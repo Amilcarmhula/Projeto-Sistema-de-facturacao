@@ -14,12 +14,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-width:.4px 0px .4px .4px;
 }
 
-.right-form{
-    -fx-background-color: #2323232b;
-    /*-fx-background-color:transparent;*/
-    -fx-border-color:#000;
-    -fx-border-width:.4px .4px .4px 0px;
-}
 
 .bg-transparent{
     -fx-background-color:transparent;
@@ -30,16 +24,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-cursor:hand;
 }
 .close:hover{
-    -fx-background-color:#ff3547;
+    -fx-background-color:rgba(35, 35, 35, .3);
 }
 
 .textfield{
     -fx-background-color:linear-gradient(to bottom, #efefef, #eee);
-    -fx-background-radius:4px;
-    -fx-border-color:#000;
-    -fx-border-width:.4px;
-    -fx-border-radius:4px;
-    -fx-font-size:13px;
+    -fx-background-radius:20px;
+    /* -fx-border-color:#000; */
+    /* -fx-border-width:4px; */
+    -fx-box-shadow: 0px 0px 10px 5px;
+    -fx-border-outline:0px ;
+    -fx-border-radius:20px;
+    -fx-font-size:15px;
     -fx-font-family:"Arial";
     
 }
@@ -50,13 +46,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 .login-btn{
-    -fx-background-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
-    -fx-background-radius:5px;
-    -fx-text-fill:#fff;
-    -fx-font-size:14px;
+    -fx-background-color:linear-gradient(to bottom, #21a7ae,#368981);
+    -fx-background-radius:20px;
+    -fx-text-fill:#000;
+    -fx-font-size:20px;
     -fx-font-family:"Arial";
     -fx-cursor:hand;
-}
-.login-btn:hover{
-    -fx-background-color:linear-gradient(to bottom, #21a7ae,#368981);
 }

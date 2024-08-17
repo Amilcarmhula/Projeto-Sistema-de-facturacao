@@ -36,13 +36,13 @@ public class SysFact extends Application {
             stage.setX(event.getScreenX() - x);
             stage.setY(event.getScreenY() - y);
             
-            stage.setOpacity(.8);
+            stage.setOpacity(.5);
         });
         
         root.setOnMouseReleased((MouseEvent event) ->{
             stage.setOpacity(1);
         });
-        
+//      Remover os botoes de close, maximize e minimize
         stage.initStyle(StageStyle.TRANSPARENT);
         
         stage.setScene(scene);

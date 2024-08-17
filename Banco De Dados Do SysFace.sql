@@ -1,17 +1,20 @@
--- Informatico@12
+drop database _sysface;
+
+create database _sysface;
  
 use _sysface;
 -- As tabelas contem um prefixo e_ ou fe_ que significam que a tabela e pertecente ao sistema de estoque se iniciada com e_ e pertecente ao sistema de facturacao e estoque se iniciada com fe_
 
 -- Tabela de categorizacao dos productos
-create table e_categoria(
+
+create table categoria(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
     descricao text
 );
-alter table e_categoria add sub_nome varchar(30);
+-- alter table e_categoria add sub_nome varchar(30);
 
-insert into e_categoria (nome, descricao,sub_nome)
+insert into categoria (nome, descricao,sub_nome)
  values ('Vestuário ','Roupas para Criança', 'Criança Masculino'),
 		('Vestuário ','Roupas para Criança', 'Criança Femenino'),
         ('Vestuário ','Roupas para Adulto', 'Adulto Masculino'),
@@ -19,7 +22,7 @@ insert into e_categoria (nome, descricao,sub_nome)
 
 
 -- Tabela de unidades de produtos com descriacao da unidade, isto e, nome da unidisa e as siglas no sistema de unidades no sistema internacional USI
-create table e_unidade_medida(
+create table unidade_medida(
 	id integer primary key auto_increment,
     descricao varchar(50),
     usi varchar(10)
@@ -44,6 +47,7 @@ create table e_armazem(
     avenida varchar(50),
     numero integer not null
 );
+
 insert into e_armazem (nome, provincia, cidade, bairro, avenida, numero)
  values ('Armazém 1 ','Maputo','Cidade de Maputo','Patrice Lumumba','av. Amilcar Cabral',100),
 		('Armazém 2 ','Maputo','Cidade de Maputo','Machava Socimol','av. Steve Jbos',201),
@@ -52,19 +56,19 @@ insert into e_armazem (nome, provincia, cidade, bairro, avenida, numero)
 create table e_fornecedor(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
-    nuit int(9)
+    nuit integer
 );
 insert into e_fornecedor (nome, nuit)
  values ('Fornecedor 1 ',123456789),('Fornecedor 2 ',223456789),('Fornecedor 3 ',333456789),('Fornecedor 4 ',444456789);
 
 create table e_contacto_fornecedor(
 	id integer primary key auto_increment,
-    contacto varbinary(20) not null,
+    contacto varchar(20) not null,
 	email varchar(50) unique,
     fk_id_fornecedor integer not null,
     foreign key (fk_id_fornecedor) references e_fornecedor(id)
 );
-alter table e_contacto_fornecedor modify contacto varchar(20);
+
 insert into e_contacto_fornecedor (contacto, email,fk_id_fornecedor)
  values ('+258878201993','email.teste-1@mail.com',1),
  ('+258847100793','email.teste-2@mail.com',1),
@@ -85,6 +89,11 @@ create table e_endereco_fornecedor(
 insert into e_endereco_fornecedor (provincia, cidade, bairro, avenida, numero,fk_id_fornecedor)
  values ('Gaza','Xai-xai','Bairro 1','av.Cabral Amilcar', 6062, 1);
 
+create table taxa_imposto(
+	id integer primary key auto_increment,
+    nome varchar(50) not null,
+    percentagem decimal(3,2)
+);
 
 create table fe_produto(
 	id integer primary key auto_increment,
@@ -93,9 +102,12 @@ create table fe_produto(
     descricao text,
     fk_id_categoria integer not null,
     fk_id_unidade_medida integer not null,
+    fk_id_taxa_imposto integer not null,
     foreign key (fk_id_categoria) references e_categoria(id),
-    foreign key (fk_id_unidade_medida) references e_unidade_medida(id)
+    foreign key (fk_id_unidade_medida) references e_unidade_medida(id),
+    foreign key (fk_id_taxa_imposto) references taxa_imposto(id)
 );
+
 -- drop table fe_produto;
 
 insert into fe_produto (nome, codigo_barra, descricao, fk_id_categoria, fk_id_unidade_medida)
@@ -129,18 +141,126 @@ create table fe_movimento_estoque(
 -- drop table fe_movimento_estoque;
 insert into fe_movimento_estoque (tipo_movimento, data_movimento, quantidade, motivo_movimento, fk_id_produto)
  values ('Entrada','2024-08-17 01:05:56',40,'',2);
- 
  update fe_movimento_estoque set data_movimento = '2024-08-17 00:00:00' where id=1;
  
- 
--- Tabela de teste
-create table tabelateste(
+ create table f_cliente(
 	id integer primary key auto_increment,
-    salario integer
+    nome varchar(50) not null,
+    apelido varchar(30),
+    nuit int(9),
+    data_criacao datetime not null
 );
 
-insert into tabelateste (salario) value (1000);
--- Procedimento armazenado
+create table f_endereco_cliente(
+	id integer primary key auto_increment,
+    provincia varchar(50),
+    cidade varchar(50),
+    bairro varchar(50),
+    avenida varchar(50),
+    rua varchar(30),
+    codigo_postal int(6),
+    numero integer not null,
+    tipo varchar(10),
+    fk_id_cliente integer not null,
+    foreign key (fk_id_cliente) references f_cliente(id)
+);
+
+create table f_contacto_cliente(
+	id integer primary key auto_increment,
+    contacto varbinary(20) not null,
+	email varchar(50) unique,
+    fk_id_cliente integer not null,
+    foreign key (fk_id_cliente) references f_cliente(id)
+);
+--  Banco de dados da empresa no sistema Sysface
+ create table f_empresa(
+	id integer primary key auto_increment,
+    nome varchar(50) not null,
+    apelido varchar(30),
+    nuit integer,
+    data_criacao datetime not null
+);
+
+create table f_endereco_empresa(
+	id integer primary key auto_increment,
+    provincia varchar(50),
+    cidade varchar(50),
+    bairro varchar(50),
+    avenida varchar(50),
+    rua varchar(30),
+    codigo_postal integer,
+    numero integer not null,
+    tipo varchar(10),
+    fk_id_empresa integer not null,
+    foreign key (fk_id_empresa) references f_empresa(id)
+);
+create table funcionario(
+	id integer primary key auto_increment,
+    nome varchar(50) not null,
+    codigo integer,
+    cargo varchar(50)
+);
+
+create table f_contacto_empresa(
+	id integer primary key auto_increment,
+    contacto varbinary(20) not null,
+	email varchar(50) unique,
+    fk_id_empresa integer not null,
+    foreign key (fk_id_empresa) references f_empresa(id)
+);
+
+ create table f_conta(
+	id integer primary key auto_increment,
+    nome_banco varchar(50) not null,
+    numero integer,
+    nib integer,
+    nuib integer,
+    data_criacao datetime not null,
+    fk_id_empresa integer not null,
+    foreign key (fk_id_empresa) references f_empresa(id)
+);
+
+-- Tabelas para armazenar dados das facturacoes
+create table f_factura(
+	id integer primary key auto_increment,
+    tipo varchar(30) not null,
+    numero integer not null,
+    data_emissao datetime not null,
+    data_vencimento datetime not null,
+    estado boolean not null,
+    total decimal(10,2) not null,
+    -- fk_id_empresa integer not null,
+    fk_id_cliente integer not null,
+    fk_id_funcionario integer not null,
+    -- foreign key (fk_id_empresa) references f_empresa(id),
+    foreign key (fk_id_funcionario) references funcionario(id),
+    foreign key (fk_id_cliente) references f_cliente(id)
+);
+
+create table f_desconto(
+	id integer primary key auto_increment,
+    nome varchar(50) not null,
+    percentagem decimal(3,2),
+    valor_fixo decimal(10,2),
+    descricao text
+);
+create table item_factura(
+	id integer primary key auto_increment,
+    tipo varchar(50) not null,
+    quantidade decimal(10,2) not null,
+    preco_unitario decimal(10,2) not null,
+    subtotal decimal(10,2) not null,
+    fk_id_desconto integer not null,
+    fk_id_produto integer not null,
+    fk_id_factura integer not null,
+    foreign key (fk_id_desconto) references f_desconto(id),
+    foreign key (fk_id_produto) references fe_produto(id),
+    foreign key (fk_id_factura) references f_factura(id)
+);
+
+
+
+ 
 
 
 

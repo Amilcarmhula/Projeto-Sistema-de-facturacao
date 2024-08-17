@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="bg-transparent" stylesheets="@style/loginStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.MainController">
+   <children>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="bg-transparent" stylesheets="@style/loginStyle.css">
+         <children>
+            <AnchorPane prefHeight="600.0" prefWidth="400.0" styleClass="left-form" stylesheets="@style/loginStyle.css">
+               <children>
+                  <FontAwesomeIconView glyphName="USERS" layoutX="93.0" layoutY="197.0" size="200" />
+                  <TextField fx:id="txtusarname" layoutX="85.0" layoutY="347.0" prefHeight="37.0" prefWidth="230.0" promptText="Usuário" styleClass="textfield" stylesheets="@style/loginStyle.css" />
+                  <TextField fx:id="txtpassword" layoutX="85.0" layoutY="407.0" prefHeight="37.0" prefWidth="230.0" promptText="Senha" styleClass="textfield" stylesheets="@style/loginStyle.css" />
+                  <Button fx:id="btnlogin" layoutX="85.0" layoutY="483.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="230.0" styleClass="login-btn" stylesheets="@style/loginStyle.css" text="Login">
+                     <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="48.0" />
+                     </font>
+                  </Button>
+                  <Label layoutX="140.0" layoutY="265.0" text="Login">
+                     <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="48.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="363.0" layoutY="2.0" mnemonicParsing="false" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="8.0">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="CLOSE" />
+                     </graphic>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

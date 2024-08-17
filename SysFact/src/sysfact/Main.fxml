@@ -8,30 +8,26 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" styleClass="bg-transparent" stylesheets="@style/loginStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.MainController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="bg-transparent" stylesheets="@style/loginStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.MainController">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="bg-transparent" stylesheets="@style/loginStyle.css">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="bg-transparent" stylesheets="@style/loginStyle.css">
          <children>
-            <AnchorPane prefHeight="400.0" prefWidth="400.0" styleClass="left-form" stylesheets="@style/loginStyle.css">
+            <AnchorPane prefHeight="600.0" prefWidth="400.0" styleClass="left-form" stylesheets="@style/loginStyle.css">
                <children>
-                  <FontAwesomeIconView glyphName="USERS" layoutX="93.0" layoutY="271.0" size="200" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="400.0" prefHeight="400.0" prefWidth="400.0" styleClass="bg-transparent" stylesheets="@style/loginStyle.css">
-               <children>
-                  <TextField fx:id="txtusarname" layoutX="88.0" layoutY="140.0" prefHeight="26.0" prefWidth="230.0" styleClass="textfield" stylesheets="@style/loginStyle.css" />
-                  <TextField fx:id="txtpassword" layoutX="88.0" layoutY="200.0" prefHeight="26.0" prefWidth="230.0" styleClass="textfield" stylesheets="@style/loginStyle.css" />
-                  <Button fx:id="btnlogin" layoutX="88.0" layoutY="265.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="230.0" styleClass="login-btn" stylesheets="@style/loginStyle.css" text="Login">
+                  <FontAwesomeIconView glyphName="USERS" layoutX="93.0" layoutY="197.0" size="200" />
+                  <TextField fx:id="txtusarname" layoutX="85.0" layoutY="347.0" prefHeight="37.0" prefWidth="230.0" promptText="Usuário" styleClass="textfield" stylesheets="@style/loginStyle.css" />
+                  <TextField fx:id="txtpassword" layoutX="85.0" layoutY="407.0" prefHeight="37.0" prefWidth="230.0" promptText="Senha" styleClass="textfield" stylesheets="@style/loginStyle.css" />
+                  <Button fx:id="btnlogin" layoutX="85.0" layoutY="483.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="230.0" styleClass="login-btn" stylesheets="@style/loginStyle.css" text="Login">
                      <font>
                         <Font name="Berlin Sans FB Demi Bold" size="48.0" />
                      </font>
                   </Button>
-                  <Label layoutX="143.0" layoutY="47.0" text="Login">
+                  <Label layoutX="140.0" layoutY="265.0" text="Login">
                      <font>
                         <Font name="Berlin Sans FB Demi Bold" size="48.0" />
                      </font>
                   </Label>
-                  <Button layoutX="318.0" layoutY="14.0" mnemonicParsing="false" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+                  <Button mnemonicParsing="false" styleClass="close" stylesheets="@style/loginStyle.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
                      <graphic>
                         <FontAwesomeIconView glyphName="CLOSE" />
                      </graphic>

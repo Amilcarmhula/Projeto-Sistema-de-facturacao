@@ -46,13 +46,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 .login-btn{
-    -fx-background-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
-    -fx-background-radius:5px;
-    -fx-text-fill:#fff;
-    -fx-font-size:14px;
+    -fx-background-color:linear-gradient(to bottom, #21a7ae,#368981);
+    -fx-background-radius:20px;
+    -fx-text-fill:#000;
+    -fx-font-size:20px;
     -fx-font-family:"Arial";
     -fx-cursor:hand;
-}
-.login-btn:hover{
-    -fx-background-color:linear-gradient(to bottom, #21a7ae,#368981);
 }

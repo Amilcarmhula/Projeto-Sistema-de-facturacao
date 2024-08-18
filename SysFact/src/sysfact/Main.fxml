@@ -50,7 +50,7 @@
                         <Font name="Berlin Sans FB Demi Bold" size="48.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" styleClass="close" stylesheets="@style/loginStyle.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+                  <Button mnemonicParsing="false" onAction="#close" styleClass="close" stylesheets="@style/loginStyle.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
                      <graphic>
                         <FontAwesomeIconView glyphName="CLOSE" />
                      </graphic>

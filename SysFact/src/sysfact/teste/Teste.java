@@ -22,20 +22,27 @@ public class Teste {
         Cliente c = new Cliente();
         ClienteDAO cdao = new ClienteDAO();
 
-//        c.setNome("Junior ");
-//        c.setApelido("Mula Filho");
-//        c.setNuit(987654321);
-//        c.setData_criacao("2024-08-17 23:23:32");
+//        c.setNome("Amilcar Junior");
+//        c.setApelido("Mula Filho do Pai");
+//        c.setNuit(777888999);
+//        c.setData_criacao("2024-08-17 01:53:32");
 //        cdao.adicionaCliente(c);
-
 //        List<Cliente> lista = cdao.listaCliente();
 //        for (Cliente cliente : lista) {
 //            System.out.println(cliente.getNome());
 //        }
-
-        Cliente cliente = cdao.listaClientePorNome("Junior ");
+        Cliente cliente = cdao.listaClientePorNome("Amilc");
         System.out.println(cliente.getNuit());
+//        List<Cliente> lista = cdao.listaClientePorNome("Ven");
+//        for (Cliente cliente : lista) {
+//            System.out.println(cliente.getNome());
+//        }
 
+//        c.setId(4);
+//        c.setNome("Venmu");
+//        c.setApelido("Mula Jr. Filho");
+//        c.setNuit(987654321);
+//        cdao.actualizaCliente(c, c.getId());
     }
 
 }

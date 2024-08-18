@@ -25,7 +25,10 @@ public class MainController implements Initializable {
 
     @FXML
     private TextField txtusarname;
-
+    
+    public void close(){
+        System.exit(0);
+    }
 
     
     @Override

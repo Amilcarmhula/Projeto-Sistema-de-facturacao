@@ -1,9 +1,7 @@
 -- drop database _sysface;
-
-create database _sysface;
+-- create database _sysface;
  
 use _sysface;
-
 
 create table usuario(
 	id integer primary key auto_increment,
@@ -12,11 +10,21 @@ create table usuario(
     senha integer not null,
     codigo integer
 );
+-- create table categoria(
+-- 	id integer primary key auto_increment,
+--     tipo varchar(30) not null,
+--     nome varchar(50) not null,
+--     descricao text,
+--     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
 
+-- version II
 create table categoria(
 	id integer primary key auto_increment,
     tipo varchar(30) not null,
-    nome varchar(50) not null,
+    grupo varchar(50) not null,
+    subgrupo varchar(50),
+    familia varchar(50),
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

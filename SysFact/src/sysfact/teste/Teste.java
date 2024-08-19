@@ -7,7 +7,7 @@ package sysfact.teste;
 import java.sql.SQLException;
 import java.util.List;
 import sysfact.cliente.Cliente;
-import sysfact.cliente.DAO.ClienteDAO;
+import sysfact.DAO.ClienteDAO;
 
 /**
  *

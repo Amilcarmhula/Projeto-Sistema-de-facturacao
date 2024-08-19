@@ -18,21 +18,21 @@
          <children>
             <BorderPane layoutX="211.0" layoutY="173.0" prefHeight="1000.0" prefWidth="1700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <top>
-                  <AnchorPane prefHeight="45.0" prefWidth="1700.0" styleClass="semi-top-form" stylesheets="@dashboard.css" BorderPane.alignment="CENTER">
+                  <AnchorPane prefHeight="45.0" prefWidth="1700.0" styleClass="semi-top-form" stylesheets="@../../style/dashboard.css" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane prefHeight="35.0" prefWidth="1700.0" stylesheets="@dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane prefHeight="35.0" prefWidth="1700.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Label layoutX="61.0" layoutY="5.0" text="Sistema de Facturacao E Controle de Estoque">
                                  <font>
                                     <Font name="Berlin Sans FB" size="22.0" />
                                  </font>
                               </Label>
-                              <Button layoutX="1674.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="40.0" styleClass="close" stylesheets="@dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <Button layoutX="1674.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="40.0" styleClass="close" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="CLOSE" size="20" />
                                  </graphic>
                               </Button>
-                              <Button layoutX="1635.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="40.0" styleClass="minimize" stylesheets="@dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="0.0">
+                              <Button layoutX="1635.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="40.0" styleClass="minimize" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="0.0">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="MINUS" size="20" />
                                  </graphic>
@@ -50,7 +50,7 @@
                <left>
                   <AnchorPane prefHeight="1655.0" prefWidth="250.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutX="26.0" layoutY="284.0" prefHeight="1655.0" prefWidth="250.0" styleClass="navs" stylesheets="@dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane layoutX="26.0" layoutY="284.0" prefHeight="1655.0" prefWidth="250.0" styleClass="navs" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Label alignment="CENTER" layoutX="1.0" layoutY="324.0" prefHeight="29.0" prefWidth="250.0" text="Nome do Usuario" textFill="WHITE">
                                  <font>
@@ -65,7 +65,7 @@
                               </Label>
                               <VBox layoutX="10.0" layoutY="401.0" prefHeight="330.0" prefWidth="230.0">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@dashboard.css" text="Dashboard" textFill="WHITE">
+                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
                                        <graphic>
                                           <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="30" />
                                        </graphic>
@@ -76,7 +76,7 @@
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@dashboard.css" text="Dashboard" textFill="WHITE">
+                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
                                        <graphic>
                                           <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="30" />
                                        </graphic>
@@ -87,7 +87,7 @@
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@dashboard.css" text="Dashboard" textFill="WHITE">
+                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
                                        <graphic>
                                           <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="30" />
                                        </graphic>
@@ -98,7 +98,7 @@
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@dashboard.css" text="Dashboard" textFill="WHITE">
+                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
                                        <graphic>
                                           <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="30" />
                                        </graphic>
@@ -109,7 +109,7 @@
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@dashboard.css" text="Dashboard" textFill="WHITE">
+                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
                                        <graphic>
                                           <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="30" />
                                        </graphic>
@@ -120,7 +120,7 @@
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@dashboard.css" text="Dashboard" textFill="WHITE">
+                                    <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
                                        <graphic>
                                           <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="30" />
                                        </graphic>
@@ -133,7 +133,7 @@
                                     </Button>
                                  </children>
                               </VBox>
-                              <Button layoutX="50.0" layoutY="785.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="150.0" styleClass="btn-logout" stylesheets="@dashboard.css" text="Logout" textFill="WHITE">
+                              <Button layoutX="50.0" layoutY="785.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="150.0" styleClass="btn-logout" stylesheets="@../../style/dashboard.css" text="Logout" textFill="WHITE">
                                  <graphic>
                                     <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" size="30" />
                                  </graphic>
@@ -150,9 +150,9 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutX="137.0" layoutY="317.0" prefHeight="955.0" prefWidth="1451.0" styleClass="main-frame" stylesheets="@dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane layoutX="137.0" layoutY="317.0" prefHeight="955.0" prefWidth="1451.0" styleClass="main-frame" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane layoutX="12.0" layoutY="11.0" prefHeight="934.0" prefWidth="1425.0" stylesheets="@dashboard.css">
+                              <AnchorPane layoutX="12.0" layoutY="11.0" prefHeight="934.0" prefWidth="1425.0" stylesheets="@../../style/dashboard.css">
                                  <styleClass>
                                     <String fx:value="white-bg" />
                                     <String fx:value="shadow" />

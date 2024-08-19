@@ -131,6 +131,7 @@ create table movimento_estoque(
     nuit integer,
     data_criacao datetime not null
 );
+select * from cliente;
 
 create table endereco_cliente(
 	id integer primary key auto_increment,
@@ -228,7 +229,7 @@ create table desconto(
 );
 create table item_factura(
 	id integer primary key auto_increment,
-    tipo varchar(50) not null,
+    tipo  varchar(50) not null,
     quantidade decimal(10,2) not null,
     preco_unitario decimal(10,2) not null,
     subtotal decimal(10,2) not null,
@@ -257,26 +258,6 @@ create table pagamento(
     foreign key (fk_id_factura) references factura(id)
 );
 
- 
-
-create table funcionario(
-	id integer primary key auto_increment,
-    nome varchar(30),
-    salario decimal(10,2)
-);
-
-insert into funcionario (nome, salario) value ('Mula 1',1000),('Mula 2',2000),('Mula 3',3000);
-
-select * from funcionario;
-
-delimiter //
-create procedure aumentasalario(IN valor decimal(10,2))
-begin
-	update funcionario set salario = salario + valor where id = 2;
-end //
-delimiter ;
-
-call aumentasalario(500);
 
 
 

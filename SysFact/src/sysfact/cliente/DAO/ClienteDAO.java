@@ -10,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import sysfact.cliente.Cliente;
 import sysfact.conexao.Conexao;
@@ -40,7 +38,7 @@ public class ClienteDAO {
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(null, "Falha ao adicionar Cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 

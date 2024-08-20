@@ -11,8 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import sysfact.cliente.Cliente;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import sysfact.conexao.Conexao;
+import sysfact.logical.Cliente;
 
 /**
  *
@@ -28,17 +29,16 @@ public class ClienteDAO {
 
     public void adicionaCliente(Cliente c) {
         try {
-            String sql = "insert into cliente (nome,apelido,nuit,data_criacao) value (?,?,?,?)";
+            String sql = "insert into cliente (nome,apelido,nuit) value (?,?,?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, c.getNome());
             stmt.setString(2, c.getApelido());
             stmt.setInt(3, c.getNuit());
-            stmt.setString(4, c.getData_criacao());
 
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
-           JOptionPane.showMessageDialog(null, "Falha ao adicionar Cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao adicionar Cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -82,12 +82,13 @@ public class ClienteDAO {
         }
         return lista;
     }
-/*
+
+    /*
     Pesquisas por nome ou outra celula no banco de dados que devem retornar todos 
     elementos que contenham o parametro da pesquisa devem usar o while e nao o if;
     e usando o while os elementos devem ser armazenados numa lista, para posteriormente
     serem visualizados numa tabela
-    */
+     */
     public Cliente listaClientePorNome(String nome) {
         Cliente cliente = null;
         try {
@@ -97,11 +98,11 @@ public class ClienteDAO {
             ResultSet result = stmt.executeQuery();
             if (result.next()) {
                 cliente = new Cliente();
-                cliente.setApelido(result.getString("apelido"));
-                cliente.setData_criacao(result.getString("data_criacao"));
                 cliente.setId(result.getInt("id"));
                 cliente.setNome(result.getString("nome"));
+                cliente.setApelido(result.getString("apelido"));
                 cliente.setNuit(result.getInt("nuit"));
+                cliente.setData_criacao(result.getString("data_criacao"));
             }
             result.close();
             stmt.close();
@@ -111,7 +112,7 @@ public class ClienteDAO {
         }
         return cliente;
     }
-    
+
 //    public List<Cliente> listaClientePorNome(String nome) {
 //        List<Cliente> cli = new ArrayList<>();
 //        Cliente cliente = null;
@@ -137,5 +138,4 @@ public class ClienteDAO {
 //        }
 //        return cli;
 //    }
-
 }

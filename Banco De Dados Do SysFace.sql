@@ -3,6 +3,7 @@
  
 use _sysface;
 
+
 create table usuario(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -33,7 +34,7 @@ create table categoria(
 );
 create table unidade_medida(
 	id integer primary key auto_increment,
-    nome varchar(50), -- se e uma unidade de area, agraria, volume, massa, etc.. 
+    tipo varchar(50), -- se e uma unidade de area, agraria, volume, massa, etc.. 
     identificador varchar(50) not null,
     sigla varchar(10) not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -41,7 +42,7 @@ create table unidade_medida(
 ); 
 create table taxa_imposto(
 	id integer primary key auto_increment,
-    nome varchar(50) not null,
+    identificador varchar(50) not null,
     percentagem decimal(3,2),
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -6,8 +6,8 @@ package sysfact.teste;
 
 import java.sql.SQLException;
 import java.util.List;
-import sysfact.cliente.Cliente;
 import sysfact.DAO.ClienteDAO;
+import sysfact.logical.Cliente;
 
 /**
  *
@@ -22,10 +22,9 @@ public class Teste {
         Cliente c = new Cliente();
         ClienteDAO cdao = new ClienteDAO();
 
-//        c.setNome("Amilcar Junior");
-        c.setApelido("Mula Filho do Pai");
+        c.setNome("Amilcar");
+        c.setApelido("Mula Pai");
         c.setNuit(777888999);
-        c.setData_criacao("2024-08-17 01:53:32");
         cdao.adicionaCliente(c);
 
 //        List<Cliente> lista = cdao.listaCliente();

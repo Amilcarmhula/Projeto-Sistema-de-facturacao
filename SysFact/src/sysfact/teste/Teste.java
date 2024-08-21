@@ -6,6 +6,7 @@ package sysfact.teste;
 
 import java.sql.SQLException;
 import java.util.List;
+import org.w3c.dom.css.Counter;
 import sysfact.DAO.ClienteDAO;
 import sysfact.logical.Cliente;
 
@@ -22,10 +23,10 @@ public class Teste {
         Cliente c = new Cliente();
         ClienteDAO cdao = new ClienteDAO();
 
-        c.setNome("Amilcar");
-        c.setApelido("Mula Pai");
-        c.setNuit(777888999);
-        cdao.adicionaCliente(c);
+//        c.setNome("Amilcar");
+//        c.setApelido("Mula Pai");
+//        c.setNuit(777888999);
+//        cdao.adicionaCliente(c);
 
 //        List<Cliente> lista = cdao.listaCliente();
 //        for (Cliente cliente : lista) {
@@ -46,5 +47,6 @@ public class Teste {
 //        c.setNuit(987654321);
 //        cdao.actualizaCliente(c, c.getId());
     }
+    
 
 }

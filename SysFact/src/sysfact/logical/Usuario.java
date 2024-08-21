@@ -13,15 +13,17 @@ public class Usuario {
     private String nome;
     private int senha;
     private int codigo;
+    private String data_criacao;
     private boolean estadoActive;
     
     public Usuario(){}
 
-    public Usuario(int id, String nome, int senha, int codigo, boolean estadoActive) {
+    public Usuario(int id, String nome, int senha, int codigo, String data_criacao, boolean estadoActive) {
         this.id = id;
         this.nome = nome;
         this.senha = senha;
         this.codigo = codigo;
+        this.data_criacao = data_criacao;
         this.estadoActive = estadoActive;
     }
 
@@ -57,6 +59,14 @@ public class Usuario {
         this.codigo = codigo;
     }
 
+    public String getData_criacao() {
+        return data_criacao;
+    }
+
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
+    }
+
     public boolean isEstadoActive() {
         return estadoActive;
     }
@@ -64,8 +74,7 @@ public class Usuario {
     public void setEstadoActive(boolean estadoActive) {
         this.estadoActive = estadoActive;
     }
-    
-    
+
     
     
 }

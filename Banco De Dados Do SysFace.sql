@@ -33,7 +33,8 @@ create table categoria(
     familia varchar(50),
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean not null -- deletado ou nao
+    active_or_not boolean default 1 not null, -- deletado ou nao
+    check(tipo in('Produto','Serviço'))
 );
 create table unidade_medida(
 	id integer primary key auto_increment,
@@ -105,7 +106,8 @@ create table endereco_fornecedor(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fk_id_fornecedor integer not null,
     active_or_not boolean default 1 not null, -- deletado ou nao
-    foreign key (fk_id_fornecedor) references fornecedor(id)
+    foreign key (fk_id_fornecedor) references fornecedor(id),
+    check (tipo in('Facturação','Envio'))
 );
 
 create table servico(
@@ -163,7 +165,8 @@ create table movimento_produto(
     active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_produto) references produto(id),
     foreign key (fk_id_usuario) references usuario(id),
-    foreign key (fk_id_armazem) references armazem(id)
+    foreign key (fk_id_armazem) references armazem(id),
+    check (tipo_movimento in('Entrada','Saída','Ajuste'))
 );
 
 
@@ -196,7 +199,8 @@ create table endereco_cliente(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_usuario) references usuario(id),
-    foreign key (fk_id_cliente) references cliente(id)
+    foreign key (fk_id_cliente) references cliente(id),
+    check(tipo in('Facturação','Envio'))
 );
 create table contacto_cliente(
 	id integer primary key auto_increment,
@@ -234,7 +238,8 @@ create table endereco_empresa(
     fk_id_empresa integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active_or_not boolean default 1 not null, -- deletado ou nao
-    foreign key (fk_id_empresa) references empresa(id)
+    foreign key (fk_id_empresa) references empresa(id),
+    check (tipo in('Facturação','Envio'))
 );
 
 create table contacto_empresa(

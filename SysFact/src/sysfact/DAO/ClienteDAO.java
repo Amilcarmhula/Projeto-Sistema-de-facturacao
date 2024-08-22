@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import jdk.nashorn.internal.codegen.CompilerConstants;
 import sysfact.conexao.Conexao;
 import sysfact.logical.Cliente;
 
@@ -44,7 +43,8 @@ public class ClienteDAO {
 
     public void actualizaCliente(Cliente c, int id) {
         try {
-            String sql = "update cliente set nome=? ,apelido=? ,nuit=? where id=?";
+            String sql = "update cliente set nome=? ,apelido=? ,nuit=?"
+                    + " where id=?";
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setString(1, c.getNome());
@@ -55,7 +55,8 @@ public class ClienteDAO {
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao actualizar Cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao actualizar Cliente: " 
+                    + e, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -138,4 +139,5 @@ public class ClienteDAO {
 //        }
 //        return cli;
 //    }
+    
 }

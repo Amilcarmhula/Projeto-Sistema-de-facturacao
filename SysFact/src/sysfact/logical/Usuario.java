@@ -11,20 +11,22 @@ package sysfact.logical;
 public class Usuario {
     private int id;
     private String nome;
+    private String usuario;
     private int senha;
     private int codigo;
     private String data_criacao;
-    private boolean estadoActive;
+    private boolean active_or_not;
     
     public Usuario(){}
 
-    public Usuario(int id, String nome, int senha, int codigo, String data_criacao, boolean estadoActive) {
+    public Usuario(int id, String nome, String usuario, int senha, int codigo, String data_criacao, boolean active_or_not) {
         this.id = id;
         this.nome = nome;
+        this.usuario = usuario;
         this.senha = senha;
         this.codigo = codigo;
         this.data_criacao = data_criacao;
-        this.estadoActive = estadoActive;
+        this.active_or_not = active_or_not;
     }
 
     public int getId() {
@@ -41,6 +43,14 @@ public class Usuario {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public int getSenha() {
@@ -67,14 +77,15 @@ public class Usuario {
         this.data_criacao = data_criacao;
     }
 
-    public boolean isEstadoActive() {
-        return estadoActive;
+    public boolean isActive_or_not() {
+        return active_or_not;
     }
 
-    public void setEstadoActive(boolean estadoActive) {
-        this.estadoActive = estadoActive;
+    public void setEstadoActive(boolean active_or_not) {
+        this.active_or_not = active_or_not;
     }
 
+   
     
     
 }

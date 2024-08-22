@@ -3,8 +3,9 @@
  
 use _sysface;
 
--- select * from usuario;
---  insert into usuario(nome, usuario, senha, codigo) value ('Amilcar Mula','Admin',1234,408);
+select * from usuario;
+insert into usuario(nome, usuario, senha, codigo) value ('Amilcar Mula','Admin',1234,408);
+update usuario set nome='Jr Mula', usuario=root, senha=4321, codigo=407 where id=1;
 
 create table usuario(
 	id integer primary key auto_increment,
@@ -128,6 +129,7 @@ create table produto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
     codigo_barra varchar(50),
+    preco decimal(10,2),
     descricao text,
     fk_id_categoria integer not null,
     fk_id_unidade_medida integer not null,

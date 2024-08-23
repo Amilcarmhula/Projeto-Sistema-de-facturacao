@@ -13,6 +13,7 @@ public class Produto {
     private int id;
     private String nome;
     private String codigo_barra;
+    private double preco;
     private String descricao;
     private Categoria fk_id_categoria;
     private UnidadeMedida fk_id_unidade_medida;
@@ -21,10 +22,11 @@ public class Produto {
     
     public Produto(){}
 
-    public Produto(int id, String nome, String codigo_barra, String descricao, Categoria fk_id_categoria, UnidadeMedida fk_id_unidade_medida, TaxaImposto fk_id_taxa_imposto, boolean active_or_not) {
+    public Produto(int id, String nome, String codigo_barra, double preco, String descricao, Categoria fk_id_categoria, UnidadeMedida fk_id_unidade_medida, TaxaImposto fk_id_taxa_imposto, boolean active_or_not) {
         this.id = id;
         this.nome = nome;
         this.codigo_barra = codigo_barra;
+        this.preco = preco;
         this.descricao = descricao;
         this.fk_id_categoria = fk_id_categoria;
         this.fk_id_unidade_medida = fk_id_unidade_medida;
@@ -54,6 +56,14 @@ public class Produto {
 
     public void setCodigo_barra(String codigo_barra) {
         this.codigo_barra = codigo_barra;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
     }
 
     public String getDescricao() {
@@ -95,6 +105,5 @@ public class Produto {
     public void setActive_or_not(boolean active_or_not) {
         this.active_or_not = active_or_not;
     }
-    
-    
+
 }

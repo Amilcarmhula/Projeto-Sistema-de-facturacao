@@ -15,7 +15,9 @@ public interface DaoImpl<T> {
     void updateEntityByID(T t, int id);
     List<T> listAllEntities();
     T searchEntityByName(String name);
-    void deleteEntity(int id);
+    void deleteEntityByROOT(int id);
+    void deleteEntityByUSER(int id);
+
 //    List<T> searchListEntityByName(String name);
 
 }

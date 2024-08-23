@@ -9,24 +9,28 @@ package sysfact.logical;
  * @author JM-Tecnologias
  */
 public class Categoria {
- private int id;
- private String tipo;
- private String grupo;
- private String subgrupo;
- private String familia;
- private String descricao;
- private boolean estadoActive;
- 
- public  Categoria(){}
 
-    public Categoria(int id, String tipo, String grupo, String subgrupo, String familia, String descricao, boolean estadoActive) {
+    private int id;
+    private String tipo;
+    private String grupo;
+    private String subgrupo;
+    private String familia;
+    private String descricao;
+    private String data_criacao;
+    private boolean active_or_not;
+
+    public Categoria() {
+    }
+
+    public Categoria(int id, String tipo, String grupo, String subgrupo, String familia, String descricao, String data_criacao, boolean active_or_not) {
         this.id = id;
         this.tipo = tipo;
         this.grupo = grupo;
         this.subgrupo = subgrupo;
         this.familia = familia;
         this.descricao = descricao;
-        this.estadoActive = estadoActive;
+        this.data_criacao = data_criacao;
+        this.active_or_not = active_or_not;
     }
 
     public int getId() {
@@ -77,15 +81,20 @@ public class Categoria {
         this.descricao = descricao;
     }
 
-    public boolean isEstadoActive() {
-        return estadoActive;
+    public String getData_criacao() {
+        return data_criacao;
     }
 
-    public void setEstadoActive(boolean estadoActive) {
-        this.estadoActive = estadoActive;
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
     }
-    
-    
- 
+
+    public boolean isActive_or_not() {
+        return active_or_not;
+    }
+
+    public void setActive_or_not(boolean active_or_not) {
+        this.active_or_not = active_or_not;
+    }
 
 }

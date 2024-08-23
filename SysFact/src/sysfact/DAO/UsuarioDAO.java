@@ -151,9 +151,23 @@ public class UsuarioDAO implements DaoImpl<Usuario> {
 //    }
 
     @Override
-    public void deleteEntity(int id) {
+    public void deleteEntityByROOT(int id) {
         try {
             sql = "delete from usuario where id=?";
+            ps = con.prepareStatement(sql);
+
+            ps.setInt(1, id);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao deletar Usuario: "
+                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    @Override
+    public void deleteEntityByUSER(int id) {
+        try {
+            sql = "update usuario set active_or_not=false where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, id);

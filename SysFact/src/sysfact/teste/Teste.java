@@ -9,9 +9,11 @@ import java.util.List;
 import org.w3c.dom.css.Counter;
 import sysfact.DAO.CategoriaDAO;
 import sysfact.DAO.ClienteDAO;
+import sysfact.DAO.UnidadeMedidaDAO;
 import sysfact.DAO.UsuarioDAO;
 import sysfact.logical.Categoria;
 import sysfact.logical.Cliente;
+import sysfact.logical.UnidadeMedida;
 import sysfact.logical.Usuario;
 
 /**
@@ -30,8 +32,14 @@ public class Teste {
         UsuarioDAO ud = new UsuarioDAO();
         Categoria cat = new Categoria();
         CategoriaDAO cd = new CategoriaDAO();
+        UnidadeMedida um = new UnidadeMedida();
+        UnidadeMedidaDAO umd = new UnidadeMedidaDAO();
+        um.setTipo("Massa");
+        um.setIdentificador("onça");
+        um.setSigla("oz");
+        umd.addEntity(um);
+
         
-        ud.deleteEntityByUSER(7);
 
 //        cat.setTipo("Produto");
 //        cat.setGrupo("Vestuário");

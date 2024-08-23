@@ -13,16 +13,18 @@ public class UnidadeMedida {
     private String tipo;
     private String identificador;
     private String sigla;
-    private boolean estadoActive;
+    private String data_criacao;
+    private boolean active_or_not;
     
     public UnidadeMedida(){}
 
-    public UnidadeMedida(int id, String tipo, String identificador, String sigla, boolean estadoActive) {
+    public UnidadeMedida(int id, String tipo, String identificador, String sigla, String data_criacao, boolean active_or_not) {
         this.id = id;
         this.tipo = tipo;
         this.identificador = identificador;
         this.sigla = sigla;
-        this.estadoActive = estadoActive;
+        this.data_criacao = data_criacao;
+        this.active_or_not = active_or_not;
     }
 
     public int getId() {
@@ -57,13 +59,21 @@ public class UnidadeMedida {
         this.sigla = sigla;
     }
 
-    public boolean isEstadoActive() {
-        return estadoActive;
+    public String getData_criacao() {
+        return data_criacao;
     }
 
-    public void setEstadoActive(boolean estadoActive) {
-        this.estadoActive = estadoActive;
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
     }
-    
+
+    public boolean isActive_or_not() {
+        return active_or_not;
+    }
+
+    public void setActive_or_not(boolean active_or_not) {
+        this.active_or_not = active_or_not;
+    }
+
     
 }

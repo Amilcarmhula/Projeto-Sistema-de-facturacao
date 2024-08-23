@@ -51,8 +51,8 @@ public class CategoriaDAO implements DaoImpl<Categoria> {
     @Override
     public void updateEntityByID(Categoria t, int id) {
         try {
-            sql = "update categoria set tipo, grupo, subgrupo, familia,"
-                    + " descricao where id=?";
+            sql = "update categoria set tipo=?, grupo=?, subgrupo=?, familia=?,"
+                    + " descricao=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getTipo());

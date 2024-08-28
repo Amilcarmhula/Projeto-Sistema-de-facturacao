@@ -183,15 +183,7 @@ create trigger trigger_registra_entrada
     end//
 delimiter ;
 
-
-
-
-
-
-
-
-
-
+select * from cliente;
  create table cliente(
 	id integer primary key auto_increment,
     nome varchar(50) not null,

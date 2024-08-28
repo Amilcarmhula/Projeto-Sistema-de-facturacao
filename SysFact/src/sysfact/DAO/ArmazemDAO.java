@@ -18,7 +18,7 @@ import sysfact.logical.Armazem;
  *
  * @author JM-Tecnologias
  */
-public class ArmazemDAO  implements DaoImpl<Armazem> {
+public class ArmazemDAO implements DaoImpl<Armazem> {
 
     private Connection con;
     private PreparedStatement ps;

@@ -18,54 +18,61 @@ import sysfact.logical.Cliente;
  *
  * @author JM-Tecnologias
  */
-public class ClienteDAO {
+public class ClienteDAO implements DaoImpl<Cliente>{
 
     private Connection con;
+    private PreparedStatement ps;
+    private String sql;
 
     public ClienteDAO() throws SQLException {
         this.con = Conexao.getConexao();
     }
 
-    public void adicionaCliente(Cliente c) {
-        try {
-            String sql = "insert into cliente (nome,apelido,nuit) value (?,?,?)";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, c.getNome());
-            stmt.setString(2, c.getApelido());
-            stmt.setInt(3, c.getNuit());
+    @Override
+    public void addEntity(Cliente c) {
+       try {
+            sql = "insert into cliente (nome,apelido,nuit,fk_id_usuario) value (?,?,?,?)";
+            ps= con.prepareStatement(sql);
+            ps.setString(1, c.getNome());
+            ps.setString(2, c.getApelido());
+            ps.setInt(3, c.getNuit());
+            ps.setInt(4, c.getFk_id_usuario());
 
-            stmt.execute();
-            stmt.close();
+            ps.execute();
+            ps.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void actualizaCliente(Cliente c, int id) {
+    @Override
+    public void updateEntityByID(Cliente c, int id) {
         try {
-            String sql = "update cliente set nome=? ,apelido=? ,nuit=?"
+            sql = "update cliente set nome=? ,apelido=? ,nuit=?, fk_id_usuario=?"
                     + " where id=?";
-            PreparedStatement stmt = con.prepareStatement(sql);
+            ps = con.prepareStatement(sql);
 
-            stmt.setString(1, c.getNome());
-            stmt.setString(2, c.getApelido());
-            stmt.setInt(3, c.getNuit());
-            stmt.setInt(4, id);
+            ps.setString(1, c.getNome());
+            ps.setString(2, c.getApelido());
+            ps.setInt(3, c.getNuit());
+            ps.setInt(4, c.getFk_id_usuario());
+            ps.setInt(5, id);
 
-            stmt.execute();
-            stmt.close();
+            ps.execute();
+            ps.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao actualizar Cliente: " 
                     + e, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public List<Cliente> listaCliente() {
+    @Override
+    public List<Cliente> listAllEntities() {
         List<Cliente> lista = new ArrayList<>();
         try {
-            String sql = "select * from cliente";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            ResultSet result = stmt.executeQuery();
+            sql = "select * from cliente";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
             while (result.next()) {
                 Cliente c = new Cliente();
                 c.setId(result.getInt("id"));
@@ -73,10 +80,12 @@ public class ClienteDAO {
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setNome(result.getString("nome"));
                 c.setNuit(result.getInt("nuit"));
+                c.setActive_or_not(result.getBoolean("active_or_not"));
+                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 lista.add(c);
             }
             result.close();
-            stmt.close();
+            ps.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao Bucar Clientes: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
 
@@ -90,54 +99,59 @@ public class ClienteDAO {
     e usando o while os elementos devem ser armazenados numa lista, para posteriormente
     serem visualizados numa tabela
      */
-    public Cliente listaClientePorNome(String nome) {
-        Cliente cliente = null;
+     @Override
+    public Cliente searchEntityByName(String nome) {
+        Cliente c = null;
         try {
-            String sql = "select * from cliente where nome LIKE ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, "%" + nome + "%");
-            ResultSet result = stmt.executeQuery();
-            if (result.next()) {
-                cliente = new Cliente();
-                cliente.setId(result.getInt("id"));
-                cliente.setNome(result.getString("nome"));
-                cliente.setApelido(result.getString("apelido"));
-                cliente.setNuit(result.getInt("nuit"));
-                cliente.setData_criacao(result.getString("data_criacao"));
+            sql = "select * from cliente where nome LIKE ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, "%" + nome + "%");
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                c = new Cliente();
+                c.setId(result.getInt("id"));
+                c.setApelido(result.getString("apelido"));
+                c.setData_criacao(result.getString("data_criacao"));
+                c.setNome(result.getString("nome"));
+                c.setNuit(result.getInt("nuit"));
+                c.setActive_or_not(result.getBoolean("active_or_not"));
+                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
             }
             result.close();
-            stmt.close();
+            ps.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao Bucar Clientes: " + e,
                     "Informação", JOptionPane.ERROR_MESSAGE);
         }
-        return cliente;
+        return c;
     }
+     @Override
+    public void deleteEntityByROOT(int id) {
+        try {
+            sql = "delete from cliente where id=?";
+            ps = con.prepareStatement(sql);
 
-//    public List<Cliente> listaClientePorNome(String nome) {
-//        List<Cliente> cli = new ArrayList<>();
-//        Cliente cliente = null;
-//        try {
-//            String sql = "select * from cliente where nome LIKE ?";
-//            PreparedStatement stmt = con.prepareStatement(sql);
-//            stmt.setString(1, "%" + nome + "%");
-//            ResultSet result = stmt.executeQuery();
-//            while (result.next()) {
-//                cliente = new Cliente();
-//                cliente.setApelido(result.getString("apelido"));
-//                cliente.setData_criacao(result.getString("data_criacao"));
-//                cliente.setId(result.getInt("id"));
-//                cliente.setNome(result.getString("nome"));
-//                cliente.setNuit(result.getInt("nuit"));
-//                cli.add(cliente);
-//            }
-//            result.close();
-//            stmt.close();
-//        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, "Falha ao Bucar Clientes: " + e,
-//                    "Informação", JOptionPane.ERROR_MESSAGE);
-//        }
-//        return cli;
-//    }
+            ps.setInt(1, id);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
+                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     
+    @Override
+    public void deleteEntityByUSER(int id) {
+        try {
+            sql =  "update cliente set active_or_not=false where id=?";
+            ps = con.prepareStatement(sql);
+
+            ps.setInt(1, id);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
+                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

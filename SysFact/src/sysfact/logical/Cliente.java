@@ -15,20 +15,17 @@ public class Cliente {
     private String apelido;
     private int nuit;
     private String data_criacao;
-    private Usuario fk_id_usuario;
+    private int fk_id_usuario;
     private boolean active_or_not;
 
     public Cliente() {
     }
 
-    public Cliente(int id, String nome, String apelido, int nuit, String data_criacao, Usuario fk_id_usuario, boolean active_or_not) {
-        this.id = id;
+    public Cliente( String nome, String apelido, int nuit, Usuario fk_id_usuario) {
         this.nome = nome;
         this.apelido = apelido;
         this.nuit = nuit;
-        this.data_criacao = data_criacao;
-        this.fk_id_usuario = fk_id_usuario;
-        this.active_or_not = active_or_not;
+        this.fk_id_usuario = fk_id_usuario.getId();
     }
 
     
@@ -73,11 +70,11 @@ public class Cliente {
         this.data_criacao = data_criacao;
     }
 
-    public Usuario getFk_id_usuario() {
+    public int getFk_id_usuario() {
         return fk_id_usuario;
     }
 
-    public void setFk_id_usuario(Usuario fk_id_usuario) {
+    public void setFk_id_usuario(int fk_id_usuario) {
         this.fk_id_usuario = fk_id_usuario;
     }
 

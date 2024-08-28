@@ -78,16 +78,19 @@ public class Teste {
 //        pd.addEntity(p);
         FornecedorDAO fd = new FornecedorDAO();
         Fornecedor f = fd.searchEntityByName("Fornecedor 4");
-        
+
         ProdutoDAO pd = new ProdutoDAO();
         Produto p = pd.searchEntityByName("Cadeira singular");
-        
+
         ArmazemDAO ad = new ArmazemDAO();
         Armazem a = ad.searchEntityByName("HomoSotore");
-        
+
         ProdutoFornecidoDAO pfd = new ProdutoFornecidoDAO();
-        ProdutoFornecido pf = new ProdutoFornecido(10, "2024-08-28 7:03:00", 13684.39, a, p, f,u);
-        pfd.addEntity(pf);
+        ProdutoFornecido pf = new ProdutoFornecido(10, "2024-08-28 7:03:00", 13684.39, a, p, f, u);
+//        pfd.addEntity(pf);
+        ClienteDAO clid = new ClienteDAO();
+        Cliente cli = new Cliente("Cliente 1", "Mula", 123456789, u);
+        clid.addEntity(cli);
 //        ContactoFornecedorDAO cfd = new ContactoFornecedorDAO();
 //        ContactoFornecedor cf = new ContactoFornecedor(ff, "878201993", "teste6@mail.com");
 //        ContactoFornecedor cf = new ContactoFornecedor();

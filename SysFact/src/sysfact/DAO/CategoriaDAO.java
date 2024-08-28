@@ -13,7 +13,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import sysfact.conexao.Conexao;
 import sysfact.logical.Categoria;
-import sysfact.logical.Usuario;
 
 /**
  *
@@ -31,10 +30,12 @@ public class CategoriaDAO implements DaoImpl<Categoria> {
 
     @Override
     public void addEntity(Categoria t) {
-        try {
+       try {
             sql = "insert into categoria (tipo, grupo, subgrupo, familia,"
                     + " descricao) value (?,?,?,?,?)";
+        
             ps = con.prepareStatement(sql);
+        
             ps.setString(1, t.getTipo());
             ps.setString(2, t.getGrupo());
             ps.setString(3, t.getSubgrupo());
@@ -43,9 +44,10 @@ public class CategoriaDAO implements DaoImpl<Categoria> {
 
             ps.execute();
             ps.close();
-        } catch (SQLException ex) {
+            } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Categoria: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
+        
     }
 
     @Override
@@ -65,7 +67,7 @@ public class CategoriaDAO implements DaoImpl<Categoria> {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Usuario: "
+            JOptionPane.showMessageDialog(null, "Falha ao actulizar categoria: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -92,7 +94,7 @@ public class CategoriaDAO implements DaoImpl<Categoria> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Categoria: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao Buscar categoria: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
         return lista;
     }
@@ -101,7 +103,7 @@ public class CategoriaDAO implements DaoImpl<Categoria> {
     public Categoria searchEntityByName(String name) {
         Categoria c = null;
         try {
-            sql = "select * from categoria where nome like ?";
+            sql = "select * from categoria where familia like ?";
             ps = con.prepareStatement(sql);
             ps.setString(1, "%" + name + "%");
             ResultSet result = ps.executeQuery();
@@ -120,7 +122,7 @@ public class CategoriaDAO implements DaoImpl<Categoria> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Usuario: " + ex,
+            JOptionPane.showMessageDialog(null, "Erro ao pesquisar categoria: " + ex,
                     "Informação", JOptionPane.ERROR_MESSAGE);
         }
         return c;
@@ -137,7 +139,7 @@ public class CategoriaDAO implements DaoImpl<Categoria> {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Usuario: "
+            JOptionPane.showMessageDialog(null, "Erro ao deletar categoria: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -152,7 +154,7 @@ public class CategoriaDAO implements DaoImpl<Categoria> {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Usuario: "
+            JOptionPane.showMessageDialog(null, "Erro ao deletar categoria: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }

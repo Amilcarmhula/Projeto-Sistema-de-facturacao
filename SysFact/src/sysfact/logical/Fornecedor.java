@@ -9,18 +9,19 @@ package sysfact.logical;
  * @author JM-Tecnologias
  */
 public class Fornecedor {
+
     private int id;
     private String nome;
     private int nuit;
+    private String data_criacao;
     private boolean estadoActive;
-    
-    public Fornecedor(){}
 
-    public Fornecedor(int id, String nome, int nuit, boolean estadoActive) {
-        this.id = id;
+    public Fornecedor() {
+    }
+
+    public Fornecedor( String nome, int nuit) {
         this.nome = nome;
         this.nuit = nuit;
-        this.estadoActive = estadoActive;
     }
 
     public int getId() {
@@ -47,6 +48,14 @@ public class Fornecedor {
         this.nuit = nuit;
     }
 
+    public String getData_criacao() {
+        return data_criacao;
+    }
+
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
+    }
+
     public boolean isEstadoActive() {
         return estadoActive;
     }
@@ -54,6 +63,6 @@ public class Fornecedor {
     public void setEstadoActive(boolean estadoActive) {
         this.estadoActive = estadoActive;
     }
-    
-    
+
+   
 }

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import sysfact.conexao.Conexao;
-import sysfact.logical.Categoria;
 import sysfact.logical.UnidadeMedida;
 
 /**
@@ -61,7 +60,7 @@ public class UnidadeMedidaDAO  implements DaoImpl<UnidadeMedida> {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Usuario: "
+            JOptionPane.showMessageDialog(null, "Falha ao actulizar  unidade medida: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -129,7 +128,7 @@ public class UnidadeMedidaDAO  implements DaoImpl<UnidadeMedida> {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Usuario: "
+            JOptionPane.showMessageDialog(null, "Erro ao deletar  unidade medida: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -144,7 +143,7 @@ public class UnidadeMedidaDAO  implements DaoImpl<UnidadeMedida> {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Usuario: "
+            JOptionPane.showMessageDialog(null, "Erro ao deletar unidade medida: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }

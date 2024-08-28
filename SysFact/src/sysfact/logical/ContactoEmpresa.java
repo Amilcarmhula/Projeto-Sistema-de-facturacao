@@ -10,23 +10,42 @@ package sysfact.logical;
  */
 public class ContactoEmpresa extends Contacto{
 
-    private Empresa fk_id_empresa;
+    private int fk_id_empresa;
     private boolean active_or_not;
+     private int id;
+    private String data_criacao;
 
     public ContactoEmpresa() {
     }
 
-    public ContactoEmpresa(Empresa fk_id_empresa, boolean active_or_not, int id, String contacto, String email) {
-        super(id, contacto, email);
-        this.fk_id_empresa = fk_id_empresa;
-        this.active_or_not = active_or_not;
+    public ContactoEmpresa(Empresa fk_id_empresa, String contacto, String email) {
+        super(contacto, email);
+        this.fk_id_empresa = fk_id_empresa.getId();
     }
 
-    public Empresa getFk_id_empresa() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getData_criacao() {
+        return data_criacao;
+    }
+
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
+    }
+
+    
+
+    public int getFk_id_empresa() {
         return fk_id_empresa;
     }
 
-    public void setFk_id_empresa(Empresa fk_id_empresa) {
+    public void setFk_id_empresa(int fk_id_empresa) {
         this.fk_id_empresa = fk_id_empresa;
     }
 

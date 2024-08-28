@@ -3,9 +3,9 @@
  
 use _sysface;
 
-select * from usuario;
-insert into usuario(nome, usuario, senha, codigo) value ('Amilcar Mula','Admin',1234,408);
-update usuario set nome='Jr Mula', usuario=root, senha=4321, codigo=407 where id=1;
+
+-- insert into usuario(nome, usuario, senha, codigo) value ('Amilcar Mula','Admin',1234,408);
+-- update usuario set nome='Jr Mula', usuario='root', senha=4321, codigo=407 where id=1;
 
 create table usuario(
 	id integer primary key auto_increment,
@@ -37,6 +37,7 @@ create table categoria(
     active_or_not boolean default 1 not null, -- deletado ou nao
     check(tipo in('Produto','Serviço'))
 );
+
 create table unidade_medida(
 	id integer primary key auto_increment,
     tipo varchar(50), -- se e uma unidade de area, agraria, volume, massa, etc.. 
@@ -45,6 +46,7 @@ create table unidade_medida(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active_or_not boolean default 1 not null -- deletado ou nao
 ); 
+
 create table taxa_imposto(
 	id integer primary key auto_increment,
     identificador varchar(50) not null,
@@ -62,7 +64,7 @@ create table armazem(
     avenida varchar(50),
     rua varchar(30),
     codigo_postal integer,
-    numero integer not null,
+    numero integer not null unique,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active_or_not boolean default 1 not null -- deletado ou nao
 );
@@ -76,8 +78,6 @@ create table desconto(
     active_or_not boolean default 1 not null -- deletado ou nao
 );
 
-
-
 create table fornecedor(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -85,9 +85,10 @@ create table fornecedor(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active_or_not boolean default 1 not null -- deletado ou nao
 );
+
 create table contacto_fornecedor(
 	id integer primary key auto_increment,
-    contacto varchar(20) not null,
+    contacto varchar(20) not null unique,
 	email varchar(50) unique,
     fk_id_fornecedor integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -102,7 +103,7 @@ create table endereco_fornecedor(
     avenida varchar(50),
     rua varchar(30),
     codigo_postal integer,
-    numero integer not null,
+    numero integer not null unique,
     tipo varchar(10),
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fk_id_fornecedor integer not null,
@@ -110,7 +111,7 @@ create table endereco_fornecedor(
     foreign key (fk_id_fornecedor) references fornecedor(id),
     check (tipo in('Facturação','Envio'))
 );
-
+select * from servico;
 create table servico(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -148,10 +149,12 @@ create table produto_fornecido(
     fk_id_armazem integer not null,
     fk_id_produto integer not null,
     fk_id_fornecedor integer not null,
+    fk_id_usuario integer not null,
 	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_produto) references produto(id),
+    foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_fornecedor) references fornecedor(id)
 );
 
@@ -160,16 +163,29 @@ create table movimento_produto(
     tipo_movimento varchar(8) not null,
     data_movimento datetime,
     quantidade integer not null,
-    motivo_movimento varchar(50),
+    -- motivo_movimento varchar(50),
     fk_id_produto integer not null,
-    fk_id_usuario integer not null,
+	fk_id_usuario integer not null,
     fk_id_armazem integer not null,
     active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_produto) references produto(id),
-    foreign key (fk_id_usuario) references usuario(id),
+	foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_armazem) references armazem(id),
     check (tipo_movimento in('Entrada','Saída','Ajuste'))
 );
+
+delimiter //
+create trigger trigger_registra_entrada
+	after insert on produto_fornecido
+    for each row
+    begin
+		insert into movimento_produto (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem) value ('Entrada',new.data_fornedida,new.quantidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
+    end//
+delimiter ;
+
+
+
+
 
 
 

@@ -9,24 +9,18 @@ package sysfact.logical;
  * @author JM-Tecnologias
  */
 public class Contacto {
-    private int id;
+    
     private String contacto;
     private String email;
     
+
+    
     public Contacto(){}
 
-    public Contacto(int id, String contacto, String email) {
-        this.id = id;
+    public Contacto( String contacto, String email) {
+
         this.contacto = contacto;
         this.email = email;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getContacto() {
@@ -44,6 +38,4 @@ public class Contacto {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
 }

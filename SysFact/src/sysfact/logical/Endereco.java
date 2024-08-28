@@ -9,7 +9,6 @@ package sysfact.logical;
  * @author JM-Tecnologias
  */
 public class Endereco {
-    private int id;
     private String provincia;
     private String cidade;
     private String bairro;
@@ -21,8 +20,7 @@ public class Endereco {
     
     public Endereco(){}
 
-    public Endereco(int id, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
-        this.id = id;
+    public Endereco( String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
         this.provincia = provincia;
         this.cidade = cidade;
         this.bairro = bairro;
@@ -31,14 +29,6 @@ public class Endereco {
         this.codigoPostal = codigoPostal;
         this.numero = numero;
         this.tipo = tipo;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getProvincia() {

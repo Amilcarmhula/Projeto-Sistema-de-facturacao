@@ -9,32 +9,51 @@ package sysfact.logical;
  * @author JM-Tecnologias
  */
 public class ContactoCliente extends Contacto{
-    private Cliente fk_id_cliente;
-    private Usuario fk_id_usuario;
+    private int fk_id_cliente;
+    private int fk_id_usuario;
     private boolean active_or_not;
+    private int id;
+    private String data_criacao;
     
     public ContactoCliente(){}
 
-    public ContactoCliente(Cliente fk_id_cliente, Usuario fk_id_usuario, boolean active_or_not, int id, String contacto, String email) {
-        super(id, contacto, email);
-        this.fk_id_cliente = fk_id_cliente;
-        this.fk_id_usuario = fk_id_usuario;
-        this.active_or_not = active_or_not;
+    public ContactoCliente(Cliente fk_id_cliente, Usuario fk_id_usuario, String contacto, String email) {
+        super(contacto, email);
+        this.fk_id_cliente = fk_id_cliente.getId();
+        this.fk_id_usuario = fk_id_usuario.getId();
     }
 
-    public Cliente getFk_id_cliente() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getData_criacao() {
+        return data_criacao;
+    }
+
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
+    }
+
+    
+
+    public int getFk_id_cliente() {
         return fk_id_cliente;
     }
 
-    public void setFk_id_cliente(Cliente fk_id_cliente) {
+    public void setFk_id_cliente(int fk_id_cliente) {
         this.fk_id_cliente = fk_id_cliente;
     }
 
-    public Usuario getFk_id_usuario() {
+    public int getFk_id_usuario() {
         return fk_id_usuario;
     }
 
-    public void setFk_id_usuario(Usuario fk_id_usuario) {
+    public void setFk_id_usuario(int fk_id_usuario) {
         this.fk_id_usuario = fk_id_usuario;
     }
 

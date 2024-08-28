@@ -14,16 +14,18 @@ public class TaxaImposto {
     private String identificador;
     private double percentagem;
     private String descricao;
-    private boolean estadoActive;
+    private String data_criacao;
+    private boolean active_or_not;
     
     public TaxaImposto(){}
 
-    public TaxaImposto(int id, String identificador, double percentagem, String descricao, boolean estadoActive) {
+    public TaxaImposto(int id, String identificador, double percentagem, String descricao, String data_criacao, boolean active_or_not) {
         this.id = id;
         this.identificador = identificador;
         this.percentagem = percentagem;
         this.descricao = descricao;
-        this.estadoActive = estadoActive;
+        this.data_criacao = data_criacao;
+        this.active_or_not = active_or_not;
     }
 
     public int getId() {
@@ -58,12 +60,20 @@ public class TaxaImposto {
         this.descricao = descricao;
     }
 
-    public boolean isEstadoActive() {
-        return estadoActive;
+    public String getData_criacao() {
+        return data_criacao;
     }
 
-    public void setEstadoActive(boolean estadoActive) {
-        this.estadoActive = estadoActive;
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
     }
-    
-}
+
+    public boolean isActive_or_not() {
+        return active_or_not;
+    }
+
+    public void setActive_or_not(boolean active_or_not) {
+        this.active_or_not = active_or_not;
+    }
+
+    }

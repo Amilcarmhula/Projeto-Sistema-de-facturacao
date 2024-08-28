@@ -14,17 +14,19 @@ public class Desconto {
     private double percentagem;
     private double valorFixo;
     private String descricao;
-    private boolean estadoActive;
+    private String data_criacao;
+    private boolean active_or_not;
     
     public Desconto(){}
 
-    public Desconto(int id, String nome, double percentagem, double valorFixo, String descricao, boolean estadoActive) {
+    public Desconto(int id, String nome, double percentagem, double valorFixo, String descricao, String data_criacao, boolean active_or_not) {
         this.id = id;
         this.nome = nome;
         this.percentagem = percentagem;
         this.valorFixo = valorFixo;
         this.descricao = descricao;
-        this.estadoActive = estadoActive;
+        this.data_criacao = data_criacao;
+        this.active_or_not = active_or_not;
     }
 
     public int getId() {
@@ -67,13 +69,22 @@ public class Desconto {
         this.descricao = descricao;
     }
 
-    public boolean isEstadoActive() {
-        return estadoActive;
+    public String getData_criacao() {
+        return data_criacao;
     }
 
-    public void setEstadoActive(boolean estadoActive) {
-        this.estadoActive = estadoActive;
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
     }
+
+    public boolean isActive_or_not() {
+        return active_or_not;
+    }
+
+    public void setActive_or_not(boolean active_or_not) {
+        this.active_or_not = active_or_not;
+    }
+
     
     
 }

@@ -1,0 +1,55 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Aug 14, 2024, 8:25:43 PM
+    Author     : JM-Tecnologias
+*/
+
+.left-form{
+    /*-fx-background-color:linear-gradient(to bottom right, #272b3f, #256b51);    -fx-background-color:linear-gradient(to bottom right, #272b3f, #256b51);*/
+    -fx-background-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
+    -fx-border-color:#000;
+    -fx-border-width:.4px 0px .4px .4px;
+}
+
+
+.bg-transparent{
+    -fx-background-color:transparent;
+}
+
+.close{
+    -fx-background-color:transparent;
+    -fx-cursor:hand;
+}
+.close:hover{
+    -fx-background-color:rgba(35, 35, 35, .3);
+}
+
+.textfield{
+    -fx-background-color:linear-gradient(to bottom, #efefef, #eee);
+    -fx-background-radius:20px;
+    /* -fx-border-color:#000; */
+    /* -fx-border-width:4px; */
+    -fx-box-shadow: 0px 0px 10px 5px;
+    -fx-border-outline:0px ;
+    -fx-border-radius:20px;
+    -fx-font-size:15px;
+    -fx-font-family:"Arial";
+    
+}
+.textfield:focused{
+    -fx-background-color:#fff;
+    -fx-border-color:linear-gradient(to bottom right, #272b3f, #256b51);
+    -fx-border-width:.8px;
+}
+
+.login-btn{
+    -fx-background-color:linear-gradient(to bottom, #21a7ae,#368981);
+    -fx-background-radius:20px;
+    -fx-text-fill:#000;
+    -fx-font-size:20px;
+    -fx-font-family:"Arial";
+    -fx-cursor:hand;
+}

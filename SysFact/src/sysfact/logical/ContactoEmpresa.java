@@ -8,19 +8,21 @@ package sysfact.logical;
  *
  * @author JM-Tecnologias
  */
-public class ContactoEmpresa extends Contacto{
+public class ContactoEmpresa extends Contacto {
 
-    private int fk_id_empresa;
-    private boolean active_or_not;
-     private int id;
+    private int id;
     private String data_criacao;
+    private int fk_id_empresa;
+    private int fk_id_usuario;
+    private boolean active_or_not;
 
     public ContactoEmpresa() {
     }
 
-    public ContactoEmpresa(Empresa fk_id_empresa, String contacto, String email) {
+    public ContactoEmpresa(String contacto, String email, Empresa fk_id_empresa, Usuario fk_id_usuario) {
         super(contacto, email);
         this.fk_id_empresa = fk_id_empresa.getId();
+        this.fk_id_usuario = fk_id_usuario.getId();
     }
 
     public int getId() {
@@ -39,14 +41,20 @@ public class ContactoEmpresa extends Contacto{
         this.data_criacao = data_criacao;
     }
 
-    
-
     public int getFk_id_empresa() {
         return fk_id_empresa;
     }
 
     public void setFk_id_empresa(int fk_id_empresa) {
         this.fk_id_empresa = fk_id_empresa;
+    }
+
+    public int getFk_id_usuario() {
+        return fk_id_usuario;
+    }
+
+    public void setFk_id_usuario(int fk_id_usuario) {
+        this.fk_id_usuario = fk_id_usuario;
     }
 
     public boolean isActive_or_not() {
@@ -56,5 +64,6 @@ public class ContactoEmpresa extends Contacto{
     public void setActive_or_not(boolean active_or_not) {
         this.active_or_not = active_or_not;
     }
-    
+
+   
 }

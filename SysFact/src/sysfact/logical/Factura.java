@@ -13,28 +13,27 @@ public class Factura {
     private int id;
     private String tipo;
     private long numero;
-    private String data_vencimento;
     private boolean estado;
     private double total;
-    private Empresa fk_id_empresa;
-    private Cliente fk_id_cliente;
-    private Usuario fk_id_usuario;
+    private String data_criacao;
+    private String data_vencimento;
+    private int fk_id_empresa;
+    private int fk_id_cliente;
+    private int fk_id_usuario;
     private boolean active_or_not;
 
     public Factura() {
     }
 
-    public Factura(int id, String tipo, long numero, String data_vencimento, boolean estado, double total, Empresa fk_id_empresa, Cliente fk_id_cliente, Usuario fk_id_usuario, boolean active_or_not) {
-        this.id = id;
+    public Factura(String tipo, long numero, boolean estado, double total, String data_vencimento, Empresa fk_id_empresa, Cliente fk_id_cliente, Usuario fk_id_usuario) {
         this.tipo = tipo;
         this.numero = numero;
-        this.data_vencimento = data_vencimento;
         this.estado = estado;
         this.total = total;
-        this.fk_id_empresa = fk_id_empresa;
-        this.fk_id_cliente = fk_id_cliente;
-        this.fk_id_usuario = fk_id_usuario;
-        this.active_or_not = active_or_not;
+        this.data_vencimento = data_vencimento;
+        this.fk_id_empresa = fk_id_empresa.getId();
+        this.fk_id_cliente = fk_id_cliente.getId();
+        this.fk_id_usuario = fk_id_usuario.getId();
     }
 
     public int getId() {
@@ -61,14 +60,6 @@ public class Factura {
         this.numero = numero;
     }
 
-    public String getData_vencimento() {
-        return data_vencimento;
-    }
-
-    public void setData_vencimento(String data_vencimento) {
-        this.data_vencimento = data_vencimento;
-    }
-
     public boolean isEstado() {
         return estado;
     }
@@ -85,27 +76,43 @@ public class Factura {
         this.total = total;
     }
 
-    public Empresa getFk_id_empresa() {
+    public String getData_criacao() {
+        return data_criacao;
+    }
+
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
+    }
+
+    public String getData_vencimento() {
+        return data_vencimento;
+    }
+
+    public void setData_vencimento(String data_vencimento) {
+        this.data_vencimento = data_vencimento;
+    }
+
+    public int getFk_id_empresa() {
         return fk_id_empresa;
     }
 
-    public void setFk_id_empresa(Empresa fk_id_empresa) {
+    public void setFk_id_empresa(int fk_id_empresa) {
         this.fk_id_empresa = fk_id_empresa;
     }
 
-    public Cliente getFk_id_cliente() {
+    public int getFk_id_cliente() {
         return fk_id_cliente;
     }
 
-    public void setFk_id_cliente(Cliente fk_id_cliente) {
+    public void setFk_id_cliente(int fk_id_cliente) {
         this.fk_id_cliente = fk_id_cliente;
     }
 
-    public Usuario getFk_id_usuario() {
+    public int getFk_id_usuario() {
         return fk_id_usuario;
     }
 
-    public void setFk_id_usuario(Usuario fk_id_usuario) {
+    public void setFk_id_usuario(int fk_id_usuario) {
         this.fk_id_usuario = fk_id_usuario;
     }
 
@@ -116,6 +123,6 @@ public class Factura {
     public void setActive_or_not(boolean active_or_not) {
         this.active_or_not = active_or_not;
     }
-    
-    
+
+   
 }

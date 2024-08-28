@@ -14,12 +14,13 @@ public class Empresa {
     private String nome;
     private String apelido;
     private int nuit;
+    private String data_criacao;
+    private boolean active_or_not;
 
     public Empresa() {
     }
 
-    public Empresa(int id, String nome, String apelido, int nuit) {
-        this.id = id;
+    public Empresa( String nome, String apelido, int nuit) {
         this.nome = nome;
         this.apelido = apelido;
         this.nuit = nuit;
@@ -55,6 +56,22 @@ public class Empresa {
 
     public void setNuit(int nuit) {
         this.nuit = nuit;
+    }
+
+    public String getData_criacao() {
+        return data_criacao;
+    }
+
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
+    }
+
+    public boolean isActive_or_not() {
+        return active_or_not;
+    }
+
+    public void setActive_or_not(boolean active_or_not) {
+        this.active_or_not = active_or_not;
     }
     
     

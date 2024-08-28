@@ -1,0 +1,67 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.top-form {
+    -fx-background-color: #fff;
+    /*-fx-border-color: #000;*/
+    -fx-border-radius: .4px .4px .2px .4px;
+}
+
+.semi-top-form{
+    -fx-background-color: rgba(131, 130, 130, 0.3);
+    /*-fx-border-color: #000;*/
+    -fx-border-width: .2px .4px .8px .4px;
+}
+
+.close{
+    -fx-background-color:transparent;
+    -fx-cursor:hand;
+}
+
+.close:hover{
+    -fx-background-color:#ff3547;
+}
+
+.minimize{
+    -fx-background-color:transparent;
+    -fx-cursor:hand;
+}
+.minimize:hover{
+    -fx-background-color:rgba(35, 35, 35, .3);
+}
+.navs{
+    -fx-background-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
+}
+.nav-btn{
+    -fx-background-color: transparent;
+    /*-fx-text-fill: #fff;*/
+    -fx-cursor: hand;
+}
+
+.nav-btn:hover{
+   -fx-background-color: rgba(55, 55, 179, 0.25);
+   /*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.5), 6,0,0,0);*/
+}
+
+.main-frame{
+    -fx-background-color: #fff;
+}
+
+.btn-logout{
+    -fx-cursor: hand;
+    -fx-background-color: rgba(55, 55, 179, 0.25);
+    -fx-background-radius:20px;
+}
+.btn-logout:hover{
+    -fx-border-color: rgba(35, 35, 35, .3);
+    -fx-border-radius: 20px;
+    -fx-border-width: 5px;
+}
+.shadow{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.5), 6,0,0,0);
+}
+.white-bg{
+    -fx-background-color: #fff;
+    -fx-background-radius: 10px;
+}

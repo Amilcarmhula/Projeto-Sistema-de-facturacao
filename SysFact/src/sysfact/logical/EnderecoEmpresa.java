@@ -10,7 +10,7 @@ package sysfact.logical;
  */
 public class EnderecoEmpresa extends Endereco{
 
-    private Empresa fk_id_empresa;
+    private int fk_id_empresa;
     private boolean active_or_not;
     private int id;
     private String data_criacao;
@@ -20,7 +20,7 @@ public class EnderecoEmpresa extends Endereco{
 
     public EnderecoEmpresa(Empresa fk_id_empresa, int id, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
         super(provincia, cidade, bairro, avenida, rua, codigoPostal, numero, tipo);
-        this.fk_id_empresa = fk_id_empresa;
+        this.fk_id_empresa = fk_id_empresa.getId();
     }
 
     public int getId() {
@@ -39,11 +39,11 @@ public class EnderecoEmpresa extends Endereco{
         this.data_criacao = data_criacao;
     }
 
-    public Empresa getFk_id_empresa() {
+    public int getFk_id_empresa() {
         return fk_id_empresa;
     }
 
-    public void setFk_id_empresa(Empresa fk_id_empresa) {
+    public void setFk_id_empresa(int fk_id_empresa) {
         this.fk_id_empresa = fk_id_empresa;
     }
 

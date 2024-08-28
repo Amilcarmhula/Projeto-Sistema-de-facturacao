@@ -13,22 +13,23 @@ public class ContaBancaria {
     private int id;
     private String nome_banco;
     private long numero;
-    private int nib;
+    private long nib;
     private long nuib;
-    private Empresa fk_id_empresa;
+    private int fk_id_empresa;
+    private int fk_id_usuario;
+    private String data_criacao;
     private boolean active_or_not;
 
     public ContaBancaria() {
     }
 
-    public ContaBancaria(int id, String nome_banco, long numero, int nib, long nuib, Empresa fk_id_empresa, boolean active_or_not) {
-        this.id = id;
+    public ContaBancaria(String nome_banco, long numero, int nib, long nuib, Empresa fk_id_empresa, Usuario fk_id_usuario) {
         this.nome_banco = nome_banco;
         this.numero = numero;
         this.nib = nib;
         this.nuib = nuib;
-        this.fk_id_empresa = fk_id_empresa;
-        this.active_or_not = active_or_not;
+        this.fk_id_empresa = fk_id_empresa.getId();
+        this.fk_id_usuario = fk_id_usuario.getId();
     }
 
     public int getId() {
@@ -55,11 +56,11 @@ public class ContaBancaria {
         this.numero = numero;
     }
 
-    public int getNib() {
+    public long getNib() {
         return nib;
     }
 
-    public void setNib(int nib) {
+    public void setNib(long nib) {
         this.nib = nib;
     }
 
@@ -71,12 +72,28 @@ public class ContaBancaria {
         this.nuib = nuib;
     }
 
-    public Empresa getFk_id_empresa() {
+    public int getFk_id_empresa() {
         return fk_id_empresa;
     }
 
-    public void setFk_id_empresa(Empresa fk_id_empresa) {
+    public void setFk_id_empresa(int fk_id_empresa) {
         this.fk_id_empresa = fk_id_empresa;
+    }
+
+    public int getFk_id_usuario() {
+        return fk_id_usuario;
+    }
+
+    public void setFk_id_usuario(int fk_id_usuario) {
+        this.fk_id_usuario = fk_id_usuario;
+    }
+
+    public String getData_criacao() {
+        return data_criacao;
+    }
+
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
     }
 
     public boolean isActive_or_not() {
@@ -86,6 +103,6 @@ public class ContaBancaria {
     public void setActive_or_not(boolean active_or_not) {
         this.active_or_not = active_or_not;
     }
-    
+
     
 }

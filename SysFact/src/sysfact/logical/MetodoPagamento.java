@@ -13,16 +13,15 @@ public class MetodoPagamento {
     private int id;
     private String nome;
     private String descricao;
+    private String data_criacao;
     private boolean active_or_not;
 
     public MetodoPagamento() {
     }
 
-    public MetodoPagamento(int id, String nome, String descricao, boolean active_or_not) {
-        this.id = id;
+    public MetodoPagamento(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
-        this.active_or_not = active_or_not;
     }
 
     public int getId() {
@@ -49,6 +48,14 @@ public class MetodoPagamento {
         this.descricao = descricao;
     }
 
+    public String getData_criacao() {
+        return data_criacao;
+    }
+
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
+    }
+
     public boolean isActive_or_not() {
         return active_or_not;
     }
@@ -56,4 +63,6 @@ public class MetodoPagamento {
     public void setActive_or_not(boolean active_or_not) {
         this.active_or_not = active_or_not;
     }
+
+    
 }

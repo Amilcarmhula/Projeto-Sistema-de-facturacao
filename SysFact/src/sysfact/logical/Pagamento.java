@@ -12,25 +12,24 @@ public class Pagamento {
 
     private int id;
     private String data_pagamento;
-    private int referencia_numero_fatura;
+    private long referencia_numero_fatura;
     private double valor;
-    private MetodoPagamento fk_id_metodo_pagamento;
-    private Factura fk_id_factura;
-    private Usuario fk_id_usuario;
+    private int fk_id_metodo_pagamento;
+    private String data_criacao;
+    private int fk_id_factura;
+    private int fk_id_usuario;
     private boolean active_or_not;
 
     public Pagamento() {
     }
 
-    public Pagamento(int id, String data_pagamento, int referencia_numero_fatura, double valor, MetodoPagamento fk_id_metodo_pagamento, Factura fk_id_factura, Usuario fk_id_usuario, boolean active_or_not) {
-        this.id = id;
+    public Pagamento(String data_pagamento, long referencia_numero_fatura, double valor, MetodoPagamento fk_id_metodo_pagamento, Factura fk_id_factura, Usuario fk_id_usuario) {
         this.data_pagamento = data_pagamento;
         this.referencia_numero_fatura = referencia_numero_fatura;
         this.valor = valor;
-        this.fk_id_metodo_pagamento = fk_id_metodo_pagamento;
-        this.fk_id_factura = fk_id_factura;
-        this.fk_id_usuario = fk_id_usuario;
-        this.active_or_not = active_or_not;
+        this.fk_id_metodo_pagamento = fk_id_metodo_pagamento.getId();
+        this.fk_id_factura = fk_id_factura.getId();
+        this.fk_id_usuario = fk_id_usuario.getId();
     }
 
     public int getId() {
@@ -49,11 +48,11 @@ public class Pagamento {
         this.data_pagamento = data_pagamento;
     }
 
-    public int getReferencia_numero_fatura() {
+    public long getReferencia_numero_fatura() {
         return referencia_numero_fatura;
     }
 
-    public void setReferencia_numero_fatura(int referencia_numero_fatura) {
+    public void setReferencia_numero_fatura(long referencia_numero_fatura) {
         this.referencia_numero_fatura = referencia_numero_fatura;
     }
 
@@ -65,27 +64,35 @@ public class Pagamento {
         this.valor = valor;
     }
 
-    public MetodoPagamento getFk_id_metodo_pagamento() {
+    public int getFk_id_metodo_pagamento() {
         return fk_id_metodo_pagamento;
     }
 
-    public void setFk_id_metodo_pagamento(MetodoPagamento fk_id_metodo_pagamento) {
+    public void setFk_id_metodo_pagamento(int fk_id_metodo_pagamento) {
         this.fk_id_metodo_pagamento = fk_id_metodo_pagamento;
     }
 
-    public Factura getFk_id_factura() {
+    public String getData_criacao() {
+        return data_criacao;
+    }
+
+    public void setData_criacao(String data_criacao) {
+        this.data_criacao = data_criacao;
+    }
+
+    public int getFk_id_factura() {
         return fk_id_factura;
     }
 
-    public void setFk_id_factura(Factura fk_id_factura) {
+    public void setFk_id_factura(int fk_id_factura) {
         this.fk_id_factura = fk_id_factura;
     }
 
-    public Usuario getFk_id_usuario() {
+    public int getFk_id_usuario() {
         return fk_id_usuario;
     }
 
-    public void setFk_id_usuario(Usuario fk_id_usuario) {
+    public void setFk_id_usuario(int fk_id_usuario) {
         this.fk_id_usuario = fk_id_usuario;
     }
 
@@ -96,6 +103,5 @@ public class Pagamento {
     public void setActive_or_not(boolean active_or_not) {
         this.active_or_not = active_or_not;
     }
-    
-    
+
 }

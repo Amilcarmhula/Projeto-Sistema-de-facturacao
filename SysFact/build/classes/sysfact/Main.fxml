@@ -3,6 +3,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -17,7 +18,7 @@
             <AnchorPane prefHeight="600.0" prefWidth="400.0" styleClass="left-form" stylesheets="@style/loginStyle.css">
                <children>
                   <FontAwesomeIconView glyphName="USERS" layoutX="98.0" layoutY="319.0" size="200" />
-                  <TextField fx:id="txtusarname" layoutX="90.0" layoutY="380.0" prefHeight="30.0" prefWidth="230.0" promptText="Usuário" styleClass="textfield" stylesheets="@style/loginStyle.css">
+                  <TextField fx:id="txtusarname" layoutX="90.0" layoutY="367.0" prefHeight="30.0" prefWidth="230.0" promptText="Usuário" styleClass="textfield" stylesheets="@style/loginStyle.css">
                      <effect>
                         <DropShadow height="10.0" radius="4.5" spread="0.2" width="10.0">
                            <color>
@@ -25,15 +26,7 @@
                            </color>
                         </DropShadow>
                      </effect></TextField>
-                  <TextField fx:id="txtpassword" layoutX="90.0" layoutY="440.0" prefHeight="30.0" prefWidth="230.0" promptText="Senha" styleClass="textfield" stylesheets="@style/loginStyle.css">
-                     <effect>
-                        <DropShadow height="10.0" radius="4.5" spread="0.2" width="10.0">
-                           <color>
-                              <Color opacity="0.6000000238418579" />
-                           </color>
-                        </DropShadow>
-                     </effect></TextField>
-                  <Button fx:id="btnlogin" layoutX="90.0" layoutY="500.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="230.0" styleClass="login-btn" stylesheets="@style/loginStyle.css" text="Login">
+                  <Button fx:id="btnlogin" layoutX="90.0" layoutY="500.0" mnemonicParsing="false" onAction="#log" prefHeight="37.0" prefWidth="230.0" styleClass="login-btn" stylesheets="@style/loginStyle.css" text="Login">
                      <font>
                         <Font name="Berlin Sans FB Demi Bold" size="48.0" />
                      </font>
@@ -60,6 +53,24 @@
                         <Font name="Berlin Sans FB Demi Bold" size="30.0" />
                      </font>
                   </Label>
+                  <TextField fx:id="txtcodigo" layoutX="90.0" layoutY="404.0" prefHeight="30.0" prefWidth="230.0" promptText="Codigo" styleClass="textfield" stylesheets="@style/loginStyle.css">
+                     <effect>
+                        <DropShadow height="10.0" radius="4.5" spread="0.2" width="10.0">
+                           <color>
+                              <Color opacity="0.6000000238418579" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </TextField>
+                  <PasswordField fx:id="txtpassword" layoutX="90.0" layoutY="440.0" prefWidth="230.0" promptText="Senha" styleClass="textfield" stylesheets="@style/loginStyle.css">
+                     <effect>
+                        <DropShadow height="10.0" radius="4.5" spread="0.2" width="10.0">
+                           <color>
+                              <Color opacity="0.6000000238418579" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </PasswordField>
                </children>
             </AnchorPane>
          </children>

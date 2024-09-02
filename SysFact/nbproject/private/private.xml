@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/logical/Cliente.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/DAO/ContactoFornecedorDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/teste/Teste.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/DAO/ContactoClienteDAO.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/logical/Contacto.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/views/dashboard/DashboardController.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/DAO/EnderecoAgenteDAO.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/logical/Endereco.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/logical/EnderecoAgente.java</file>
         </group>
     </open-files>
 </project-private>

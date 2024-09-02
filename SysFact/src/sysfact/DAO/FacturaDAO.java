@@ -32,7 +32,7 @@ public class FacturaDAO implements DaoImpl<Factura> {
     public void addEntity(Factura t) {
         try {
             sql = "insert into factura (tipo,numero,data_vencimento,total,"
-                    + "fk_id_empresa,fk_id_cliente,fk_id_usuario)"
+                    + "fk_id_empresa,fk_id_agente,fk_id_usuario)"
                     + " value (?,?,?,?,?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, t.getTipo());
@@ -40,7 +40,7 @@ public class FacturaDAO implements DaoImpl<Factura> {
             ps.setString(3, t.getData_vencimento());
             ps.setDouble(4, t.getTotal());
             ps.setInt(5, t.getFk_id_empresa());
-            ps.setInt(6, t.getFk_id_cliente());
+            ps.setInt(6, t.getFk_id_agente());
             ps.setInt(7, t.getFk_id_usuario());
 
             ps.execute();
@@ -58,7 +58,7 @@ public class FacturaDAO implements DaoImpl<Factura> {
             ps = con.prepareStatement(sql);
 
              ps.setString(1, t.getTipo());
-            ps.setInt(2, t.getFk_id_cliente());
+            ps.setInt(2, t.getFk_id_agente());
             ps.setInt(3, id);
 
             ps.execute();

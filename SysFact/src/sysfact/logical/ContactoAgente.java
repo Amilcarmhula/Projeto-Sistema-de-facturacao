@@ -8,20 +8,19 @@ package sysfact.logical;
  *
  * @author JM-Tecnologias
  */
-public class EnderecoCliente extends Endereco {
-
-    private int id;
-    private String data_criacao;
-    private int fk_id_cliente;
+public class ContactoAgente extends Contacto{
+    private int fk_id_agente;
     private int fk_id_usuario;
     private boolean active_or_not;
+    private int id;
+    private String data_criacao;
+    
+    
+    public ContactoAgente(){}
 
-    public EnderecoCliente() {
-    }
-
-    public EnderecoCliente(Cliente fk_id_cliente, Usuario fk_id_usuario, int id, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
-        super(provincia, cidade, bairro, avenida, rua, codigoPostal, numero, tipo);
-        this.fk_id_cliente = fk_id_cliente.getId();
+    public ContactoAgente(Agente fk_id_agente, Usuario fk_id_usuario, String contacto, String email) {
+        super(contacto, email);
+        this.fk_id_agente = fk_id_agente.getId();
         this.fk_id_usuario = fk_id_usuario.getId();
     }
 
@@ -41,12 +40,14 @@ public class EnderecoCliente extends Endereco {
         this.data_criacao = data_criacao;
     }
 
-    public int getFk_id_cliente() {
-        return fk_id_cliente;
+    
+
+    public int getFk_id_agente() {
+        return fk_id_agente;
     }
 
-    public void setFk_id_cliente(int fk_id_cliente) {
-        this.fk_id_cliente = fk_id_cliente;
+    public void setFk_id_agente(int fk_id_agente) {
+        this.fk_id_agente = fk_id_agente;
     }
 
     public int getFk_id_usuario() {
@@ -64,5 +65,6 @@ public class EnderecoCliente extends Endereco {
     public void setActive_or_not(boolean active_or_not) {
         this.active_or_not = active_or_not;
     }
-
+    
+    
 }

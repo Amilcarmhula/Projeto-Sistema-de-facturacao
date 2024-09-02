@@ -23,7 +23,9 @@ public class SysFact extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/dashboard/dashboard.fxml"));
+
         
         Scene scene = new Scene(root);
         

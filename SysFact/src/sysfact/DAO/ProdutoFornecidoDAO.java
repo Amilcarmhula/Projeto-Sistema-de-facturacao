@@ -32,7 +32,7 @@ public class ProdutoFornecidoDAO implements DaoImpl<ProdutoFornecido> {
     public void addEntity(ProdutoFornecido t) {
        try {
             sql = "insert into produto_fornecido (quantidade,data_fornedida,custo, fk_id_armazem,fk_id_produto, "
-                    + "fk_id_fornecedor,fk_id_usuario) value (?,?,?,?,?,?,?)";
+                    + "fk_id_agente,fk_id_usuario) value (?,?,?,?,?,?,?)";
         
             ps = con.prepareStatement(sql);
         
@@ -41,7 +41,7 @@ public class ProdutoFornecidoDAO implements DaoImpl<ProdutoFornecido> {
             ps.setDouble(3, t.getCusto());
             ps.setInt(4, t.getFk_id_armazem());
             ps.setInt(5, t.getFk_id_produto());
-            ps.setInt(6, t.getFk_id_fornecedor());
+            ps.setInt(6, t.getFk_id_agente());
             ps.setInt(7, t.getFk_id_usuario());
 
 
@@ -58,7 +58,7 @@ public class ProdutoFornecidoDAO implements DaoImpl<ProdutoFornecido> {
         try {
             sql = "update produto_fornecido set quantidade=?,data_fornedida=?,"
                     + "custo=?, fk_id_armazem=?,fk_id_produto=?,"
-                    + "fk_id_fornecedor=?, fk_id_usuario=? where id=?";
+                    + "fk_id_agente=?, fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, t.getQuantidade());
@@ -66,7 +66,7 @@ public class ProdutoFornecidoDAO implements DaoImpl<ProdutoFornecido> {
             ps.setDouble(3, t.getCusto());
             ps.setInt(4, t.getFk_id_armazem());
             ps.setInt(5, t.getFk_id_produto());
-            ps.setInt(6, t.getFk_id_fornecedor());
+            ps.setInt(6, t.getFk_id_agente());
             ps.setInt(7, t.getFk_id_usuario());
 
             ps.setInt(8, id);
@@ -94,7 +94,7 @@ public class ProdutoFornecidoDAO implements DaoImpl<ProdutoFornecido> {
                 c.setCusto(result.getDouble("custo"));
                 c.setFk_id_armazem(result.getInt("fk_id_armazem"));
                 c.setFk_id_produto(result.getInt("fk_id_produto"));
-                c.setFk_id_fornecedor(result.getInt("fk_id_fornecedor"));
+                c.setFk_id_agente(result.getInt("fk_id_agente"));
                 c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setActive_or_not(result.getBoolean("active_or_not"));
@@ -125,7 +125,7 @@ public class ProdutoFornecidoDAO implements DaoImpl<ProdutoFornecido> {
                 c.setCusto(result.getDouble("custo"));
                 c.setFk_id_armazem(result.getInt("fk_id_armazem"));
                 c.setFk_id_produto(result.getInt("fk_id_produto"));
-                c.setFk_id_fornecedor(result.getInt("fk_id_fornecedor"));
+                c.setFk_id_agente(result.getInt("fk_id_agente"));
                 c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setActive_or_not(result.getBoolean("active_or_not"));

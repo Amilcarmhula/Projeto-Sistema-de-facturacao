@@ -8,27 +8,22 @@ package sysfact.logical;
  *
  * @author JM-Tecnologias
  */
-public class Cliente {
+public class EnderecoAgente extends Endereco {
 
     private int id;
-    private String nome;
-    private String apelido;
-    private int nuit;
     private String data_criacao;
+    private int fk_id_agente;
     private int fk_id_usuario;
     private boolean active_or_not;
 
-    public Cliente() {
+    public EnderecoAgente() {
     }
 
-    public Cliente( String nome, String apelido, int nuit, Usuario fk_id_usuario) {
-        this.nome = nome;
-        this.apelido = apelido;
-        this.nuit = nuit;
+    public EnderecoAgente(Agente fk_id_agente, Usuario fk_id_usuario, int id, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
+        super(provincia, cidade, bairro, avenida, rua, codigoPostal, numero, tipo);
+        this.fk_id_agente = fk_id_agente.getId();
         this.fk_id_usuario = fk_id_usuario.getId();
     }
-
-    
 
     public int getId() {
         return id;
@@ -38,36 +33,20 @@ public class Cliente {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getApelido() {
-        return apelido;
-    }
-
-    public void setApelido(String apelido) {
-        this.apelido = apelido;
-    }
-
-    public int getNuit() {
-        return nuit;
-    }
-
-    public void setNuit(int nuit) {
-        this.nuit = nuit;
-    }
-
     public String getData_criacao() {
         return data_criacao;
     }
 
     public void setData_criacao(String data_criacao) {
         this.data_criacao = data_criacao;
+    }
+
+    public int getFk_id_agente() {
+        return fk_id_agente;
+    }
+
+    public void setFk_id_agente(int fk_id_agente) {
+        this.fk_id_agente = fk_id_agente;
     }
 
     public int getFk_id_usuario() {
@@ -86,5 +65,4 @@ public class Cliente {
         this.active_or_not = active_or_not;
     }
 
-    
 }

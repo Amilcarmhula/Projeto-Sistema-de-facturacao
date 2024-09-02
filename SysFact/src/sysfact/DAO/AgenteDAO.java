@@ -10,72 +10,78 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import sysfact.conexao.Conexao;
-import sysfact.logical.Cliente;
+import sysfact.logical.Agente;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public class ClienteDAO implements DaoImpl<Cliente>{
+public class AgenteDAO implements DaoImpl<Agente>{
 
     private Connection con;
     private PreparedStatement ps;
     private String sql;
 
-    public ClienteDAO() throws SQLException {
+    public AgenteDAO() throws SQLException {
         this.con = Conexao.getConexao();
     }
 
     @Override
-    public void addEntity(Cliente c) {
+    public void addEntity(Agente c) {
        try {
-            sql = "insert into cliente (nome,apelido,nuit,fk_id_usuario) value (?,?,?,?)";
+            sql = "insert into agente (tipo,nome,apelido,nuit,fk_id_usuario) value (?,?,?,?,?)";
             ps= con.prepareStatement(sql);
-            ps.setString(1, c.getNome());
-            ps.setString(2, c.getApelido());
-            ps.setInt(3, c.getNuit());
-            ps.setInt(4, c.getFk_id_usuario());
+            ps.setString(1, c.getTipo());
+            ps.setString(2, c.getNome());
+            ps.setString(3, c.getApelido());
+            ps.setInt(4, c.getNuit());
+            ps.setInt(5, c.getFk_id_usuario());
 
             ps.execute();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao adicionar agente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     @Override
-    public void updateEntityByID(Cliente c, int id) {
+    public void updateEntityByID(Agente c, int id) {
         try {
-            sql = "update cliente set nome=? ,apelido=? ,nuit=?, fk_id_usuario=?"
+            sql = "update agente set tipo=?, nome=? ,apelido=? ,nuit=?, fk_id_usuario=?"
                     + " where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, c.getNome());
-            ps.setString(2, c.getApelido());
-            ps.setInt(3, c.getNuit());
-            ps.setInt(4, c.getFk_id_usuario());
-            ps.setInt(5, id);
+            ps.setString(1, c.getTipo());
+            ps.setString(2, c.getNome());
+            ps.setString(3, c.getApelido());
+            ps.setInt(4, c.getNuit());
+            ps.setInt(5, c.getFk_id_usuario());
+            ps.setInt(6, id);
 
             ps.execute();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao actualizar Cliente: " 
+            JOptionPane.showMessageDialog(null, "Falha ao actualizar agente: " 
                     + e, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     @Override
-    public List<Cliente> listAllEntities() {
-        List<Cliente> lista = new ArrayList<>();
+    public ObservableList<Agente> listAllEntities() {
+//        List<Agente> lista = new ArrayList<>();
+        ObservableList<Agente> lista = FXCollections.observableArrayList();
         try {
-            sql = "select * from cliente";
+            sql = "select * from agente";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
-                Cliente c = new Cliente();
+                Agente c = new Agente();
                 c.setId(result.getInt("id"));
+                c.setTipo(result.getString("tipo"));
                 c.setApelido(result.getString("apelido"));
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setNome(result.getString("nome"));
@@ -87,7 +93,35 @@ public class ClienteDAO implements DaoImpl<Cliente>{
             result.close();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar Clientes: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar agente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+
+        }
+        return lista;
+    }
+    
+    public ObservableList<Agente> searchEntityByName2(String nome) {
+        ObservableList<Agente> lista = FXCollections.observableArrayList();
+        try {
+            sql = "select * from agente where nome LIKE ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, "%" + nome + "%");
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                Agente c = new Agente();
+                c.setId(result.getInt("id"));
+                c.setTipo(result.getString("tipo"));
+                c.setApelido(result.getString("apelido"));
+                c.setData_criacao(result.getString("data_criacao"));
+                c.setNome(result.getString("nome"));
+                c.setNuit(result.getInt("nuit"));
+                c.setActive_or_not(result.getBoolean("active_or_not"));
+                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
+                lista.add(c);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar agente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
 
         }
         return lista;
@@ -100,16 +134,17 @@ public class ClienteDAO implements DaoImpl<Cliente>{
     serem visualizados numa tabela
      */
      @Override
-    public Cliente searchEntityByName(String nome) {
-        Cliente c = null;
+    public Agente searchEntityByName(String nome) {
+        Agente c = null;
         try {
-            sql = "select * from cliente where nome LIKE ?";
+            sql = "select * from agente where nome LIKE ?";
             ps = con.prepareStatement(sql);
             ps.setString(1, "%" + nome + "%");
             ResultSet result = ps.executeQuery();
             while (result.next()) {
-                c = new Cliente();
+                c = new Agente();
                 c.setId(result.getInt("id"));
+                c.setTipo(result.getString("tipo"));
                 c.setApelido(result.getString("apelido"));
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setNome(result.getString("nome"));
@@ -120,7 +155,7 @@ public class ClienteDAO implements DaoImpl<Cliente>{
             result.close();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar Clientes: " + e,
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar agente: " + e,
                     "Informação", JOptionPane.ERROR_MESSAGE);
         }
         return c;
@@ -128,14 +163,14 @@ public class ClienteDAO implements DaoImpl<Cliente>{
      @Override
     public void deleteEntityByROOT(int id) {
         try {
-            sql = "delete from cliente where id=?";
+            sql = "delete from agente where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, id);
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
+            JOptionPane.showMessageDialog(null, "Erro ao deletar agente: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -143,14 +178,14 @@ public class ClienteDAO implements DaoImpl<Cliente>{
     @Override
     public void deleteEntityByUSER(int id) {
         try {
-            sql =  "update cliente set active_or_not=false where id=?";
+            sql =  "update agente set active_or_not=false where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, id);
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
+            JOptionPane.showMessageDialog(null, "Erro ao deletar agente: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }

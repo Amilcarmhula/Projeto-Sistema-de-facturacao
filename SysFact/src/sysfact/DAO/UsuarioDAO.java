@@ -28,6 +28,35 @@ public class UsuarioDAO implements DaoImpl<Usuario> {
         this.con = Conexao.getConexao();
     }
 
+    public Usuario login(Usuario u) {
+        Usuario user = null;
+        try {
+            sql = "select * from usuario where usuario=? and codigo=? and senha=?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, u.getUsuario());
+            ps.setInt(2, u.getCodigo());
+            ps.setInt(3, u.getSenha());
+
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                user = new Usuario();
+                user.setId(result.getInt("id"));
+                user.setNome(result.getString("nome"));
+                user.setUsuario(result.getString("usuario"));
+                user.setSenha(result.getInt("senha"));
+                user.setCodigo(result.getInt("codigo"));
+                user.setData_criacao(result.getString("data_criacao"));
+                user.setEstadoActive(result.getBoolean("active_or_not"));
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Usuario nao encontrado: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+        return user;
+    }
+    
+
     @Override
     public void addEntity(Usuario t) {
         try {
@@ -120,7 +149,7 @@ public class UsuarioDAO implements DaoImpl<Usuario> {
         return u;
 
     }
-    
+
 //    @Override
 //    public List<Usuario> searchListEntityByName(String name) {
 //        List<Usuario>  user= new ArrayList<>();
@@ -149,7 +178,6 @@ public class UsuarioDAO implements DaoImpl<Usuario> {
 //        }
 //        return user;
 //    }
-
     @Override
     public void deleteEntityByROOT(int id) {
         try {
@@ -164,6 +192,7 @@ public class UsuarioDAO implements DaoImpl<Usuario> {
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     @Override
     public void deleteEntityByUSER(int id) {
         try {

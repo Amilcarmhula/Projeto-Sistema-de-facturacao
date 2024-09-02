@@ -16,20 +16,20 @@ public class ProdutoFornecido {
     private double custo;
     private int fk_id_armazem;
     private int fk_id_produto;
-    private int fk_id_fornecedor;
+    private int fk_id_agente;
     private int fk_id_usuario;
     private String data_criacao;
     private boolean active_or_not;
     
     public ProdutoFornecido(){}
 
-    public ProdutoFornecido(int quantidade, String data_fornedida, double custo, Armazem fk_id_armazem, Produto fk_id_produto, Fornecedor fk_id_fornecedor, Usuario fk_id_usuario) {
+    public ProdutoFornecido(int quantidade, String data_fornedida, double custo, Armazem fk_id_armazem, Produto fk_id_produto, Agente fk_id_agente, Usuario fk_id_usuario) {
         this.quantidade = quantidade;
         this.data_fornedida = data_fornedida;
         this.custo = custo;
         this.fk_id_armazem = fk_id_armazem.getId();
         this.fk_id_produto = fk_id_produto.getId();
-        this.fk_id_fornecedor = fk_id_fornecedor.getId();
+        this.fk_id_agente = fk_id_agente.getId();
         this.fk_id_usuario = fk_id_usuario.getId();
 
     }
@@ -82,12 +82,12 @@ public class ProdutoFornecido {
         this.fk_id_produto = fk_id_produto;
     }
 
-    public int getFk_id_fornecedor() {
-        return fk_id_fornecedor;
+    public int getFk_id_agente() {
+        return fk_id_agente;
     }
 
-    public void setFk_id_fornecedor(int fk_id_fornecedor) {
-        this.fk_id_fornecedor = fk_id_fornecedor;
+    public void setFk_id_agente(int fk_id_agente) {
+        this.fk_id_agente = fk_id_agente;
     }
 
     public int getFk_id_usuario() {

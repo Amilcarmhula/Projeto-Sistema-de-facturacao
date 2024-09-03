@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import sysfact.conexao.Conexao;
+import sysfact.util.Conexao;
 import sysfact.logical.ProdutoFornecido;
 
 /**

@@ -8,7 +8,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,12 +33,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import sysfact.DAO.AgenteDAO;
-import sysfact.DAO.ContactoAgenteDAO;
-import sysfact.DAO.EnderecoAgenteDAO;
-import sysfact.logical.Agente;
-import sysfact.logical.ContactoAgente;
-import sysfact.logical.EnderecoAgente;
+import sysfact.dao.agente.AgenteDAO;
+import sysfact.dao.agente.contacto.ContactoAgenteDAO;
+import sysfact.dao.agente.endereco.EnderecoAgenteDAO;
+import sysfact.model.agente.Agente;
+import sysfact.model.contacto.agente.ContactoAgente;
+import sysfact.model.endereco.agente.EnderecoAgente;
 
 /**
  * FXML Controller class
@@ -96,10 +95,10 @@ public class DashboardController implements Initializable {
     private TableColumn<Agente, String> btntabelaCliente;
 
     @FXML
-    private TableColumn<ContactoAgente, Button> btntabelaContacto;
+    private TableColumn<ContactoAgente, String> btntabelaContacto;
 
     @FXML
-    private TableColumn<EnderecoAgente, Button> btntabelaEndereco;
+    private TableColumn<EnderecoAgente, String> btntabelaEndereco;
     @FXML
     private Button btn_cliente;
 
@@ -171,7 +170,7 @@ public class DashboardController implements Initializable {
 
     @FXML
     private TextField cf_txtIDCliente;
-
+    
     @FXML
     private TextField cf_txtIDContacto;
 
@@ -413,16 +412,17 @@ public class DashboardController implements Initializable {
         a.setApelido(cf_txtApelido.getText());
         a.setNuit(Integer.parseInt(cf_txtNuit.getText()));
         a.setFk_id_usuario(Integer.parseInt(labID.getText()));
+        a.setId(Integer.parseInt(cf_txtIDCliente.getText()));
         if (cf_radioCliente.isSelected()) {
             cf_radioFornecedor.setSelected(false);
             a.setTipo("Cliente");
-            aDAO.updateEntityByID(a, Integer.parseInt(cf_txtIDCliente.getText()));
+            aDAO.updateEntityByID(a);
             resetAgentes();
             showAgente();
         } else if (cf_radioFornecedor.isSelected()) {
             cf_radioCliente.setSelected(false);
             a.setTipo("Fornecedor");
-            aDAO.updateEntityByID(a, Integer.parseInt(cf_txtIDCliente.getText()));
+            aDAO.updateEntityByID(a);
             resetAgentes();
             showAgente();
         } else {
@@ -446,7 +446,7 @@ public class DashboardController implements Initializable {
         apelidotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("apelido"));
         nuittabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nuit"));
         datatabelaCliente.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
-        
+
         //add cell of button edit 
         Callback<TableColumn<Agente, String>, TableCell<Agente, String>> cellFoctory = (TableColumn<Agente, String> param) -> {
             // make cell containing buttons
@@ -459,16 +459,18 @@ public class DashboardController implements Initializable {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
+                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
                                 + "-glyph-size:28px;"
-                                + "-fx-fill:#ff1744;"
+                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
+                            Agente a = tabelaCliente.getSelectionModel().getSelectedItem();
+                            System.out.println(a.getId());
                             /*
                             Definir as accoes do botao deletar
-                            */
+                             */
                         });
                         setGraphic(deleteIcon);
                         setText(null);
@@ -479,8 +481,7 @@ public class DashboardController implements Initializable {
             return cell;
         };
         btntabelaCliente.setCellFactory(cellFoctory);
-        
-        
+
         FilteredList<Agente> dadosFiltrados = new FilteredList<>(listaAgentes, b -> true);
         cf_txtPesquisaCliente.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(agente -> {
@@ -563,7 +564,38 @@ public class DashboardController implements Initializable {
         emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email"));
         datatabelaContacto.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
 //        btntabelaContacto.setCellValueFactory(new PropertyValueFactory<>(new Button("X")));
+//add cell of button edit 
+        Callback<TableColumn<ContactoAgente, String>, TableCell<ContactoAgente, String>> cellFoctory = (TableColumn<ContactoAgente, String> param) -> {
+            // make cell containing buttons
+            final TableCell<ContactoAgente, String> cell = new TableCell<ContactoAgente, String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    //that cell created only on non-empty rows
+                    if (empty) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                        deleteIcon.setStyle(
+                                " -fx-cursor: hand ;"
+                                + "-glyph-size:28px;"
+                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                        );
+                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
+                            /*
+                            Definir as accoes do botao deletar
+                             */
+                        });
+                        setGraphic(deleteIcon);
+                        setText(null);
+                    }
+                }
+            };
 
+            return cell;
+        };
+        btntabelaContacto.setCellFactory(cellFoctory);
         tabelaContacto.setItems(listaContactosAgente);
     }
 
@@ -595,7 +627,8 @@ public class DashboardController implements Initializable {
         x.setEmail(cf_txtEmail.getText());
         x.setFk_id_agente(Integer.parseInt(cf_txtIDCliente.getText()));
         x.setFk_id_usuario(idUser);
-        xDAO.updateEntityByID(x, Integer.parseInt(cf_txtIDContacto.getText()));
+        x.setId(Integer.parseInt(cf_txtIDContacto.getText()));
+        xDAO.updateEntityByID(x);
         showContactoAgente();
         resetContactosAgente();
     }
@@ -603,7 +636,9 @@ public class DashboardController implements Initializable {
 
     public void showContactoAgenteSelected() throws SQLException {
         ContactoAgenteDAO x = new ContactoAgenteDAO();
-        listaContactos_SeletedAgente = x.searchEntityByAgente(Integer.parseInt(cf_txtIDCliente.getText()));
+        ContactoAgente z = new ContactoAgente();
+        z.setFk_id_agente(Integer.parseInt(cf_txtIDCliente.getText()));
+        listaContactos_SeletedAgente = x.searchEntityByAgente(z);
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
         contactotabelaContacto.setCellValueFactory(new PropertyValueFactory<>("contacto"));
@@ -644,7 +679,38 @@ public class DashboardController implements Initializable {
         numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero"));
         datatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
 //        btntabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
+//add cell of button edit 
+        Callback<TableColumn<EnderecoAgente, String>, TableCell<EnderecoAgente, String>> cellFoctory = (TableColumn<EnderecoAgente, String> param) -> {
+            // make cell containing buttons
+            final TableCell<EnderecoAgente, String> cell = new TableCell<EnderecoAgente, String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    //that cell created only on non-empty rows
+                    if (empty) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                        deleteIcon.setStyle(
+                                " -fx-cursor: hand ;"
+                                + "-glyph-size:28px;"
+                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                        );
+                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
+                            /*
+                            Definir as accoes do botao deletar
+                             */
+                        });
+                        setGraphic(deleteIcon);
+                        setText(null);
+                    }
+                }
+            };
 
+            return cell;
+        };
+        btntabelaEndereco.setCellFactory(cellFoctory);
         tabelaEndereco.setItems(listaEnderecosAgente);
     }
 
@@ -695,7 +761,8 @@ public class DashboardController implements Initializable {
         x.setTipo(cf_combTipo.getValue());
         x.setFk_id_agente(Integer.parseInt(cf_txtIDCliente.getText()));
         x.setFk_id_usuario(idUser);
-        xDAO.updateEntityByID(x, Integer.parseInt(cf_txtIDEndereco.getText()));
+        x.setId(Integer.parseInt(cf_txtIDEndereco.getText()));
+        xDAO.updateEntityByID(x);
         resetEnderecoAgente();
         showEnderecoAgenteSelected();
     }
@@ -704,7 +771,9 @@ public class DashboardController implements Initializable {
 
     public void showEnderecoAgenteSelected() throws SQLException {
         EnderecoAgenteDAO x = new EnderecoAgenteDAO();
-        listaEndereco_SeletedAgente = x.searchEntityByAgente(Integer.parseInt(cf_txtIDCliente.getText()));
+        EnderecoAgente z = new EnderecoAgente();
+        z.setFk_id_agente(Integer.parseInt(cf_txtIDCliente.getText()));
+        listaEndereco_SeletedAgente = x.searchEntityByAgente(z);
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -716,6 +785,38 @@ public class DashboardController implements Initializable {
         codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal"));
         numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero"));
         datatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
+        //add cell of button edit 
+        Callback<TableColumn<EnderecoAgente, String>, TableCell<EnderecoAgente, String>> cellFoctory = (TableColumn<EnderecoAgente, String> param) -> {
+            // make cell containing buttons
+            final TableCell<EnderecoAgente, String> cell = new TableCell<EnderecoAgente, String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    //that cell created only on non-empty rows
+                    if (empty) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                        deleteIcon.setStyle(
+                                " -fx-cursor: hand ;"
+                                + "-glyph-size:28px;"
+                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                        );
+                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
+                            /*
+                            Definir as accoes do botao deletar
+                             */
+                        });
+                        setGraphic(deleteIcon);
+                        setText(null);
+                    }
+                }
+            };
+
+            return cell;
+        };
+        btntabelaEndereco.setCellFactory(cellFoctory);
 //        btntabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         tabelaEndereco.setItems(listaEndereco_SeletedAgente);

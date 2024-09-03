@@ -4,34 +4,13 @@
  */
 package sysfact.teste;
 
+
 import java.sql.SQLException;
-import java.util.List;
 import javafx.collections.ObservableList;
-import org.w3c.dom.css.Counter;
-import sysfact.DAO.ArmazemDAO;
-import sysfact.DAO.CategoriaDAO;
-import sysfact.DAO.AgenteDAO;
-import sysfact.DAO.ContactoAgenteDAO;
-import sysfact.DAO.DescontoDAO;
-import sysfact.DAO.AgenteDAO;
-import sysfact.DAO.ProdutoDAO;
-import sysfact.DAO.ProdutoFornecidoDAO;
-import sysfact.DAO.ServicoDAO;
-import sysfact.DAO.TaxaImpostoDAO;
-import sysfact.DAO.UnidadeMedidaDAO;
-import sysfact.DAO.UsuarioDAO;
-import sysfact.logical.Armazem;
-import sysfact.logical.Categoria;
-import sysfact.logical.Agente;
-import sysfact.logical.ContactoAgente;
-import sysfact.logical.Desconto;
-import sysfact.logical.Agente;
-import sysfact.logical.Produto;
-import sysfact.logical.ProdutoFornecido;
-import sysfact.logical.Servico;
-import sysfact.logical.TaxaImposto;
-import sysfact.logical.UnidadeMedida;
-import sysfact.logical.Usuario;
+import sysfact.dao.agente.AgenteDAO;
+import sysfact.model.agente.Agente;
+
+import sysfact.service.Agente.AgenteService;
 
 /**
  *
@@ -43,9 +22,10 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        ContactoAgenteDAO cad = new ContactoAgenteDAO();
-        ObservableList<ContactoAgente> lista = cad.searchEntityByAgente(2);
-        for (ContactoAgente ca : lista) {
+        AgenteService cad = new AgenteService();
+        AgenteDAO c = new AgenteDAO();
+        ObservableList<Agente> lista = c.listAllEntities();
+        for (Agente ca : lista) {
             System.out.println("ID: " + ca.getId());
         }
 //        Agente a = new Agente();

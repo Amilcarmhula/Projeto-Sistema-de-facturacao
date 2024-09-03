@@ -603,7 +603,6 @@
                                     </AnchorPane>
                                     <AnchorPane layoutX="10.0" layoutY="773.0" prefHeight="139.0" prefWidth="944.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="475.0">
                                        <styleClass>
-                                          <String fx:value="white-bg" />
                                           <String fx:value="Squared-border" />
                                           <String fx:value="shadow" />
                                        </styleClass>
@@ -619,35 +618,6 @@
                                                 <String fx:value="shadow-efect" />
                                              </styleClass>
                                           </Button>
-                                          <VBox layoutX="14.0" layoutY="35.0" prefHeight="154.0" prefWidth="122.0">
-                                             <children>
-                                                <Label text="Sub-Total:">
-                                                   <font>
-                                                      <Font name="System Bold" size="20.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="Desconto:">
-                                                   <font>
-                                                      <Font name="System Bold" size="20.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="Total Geral:">
-                                                   <font>
-                                                      <Font name="System Bold" size="20.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="Pagamento:">
-                                                   <font>
-                                                      <Font name="System Bold" size="20.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="Divida:" textFill="RED">
-                                                   <font>
-                                                      <Font name="System Bold" size="20.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </VBox>
                                           <VBox layoutX="139.0" layoutY="35.0" prefHeight="154.0" prefWidth="190.0">
                                              <children>
                                                 <Label text="0.0">
@@ -677,11 +647,39 @@
                                                 </Label>
                                              </children>
                                           </VBox>
+                                          <VBox layoutX="14.0" layoutY="35.0" prefHeight="154.0" prefWidth="122.0">
+                                             <children>
+                                                <Label text="Sub-Total:">
+                                                   <font>
+                                                      <Font name="System Bold" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Desconto:">
+                                                   <font>
+                                                      <Font name="System Bold" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Total Geral:">
+                                                   <font>
+                                                      <Font name="System Bold" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Pagamento:">
+                                                   <font>
+                                                      <Font name="System Bold" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Divida:" textFill="RED">
+                                                   <font>
+                                                      <Font name="System Bold" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="147.0" prefWidth="1409.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                        <styleClass>
-                                          <String fx:value="white-bg" />
                                           <String fx:value="Squared-border" />
                                           <String fx:value="shadow" />
                                        </styleClass>
@@ -710,18 +708,23 @@
                                                 </Label>
                                              </children>
                                           </AnchorPane>
-                                          <FontAwesomeIconView fill="#4a56e1b8" glyphName="SHOPPING_CART" layoutX="853.0" layoutY="131.0" size="100" />
-                                          <Label alignment="CENTER_RIGHT" layoutX="962.0" layoutY="66.0" prefHeight="73.0" prefWidth="340.0" text="0.00">
+                                          <TextField alignment="CENTER" disable="true" layoutX="100.0" layoutY="111.0" prefHeight="30.0" prefWidth="322.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </TextField>
+                                          <FontAwesomeIconView fill="#4a56e1b8" glyphName="SHOPPING_CART" layoutX="853.0" layoutY="131.0" size="90" />
+                                          <Label alignment="CENTER_RIGHT" layoutX="962.0" layoutY="71.0" prefHeight="73.0" prefWidth="340.0" text="0.00">
                                              <font>
                                                 <Font name="System Bold" size="50.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="1308.0" layoutY="66.0" text="MT">
+                                          <Label layoutX="1308.0" layoutY="71.0" text="MT">
                                              <font>
                                                 <Font name="System Bold" size="47.0" />
                                              </font>
                                           </Label>
-                                          <TextField layoutX="453.0" layoutY="76.0" prefHeight="46.0" prefWidth="377.0" promptText="Pesquisar por numero da factura" stylesheets="@../../style/dashboard.css">
+                                          <TextField layoutX="453.0" layoutY="82.0" prefHeight="46.0" prefWidth="377.0" promptText="Pesquisar por numero da factura" stylesheets="@../../style/dashboard.css">
                                              <font>
                                                 <Font name="System Bold" size="20.0" />
                                              </font>
@@ -730,8 +733,8 @@
                                                 <String fx:value="shadow" />
                                              </styleClass>
                                           </TextField>
-                                          <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="783.0" layoutY="108.0" size="30" />
-                                          <Button layoutX="918.0" layoutY="53.0" mnemonicParsing="false" stylesheets="@../../style/dashboard.css" text="0" textFill="WHITE">
+                                          <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="783.0" layoutY="114.0" size="30" />
+                                          <Button layoutX="918.0" layoutY="65.0" mnemonicParsing="false" stylesheets="@../../style/dashboard.css" text="0" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -740,7 +743,7 @@
                                                 <String fx:value="red-bg" />
                                              </styleClass>
                                           </Button>
-                                          <Button alignment="BOTTOM_CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="67.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="66.0" stylesheets="@../../style/dashboard.css" text="Cliente" textAlignment="CENTER" textFill="WHITE">
+                                          <Button alignment="BOTTOM_CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="79.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="66.0" stylesheets="@../../style/dashboard.css" text="Cliente" textAlignment="CENTER" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="14.0" />
                                              </font>
@@ -754,13 +757,8 @@
                                                 <Cursor fx:constant="DEFAULT" />
                                              </cursor>
                                           </Button>
-                                          <FontAwesomeIconView fill="RED" glyphName="USER_PLUS" layoutX="36.0" layoutY="90.0" size="20" />
-                                          <TextField alignment="CENTER" disable="true" layoutX="100.0" layoutY="65.0" prefHeight="30.0" prefWidth="322.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
-                                             <font>
-                                                <Font name="System Bold" size="14.0" />
-                                             </font>
-                                          </TextField>
-                                          <TextField alignment="CENTER" disable="true" layoutX="100.0" layoutY="105.0" prefHeight="30.0" prefWidth="322.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                                          <FontAwesomeIconView fill="RED" glyphName="USER_PLUS" layoutX="36.0" layoutY="102.0" size="20" />
+                                          <TextField alignment="CENTER" disable="true" layoutX="100.0" layoutY="71.0" prefHeight="30.0" prefWidth="322.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                                              <font>
                                                 <Font name="System Bold" size="14.0" />
                                              </font>
@@ -1241,21 +1239,21 @@
                                                 <TableView fx:id="tabelaCliente" layoutY="49.0" onMouseClicked="#selectedLineAgentes" prefHeight="251.0" prefWidth="753.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                    <columns>
                                                       <TableColumn fx:id="IDtabelaCliente" prefWidth="29.0" text="ID" />
-                                                      <TableColumn fx:id="tipotabelaCliente" prefWidth="87.0" text="Tipo" />
-                                                      <TableColumn fx:id="nometabelaCliente" prefWidth="145.0" text="Nome" />
-                                                      <TableColumn fx:id="apelidotabelaCliente" prefWidth="188.0" text="Apelido ou Sifra" />
-                                                      <TableColumn fx:id="nuittabelaCliente" prefWidth="128.0" text="Nuit" />
-                                                      <TableColumn fx:id="datatabelaCliente" minWidth="0.0" prefWidth="108.0" resizable="false" text="Data" />
-                                                      <TableColumn fx:id="btntabelaCliente" prefWidth="64.0" resizable="false" />
+                                                      <TableColumn fx:id="tipotabelaCliente" prefWidth="78.0" text="Tipo" />
+                                                      <TableColumn fx:id="nometabelaCliente" prefWidth="190.0" text="Nome" />
+                                                      <TableColumn fx:id="apelidotabelaCliente" prefWidth="157.0" text="Apelido ou Sifra" />
+                                                      <TableColumn fx:id="nuittabelaCliente" prefWidth="105.0" text="Nuit" />
+                                                      <TableColumn fx:id="datatabelaCliente" minWidth="0.0" prefWidth="139.0" text="Data" />
+                                                      <TableColumn fx:id="btntabelaCliente" prefWidth="41.0" />
                                                    </columns>
                                                 </TableView>
-                                                <TableView fx:id="tabelaContacto" layoutY="302.0" onMouseClicked="#selectedLineContactos" prefHeight="131.0" prefWidth="756.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                <TableView fx:id="tabelaContacto" layoutY="302.0" onMouseClicked="#selectedLineContactos" prefHeight="131.0" prefWidth="754.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="4.0">
                                                    <columns>
                                                       <TableColumn fx:id="IDtabelaContacto" prefWidth="29.0" text="ID" />
                                                       <TableColumn fx:id="contactotabelaContacto" prefWidth="191.0" text="Numero" />
-                                                      <TableColumn fx:id="emailtabelaContacto" prefWidth="330.0" text="E-mail" />
-                                                      <TableColumn fx:id="datatabelaContacto" prefWidth="126.0" text="Data" />
-                                                      <TableColumn fx:id="btntabelaContacto" prefWidth="74.0" resizable="false" />
+                                                      <TableColumn fx:id="emailtabelaContacto" prefWidth="313.0" text="E-mail" />
+                                                      <TableColumn fx:id="datatabelaContacto" prefWidth="167.0" text="Data" />
+                                                      <TableColumn fx:id="btntabelaContacto" prefWidth="40.0" />
                                                    </columns>
                                                 </TableView>
                                              </children>
@@ -1538,7 +1536,7 @@
                                                       <String fx:value="shadow" />
                                                    </styleClass>
                                                 </TextField>
-                                                <TableView fx:id="tabelaEndereco" layoutX="23.0" layoutY="160.0" onMouseClicked="#selectedLineEnderecos" prefHeight="246.0" prefWidth="1351.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                                                <TableView fx:id="tabelaEndereco" layoutX="23.0" layoutY="160.0" onMouseClicked="#selectedLineEnderecos" prefHeight="246.0" prefWidth="1351.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                                                    <columns>
                                                       <TableColumn fx:id="IDtabelaEndereco" prefWidth="29.0" text="ID" />
                                                       <TableColumn fx:id="tipotabelaEndereco" prefWidth="99.666748046875" text="Tipo" />
@@ -1549,8 +1547,8 @@
                                                       <TableColumn fx:id="ruatabelaEndereco" prefWidth="120.0" text="Rua" />
                                                       <TableColumn fx:id="codigopostaltabelaEndereco" prefWidth="141.0" text="Codigo Postal" />
                                                       <TableColumn fx:id="numerotabelaEndereco" prefWidth="135.0" text="Numero" />
-                                                      <TableColumn fx:id="datatabelaEndereco" prefWidth="146.0" text="Data" />
-                                                      <TableColumn fx:id="btntabelaEndereco" prefWidth="60.0" resizable="false" />
+                                                      <TableColumn fx:id="datatabelaEndereco" prefWidth="145.0" resizable="false" text="Data" />
+                                                      <TableColumn fx:id="btntabelaEndereco" prefWidth="40.0" />
                                                    </columns>
                                                 </TableView>
                                                 <Button fx:id="cf_btnUpdateEndereco" layoutX="1219.0" layoutY="98.0" mnemonicParsing="false" onAction="#updateEnderecoAgente" prefHeight="39.0" prefWidth="148.0" stylesheets="@../../style/dashboard.css" text="Actualizar" textFill="WHITE">

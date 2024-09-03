@@ -2,26 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sysfact.DAO;
+package sysfact.dao.agente.endereco;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
-import sysfact.conexao.Conexao;
-import sysfact.logical.ContactoAgente;
-import sysfact.logical.EnderecoAgente;
+import sysfact.model.endereco.agente.EnderecoAgente;
+import sysfact.util.Conexao;
+
 
 /**
  *
  * @author JM-Tecnologias
  */
-public class EnderecoAgenteDAO implements DaoImpl<EnderecoAgente> {
+public class EnderecoAgenteDAO implements EnderecoAgenteDAOImpl<EnderecoAgente> {
 
     private Connection con;
     private PreparedStatement ps;
@@ -60,7 +58,7 @@ public class EnderecoAgenteDAO implements DaoImpl<EnderecoAgente> {
     }
 
     @Override
-    public void updateEntityByID(EnderecoAgente t, int id) {
+    public void updateEntityByID(EnderecoAgente t) {
         try {
             sql = "update endereco_agente set provincia=?,cidade=?,bairro=?,avenida=?,"
                     + "rua=?,codigo_postal=?,numero=?, tipo=?, fk_id_agente=?, fk_id_usuario=? where id=?";
@@ -76,7 +74,7 @@ public class EnderecoAgenteDAO implements DaoImpl<EnderecoAgente> {
             ps.setString(8, t.getTipo());
             ps.setInt(9, t.getFk_id_agente());
             ps.setInt(10, t.getFk_id_usuario());
-            ps.setInt(11, id);
+            ps.setInt(11, t.getId());
 
             ps.execute();
             ps.close();
@@ -118,48 +116,48 @@ public class EnderecoAgenteDAO implements DaoImpl<EnderecoAgente> {
         return lista;
     }
 
-    @Override
-    public EnderecoAgente searchEntityByName(String name) {
-        EnderecoAgente c = null;
-        try {
-            sql = "select * from endereco_agente where bairro like ?";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, "%" + name + "%");
-            ResultSet result = ps.executeQuery();
-//            if (result.next()) {
-            while (result.next()) {
-                c = new EnderecoAgente();
-                c.setId(result.getInt("id"));
-                c.setProvincia(result.getString("provincia"));
-                c.setCidade(result.getString("cidade"));
-                c.setBairro(result.getString("bairro"));
-                c.setAvenida(result.getString("avenida"));
-                c.setRua(result.getString("rua"));
-                c.setCodigoPostal(result.getInt("codigo_postal"));
-                c.setNumero(result.getInt("numero"));
-                c.setFk_id_agente(result.getInt("fk_id_agente"));
-                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
-                c.setData_criacao(result.getString("data_criacao"));
-                c.setTipo(result.getString("tipo"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
+//    @Override
+//    public EnderecoAgente searchEntityByName(String name) {
+//        EnderecoAgente c = null;
+//        try {
+//            sql = "select * from endereco_agente where bairro like ?";
+//            ps = con.prepareStatement(sql);
+//            ps.setString(1, "%" + name + "%");
+//            ResultSet result = ps.executeQuery();
+////            if (result.next()) {
+//            while (result.next()) {
+//                c = new EnderecoAgente();
+//                c.setId(result.getInt("id"));
+//                c.setProvincia(result.getString("provincia"));
+//                c.setCidade(result.getString("cidade"));
+//                c.setBairro(result.getString("bairro"));
+//                c.setAvenida(result.getString("avenida"));
+//                c.setRua(result.getString("rua"));
+//                c.setCodigoPostal(result.getInt("codigo_postal"));
+//                c.setNumero(result.getInt("numero"));
+//                c.setFk_id_agente(result.getInt("fk_id_agente"));
+//                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
+//                c.setData_criacao(result.getString("data_criacao"));
+//                c.setTipo(result.getString("tipo"));
+//                c.setActive_or_not(result.getBoolean("active_or_not"));
+//
+//            }
+//            result.close();
+//            ps.close();
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Endereco: " + ex,
+//                    "Informação", JOptionPane.ERROR_MESSAGE);
+//        }
+//        return c;
+//
+//    }
 
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Endereco: " + ex,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-        return c;
-
-    }
-
-    public ObservableList<EnderecoAgente> searchEntityByAgente(int agentID) {
+    public ObservableList<EnderecoAgente> searchEntityByAgente(EnderecoAgente agentID) {
         ObservableList<EnderecoAgente> lista = FXCollections.observableArrayList();
         try {
             sql = "select * from endereco_agente where fk_id_agente=?";
             ps = con.prepareStatement(sql);
-            ps.setInt(1,agentID);
+            ps.setInt(1,agentID.getFk_id_agente());
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 EnderecoAgente c = new EnderecoAgente();
@@ -186,28 +184,28 @@ public class EnderecoAgenteDAO implements DaoImpl<EnderecoAgente> {
         return lista;
     }
 
-    @Override
-    public void deleteEntityByROOT(int id) {
-        try {
-            sql = "delete from endereco_agente where id=?";
-            ps = con.prepareStatement(sql);
+//    @Override
+//    public void deleteEntityByROOT(int id) {
+//        try {
+//            sql = "delete from endereco_agente where id=?";
+//            ps = con.prepareStatement(sql);
+//
+//            ps.setInt(1, id);
+//            ps.execute();
+//            ps.close();
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco: "
+//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
 
-            ps.setInt(1, id);
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     @Override
-    public void deleteEntityByUSER(int id) {
+    public void deleteEntityByUSER(EnderecoAgente id) {
         try {
             sql = "update endereco_agente set active_or_not=false where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setInt(1, id);
+            ps.setInt(1, id.getId());
             ps.execute();
             ps.close();
         } catch (SQLException ex) {

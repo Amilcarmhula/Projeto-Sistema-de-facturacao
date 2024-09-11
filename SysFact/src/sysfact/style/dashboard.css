@@ -10,9 +10,18 @@
     -fx-cursor:hand;
 }
 
+.close-categoria{
+    -fx-background-color:transparent;
+    -fx-cursor:hand;
+}
+
 .close:hover{
     -fx-background-color:#ff3547;
     -fx-background-radius: 0px 0px 10px 0px;
+}
+
+.close-categoria:hover{
+    -fx-background-color:#ff3547;
 }
 
 .minimize{
@@ -86,7 +95,7 @@
 .table-view{
     -fx-border-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
     -fx-background-color: transparent;
-    -fx-border-radius: 10px;
+    -fx-border-radius: 10px 10px 0px 0px;
     -fx-border-width: 3px;
 }
 
@@ -103,3 +112,140 @@
 .table-view .column-header, .label{
     -fx-text-fill: #fff;
 }
+
+/* Row Styling */
+.table-row-cell {
+    -fx-background-color: transparent; 
+   -fx-text-fill: #fff;
+   -fx-font-weight: bold;
+}
+
+/* Alternate Row Colors */
+/*.table-row-cell:odd {
+    -fx-background-color: #2b2b2b;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #1e1e1e;
+}*/
+
+/* Row Hover Effect */
+/*.table-row-cell:hover {
+    -fx-background-color: #eee;  Change color on hover 
+    -fx-text-fill: #000000;
+}*/
+
+/* Selected Row Styling */
+/*.table-row-cell:selected {
+    -fx-background-color: #00ff00;  Change selected row color 
+    -fx-text-fill: #000000;  Change selected row text color 
+}*/
+
+/* Add padding to row cells */
+/*.table-row-cell {
+    -fx-padding: 10px;
+}*/
+
+.tab-pane{
+    -fx-border-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
+    -fx-background-color: transparent;
+    -fx-border-radius: 10px;
+    -fx-border-width: 3px;
+}
+
+.tab-pane .tab-header-background{
+    -fx-background-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
+    -fx-background-radius: 10px 10px 0px 0px;
+}
+
+/*.tab-pane .tab, .filter{
+    -fx-background-color: transparent;
+    -fx-size:80px;
+}*/
+
+
+
+
+/* Base styling for TabPane */
+/*.tab-pane {
+    -fx-border-color: linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
+    -fx-background-color: transparent;
+    -fx-border-radius: 10px;
+    -fx-border-width: 3px;
+}*/
+
+/* Tab Header Background */
+/*.tab-pane .tab-header-background {
+    -fx-background-color: linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
+    -fx-background-radius: 10px 10px 0px 0px;
+}*/
+
+/* Styling individual tabs */
+/*.tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;  Padding inside tabs 
+}*/
+
+
+/* Selected tab styling */
+.tab-pane .tab {
+    -fx-background-color: linear-gradient(to bottom right, #00ff004d, #0000ff80);
+    -fx-border-radius: 10px 10px 0px 0px;
+    -fx-padding: 10px;
+}
+
+/* Hover effect for tabs */
+/*.tab-pane .tab:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);  Lighten on hover 
+    -fx-border-radius: 10px;
+}*/
+
+/* Styling content inside the selected tab */
+/*.tab-pane .tab-content-area {
+    -fx-background-color: transparent;
+    -fx-border-color: #ffffff;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+}*/
+
+/* Styling label inside tabs */
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #ffffff; 
+    -fx-font-size: 18px; 
+    -fx-font-weight: bold;
+    
+}
+
+
+
+
+
+
+
+.combo-box {
+    /*-fx-background-color: #f0f0f0;  Cor de fundo */
+    /*-fx-border-color: #cccccc;  Cor da borda */
+    /*-fx-border-radius: 5px;  Arredondar bordas */
+    /*-fx-padding: 5px;  Preenchimento interno */
+}
+
+/* Estilo para o botão de drop-down */
+.combo-box .arrow {
+    /*-fx-background-color: #007bff;  Cor de fundo da seta */
+    /*-fx-padding: 5px;  Preenchimento interno da seta */
+}
+
+/* Estilo para os itens do ComboBox */
+.combo-box .list-cell {
+    /*-fx-background-color: #ffffff;  Cor de fundo dos itens */
+    /*-fx-text-fill: #333333;  Cor do texto dos itens */
+    /*-fx-font-weight: bold;  Aplica bold ao texto dos itens */
+}
+
+/* Estilo para o item selecionado */
+.combo-box .list-cell:filled:selected {
+    /*-fx-background-color: #007bff;  Cor de fundo quando selecionado */
+    /*-fx-text-fill: #ffffff;  Cor do texto quando selecionado */
+    /*-fx-font-weight: bold;  Aplica bold ao item selecionado*/ 
+}
+

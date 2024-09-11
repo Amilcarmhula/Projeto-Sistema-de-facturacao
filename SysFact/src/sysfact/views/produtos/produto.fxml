@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorProdutos" prefHeight="955.0" prefWidth="1451.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.produtos.ProdutoController">
+   <children>
+      <AnchorPane fx:id="ancharVendas1" prefHeight="942.0" prefWidth="1425.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <styleClass>
+                  <String fx:value="headers-color" />
+                  <String fx:value="top-Squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+               <children>
+                  <Label alignment="CENTER" layoutX="29.0" text="Produtos &amp; Stock" textFill="WHITE" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="34.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <TabPane layoutX="13.0" layoutY="57.0" prefHeight="882.0" prefWidth="1411.0" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+                  <Tab text="Produtos &amp; Serviço">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="555.0" prefWidth="1258.0">
+                           <children>
+                              <TextField fx:id="ps_txtIDProduto" alignment="CENTER" disable="true" layoutX="10.0" layoutY="74.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <TextField fx:id="ps_txtprecoProduto" layoutX="10.0" layoutY="372.0" prefHeight="20.0" prefWidth="157.0" promptText="Preço unitário " stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <TextField fx:id="ps_txtcodigobarrasProduto" layoutX="10.0" layoutY="152.0" prefHeight="25.0" prefWidth="209.0" promptText="Codigo de barras" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <TextField fx:id="ps_txtNomeProduto" layoutX="139.0" layoutY="74.0" prefHeight="25.0" prefWidth="240.0" promptText="Nome do produto" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <ComboBox fx:id="ps_combunidademedidaProduto" layoutX="10.0" layoutY="112.0" prefHeight="30.0" prefWidth="208.0" promptText="Selecione a unidade de medida" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css" />
+                              <TextArea fx:id="ps_txtdescricaoProduto" layoutX="383.0" layoutY="74.0" prefHeight="199.0" prefWidth="240.0" styleClass="shadow" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </TextArea>
+                              <TableView fx:id="tabelaProduto" layoutX="628.0" layoutY="49.0" onMouseClicked="#selectedLineProduto" prefHeight="280.0" prefWidth="769.0">
+                                 <columns>
+                                    <TableColumn fx:id="IDtabelaProduto" prefWidth="29.0" text="ID" />
+                                    <TableColumn fx:id="IDCatabelaProduto" prefWidth="42.0" text="ID Cat" />
+                                    <TableColumn fx:id="tipotabelaProduto" prefWidth="100.0" text="Tipo" />
+                                    <TableColumn fx:id="produtotabelaProduto" prefWidth="146.0" text="Produto" />
+                                    <TableColumn fx:id="codigobarrastabelaProduto" prefWidth="122.0" text="Codigo de barras" />
+                                    <TableColumn fx:id="unidademedidatabelaProduto" prefWidth="82.0" text="Uni.Medida" />
+                                    <TableColumn fx:id="descricaotabelaProduto" prefWidth="195.0" resizable="false" text="Descrição" />
+                                    <TableColumn fx:id="btntabelaProduto" prefWidth="42.0" resizable="false" />
+                                 </columns>
+                              </TableView>
+                              <TextField fx:id="ps_txtpesquisaProduto" layoutX="1009.0" layoutY="11.0" prefHeight="0.0" prefWidth="377.0" promptText="Pesquisar produto/servico" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="1351.0" layoutY="33.0" size="20" />
+                              <HBox alignment="CENTER" layoutX="429.0" layoutY="279.0" prefHeight="54.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="btnAddProduto" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addProduto" prefHeight="51.0" prefWidth="66.0" stylesheets="@../../style/dashboard.css" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                       <styleClass>
+                                          <String fx:value="Squared-border" />
+                                          <String fx:value="shadow-efect" />
+                                          <String fx:value="hand-efect" />
+                                          <String fx:value="gray-bg" />
+                                       </styleClass>
+                                       <cursor>
+                                          <Cursor fx:constant="DEFAULT" />
+                                       </cursor>
+                                       <graphic>
+                                          <FontAwesomeIconView fill="#00a1ff" glyphName="PLUS" size="40" />
+                                       </graphic>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="btnUpdateProduto" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#updateProduto" prefHeight="51.0" prefWidth="66.0" stylesheets="@../../style/dashboard.css" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                       <styleClass>
+                                          <String fx:value="Squared-border" />
+                                          <String fx:value="shadow-efect" />
+                                          <String fx:value="hand-efect" />
+                                          <String fx:value="gray-bg" />
+                                       </styleClass>
+                                       <cursor>
+                                          <Cursor fx:constant="DEFAULT" />
+                                       </cursor>
+                                       <graphic>
+                                          <FontAwesomeIconView fill="#00ff18" glyphName="REFRESH" size="40" />
+                                       </graphic>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <Button fx:id="btnEntradaProdutos" disable="true" layoutX="1287.0" layoutY="356.0" mnemonicParsing="false" onAction="#addProdutoFornecido" prefHeight="59.0" prefWidth="66.0" stylesheets="@../../style/dashboard.css">
+                                 <graphic>
+                                    <FontAwesomeIconView fill="#2734e3" glyphName="DATABASE" size="100" />
+                                 </graphic>
+                                 <styleClass>
+                                    <String fx:value="hand-efect" />
+                                    <String fx:value="gray-bg" />
+                                    <String fx:value="Squared-border" />
+                                    <String fx:value="shadow-efect" />
+                                 </styleClass>
+                              </Button>
+                              <TableView fx:id="tabelaCliente" layoutX="10.0" layoutY="448.0" onMouseClicked="#selectedLineFornecedor" prefHeight="164.0" prefWidth="569.0" stylesheets="@../../style/dashboard.css">
+                                 <columns>
+                                    <TableColumn fx:id="IDtabelaCliente" prefWidth="29.0" text="ID" />
+                                    <TableColumn fx:id="nometabelaCliente" prefWidth="190.0" text="Fornecedor" />
+                                    <TableColumn fx:id="apelidotabelaCliente" prefWidth="157.0" text="Apelido/Sifra" />
+                                    <TableColumn fx:id="nuittabelaCliente" minWidth="0.0" prefWidth="179.0" text="Nuit" />
+                                 </columns>
+                              </TableView>
+                              <TextField fx:id="ps_txtPesquisafornecedor" layoutX="215.0" layoutY="415.0" prefHeight="20.0" prefWidth="360.0" promptText="Pesquisar fornecedor" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="530.0" layoutY="434.0" size="20" />
+                              <TextField fx:id="ps_txtIDFornecedor" alignment="CENTER" disable="true" layoutX="80.0" layoutY="415.0" prefHeight="20.0" prefWidth="115.0" promptText="ID" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <TextField fx:id="ps_txtQuantidade" layoutX="975.0" layoutY="473.0" prefHeight="20.0" prefWidth="95.0" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <DatePicker fx:id="ps_dataAquisicao" layoutX="1245.0" layoutY="474.0" prefHeight="25.0" prefWidth="136.0" />
+                              <TableView fx:id="tabelaArmazem" layoutX="10.0" layoutY="656.0" onMouseClicked="#selectedLineArmazem" prefHeight="164.0" prefWidth="569.0" stylesheets="@../../style/dashboard.css">
+                                 <columns>
+                                    <TableColumn fx:id="IDtabelaArmazem" prefWidth="29.0" text="ID" />
+                                    <TableColumn fx:id="armazemtabelaArmazem" prefWidth="166.0" text="Armazem" />
+                                    <TableColumn fx:id="cidadetabelaArmazem" prefWidth="191.0" text="Cidade" />
+                                    <TableColumn fx:id="referenciatabelaArmazem" minWidth="0.0" prefWidth="169.0" text="Referencia" />
+                                 </columns>
+                              </TableView>
+                              <TextField fx:id="ps_txtPesquisaArmazem" layoutX="215.0" layoutY="623.0" onMouseClicked="#getArmazemView" prefHeight="20.0" prefWidth="360.0" promptText="Pesquisar armazem" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="530.0" layoutY="642.0" size="20" />
+                              <TextField fx:id="ps_txtIDArmazem" alignment="CENTER" disable="true" layoutX="80.0" layoutY="623.0" prefHeight="20.0" prefWidth="115.0" promptText="ID" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <Label layoutX="853.0" layoutY="472.0" text="Quantidade:">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="1096.0" layoutY="473.0" text="Data da entrada:">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="ps_txtgrupoCategoria" editable="false" layoutX="10.0" layoutY="192.0" onMouseClicked="#getCategoriaView" prefHeight="25.0" prefWidth="208.0" promptText="Grupo" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <TextField fx:id="ps_txtsubgrupoCategoria" editable="false" layoutX="224.0" layoutY="192.0" onMouseClicked="#getCategoriaView" prefHeight="20.0" prefWidth="157.0" promptText="Subgrupo" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <TextField fx:id="ps_txtfamiliaCategoria" editable="false" layoutX="10.0" layoutY="229.0" onMouseClicked="#getCategoriaView" prefHeight="25.0" prefWidth="370.0" promptText="Familia" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <TextField fx:id="ps_txtIDCategoria" disable="true" layoutX="224.0" layoutY="152.0" prefHeight="20.0" prefWidth="157.0" promptText="Identificador" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <DatePicker fx:id="date_inicio" layoutX="177.0" layoutY="372.0" prefHeight="25.0" prefWidth="119.0" promptText="Data de inicio" />
+                              <DatePicker fx:id="date_fim" layoutX="305.0" layoutY="372.0" prefHeight="25.0" prefWidth="119.0" promptText="Data de fim" />
+                              <Button fx:id="btnAddpreco" alignment="CENTER" contentDisplay="CENTER" layoutX="436.0" layoutY="369.0" mnemonicParsing="false" onAction="#addPreco" prefHeight="32.0" prefWidth="65.0" stylesheets="@../../style/dashboard.css" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="Squared-border" />
+                                    <String fx:value="shadow-efect" />
+                                    <String fx:value="hand-efect" />
+                                    <String fx:value="gray-bg" />
+                                 </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                                 <graphic>
+                                    <FontAwesomeIconView fill="#00a1ff" glyphName="PLUS" size="20" />
+                                 </graphic>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Button>
+                              <TextField fx:id="ps_txtCustoAquisicao" layoutX="688.0" layoutY="475.0" prefHeight="25.0" prefWidth="145.0" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                              <Label layoutX="624.0" layoutY="474.0" text="Custo:">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <TableView fx:id="tabelaProdutoFornecido" layoutX="599.0" layoutY="512.0" onMouseClicked="#selectedLineFornecedor" prefHeight="308.0" prefWidth="793.0" stylesheets="@../../style/dashboard.css">
+                                 <columns>
+                                    <TableColumn fx:id="IDtabelaProdutoFornecido" prefWidth="38.0" text="ID" />
+                                    <TableColumn fx:id="produtotabelaProdutoFornecido" prefWidth="140.0" text="Produto" />
+                                    <TableColumn fx:id="fornecedortabelaProdutoFornecido" prefWidth="159.0" text="Fornecedor" />
+                                    <TableColumn fx:id="armazemtabelaProdutoFornecido" minWidth="0.0" prefWidth="163.0" text="Armazem" />
+                                    <TableColumn fx:id="quantidadetabelaProdutoFornecido" minWidth="0.0" prefWidth="44.0" text="QTD." />
+                                    <TableColumn fx:id="custotabelaProdutoFornecido" minWidth="0.0" prefWidth="118.0" text="Custo" />
+                                    <TableColumn fx:id="datatabelaProdutoFornecido" minWidth="0.0" prefWidth="117.0" text="Data" />
+                                 </columns>
+                              </TableView>
+                              <Button fx:id="btnUpdatedpreco" alignment="CENTER" contentDisplay="CENTER" layoutX="507.0" layoutY="369.0" mnemonicParsing="false" onAction="#updatePreco" prefHeight="32.0" prefWidth="65.0" stylesheets="@../../style/dashboard.css" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="Squared-border" />
+                                    <String fx:value="shadow-efect" />
+                                    <String fx:value="hand-efect" />
+                                    <String fx:value="gray-bg" />
+                                 </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                                 <graphic>
+                                    <FontAwesomeIconView fill="#00ff18" glyphName="REFRESH" size="20" />
+                                 </graphic>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Button>
+                              <TextField fx:id="ps_txtIDPreco" alignment="CENTER" disable="true" layoutX="10.0" layoutY="338.0" prefHeight="25.0" prefWidth="87.0" promptText="ID" stylesheets="@../../style/dashboard.css">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="text-squared-border" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </TextField>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Produtos Fornecidos">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+         </children>
+         <styleClass>
+            <String fx:value="blue-bg" />
+            <String fx:value="Squared-border" />
+            <String fx:value="shadow" />
+         </styleClass>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
-import sysfact.model.contacto.agente.ContactoAgente;
+import sysfact.model.agente.contacto.ContactoAgente;
 import sysfact.util.Conexao;
 
 /**
@@ -87,7 +87,9 @@ public class ContactoAgenteDAO implements ContactoAgenteDAOImpl<ContactoAgente> 
                 c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setActive_or_not(result.getBoolean("active_or_not"));
-                lista.add(c);
+                if (c.isActive_or_not()) {
+                    lista.add(c);
+                }
             }
             result.close();
             ps.close();
@@ -142,7 +144,9 @@ public class ContactoAgenteDAO implements ContactoAgenteDAOImpl<ContactoAgente> 
                 c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setActive_or_not(result.getBoolean("active_or_not"));
-                lista.add(c);
+                if (c.isActive_or_not()) {
+                    lista.add(c);
+                }
             }
             result.close();
             ps.close();

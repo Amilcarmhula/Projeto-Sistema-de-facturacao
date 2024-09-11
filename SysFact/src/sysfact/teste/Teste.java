@@ -4,13 +4,18 @@
  */
 package sysfact.teste;
 
-
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javafx.collections.ObservableList;
 import sysfact.dao.agente.AgenteDAO;
+import sysfact.dao.produto.ProdutoDAO;
+import sysfact.dao.unidademedida.UnidadeMedidaDAO;
 import sysfact.model.agente.Agente;
-
-import sysfact.service.Agente.AgenteService;
+import sysfact.model.produto.Produto;
+import sysfact.model.unidade_medida.UnidadeMedida;
 
 /**
  *
@@ -22,12 +27,42 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        AgenteService cad = new AgenteService();
-        AgenteDAO c = new AgenteDAO();
-        ObservableList<Agente> lista = c.listAllEntities();
-        for (Agente ca : lista) {
-            System.out.println("ID: " + ca.getId());
-        }
+        UnidadeMedida x = new UnidadeMedida();
+        UnidadeMedidaDAO z = new UnidadeMedidaDAO();
+//        x.setId(3);
+        x.setIdentificador("kilo grama");
+        x.setSigla("kg");
+        z.addEntity(x);
+        
+        
+//        ProdutoDAO pd = new ProdutoDAO();
+//        ObservableList<Produto> lista = pd.listAllEntities2();
+//        for (Produto p : lista) {
+//            System.out.println(""+p.getTaxa_imposto().getIdentificador());
+//            System.out.println(""+p.getUnidade_medida().getIdentificador());
+//
+//        }
+
+//        for (Map.Entry<Integer, String> entry : mapa.entrySet()) {
+//            Object key = entry.getKey();
+//            Object val = entry.getValue();
+//            System.out.println("Chave:"+key+" Valor:"+val);
+//        }
+//        UnidadeMedidaDAO umd = new UnidadeMedidaDAO();
+//        Map<String, Integer> mapa = umd.mapUnidadeMedida();
+//        for (Map.Entry<String, Integer> entry : mapa.entrySet()) {
+//            Object key = entry.getKey();
+//            Object val = entry.getValue();
+//            System.out.println("Chave:"+key+" Valor:"+val);
+//        }
+//        
+//        System.out.println(mapa);
+//        AgenteService cad = new AgenteService();
+//        AgenteDAO c = new AgenteDAO();
+//        ObservableList<Agente> lista = c.listAllEntities();
+//        for (Agente ca : lista) {
+//            System.out.println("ID: " + ca.getId());
+//        }
 //        Agente a = new Agente();
 //        a.setTipo("Cliente");
 //        a.setNome("Amilcar");
@@ -36,7 +71,6 @@ public class Teste {
 //        a.setFk_id_usuario(1);
 //        AgenteDAO ad = new AgenteDAO();
 //        ad.addEntity(a);
-
 //        Usuario u = new Usuario();
 //        UsuarioDAO ud = new UsuarioDAO();
 //        u.setUsuario("root");

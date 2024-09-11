@@ -22,8 +22,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import sysfact.DAO.UsuarioDAO;
-import sysfact.logical.Usuario;
+import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
 
 /**
@@ -34,9 +33,6 @@ public class MainController implements Initializable {
     
     @FXML
     private Button btnlogin;
-    
-    @FXML
-    private TextField txtcodigo;
     
     @FXML
     private PasswordField txtpassword;
@@ -51,7 +47,7 @@ public class MainController implements Initializable {
     public void log() throws SQLException, IOException {
         Alert alert;
         Usuario u = new Usuario();
-        if (txtusarname.getText().isEmpty() || txtpassword.getText().isEmpty() || txtcodigo.getText().isEmpty()) {
+        if (txtusarname.getText().isEmpty() || txtpassword.getText().isEmpty()) {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Mensagem de Erro.");
             alert.setHeaderText(null);
@@ -59,15 +55,13 @@ public class MainController implements Initializable {
             alert.showAndWait();
         } else {
             u.setUsuario(txtusarname.getText());
-            u.setCodigo(Integer.parseInt(txtcodigo.getText()));
             u.setSenha(Integer.parseInt(txtpassword.getText()));
             Usuario user = null;
             try {
-                String sql = "select * from usuario where usuario=? and codigo=? and senha=?";
+                String sql = "select * from usuario where usuario=? and senha=?";
                 PreparedStatement ps = Conexao.getConexao().prepareStatement(sql);
                 ps.setString(1, u.getUsuario());
-                ps.setInt(2, u.getCodigo());
-                ps.setInt(3, u.getSenha());
+                ps.setInt(2, u.getSenha());
                 
                 ResultSet result = ps.executeQuery();
                 if (result.next()) {
@@ -76,11 +70,13 @@ public class MainController implements Initializable {
                     user.setNome(result.getString("nome"));
                     user.setUsuario(result.getString("usuario"));
                     user.setSenha(result.getInt("senha"));
-                    user.setCodigo(result.getInt("codigo"));
                     user.setData_criacao(result.getString("data_criacao"));
                     user.setEstadoActive(result.getBoolean("active_or_not"));
+                    
+                    /*Dados de login a serem armazenados*/
+                    SysFact.setUserData(user);
                     btnlogin.getScene().getWindow().hide();
-                    Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/dashboard/dashboard.fxml"));
+                    Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/main/main.fxml"));
                     Stage stage = new Stage();
                     Scene scene = new Scene(root);
                     

@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
-import sysfact.model.endereco.agente.EnderecoAgente;
+import sysfact.model.agente.Agente;
+import sysfact.model.agente.endereco.EnderecoAgente;
+import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
 
 
@@ -46,8 +48,8 @@ public class EnderecoAgenteDAO implements EnderecoAgenteDAOImpl<EnderecoAgente> 
             ps.setInt(6, t.getCodigoPostal());
             ps.setInt(7, t.getNumero());
             ps.setString(8, t.getTipo());
-            ps.setInt(9, t.getFk_id_agente());
-            ps.setInt(10, t.getFk_id_usuario());
+            ps.setInt(9, t.getAgente().getId());
+            ps.setInt(10, t.getUsuario().getId());
 
             ps.execute();
             ps.close();
@@ -72,8 +74,8 @@ public class EnderecoAgenteDAO implements EnderecoAgenteDAOImpl<EnderecoAgente> 
             ps.setInt(6, t.getCodigoPostal());
             ps.setInt(7, t.getNumero());
             ps.setString(8, t.getTipo());
-            ps.setInt(9, t.getFk_id_agente());
-            ps.setInt(10, t.getFk_id_usuario());
+            ps.setInt(9, t.getAgente().getId());
+            ps.setInt(10, t.getUsuario().getId());
             ps.setInt(11, t.getId());
 
             ps.execute();
@@ -101,12 +103,18 @@ public class EnderecoAgenteDAO implements EnderecoAgenteDAOImpl<EnderecoAgente> 
                 c.setRua(result.getString("rua"));
                 c.setCodigoPostal(result.getInt("codigo_postal"));
                 c.setNumero(result.getInt("numero"));
-                c.setFk_id_agente(result.getInt("fk_id_agente"));
-                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
+                Agente a = new Agente();
+                a.setId(result.getInt("fk_id_agente"));
+                c.setAgente(a);
+                Usuario u = new Usuario();
+                u.setId(result.getInt("fk_id_usuario"));
+                c.setUsuario(u);
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setTipo(result.getString("tipo"));
                 c.setActive_or_not(result.getBoolean("active_or_not"));
-                lista.add(c);
+                if (c.isActive_or_not()) {
+                    lista.add(c);
+                }
             }
             result.close();
             ps.close();
@@ -157,7 +165,7 @@ public class EnderecoAgenteDAO implements EnderecoAgenteDAOImpl<EnderecoAgente> 
         try {
             sql = "select * from endereco_agente where fk_id_agente=?";
             ps = con.prepareStatement(sql);
-            ps.setInt(1,agentID.getFk_id_agente());
+            ps.setInt(1,agentID.getAgente().getId());
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 EnderecoAgente c = new EnderecoAgente();
@@ -169,12 +177,18 @@ public class EnderecoAgenteDAO implements EnderecoAgenteDAOImpl<EnderecoAgente> 
                 c.setRua(result.getString("rua"));
                 c.setCodigoPostal(result.getInt("codigo_postal"));
                 c.setNumero(result.getInt("numero"));
-                c.setFk_id_agente(result.getInt("fk_id_agente"));
-                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
+                Agente a = new Agente();
+                a.setId(result.getInt("fk_id_agente"));
+                c.setAgente(a);
+                Usuario u = new Usuario();
+                u.setId(result.getInt("fk_id_usuario"));
+                c.setUsuario(u);
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setTipo(result.getString("tipo"));
                 c.setActive_or_not(result.getBoolean("active_or_not"));
-                lista.add(c);
+                if (c.isActive_or_not()) {
+                    lista.add(c);
+                }
             }
             result.close();
             ps.close();

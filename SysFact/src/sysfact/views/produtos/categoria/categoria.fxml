@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="ancharVendas1" prefHeight="484.0" prefWidth="686.0" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.produtos.categoria.CategoriaController">
+   <children>
+      <AnchorPane layoutY="50.0" minHeight="-Infinity" prefHeight="434.0" prefWidth="682.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css">
+         <children>
+            <TextField fx:id="ps_txtpesquisar" alignment="CENTER" layoutX="291.0" layoutY="161.0" minHeight="-Infinity" prefHeight="20.0" prefWidth="377.0" promptText="Pesquisar categoria">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="644.0" layoutY="175.0" size="15" />
+            <TableView fx:id="tabelaCategoria" layoutX="5.0" layoutY="190.0" onMouseClicked="#selectedLineCategoria" prefHeight="238.0" prefWidth="675.0">
+               <columns>
+                  <TableColumn fx:id="IDtabelaCategoria" prefWidth="29.0" text="ID" />
+                  <TableColumn fx:id="tipotabelaCategoria" prefWidth="85.0" text="Tipo" />
+                  <TableColumn fx:id="grupotabelaCategoria" prefWidth="96.0" text="Grupo" />
+                  <TableColumn fx:id="subgrupotabelaCategoria" prefWidth="104.0" text="Subgrupo" />
+                  <TableColumn fx:id="familiatabelaCategoria" prefWidth="94.0" text="Família" />
+                  <TableColumn fx:id="descricaotabelaCategoria" prefWidth="204.0" text="Descrição" />
+                  <TableColumn fx:id="btntabelaCategoria" prefWidth="50.0" />
+               </columns>
+            </TableView>
+            <TextField fx:id="ps_txtIDCategoria" alignment="CENTER" disable="true" layoutX="9.0" layoutY="18.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" AnchorPane.leftAnchor="9.0" AnchorPane.topAnchor="18.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="ps_txtgrupoCategoria" layoutX="9.0" layoutY="52.0" prefHeight="20.0" prefWidth="280.0" promptText="Grupo" AnchorPane.leftAnchor="9.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="ps_txtsubgrupoCategoria" layoutX="9.0" layoutY="89.0" prefHeight="20.0" prefWidth="280.0" promptText="Subgrupo" AnchorPane.leftAnchor="9.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="ps_txtfamiliaCategoria" layoutX="9.0" layoutY="125.0" prefHeight="20.0" prefWidth="280.0" promptText="Família" AnchorPane.leftAnchor="9.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextArea fx:id="ps_txtdescricaoCategoria" layoutX="297.0" layoutY="18.0" prefHeight="133.0" prefWidth="302.0" styleClass="shadow" stylesheets="@../../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </TextArea>
+            <ComboBox fx:id="ps_combTipoCategoria" layoutX="131.0" layoutY="18.0" prefHeight="20.0" prefWidth="160.0" promptText="Selecione a Categoria" AnchorPane.topAnchor="18.0" />
+            <VBox alignment="CENTER" layoutX="606.0" layoutY="18.0" prefHeight="133.0" prefWidth="67.0">
+               <children>
+                  <Button fx:id="btnAddCategoria" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addCategoria" prefHeight="50.0" prefWidth="50.0" stylesheets="@../../../style/dashboard.css" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="Squared-border" />
+                        <String fx:value="shadow-efect" />
+                        <String fx:value="hand-efect" />
+                        <String fx:value="gray-bg" />
+                     </styleClass>
+                     <graphic>
+                        <FontAwesomeIconView fill="#00a1ff" glyphName="PLUS" size="30" />
+                     </graphic>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="btnUpdadeCategoria" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#updateCategoria" prefHeight="50.0" prefWidth="50.0" stylesheets="@../../../style/dashboard.css" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="Squared-border" />
+                        <String fx:value="shadow-efect" />
+                        <String fx:value="hand-efect" />
+                        <String fx:value="gray-bg" />
+                     </styleClass>
+                     <graphic>
+                        <FontAwesomeIconView fx:id="btnUpdateCategoria" fill="#00ff18" glyphName="REFRESH" size="30" />
+                     </graphic>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="25.0" prefWidth="686.0" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <styleClass>
+            <String fx:value="headers-color" />
+            <String fx:value="shadow" />
+         </styleClass>
+         <children>
+            <Label alignment="CENTER" layoutX="29.0" prefHeight="25.0" prefWidth="150.0" text="Categorias" textFill="WHITE" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnClose" layoutX="599.0" layoutY="13.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="30.0" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="15" />
+               </graphic>
+               <styleClass>
+                  <String fx:value="close-categoria" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+   <styleClass>
+      <String fx:value="blue-bg" />
+      <String fx:value="shadow" />
+   </styleClass>
+</AnchorPane>

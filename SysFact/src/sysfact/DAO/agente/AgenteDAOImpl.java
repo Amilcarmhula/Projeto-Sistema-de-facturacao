@@ -14,8 +14,12 @@ public interface AgenteDAOImpl<T> {
     void  addEntity(T t);
     void updateEntityByID(T t);
     ObservableList<T> listAllEntities();
+    ObservableList<T> listAllEntitiesTypeFornecedor();
 //    T searchEntityByName(String name);
 //    void deleteEntityByROOT(int id);
     void deleteEntityByUSER(T x);
+    void deleteEntityByUSERSimpleTwo(T x);
+    void deleteEntityByUSERSimpleThree(T x);
+    void deleteEntityByUSERSimpleFour(T x);
 //    ObservableList<T> searchListEntityByName(String name);
 }

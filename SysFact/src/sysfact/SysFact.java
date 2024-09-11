@@ -11,20 +11,41 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sysfact.model.usuario.Usuario;
 
 /**
  *
  * @author JM-Tecnologias
  */
 public class SysFact extends Application {
+    private static Usuario userData;
+    private static Object data;
+
+    public static Object getData() {
+        return data;
+    }
+
+    public static void setData(Object data) {
+        SysFact.data = data;
+    }
     
+    
+
+    public static Usuario getUserData() {
+        return userData;
+    }
+
+    public static void setUserData(Usuario userData) {
+        SysFact.userData = userData;
+    }
+
     private double x = 0;
     private double y = 0;
     
     @Override
     public void start(Stage stage) throws Exception {
-//        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/dashboard/dashboard.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/produtos/produto.fxml"));
 
         
         Scene scene = new Scene(root);
@@ -57,5 +78,4 @@ public class SysFact extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
 }

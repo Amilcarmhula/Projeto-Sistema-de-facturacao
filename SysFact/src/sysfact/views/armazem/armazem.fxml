@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="ancharVendas1" prefHeight="455.0" prefWidth="686.0" stylesheets="@../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.armazem.ArmazemController">
+   <children>
+      <AnchorPane layoutY="50.0" minHeight="-Infinity" prefHeight="412.0" prefWidth="682.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css">
+         <children>
+            <TextField fx:id="txtpesquisar" alignment="CENTER" layoutX="291.0" layoutY="132.0" minHeight="-Infinity" prefHeight="20.0" prefWidth="377.0" promptText="Pesquisar categoria">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="644.0" layoutY="146.0" size="15" />
+            <TableView fx:id="tabelaArmazem" layoutX="5.0" layoutY="161.0" onMouseClicked="#selectedRow" prefHeight="238.0" prefWidth="675.0">
+               <columns>
+                  <TableColumn fx:id="IDtabelaArmazem" prefWidth="29.0" text="ID" />
+                  <TableColumn fx:id="nometabelaArmazem" prefWidth="85.0" text="Nome" />
+                  <TableColumn fx:id="cidadetabelaArmazem" prefWidth="81.0" text="Cidade" />
+                  <TableColumn fx:id="bairrotabelaArmazem" prefWidth="88.0" text="Bairro" />
+                  <TableColumn fx:id="avenidatabelaArmazem" prefWidth="126.0" text="Avenida" />
+                  <TableColumn fx:id="ruatabelaArmazem" prefWidth="66.0" text="Rua" />
+                  <TableColumn fx:id="numerotabelaArmazem" prefWidth="45.0" text="N°" />
+                  <TableColumn fx:id="codigotabelaArmazem" prefWidth="99.0" text="Codigo Postal" />
+                  <TableColumn fx:id="btntabelaArmazem" prefWidth="42.0" />
+               </columns>
+            </TableView>
+            <TextField fx:id="txtID" alignment="CENTER" disable="true" layoutX="87.0" layoutY="14.0" prefHeight="25.0" prefWidth="92.0" promptText="ID" styleClass="text-squared-border">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtNome" layoutX="88.0" layoutY="48.0" prefHeight="25.0" prefWidth="164.0" promptText="Nome do armazem">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtCidade" layoutX="259.0" layoutY="48.0" prefHeight="25.0" prefWidth="114.0" promptText="Cidade" AnchorPane.leftAnchor="259.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <VBox alignment="CENTER" layoutX="546.0" layoutY="33.0" prefHeight="97.0" prefWidth="50.0">
+               <children>
+                  <Button fx:id="btnAdd" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addArmazem" prefHeight="43.0" prefWidth="40.0" stylesheets="@../../../style/dashboard.css" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="Squared-border" />
+                        <String fx:value="shadow-efect" />
+                        <String fx:value="hand-efect" />
+                        <String fx:value="gray-bg" />
+                     </styleClass>
+                     <graphic>
+                        <FontAwesomeIconView fill="#00a1ff" glyphName="PLUS" size="30" />
+                     </graphic>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="btnUpdade" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#updateArmazem" prefHeight="33.0" prefWidth="29.0" stylesheets="@../../../style/dashboard.css" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="Squared-border" />
+                        <String fx:value="shadow-efect" />
+                        <String fx:value="hand-efect" />
+                        <String fx:value="gray-bg" />
+                     </styleClass>
+                     <graphic>
+                        <FontAwesomeIconView fill="#00ff18" glyphName="REFRESH" size="30" />
+                     </graphic>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
+            <TextField fx:id="txtBairro" layoutX="382.0" layoutY="48.0" prefHeight="25.0" prefWidth="157.0" promptText="Bairro">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtAvenida" layoutX="88.0" layoutY="86.0" prefHeight="25.0" prefWidth="189.0" promptText="Avenida">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtRua" layoutX="284.0" layoutY="86.0" prefHeight="25.0" prefWidth="84.0" promptText="Rua">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtNumero" layoutX="374.0" layoutY="86.0" prefHeight="25.0" prefWidth="67.0" promptText="Nmero">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtCodigopostal" layoutX="448.0" layoutY="86.0" prefHeight="25.0" prefWidth="92.0" promptText="Codigo postal">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="25.0" prefWidth="686.0" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <styleClass>
+            <String fx:value="headers-color" />
+            <String fx:value="shadow" />
+         </styleClass>
+         <children>
+            <Label alignment="CENTER" layoutX="29.0" prefHeight="25.0" prefWidth="150.0" text="Armazens" textFill="WHITE" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnClose" layoutX="599.0" layoutY="13.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="30.0" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="15" />
+               </graphic>
+               <styleClass>
+                  <String fx:value="close-categoria" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+   <styleClass>
+      <String fx:value="blue-bg" />
+      <String fx:value="shadow" />
+   </styleClass>
+</AnchorPane>

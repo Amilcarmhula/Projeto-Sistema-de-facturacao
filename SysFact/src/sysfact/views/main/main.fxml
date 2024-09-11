@@ -71,7 +71,26 @@
                                     <Font name="System Bold" size="19.0" />
                                  </font>
                               </Label>
-                              <VBox layoutX="10.0" layoutY="401.0" prefHeight="330.0" prefWidth="230.0">
+                              <Button layoutX="22.0" layoutY="795.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="98.0" stylesheets="@../../style/dashboard.css" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" size="60" />
+                                 </graphic>
+                                 <styleClass>
+                                    <String fx:value="btn-logout" />
+                                    <String fx:value="hand-efect" />
+                                    <String fx:value="Squared-border" />
+                                 </styleClass>
+                              </Button>
+                              <Line endX="125.0" layoutX="115.0" layoutY="359.0" startX="-100.0" />
+                              <Label layoutX="128.0" layoutY="827.0" text="Logout" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
+                              <VBox layoutX="13.0" layoutY="399.0" prefHeight="330.0" prefWidth="230.0">
                                  <children>
                                     <Button fx:id="btn_dashboard" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
                                        <font>
@@ -89,7 +108,7 @@
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button fx:id="btn_produtos" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Stock" textFill="WHITE">
+                                    <Button fx:id="btn_produtos" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Inventário" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
@@ -123,25 +142,6 @@
                                     </Button>
                                  </children>
                               </VBox>
-                              <Button layoutX="22.0" layoutY="795.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="98.0" stylesheets="@../../style/dashboard.css" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="25.0" />
-                                 </font>
-                                 <graphic>
-                                    <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" size="60" />
-                                 </graphic>
-                                 <styleClass>
-                                    <String fx:value="btn-logout" />
-                                    <String fx:value="hand-efect" />
-                                    <String fx:value="Squared-border" />
-                                 </styleClass>
-                              </Button>
-                              <Line endX="125.0" layoutX="115.0" layoutY="359.0" startX="-100.0" />
-                              <Label layoutX="128.0" layoutY="827.0" text="Logout" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="25.0" />
-                                 </font>
-                              </Label>
                            </children>
                            <styleClass>
                               <String fx:value="blue-bg" />

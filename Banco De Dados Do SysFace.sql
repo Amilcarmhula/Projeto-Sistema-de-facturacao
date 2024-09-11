@@ -29,22 +29,42 @@ create table usuario(
     nome varchar(50) not null,
     usuario varchar(50) not null unique,
     senha integer not null,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null -- deletado ou nao
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
  insert into usuario(nome, usuario, senha) value ('Jr Mula','user',1111);
- create table agente(
+ 
+ 
+ create table cliente(
 	id integer primary key auto_increment,
-    tipo varchar(50) not null,
+    tipo varchar(50) not null, --  (Pessoa Física/Jurídica)
     nome varchar(100) not null,
-    apelido varchar(50),
+    apelido varchar(50), -- Razao social
     nuit integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_usuario) references usuario(id)
 );
-create table endereco_agente(
+
+create table fornecedor(
+	id integer primary key auto_increment,
+    tipo varchar(50) not null, --  (Pessoa Física/Jurídica)
+    nome varchar(100) not null,-- Razao social
+    nuit integer,
+    fk_id_usuario integer not null,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_usuario) references usuario(id)
+);
+
+create table armazem(
+	id integer primary key auto_increment,
+    nome varchar(50) not null,
+    tipo varchar(50) not null, -- de Armazém: (Central, Regional, Loja, etc.)
+    descricao varchar(50),
+    estado boolean default 1 not null, -- Ativo/Inativo.
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+create table endereco(
 	id integer primary key auto_increment,
     provincia varchar(50),
     cidade varchar(50),
@@ -54,24 +74,46 @@ create table endereco_agente(
     codigo_postal integer,
     numero integer not null,
     tipo varchar(10),
-    fk_id_agente integer not null,
+	fk_id_cliente integer,
+    fk_id_fornecedor integer,
+    fk_id_armazem integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
+    foreign key (fk_id_cliente) references clinte(id),
+    foreign key (fk_id_fornecedor) references fornecedor(id),
+    foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id),
-    foreign key (fk_id_agente) references agente(id),
-    check(tipo in('Facturação','Envio'))
+    check(tipo in('Facturação','Envio')),
+    check(
+		(fk_id_cliente is not null and (fk_id_fornecedor is null and fk_id_armazem is null))
+        or 
+        (fk_id_fornecedor is not null and (fk_id_cliente is null and fk_id_armazem is null))
+        or 
+        (fk_id_armazem is not null and (fk_id_cliente is null and fk_id_fornecedor is null))
+	)
 );
-create table contacto_agente(
+create table contacto(
 	id integer primary key auto_increment,
+    pessoa_de_contacto varchar(100),
     contacto varchar(20) not null,
 	email varchar(50) unique,
-    fk_id_agente integer not null,
+    website varchar(50) unique,
+    fk_id_cliente integer,
+    fk_id_fornecedor integer,
+    fk_id_armazem integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
+    foreign key (fk_id_cliente) references clinte(id),
+    foreign key (fk_id_fornecedor) references fornecedor(id),
+    foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id),
-    foreign key (fk_id_agente) references agente(id)
+    check(
+		(fk_id_cliente is not null and (fk_id_fornecedor is null and fk_id_armazem is null))
+        or 
+        (fk_id_fornecedor is not null and (fk_id_cliente is null and fk_id_armazem is null))
+        or 
+        (fk_id_armazem is not null and (fk_id_cliente is null and fk_id_fornecedor is null))
+	)
 );
 
 -- create table categoria(
@@ -91,16 +133,14 @@ create table categoria(
     familia varchar(50),
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     check(tipo in('Produto','Serviço'))
 );
-select * from unidade_medida;
+
 create table unidade_medida(
 	id integer primary key auto_increment,
     identificador varchar(50) not null,
     sigla varchar(10) not null,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null -- deletado ou nao
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ); 
 
 create table taxa_imposto(
@@ -108,21 +148,9 @@ create table taxa_imposto(
     identificador varchar(50) not null,
     percentagem decimal(3,2),
     descricao text,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null -- deletado ou nao
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-create table armazem(
-	id integer primary key auto_increment,
-    nome varchar(50) not null,
-    cidade varchar(50),
-    bairro varchar(50),
-    avenida varchar(50),
-    rua varchar(30),
-    codigo_postal integer,
-    numero integer not null unique,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null -- deletado ou nao
-);
+
 -- insert into armazem (nome, cidade, bairro,avenida, rua,codigo_postal,numero) value ('Armazem 3', 'Maracuene', 'Jardim', 'av. Cardoso', 'Junta', 1122,300);
 -- ALTER TABLE armazem DROP COLUMN provincia;
 
@@ -131,8 +159,7 @@ create table desconto(
     nome varchar(50) not null,
     percentagem decimal(3,2),
     descricao text,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null -- deletado ou nao
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- SELECT s.id, fk_id_categoria, s.nome,
@@ -165,7 +192,6 @@ create table produto(
     fk_id_categoria integer not null,
     fk_id_unidade_medida integer,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_categoria) references categoria(id),
     foreign key (fk_id_unidade_medida) references unidade_medida(id)
 );
@@ -179,7 +205,6 @@ CREATE TABLE precovenda (
     fk_id_produto integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     FOREIGN KEY (fk_id_produto) REFERENCES produto(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
@@ -197,14 +222,13 @@ create table produto_fornecido(
     custo decimal(10,2) not null,
     fk_id_armazem integer not null,
     fk_id_produto integer not null,
-    fk_id_agente integer not null,
+    fk_id_fornecedor integer not null,
     fk_id_usuario integer not null,
 	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_produto) references produto(id),
     foreign key (fk_id_usuario) references usuario(id),
-    foreign key (fk_id_agente) references agente(id)
+    foreign key (fk_id_fornecedor) references fornecedor(id)
 );
 
 -- select * from precovenda;
@@ -247,7 +271,6 @@ create table movimento_produto(
     fk_id_produto integer not null,
 	fk_id_usuario integer not null,
     fk_id_armazem integer not null,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_produto) references produto(id),
 	foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_armazem) references armazem(id),
@@ -290,8 +313,7 @@ delimiter ;
     nome varchar(50) not null,
     apelido varchar(30),
     nuit integer,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null -- deletado ou nao
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 create table endereco_empresa(
@@ -306,7 +328,6 @@ create table endereco_empresa(
     tipo varchar(10),
     fk_id_empresa integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_empresa) references empresa(id),
     check (tipo in('Facturação','Envio'))
 );
@@ -318,7 +339,6 @@ create table contacto_empresa(
     fk_id_empresa integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_empresa) references empresa(id)
 );
@@ -333,7 +353,6 @@ create table contacto_empresa(
     fk_id_empresa integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_empresa) references empresa(id)
 );
@@ -349,12 +368,11 @@ create table factura(
     estado boolean default 0 not null,
     total decimal(10,2) not null,
     fk_id_empresa integer not null,
-    fk_id_agente integer not null,
+    fk_id_cliente integer not null,
     fk_id_usuario integer not null,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_empresa) references empresa(id),
     foreign key (fk_id_usuario) references usuario(id),
-    foreign key (fk_id_agente) references agente(id)
+    foreign key (fk_id_cliente) references cliente(id)
 );
 -- tipo,quantidade,preco_unitario,subtotal,fk_id_desconto,fk_id_produto,fk_id_factura,fk_id_servico,fk_id_usuario
 -- drop table item_factura;
@@ -369,7 +387,6 @@ create table item_factura(
     fk_id_factura integer not null,
     fk_id_usuario integer not null,
     data_adicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_precovenda) references precovenda(id),
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_desconto) references desconto(id),
@@ -382,8 +399,7 @@ create table metodo_pagamento(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
     descricao text,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   active_or_not boolean default 1 not null -- deletado ou nao
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 create table pagamento(
@@ -395,7 +411,6 @@ create table pagamento(
     fk_id_factura integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active_or_not boolean default 1 not null, -- deletado ou nao
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_metodo_pagamento) references metodo_pagamento(id),
     foreign key (fk_id_factura) references factura(id)

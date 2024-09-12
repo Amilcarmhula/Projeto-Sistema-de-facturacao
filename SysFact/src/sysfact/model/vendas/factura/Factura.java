@@ -4,7 +4,7 @@
  */
 package sysfact.model.vendas.factura;
 
-import sysfact.model.agente.Agente;
+import sysfact.model.cliente.Cliente;
 import sysfact.model.empresa.Empresa;
 import sysfact.model.usuario.Usuario;
 
@@ -23,14 +23,14 @@ public class Factura {
     private String data_criacao;
     private String data_vencimento;
     private Empresa empresa;
-    private Agente agente;
+    private Cliente agente;
     private Usuario usuario;
     private boolean active_or_not;
 
     public Factura() {
     }
 
-    public Factura(String tipo, long numero, boolean estado, double total, String data_vencimento, Empresa empresa, Agente agente, Usuario usuario) {
+    public Factura(String tipo, long numero, boolean estado, double total, String data_vencimento, Empresa empresa, Cliente agente, Usuario usuario) {
         this.tipo = tipo;
         this.numero = numero;
         this.estado = estado;
@@ -105,11 +105,11 @@ public class Factura {
         this.empresa = empresa;
     }
 
-    public Agente getAgente() {
+    public Cliente getAgente() {
         return agente;
     }
 
-    public void setAgente(Agente agente) {
+    public void setAgente(Cliente agente) {
         this.agente = agente;
     }
 

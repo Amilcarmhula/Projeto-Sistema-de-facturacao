@@ -114,10 +114,12 @@
 }
 
 /* Row Styling */
-.table-row-cell {
-    -fx-background-color: transparent; 
-   -fx-text-fill: #fff;
-   -fx-font-weight: bold;
+/* Estilizando as células da tabela */
+.table-view .table-row-cell {
+    -fx-background-color: transparent; /* Fundo das linhas */
+    /*-fx-text-fill: white;               Texto branco nas linhas */
+    -fx-font-size: 18px;               /* Tamanho maior do texto */
+    -fx-font-weight: bold;
 }
 
 /* Alternate Row Colors */
@@ -249,3 +251,39 @@
     /*-fx-font-weight: bold;  Aplica bold ao item selecionado*/ 
 }
 
+
+
+
+
+/*
+
+
+ Estilizando o Accordion 
+.accordion {
+    -fx-background-color: transparent;  Cor de fundo do Accordion 
+    -fx-border-color: #cccccc;      Cor da borda 
+      -fx-border-width: 2px;        Espessura da borda 
+    -fx-border-radius: 5px;         Arredondar cantos 
+}
+
+ Estilizando o Título do TitledPane 
+.titled-pane > .title {
+    -fx-background-color: transparent;  Cor de fundo do título 
+    -fx-text-fill: white;           Cor do texto do título 
+    -fx-font-weight: bold;          Texto em negrito 
+    -fx-padding: 10px;              Espaçamento interno 
+    -fx-border-color: #cccccc;      Cor da borda do título 
+    -fx-border-width: 0 0 1px 0;    Apenas uma borda inferior 
+}
+
+ Estilizando o Conteúdo do TitledPane 
+.titled-pane > .content {
+    -fx-background-color: transparent;  Cor de fundo do conteúdo 
+    -fx-padding: 10px;              Espaçamento interno do conteúdo 
+}
+
+ Alteração no estado expandido 
+.titled-pane:expanded > .title {
+    -fx-background-color: linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
+
+}*/

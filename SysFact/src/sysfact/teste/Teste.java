@@ -5,17 +5,13 @@
 package sysfact.teste;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javafx.collections.ObservableList;
-import sysfact.dao.agente.AgenteDAO;
-import sysfact.dao.produto.ProdutoDAO;
-import sysfact.dao.unidademedida.UnidadeMedidaDAO;
-import sysfact.model.agente.Agente;
-import sysfact.model.produto.Produto;
-import sysfact.model.unidade_medida.UnidadeMedida;
+import sysfact.dao.cliente.ClienteDAO;
+import sysfact.model.cliente.Cliente;
+import sysfact.model.cliente.contacto.ContactoCliente;
+
+
 
 /**
  *
@@ -27,12 +23,31 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        UnidadeMedida x = new UnidadeMedida();
-        UnidadeMedidaDAO z = new UnidadeMedidaDAO();
-//        x.setId(3);
-        x.setIdentificador("kilo grama");
-        x.setSigla("kg");
-        z.addEntity(x);
+        Cliente c = new Cliente();
+        ClienteDAO cdao = new ClienteDAO();
+        ObservableList<Cliente> listaClientes = cdao.listAllEntities();
+        for (Cliente cli : listaClientes) {
+            System.out.println("ID: "+cli.getId());
+            System.out.println("Tipo: "+cli.getTipo());
+            System.out.println("Nome: " +cli.getNome());
+            System.out.println("Apelido: "+cli.getApelido());
+            System.out.println("Nuit: "+cli.getNuit());
+            List<ContactoCliente> cc = cli.getContactoCliente();
+            for (ContactoCliente contactoCliente : cc) {
+                System.out.println("Contacto: "+contactoCliente.getContacto());
+            }
+            System.out.println("______________________Cliente______________________");
+            
+
+            
+        }
+        
+//        UnidadeMedida x = new UnidadeMedida();
+//        UnidadeMedidaDAO z = new UnidadeMedidaDAO();
+////        x.setId(3);
+//        x.setIdentificador("kilo grama");
+//        x.setSigla("kg");
+//        z.addEntity(x);
         
         
 //        ProdutoDAO pd = new ProdutoDAO();
@@ -58,18 +73,18 @@ public class Teste {
 //        
 //        System.out.println(mapa);
 //        AgenteService cad = new AgenteService();
-//        AgenteDAO c = new AgenteDAO();
+//        ClienteDAO c = new ClienteDAO();
 //        ObservableList<Agente> lista = c.listAllEntities();
-//        for (Agente ca : lista) {
+//        for (Cliente ca : lista) {
 //            System.out.println("ID: " + ca.getId());
 //        }
-//        Agente a = new Agente();
+//        Cliente a = new Cliente();
 //        a.setTipo("Cliente");
 //        a.setNome("Amilcar");
 //        a.setApelido("Mula");
 //        a.setNuit(123456789);
 //        a.setFk_id_usuario(1);
-//        AgenteDAO ad = new AgenteDAO();
+//        ClienteDAO ad = new ClienteDAO();
 //        ad.addEntity(a);
 //        Usuario u = new Usuario();
 //        UsuarioDAO ud = new UsuarioDAO();
@@ -131,8 +146,8 @@ public class Teste {
 //        ProdutoFornecidoDAO pfd = new ProdutoFornecidoDAO();
 //        ProdutoFornecido pf = new ProdutoFornecido(10, "2024-08-28 7:03:00", 13684.39, a, p, f, u);
 ////        pfd.addEntity(pf);
-//        AgenteDAO clid = new AgenteDAO();
-//        Agente cli = new Agente("Agente 1", "Mula", 123456789, u);
+//        ClienteDAO clid = new ClienteDAO();
+//        Cliente cli = new Cliente("Cliente 1", "Mula", 123456789, u);
 //        clid.addEntity(cli);
 //        ContactoFornecedorDAO cfd = new ContactoFornecedorDAO();
 //        ContactoFornecedor cf = new ContactoFornecedor(ff, "878201993", "teste6@mail.com");
@@ -161,10 +176,10 @@ public class Teste {
 //        for (Usuario u : lista) {
 //            System.out.println(u.isActive_or_not());
 //        }
-//        Agente cliente = cdao.listaClientePorNome("Amilc");
+//        Cliente cliente = cdao.listaClientePorNome("Amilc");
 //        System.out.println(cliente.getNuit());
 //        List<Cliente> lista = cdao.listaClientePorNome("Ven");
-//        for (Agente cliente : lista) {
+//        for (Cliente cliente : lista) {
 //            System.out.println(cliente.getNome());
 //        }
 //        c.setId(4);

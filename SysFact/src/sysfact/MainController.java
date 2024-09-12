@@ -71,7 +71,6 @@ public class MainController implements Initializable {
                     user.setUsuario(result.getString("usuario"));
                     user.setSenha(result.getInt("senha"));
                     user.setData_criacao(result.getString("data_criacao"));
-                    user.setEstadoActive(result.getBoolean("active_or_not"));
                     
                     /*Dados de login a serem armazenados*/
                     SysFact.setUserData(user);

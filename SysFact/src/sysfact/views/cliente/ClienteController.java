@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package sysfact.views.agente;
+package sysfact.views.cliente;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -31,12 +31,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import sysfact.SysFact;
-import sysfact.dao.agente.AgenteDAO;
-import sysfact.dao.agente.contacto.ContactoAgenteDAO;
-import sysfact.dao.agente.endereco.EnderecoAgenteDAO;
-import sysfact.model.agente.Agente;
-import sysfact.model.agente.contacto.ContactoAgente;
-import sysfact.model.agente.endereco.EnderecoAgente;
+import sysfact.dao.cliente.ClienteDAO;
+import sysfact.dao.cliente.contacto.ContactoClienteDAO;
+import sysfact.dao.cliente.endereco.EnderecoClienteDAO;
+import sysfact.model.cliente.Cliente;
+import sysfact.model.cliente.contacto.ContactoCliente;
+import sysfact.model.cliente.endereco.EnderecoCliente;
 import sysfact.model.usuario.Usuario;
 
 /**
@@ -44,38 +44,33 @@ import sysfact.model.usuario.Usuario;
  *
  * @author JM-Tecnologias
  */
-public class AgentesController implements Initializable {
+public class ClienteController implements Initializable {
 
     private Usuario userData;
 
-    
+    @FXML
+    private TableColumn<ContactoCliente, Integer> IDtabelaContacto;
 
     @FXML
-    private TableColumn<ContactoAgente, Integer> IDtabelaContacto;
+    private TableColumn<ContactoCliente, String> datatabelaContacto;
 
     @FXML
-    private TableColumn<ContactoAgente, String> datatabelaContacto;
+    private TableColumn<EnderecoCliente, Integer> IDtabelaEndereco;
 
     @FXML
-    private TableColumn<EnderecoAgente, Integer> IDtabelaEndereco;
+    private TableColumn<EnderecoCliente, String> avenidatabelaEndereco;
 
     @FXML
-    private TableColumn<EnderecoAgente, String> avenidatabelaEndereco;
+    private TableColumn<EnderecoCliente, String> bairrotabelaEndereco;
 
     @FXML
-    private TableColumn<EnderecoAgente, String> bairrotabelaEndereco;
-
-    
+    private TableColumn<ContactoCliente, String> btntabelaContacto;
 
     @FXML
-    private TableColumn<ContactoAgente, String> btntabelaContacto;
+    private TableColumn<EnderecoCliente, String> btntabelaEndereco;
 
     @FXML
-    private TableColumn<EnderecoAgente, String> btntabelaEndereco;
-
-
-    @FXML
-    private Button btn_dashboard;    
+    private Button btn_dashboard;
 
     @FXML
     private Button cf_btnAddCliente;
@@ -153,68 +148,60 @@ public class AgentesController implements Initializable {
     private TextField cf_txtRua;
 
     @FXML
-    private TableColumn<EnderecoAgente, String> cidadetabelaEndereco;
+    private TableColumn<EnderecoCliente, String> cidadetabelaEndereco;
 
     @FXML
-    private TableColumn<EnderecoAgente, Integer> codigopostaltabelaEndereco;
+    private TableColumn<EnderecoCliente, Integer> codigopostaltabelaEndereco;
 
     @FXML
-    private TableColumn<ContactoAgente, String> contactotabelaContacto;
-
-    
+    private TableColumn<ContactoCliente, String> contactotabelaContacto;
 
     @FXML
-    private TableColumn<EnderecoAgente, String> datatabelaEndereco;
+    private TableColumn<EnderecoCliente, String> datatabelaEndereco;
 
     @FXML
-    private TableColumn<ContactoAgente, String> emailtabelaContacto;
+    private TableColumn<ContactoCliente, String> emailtabelaContacto;
 
     @FXML
     private Label labID;
-    
-    @FXML
-    private TableView<Agente> tabelaCliente;
 
     @FXML
-    private TableColumn<Agente, String> nometabelaCliente;
-    @FXML
-    private TableColumn<Agente, String> tipotabelaCliente;
+    private TableView<Cliente> tabelaCliente;
 
     @FXML
-    private TableColumn<Agente, Integer> nuittabelaCliente;
-    
+    private TableColumn<Cliente, String> nometabelaCliente;
     @FXML
-    private TableColumn<Agente, String> datatabelaCliente;
-    @FXML
-    private TableColumn<Agente, String> apelidotabelaCliente;
-    @FXML
-    private TableColumn<Agente, Integer> IDtabelaCliente;
-    @FXML
-    private TableColumn<Agente, String> btntabelaCliente;
+    private TableColumn<Cliente, String> tipotabelaCliente;
 
     @FXML
-    private TableColumn<EnderecoAgente, Integer> numerotabelaEndereco;
+    private TableColumn<Cliente, Integer> nuittabelaCliente;
 
     @FXML
-    private TableColumn<EnderecoAgente, String> provinciatabelaEndereco;
+    private TableColumn<Cliente, String> datatabelaCliente;
+    @FXML
+    private TableColumn<Cliente, String> apelidotabelaCliente;
+    @FXML
+    private TableColumn<Cliente, Integer> IDtabelaCliente;
+    @FXML
+    private TableColumn<Cliente, String> btntabelaCliente;
 
     @FXML
-    private TableColumn<EnderecoAgente, String> ruatabelaEndereco;
-
-    
+    private TableColumn<EnderecoCliente, Integer> numerotabelaEndereco;
 
     @FXML
-    private TableView<ContactoAgente> tabelaContacto;
+    private TableColumn<EnderecoCliente, String> provinciatabelaEndereco;
 
     @FXML
-    private TableView<EnderecoAgente> tabelaEndereco;
+    private TableColumn<EnderecoCliente, String> ruatabelaEndereco;
 
     @FXML
-    private TableColumn<EnderecoAgente, String> tipotabelaEndereco;
+    private TableView<ContactoCliente> tabelaContacto;
 
-    
+    @FXML
+    private TableView<EnderecoCliente> tabelaEndereco;
 
-
+    @FXML
+    private TableColumn<EnderecoCliente, String> tipotabelaEndereco;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -240,7 +227,7 @@ public class AgentesController implements Initializable {
             showContactoAgente();
             showEnderecoAgente();
         } catch (SQLException ex) {
-            Logger.getLogger(Agente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -252,11 +239,11 @@ public class AgentesController implements Initializable {
  /*
         Funcoes para fazer pesquisas no banco de dados buscando todos dados
      */
-    private ObservableList<Agente> listaAgentes;
+    private ObservableList<Cliente> listaAgentes;
 
     public void showAgente() throws SQLException {
 
-        AgenteDAO aDAO = new AgenteDAO();
+        ClienteDAO aDAO = new ClienteDAO();
         listaAgentes = aDAO.listAllEntities();
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -267,9 +254,9 @@ public class AgentesController implements Initializable {
         datatabelaCliente.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
 
         //add cell of button edit 
-        Callback<TableColumn<Agente, String>, TableCell<Agente, String>> cellFoctory = (TableColumn<Agente, String> param) -> {
+        Callback<TableColumn<Cliente, String>, TableCell<Cliente, String>> cellFoctory = (TableColumn<Cliente, String> param) -> {
             // make cell containing buttons
-            final TableCell<Agente, String> cell = new TableCell<Agente, String>() {
+            final TableCell<Cliente, String> cell = new TableCell<Cliente, String>() {
                 @Override
                 public void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -285,10 +272,10 @@ public class AgentesController implements Initializable {
                                 + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            Agente a = tabelaCliente.getSelectionModel().getSelectedItem();
+                            Cliente a = tabelaCliente.getSelectionModel().getSelectedItem();
                             System.out.println(a.getId());
                             try {
-                                AgenteDAO xDAO = new AgenteDAO();
+                                ClienteDAO xDAO = new ClienteDAO();
                                 xDAO.deleteEntityByUSER(a);
                                 xDAO.deleteEntityByUSERSimpleTwo(a);
                                 xDAO.deleteEntityByUSERSimpleThree(a);
@@ -297,7 +284,7 @@ public class AgentesController implements Initializable {
                                 showContactoAgenteSelected();
                                 showEnderecoAgenteSelected();
                             } catch (SQLException ex) {
-                                Logger.getLogger(Agente.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         });
                         setGraphic(deleteIcon);
@@ -310,7 +297,7 @@ public class AgentesController implements Initializable {
         };
         btntabelaCliente.setCellFactory(cellFoctory);
 
-        FilteredList<Agente> dadosFiltrados = new FilteredList<>(listaAgentes, b -> true);
+        FilteredList<Cliente> dadosFiltrados = new FilteredList<>(listaAgentes, b -> true);
         cf_txtPesquisaCliente.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(agente -> {
 
@@ -330,17 +317,17 @@ public class AgentesController implements Initializable {
 
             });
         });
-        SortedList<Agente> sortedData = new SortedList<>(dadosFiltrados);
+        SortedList<Cliente> sortedData = new SortedList<>(dadosFiltrados);
         sortedData.comparatorProperty().bind(tabelaCliente.comparatorProperty());
 
 //        tabelaCliente.setItems(listaAgentes);
         tabelaCliente.setItems(sortedData);
     }
 
-    private ObservableList<ContactoAgente> listaContactosAgente;
+    private ObservableList<ContactoCliente> listaContactosAgente;
 
     public void showContactoAgente() throws SQLException {
-        ContactoAgenteDAO x = new ContactoAgenteDAO();
+        ContactoClienteDAO x = new ContactoClienteDAO();
         listaContactosAgente = x.listAllEntities();
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -348,9 +335,9 @@ public class AgentesController implements Initializable {
         emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email"));
         datatabelaContacto.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
         //add cell of button edit 
-        Callback<TableColumn<ContactoAgente, String>, TableCell<ContactoAgente, String>> cellFoctory = (TableColumn<ContactoAgente, String> param) -> {
+        Callback<TableColumn<ContactoCliente, String>, TableCell<ContactoCliente, String>> cellFoctory = (TableColumn<ContactoCliente, String> param) -> {
             // make cell containing buttons
-            final TableCell<ContactoAgente, String> cell = new TableCell<ContactoAgente, String>() {
+            final TableCell<ContactoCliente, String> cell = new TableCell<ContactoCliente, String>() {
                 @Override
                 public void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -366,14 +353,14 @@ public class AgentesController implements Initializable {
                                 + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            ContactoAgente a = tabelaContacto.getSelectionModel().getSelectedItem();
+                            ContactoCliente a = tabelaContacto.getSelectionModel().getSelectedItem();
                             System.out.println(a.getId());
                             try {
-                                ContactoAgenteDAO xDAO = new ContactoAgenteDAO();
+                                ContactoClienteDAO xDAO = new ContactoClienteDAO();
                                 xDAO.deleteEntityByUSER(a);
                                 showContactoAgenteSelected();
                             } catch (SQLException ex) {
-                                Logger.getLogger(Agente.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         });
                         setGraphic(deleteIcon);
@@ -388,10 +375,10 @@ public class AgentesController implements Initializable {
         tabelaContacto.setItems(listaContactosAgente);
     }
 
-    private ObservableList<EnderecoAgente> listaEnderecosAgente;
+    private ObservableList<EnderecoCliente> listaEnderecosAgente;
 
     public void showEnderecoAgente() throws SQLException {
-        EnderecoAgenteDAO x = new EnderecoAgenteDAO();
+        EnderecoClienteDAO x = new EnderecoClienteDAO();
         listaEnderecosAgente = x.listAllEntities();
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -406,9 +393,9 @@ public class AgentesController implements Initializable {
         datatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
 //        btntabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
 //add cell of button edit 
-        Callback<TableColumn<EnderecoAgente, String>, TableCell<EnderecoAgente, String>> cellFoctory = (TableColumn<EnderecoAgente, String> param) -> {
+        Callback<TableColumn<EnderecoCliente, String>, TableCell<EnderecoCliente, String>> cellFoctory = (TableColumn<EnderecoCliente, String> param) -> {
             // make cell containing buttons
-            final TableCell<EnderecoAgente, String> cell = new TableCell<EnderecoAgente, String>() {
+            final TableCell<EnderecoCliente, String> cell = new TableCell<EnderecoCliente, String>() {
                 @Override
                 public void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -424,14 +411,14 @@ public class AgentesController implements Initializable {
                                 + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            EnderecoAgente a = tabelaEndereco.getSelectionModel().getSelectedItem();
+                            EnderecoCliente a = tabelaEndereco.getSelectionModel().getSelectedItem();
                             System.out.println(a.getId());
                             try {
-                                EnderecoAgenteDAO xDAO = new EnderecoAgenteDAO();
+                                EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
                                 xDAO.deleteEntityByUSER(a);
                                 showEnderecoAgenteSelected();
                             } catch (SQLException ex) {
-                                Logger.getLogger(Agente.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         });
                         setGraphic(deleteIcon);
@@ -450,12 +437,14 @@ public class AgentesController implements Initializable {
         Funcoes para fazer pesquisas no banco de dados informacoes relacionadas 
     com o agente selecionado
      */
-    private ObservableList<ContactoAgente> listaContactos_SeletedAgente;
+    private ObservableList<ContactoCliente> listaContactos_SeletedAgente;
 
     public void showContactoAgenteSelected() throws SQLException {
-        ContactoAgenteDAO x = new ContactoAgenteDAO();
-        ContactoAgente z = new ContactoAgente();
-        z.setFk_id_agente(Integer.parseInt(cf_txtIDCliente.getText()));
+        ContactoClienteDAO x = new ContactoClienteDAO();
+        ContactoCliente z = new ContactoCliente();
+        Cliente cli = new Cliente();
+        cli.setId(Integer.parseInt(cf_txtIDCliente.getText()));
+        z.setCliente(cli);
         listaContactos_SeletedAgente = x.searchEntityByAgente(z);
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -464,9 +453,9 @@ public class AgentesController implements Initializable {
         datatabelaContacto.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
 
         //add cell of button edit 
-        Callback<TableColumn<ContactoAgente, String>, TableCell<ContactoAgente, String>> cellFoctory = (TableColumn<ContactoAgente, String> param) -> {
+        Callback<TableColumn<ContactoCliente, String>, TableCell<ContactoCliente, String>> cellFoctory = (TableColumn<ContactoCliente, String> param) -> {
             // make cell containing buttons
-            final TableCell<ContactoAgente, String> cell = new TableCell<ContactoAgente, String>() {
+            final TableCell<ContactoCliente, String> cell = new TableCell<ContactoCliente, String>() {
                 @Override
                 public void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -482,14 +471,14 @@ public class AgentesController implements Initializable {
                                 + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            ContactoAgente a = tabelaContacto.getSelectionModel().getSelectedItem();
+                            ContactoCliente a = tabelaContacto.getSelectionModel().getSelectedItem();
                             System.out.println(a.getId());
                             try {
-                                ContactoAgenteDAO xDAO = new ContactoAgenteDAO();
+                                ContactoClienteDAO xDAO = new ContactoClienteDAO();
                                 xDAO.deleteEntityByUSER(a);
                                 showContactoAgenteSelected();
                             } catch (SQLException ex) {
-                                Logger.getLogger(Agente.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         });
                         setGraphic(deleteIcon);
@@ -505,14 +494,14 @@ public class AgentesController implements Initializable {
         tabelaContacto.setItems(listaContactos_SeletedAgente);
     }
 
-    private ObservableList<EnderecoAgente> listaEndereco_SeletedAgente;
+    private ObservableList<EnderecoCliente> listaEndereco_SeletedAgente;
 
     public void showEnderecoAgenteSelected() throws SQLException {
-        EnderecoAgenteDAO x = new EnderecoAgenteDAO();
-        EnderecoAgente z = new EnderecoAgente();
-        Agente a = new Agente();
+        EnderecoClienteDAO x = new EnderecoClienteDAO();
+        EnderecoCliente z = new EnderecoCliente();
+        Cliente a = new Cliente();
         a.setId(Integer.parseInt(cf_txtIDCliente.getText()));
-        z.setAgente(a);
+        z.setCliente(a);
         listaEndereco_SeletedAgente = x.searchEntityByAgente(z);
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -526,9 +515,9 @@ public class AgentesController implements Initializable {
         numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero"));
         datatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
         //add cell of button edit 
-        Callback<TableColumn<EnderecoAgente, String>, TableCell<EnderecoAgente, String>> cellFoctory = (TableColumn<EnderecoAgente, String> param) -> {
+        Callback<TableColumn<EnderecoCliente, String>, TableCell<EnderecoCliente, String>> cellFoctory = (TableColumn<EnderecoCliente, String> param) -> {
             // make cell containing buttons
-            final TableCell<EnderecoAgente, String> cell = new TableCell<EnderecoAgente, String>() {
+            final TableCell<EnderecoCliente, String> cell = new TableCell<EnderecoCliente, String>() {
                 @Override
                 public void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -544,14 +533,14 @@ public class AgentesController implements Initializable {
                                 + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            EnderecoAgente a = tabelaEndereco.getSelectionModel().getSelectedItem();
+                            EnderecoCliente a = tabelaEndereco.getSelectionModel().getSelectedItem();
                             System.out.println(a.getId());
                             try {
-                                EnderecoAgenteDAO xDAO = new EnderecoAgenteDAO();
+                                EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
                                 xDAO.deleteEntityByUSER(a);
                                 showEnderecoAgenteSelected();
                             } catch (SQLException ex) {
-                                Logger.getLogger(Agente.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         });
                         setGraphic(deleteIcon);
@@ -572,14 +561,14 @@ public class AgentesController implements Initializable {
         Funcoes para Adicionar informacoes ao banco de dados
      */
     public void addAgente() throws SQLException {
-        AgenteDAO aDAO = new AgenteDAO();
-        Agente a = new Agente();
+        ClienteDAO aDAO = new ClienteDAO();
+        Cliente a = new Cliente();
         Alert alert;
 
         a.setNome(cf_txtNome.getText());
         a.setApelido(cf_txtApelido.getText());
         a.setNuit(Integer.parseInt(cf_txtNuit.getText()));
-        a.setFk_id_usuario(this.userData.getId());
+        a.setUsuario(userData);
         if (cf_radioCliente.isSelected()) {
             cf_radioFornecedor.setSelected(false);
             a.setTipo("Cliente");
@@ -602,21 +591,23 @@ public class AgentesController implements Initializable {
     }
 
     public void addContactoAgente() throws SQLException {
-        ContactoAgenteDAO xDAO = new ContactoAgenteDAO();
-        ContactoAgente x = new ContactoAgente();
+        ContactoClienteDAO xDAO = new ContactoClienteDAO();
+        ContactoCliente x = new ContactoCliente();
 
         x.setContacto(cf_txtContacto.getText());
         x.setEmail(cf_txtEmail.getText());
-        x.setFk_id_agente(Integer.parseInt(cf_txtIDCliente.getText()));
-        x.setFk_id_usuario(this.userData.getId());
+        Cliente cli = new Cliente();
+        cli.setId(Integer.parseInt(cf_txtIDCliente.getText()));
+        x.setCliente(cli);
+        x.setUsuario(userData);
         xDAO.addEntity(x);
         showContactoAgenteSelected();
         resetContactosAgente();
     }
 
     public void addEnderecoAgente() throws SQLException {
-        EnderecoAgenteDAO xDAO = new EnderecoAgenteDAO();
-        EnderecoAgente x = new EnderecoAgente();
+        EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
+        EnderecoCliente x = new EnderecoCliente();
 
         x.setProvincia(cf_combProvincia.getValue());
         x.setCidade(cf_txtCidade.getText());
@@ -626,9 +617,9 @@ public class AgentesController implements Initializable {
         x.setCodigoPostal(Integer.parseInt(cf_txtCodigooPostal.getText()));
         x.setNumero(Integer.parseInt(cf_txtNumeroEndereco.getText()));
         x.setTipo(cf_combTipo.getValue());
-        Agente a = new Agente();
+        Cliente a = new Cliente();
         a.setId(Integer.parseInt(cf_txtIDCliente.getText()));
-        x.setAgente(a);
+        x.setCliente(a);
         Usuario u = new Usuario();
         u.setId(this.userData.getId());
         x.setUsuario(u);
@@ -641,14 +632,14 @@ public class AgentesController implements Initializable {
         Funcoes para Actualizar informacoes ao banco de dados
      */
     public void updateAgente() throws SQLException {
-        AgenteDAO aDAO = new AgenteDAO();
-        Agente a = new Agente();
+        ClienteDAO aDAO = new ClienteDAO();
+        Cliente a = new Cliente();
         Alert alert;
 
         a.setNome(cf_txtNome.getText());
         a.setApelido(cf_txtApelido.getText());
         a.setNuit(Integer.parseInt(cf_txtNuit.getText()));
-        a.setFk_id_usuario(Integer.parseInt(labID.getText()));
+        a.setUsuario(userData);
         a.setId(Integer.parseInt(cf_txtIDCliente.getText()));
         if (cf_radioCliente.isSelected()) {
             cf_radioFornecedor.setSelected(false);
@@ -672,13 +663,15 @@ public class AgentesController implements Initializable {
     }
 
     public void updateContactoAgente() throws SQLException {
-        ContactoAgenteDAO xDAO = new ContactoAgenteDAO();
-        ContactoAgente x = new ContactoAgente();
+        ContactoClienteDAO xDAO = new ContactoClienteDAO();
+        ContactoCliente x = new ContactoCliente();
 
         x.setContacto(cf_txtContacto.getText());
         x.setEmail(cf_txtEmail.getText());
-        x.setFk_id_agente(Integer.parseInt(cf_txtIDCliente.getText()));
-        x.setFk_id_usuario(this.userData.getId());
+        Cliente cli = new Cliente();
+        cli.setId(Integer.parseInt(cf_txtIDCliente.getText()));
+        x.setCliente(cli);
+        x.setUsuario(userData);;
         x.setId(Integer.parseInt(cf_txtIDContacto.getText()));
         xDAO.updateEntityByID(x);
         showContactoAgenteSelected();
@@ -686,8 +679,8 @@ public class AgentesController implements Initializable {
     }
 
     public void updateEnderecoAgente() throws SQLException {
-        EnderecoAgenteDAO xDAO = new EnderecoAgenteDAO();
-        EnderecoAgente x = new EnderecoAgente();
+        EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
+        EnderecoCliente x = new EnderecoCliente();
 
         x.setProvincia(cf_combProvincia.getValue());
         x.setCidade(cf_txtCidade.getText());
@@ -697,9 +690,9 @@ public class AgentesController implements Initializable {
         x.setCodigoPostal(Integer.parseInt(cf_txtCodigooPostal.getText()));
         x.setNumero(Integer.parseInt(cf_txtNumeroEndereco.getText()));
         x.setTipo(cf_combTipo.getValue());
-        Agente a = new Agente();
+        Cliente a = new Cliente();
         a.setId(Integer.parseInt(cf_txtIDCliente.getText()));
-        x.setAgente(a);
+        x.setCliente(a);
         Usuario u = new Usuario();
         u.setId(this.userData.getId());
         x.setUsuario(u);
@@ -714,7 +707,7 @@ public class AgentesController implements Initializable {
      */
     public void selectedLineAgentes() throws SQLException {
         System.out.println("Linha vazia:" + tabelaCliente.getSelectionModel().getSelectedItem());
-        Agente a = tabelaCliente.getSelectionModel().getSelectedItem();
+        Cliente a = tabelaCliente.getSelectionModel().getSelectedItem();
         System.out.println("Agente: " + a);
         if (a != null) {
             cf_txtIDCliente.setText(String.valueOf(a.getId()));
@@ -738,7 +731,7 @@ public class AgentesController implements Initializable {
     }
 
     public void selectedLineContactos() throws SQLException {
-        ContactoAgente x = tabelaContacto.getSelectionModel().getSelectedItem();
+        ContactoCliente x = tabelaContacto.getSelectionModel().getSelectedItem();
         if (x != null) {
             cf_txtIDContacto.setText(String.valueOf(x.getId()));
             cf_txtContacto.setText(x.getContacto());
@@ -752,7 +745,7 @@ public class AgentesController implements Initializable {
     }
 
     public void selectedLineEnderecos() throws SQLException {
-        EnderecoAgente x = tabelaEndereco.getSelectionModel().getSelectedItem();
+        EnderecoCliente x = tabelaEndereco.getSelectionModel().getSelectedItem();
         if (x != null) {
             cf_txtIDEndereco.setText(String.valueOf(x.getId()));
             cf_txtCidade.setText(x.getCidade());

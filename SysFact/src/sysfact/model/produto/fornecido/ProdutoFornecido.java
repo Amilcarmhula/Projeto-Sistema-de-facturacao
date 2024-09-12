@@ -4,8 +4,8 @@
  */
 package sysfact.model.produto.fornecido;
 
-import sysfact.model.agente.Agente;
 import sysfact.model.armazem.Armazem;
+import sysfact.model.cliente.Cliente;
 import sysfact.model.produto.Produto;
 import sysfact.model.usuario.Usuario;
 
@@ -22,14 +22,14 @@ public class ProdutoFornecido {
     private double custo;
     private Armazem armazem;
     private Produto produto;
-    private Agente agente;
+    private Cliente agente;
     private Usuario usuario;
     private String data_criacao;
     private boolean active_or_not;
     
     public ProdutoFornecido(){}
 
-    public ProdutoFornecido(int quantidade, String data_fornedida, double custo, Armazem armazem, Produto produto, Agente agente, Usuario usuario) {
+    public ProdutoFornecido(int quantidade, String data_fornedida, double custo, Armazem armazem, Produto produto, Cliente agente, Usuario usuario) {
         this.quantidade = quantidade;
         this.data_fornecida = data_fornedida;
         this.custo = custo;
@@ -87,11 +87,11 @@ public class ProdutoFornecido {
         this.produto = produto;
     }
 
-    public Agente getAgente() {
+    public Cliente getAgente() {
         return agente;
     }
 
-    public void setAgente(Agente agente) {
+    public void setAgente(Cliente agente) {
         this.agente = agente;
     }
 

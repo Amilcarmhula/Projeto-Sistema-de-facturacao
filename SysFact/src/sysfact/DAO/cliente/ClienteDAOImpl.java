@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package sysfact.dao.agente;
+package sysfact.dao.cliente;
 
 import javafx.collections.ObservableList;
 
@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
  *
  * @author JM-Tecnologias
  */
-public interface AgenteDAOImpl<T> {
+public interface ClienteDAOImpl<T> {
     void  addEntity(T t);
     void updateEntityByID(T t);
     ObservableList<T> listAllEntities();

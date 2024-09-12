@@ -2,54 +2,58 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sysfact.dao.agente;
+package sysfact.dao.cliente;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
-import sysfact.model.agente.Agente;
+import sysfact.model.cliente.Cliente;
+import sysfact.model.cliente.contacto.ContactoCliente;
+import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public class AgenteDAO implements AgenteDAOImpl<Agente> {
+public class ClienteDAO implements ClienteDAOImpl<Cliente> {
 
     private Connection con;
     private PreparedStatement ps;
     private String sql;
 
-    public AgenteDAO() throws SQLException {
+    public ClienteDAO() throws SQLException {
         this.con = Conexao.getConexao();
     }
 
     @Override
-    public void addEntity(Agente c) {
+    public void addEntity(Cliente c) {
         try {
-            sql = "insert into agente (tipo,nome,apelido,nuit,fk_id_usuario) value (?,?,?,?,?)";
+            sql = "insert into cliente (tipo,nome,apelido,nuit,fk_id_usuario) value (?,?,?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, c.getTipo());
             ps.setString(2, c.getNome());
             ps.setString(3, c.getApelido());
             ps.setInt(4, c.getNuit());
-            ps.setInt(5, c.getFk_id_usuario());
+            ps.setInt(5, c.getUsuario().getId());
 
             ps.execute();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar agente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao adicionar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     @Override
-    public void updateEntityByID(Agente c) {
+    public void updateEntityByID(Cliente c) {
         try {
-            sql = "update agente set tipo=?, nome=? ,apelido=? ,nuit=?, fk_id_usuario=?"
+            sql = "update cliente set tipo=?, nome=? ,apelido=? ,nuit=?, fk_id_usuario=?"
                     + " where id=?";
             ps = con.prepareStatement(sql);
 
@@ -57,86 +61,91 @@ public class AgenteDAO implements AgenteDAOImpl<Agente> {
             ps.setString(2, c.getNome());
             ps.setString(3, c.getApelido());
             ps.setInt(4, c.getNuit());
-            ps.setInt(5, c.getFk_id_usuario());
+            ps.setInt(5, c.getUsuario().getId());
             ps.setInt(6, c.getId());
 
             ps.execute();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao actualizar agente: "
+            JOptionPane.showMessageDialog(null, "Falha ao actualizar cliente: "
                     + e, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     @Override
-    public ObservableList<Agente> listAllEntities() {
-        ObservableList<Agente> lista = FXCollections.observableArrayList();
+    public ObservableList<Cliente> listAllEntities() {
+        ObservableList<Cliente> lista = FXCollections.observableArrayList();
         try {
-            sql = "select * from agente";
+            sql = "SELECT c.id,c.tipo,c.nome,c.apelido as razaosocial,c.nuit, "
+                    + "GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos "
+                    + "FROM cliente c "
+                    + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id "
+                    + "GROUP BY c.id, c.nome, c.apelido, c.nuit;";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
-                Agente c = new Agente();
+                Cliente c = new Cliente();
                 c.setId(result.getInt("id"));
                 c.setTipo(result.getString("tipo"));
-                c.setApelido(result.getString("apelido"));
-                c.setData_criacao(result.getString("data_criacao"));
                 c.setNome(result.getString("nome"));
+                c.setApelido(result.getString("razaosocial"));
                 c.setNuit(result.getInt("nuit"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
-                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
-                if (c.isActive_or_not()) {
-                    lista.add(c);
+                List<ContactoCliente> listaContactos = new ArrayList<>();
+                ContactoCliente cc;
+                for (String split : result.getString("contatos").split(" ")) {
+                    cc = new ContactoCliente();
+                    cc.setContacto(split);
+                    listaContactos.add(cc);
                 }
+                c.setContactoCliente(listaContactos);
+                lista.add(c);
             }
             result.close();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar agente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
 
         }
         return lista;
     }
-    
+
     @Override
-    public ObservableList<Agente> listAllEntitiesTypeFornecedor() {
-        ObservableList<Agente> lista = FXCollections.observableArrayList();
+    public ObservableList<Cliente> listAllEntitiesTypeFornecedor() {
+        ObservableList<Cliente> lista = FXCollections.observableArrayList();
         try {
-            sql = "select * from agente";
+            sql = "select * from cliente";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
-                Agente c = new Agente();
+                Cliente c = new Cliente();
                 c.setId(result.getInt("id"));
                 c.setTipo(result.getString("tipo"));
                 c.setApelido(result.getString("apelido"));
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setNome(result.getString("nome"));
                 c.setNuit(result.getInt("nuit"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
-                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
-                if (c.isActive_or_not() && c.getTipo().equals("Fornecedor")) {
-                    lista.add(c);
-                }
+                Usuario u = new Usuario();
+                u.setId(result.getInt("fk_id_usuario"));
+                c.setUsuario(u);
             }
             result.close();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar agente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
 
         }
         return lista;
     }
 
-//    public Agente searchEntityByName(String nome) {
-//        Agente c = null;
+//    public Cliente searchEntityByName(String nome) {
+//        Cliente c = null;
 //        try {
 //            sql = "select * from agente where nome LIKE ?";
 //            ps = con.prepareStatement(sql);
 //            ps.setString(1, "%" + nome + "%");
 //            ResultSet result = ps.executeQuery();
 //            while (result.next()) {
-//                c = new Agente();
+//                c = new Cliente();
 //                c.setId(result.getInt("id"));
 //                c.setTipo(result.getString("tipo"));
 //                c.setApelido(result.getString("apelido"));
@@ -170,9 +179,9 @@ public class AgenteDAO implements AgenteDAOImpl<Agente> {
 //    }
 //    
     @Override
-    public void deleteEntityByUSER(Agente x) {
+    public void deleteEntityByUSER(Cliente x) {
         try {
-            sql = "UPDATE agente "
+            sql = "UPDATE cliente "
                     + "INNER JOIN endereco_agente ON agente.id = endereco_agente.fk_id_agente "
                     + "INNER JOIN contacto_agente ON agente.id = contacto_agente.fk_id_agente "
                     + "SET agente.active_or_not = false,"
@@ -185,13 +194,13 @@ public class AgenteDAO implements AgenteDAOImpl<Agente> {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar agente: "
+            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     @Override
-    public void deleteEntityByUSERSimpleTwo(Agente x) {
+    public void deleteEntityByUSERSimpleTwo(Cliente x) {
         try {
             sql = "UPDATE agente "
                     + "INNER JOIN endereco_agente ON agente.id = endereco_agente.fk_id_agente "
@@ -204,15 +213,15 @@ public class AgenteDAO implements AgenteDAOImpl<Agente> {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar agente: "
+            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     @Override
-    public void deleteEntityByUSERSimpleThree(Agente x) {
+    public void deleteEntityByUSERSimpleThree(Cliente x) {
         try {
-            sql = "UPDATE agente "
+            sql = "UPDATE cliente "
                     + "INNER JOIN contacto_agente ON agente.id = contacto_agente.fk_id_agente "
                     + "SET agente.active_or_not = false,"
                     + " contacto_agente.active_or_not = false"
@@ -223,22 +232,22 @@ public class AgenteDAO implements AgenteDAOImpl<Agente> {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar agente: "
+            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     @Override
-    public void deleteEntityByUSERSimpleFour(Agente x) {
+    public void deleteEntityByUSERSimpleFour(Cliente x) {
         try {
-            sql = "UPDATE agente SET active_or_not = false WHERE id = ?";
+            sql = "UPDATE cliente SET active_or_not = false WHERE id = ?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x.getId());
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar agente: "
+            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }

@@ -11,8 +11,8 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
-import sysfact.model.agente.Agente;
 import sysfact.model.armazem.Armazem;
+import sysfact.model.cliente.Cliente;
 import sysfact.model.produto.Produto;
 import sysfact.model.produto.fornecido.ProdutoFornecido;
 import sysfact.model.usuario.Usuario;
@@ -105,7 +105,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 Produto p = new Produto();
                 p.setNome(result.getString("nome_p"));
                 c.setProduto(p);
-                Agente ag = new Agente();
+                Cliente ag = new Cliente();
                 ag.setNome(result.getString("nome_f"));
                 c.setAgente(ag);
                 c.setActive_or_not(result.getBoolean("active_or_not"));
@@ -142,7 +142,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 Produto p = new Produto();
                 p.setId(result.getInt("fk_id_produto"));
                 c.setProduto(p);
-                Agente ag = new Agente();
+                Cliente ag = new Cliente();
                 ag.setId(result.getInt("fk_id_agente"));
                 c.setAgente(ag);
                 Usuario u = new Usuario();

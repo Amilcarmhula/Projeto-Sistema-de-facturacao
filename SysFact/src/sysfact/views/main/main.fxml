@@ -3,14 +3,15 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1700.0" stylesheets="@../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.main.MainController">
@@ -57,20 +58,6 @@
                      <children>
                         <AnchorPane layoutX="26.0" layoutY="284.0" prefHeight="1655.0" prefWidth="250.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Label alignment="CENTER" layoutX="1.0" layoutY="324.0" prefHeight="29.0" prefWidth="250.0" text="Nome do Usuario" textFill="#ebeaea">
-                                 <font>
-                                    <Font name="Berlin Sans FB" size="25.0" />
-                                 </font>
-                              </Label>
-                              <FontAwesomeIconView fill="#909090" glyphName="USER" layoutX="36.0" layoutY="260.0" size="250">
-                                 <effect>
-                                    <InnerShadow height="108.93" radius="51.7675" width="100.14" />
-                                 </effect></FontAwesomeIconView>
-                              <Label alignment="CENTER" layoutX="1.0" layoutY="294.0" prefWidth="250.0" text="Bem-vindo" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="19.0" />
-                                 </font>
-                              </Label>
                               <Button layoutX="22.0" layoutY="795.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="98.0" stylesheets="@../../style/dashboard.css" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="25.0" />
@@ -84,68 +71,375 @@
                                     <String fx:value="Squared-border" />
                                  </styleClass>
                               </Button>
-                              <Line endX="125.0" layoutX="115.0" layoutY="359.0" startX="-100.0" />
                               <Label layoutX="128.0" layoutY="827.0" text="Logout" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="25.0" />
                                  </font>
                               </Label>
-                              <VBox layoutX="13.0" layoutY="399.0" prefHeight="330.0" prefWidth="230.0">
-                                 <children>
-                                    <Button fx:id="btn_dashboard" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
+                              <Accordion layoutX="27.0" layoutY="252.0" prefHeight="437.0" prefWidth="250.0" AnchorPane.bottomAnchor="266.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="252.0">
+                                <panes>
+                                  <TitledPane animated="false" text="Contabilidade">
+                                       <content>
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0">
+                                             <content>
+                                                <AnchorPane prefHeight="306.0" prefWidth="221.0">
+                                                   <children>
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
+                                                         <children>
+                                                            <Button fx:id="btn_dashboard" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Dashboard">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_cliente" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Agentes">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_produtos" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Inventário">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_facturas" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Facturas">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_vendas" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Vendas">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_config" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="438.0" stylesheets="@../../style/dashboard.css" text="Config.">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets top="5.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" />
-                                       </VBox.margin>
-                                    </Button>
-                                    <Button fx:id="btn_cliente" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Agentes" textFill="WHITE">
+                                  </TitledPane>
+                                    <TitledPane animated="false" text="Tesouraria">
+                                       <content>
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css">
+                                             <content>
+                                                <AnchorPane prefHeight="306.0" prefWidth="221.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css">
+                                                   <children>
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css">
+                                                         <children>
+                                                            <Button fx:id="btn_dashboard11" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Pagamentos">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_cliente11" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Fluxo de Caixa">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_produtos11" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Documentos Comercias">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets top="5.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" />
-                                       </VBox.margin>
-                                    </Button>
-                                    <Button fx:id="btn_produtos" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Inventário" textFill="WHITE">
+                                    </TitledPane>
+                                    <TitledPane animated="false" text="Vendas">
+                                       <content>
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0">
+                                             <content>
+                                                <AnchorPane prefHeight="306.0" prefWidth="221.0">
+                                                   <children>
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
+                                                         <children>
+                                                            <Button fx:id="btn_cliente111" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Clientes">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_produtos111" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Vendas">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_facturas111" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Encomendas">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_vendas111" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Precos">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets top="5.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" />
-                                       </VBox.margin>
-                                    </Button>
-                                    <Button fx:id="btn_facturas" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Facturas" textFill="WHITE">
+                                    </TitledPane>
+                                    <TitledPane animated="false" text="Compras">
+                                       <content>
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0">
+                                             <content>
+                                                <AnchorPane prefHeight="306.0" prefWidth="221.0">
+                                                   <children>
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
+                                                         <children>
+                                                            <Button fx:id="btn_dashboard112" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Artigos">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_cliente112" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Compras">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_produtos112" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Encomendas">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_facturas112" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Fornecedores">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_vendas112" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Precos">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets top="5.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" />
-                                       </VBox.margin>
-                                    </Button>
-                                    <Button fx:id="btn_vendas" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Vendas" textFill="WHITE">
+                                    </TitledPane>
+                                    <TitledPane animated="false" text="Inventário">
+                                       <content>
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0">
+                                             <content>
+                                                <AnchorPane prefHeight="306.0" prefWidth="221.0">
+                                                   <children>
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
+                                                         <children>
+                                                            <Button fx:id="btn_cliente113" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Armazens">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_produtos113" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Artigos">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_facturas113" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Precos">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_vendas113" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Stock">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets top="5.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" />
-                                       </VBox.margin>
-                                    </Button>
-                                    <Button fx:id="btn_config" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="55.0" prefWidth="250.0" styleClass="nav-btn" stylesheets="@../../style/dashboard.css" text="Config." textFill="WHITE">
+                                    </TitledPane>
+                                    <TitledPane animated="false" text="Config.">
+                                       <content>
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0">
+                                             <content>
+                                                <AnchorPane prefHeight="306.0" prefWidth="221.0">
+                                                   <children>
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
+                                                         <children>
+                                                            <Button fx:id="btn_dashboard114" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Dashboard">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_cliente114" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Agentes">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_produtos114" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Inventário">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_facturas114" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Facturas">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_vendas114" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Vendas">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btn_config114" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="438.0" stylesheets="@../../style/dashboard.css" text="Config.">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets top="5.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" />
-                                       </VBox.margin>
-                                    </Button>
-                                 </children>
-                              </VBox>
+                                    </TitledPane>
+                                </panes>
+                              </Accordion>
                            </children>
                            <styleClass>
-                              <String fx:value="blue-bg" />
                               <String fx:value="shadow" />
+                              <String fx:value="gray-bg" />
                               <String fx:value="top-Squared-border" />
                            </styleClass>
                         </AnchorPane>

@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sysfact.model.agente.endereco;
+package sysfact.model.cliente.endereco;
 
-import sysfact.model.agente.Agente;
+import sysfact.model.cliente.Cliente;
 import sysfact.model.endereco.Endereco;
 import sysfact.model.usuario.Usuario;
 
@@ -13,20 +13,19 @@ import sysfact.model.usuario.Usuario;
  *
  * @author JM-Tecnologias
  */
-public class EnderecoAgente extends Endereco {
+public class EnderecoCliente extends Endereco {
 
     private int id;
     private String data_criacao;
-    private Agente agente;
+    private Cliente cliente;
     private Usuario usuario;
-    private boolean active_or_not;
 
-    public EnderecoAgente() {
+    public EnderecoCliente() {
     }
 
-    public EnderecoAgente(Agente agente, Usuario usuario, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
+    public EnderecoCliente(Cliente cliente, Usuario usuario, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
         super(provincia, cidade, bairro, avenida, rua, codigoPostal, numero, tipo);
-        this.agente = agente;
+        this.cliente = cliente;
         this.usuario = usuario;
     }
 
@@ -46,12 +45,12 @@ public class EnderecoAgente extends Endereco {
         this.data_criacao = data_criacao;
     }
 
-    public Agente getAgente() {
-        return agente;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setAgente(Agente agente) {
-        this.agente = agente;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public Usuario getUsuario() {
@@ -61,14 +60,5 @@ public class EnderecoAgente extends Endereco {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
-    public boolean isActive_or_not() {
-        return active_or_not;
-    }
-
-    public void setActive_or_not(boolean active_or_not) {
-        this.active_or_not = active_or_not;
-    }
-
     
 }

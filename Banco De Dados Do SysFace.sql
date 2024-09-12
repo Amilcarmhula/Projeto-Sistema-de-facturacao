@@ -1,5 +1,6 @@
 -- drop database _sysface;
 -- create database _sysface;
+
  
 use _sysface;
  -- select * from agente inner join contacto_agente on agente.id=contacto_agente.fk_id_agente;
@@ -23,7 +24,6 @@ use _sysface;
 -- 		contacto_agente.active_or_not = true
 -- 	WHERE agente.id = 1;
 
-
 create table usuario(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -31,7 +31,7 @@ create table usuario(
     senha integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
- insert into usuario(nome, usuario, senha) value ('Jr Mula','user',1111);
+ insert into usuario(nome, usuario, senha) value ('Amilcar Mula','user',1111);
  
  
  create table cliente(
@@ -45,13 +45,161 @@ create table usuario(
     foreign key (fk_id_usuario) references usuario(id)
 );
 
+
+
+INSERT INTO cliente (tipo, nome, apelido, nuit, fk_id_usuario)
+VALUES
+('Pessoa Física', 'Carlos Mendes', 'Carlinhos', 123456789, 1),
+('Pessoa Jurídica', 'Tech Solutions', 'Tech Soluções Ltda', 987654321, 1),
+('Pessoa Física', 'Maria Ferreira', 'Ferreirinha', 456789123, 1),
+('Pessoa Jurídica', 'Construtora Ideal', 'Ideal Construtora Ltda', 147258369, 1),
+('Pessoa Física', 'João Silva', 'Marcos', 852963741, 1),
+('Pessoa Física', 'Ana Gomes', 'Aninha', 321654987, 1),
+('Pessoa Jurídica', 'Supermercado Bom Preço', 'Bom Preço Ltda', 654987321, 1),
+('Pessoa Jurídica', 'Transporte Rápido', 'TransRápido Ltda', 963852741, 1),
+('Pessoa Física', 'Fernanda Oliveira', 'Nanda', 741852963, 1),
+('Pessoa Física', 'Roberto Souza', 'Beto', 369258147, 1);
+select * from cliente;
+
+create table endereco_cliente(
+	id integer primary key auto_increment,
+    provincia varchar(50),
+    cidade varchar(50),
+    bairro varchar(50),
+    avenida varchar(50),
+    rua varchar(30),
+    codigo_postal integer,
+    numero integer not null,
+    tipo varchar(10),
+	fk_id_cliente integer not null,
+    fk_id_usuario integer not null,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_cliente) references cliente(id),
+    foreign key (fk_id_usuario) references usuario(id),
+    check(tipo in('Facturação','Envio'))
+);
+
+SELECT c.id, c.nome, c.apelido, c.nuit, 
+       -- e.provincia, e.cidade, e.bairro, e.avenida, e.rua, e.codigo_postal, e.numero, e.tipo AS tipo_endereco,
+       ct.pessoa_de_contacto, ct.contacto, ct.email, ct.website
+FROM cliente c
+-- LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id
+LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id;
+
+SELECT c.id, 
+       c.nome, 
+       c.apelido, 
+       c.nuit, 
+       GROUP_CONCAT(CONCAT(ct.pessoa_de_contacto, ': ', ct.contacto, ', ', ct.email, ', ', ct.website) SEPARATOR ' | ') AS contatos
+FROM cliente c
+LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
+GROUP BY c.id, c.nome, c.apelido, c.nuit;
+
+SELECT c.id, 
+       c.nome, 
+       c.apelido as razaosocial, 
+       c.nuit, 
+       GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' | ') AS contatos
+FROM cliente c
+LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
+GROUP BY c.id, c.nome, c.apelido, c.nuit;
+
+
+
+-- Dados de endereços
+INSERT INTO endereco_cliente (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_cliente, fk_id_usuario)
+VALUES
+('Maputo', 'Maputo', 'Alto Maé', 'Avenida 25 de Setembro', 'Rua 1', 1100, 123, 'Facturação', 1, 1),
+('Maputo', 'Maputo', 'Polana', 'Avenida Julius Nyerere', 'Rua 2', 1200, 456, 'Envio', 2, 1),
+('Sofala', 'Beira', 'Munhava', 'Avenida Samora Machel', 'Rua 3', 2200, 789, 'Facturação', 3, 1),
+('Nampula', 'Nampula', 'Namicopo', 'Avenida Eduardo Mondlane', 'Rua 4', 3300, 101, 'Envio', 4, 1),
+('Maputo', 'Matola', 'T3', 'Avenida 4 de Outubro', 'Rua 5', 1400, 202, 'Facturação', 5, 1),
+('Inhambane', 'Inhambane', 'Chilwane', 'Avenida Patrice Lumumba', 'Rua 6', 5500, 303, 'Envio', 6, 1),
+('Gaza', 'Xai-Xai', 'Chongoene', 'Avenida dos Heróis', 'Rua 7', 6600, 404, 'Facturação', 7, 1),
+('Cabo Delgado', 'Pemba', 'Paquitequete', 'Avenida 25 de Junho', 'Rua 8', 7700, 505, 'Envio', 8, 1),
+('Zambézia', 'Quelimane', 'Sagrada Família', 'Avenida Marginal', 'Rua 9', 8800, 606, 'Facturação', 9, 1),
+('Manica', 'Chimoio', '3 de Fevereiro', 'Avenida 7 de Abril', 'Rua 10', 9900, 707, 'Envio', 10, 1);
+select * from endereco_cliente;
+
+create table contacto_cliente(
+	id integer primary key auto_increment,
+    pessoa_de_contacto varchar(100),
+    contacto varchar(20) not null,
+	email varchar(50) unique,
+    website varchar(50) unique,
+    fk_id_cliente integer,
+    fk_id_usuario integer not null,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_cliente) references cliente(id),
+    foreign key (fk_id_usuario) references usuario(id)
+);
+-- Inserir dados fictícios na tabela contacto_cliente
+INSERT INTO contacto_cliente (pessoa_de_contacto, contacto, email, website, fk_id_cliente, fk_id_usuario)
+VALUES
+('Carlos Mendes', '841234567', 'carlos.mendes@exemplo.com', 'www.carlosmendes.com', 1, 1),
+('Ana Joaquim', '842345678', 'ana.joaquim@exemplo.com', 'www.anajoaquim.com', 2, 1),
+('Pedro Langa', '843456789', 'pedro.langa@exemplo.com', 'www.pedrolanga.com', 3, 1),
+('Maria Xavier', '844567890', 'maria.xavier@exemplo.com', 'www.mariaxavier.com', 4, 1),
+('Joaquim Sambo', '845678901', 'joaquim.sambo@exemplo.com', 'www.joaquimsambo.com', 5, 1),
+('Rita Mabunda', '846789012', 'rita.mabunda@exemplo.com', 'www.ritamabunda.com', 6, 1),
+('Fernando Tamele', '847890123', 'fernando.tamele@exemplo.com', 'www.fernandotamele.com', 7, 1),
+('Cláudia Nhampossa', '848901234', 'claudia.nhampossa@exemplo.com', 'www.claudianhampossa.com', 8, 1),
+('Lucas Bique', '849012345', 'lucas.bique@exemplo.com', 'www.lucasbique.com', 9, 1),
+('Sónia Cossa', '841012345', 'sonia.cossa@exemplo.com', 'www.soniacossa.com', 10, 1);
+
+-- Inserir mais 10 contatos fictícios na tabela contacto_cliente
+INSERT INTO contacto_cliente (pessoa_de_contacto, contacto, email, website, fk_id_cliente, fk_id_usuario)
+VALUES
+('José Chongo', '841234568', 'jose.chongo@exemplo.com', 'www.josechongo.com', 1, 1),
+('Patrícia Domingos', '842345679', 'patricia.domingos@exemplo.com', 'www.patriciadomingos.com', 2, 1),
+('Manuel Macamo', '843456780', 'manuel.macamo@exemplo.com', 'www.manuelmacamo.com', 3, 1),
+('Carla Magalhães', '844567891', 'carla.magalhaes@exemplo.com', 'www.carlamagalhaes.com', 4, 1),
+('Paulo Samito', '845678902', 'paulo.samito@exemplo.com', 'www.paulosamito.com', 5, 1),
+('Helena Mutemba', '846789013', 'helena.mutemba@exemplo.com', 'www.helenamutemba.com', 6, 1),
+('Sérgio Moiane', '847890124', 'sergio.moiane@exemplo.com', 'www.sergiomoiane.com', 7, 1),
+('Eunice Dhlakama', '848901235', 'eunice.dhlakama@exemplo.com', 'www.eunicedhlakama.com', 8, 1),
+('Luís Nhaca', '849012346', 'luis.nhaca@exemplo.com', 'www.luisnhaca.com', 9, 1),
+('Mónica Mucheto', '841012346', 'monica.mucheto@exemplo.com', 'www.monicamucheto.com', 10, 1);
+
+select * from contacto_cliente;
+
 create table fornecedor(
 	id integer primary key auto_increment,
     tipo varchar(50) not null, --  (Pessoa Física/Jurídica)
-    nome varchar(100) not null,-- Razao social
+    razaosocial varchar(100) not null,-- Razao social
     nuit integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_usuario) references usuario(id)
+);
+create table endereco_fornecedor(
+	id integer primary key auto_increment,
+    provincia varchar(50),
+    cidade varchar(50),
+    bairro varchar(50),
+    avenida varchar(50),
+    rua varchar(30),
+    codigo_postal integer,
+    numero integer not null,
+    tipo varchar(10),
+	fk_id_fornecedor integer not null,
+    fk_id_usuario integer not null,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_fornecedor) references fornecedor(id),
+    foreign key (fk_id_usuario) references usuario(id)
+);
+
+
+create table contacto_fornecedor(
+	id integer primary key auto_increment,
+    pessoa_de_contacto varchar(100),
+    contacto varchar(20) not null,
+	email varchar(50) unique,
+    website varchar(50) unique,
+    fk_id_fornecedor integer,
+    fk_id_usuario integer not null,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_fornecedor) references fornecedor(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
 
@@ -64,7 +212,7 @@ create table armazem(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table endereco(
+create table endereco_armazem(
 	id integer primary key auto_increment,
     provincia varchar(50),
     cidade varchar(50),
@@ -74,47 +222,56 @@ create table endereco(
     codigo_postal integer,
     numero integer not null,
     tipo varchar(10),
-	fk_id_cliente integer,
-    fk_id_fornecedor integer,
-    fk_id_armazem integer,
+	fk_id_armazem integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_cliente) references clinte(id),
-    foreign key (fk_id_fornecedor) references fornecedor(id),
     foreign key (fk_id_armazem) references armazem(id),
-    foreign key (fk_id_usuario) references usuario(id),
-    check(tipo in('Facturação','Envio')),
-    check(
-		(fk_id_cliente is not null and (fk_id_fornecedor is null and fk_id_armazem is null))
-        or 
-        (fk_id_fornecedor is not null and (fk_id_cliente is null and fk_id_armazem is null))
-        or 
-        (fk_id_armazem is not null and (fk_id_cliente is null and fk_id_fornecedor is null))
-	)
+    foreign key (fk_id_usuario) references usuario(id)
 );
-create table contacto(
+
+create table contacto_armazem(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
     contacto varchar(20) not null,
 	email varchar(50) unique,
     website varchar(50) unique,
-    fk_id_cliente integer,
-    fk_id_fornecedor integer,
     fk_id_armazem integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_cliente) references clinte(id),
-    foreign key (fk_id_fornecedor) references fornecedor(id),
     foreign key (fk_id_armazem) references armazem(id),
-    foreign key (fk_id_usuario) references usuario(id),
-    check(
-		(fk_id_cliente is not null and (fk_id_fornecedor is null and fk_id_armazem is null))
-        or 
-        (fk_id_fornecedor is not null and (fk_id_cliente is null and fk_id_armazem is null))
-        or 
-        (fk_id_armazem is not null and (fk_id_cliente is null and fk_id_fornecedor is null))
-	)
+    foreign key (fk_id_usuario) references usuario(id)
 );
+
+-- create table endereco(
+-- 	id integer primary key auto_increment,
+--     provincia varchar(50),
+--     cidade varchar(50),
+--     bairro varchar(50),
+--     avenida varchar(50),
+--     rua varchar(30),
+--     codigo_postal integer,
+--     numero integer not null,
+--     tipo varchar(10),
+-- 	fk_id_cliente integer,
+--     fk_id_fornecedor integer,
+--     fk_id_armazem integer,
+--     fk_id_usuario integer not null,
+--     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     foreign key (fk_id_cliente) references cliente(id),
+--     foreign key (fk_id_fornecedor) references fornecedor(id),
+--     foreign key (fk_id_armazem) references armazem(id),
+--     foreign key (fk_id_usuario) references usuario(id),
+--     check(tipo in('Facturação','Envio')),
+--     check(
+-- 		(fk_id_cliente is not null and (fk_id_fornecedor is null and fk_id_armazem is null))
+--         or 
+--         (fk_id_fornecedor is not null and (fk_id_cliente is null and fk_id_armazem is null))
+--         or 
+--         (fk_id_armazem is not null and (fk_id_cliente is null and fk_id_fornecedor is null))
+-- 	)
+-- );
+
+
 
 -- create table categoria(
 -- 	id integer primary key auto_increment,
@@ -191,7 +348,9 @@ create table produto(
     descricao text,
     fk_id_categoria integer not null,
     fk_id_unidade_medida integer,
+    fk_id_taxa_imposto integer,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_taxa_imposto) references taxa_imposto(id),
     foreign key (fk_id_categoria) references categoria(id),
     foreign key (fk_id_unidade_medida) references unidade_medida(id)
 );
@@ -382,7 +541,6 @@ create table item_factura(
     subtotal decimal(10,2) not null,
 	fk_id_precovenda integer not null,
     fk_id_desconto integer,
-    fk_id_taxa_imposto integer not null,
     fk_id_produto integer not null,
     fk_id_factura integer not null,
     fk_id_usuario integer not null,
@@ -391,8 +549,7 @@ create table item_factura(
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_desconto) references desconto(id),
     foreign key (fk_id_produto) references produto(id),
-    foreign key (fk_id_factura) references factura(id),
-    foreign key (fk_id_taxa_imposto) references taxa_imposto(id)
+    foreign key (fk_id_factura) references factura(id)
 );
 
 create table metodo_pagamento(

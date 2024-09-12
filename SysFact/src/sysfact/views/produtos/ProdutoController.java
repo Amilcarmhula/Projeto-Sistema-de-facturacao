@@ -47,16 +47,16 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import sysfact.SysFact;
-import sysfact.dao.agente.AgenteDAO;
+import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.armazem.ArmazemDAO;
 import sysfact.dao.preco.PrecoVendaDAO;
 import sysfact.dao.produto.ProdutoDAO;
 import sysfact.dao.produto.fornecido.ProdutoFornecidoDAO;
 import sysfact.dao.taxaimposto.TaxaImpostoDAO;
 import sysfact.dao.unidademedida.UnidadeMedidaDAO;
-import sysfact.model.agente.Agente;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.categoria.Categoria;
+import sysfact.model.cliente.Cliente;
 import sysfact.model.preco.PrecoVenda;
 import sysfact.model.produto.Produto;
 import sysfact.model.produto.fornecido.ProdutoFornecido;
@@ -125,19 +125,19 @@ public class ProdutoController implements Initializable {
     private Button btnUpdateProduto;
 
     @FXML
-    private TableView<Agente> tabelaCliente;
+    private TableView<Cliente> tabelaCliente;
 
     @FXML
-    private TableColumn<Agente, Integer> IDtabelaCliente;
+    private TableColumn<Cliente, Integer> IDtabelaCliente;
 
     @FXML
-    private TableColumn<Agente, String> nometabelaCliente;
+    private TableColumn<Cliente, String> nometabelaCliente;
 
     @FXML
-    private TableColumn<Agente, String> apelidotabelaCliente;
+    private TableColumn<Cliente, String> apelidotabelaCliente;
 
     @FXML
-    private TableColumn<Agente, Integer> nuittabelaCliente;
+    private TableColumn<Cliente, Integer> nuittabelaCliente;
 
     @FXML
     private TextField ps_txtPesquisafornecedor;
@@ -483,11 +483,11 @@ public class ProdutoController implements Initializable {
         tabelaProduto.setItems(sortedData);
     }
 
-    private ObservableList<Agente> listaAgentes;
+    private ObservableList<Cliente> listaAgentes;
 
     public void showFornecedores() throws SQLException {
 
-        AgenteDAO aDAO = new AgenteDAO();
+        ClienteDAO aDAO = new ClienteDAO();
         listaAgentes = aDAO.listAllEntitiesTypeFornecedor();
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -495,7 +495,7 @@ public class ProdutoController implements Initializable {
         apelidotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("apelido"));
         nuittabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nuit"));
 
-        FilteredList<Agente> dadosFiltrados = new FilteredList<>(listaAgentes, b -> true);
+        FilteredList<Cliente> dadosFiltrados = new FilteredList<>(listaAgentes, b -> true);
         ps_txtPesquisafornecedor.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(agente -> {
 
@@ -515,7 +515,7 @@ public class ProdutoController implements Initializable {
 
             });
         });
-        SortedList<Agente> sortedData = new SortedList<>(dadosFiltrados);
+        SortedList<Cliente> sortedData = new SortedList<>(dadosFiltrados);
         sortedData.comparatorProperty().bind(tabelaCliente.comparatorProperty());
 
 //        tabelaCliente.setItems(listaAgentes);
@@ -638,7 +638,7 @@ public class ProdutoController implements Initializable {
     }
 
     public void selectedLineFornecedor() throws SQLException {
-        Agente a = tabelaCliente.getSelectionModel().getSelectedItem();
+        Cliente a = tabelaCliente.getSelectionModel().getSelectedItem();
         if (a != null) {
             ps_txtIDFornecedor.setText(String.valueOf(a.getId()));
         }
@@ -684,7 +684,7 @@ public class ProdutoController implements Initializable {
         Armazem a = new Armazem();
         a.setId(Integer.parseInt(ps_txtIDArmazem.getText()));
         pf.setArmazem(a);
-        Agente ag = new Agente();
+        Cliente ag = new Cliente();
         ag.setId(Integer.parseInt(ps_txtIDFornecedor.getText()));
         pf.setAgente(ag);
         pf.setUsuario(userData);

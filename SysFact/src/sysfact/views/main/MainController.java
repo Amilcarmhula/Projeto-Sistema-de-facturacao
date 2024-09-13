@@ -33,6 +33,9 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btn_fornecedor;
+    
+    @FXML
+    private Button btn_armazem;
 
     @FXML
     private Button btn_config;
@@ -100,6 +103,15 @@ public class MainController implements Initializable {
             btn_produtos.setStyle("-fx-background-color: transparent");
         } else if (e.getSource() == btn_fornecedor) {
             pane = FXMLLoader.load(getClass().getResource("../modulo_compra/fornecedorView/fornecedorView.fxml"));
+            anchorMain.getChildren().setAll(pane);
+            btn_dashboard.setStyle("-fx-background-color: transparent");
+            btn_vendas.setStyle("-fx-background-color: transparent");
+            btn_cliente.setStyle("-fx-background-color: rgba(55, 55, 179, 0.25)");
+            btn_config.setStyle("-fx-background-color: transparent");
+            btn_facturas.setStyle("-fx-background-color: transparent");
+            btn_produtos.setStyle("-fx-background-color: transparent");
+        } else if (e.getSource() == btn_armazem) {
+            pane = FXMLLoader.load(getClass().getResource("../modulo_inventario/armazemView/armazemView.fxml"));
             anchorMain.getChildren().setAll(pane);
             btn_dashboard.setStyle("-fx-background-color: transparent");
             btn_vendas.setStyle("-fx-background-color: transparent");

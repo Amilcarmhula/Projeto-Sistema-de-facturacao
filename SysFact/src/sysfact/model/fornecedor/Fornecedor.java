@@ -22,20 +22,20 @@ public class Fornecedor {
     private String razaosocial;
     private int nuit;
     private String data_criacao;
-    private List<ContactoFornecedor> contactoCliente;
-    private List<EnderecoFornecedor> enderecoCliente;
+    private List<ContactoFornecedor> contactoFornecedor;
+    private List<EnderecoFornecedor> enderecoFornecedor;
     private Usuario usuario;
     
 
     public Fornecedor() {
     }
 
-    public Fornecedor(String tipo, String razaosocial, int nuit, List<ContactoFornecedor> contactoCliente, List<EnderecoFornecedor> enderecoCliente, Usuario usuario) {
+    public Fornecedor(String tipo, String razaosocial, int nuit, List<ContactoFornecedor> contactoFornecedor, List<EnderecoFornecedor> enderecoFornecedor, Usuario usuario) {
         this.tipo = tipo;
         this.razaosocial = razaosocial;
         this.nuit = nuit;
-        this.contactoCliente = contactoCliente;
-        this.enderecoCliente = enderecoCliente;
+        this.contactoFornecedor = contactoFornecedor;
+        this.enderecoFornecedor = enderecoFornecedor;
         this.usuario = usuario;
     }
 
@@ -81,30 +81,30 @@ public class Fornecedor {
         this.data_criacao = data_criacao;
     }
 
-    public List<ContactoFornecedor> getContactoCliente() {
-        return contactoCliente;
+    public List<ContactoFornecedor> getContactoFornecedor() {
+        return contactoFornecedor;
     }
     
     public String printContatos(){
         String contacto = "";
-        if(contactoCliente != null){
-            for (ContactoFornecedor c : contactoCliente) {
+        if(contactoFornecedor != null){
+            for (ContactoFornecedor c : contactoFornecedor) {
                 contacto += c.getContacto() + ";   ";
             }
         }
         return contacto;
     }
 
-    public void setContactoCliente(List<ContactoFornecedor> contactoCliente) {
-        this.contactoCliente = contactoCliente;
+    public void setContactoFornecedor(List<ContactoFornecedor> contactoFornecedor) {
+        this.contactoFornecedor = contactoFornecedor;
     }
 
-    public List<EnderecoFornecedor> getEnderecoCliente() {
-        return enderecoCliente;
+    public List<EnderecoFornecedor> getEnderecoFornecedor() {
+        return enderecoFornecedor;
     }
 
-    public void setEnderecoCliente(List<EnderecoFornecedor> enderecoCliente) {
-        this.enderecoCliente = enderecoCliente;
+    public void setEnderecoFornecedor(List<EnderecoFornecedor> enderecoFornecedor) {
+        this.enderecoFornecedor = enderecoFornecedor;
     }
     
 

@@ -273,6 +273,16 @@ create table armazem(
     estado boolean default 1 not null, -- Ativo/Inativo.
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+INSERT INTO armazem (nome, tipo, descricao, estado) VALUES
+('Armazém Central Maputo', 'Central', 'Principal em Maputo', 1),
+('Armazém Regional Beira', 'Regional', 'Operações Sofala', 1),
+('Armazém Loja Matola', 'Loja', 'Suporte Matola', 1),
+('Armazém Central Nampula', 'Central', 'Principal em Nampula', 1),
+('Armazém Regional Tete', 'Regional', 'Operações Tete', 1),
+('Armazém Loja Xai-Xai', 'Loja', 'Suporte Gaza', 1),
+('Armazém Central Pemba', 'Central', 'Principal em Cabo Delgado', 1),
+('Armazém Regional Chimoio', 'Regional', 'Operações Manica', 1);
+
 
 create table endereco_armazem(
 	id integer primary key auto_increment,
@@ -290,19 +300,38 @@ create table endereco_armazem(
     foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
+INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_armazem, fk_id_usuario) VALUES
+('Maputo', 'Maputo', 'Bairro Central', 'Avenida 25 de Setembro', 'Rua das Acácias', 1101, 23, 'Comercial', 1, 1),
+('Sofala', 'Beira', 'Bairro Ponta-Gêa', 'Avenida Samora Machel', 'Rua da Beira', 1401, 10, 'Comercial', 2, 1),
+('Maputo', 'Matola', 'Bairro Liberdade', 'Avenida da Liberdade', 'Rua das Flores', 1102, 45, 'Comercial', 3, 1),
+('Nampula', 'Nampula', 'Bairro Muhala', 'Avenida das Industrias', 'Rua 24 de Julho', 1701, 5, 'Comercial', 4, 1),
+('Tete', 'Tete', 'Bairro Matundo', 'Avenida do Zambeze', 'Rua do Mercado', 2001, 12, 'Comercial', 5, 1),
+('Gaza', 'Xai-Xai', 'Bairro Patrice Lumumba', 'Avenida Eduardo Mondlane', 'Rua do Comércio', 1201, 36, 'Comercial', 6, 1),
+('Cabo Delgado', 'Pemba', 'Bairro Cariaco', 'Avenida dos Heróis', 'Rua dos Pescadores', 1801, 27, 'Comercial', 7, 1),
+('Manica', 'Chimoio', 'Bairro 25 de Setembro', 'Avenida 25 de Setembro', 'Rua da Paz', 1501, 18, 'Comercial', 8, 1);
+
 
 create table contacto_armazem(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
     contacto varchar(20) not null,
 	email varchar(50) unique,
-    website varchar(50) unique,
     fk_id_armazem integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
+INSERT INTO contacto_armazem (pessoa_de_contacto, contacto, email, fk_id_armazem, fk_id_usuario) VALUES
+('João Pereira', '823456789', 'joao.pereira@centralmaputo.com', 1, 1),
+('Ana Martins', '843456789', 'ana.martins@regionalbeira.com', 2, 1),
+('Carlos Silva', '823987654', 'carlos.silva@loja.matola.com', 3, 1),
+('Pedro Andrade', '863456789', 'pedro.andrade@centralnampula.com', 4, 1),
+('Mariana Costa', '823654987', 'mariana.costa@regionaltete.com', 5, 1),
+('Luís Ferreira', '829876543', 'luis.ferreira@lojaxaixai.com', 6, 1),
+('Rita Lopes', '823123456', 'rita.lopes@centralpemba.com', 7, 1),
+('Fábio Nunes', '847654321', 'fabio.nunes@regionalchimoio.com', 8, 1);
+
 
 -- create table endereco(
 -- 	id integer primary key auto_increment,
@@ -354,6 +383,7 @@ create table categoria(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     check(tipo in('Produto','Serviço'))
 );
+select * from categoria;
 
 create table unidade_medida(
 	id integer primary key auto_increment,

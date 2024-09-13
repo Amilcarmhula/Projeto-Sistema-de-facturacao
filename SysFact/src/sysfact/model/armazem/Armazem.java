@@ -4,24 +4,37 @@
  */
 package sysfact.model.armazem;
 
-import sysfact.model.endereco.Endereco;
+import java.util.List;
+import sysfact.model.armazem.contacto.ContactoArmazem;
+import sysfact.model.armazem.endereco.EnderecoArmazem;
+
 
 
 /**
  *
  * @author JM-Tecnologias
  */
-public class Armazem extends Endereco{
-    private int id;
-    private String nome;
-    private boolean active_or_not;
-    private String data_criacao;
-    
-    public Armazem(){}
+public class Armazem {
 
-    public Armazem(String nome, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
-        super(provincia, cidade, bairro, avenida, rua, codigoPostal, numero, tipo);
+    private int id;
+    private String tipo;
+    private String nome;
+    private String descricao;
+    private boolean estado;
+    private String data_criacao;
+    private List<ContactoArmazem> contactoArmazem;
+    private List<EnderecoArmazem> enderecoArmazem;
+    
+
+    public Armazem() {
+    }
+
+    public Armazem(String tipo, String nome, String descricao, List<ContactoArmazem> contactoArmazem, List<EnderecoArmazem> enderecoArmazem) {
+        this.tipo = tipo;
         this.nome = nome;
+        this.descricao = descricao;
+        this.contactoArmazem = contactoArmazem;
+        this.enderecoArmazem = enderecoArmazem;
     }
 
     public int getId() {
@@ -32,6 +45,14 @@ public class Armazem extends Endereco{
         this.id = id;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -40,12 +61,20 @@ public class Armazem extends Endereco{
         this.nome = nome;
     }
 
-    public boolean isActive_or_not() {
-        return active_or_not;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setActive_or_not(boolean active_or_not) {
-        this.active_or_not = active_or_not;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
     public String getData_criacao() {
@@ -55,6 +84,31 @@ public class Armazem extends Endereco{
     public void setData_criacao(String data_criacao) {
         this.data_criacao = data_criacao;
     }
-
     
+    public String printContatos(){
+        String contacto = "";
+        if(contactoArmazem != null){
+            for (ContactoArmazem c : contactoArmazem) {
+                contacto += c.getContacto() + ";   ";
+            }
+        }
+        return contacto;
+    }
+
+    public List<ContactoArmazem> getContactoArmazem() {
+        return contactoArmazem;
+    }
+
+    public void setContactoArmazem(List<ContactoArmazem> contactoArmazem) {
+        this.contactoArmazem = contactoArmazem;
+    }
+
+    public List<EnderecoArmazem> getEnderecoArmazem() {
+        return enderecoArmazem;
+    }
+
+    public void setEnderecoArmazem(List<EnderecoArmazem> enderecoArmazem) {
+        this.enderecoArmazem = enderecoArmazem;
+    }
+
 }

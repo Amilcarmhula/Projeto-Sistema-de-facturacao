@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -22,12 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -39,13 +33,8 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
-import sysfact.dao.cliente.contacto.ContactoClienteDAO;
-import sysfact.dao.cliente.endereco.EnderecoClienteDAO;
 import sysfact.model.cliente.Cliente;
-import sysfact.model.cliente.contacto.ContactoCliente;
-import sysfact.model.cliente.endereco.EnderecoCliente;
 import sysfact.model.usuario.Usuario;
-import sysfact.views.produtos.ProdutoController;
 
 /**
  * FXML Controller class

@@ -20,7 +20,7 @@ import sysfact.util.Conexao;
  *
  * @author JM-Tecnologias
  */
-public class EnderecoFornecedorDAO implements EnderecoClienteDAOImpl<EnderecoFornecedor> {
+public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<EnderecoFornecedor> {
 
     private Connection con;
     private PreparedStatement ps;

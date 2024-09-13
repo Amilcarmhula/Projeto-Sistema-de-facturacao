@@ -97,7 +97,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
                     }
                 }
 
-                c.setContactoCliente(listaContactos);
+                c.setContactoFornecedor(listaContactos);
                 lista.add(c);
             }
             result.close();

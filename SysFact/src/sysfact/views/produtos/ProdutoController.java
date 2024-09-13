@@ -544,9 +544,9 @@ public class ProdutoController implements Initializable {
                 String filtroCaixaBaixa = newValue.toLowerCase();
                 if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (x.getCidade().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (String.valueOf(x.getNumero()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (String.valueOf(x.getDescricao()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else {
                     return false;

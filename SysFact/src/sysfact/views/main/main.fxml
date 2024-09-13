@@ -318,7 +318,7 @@
                                                    <children>
                                                       <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
                                                          <children>
-                                                            <Button fx:id="btn_cliente113" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Armazens">
+                                                            <Button fx:id="btn_armazem" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Armazens">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>

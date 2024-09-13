@@ -280,7 +280,7 @@
                                                                   <Insets bottom="5.0" />
                                                                </VBox.margin>
                                                             </Button>
-                                                            <Button fx:id="btn_facturas112" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Fornecedores">
+                                                            <Button fx:id="btn_fornecedor" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Fornecedores">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>

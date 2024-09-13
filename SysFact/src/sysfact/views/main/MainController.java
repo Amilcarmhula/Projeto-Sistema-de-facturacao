@@ -28,9 +28,11 @@ public class MainController implements Initializable {
     @FXML
     private AnchorPane anchorMain;
 
-
     @FXML
     private Button btn_cliente;
+
+    @FXML
+    private Button btn_fornecedor;
 
     @FXML
     private Button btn_config;
@@ -96,6 +98,15 @@ public class MainController implements Initializable {
             btn_config.setStyle("-fx-background-color: transparent");
             btn_facturas.setStyle("-fx-background-color: transparent");
             btn_produtos.setStyle("-fx-background-color: transparent");
+        } else if (e.getSource() == btn_fornecedor) {
+            pane = FXMLLoader.load(getClass().getResource("../modulo_compra/fornecedorView/fornecedorView.fxml"));
+            anchorMain.getChildren().setAll(pane);
+            btn_dashboard.setStyle("-fx-background-color: transparent");
+            btn_vendas.setStyle("-fx-background-color: transparent");
+            btn_cliente.setStyle("-fx-background-color: rgba(55, 55, 179, 0.25)");
+            btn_config.setStyle("-fx-background-color: transparent");
+            btn_facturas.setStyle("-fx-background-color: transparent");
+            btn_produtos.setStyle("-fx-background-color: transparent");
         } else if (e.getSource() == btn_facturas) {
             pane = FXMLLoader.load(getClass().getResource("../factura/factura.fxml"));
             anchorMain.getChildren().setAll(pane);
@@ -120,7 +131,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         btn_dashboard.setStyle("-fx-background-color: rgba(55, 55, 179, 0.25)");
-            AnchorPane pane;
+        AnchorPane pane;
         try {
             pane = FXMLLoader.load(getClass().getResource("../dashboard/dashboard.fxml"));
             anchorMain.getChildren().setAll(pane);

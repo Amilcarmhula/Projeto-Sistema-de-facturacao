@@ -176,6 +176,23 @@ create table fornecedor(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_usuario) references usuario(id)
 );
+INSERT INTO fornecedor (tipo, razaosocial, nuit, fk_id_usuario) VALUES
+('Pessoa Jurídica', 'Alpha Distribuidora LTDA', 123456789, 1),
+('Pessoa Jurídica', 'Beta Comércio e Serviços', 987654321, 1),
+('Pessoa Física', 'Carlos Eduardo Silva', 789456123, 1),
+('Pessoa Jurídica', 'Delta Engenharia S.A.', 741258963, 1),
+('Pessoa Jurídica', 'Epsilon Equipamentos Industriais', 321654987, 1),
+('Pessoa Física', 'Fernanda Maria Oliveira', 852963741, 1),
+('Pessoa Jurídica', 'Gamma Transportes LTDA', 963852741, 1),
+('Pessoa Jurídica', 'Omega Soluções Ltda', 654987321, 1),
+('Pessoa Física', 'Marcos Antônio Freitas', 147258369, 1),
+('Pessoa Jurídica', 'Sigma Construções Eireli', 951753852, 1),
+('Pessoa Jurídica', 'Zeta Comércio de Alimentos', 369258147, 1),
+('Pessoa Jurídica', 'Theta Soluções Tecnológicas', 258369147, 1),
+('Pessoa Jurídica', 'Iota Importação e Exportação', 753951456, 1),
+('Pessoa Física', 'Luciana Almeida de Souza', 456123789, 1),
+('Pessoa Jurídica', 'Lambda Serviços Automotivos', 159753456, 1);
+
 create table endereco_fornecedor(
 	id integer primary key auto_increment,
     provincia varchar(50),
@@ -192,8 +209,24 @@ create table endereco_fornecedor(
     foreign key (fk_id_fornecedor) references fornecedor(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
+INSERT INTO endereco_fornecedor (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_fornecedor, fk_id_usuario) VALUES
+('Maputo', 'Maputo', 'Bairro Central', 'Avenida 25 de Setembro', 'Rua das Acácias', 1101, 23, 'Comercial', 1, 1),
+('Maputo', 'Matola', 'Bairro Liberdade', 'Avenida da Liberdade', 'Rua das Flores', 1102, 45, 'Comercial', 2, 1),
+('Gaza', 'Xai-Xai', 'Bairro Patrice Lumumba', 'Avenida Eduardo Mondlane', 'Rua do Comércio', 1201, 12, 'Comercial', 3, 1),
+('Inhambane', 'Maxixe', 'Bairro Maxixe', 'Avenida 7 de Abril', 'Rua do Mar', 1301, 5, 'Comercial', 4, 1),
+('Sofala', 'Beira', 'Ponta-Gêa', 'Avenida Samora Machel', 'Rua da Beira', 1401, 78, 'Comercial', 5, 1),
+('Manica', 'Chimoio', 'Bairro 25 de Setembro', 'Avenida 25 de Setembro', 'Rua da Paz', 1501, 18, 'Comercial', 6, 1),
+('Zambézia', 'Quelimane', 'Bairro Sinacura', 'Avenida Maguiguana', 'Rua Zambeze', 1601, 35, 'Comercial', 7, 1),
+('Nampula', 'Nampula', 'Bairro Muhala', 'Avenida das Industrias', 'Rua 24 de Julho', 1701, 10, 'Comercial', 8, 1),
+('Cabo Delgado', 'Pemba', 'Bairro Cariaco', 'Avenida dos Heróis', 'Rua dos Pescadores', 1801, 27, 'Comercial', 9, 1),
+('Niassa', 'Lichinga', 'Bairro Lichinga', 'Avenida da República', 'Rua das Montanhas', 1901, 50, 'Comercial', 10, 1),
+('Tete', 'Tete', 'Bairro Matundo', 'Avenida do Zambeze', 'Rua do Mercado', 2001, 8, 'Comercial', 11, 1),
+('Maputo', 'Matola', 'Bairro T-3', 'Avenida Julius Nyerere', 'Rua do Lazer', 1103, 120, 'Comercial', 12, 1),
+('Gaza', 'Chokwe', 'Bairro Ngala', 'Avenida Samora Machel', 'Rua Agrária', 1202, 36, 'Comercial', 13, 1),
+('Inhambane', 'Inhambane', 'Bairro Cemento', 'Avenida da Independência', 'Rua do Farol', 1302, 15, 'Comercial', 14, 1),
+('Manica', 'Manica', 'Bairro 7 de Abril', 'Avenida 7 de Abril', 'Rua das Mangueiras', 1502, 70, 'Comercial', 15, 1);
 
-
+select * from contacto_fornecedor;
 create table contacto_fornecedor(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
@@ -206,6 +239,31 @@ create table contacto_fornecedor(
     foreign key (fk_id_fornecedor) references fornecedor(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
+INSERT INTO contacto_fornecedor (pessoa_de_contacto, contacto, email, website, fk_id_fornecedor, fk_id_usuario) VALUES
+('João Almeida', '823456789', 'joao.almeida@alphadistribuidora.com', 'www.alphadistribuidora.com', 1, 1),
+('Maria Silva', '843456789', 'maria.silva@alphadistribuidora.com', NULL, 1, 1),
+('Pedro Santos', '863456789', NULL, 'www.alphaditribuidora.com', 1, 1),
+
+('Ana Costa', '823987654', 'ana.costa@betacomercio.com', 'www.betacomercio.com', 2, 1),
+('Carlos Sousa', '843987654', NULL, 'www.betcomercio.com', 2, 1),
+
+('Paulo Fernandes', '829876543', 'paulo.fernandes@carloseduardo.com', NULL, 3, 1),
+
+('Fernanda Lopes', '825643987', 'fernanda.lopes@deltaengenharia.com', 'www.deltaengenharia.com', 4, 1),
+('Roberto Garcia', '845643987', NULL, 'www.delaengenharia.com', 4, 1),
+
+('Isabel Pinto', '824789123', 'isabel.pinto@epsilonindustriais.com', NULL, 5, 1),
+
+('Ricardo Oliveira', '824563217', 'ricardo.oliveira@fernandamaria.com', NULL, 6, 1),
+
+('Claudia Souza', '826543987', 'claudia.souza@gammatransportes.com', 'www.gammatransportes.com', 7, 1),
+('José Lima', '846543987', NULL, 'www.gammatansportes.com', 7, 1),
+
+('Leonardo Castro', '827654321', 'leonardo.castro@omegasolucoes.com', 'www.omegasolucoes.com', 8, 1),
+('Gabriela Rocha', '847654321', NULL, NULL, 8, 1),
+
+('Mateus Gonçalves', '826432198', 'mateus.goncalves@sigmaeireli.com', NULL, 9, 1);
+
 
 create table armazem(
 	id integer primary key auto_increment,

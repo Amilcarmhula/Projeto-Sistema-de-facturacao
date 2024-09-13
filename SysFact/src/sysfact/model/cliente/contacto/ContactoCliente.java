@@ -14,19 +14,25 @@ import sysfact.model.usuario.Usuario;
  * @author JM-Tecnologias
  */
 public class ContactoCliente extends Contacto{
+    private int id;
+    private String responsavel;
     private Cliente cliente;
     private Usuario usuario;
-    private int id;
     private String data_criacao;
     
     
     public ContactoCliente(){}
 
-    public ContactoCliente(Cliente cliente, Usuario usuario, String contacto, String email) {
-        super(contacto, email);
+    public ContactoCliente(String responsavel, Cliente cliente, Usuario usuario, String contacto, String email, String webSite) {
+        super(contacto, email, webSite);
+        this.responsavel = responsavel;
         this.cliente = cliente;
         this.usuario = usuario;
     }
+
+    
+
+    
 
     public int getId() {
         return id;
@@ -34,6 +40,14 @@ public class ContactoCliente extends Contacto{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
     }
 
     public String getData_criacao() {

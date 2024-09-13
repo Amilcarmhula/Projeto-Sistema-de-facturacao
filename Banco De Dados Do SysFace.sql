@@ -47,6 +47,9 @@ create table usuario(
 
 
 
+
+
+
 INSERT INTO cliente (tipo, nome, apelido, nuit, fk_id_usuario)
 VALUES
 ('Pessoa Física', 'Carlos Mendes', 'Carlinhos', 123456789, 1),
@@ -96,13 +99,20 @@ LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
 GROUP BY c.id, c.nome, c.apelido, c.nuit;
 
 SELECT c.id, 
+	   c.tipo,
        c.nome, 
        c.apelido as razaosocial, 
        c.nuit, 
-       GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' | ') AS contatos
+       GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos
 FROM cliente c
 LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
 GROUP BY c.id, c.nome, c.apelido, c.nuit;
+
+SELECT c.id,c.tipo,c.nome,c.apelido as razaosocial,c.nuit, 
+                    GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos 
+                    FROM cliente c 
+                    LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id 
+                    GROUP BY c.id, c.nome, c.apelido, c.nuit;
 
 
 
@@ -119,7 +129,7 @@ VALUES
 ('Cabo Delgado', 'Pemba', 'Paquitequete', 'Avenida 25 de Junho', 'Rua 8', 7700, 505, 'Envio', 8, 1),
 ('Zambézia', 'Quelimane', 'Sagrada Família', 'Avenida Marginal', 'Rua 9', 8800, 606, 'Facturação', 9, 1),
 ('Manica', 'Chimoio', '3 de Fevereiro', 'Avenida 7 de Abril', 'Rua 10', 9900, 707, 'Envio', 10, 1);
-select * from endereco_cliente;
+select * from contacto_cliente;
 
 create table contacto_cliente(
 	id integer primary key auto_increment,

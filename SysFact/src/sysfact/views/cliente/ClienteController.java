@@ -276,10 +276,10 @@ public class ClienteController implements Initializable {
                             System.out.println(a.getId());
                             try {
                                 ClienteDAO xDAO = new ClienteDAO();
-                                xDAO.deleteEntityByUSER(a);
-                                xDAO.deleteEntityByUSERSimpleTwo(a);
-                                xDAO.deleteEntityByUSERSimpleThree(a);
-                                xDAO.deleteEntityByUSERSimpleFour(a);
+//                                xDAO.deleteEntityByUSER(a);
+//                                xDAO.deleteEntityByUSERSimpleTwo(a);
+//                                xDAO.deleteEntityByUSERSimpleThree(a);
+//                                xDAO.deleteEntityByUSERSimpleFour(a);
                                 showAgente();
                                 showContactoAgenteSelected();
                                 showEnderecoAgenteSelected();
@@ -357,7 +357,7 @@ public class ClienteController implements Initializable {
                             System.out.println(a.getId());
                             try {
                                 ContactoClienteDAO xDAO = new ContactoClienteDAO();
-                                xDAO.deleteEntityByUSER(a);
+                                xDAO.deleteEntity(a);
                                 showContactoAgenteSelected();
                             } catch (SQLException ex) {
                                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -445,7 +445,7 @@ public class ClienteController implements Initializable {
         Cliente cli = new Cliente();
         cli.setId(Integer.parseInt(cf_txtIDCliente.getText()));
         z.setCliente(cli);
-        listaContactos_SeletedAgente = x.searchEntityByAgente(z);
+        listaContactos_SeletedAgente = x.searchEntityByCLiente(z);
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
         contactotabelaContacto.setCellValueFactory(new PropertyValueFactory<>("contacto"));
@@ -475,7 +475,7 @@ public class ClienteController implements Initializable {
                             System.out.println(a.getId());
                             try {
                                 ContactoClienteDAO xDAO = new ContactoClienteDAO();
-                                xDAO.deleteEntityByUSER(a);
+                                xDAO.deleteEntity(a);
                                 showContactoAgenteSelected();
                             } catch (SQLException ex) {
                                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -644,13 +644,13 @@ public class ClienteController implements Initializable {
         if (cf_radioCliente.isSelected()) {
             cf_radioFornecedor.setSelected(false);
             a.setTipo("Cliente");
-            aDAO.updateEntityByID(a);
+//            aDAO.updateEntityByID(a);
             resetAgentes();
             showAgente();
         } else if (cf_radioFornecedor.isSelected()) {
             cf_radioCliente.setSelected(false);
             a.setTipo("Fornecedor");
-            aDAO.updateEntityByID(a);
+//            aDAO.updateEntityByID(a);
             resetAgentes();
             showAgente();
         } else {
@@ -673,7 +673,7 @@ public class ClienteController implements Initializable {
         x.setCliente(cli);
         x.setUsuario(userData);;
         x.setId(Integer.parseInt(cf_txtIDContacto.getText()));
-        xDAO.updateEntityByID(x);
+//        xDAO.updateEntityByID(x);
         showContactoAgenteSelected();
         resetContactosAgente();
     }

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorClientes" prefHeight="955.0" prefWidth="1451.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.cliente.ClienteController">
+   <children>
+      <AnchorPane fx:id="ancharVendas11" prefHeight="942.0" prefWidth="1425.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane layoutX="10.0" layoutY="128.0" prefHeight="451.0" prefWidth="1411.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0">
+               <styleClass>
+                  <String fx:value="white-bg" />
+                  <String fx:value="Squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+               <children>
+                  <AnchorPane layoutX="12.0" layoutY="28.0" prefHeight="221.0" prefWidth="624.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <children>
+                        <TextField fx:id="cf_txtIDCliente" alignment="CENTER" disable="true" layoutX="3.0" layoutY="107.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="cf_txtNome" layoutX="122.0" layoutY="107.0" prefHeight="20.0" prefWidth="375.0" promptText="Nome" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <TextField fx:id="cf_txtApelido" layoutX="3.0" layoutY="154.0" prefHeight="20.0" prefWidth="310.0" promptText="Apelido ou Sifra se for Fornecedor" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <TextField fx:id="cf_txtNuit" layoutX="502.0" layoutY="107.0" prefHeight="20.0" prefWidth="117.0" promptText="Nuit" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <RadioButton fx:id="cf_radioCliente" layoutX="189.0" layoutY="60.0" mnemonicParsing="false" onAction="#setSelectedradioCliente" text="Cliente" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton fx:id="cf_radioFornecedor" layoutX="307.0" layoutY="60.0" mnemonicParsing="false" onAction="#setSelectedradioFornecedor" text="Fornecedor" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </RadioButton>
+                        <Button fx:id="cf_btnAddCliente" layoutX="321.0" layoutY="154.0" mnemonicParsing="false" onAction="#addAgente" prefHeight="39.0" prefWidth="148.0" stylesheets="@../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="USER_PLUS" />
+                           </graphic>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="gray-bg" />
+                              <String fx:value="shadow-efect" />
+                           </styleClass>
+                        </Button>
+                        <AnchorPane prefHeight="50.0" prefWidth="355.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <styleClass>
+                              <String fx:value="headers-color" />
+                              <String fx:value="top-Squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" text="Informações de identificação" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <font>
+                                    <Font name="System Bold" size="34.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <Button fx:id="cf_btnUpdateCliente" layoutX="473.0" layoutY="154.0" mnemonicParsing="false" onAction="#updateAgente" prefHeight="39.0" prefWidth="148.0" stylesheets="@../../style/dashboard.css" text="Actualizar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" />
+                           </graphic>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="gray-bg" />
+                              <String fx:value="shadow-efect" />
+                           </styleClass>
+                        </Button>
+                     </children>
+                     <styleClass>
+                        <String fx:value="blue-bg" />
+                        <String fx:value="Squared-border" />
+                     </styleClass>
+                  </AnchorPane>
+                  <AnchorPane layoutX="10.0" layoutY="239.0" prefHeight="206.0" prefWidth="624.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0">
+                     <children>
+                        <TextField fx:id="cf_txtIDContacto" disable="true" layoutX="3.0" layoutY="65.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="cf_txtContacto" layoutX="122.0" layoutY="65.0" prefHeight="20.0" prefWidth="489.0" promptText="Numero de telefone" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <TextField fx:id="cf_txtEmail" layoutX="3.0" layoutY="114.0" prefHeight="20.0" prefWidth="610.0" promptText="E-mail" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <Button fx:id="cf_btnAddContacto" layoutX="321.0" layoutY="160.0" mnemonicParsing="false" onAction="#addContactoAgente" prefHeight="39.0" prefWidth="148.0" stylesheets="@../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="PLUS" />
+                           </graphic>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="gray-bg" />
+                              <String fx:value="shadow-efect" />
+                           </styleClass>
+                        </Button>
+                        <AnchorPane prefHeight="50.0" prefWidth="355.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <styleClass>
+                              <String fx:value="headers-color" />
+                              <String fx:value="top-Squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" text="Informações de contacto" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <font>
+                                    <Font name="System Bold" size="34.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <Button fx:id="cf_btnUpdateContacto" layoutX="473.0" layoutY="160.0" mnemonicParsing="false" onAction="#updateAgente" prefHeight="39.0" prefWidth="148.0" stylesheets="@../../style/dashboard.css" text="Actualizar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" />
+                           </graphic>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="gray-bg" />
+                              <String fx:value="shadow-efect" />
+                           </styleClass>
+                        </Button>
+                     </children>
+                     <styleClass>
+                        <String fx:value="blue-bg" />
+                        <String fx:value="Squared-border" />
+                     </styleClass>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <styleClass>
+                  <String fx:value="headers-color" />
+                  <String fx:value="top-Squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+               <children>
+                  <Label alignment="CENTER" layoutX="29.0" text="Agentes" textFill="WHITE" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="34.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="20.0" layoutY="138.0" prefHeight="420.0" prefWidth="1411.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+               <styleClass>
+                  <String fx:value="white-bg" />
+                  <String fx:value="Squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+               <children>
+                  <AnchorPane prefHeight="452.0" prefWidth="1391.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <children>
+                        <TextField fx:id="cf_txtIDEndereco" disable="true" layoutX="3.0" layoutY="55.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="cf_txtCidade" layoutX="415.0" layoutY="55.0" prefHeight="20.0" prefWidth="235.0" promptText="Cidade" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <Button fx:id="cf_btnAddEndereco" layoutX="1057.0" layoutY="98.0" mnemonicParsing="false" onAction="#addEnderecoAgente" prefHeight="39.0" prefWidth="148.0" stylesheets="@../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="PLUS" />
+                           </graphic>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="gray-bg" />
+                              <String fx:value="shadow-efect" />
+                           </styleClass>
+                        </Button>
+                        <AnchorPane prefHeight="50.0" prefWidth="355.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <styleClass>
+                              <String fx:value="headers-color" />
+                              <String fx:value="top-Squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" text="Informações de endereço" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <font>
+                                    <Font name="System Bold" size="34.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <ComboBox fx:id="cf_combTipo" layoutX="125.0" layoutY="55.0" prefHeight="35.0" prefWidth="137.0" promptText="Tipo de endereço" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css" />
+                        <ComboBox fx:id="cf_combProvincia" layoutX="268.0" layoutY="55.0" prefHeight="35.0" prefWidth="137.0" promptText="Provincia" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css" />
+                        <TextField fx:id="cf_txtBairro" layoutX="904.0" layoutY="55.0" prefHeight="20.0" prefWidth="398.0" promptText="Bairro" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <TextField fx:id="cf_txtAvenida" layoutX="7.0" layoutY="100.0" prefHeight="20.0" prefWidth="477.0" promptText="Avenida" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <TextField fx:id="cf_txtCodigooPostal" layoutX="656.0" layoutY="55.0" prefHeight="20.0" prefWidth="235.0" promptText="Codigo postal" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <TextField fx:id="cf_txtRua" layoutX="491.0" layoutY="100.0" prefHeight="20.0" prefWidth="181.0" promptText="Rua" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <TextField fx:id="cf_txtNumeroEndereco" layoutX="679.0" layoutY="100.0" prefHeight="20.0" prefWidth="103.0" promptText="Numero" stylesheets="@../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </TextField>
+                        <Button fx:id="cf_btnUpdateEndereco" layoutX="1219.0" layoutY="98.0" mnemonicParsing="false" onAction="#updateEnderecoAgente" prefHeight="39.0" prefWidth="148.0" stylesheets="@../../style/dashboard.css" text="Actualizar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" />
+                           </graphic>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="gray-bg" />
+                              <String fx:value="shadow-efect" />
+                           </styleClass>
+                        </Button>
+                     </children>
+                     <styleClass>
+                        <String fx:value="blue-bg" />
+                        <String fx:value="Squared-border" />
+                     </styleClass>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+         <styleClass>
+            <String fx:value="blue-bg" />
+            <String fx:value="Squared-border" />
+            <String fx:value="shadow" />
+         </styleClass>
+      </AnchorPane>
+   </children>
+</AnchorPane>

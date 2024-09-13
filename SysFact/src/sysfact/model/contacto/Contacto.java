@@ -13,15 +13,17 @@ public class Contacto {
     
     private String contacto;
     private String email;
+    private String website;
     
 
     
     public Contacto(){}
 
-    public Contacto( String contacto, String email) {
+    public Contacto( String contacto, String email, String webSite) {
 
         this.contacto = contacto;
         this.email = email;
+        this.website = webSite;
     }
 
     public String getContacto() {
@@ -39,4 +41,14 @@ public class Contacto {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+    
+    
 }

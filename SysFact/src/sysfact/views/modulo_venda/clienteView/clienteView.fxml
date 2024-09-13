@@ -37,7 +37,7 @@
                            </styleClass>
                         </TextField>
                         <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="607.0" layoutY="31.0" size="20" />
-                        <Button fx:id="btnAdd" layoutX="1118.0" layoutY="5.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="247.0" stylesheets="@../../style/dashboard.css" text="Adicionar Cliente" textFill="WHITE" AnchorPane.bottomAnchor="6.0" AnchorPane.topAnchor="5.0">
+                        <Button fx:id="btnAdd" layoutX="1118.0" layoutY="5.0" mnemonicParsing="false" onAction="#getViewAddCliente" prefHeight="39.0" prefWidth="247.0" stylesheets="@../../style/dashboard.css" text="Adicionar Cliente" textFill="WHITE" AnchorPane.bottomAnchor="6.0" AnchorPane.topAnchor="5.0">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

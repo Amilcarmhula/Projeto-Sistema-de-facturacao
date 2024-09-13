@@ -51,7 +51,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     }
 
     @Override
-    public void updateEntityByID(Cliente c) {
+    public void updateEntityByID(Cliente c, int id) {
         try {
             sql = "update cliente set tipo=?, nome=? ,apelido=? ,nuit=?, fk_id_usuario=?"
                     + " where id=?";
@@ -62,7 +62,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
             ps.setString(3, c.getApelido());
             ps.setInt(4, c.getNuit());
             ps.setInt(5, c.getUsuario().getId());
-            ps.setInt(6, c.getId());
+            ps.setInt(6, id);
 
             ps.execute();
             ps.close();
@@ -91,12 +91,15 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 c.setApelido(result.getString("razaosocial"));
                 c.setNuit(result.getInt("nuit"));
                 List<ContactoCliente> listaContactos = new ArrayList<>();
-                ContactoCliente cc;
-                for (String split : result.getString("contatos").split(" ")) {
-                    cc = new ContactoCliente();
-                    cc.setContacto(split);
-                    listaContactos.add(cc);
+                String contactos = result.getString("contatos");
+                if (contactos != null && !contactos.trim().isEmpty()) {
+                    for (String split : contactos.split(" ")) {
+                        ContactoCliente cc = new ContactoCliente();
+                        cc.setContacto(split);
+                        listaContactos.add(cc);
+                    }
                 }
+
                 c.setContactoCliente(listaContactos);
                 lista.add(c);
             }
@@ -137,32 +140,54 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         return lista;
     }
 
-//    public Cliente searchEntityByName(String nome) {
-//        Cliente c = null;
-//        try {
-//            sql = "select * from agente where nome LIKE ?";
-//            ps = con.prepareStatement(sql);
-//            ps.setString(1, "%" + nome + "%");
-//            ResultSet result = ps.executeQuery();
-//            while (result.next()) {
-//                c = new Cliente();
-//                c.setId(result.getInt("id"));
-//                c.setTipo(result.getString("tipo"));
-//                c.setApelido(result.getString("apelido"));
-//                c.setData_criacao(result.getString("data_criacao"));
-//                c.setNome(result.getString("nome"));
-//                c.setNuit(result.getInt("nuit"));
-//                c.setActive_or_not(result.getBoolean("active_or_not"));
-//                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
-//            }
-//            result.close();
-//            ps.close();
-//        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, "Falha ao Bucar agente: " + e,
-//                    "Informação", JOptionPane.ERROR_MESSAGE);
-//        }
-//        return c;
-//    }
+    @Override
+    public Cliente getLastEntity() {
+        Cliente c = null;
+        try {
+            sql = "SELECT id,tipo,nome,apelido,nuit FROM cliente ORDER BY id DESC LIMIT 1;";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                c = new Cliente();
+                c.setId(result.getInt("id"));
+                c.setTipo(result.getString("tipo"));
+                c.setApelido(result.getString("apelido"));
+                c.setNome(result.getString("nome"));
+                c.setNuit(result.getInt("nuit"));
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e,
+                    "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+        return c;
+    }
+    
+    @Override
+    public Cliente getEntityByID(int id) {
+        Cliente c = null;
+        try {
+            sql = "SELECT id,tipo,nome,apelido,nuit FROM cliente where id=?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                c = new Cliente();
+                c.setId(result.getInt("id"));
+                c.setTipo(result.getString("tipo"));
+                c.setApelido(result.getString("apelido"));
+                c.setNome(result.getString("nome"));
+                c.setNuit(result.getInt("nuit"));
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e,
+                    "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+        return c;
+    }
 //     @Override
 //    public void deleteEntityByROOT(int id) {
 //        try {
@@ -178,72 +203,18 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
 //        }
 //    }
 //    
-    @Override
-    public void deleteEntityByUSER(Cliente x) {
-        try {
-            sql = "UPDATE cliente "
-                    + "INNER JOIN endereco_agente ON agente.id = endereco_agente.fk_id_agente "
-                    + "INNER JOIN contacto_agente ON agente.id = contacto_agente.fk_id_agente "
-                    + "SET agente.active_or_not = false,"
-                    + " endereco_agente.active_or_not = false,"
-                    + " contacto_agente.active_or_not = false"
-                    + " WHERE agente.id = ?";
-            ps = con.prepareStatement(sql);
 
-            ps.setInt(1, x.getId());
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+
+
+
 
     @Override
-    public void deleteEntityByUSERSimpleTwo(Cliente x) {
+    public void deleteEntity(int x) {
         try {
-            sql = "UPDATE agente "
-                    + "INNER JOIN endereco_agente ON agente.id = endereco_agente.fk_id_agente "
-                    + "SET agente.active_or_not = false,"
-                    + " endereco_agente.active_or_not = false"
-                    + " WHERE agente.id = ?";
+            sql = "delete from cliente WHERE id = ?";
             ps = con.prepareStatement(sql);
 
-            ps.setInt(1, x.getId());
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    @Override
-    public void deleteEntityByUSERSimpleThree(Cliente x) {
-        try {
-            sql = "UPDATE cliente "
-                    + "INNER JOIN contacto_agente ON agente.id = contacto_agente.fk_id_agente "
-                    + "SET agente.active_or_not = false,"
-                    + " contacto_agente.active_or_not = false"
-                    + " WHERE agente.id = ?";
-            ps = con.prepareStatement(sql);
-
-            ps.setInt(1, x.getId());
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    @Override
-    public void deleteEntityByUSERSimpleFour(Cliente x) {
-        try {
-            sql = "UPDATE cliente SET active_or_not = false WHERE id = ?";
-            ps = con.prepareStatement(sql);
-
-            ps.setInt(1, x.getId());
+            ps.setInt(1, x);
             ps.execute();
             ps.close();
         } catch (SQLException ex) {

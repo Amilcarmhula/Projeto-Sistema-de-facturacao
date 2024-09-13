@@ -12,14 +12,11 @@ import javafx.collections.ObservableList;
  */
 public interface ClienteDAOImpl<T> {
     void  addEntity(T t);
-    void updateEntityByID(T t);
+    void updateEntityByID(T t, int id);
     ObservableList<T> listAllEntities();
     ObservableList<T> listAllEntitiesTypeFornecedor();
-//    T searchEntityByName(String name);
+    T getLastEntity();
+    T getEntityByID(int id);
 //    void deleteEntityByROOT(int id);
-    void deleteEntityByUSER(T x);
-    void deleteEntityByUSERSimpleTwo(T x);
-    void deleteEntityByUSERSimpleThree(T x);
-    void deleteEntityByUSERSimpleFour(T x);
-//    ObservableList<T> searchListEntityByName(String name);
+    void deleteEntity(int x);
 }

@@ -94,7 +94,7 @@
                                                                   <Insets bottom="5.0" />
                                                                </VBox.margin>
                                                             </Button>
-                                                            <Button fx:id="btn_cliente" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Agentes">
+                                                            <Button fx:id="btn_clienteX" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Agentes">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
@@ -202,7 +202,7 @@
                                                    <children>
                                                       <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
                                                          <children>
-                                                            <Button fx:id="btn_cliente111" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Clientes">
+                                                            <Button fx:id="btn_cliente" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Clientes">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>

@@ -88,7 +88,7 @@ public class MainController implements Initializable {
             btn_facturas.setStyle("-fx-background-color: transparent");
             btn_produtos.setStyle("-fx-background-color: rgba(55, 55, 179, 0.25)");
         } else if (e.getSource() == btn_cliente) {
-            pane = FXMLLoader.load(getClass().getResource("../cliente/cliente.fxml"));
+            pane = FXMLLoader.load(getClass().getResource("../modulo_venda/clienteView/clienteView.fxml"));
             anchorMain.getChildren().setAll(pane);
             btn_dashboard.setStyle("-fx-background-color: transparent");
             btn_vendas.setStyle("-fx-background-color: transparent");

@@ -33,16 +33,17 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     @Override
     public void addEntity(ContactoCliente t) {
         try {
-            sql = "insert into contacto_cliente (contacto, email, "
-                    + "fk_id_agente, fk_id_usuario) value (?,?,?,?)";
+            sql = "insert into contacto_cliente (contacto, email,website,pessoa_de_contacto, "
+                    + "fk_id_cliente, fk_id_usuario) value (?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getContacto());
             ps.setString(2, t.getEmail());
-            ps.setInt(3, t.getCliente().getId());
-            ps.setInt(4, t.getUsuario().getId());
-
+            ps.setString(3, t.getWebsite());
+            ps.setString(4, t.getResponsavel());
+            ps.setInt(5, t.getCliente().getId());
+            ps.setInt(6, t.getUsuario().getId());
 
             ps.execute();
             ps.close();
@@ -53,17 +54,18 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     }
 
     @Override
-    public void updateEntityByID(ContactoCliente t) {
+    public void updateEntityByID(ContactoCliente t, int id) {
         try {
-            sql = "update contacto_cliente set contacto=?, email=?, "
-                    + "fk_id_cliente=?, fk_id_usuario=? where id=?";
+            sql = "update contacto_cliente set contacto=?, email=? ,website=? ,"
+                    + "pessoa_de_contacto=?, fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
 
-             ps.setString(1, t.getContacto());
+            ps.setString(1, t.getContacto());
             ps.setString(2, t.getEmail());
-            ps.setInt(3, t.getCliente().getId());
-            ps.setInt(4, t.getUsuario().getId());
-            ps.setInt(5, t.getId());
+            ps.setString(3, t.getWebsite());
+            ps.setString(4, t.getResponsavel());
+            ps.setInt(5, t.getUsuario().getId());
+            ps.setInt(6, id);
 
             ps.execute();
             ps.close();
@@ -85,13 +87,9 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
                 c.setId(result.getInt("id"));
                 c.setContacto(result.getString("contacto"));
                 c.setEmail(result.getString("email"));
-                Usuario u = new Usuario();
-                u.setId(result.getInt("fk_id_usuario"));
-                Cliente cli = new Cliente();
-                cli.setId(result.getInt("fk_id_cliente"));
-                c.setCliente(cli);
-                c.setUsuario(u);
-                c.setData_criacao(result.getString("data_criacao"));
+                c.setWebsite(result.getString("website"));
+                c.setResponsavel(result.getString("pessoa_de_contacto"));
+                lista.add(c);
             }
             result.close();
             ps.close();
@@ -130,25 +128,21 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
 //    }
 //    
     @Override
-    public ObservableList<ContactoCliente> searchEntityByAgente(ContactoCliente agentID) {
+    public ObservableList<ContactoCliente> searchEntityByCLiente(ContactoCliente agentID) {
         ObservableList<ContactoCliente> lista = FXCollections.observableArrayList();
         try {
             sql = "select * from contacto_cliente where fk_id_cliente=?";
             ps = con.prepareStatement(sql);
-            ps.setInt(1,agentID.getCliente().getId());
+            ps.setInt(1, agentID.getCliente().getId());
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 ContactoCliente c = new ContactoCliente();
                 c.setId(result.getInt("id"));
                 c.setContacto(result.getString("contacto"));
                 c.setEmail(result.getString("email"));
-                Usuario u = new Usuario();
-                u.setId(result.getInt("fk_id_usuario"));
-                Cliente cli = new Cliente();
-                cli.setId(result.getInt("fk_id_cliente"));
-                c.setCliente(cli);
-                c.setUsuario(u);
-                c.setData_criacao(result.getString("data_criacao"));
+                c.setWebsite(result.getString("website"));
+                c.setResponsavel(result.getString("pessoa_de_contacto"));
+                lista.add(c);
             }
             result.close();
             ps.close();
@@ -158,7 +152,6 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
         }
         return lista;
     }
-   
 
 //    @Override
 //    public void deleteEntityByROOT(int id) {
@@ -174,11 +167,10 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
 //                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
 //        }
 //    }
-
     @Override
-    public void deleteEntityByUSER(ContactoCliente x) {
+    public void deleteEntity(ContactoCliente x) {
         try {
-            sql = "update contacto_cliente set active_or_not=false where id=?";
+            sql = "delete from contacto_cliente where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x.getId());

@@ -118,8 +118,8 @@
 .table-view .table-row-cell {
     -fx-background-color: transparent; /* Fundo das linhas */
     /*-fx-text-fill: white;               Texto branco nas linhas */
-    -fx-font-size: 18px;               /* Tamanho maior do texto */
-    -fx-font-weight: bold;
+    -fx-font-size: 16px;               /* Tamanho maior do texto */
+    /*-fx-font-weight: bold;*/
 }
 
 /* Alternate Row Colors */

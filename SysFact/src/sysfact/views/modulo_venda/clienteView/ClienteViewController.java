@@ -6,6 +6,7 @@ package sysfact.views.modulo_venda.clienteView;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -17,7 +18,10 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -30,6 +34,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
@@ -39,6 +45,7 @@ import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.views.produtos.ProdutoController;
 
 /**
  * FXML Controller class
@@ -81,6 +88,19 @@ public class ClienteViewController implements Initializable {
 
     @FXML
     private TextField txtPesquisa;
+    
+    public void getViewAddCliente(){
+        try {
+            Parent parente = FXMLLoader.load(getClass().getResource("../clienteView/clienteAdd/addCliente.fxml"));
+            Scene scene = new Scene(parente);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(ClienteViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -134,10 +154,10 @@ public class ClienteViewController implements Initializable {
                                 + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            Cliente a = tabelaCliente.getSelectionModel().getSelectedItem();
-                            System.out.println(a.getId());
+                            Cliente x = tabelaCliente.getSelectionModel().getSelectedItem();
                             try {
                                 ClienteDAO xDAO = new ClienteDAO();
+                                xDAO.deleteEntity(x.getId());
                                 showClientes();
 
                             } catch (SQLException ex) {
@@ -186,6 +206,7 @@ public class ClienteViewController implements Initializable {
     public void selectedLineCliente() throws SQLException {
         Cliente c = tabelaCliente.getSelectionModel().getSelectedItem();
         if (c != null) {
+            SysFact.setData(String.valueOf(c.getId()));
             txtIDCliente.setText(String.valueOf(c.getId()));
 
         }

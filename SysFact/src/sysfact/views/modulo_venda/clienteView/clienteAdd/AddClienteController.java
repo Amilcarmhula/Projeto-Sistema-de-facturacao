@@ -30,6 +30,7 @@ import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.cliente.contacto.ContactoClienteDAO;
+import sysfact.dao.cliente.endereco.EnderecoClienteDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
@@ -168,6 +169,14 @@ public class AddClienteController implements Initializable {
         }
     }
 
+    public void addORupdateEndereco() throws SQLException {
+        if ("".equals(txtIDEndereco.getText())) {
+            addEndereco();
+        } else {
+            updateEndereco();
+        }
+    }
+
     /**
      * Initializes the controller class.
      */
@@ -175,6 +184,21 @@ public class AddClienteController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.userData = SysFact.getUserData();
         combTipoCliente.setItems(FXCollections.observableArrayList("Pessoa Física", "Jurídica"));
+        combTipoEndereco.setItems(FXCollections.observableArrayList("Facturação", "Envio"));
+        combProvincia.setItems(FXCollections.observableArrayList(
+                "Maputo(Cidade)",
+                "Maputo(Provincia)",
+                "Gaza",
+                "Inhambane",
+                "Sofala",
+                "Manica",
+                "Tete",
+                "Zambezia",
+                "Napula",
+                "Niassa",
+                "Cabo Delgado"
+        )
+        );
         if (SysFact.getData() != null) {
             txtIDCliente.setText((String) SysFact.getData());
         }
@@ -182,6 +206,7 @@ public class AddClienteController implements Initializable {
         try {
             showContactos();
             showClienteByID();
+            showEndereco();
             // TODO
         } catch (SQLException ex) {
             Logger.getLogger(AddClienteController.class.getName()).log(Level.SEVERE, null, ex);
@@ -189,19 +214,28 @@ public class AddClienteController implements Initializable {
         estadoBTNCliente();
         estadoBTNContacto();
     }
-    
-    public void estadoBTNCliente(){
-        if(!"".equals(txtIDCliente.getText())){
+
+    public void estadoBTNCliente() {
+        if (!"".equals(txtIDCliente.getText())) {
             btnAddCliente.setText("Actualizar");
-        }else{
+        } else {
             btnAddCliente.setText("Adicionar");
         }
     }
-    public void estadoBTNContacto(){
-        if(!"".equals(txtIDContacto.getText())){
+
+    public void estadoBTNContacto() {
+        if (!"".equals(txtIDContacto.getText())) {
             btnAddContacto.setText("Actualizar");
-        }else{
+        } else {
             btnAddContacto.setText("Adicionar");
+        }
+    }
+
+    public void estadoBTNendereco() {
+        if (!"".equals(txtIDEndereco.getText())) {
+            btnAddEndereco.setText("Actualizar");
+        } else {
+            btnAddEndereco.setText("Adicionar");
         }
     }
 
@@ -232,19 +266,84 @@ public class AddClienteController implements Initializable {
 
     }
 
+    private ObservableList<EnderecoCliente> listaEndereco;
+
+    public void showEndereco() throws SQLException {
+        EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
+        EnderecoCliente z = new EnderecoCliente();
+        Cliente c = new Cliente();
+
+        if ("".equals(txtIDCliente.getText())) {
+            listaEndereco = xDAO.listAllEntities();
+        } else {
+            c.setId(Integer.parseInt(txtIDCliente.getText()));
+            z.setCliente(c);
+            listaEndereco = xDAO.searchEntityByCLiente(z);
+        }
+
+        IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        provinciatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("provincia"));
+        cidadetabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("cidade"));
+        bairrotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("bairro"));
+        avenidatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("avenida"));
+        ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua"));
+        codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal"));
+        numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero"));
+        //add cell of button edit 
+        Callback<TableColumn<EnderecoCliente, String>, TableCell<EnderecoCliente, String>> cellFoctory = (TableColumn<EnderecoCliente, String> param) -> {
+            // make cell containing buttons
+            final TableCell<EnderecoCliente, String> cell = new TableCell<EnderecoCliente, String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    //that cell created only on non-empty rows
+                    if (empty) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                        deleteIcon.setStyle(
+                                " -fx-cursor: hand ;"
+                                + "-glyph-size:28px;"
+                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                        );
+                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
+                            EnderecoCliente a = tabelaEndereco.getSelectionModel().getSelectedItem();
+                            System.out.println(a.getId());
+                            try {
+                                EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
+                                xDAO.deleteEntity(a);
+                                showEndereco();
+                            } catch (SQLException ex) {
+                                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        });
+                        setGraphic(deleteIcon);
+                        setText(null);
+                    }
+                }
+            };
+
+            return cell;
+        };
+        btntabelaEndereco.setCellFactory(cellFoctory);
+        tabelaEndereco.setItems(listaEndereco);
+    }
+
     private ObservableList<ContactoCliente> listaContactos;
 
     public void showContactos() throws SQLException {
         ContactoClienteDAO xDAO = new ContactoClienteDAO();
-        ContactoCliente cc = new ContactoCliente();
+        ContactoCliente z = new ContactoCliente();
         Cliente c = new Cliente();
 
         if ("".equals(txtIDCliente.getText())) {
             listaContactos = xDAO.listAllEntities();
         } else {
             c.setId(Integer.parseInt(txtIDCliente.getText()));
-            cc.setCliente(c);
-            listaContactos = xDAO.searchEntityByCLiente(cc);
+            z.setCliente(c);
+            listaContactos = xDAO.searchEntityByCLiente(z);
         }
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -326,6 +425,35 @@ public class AddClienteController implements Initializable {
         restContacto();
     }
 
+    public void addEndereco() {
+        Alert alert;
+        EnderecoCliente x = new EnderecoCliente();
+        x.setAvenida(txtAvenida.getText());
+        x.setBairro(txtBairro.getText());
+        x.setCidade(txtCidade.getText());
+        Cliente c = new Cliente();
+        c.setId(Integer.parseInt(txtIDCliente.getText()));
+        x.setCliente(c);
+        x.setCodigoPostal(Integer.parseInt(txtCodigooPostal.getText()));
+        x.setNumero(Integer.parseInt(txtNumeroEndereco.getText()));
+        x.setProvincia(combProvincia.getValue());
+        x.setRua(txtRua.getText());
+        x.setTipo(combTipoEndereco.getValue());
+        x.setUsuario(userData);
+        try {
+            EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
+            xDAO.addEntity(x);
+            showEndereco();
+            resetEndereco();
+        } catch (SQLException ex) {
+            alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Mensagem de Erro.");
+            alert.setHeaderText(null);
+            alert.setContentText("Erro ao adicionar Endereco" + ex);
+            alert.showAndWait();
+        }
+    }
+
     /*
     Funcoes para Actualizar registros
      */
@@ -365,6 +493,32 @@ public class AddClienteController implements Initializable {
         restContacto();
     }
 
+    public void updateEndereco() {
+        Alert alert;
+        EnderecoCliente x = new EnderecoCliente();
+        x.setAvenida(txtAvenida.getText());
+        x.setBairro(txtBairro.getText());
+        x.setCidade(txtCidade.getText());
+        x.setCodigoPostal(Integer.parseInt(txtCodigooPostal.getText()));
+        x.setNumero(Integer.parseInt(txtNumeroEndereco.getText()));
+        x.setProvincia(combProvincia.getValue());
+        x.setRua(txtRua.getText());
+        x.setTipo(combTipoEndereco.getValue());
+        x.setUsuario(userData);
+        try {
+            EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
+            xDAO.updateEntityByID(x, Integer.parseInt(txtIDEndereco.getText()));
+            showEndereco();
+            resetEndereco();
+        } catch (SQLException ex) {
+            alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Mensagem de Erro.");
+            alert.setHeaderText(null);
+            alert.setContentText("Erro ao adicionar Endereco" + ex);
+            alert.showAndWait();
+        }
+    }
+
     /*
     Funcoes de Linha selecionada
      */
@@ -380,17 +534,26 @@ public class AddClienteController implements Initializable {
         }
     }
 
+    public void selecionaEndereco() {
+        EnderecoCliente x = tabelaEndereco.getSelectionModel().getSelectedItem();
+        if (x != null) {
+            txtIDEndereco.setText(String.valueOf(x.getId()));
+            txtAvenida.setText(x.getAvenida());
+            txtBairro.setText(x.getBairro());
+            txtCidade.setText(x.getCidade());
+            txtCodigooPostal.setText(String.valueOf(x.getCodigoPostal()));
+            txtNumeroEndereco.setText(String.valueOf(x.getNumero()));
+            combProvincia.setValue(x.getProvincia());
+            txtRua.setText(x.getRua());
+            combTipoEndereco.setValue(x.getTipo());
+            estadoBTNendereco();
+        }
+    }
+
     /*
     Funcoes de Reset Campos
      */
-    public void restContacto() {
-        txtIDContacto.setText("");
-        txtResponsavel.setText("");
-        txtContacto.setText("");
-        txtEmail.setText("");
-        txtSite.setText("");
-        estadoBTNContacto();
-    }
+    
 
     public void resetCliente() throws SQLException {
         txtIDCliente.setText("");
@@ -400,6 +563,31 @@ public class AddClienteController implements Initializable {
         txtNuit.setText("");
         estadoBTNCliente();
         showContactos();
+        showEndereco();
+        restContacto();
+        resetEndereco();
+    }
+    
+    public void restContacto() {
+        txtIDContacto.setText("");
+        txtResponsavel.setText("");
+        txtContacto.setText("");
+        txtEmail.setText("");
+        txtSite.setText("");
+        estadoBTNContacto();
+    }
+
+    public void resetEndereco() {
+        txtIDEndereco.setText("");
+        txtAvenida.setText("");
+        txtBairro.setText("");
+        txtCidade.setText("");
+        txtCodigooPostal.setText("");
+        txtNumeroEndereco.setText("");
+        combProvincia.setPromptText("Provincia");
+        txtRua.setText("");
+        combTipoEndereco.setPromptText("Tipo de endereco");
+        estadoBTNendereco();
     }
 
 }

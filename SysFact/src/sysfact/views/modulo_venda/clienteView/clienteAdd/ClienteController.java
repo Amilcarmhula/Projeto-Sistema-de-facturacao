@@ -415,7 +415,7 @@ public class ClienteController implements Initializable {
                             System.out.println(a.getId());
                             try {
                                 EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
-                                xDAO.deleteEntityByUSER(a);
+                                xDAO.deleteEntity(a);
                                 showEnderecoAgenteSelected();
                             } catch (SQLException ex) {
                                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -502,7 +502,7 @@ public class ClienteController implements Initializable {
         Cliente a = new Cliente();
         a.setId(Integer.parseInt(cf_txtIDCliente.getText()));
         z.setCliente(a);
-        listaEndereco_SeletedAgente = x.searchEntityByAgente(z);
+//        listaEndereco_SeletedAgente = x.searchEntityByAgente(z);
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -537,7 +537,7 @@ public class ClienteController implements Initializable {
                             System.out.println(a.getId());
                             try {
                                 EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
-                                xDAO.deleteEntityByUSER(a);
+                                xDAO.deleteEntity(a);
                                 showEnderecoAgenteSelected();
                             } catch (SQLException ex) {
                                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -697,7 +697,7 @@ public class ClienteController implements Initializable {
         u.setId(this.userData.getId());
         x.setUsuario(u);
         x.setId(Integer.parseInt(cf_txtIDEndereco.getText()));
-        xDAO.updateEntityByID(x);
+//        xDAO.updateEntityByID(x);
         resetEnderecoAgente();
         showEnderecoAgenteSelected();
     }

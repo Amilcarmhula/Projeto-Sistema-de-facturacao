@@ -45,11 +45,6 @@ create table usuario(
     foreign key (fk_id_usuario) references usuario(id)
 );
 
-
-
-
-
-
 INSERT INTO cliente (tipo, nome, apelido, nuit, fk_id_usuario)
 VALUES
 ('Pessoa Física', 'Carlos Mendes', 'Carlinhos', 123456789, 1),
@@ -62,7 +57,6 @@ VALUES
 ('Pessoa Jurídica', 'Transporte Rápido', 'TransRápido Ltda', 963852741, 1),
 ('Pessoa Física', 'Fernanda Oliveira', 'Nanda', 741852963, 1),
 ('Pessoa Física', 'Roberto Souza', 'Beto', 369258147, 1);
-select * from cliente;
 
 create table endereco_cliente(
 	id integer primary key auto_increment,

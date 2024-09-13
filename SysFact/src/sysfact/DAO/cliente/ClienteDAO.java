@@ -111,35 +111,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         }
         return lista;
     }
-
-    @Override
-    public ObservableList<Cliente> listAllEntitiesTypeFornecedor() {
-        ObservableList<Cliente> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from cliente";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                Cliente c = new Cliente();
-                c.setId(result.getInt("id"));
-                c.setTipo(result.getString("tipo"));
-                c.setApelido(result.getString("apelido"));
-                c.setData_criacao(result.getString("data_criacao"));
-                c.setNome(result.getString("nome"));
-                c.setNuit(result.getInt("nuit"));
-                Usuario u = new Usuario();
-                u.setId(result.getInt("fk_id_usuario"));
-                c.setUsuario(u);
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
-
-        }
-        return lista;
-    }
-
+    
     @Override
     public Cliente getLastEntity() {
         Cliente c = null;
@@ -188,26 +160,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         }
         return c;
     }
-//     @Override
-//    public void deleteEntityByROOT(int id) {
-//        try {
-//            sql = "delete from agente where id=?";
-//            ps = con.prepareStatement(sql);
-//
-//            ps.setInt(1, id);
-//            ps.execute();
-//            ps.close();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao deletar agente: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
-//    
-
-
-
-
-
+    
     @Override
     public void deleteEntity(int x) {
         try {
@@ -222,4 +175,39 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    
+    
+    
+    
+    
+    
+    @Override
+    public ObservableList<Cliente> listAllEntitiesTypeFornecedor() {
+        ObservableList<Cliente> lista = FXCollections.observableArrayList();
+        try {
+            sql = "select * from cliente";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                Cliente c = new Cliente();
+                c.setId(result.getInt("id"));
+                c.setTipo(result.getString("tipo"));
+                c.setApelido(result.getString("apelido"));
+                c.setData_criacao(result.getString("data_criacao"));
+                c.setNome(result.getString("nome"));
+                c.setNuit(result.getInt("nuit"));
+                Usuario u = new Usuario();
+                u.setId(result.getInt("fk_id_usuario"));
+                c.setUsuario(u);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+
+        }
+        return lista;
+    }
+    
 }

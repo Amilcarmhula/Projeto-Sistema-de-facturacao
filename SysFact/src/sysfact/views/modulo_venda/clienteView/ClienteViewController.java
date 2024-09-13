@@ -208,7 +208,7 @@ public class ClienteViewController implements Initializable {
         if (c != null) {
             SysFact.setData(String.valueOf(c.getId()));
             txtIDCliente.setText(String.valueOf(c.getId()));
-
+            btnAdd.setText("Actualizar Cliente");
         }
 
     }

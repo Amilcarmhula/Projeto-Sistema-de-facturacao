@@ -13,15 +13,8 @@ import javafx.collections.ObservableList;
 public interface EnderecoClienteDAOImpl<T> {
 
     void addEntity(T t);
-
-    void updateEntityByID(T t);
-
+    void updateEntityByID(T t, int id);
     ObservableList<T> listAllEntities();
-
-    ObservableList<T> searchEntityByAgente(T t);
-//    T searchEntityByName(String name);
-//    void deleteEntityByROOT(int id);
-
-    void deleteEntityByUSER(T x);
-//    ObservableList<T> searchListEntityByName(String name);
+    ObservableList<T> searchEntityByCLiente(T t);
+    void deleteEntity(T x);
 }

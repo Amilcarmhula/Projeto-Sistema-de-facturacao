@@ -64,7 +64,10 @@
                               <String fx:value="shadow-efect" />
                            </styleClass>
                         </Button>
-                        <TextArea fx:id="txtDescricao" layoutX="96.0" layoutY="51.0" prefHeight="84.0" prefWidth="386.0" styleClass="shadow" stylesheets="@../../../../style/dashboard.css" />
+                        <TextArea fx:id="txtDescricao" layoutX="96.0" layoutY="51.0" prefHeight="84.0" prefWidth="386.0" styleClass="shadow" stylesheets="@../../../../style/dashboard.css">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font></TextArea>
                      </children>
                      <styleClass>
                         <String fx:value="blue-bg" />

@@ -185,7 +185,8 @@ public class AddArmazemController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.userData = SysFact.getUserData();
-        combTipoCliente.setItems(FXCollections.observableArrayList("Pessoa Física", "Jurídica"));
+        txtDescricao.setWrapText(true);
+        combTipoCliente.setItems(FXCollections.observableArrayList("Central", "Regional","Loga","..."));
         combTipoEndereco.setItems(FXCollections.observableArrayList("Facturação", "Envio"));
         combProvincia.setItems(FXCollections.observableArrayList(
                 "Maputo(Cidade)",

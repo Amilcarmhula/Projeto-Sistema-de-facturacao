@@ -87,11 +87,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
                 c.setSubgrupo(result.getString("subgrupo"));
                 c.setFamilia(result.getString("familia"));
                 c.setDescricao(result.getString("descricao"));
-                c.setData_criacao(result.getString("data_criacao"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
-                if (c.isActive_or_not()) {
                     lista.add(c);
-                }
             }
             result.close();
             ps.close();
@@ -101,55 +97,11 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
         return lista;
     }
 
-//    @Override
-//    public Categoria searchEntityByName(String name) {
-//        Categoria c = null;
-//        try {
-//            sql = "select * from categoria where familia like ?";
-//            ps = con.prepareStatement(sql);
-//            ps.setString(1, "%" + name + "%");
-//            ResultSet result = ps.executeQuery();
-////            if (result.next()) {
-//            while (result.next()) {
-//                c = new Categoria();
-//                c.setId(result.getInt("id"));
-//                c.setTipo(result.getString("tipo"));
-//                c.setGrupo(result.getString("grupo"));
-//                c.setSubgrupo(result.getString("subgrupo"));
-//                c.setFamilia(result.getString("familia"));
-//                c.setDescricao(result.getString("descricao"));
-//                c.setData_criacao(result.getString("data_criacao"));
-//                c.setActive_or_not(result.getBoolean("active_or_not"));
-//            }
-//            result.close();
-//            ps.close();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao pesquisar categoria: " + ex,
-//                    "Informação", JOptionPane.ERROR_MESSAGE);
-//        }
-//        return c;
-//
-//    }
-
-//    @Override
-//    public void deleteEntityByROOT(int id) {
-//        try {
-//            sql = "delete from categoria where id=?";
-//            ps = con.prepareStatement(sql);
-//
-//            ps.setInt(1, id);
-//            ps.execute();
-//            ps.close();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao deletar categoria: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
     
     @Override
     public void deleteEntityByUSER(Categoria x) {
         try {
-            sql =  "update categoria set active_or_not=false where id=?";
+            sql =  "delete from categoria where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x.getId());

@@ -1,8 +1,9 @@
--- drop database _sysface;
--- create database _sysface;
+drop database _sysface;
+create database _sysface;
 
  
 use _sysface;
+
  -- select * from agente inner join contacto_agente on agente.id=contacto_agente.fk_id_agente;
 -- select contacto, email, contacto_agente.data_criacao from contacto_agente inner join agente on agente.id=contacto_agente.fk_id_agente;
 -- select * from contacto_agente where fk_id_agente=2;
@@ -76,37 +77,37 @@ create table endereco_cliente(
     check(tipo in('Facturação','Envio'))
 );
 
-SELECT c.id, c.nome, c.apelido, c.nuit, 
-       -- e.provincia, e.cidade, e.bairro, e.avenida, e.rua, e.codigo_postal, e.numero, e.tipo AS tipo_endereco,
-       ct.pessoa_de_contacto, ct.contacto, ct.email, ct.website
-FROM cliente c
--- LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id
-LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id;
+-- SELECT c.id, c.nome, c.apelido, c.nuit, 
+--        -- e.provincia, e.cidade, e.bairro, e.avenida, e.rua, e.codigo_postal, e.numero, e.tipo AS tipo_endereco,
+--        ct.pessoa_de_contacto, ct.contacto, ct.email, ct.website
+-- FROM cliente c
+-- -- LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id
+-- LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id;
 
-SELECT c.id, 
-       c.nome, 
-       c.apelido, 
-       c.nuit, 
-       GROUP_CONCAT(CONCAT(ct.pessoa_de_contacto, ': ', ct.contacto, ', ', ct.email, ', ', ct.website) SEPARATOR ' | ') AS contatos
-FROM cliente c
-LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
-GROUP BY c.id, c.nome, c.apelido, c.nuit;
+-- SELECT c.id, 
+--        c.nome, 
+--        c.apelido, 
+--        c.nuit, 
+--        GROUP_CONCAT(CONCAT(ct.pessoa_de_contacto, ': ', ct.contacto, ', ', ct.email, ', ', ct.website) SEPARATOR ' | ') AS contatos
+-- FROM cliente c
+-- LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
+-- GROUP BY c.id, c.nome, c.apelido, c.nuit;
 
-SELECT c.id, 
-	   c.tipo,
-       c.nome, 
-       c.apelido as razaosocial, 
-       c.nuit, 
-       GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos
-FROM cliente c
-LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
-GROUP BY c.id, c.nome, c.apelido, c.nuit;
+-- SELECT c.id, 
+-- 	   c.tipo,
+--        c.nome, 
+--        c.apelido as razaosocial, 
+--        c.nuit, 
+--        GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos
+-- FROM cliente c
+-- LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
+-- GROUP BY c.id, c.nome, c.apelido, c.nuit;
 
-SELECT c.id,c.tipo,c.nome,c.apelido as razaosocial,c.nuit, 
-                    GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos 
-                    FROM cliente c 
-                    LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id 
-                    GROUP BY c.id, c.nome, c.apelido, c.nuit;
+-- SELECT c.id,c.tipo,c.nome,c.apelido as razaosocial,c.nuit, 
+--                     GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos 
+--                     FROM cliente c 
+--                     LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id 
+--                     GROUP BY c.id, c.nome, c.apelido, c.nuit;
 
 
 
@@ -123,7 +124,7 @@ VALUES
 ('Cabo Delgado', 'Pemba', 'Paquitequete', 'Avenida 25 de Junho', 'Rua 8', 7700, 505, 'Envio', 8, 1),
 ('Zambézia', 'Quelimane', 'Sagrada Família', 'Avenida Marginal', 'Rua 9', 8800, 606, 'Facturação', 9, 1),
 ('Manica', 'Chimoio', '3 de Fevereiro', 'Avenida 7 de Abril', 'Rua 10', 9900, 707, 'Envio', 10, 1);
-select * from contacto_cliente;
+
 
 create table contacto_cliente(
 	id integer primary key auto_increment,
@@ -165,7 +166,6 @@ VALUES
 ('Luís Nhaca', '849012346', 'luis.nhaca@exemplo.com', 'www.luisnhaca.com', 9, 1),
 ('Mónica Mucheto', '841012346', 'monica.mucheto@exemplo.com', 'www.monicamucheto.com', 10, 1);
 
-select * from contacto_cliente;
 
 create table fornecedor(
 	id integer primary key auto_increment,
@@ -226,7 +226,6 @@ INSERT INTO endereco_fornecedor (provincia, cidade, bairro, avenida, rua, codigo
 ('Inhambane', 'Inhambane', 'Bairro Cemento', 'Avenida da Independência', 'Rua do Farol', 1302, 15, 'Comercial', 14, 1),
 ('Manica', 'Manica', 'Bairro 7 de Abril', 'Avenida 7 de Abril', 'Rua das Mangueiras', 1502, 70, 'Comercial', 15, 1);
 
-select * from contacto_fornecedor;
 create table contacto_fornecedor(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
@@ -383,22 +382,51 @@ create table categoria(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     check(tipo in('Produto','Serviço'))
 );
-select * from categoria;
+INSERT INTO categoria (tipo, grupo, subgrupo, familia, descricao) VALUES
+('Produto', 'Alimentação', 'Bebidas', 'Refrigerantes', 'Categoria de bebidas não alcoólicas'),
+('Produto', 'Alimentação', 'Congelados', 'Carnes', 'Categoria de carnes congeladas'),
+('Produto', 'Eletrônicos', 'Computadores', 'Laptops', 'Categoria de laptops e notebooks'),
+('Serviço', 'Manutenção', 'Equipamentos', 'Computadores', 'Serviços de manutenção de computadores'),
+('Serviço', 'Consultoria', 'TI', 'Infraestrutura', 'Consultoria em infraestrutura de TI');
 
 create table unidade_medida(
 	id integer primary key auto_increment,
     identificador varchar(50) not null,
     sigla varchar(10) not null,
+    descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ); 
+
+INSERT INTO unidade_medida (identificador, sigla, descricao) VALUE
+('Unidade', 'Un', 'Unidade padrao');
+-- Inserindo dados de teste na tabela unidade_medida
+INSERT INTO unidade_medida (identificador, sigla, descricao)
+VALUES 
+('Quilograma', 'kg', 'Unidade de massa usada no sistema métrico'),
+('Litro', 'L', 'Unidade de volume usada para medir líquidos'),
+('Metro', 'm', 'Unidade de comprimento usada no sistema métrico'),
+('Centímetro', 'cm', 'Unidade menor de comprimento no sistema métrico'),
+('Mililitro', 'ml', 'Unidade de volume usada para pequenas quantidades de líquidos'),
+('Grama', 'g', 'Unidade de massa usada para pequenas quantidades'),
+('Tonelada', 't', 'Unidade de massa usada para grandes quantidades'),
+('Polegada', 'in', 'Unidade de comprimento usada no sistema imperial'),
+('Galão', 'gal', 'Unidade de volume usada no sistema imperial'),
+('Onça', 'oz', 'Unidade de peso usada no sistema imperial');
+
+
 
 create table taxa_imposto(
 	id integer primary key auto_increment,
     identificador varchar(50) not null,
-    percentagem decimal(3,2),
+    percentagem decimal(4,3),
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUES
+('IVA', 0.17, 'Imposto sobre o valor acrescentado (IVA)'),
+('ISPC', 0.5, 'Imposto Simplificado para Pequenos Contribuintes (ISPC)'),
+('Taxa Reduzida', 0.075, 'Taxa de imposto reduzida para produtos essenciais'),
+('Isento', 0.00, 'Produtos isentos de imposto');
 
 -- insert into armazem (nome, cidade, bairro,avenida, rua,codigo_postal,numero) value ('Armazem 3', 'Maracuene', 'Jardim', 'av. Cardoso', 'Junta', 1122,300);
 -- ALTER TABLE armazem DROP COLUMN provincia;
@@ -406,10 +434,23 @@ create table taxa_imposto(
 create table desconto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
-    percentagem decimal(3,2),
+    percentagem decimal(4,3),
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+INSERT INTO desconto (nome, percentagem, descricao) VALUES
+('Desconto de Lançamento', 0.1, 'Desconto aplicado em novos produtos no lançamento'),
+('Desconto de Fim de Ano', 0.155, 'Desconto especial para vendas de final de ano'),
+('Desconto por Quantidade', 0.575, 'Desconto aplicado para compras em grandes quantidades'),
+('Desconto Promocional', 0.2, 'Desconto aplicado em promoções especiais por tempo limitado'),
+('Desconto Fidelidade', 0.8, 'Desconto para clientes fiéis com mais de 1 ano de compras'),
+('Desconto Black Friday', 0.3, 'Desconto massivo durante a Black Friday'),
+('Desconto de Parceria', 0.125, 'Desconto exclusivo para parceiros comerciais'),
+('Desconto de Natal', 0.1825, 'Desconto sazonal para o período de Natal'),
+('Isento', 0.0, 'Desconto aplicado em produtos sem desconto');
+
+
+
 
 -- SELECT s.id, fk_id_categoria, s.nome,
 --                      (SELECT grupo FROM categoria WHERE s.fk_id_categoria = categoria.id) AS grupo,
@@ -438,6 +479,7 @@ create table produto(
     nome varchar(50) not null,
     codigo_barra varchar(50),
     descricao text,
+    contole_stock boolean not null, -- define condicao se sera armazenado no stock pelo trigger_registra_produto
     fk_id_categoria integer not null,
     fk_id_unidade_medida integer,
     fk_id_taxa_imposto integer,
@@ -446,6 +488,8 @@ create table produto(
     foreign key (fk_id_categoria) references categoria(id),
     foreign key (fk_id_unidade_medida) references unidade_medida(id)
 );
+
+
 
 
 CREATE TABLE precovenda (
@@ -551,7 +595,9 @@ create trigger trigger_registra_produto
 	after insert on produto
     for each row
     begin
-		insert into stock (fk_id_produto,saldo) value (new.id,0);
+		if new.contole_stock = true then
+			insert into stock (fk_id_produto,saldo) value (new.id,0);
+        end if;
     end//
 delimiter ;
 

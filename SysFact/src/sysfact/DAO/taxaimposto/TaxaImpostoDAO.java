@@ -47,7 +47,7 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
     }
 
     @Override
-    public void updateEntityByID(TaxaImposto t) {
+    public void updateEntityByID(TaxaImposto  t, int id) {
         try {
             sql = "update taxa_imposto set identificador=?, percentagem=?, descricao=?"
                     + " where id=?";
@@ -56,7 +56,7 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
             ps.setString(1, t.getIdentificador());
             ps.setDouble(2, t.getPercentagem());
             ps.setString(3, t.getDescricao());
-            ps.setInt(4, t.getId());
+            ps.setInt(4, id);
 
             ps.execute();
             ps.close();
@@ -79,8 +79,6 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
                 ti.setIdentificador(result.getString("identificador"));
                 ti.setPercentagem(result.getDouble("percentagem"));
                 ti.setDescricao(result.getString("descricao"));
-                ti.setData_criacao(result.getString("data_criacao"));
-                ti.setActive_or_not(result.getBoolean("active_or_not"));
                 lista.add(ti);
             }
             result.close();
@@ -106,7 +104,6 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
                 ti.setPercentagem(result.getDouble("percentagem"));
                 ti.setDescricao(result.getString("descricao"));
                 ti.setData_criacao(result.getString("data_criacao"));
-                ti.setActive_or_not(result.getBoolean("active_or_not"));
             }
             result.close();
             ps.close();
@@ -126,10 +123,7 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 TaxaImposto u = new TaxaImposto();
-                u.setActive_or_not(result.getBoolean("active_or_not"));
-                if (u.isActive_or_not()) {
                     mapa.put(result.getString("identificador"), result.getInt("id"));
-                }
             }
             result.close();
             ps.close();
@@ -141,28 +135,14 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
 
    
 
-//    @Override
-//    public void deleteEntityByROOT(TaxaImposto) {
-//        try {
-//            sql = "delete from taxa_imposto where id=?";
-//            ps = con.prepareStatement(sql);
-//
-//            ps.setInt(1, id);
-//            ps.execute();
-//            ps.close();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao deletar Taxa: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
-    
+
     @Override
-    public void deleteEntityByUSER(TaxaImposto x) {
+    public void deleteEntity(int x) {
         try {
-            sql =  "update taxa_imposto set active_or_not=false where id=?";
+            sql =  "delete from taxa_imposto where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setInt(1, x.getId());
+            ps.setInt(1, x);
             ps.execute();
             ps.close();
         } catch (SQLException ex) {

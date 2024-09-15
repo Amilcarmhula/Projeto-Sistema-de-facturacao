@@ -8,10 +8,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1700.0" stylesheets="@../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.main.MainController">
@@ -76,63 +78,27 @@
                                     <Font name="System Bold" size="25.0" />
                                  </font>
                               </Label>
-                              <Accordion layoutX="27.0" layoutY="252.0" prefHeight="437.0" prefWidth="250.0" AnchorPane.bottomAnchor="266.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="252.0">
+                              <Accordion layoutX="27.0" layoutY="330.0" prefHeight="437.0" prefWidth="250.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                 <panes>
-                                  <TitledPane animated="false" text="Contabilidade">
+                                  <TitledPane animated="false" text="Contabilidade" textFill="WHITE">
                                        <content>
-                                          <ScrollPane prefHeight="200.0" prefWidth="84.0">
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="shadow" stylesheets="@../../style/dashboard.css">
                                              <content>
-                                                <AnchorPane prefHeight="306.0" prefWidth="221.0">
+                                                <AnchorPane prefHeight="306.0" prefWidth="226.0" stylesheets="@../../style/dashboard.css">
                                                    <children>
-                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0">
                                                          <children>
-                                                            <Button fx:id="btn_dashboard" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Dashboard">
+                                                            <Button fx:id="btn_dashboard" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="260.0" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_clienteX" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Agentes">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_produtos" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Inventário">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_facturas" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Facturas">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_vendas" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Vendas">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_config" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="438.0" stylesheets="@../../style/dashboard.css" text="Config.">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
                                                          </children>
                                                          <padding>
@@ -140,6 +106,10 @@
                                                          </padding>
                                                       </VBox>
                                                    </children>
+                                                   <styleClass>
+                                                      <String fx:value="blue-bg" />
+                                                      <String fx:value="border-less" />
+                                                   </styleClass>
                                                 </AnchorPane>
                                              </content>
                                           </ScrollPane>
@@ -148,37 +118,49 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                   </TitledPane>
-                                    <TitledPane animated="false" text="Tesouraria">
+                                    <TitledPane animated="false" text="Tesouraria" textFill="WHITE">
                                        <content>
-                                          <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css">
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="shadow" stylesheets="@../../style/dashboard.css">
                                              <content>
-                                                <AnchorPane prefHeight="306.0" prefWidth="221.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css">
+                                                <AnchorPane prefHeight="306.0" prefWidth="226.0" styleClass="blue-bg" stylesheets="@../../style/dashboard.css">
                                                    <children>
-                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css">
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css">
                                                          <children>
-                                                            <Button fx:id="btn_dashboard11" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Pagamentos">
+                                                            <Button fx:id="btn_dashboard11" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Pagamentos" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
-                                                            <Button fx:id="btn_cliente11" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Fluxo de Caixa">
+                                                            <Button fx:id="btn_cliente11" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Fluxo de Caixa" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
-                                                            <Button fx:id="btn_produtos11" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Documentos Comercias">
+                                                            <Button fx:id="btn_produtos11" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Documentos Comercias" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
                                                          </children>
                                                          <padding>
@@ -194,45 +176,49 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </TitledPane>
-                                    <TitledPane animated="false" text="Vendas">
+                                    <TitledPane animated="false" text="Vendas" textFill="WHITE">
                                        <content>
-                                          <ScrollPane prefHeight="200.0" prefWidth="84.0">
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="shadow" stylesheets="@../../style/dashboard.css">
                                              <content>
-                                                <AnchorPane prefHeight="306.0" prefWidth="221.0">
+                                                <AnchorPane prefHeight="306.0" prefWidth="226.0" styleClass="blue-bg" stylesheets="@../../style/dashboard.css">
                                                    <children>
-                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0">
                                                          <children>
-                                                            <Button fx:id="btn_cliente" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Clientes">
+                                                            <Button fx:id="btn_cliente" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Clientes" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
-                                                            <Button fx:id="btn_produtos111" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Vendas">
+                                                            <Button fx:id="btn_produtos111" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Vendas" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
-                                                            <Button fx:id="btn_facturas111" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Encomendas">
+                                                            <Button fx:id="btn_facturas111" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Encomendas" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_vendas111" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Precos">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
                                                          </children>
                                                          <padding>
@@ -248,53 +234,37 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </TitledPane>
-                                    <TitledPane animated="false" text="Compras">
+                                    <TitledPane animated="false" text="Compras" textFill="WHITE">
                                        <content>
-                                          <ScrollPane prefHeight="200.0" prefWidth="84.0">
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="shadow" stylesheets="@../../style/dashboard.css">
                                              <content>
-                                                <AnchorPane prefHeight="306.0" prefWidth="221.0">
+                                                <AnchorPane prefHeight="306.0" prefWidth="226.0" styleClass="blue-bg" stylesheets="@../../style/dashboard.css">
                                                    <children>
-                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="216.0">
                                                          <children>
-                                                            <Button fx:id="btn_dashboard112" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Artigos">
+                                                            <Button fx:id="btn_produtos112" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Encomendas" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
-                                                            <Button fx:id="btn_cliente112" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Compras">
+                                                            <Button fx:id="btn_fornecedor" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Fornecedores" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_produtos112" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Encomendas">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_fornecedor" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Fornecedores">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_vendas112" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Precos">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
                                                          </children>
                                                          <padding>
@@ -310,45 +280,49 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </TitledPane>
-                                    <TitledPane animated="false" text="Inventário">
+                                    <TitledPane animated="false" text="Inventário" textFill="WHITE">
                                        <content>
-                                          <ScrollPane prefHeight="200.0" prefWidth="84.0">
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="shadow" stylesheets="@../../style/dashboard.css">
                                              <content>
-                                                <AnchorPane prefHeight="306.0" prefWidth="221.0">
+                                                <AnchorPane prefHeight="306.0" prefWidth="226.0" styleClass="blue-bg" stylesheets="@../../style/dashboard.css">
                                                    <children>
-                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0">
                                                          <children>
-                                                            <Button fx:id="btn_armazem" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Armazens">
+                                                            <Button fx:id="btn_armazem" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Armazens" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
-                                                            <Button fx:id="btn_produtos113" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Artigos">
+                                                            <Button fx:id="btn_artigos" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Artigos" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
-                                                            <Button fx:id="btn_facturas113" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Precos">
+                                                            <Button fx:id="btn_vendas113" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Stock" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_vendas113" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Stock">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
                                                             </Button>
                                                          </children>
                                                          <padding>
@@ -364,61 +338,58 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </TitledPane>
-                                    <TitledPane animated="false" text="Config.">
+                                    <TitledPane animated="false" text="Config." textFill="WHITE">
                                        <content>
-                                          <ScrollPane prefHeight="200.0" prefWidth="84.0">
+                                          <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="shadow" stylesheets="@../../style/dashboard.css">
                                              <content>
-                                                <AnchorPane prefHeight="306.0" prefWidth="221.0">
+                                                <AnchorPane prefHeight="306.0" prefWidth="226.0" styleClass="blue-bg" stylesheets="@../../style/dashboard.css">
                                                    <children>
-                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="221.0">
+                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0">
                                                          <children>
-                                                            <Button fx:id="btn_dashboard114" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Dashboard">
+                                                            <Button fx:id="btn_taxas" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#getViews" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Taxas/Impostos" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
+                                                               <opaqueInsets>
+                                                                  <Insets />
+                                                               </opaqueInsets>
                                                             </Button>
-                                                            <Button fx:id="btn_cliente114" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Agentes">
+                                                            <Button fx:id="btn_unidades" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#getViews" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Unidades de Medida" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
+                                                               <opaqueInsets>
+                                                                  <Insets />
+                                                               </opaqueInsets>
                                                             </Button>
-                                                            <Button fx:id="btn_produtos114" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Inventário">
+                                                            <Button fx:id="btn_categorias" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#getViews" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Categorias" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font>
                                                                <VBox.margin>
-                                                                  <Insets bottom="5.0" />
+                                                                  <Insets bottom="5.0" left="4.0" />
                                                                </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_facturas114" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Facturas">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_vendas114" alignment="BASELINE_LEFT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Vendas">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="btn_config114" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="438.0" stylesheets="@../../style/dashboard.css" text="Config.">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" />
-                                                               </VBox.margin>
+                                                               <styleClass>
+                                                                  <String fx:value="gray-bg" />
+                                                                  <String fx:value="shadow-efect" />
+                                                               </styleClass>
+                                                               <opaqueInsets>
+                                                                  <Insets />
+                                                               </opaqueInsets>
                                                             </Button>
                                                          </children>
                                                          <padding>
@@ -436,10 +407,26 @@
                                     </TitledPane>
                                 </panes>
                               </Accordion>
+                              <Label fx:id="labUserName" alignment="CENTER" layoutY="279.0" prefHeight="29.0" prefWidth="250.0" text="Nome do Usuario" textFill="#ebeaea">
+                                 <font>
+                                    <Font name="Berlin Sans FB" size="24.0" />
+                                 </font>
+                              </Label>
+                              <FontAwesomeIconView fill="#909090" glyphName="USER" layoutX="33.0" layoutY="234.0" size="250">
+                                 <effect>
+                                    <InnerShadow height="108.93" radius="51.7675" width="100.14" />
+                                 </effect>
+                              </FontAwesomeIconView>
+                              <Label alignment="CENTER" layoutY="250.0" prefWidth="250.0" text="Bem-vindo" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <Line endX="125.0" layoutX="110.0" layoutY="316.0" startX="-100.0" />
                            </children>
                            <styleClass>
                               <String fx:value="shadow" />
-                              <String fx:value="gray-bg" />
+                              <String fx:value="blue-bg" />
                               <String fx:value="top-Squared-border" />
                            </styleClass>
                         </AnchorPane>

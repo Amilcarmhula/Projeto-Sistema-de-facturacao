@@ -13,9 +13,9 @@ import javafx.collections.ObservableList;
  */
 public interface UnidadeMedidaDAOImpl<T> {
     void  addEntity(T t);
-    void updateEntityByID(T t);
+    void updateEntityByID(T t, int x);
     ObservableList<T> listAllEntities();
     Map<String,Integer> mapUnidadeMedida();
     T getEntityByID(int x);
-    void deleteEntityByUSER(T x);
+    void deleteEntity(int x);
 }

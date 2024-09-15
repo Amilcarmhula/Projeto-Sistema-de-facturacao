@@ -13,9 +13,9 @@ import javafx.collections.ObservableList;
  */
 public interface TaxaImpostoDAOImpl<T> {
     void  addEntity(T t);
-    void updateEntityByID(T t);
+    void updateEntityByID(T t, int id);
     ObservableList<T> listAllEntities();
     T getEntityByID(int id);
     Map<String,Integer> mapTaxaImposto();
-    void deleteEntityByUSER(T x);
+    void deleteEntity(int x);
 }

@@ -14,14 +14,17 @@ public class UnidadeMedida {
     private String identificador;
     private String sigla;
     private String data_criacao;
-    private boolean active_or_not;
+    private String descricao;
     
     public UnidadeMedida(){}
 
-    public UnidadeMedida( String identificador, String sigla) {
+    public UnidadeMedida(String identificador, String sigla, String descricao) {
         this.identificador = identificador;
         this.sigla = sigla;
+        this.descricao = descricao;
     }
+
+    
 
     public int getId() {
         return id;
@@ -55,13 +58,12 @@ public class UnidadeMedida {
         this.data_criacao = data_criacao;
     }
 
-    public boolean isActive_or_not() {
-        return active_or_not;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setActive_or_not(boolean active_or_not) {
-        this.active_or_not = active_or_not;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
-
     
 }

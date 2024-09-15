@@ -94,10 +94,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
 //                c.setFk_id_taxa_imposto(result.getInt("fk_id_taxa_imposto"));
 //                c.setUnidade_medida(result.getInt("fk_id_unidade_medida"));
                 c.setData_criacao(result.getString("data_criacao"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
-                if (c.isActive_or_not()) {
-                    lista.add(c);
-                }
             }
             result.close();
             ps.close();
@@ -134,10 +130,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 u.setSigla(result.getString("sigla_unidade"));
                 c.setUnidade_medida(u);
 //                c.setData_criacao(result.getString("data_criacao"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
-                if (c.isActive_or_not()) {
-                    lista.add(c);
-                }
             }
             result.close();
             ps.close();
@@ -172,10 +164,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 u.setSigla(result.getString("sigla_unidade"));
                 c.setUnidade_medida(u);
 //                c.setData_criacao(result.getString("data_criacao"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
-                if (c.isActive_or_not()) {
-                    lista.add(c);
-                }
             }
             result.close();
             ps.close();

@@ -4,7 +4,6 @@
  */
 package sysfact.model.taxa_imposto;
 
-
 /**
  *
  * @author JM-Tecnologias
@@ -16,17 +15,14 @@ public class TaxaImposto {
     private double percentagem;
     private String descricao;
     private String data_criacao;
-    private boolean active_or_not;
-    
-    public TaxaImposto(){}
 
-    public TaxaImposto(int id, String identificador, double percentagem, String descricao, String data_criacao, boolean active_or_not) {
-        this.id = id;
+    public TaxaImposto() {
+    }
+
+    public TaxaImposto(String identificador, double percentagem, String descricao, String data_criacao) {
         this.identificador = identificador;
         this.percentagem = percentagem;
         this.descricao = descricao;
-        this.data_criacao = data_criacao;
-        this.active_or_not = active_or_not;
     }
 
     public int getId() {
@@ -68,13 +64,4 @@ public class TaxaImposto {
     public void setData_criacao(String data_criacao) {
         this.data_criacao = data_criacao;
     }
-
-    public boolean isActive_or_not() {
-        return active_or_not;
-    }
-
-    public void setActive_or_not(boolean active_or_not) {
-        this.active_or_not = active_or_not;
-    }
-
-    }
+}

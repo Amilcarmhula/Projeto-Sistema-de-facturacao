@@ -4,10 +4,12 @@
  */
 package sysfact.model.produto;
 
+import java.util.List;
 import sysfact.model.categoria.Categoria;
+import sysfact.model.preco.PrecoVenda;
+import sysfact.model.stock.Stock;
 import sysfact.model.taxa_imposto.TaxaImposto;
 import sysfact.model.unidade_medida.UnidadeMedida;
-
 
 /**
  *
@@ -19,21 +21,27 @@ public class Produto {
     private String nome;
     private String codigo_barra;
     private String descricao;
+    private boolean contole_stock;
     private Categoria categoria;
-//    private int fk_id_unidade_medida;
     private UnidadeMedida unidade_medida;
-//    private int fk_id_taxa_imposto;
+    private TaxaImposto taxa_imposto;
+    private List<PrecoVenda> precovenda;
+    private Stock stock;
     private String data_criacao;
-    private boolean active_or_not;
-    
-    public Produto(){}
 
-    public Produto(String nome, String codigo_barra, String descricao, Categoria categoria, UnidadeMedida unidade_medida) {
+    public Produto() {
+    }
+
+    public Produto(String nome, String codigo_barra, String descricao, boolean contole_stock, Categoria categoria, UnidadeMedida unidade_medida, TaxaImposto taxa_imposto, List<PrecoVenda> precovenda, Stock stock) {
         this.nome = nome;
         this.codigo_barra = codigo_barra;
         this.descricao = descricao;
+        this.contole_stock = contole_stock;
         this.categoria = categoria;
         this.unidade_medida = unidade_medida;
+        this.taxa_imposto = taxa_imposto;
+        this.precovenda = precovenda;
+        this.stock = stock;
     }
 
     public int getId() {
@@ -68,6 +76,14 @@ public class Produto {
         this.descricao = descricao;
     }
 
+    public boolean isContole_stock() {
+        return contole_stock;
+    }
+
+    public void setContole_stock(boolean contole_stock) {
+        this.contole_stock = contole_stock;
+    }
+
     public Categoria getCategoria() {
         return categoria;
     }
@@ -84,20 +100,36 @@ public class Produto {
         this.unidade_medida = unidade_medida;
     }
 
+    public TaxaImposto getTaxa_imposto() {
+        return taxa_imposto;
+    }
+
+    public void setTaxa_imposto(TaxaImposto taxa_imposto) {
+        this.taxa_imposto = taxa_imposto;
+    }
+
+    public List<PrecoVenda> getPrecovenda() {
+        return precovenda;
+    }
+
+    public void setPrecovenda(List<PrecoVenda> precovenda) {
+        this.precovenda = precovenda;
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
+    }
+
     public String getData_criacao() {
         return data_criacao;
     }
 
     public void setData_criacao(String data_criacao) {
         this.data_criacao = data_criacao;
-    }
-
-    public boolean isActive_or_not() {
-        return active_or_not;
-    }
-
-    public void setActive_or_not(boolean active_or_not) {
-        this.active_or_not = active_or_not;
     }
 
     

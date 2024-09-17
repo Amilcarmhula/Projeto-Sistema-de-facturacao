@@ -219,12 +219,17 @@ public class CategoriaController implements Initializable {
     public void addCategoria() throws SQLException {
         CategoriaDAO xDAO = new CategoriaDAO();
         ServicoCategoria sc = new ServicoCategoria(xDAO);
-        CategoriaControle catController = new CategoriaControle(sc);
-        catController.criaCategoria(
-                ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
+//        CategoriaControle catController = new CategoriaControle(sc);
+        sc.registaCategoria(ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
                 ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
-                ps_txtdescricaoCategoria.getText()
-        );
+                ps_txtdescricaoCategoria.getText());
+        
+        
+//        catController.criaCategoria(
+//                ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
+//                ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
+//                ps_txtdescricaoCategoria.getText()
+//        );
 //        Categoria a = new Categoria();
 //        a.setTipo(ps_combTipoCategoria.getValue());
 //        a.setGrupo(ps_txtgrupoCategoria.getText());

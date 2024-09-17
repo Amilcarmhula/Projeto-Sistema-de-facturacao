@@ -25,14 +25,14 @@ public class Produto {
     private Categoria categoria;
     private UnidadeMedida unidade_medida;
     private TaxaImposto taxa_imposto;
-    private List<PrecoVenda> precovenda;
+    private PrecoVenda precovenda;
     private Stock stock;
     private String data_criacao;
 
     public Produto() {
     }
 
-    public Produto(String nome, String codigo_barra, String descricao, boolean contole_stock, Categoria categoria, UnidadeMedida unidade_medida, TaxaImposto taxa_imposto, List<PrecoVenda> precovenda, Stock stock) {
+    public Produto(String nome, String codigo_barra, String descricao, boolean contole_stock, Categoria categoria, UnidadeMedida unidade_medida, TaxaImposto taxa_imposto, PrecoVenda precovenda, Stock stock) {
         this.nome = nome;
         this.codigo_barra = codigo_barra;
         this.descricao = descricao;
@@ -108,11 +108,11 @@ public class Produto {
         this.taxa_imposto = taxa_imposto;
     }
 
-    public List<PrecoVenda> getPrecovenda() {
+    public PrecoVenda getPrecovenda() {
         return precovenda;
     }
 
-    public void setPrecovenda(List<PrecoVenda> precovenda) {
+    public void setPrecovenda(PrecoVenda precovenda) {
         this.precovenda = precovenda;
     }
 

@@ -82,6 +82,7 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
             ps.setInt(1,  x.getProduto().getId());
             ResultSet result = ps.executeQuery();
             while (result.next()) {
+                //melhorar esta funcao
                 pv = new PrecoVenda();
                 pv.setId(result.getInt("id"));
                 pv.setPreco(result.getDouble("preco"));
@@ -94,7 +95,7 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
                 u.setId(result.getInt("fk_id_usuario"));
                 pv.setUsuario(u);
                 pv.setData_criacao(result.getString("data_criacao"));
-                pv.setActive_or_not(result.getBoolean("active_or_not"));
+                pv.setEstado(result.getBoolean("estado"));
             }
             result.close();
             ps.close();

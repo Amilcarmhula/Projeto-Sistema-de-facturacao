@@ -292,3 +292,17 @@
     /*-fx-background-color: linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);*/
 
 }
+
+
+
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent; /* Cor de fundo das barras de rolagem */
+}
+
+/* Estilo para os trilhos das barras de rolagem */
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color:  rgba(35, 35, 35, .5); /* Cor do 'thumb' da barra de rolagem */
+    -fx-background-insets: 6;       
+    -fx-background-radius: 20px;    /* Raio das bordas do 'thumb' */
+}

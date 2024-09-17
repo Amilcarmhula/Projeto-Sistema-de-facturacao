@@ -12,6 +12,8 @@ import sysfact.model.produto.Produto;
  * @author JM-Tecnologias
  */
 public interface ProdutoDAOImpl<T> {
+    ObservableList<T> getCombinedEntities();
+    
     void  addEntity(T t);
     void updateEntityByID(T t);
     ObservableList<T> listAllEntities();

@@ -19,17 +19,6 @@ public class CategoriaControle {
     public CategoriaControle(ServicoCategoria servicocategoria) {
         this.servicocategoria = servicocategoria;
     }
-
-    public void criaCategoria(String tipo, String grupo, String subgrupo,
-            String familia, String descricao) {
-        Categoria c = new Categoria();
-        c.setTipo(tipo);
-        c.setGrupo(grupo);
-        c.setSubgrupo(subgrupo);
-        c.setFamilia(familia);
-        c.setDescricao(descricao);
-        servicocategoria.registaCaregoria(c);
-    }
     
     public ObservableList<Categoria> listaTodos(){
         return servicocategoria.consultaCategorias();

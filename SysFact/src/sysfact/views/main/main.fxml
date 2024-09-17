@@ -78,47 +78,9 @@
                                     <Font name="System Bold" size="25.0" />
                                  </font>
                               </Label>
-                              <Accordion layoutX="27.0" layoutY="330.0" prefHeight="437.0" prefWidth="250.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                              <Accordion layoutX="27.0" layoutY="375.0" prefHeight="392.0" prefWidth="250.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                 <panes>
-                                  <TitledPane animated="false" text="Contabilidade" textFill="WHITE">
-                                       <content>
-                                          <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="shadow" stylesheets="@../../style/dashboard.css">
-                                             <content>
-                                                <AnchorPane prefHeight="306.0" prefWidth="226.0" stylesheets="@../../style/dashboard.css">
-                                                   <children>
-                                                      <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0">
-                                                         <children>
-                                                            <Button fx:id="btn_dashboard" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="260.0" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
-                                                               <font>
-                                                                  <Font name="System Bold" size="14.0" />
-                                                               </font>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" left="4.0" />
-                                                               </VBox.margin>
-                                                               <styleClass>
-                                                                  <String fx:value="gray-bg" />
-                                                                  <String fx:value="shadow-efect" />
-                                                               </styleClass>
-                                                            </Button>
-                                                         </children>
-                                                         <padding>
-                                                            <Insets top="5.0" />
-                                                         </padding>
-                                                      </VBox>
-                                                   </children>
-                                                   <styleClass>
-                                                      <String fx:value="blue-bg" />
-                                                      <String fx:value="border-less" />
-                                                   </styleClass>
-                                                </AnchorPane>
-                                             </content>
-                                          </ScrollPane>
-                                       </content>
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                  </TitledPane>
-                                    <TitledPane animated="false" text="Tesouraria" textFill="WHITE">
+                                    <TitledPane animated="false" text="Contabilidade" textFill="WHITE">
                                        <content>
                                           <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="shadow" stylesheets="@../../style/dashboard.css">
                                              <content>
@@ -423,6 +385,18 @@
                                  </font>
                               </Label>
                               <Line endX="125.0" layoutX="110.0" layoutY="316.0" startX="-100.0" />
+                              <Button fx:id="btn_dashboard" alignment="BASELINE_LEFT" layoutX="44.0" layoutY="325.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="152.0" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="gray-bg" />
+                                    <String fx:value="shadow-efect" />
+                                 </styleClass>
+                                 <graphic>
+                                    <FontAwesomeIconView fill="#14d970" glyphName="HOME" size="40" />
+                                 </graphic>
+                              </Button>
                            </children>
                            <styleClass>
                               <String fx:value="shadow" />

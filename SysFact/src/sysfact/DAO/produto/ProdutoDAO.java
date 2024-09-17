@@ -13,7 +13,10 @@ import javafx.collections.ObservableList;
 
 import javax.swing.JOptionPane;
 import sysfact.model.categoria.Categoria;
+import sysfact.model.preco.PrecoVenda;
 import sysfact.model.produto.Produto;
+import sysfact.model.stock.Stock;
+import sysfact.model.taxa_imposto.TaxaImposto;
 import sysfact.model.unidade_medida.UnidadeMedida;
 import sysfact.util.Conexao;
 
@@ -73,6 +76,64 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             JOptionPane.showMessageDialog(null, "Falha ao actulizar Produto: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    @Override
+    public ObservableList<Produto> getCombinedEntities() {
+        ObservableList<Produto> lista = FXCollections.observableArrayList();
+        try {
+            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.contole_stock, "
+                    + "		c.id as id_categoria, c.familia as categoria,"
+                    + "         u.id as id_unidade, u.identificador, u.sigla,"
+                    + "         t.id as id_taxa, t.identificador as taxa, t.percentagem,"
+                    + "         pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,"
+                    + "         s.saldo "
+                    + "FROM produto p "
+                    + "LEFT JOIN categoria c ON c.id = p.fk_id_categoria "
+                    + "LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida "
+                    + "LEFT JOIN taxa_imposto t ON t.id = p.fk_id_taxa_imposto "
+                    + "LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id AND pv.estado=true "
+                    + "LEFT JOIN stock s ON s.fk_id_produto=p.id";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                Produto c = new Produto();
+                c.setId(result.getInt("id"));
+                c.setNome(result.getString("nome"));
+                c.setCodigo_barra(result.getString("codigo_barra"));
+                c.setDescricao(result.getString("descricao"));
+                Categoria cat = new Categoria();
+                cat.setId(result.getInt("id_categoria"));
+                cat.setFamilia(result.getString("categoria"));
+                c.setCategoria(cat);
+                UnidadeMedida u = new UnidadeMedida();
+                u.setId(result.getInt("id_unidade"));
+                u.setIdentificador(result.getString("identificador"));
+                u.setSigla(result.getString("sigla"));
+                c.setUnidade_medida(u);
+                TaxaImposto t = new TaxaImposto();
+                t.setId(result.getInt("id_taxa"));
+                t.setIdentificador(result.getString("taxa"));
+                t.setPercentagem(result.getDouble("percentagem"));
+                c.setTaxa_imposto(t);
+                PrecoVenda p = new PrecoVenda();
+                p.setId(result.getInt("id_preco"));
+                p.setPreco(result.getDouble("preco"));
+                p.setData_inicio(result.getString("data_inicio"));
+                p.setData_fim(result.getString("data_fim"));
+                c.setPrecovenda(p);
+                Stock s = new Stock();
+                s.setSaldo(result.getInt("saldo"));
+                c.setStock(s);
+                c.setContole_stock(result.getBoolean("contole_stock"));
+                lista.add(c);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+        return lista;
     }
 
     @Override

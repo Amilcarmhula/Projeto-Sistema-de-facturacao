@@ -40,6 +40,8 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btn_cliente;
+    @FXML
+    private Button btn_dashboard;
 
     @FXML
     private Button btn_fornecedor;
@@ -90,15 +92,12 @@ public class MainController implements Initializable {
     @FXML
     public void switchForm(ActionEvent e) throws IOException {
         AnchorPane pane;
-        if (e.getSource() == btn_artigos) {
-            pane = FXMLLoader.load(getClass().getResource("../modulo_inventario/produtosView/produtoView.fxml"));
+        if (e.getSource() == btn_dashboard) {
+            pane = FXMLLoader.load(getClass().getResource("../dashboard/dashboard.fxml"));
             anchorMain.getChildren().setAll(pane);
-//            btn_dashboard.setStyle("-fx-background-color: transparent");
-//            btn_vendas.setStyle("-fx-background-color: transparent");
-//            btn_cliente.setStyle("-fx-background-color: transparent");
-//            btn_config.setStyle("-fx-background-color: transparent");
-//            btn_facturas.setStyle("-fx-background-color: transparent");
-//            btn_artigos.setStyle("-fx-background-color: rgba(55, 55, 179, 0.25)");
+        }else if (e.getSource() == btn_artigos) {
+            pane = FXMLLoader.load(getClass().getResource("../modulo_inventario/produtosView/produtoAdd.fxml"));
+            anchorMain.getChildren().setAll(pane);
         } else if (e.getSource() == btn_cliente) {
             pane = FXMLLoader.load(getClass().getResource("../modulo_venda/clienteView/clienteView.fxml"));
             anchorMain.getChildren().setAll(pane);

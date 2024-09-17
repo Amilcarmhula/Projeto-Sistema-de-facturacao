@@ -71,7 +71,7 @@
                               <String fx:value="shadow" />
                            </styleClass>
                         </TextField>
-                        <TextField fx:id="txtdescricaoProduto" layoutX="757.0" layoutY="14.0" prefHeight="25.0" prefWidth="396.0" promptText="Descricao" stylesheets="@../../style/dashboard.css">
+                        <TextField fx:id="txtdescricaoProduto" layoutX="757.0" layoutY="14.0" prefHeight="25.0" prefWidth="608.0" promptText="Descricao" stylesheets="@../../style/dashboard.css">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -84,7 +84,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="391.0" prefHeight="539.0" prefWidth="1411.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+            <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="391.0" onMouseClicked="#selectedRow" prefHeight="539.0" prefWidth="1411.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                <columns>
                   <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
                   <TableColumn fx:id="artigo" prefWidth="209.0" text="Artigo" />
@@ -97,8 +97,8 @@
                   <TableColumn fx:id="datainicio" prefWidth="107.0" resizable="false" text="Data de inicio" />
                   <TableColumn fx:id="datafim" prefWidth="96.0" resizable="false" text="Data de fim" />
                   <TableColumn fx:id="stock" prefWidth="53.0" resizable="false" text="Stock" />
-                  <TableColumn fx:id="quantidade" prefWidth="68.0" resizable="false" text="Qtd." />
-                  <TableColumn fx:id="btntabelaProduto" prefWidth="45.0" resizable="false" />
+                  <TableColumn fx:id="quantidade" prefWidth="57.0" resizable="false" text="Qtd." />
+                  <TableColumn fx:id="btntabelaProduto" prefWidth="52.0" resizable="false" />
                </columns>
             </TableView>
             <TextField fx:id="txtIDCategoria" layoutX="409.0" layoutY="173.0" onMouseClicked="#getFamiliaView" prefHeight="25.0" prefWidth="67.0" stylesheets="@../../style/dashboard.css">
@@ -211,6 +211,20 @@
                   <Insets />
                </opaqueInsets>
             </Button>
+            <TextField fx:id="txtPesquisar" layoutX="22.0" layoutY="362.0" prefHeight="25.0" prefWidth="396.0" promptText="Pesquisar produto" stylesheets="@../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <Label fx:id="labIDPreco" layoutX="1066.0" layoutY="171.0" prefHeight="30.0" prefWidth="82.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
          </children>
          <styleClass>
             <String fx:value="blue-bg" />

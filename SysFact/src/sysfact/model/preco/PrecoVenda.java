@@ -17,10 +17,10 @@ public class PrecoVenda {
     private double preco;
     private String data_inicio;
     private String data_fim;
+    private boolean estado;
     private Produto produto;
     private Usuario usuario;
     private String data_criacao;
-    private boolean active_or_not;
 
     public PrecoVenda(){
     }
@@ -89,13 +89,12 @@ public class PrecoVenda {
         this.data_criacao = data_criacao;
     }
 
-    public boolean isActive_or_not() {
-        return active_or_not;
+    public boolean isEstado() {
+        return estado;
     }
 
-    public void setActive_or_not(boolean active_or_not) {
-        this.active_or_not = active_or_not;
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
-
     
 }

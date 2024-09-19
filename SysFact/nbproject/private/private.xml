@@ -4,8 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/views/modulo_inventario/produtosView/ProdutoController.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/views/produtos/categoria/CategoriaController.java</file>
             <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/dao/produto/ProdutoDAO.java</file>
             <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/views/produtos/ProdutoController.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/service/produto/Serviceproduto.java</file>
         </group>
     </open-files>
 </project-private>

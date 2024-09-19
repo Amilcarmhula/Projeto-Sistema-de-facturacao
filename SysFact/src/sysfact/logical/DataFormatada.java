@@ -15,7 +15,8 @@ public class DataFormatada {
     
     public String formataData(){
         Date dataActual = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyMMdd HH:mm:ss");
+//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 //        SimpleDateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss.SSS");
         String data = df.format(dataActual);
         return data;

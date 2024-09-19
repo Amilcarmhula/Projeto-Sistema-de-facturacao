@@ -742,7 +742,7 @@ public class ProdutoController implements Initializable {
         a.setCodigo_barra(ps_txtcodigobarrasProduto.getText());
         a.setDescricao(ps_txtdescricaoProduto.getText());
 
-        xDAO.updateEntityByID(a);
+//        xDAO.updateEntityByID(a);
         resetProduto();
         showProduto();
     }
@@ -760,7 +760,7 @@ public class ProdutoController implements Initializable {
         p.setId(Integer.parseInt(ps_txtIDProduto.getText()));
         pv.setProduto(p);
         pv.setUsuario(userData);
-        xDAO.updateEntityByID(pv);
+//        xDAO.updateEntityByID(pv);
 
     }
 

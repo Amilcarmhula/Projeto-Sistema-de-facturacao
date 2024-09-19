@@ -38,7 +38,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     public void addEntity(Produto t) {
         try {
             sql = "insert into produto (nome,codigo_barra, descricao,fk_id_categoria, "
-                    + "fk_id_unidade_medida) value (?,?,?,?,?)";
+                    + "fk_id_unidade_medida,fk_id_taxa_imposto,contole_stock) value (?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -47,6 +47,8 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setString(3, t.getDescricao());
             ps.setInt(4, t.getCategoria().getId());
             ps.setInt(5, t.getUnidade_medida().getId());
+            ps.setInt(6, t.getTaxa_imposto().getId());
+            ps.setBoolean(7, t.isContole_stock());
 
             ps.execute();
             ps.close();
@@ -55,12 +57,12 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         }
 
     }
-
+    
     @Override
-    public void updateEntityByID(Produto t) {
+    public void updateEntityByID(Produto t, int id) {
         try {
             sql = "update produto set nome=?,codigo_barra=?, descricao=?,fk_id_categoria=?, "
-                    + "fk_id_unidade_medida=? where id=?";
+                    + "fk_id_unidade_medida=?,fk_id_taxa_imposto=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNome());
@@ -68,7 +70,8 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setString(3, t.getDescricao());
             ps.setInt(4, t.getCategoria().getId());
             ps.setInt(5, t.getUnidade_medida().getId());
-            ps.setInt(6, t.getId());
+            ps.setInt(6, t.getTaxa_imposto().getId());
+            ps.setInt(7, id);
 
             ps.execute();
             ps.close();
@@ -77,7 +80,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     @Override
     public ObservableList<Produto> getCombinedEntities() {
         ObservableList<Produto> lista = FXCollections.observableArrayList();
@@ -135,6 +138,31 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         }
         return lista;
     }
+    
+    /*Busca o ID do ultimo produto adicionado para poder acicionar o preco*/
+    @Override
+    public Produto getLastEntity() {
+        Produto x = null;
+        try {
+            sql = "SELECT id FROM produto ORDER BY id DESC LIMIT 1";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                x = new Produto();
+                x.setId(result.getInt("id"));
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar armazem: " + e,
+                    "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+        return x;
+    }
+
+    
+
+    
 
     @Override
     public ObservableList<Produto> listAllEntities() {

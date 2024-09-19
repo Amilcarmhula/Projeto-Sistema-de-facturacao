@@ -44,6 +44,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import sysfact.SysFact;
+import sysfact.dao.preco.PrecoVendaDAO;
 import sysfact.dao.produto.ProdutoDAO;
 import sysfact.model.categoria.Categoria;
 import sysfact.model.preco.PrecoVenda;
@@ -51,6 +52,8 @@ import sysfact.model.produto.Produto;
 import sysfact.model.taxa_imposto.TaxaImposto;
 import sysfact.model.unidade_medida.UnidadeMedida;
 import sysfact.model.usuario.Usuario;
+import sysfact.service.precovenda.ServicePrecoVenda;
+import sysfact.service.produto.Serviceproduto;
 
 /**
  * FXML Controller class
@@ -125,7 +128,27 @@ public class ProdutoController implements Initializable {
     private TextField txtdescricaoProduto;
     @FXML
     private TextField txtPesquisar;
-    
+
+    public void addORupdate() throws SQLException {
+        if ("".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
+            addProduto();
+        } else if (!"".equals(txtIDProduto.getText()) && "0".equals(labIDPreco.getText())) {
+            updateProduto();
+            addPrecoVendaONSelected();
+        } else if (!"".equals(txtIDProduto.getText()) && !"0".equals(labIDPreco.getText())) {
+            updateProduto();
+            updatePrecoVenda();
+        }
+    }
+
+    public void estadoBTN() {
+        if (!"".equals(txtIDProduto.getText()) || !"".equals(labIDPreco.getText())) {
+            btnAddProduto.setText("Actualizar");
+        } else {
+            btnAddProduto.setText("Adicionar");
+        }
+    }
+
     public void priceFormaterProduto() {
         // Define the Locale for currency formatting (Mozambique)
         Locale locale = new Locale("pt", "MZ");
@@ -212,10 +235,12 @@ public class ProdutoController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
-                    TaxaImposto x = (TaxaImposto) SysFact.getData();
-                    if (x != null) {
-                        txtIDTaxa.setText(String.valueOf(x.getId()));
-                        labTaxa.setText(String.valueOf(x.getIdentificador() + ": " + (x.getPercentagem() * 100) + "%"));
+                    if (SysFact.getData() instanceof TaxaImposto) {
+                        TaxaImposto x = (TaxaImposto) SysFact.getData();
+                        if (x != null) {
+                            txtIDTaxa.setText(String.valueOf(x.getId()));
+                            labTaxa.setText(String.valueOf(x.getIdentificador() + ": " + (x.getPercentagem() * 100) + "%"));
+                        }
                     }
                 }
             }
@@ -224,10 +249,13 @@ public class ProdutoController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
-                    UnidadeMedida x = (UnidadeMedida) SysFact.getData();
-                    if (x != null) {
-                        txtIDUnidade.setText(String.valueOf(x.getId()));
-                        labUnidade.setText(x.getIdentificador() + ": " + x.getSigla());
+                    if (SysFact.getData() instanceof UnidadeMedida) {
+                        UnidadeMedida x = (UnidadeMedida) SysFact.getData();
+                        if (x != null) {
+                            txtIDUnidade.setText(String.valueOf(x.getId()));
+                            labUnidade.setText(x.getIdentificador() + ": " + x.getSigla());
+
+                        }
                     }
                 }
             }
@@ -236,19 +264,16 @@ public class ProdutoController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
-                    Categoria x = (Categoria) SysFact.getData();
-                    if (x != null) {
-                        txtIDCategoria.setText(String.valueOf(x.getId()));
-                        labCategoria.setText(x.getFamilia());
+                    if (SysFact.getData() instanceof Categoria) {
+                        Categoria x = (Categoria) SysFact.getData();
+                        if (x != null) {
+                            txtIDCategoria.setText(String.valueOf(x.getId()));
+                            labCategoria.setText(x.getFamilia());
+                        }
                     }
                 }
             }
         });
-    }
-
-    @FXML
-    void addProduto(ActionEvent event) {
-
     }
 
     @Override
@@ -261,6 +286,7 @@ public class ProdutoController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        estadoBTN();
     }
 
     private ObservableList<Produto> listaProduto;
@@ -286,7 +312,7 @@ public class ProdutoController implements Initializable {
         taxa.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getTaxa_imposto().getIdentificador()));
         preco.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrecovenda().getPreco())));
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrecovenda().getPreco()) + "MZN"));
         datainicio.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getPrecovenda().getData_inicio()));
         datafim.setCellValueFactory(cellData
@@ -392,33 +418,115 @@ public class ProdutoController implements Initializable {
         Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
             Produto p = mapaProdutos.get(x.getId());
-            
+
             labIDPreco.setText(String.valueOf(p.getPrecovenda().getId()));
             txtPreco.setText(String.valueOf(p.getPrecovenda().getPreco() + "0"));
-            dataInicio.setValue(LocalDate.parse(p.getPrecovenda().getData_inicio()));
-            dataFim.setValue(LocalDate.parse(p.getPrecovenda().getData_fim()));
+
+            if (p.getPrecovenda().getData_inicio() == null) {
+                dataInicio.setValue(LocalDate.now());
+            } else {
+                dataInicio.setValue(LocalDate.parse(p.getPrecovenda().getData_inicio()));
+            }
+            
+            if (p.getPrecovenda().getData_fim()== null) {
+                dataFim.setValue(LocalDate.now());
+            } else {
+                dataFim.setValue(LocalDate.parse(p.getPrecovenda().getData_fim()));
+            }
+            
+            
             checkControle.setSelected(p.isContole_stock());
-            
+
             labCategoria.setText(p.getCategoria().getFamilia());
-            labUnidade.setText(p.getUnidade_medida().getIdentificador()+": "+p.getUnidade_medida().getSigla());
-            labTaxa.setText(p.getTaxa_imposto().getIdentificador()+": "+(p.getTaxa_imposto().getPercentagem()*100)+"%");
-            
+            labUnidade.setText(p.getUnidade_medida().getIdentificador() + ": " + p.getUnidade_medida().getSigla());
+            labTaxa.setText(p.getTaxa_imposto().getIdentificador() + ": " + (p.getTaxa_imposto().getPercentagem() * 100) + "%");
+
             txtIDCategoria.setText(String.valueOf(p.getCategoria().getId()));
             txtIDUnidade.setText(String.valueOf(p.getUnidade_medida().getId()));
             txtIDTaxa.setText(String.valueOf(p.getTaxa_imposto().getId()));
-            
+
             txtIDProduto.setText(String.valueOf(p.getId()));
             txtNomeProduto.setText(p.getNome());
             txtcodigobarrasProduto.setText(p.getCodigo_barra());
             txtdescricaoProduto.setText(p.getDescricao());
+            estadoBTN();
         }
     }
+
+    public void addProduto() throws SQLException {
+        ProdutoDAO xDAO = new ProdutoDAO();
+        Serviceproduto sp = new Serviceproduto(xDAO);
+        sp.registraProduto(Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
+                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(), txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), checkControle.isSelected());
+
+        addPrecoVenda();
+        resetCampos();
+    }
+
+    public void addPrecoVenda() throws SQLException {
+        PrecoVendaDAO pvDAO = new PrecoVendaDAO();
+        ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
+        ProdutoDAO xDAO = new ProdutoDAO();
+        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
+                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+                userData, xDAO.getLastEntity());
+        showProduto();
+        resetCampos();
+    }
     
-    public void addProduto(){
+    public void addPrecoVendaONSelected() throws SQLException {
+        PrecoVendaDAO pvDAO = new PrecoVendaDAO();
+        ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
         Produto p = new Produto();
-        PrecoVenda pv = new PrecoVenda();
-        pv.setPreco(Double.parseDouble(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")));
-        p.setPrecovenda(pv);
+        p.setId(Integer.parseInt(txtIDProduto.getText()));
+        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
+                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+                userData, p);
+        showProduto();
+        resetCampos();
+    }
+
+    public void updateProduto() throws SQLException {
+        ProdutoDAO xDAO = new ProdutoDAO();
+        Serviceproduto sp = new Serviceproduto(xDAO);
+        sp.actualizaProduto(Integer.parseInt(txtIDProduto.getText()), Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
+                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(), txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText());
+
+        showProduto();
+    }
+
+    public void updatePrecoVenda() throws SQLException {
+        PrecoVendaDAO pvDAO = new PrecoVendaDAO();
+        ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
+        ProdutoDAO xDAO = new ProdutoDAO();
+        spv.actualizaPrecoVenda(Integer.parseInt(labIDPreco.getText()), Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
+                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+                userData);
+        showProduto();
+        resetCampos();
+
+    }
+
+    public void resetCampos() {
+        labIDPreco.setText("");
+        txtPreco.setText("");
+        dataInicio.setValue(LocalDate.now());
+        dataFim.setValue(LocalDate.now());
+        checkControle.setSelected(false);
+
+        labCategoria.setText("");
+        labUnidade.setText("");
+        labTaxa.setText("");
+
+        txtIDCategoria.setText("");
+        txtIDUnidade.setText("");
+        txtIDTaxa.setText("");
+
+        txtIDProduto.setText("");
+        txtNomeProduto.setText("");
+        txtcodigobarrasProduto.setText("");
+        txtdescricaoProduto.setText("");
+        estadoBTN();
     }
 
 }

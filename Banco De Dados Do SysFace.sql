@@ -221,7 +221,8 @@ create table desconto(
 );
 
 
-    
+select * from produto;
+
 create table produto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,

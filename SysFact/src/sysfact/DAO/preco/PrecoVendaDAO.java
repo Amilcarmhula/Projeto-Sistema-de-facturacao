@@ -31,8 +31,6 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
     @Override
     public void addEntity(PrecoVenda x) {
         try {
-//            sql = "insert into precovenda (preco,data_inicio, data_fim, "
-//                    + "fk_id_produto,fk_id_servico ,fk_id_usuario) value (?,?,?,?,?,?)";
             sql = "insert into precovenda (preco,data_inicio, data_fim, "
                     + "fk_id_produto ,fk_id_usuario) value (?,?,?,?,?)";
             ps = con.prepareStatement(sql);
@@ -40,7 +38,6 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
             ps.setString(2, x.getData_inicio());
             ps.setString(3, x.getData_fim());
             ps.setInt(4, x.getProduto().getId());
-//            ps.setInt(5, x.getServico().getId());
             ps.setInt(5, x.getUsuario().getId());
 
             ps.execute();
@@ -51,20 +48,16 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
     }
 
     @Override
-    public void updateEntityByID(PrecoVenda x) {
+    public void updateEntityByID(PrecoVenda x, int id) {
         try {
-//            sql = "insert into precovenda (preco,data_inicio, data_fim, "
-//                    + "fk_id_produto,fk_id_servico ,fk_id_usuario) value (?,?,?,?,?,?)";
-            sql = "update precovenda set preco=?, data_inicio=?, data_fim=?, "
-                    + "fk_id_produto=? ,fk_id_usuario=? where id=?";
+            sql = "update precovenda set preco=?,data_inicio=?, data_fim=?"
+                    + " ,fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
             ps.setDouble(1, x.getPreco());
             ps.setString(2, x.getData_inicio());
             ps.setString(3, x.getData_fim());
-            ps.setInt(4, x.getProduto().getId());
-//            ps.setInt(5, x.getServico().getId());
-            ps.setInt(5, x.getUsuario().getId());
-            ps.setInt(6, x.getId());
+            ps.setInt(4, x.getUsuario().getId());
+            ps.setInt(5, id);
 
             ps.execute();
             ps.close();

@@ -12,10 +12,13 @@ import sysfact.model.produto.Produto;
  * @author JM-Tecnologias
  */
 public interface ProdutoDAOImpl<T> {
-    ObservableList<T> getCombinedEntities();
-    
     void  addEntity(T t);
-    void updateEntityByID(T t);
+    void updateEntityByID(T t, int id);
+    ObservableList<T> getCombinedEntities();
+    T getLastEntity();
+    
+    
+    
     ObservableList<T> listAllEntities();
     ObservableList<T> listAllEntities2();
     ObservableList<T> searchEntityByCategoria(T x);

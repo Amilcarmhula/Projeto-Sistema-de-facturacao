@@ -12,7 +12,8 @@ import javafx.collections.ObservableList;
  */
 public interface PrecoVendaDAOImpl<T> {
     void  addEntity(T x);
-    void updateEntityByID(T x);
+    void updateEntityByID(T x, int id);
+    
      T getEntityByProdutoID(T x);
     void deleteEntityByUSER(T x);
 

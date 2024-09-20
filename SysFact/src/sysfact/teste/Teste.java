@@ -23,24 +23,26 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        Cliente c = new Cliente();
-        ClienteDAO cdao = new ClienteDAO();
-        ObservableList<Cliente> listaClientes = cdao.listAllEntities();
-        for (Cliente cli : listaClientes) {
-            System.out.println("ID: "+cli.getId());
-            System.out.println("Tipo: "+cli.getTipo());
-            System.out.println("Nome: " +cli.getNome());
-            System.out.println("Apelido: "+cli.getApelido());
-            System.out.println("Nuit: "+cli.getNuit());
-            List<ContactoCliente> cc = cli.getContactoCliente();
-            for (ContactoCliente contactoCliente : cc) {
-                System.out.println("Contacto: "+contactoCliente.getContacto());
-            }
-            System.out.println("______________________Cliente______________________");
-            
-
-            
-        }
+        
+        
+//        Cliente c = new Cliente();
+//        ClienteDAO cdao = new ClienteDAO();
+//        ObservableList<Cliente> listaClientes = cdao.listAllEntities();
+//        for (Cliente cli : listaClientes) {
+//            System.out.println("ID: "+cli.getId());
+//            System.out.println("Tipo: "+cli.getTipo());
+//            System.out.println("Nome: " +cli.getNome());
+//            System.out.println("Apelido: "+cli.getApelido());
+//            System.out.println("Nuit: "+cli.getNuit());
+//            List<ContactoCliente> cc = cli.getContactoCliente();
+//            for (ContactoCliente contactoCliente : cc) {
+//                System.out.println("Contacto: "+contactoCliente.getContacto());
+//            }
+//            System.out.println("______________________Cliente______________________");
+//            
+//
+//            
+//        }
         
 //        UnidadeMedida x = new UnidadeMedida();
 //        UnidadeMedidaDAO z = new UnidadeMedidaDAO();

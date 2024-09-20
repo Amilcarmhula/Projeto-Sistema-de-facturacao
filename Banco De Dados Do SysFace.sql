@@ -221,8 +221,6 @@ create table desconto(
 );
 
 
-select * from produto;
-
 create table produto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -238,24 +236,11 @@ create table produto(
     foreign key (fk_id_unidade_medida) references unidade_medida(id)
 );
 
-SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.contole_stock, 
-		c.id as id_categoria, c.familia as categoria,
-        u.id as id_unidade, u.sigla as unidade,
-        t.id as id_taxa, t.identificador as taxa,
-        pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,
-        s.saldo
-FROM produto p
-	LEFT JOIN categoria c ON c.id = p.fk_id_categoria
-    LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida
-    LEFT JOIN taxa_imposto t ON t.id = p.fk_id_taxa_imposto
-    LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id AND pv.estado=true
-    LEFT JOIN stock s ON s.fk_id_produto=p.id;
-	-- where pv.estado=true;
+
     
 
 -- CALL atualizar_estado_precovenda();
-select * from precovenda;
-select * from produto;
+
 CREATE TABLE precovenda (
     id integer PRIMARY KEY AUTO_INCREMENT,
     preco DECIMAL(10, 2) NOT NULL,
@@ -344,6 +329,8 @@ create table produto_fornecido(
 -- insert into movimento_produto (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem ) 
 -- value ('Saída','2024-09-10', 8, 2,1,1);
 
+
+
 create table movimento_produto(
 	id integer primary key auto_increment,
     tipo_movimento varchar(8) not null,
@@ -355,7 +342,7 @@ create table movimento_produto(
     foreign key (fk_id_produto) references produto(id),
 	foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_armazem) references armazem(id),
-    check (tipo_movimento in('Entrada','Saída','Ajuste'))
+    check (tipo_movimento in('Entrada','Saída'))
 );
 -- Trigger para tabela movimento_produto manter dados de movimento de ENTRADA, SAIDA ou AJUSTE de estoque
 delimiter //
@@ -367,11 +354,27 @@ create trigger trigger_registra_entrada
     end//
 delimiter ;
 
+select * from produto_fornecido;
+select * from movimento_produto;
+select * from stock;
 create table stock(
 	fk_id_produto integer primary key,
     saldo integer not null,
     foreign key(fk_id_produto) references produto(id)
 );
+
+delimiter //
+create trigger trigger_update_saldo_stock
+	after insert on movimento_produto
+    for each row
+    begin
+		update stock set  saldo=(SELECT 
+			(SUM(CASE WHEN tipo_movimento = 'Entrada' THEN quantidade ELSE 0 END) - 
+			 SUM(CASE WHEN tipo_movimento = 'Saída' THEN quantidade ELSE 0 END)) AS saldo_produto
+		FROM movimento_produto WHERE fk_id_produto=new.fk_id_produto)
+        where fk_id_produto=new.fk_id_produto;
+	end//
+delimiter;
 
 -- Trigger para tabela stock para manter os dados de estoque actualizados
 delimiter //
@@ -409,14 +412,15 @@ create table endereco_empresa(
     tipo varchar(10),
     fk_id_empresa integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_empresa) references empresa(id),
-    check (tipo in('Facturação','Envio'))
+    foreign key (fk_id_empresa) references empresa(id)
 );
 
 create table contacto_empresa(
 	id integer primary key auto_increment,
     contacto varchar(20) not null,
+    pessoa_de_contacto varchar(100),
 	email varchar(50) unique,
+    website varchar(50) unique,
     fk_id_empresa integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -424,13 +428,13 @@ create table contacto_empresa(
     foreign key (fk_id_empresa) references empresa(id)
 );
 -- id,nome_banco,numero,nib,nuib,fk_id_empresa,fk_id_usuario,data_criacao,active_or_not
-    
+
  create table contabancaria(
 	id integer primary key auto_increment,
     nome_banco varchar(50) not null,
-    numero integer,
-    nib integer,
-    nuib integer,
+    numero varchar(100),
+    nib varchar(100),
+    nuib varchar(100),
     fk_id_empresa integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

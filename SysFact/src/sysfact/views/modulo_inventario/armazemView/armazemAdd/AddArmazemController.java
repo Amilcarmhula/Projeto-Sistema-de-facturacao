@@ -127,7 +127,6 @@ public class AddArmazemController implements Initializable {
     @FXML
     private TextField txtIDEndereco;
 
-
     @FXML
     private TextField txtNuit;
 
@@ -136,7 +135,7 @@ public class AddArmazemController implements Initializable {
 
     @FXML
     private TextField txtNome;
-    
+
     @FXML
     private TextArea txtDescricao;
 
@@ -186,7 +185,7 @@ public class AddArmazemController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.userData = SysFact.getUserData();
         txtDescricao.setWrapText(true);
-        combTipoCliente.setItems(FXCollections.observableArrayList("Central", "Regional","Loga","..."));
+        combTipoCliente.setItems(FXCollections.observableArrayList("Central", "Regional", "Loga", "..."));
         combTipoEndereco.setItems(FXCollections.observableArrayList("Facturação", "Envio"));
         combProvincia.setItems(FXCollections.observableArrayList(
                 "Maputo(Cidade)",
@@ -203,7 +202,9 @@ public class AddArmazemController implements Initializable {
         )
         );
         if (SysFact.getData() != null) {
-            txtIDCliente.setText((String) SysFact.getData());
+            if (SysFact.getData() instanceof String) {
+                txtIDCliente.setText((String) SysFact.getData());
+            }
         }
 
         try {
@@ -550,8 +551,6 @@ public class AddArmazemController implements Initializable {
     /*
     Funcoes de Reset Campos
      */
-    
-
     public void resetCliente() throws SQLException {
         txtIDCliente.setText("");
         combTipoCliente.setPromptText("Tipo de cliente");
@@ -563,7 +562,7 @@ public class AddArmazemController implements Initializable {
         restContacto();
         resetEndereco();
     }
-    
+
     public void restContacto() {
         txtIDContacto.setText("");
         txtResponsavel.setText("");

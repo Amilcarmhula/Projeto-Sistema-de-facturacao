@@ -13,7 +13,9 @@ import javafx.collections.ObservableList;
  */
 public interface ProdutoFornecidoDAOImpl<T> {
     void  addEntity(T x);
-    void updateEntityByID(T x);
+    void updateEntityByID(T t, int id);
+    
+    
     ObservableList<T> listAllEntities();
     T searchEntityByName(String name);
     void deleteEntityByUSER(T x);

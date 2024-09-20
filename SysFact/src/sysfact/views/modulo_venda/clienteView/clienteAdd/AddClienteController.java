@@ -200,7 +200,9 @@ public class AddClienteController implements Initializable {
         )
         );
         if (SysFact.getData() != null) {
-            txtIDCliente.setText((String) SysFact.getData());
+            if (SysFact.getData() instanceof String) {
+                txtIDCliente.setText((String) SysFact.getData());
+            }
         }
 
         try {
@@ -553,8 +555,6 @@ public class AddClienteController implements Initializable {
     /*
     Funcoes de Reset Campos
      */
-    
-
     public void resetCliente() throws SQLException {
         txtIDCliente.setText("");
         combTipoCliente.setPromptText("Tipo de cliente");
@@ -567,7 +567,7 @@ public class AddClienteController implements Initializable {
         restContacto();
         resetEndereco();
     }
-    
+
     public void restContacto() {
         txtIDContacto.setText("");
         txtResponsavel.setText("");

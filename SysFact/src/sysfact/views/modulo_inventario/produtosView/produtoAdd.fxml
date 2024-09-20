@@ -231,6 +231,20 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
+            <Button fx:id="btn_controleStock" disable="true" layoutX="1094.0" layoutY="345.0" mnemonicParsing="false" onAction="#getStockView" prefHeight="36.0" prefWidth="126.0" stylesheets="@../../../style/dashboard.css" text="Stock" textFill="WHITE">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="20" />
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="gray-bg" />
+                  <String fx:value="Squared-border" />
+                  <String fx:value="hand-efect" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+            </Button>
          </children>
          <styleClass>
             <String fx:value="blue-bg" />

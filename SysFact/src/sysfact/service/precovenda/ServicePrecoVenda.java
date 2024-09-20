@@ -73,7 +73,6 @@ public class ServicePrecoVenda {
             showErrorDialog("Erro de validação", "Usuário não definido.");
             return;
         }
-        System.out.println("P:"+preco);
         PrecoVenda pv = new PrecoVenda();
         pv.setPreco(preco);
         pv.setData_inicio(data_inicio);

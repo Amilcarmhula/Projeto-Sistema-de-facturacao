@@ -5,7 +5,7 @@
 package sysfact.model.produto.fornecido;
 
 import sysfact.model.armazem.Armazem;
-import sysfact.model.cliente.Cliente;
+import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.produto.Produto;
 import sysfact.model.usuario.Usuario;
 
@@ -22,20 +22,19 @@ public class ProdutoFornecido {
     private double custo;
     private Armazem armazem;
     private Produto produto;
-    private Cliente agente;
+    private Fornecedor fornecedor;
     private Usuario usuario;
     private String data_criacao;
-    private boolean active_or_not;
     
     public ProdutoFornecido(){}
 
-    public ProdutoFornecido(int quantidade, String data_fornedida, double custo, Armazem armazem, Produto produto, Cliente agente, Usuario usuario) {
+    public ProdutoFornecido(int quantidade, String data_fornecida, double custo, Armazem armazem, Produto produto, Fornecedor fornecedor, Usuario usuario) {
         this.quantidade = quantidade;
-        this.data_fornecida = data_fornedida;
+        this.data_fornecida = data_fornecida;
         this.custo = custo;
         this.armazem = armazem;
         this.produto = produto;
-        this.agente = agente;
+        this.fornecedor = fornecedor;
         this.usuario = usuario;
     }
 
@@ -87,12 +86,12 @@ public class ProdutoFornecido {
         this.produto = produto;
     }
 
-    public Cliente getAgente() {
-        return agente;
+    public Fornecedor getFornecedor() {
+        return fornecedor;
     }
 
-    public void setAgente(Cliente agente) {
-        this.agente = agente;
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
     }
 
     public Usuario getUsuario() {
@@ -111,13 +110,5 @@ public class ProdutoFornecido {
         this.data_criacao = data_criacao;
     }
 
-    public boolean isActive_or_not() {
-        return active_or_not;
-    }
-
-    public void setActive_or_not(boolean active_or_not) {
-        this.active_or_not = active_or_not;
-    }
-
-   
+    
 }

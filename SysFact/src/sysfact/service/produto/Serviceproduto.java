@@ -56,7 +56,7 @@ public class Serviceproduto {
         p.setNome(nome);
         p.setCodigo_barra(codBarras);
         p.setContole_stock(controleStock);
-        p.setDescricao(descricao);
+        p.setDescricao(descricao); 
         Categoria c = new Categoria();
         c.setId(id_cat);
         p.setCategoria(c);

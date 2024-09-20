@@ -95,6 +95,9 @@ public class ProdutoController implements Initializable {
 
     @FXML
     private Button btnAddProduto;
+    
+    @FXML
+    private Button btn_controleStock;
 
     @FXML
     private CheckBox checkControle;
@@ -184,7 +187,7 @@ public class ProdutoController implements Initializable {
         txtPreco.setText(currencyFormat.format(0)); // Set initial value
 
     }
-
+    
     public void getFamiliaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             try {
@@ -198,6 +201,20 @@ public class ProdutoController implements Initializable {
                 Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public void getStockView() {
+            try {
+                Parent parente = FXMLLoader.load(getClass().getResource("../stockView/addStock.fxml"));
+                Scene scene = new Scene(parente);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.initStyle(StageStyle.TRANSPARENT);
+                stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
     }
 
     public void getUnidadeView(MouseEvent evt) {
@@ -449,6 +466,8 @@ public class ProdutoController implements Initializable {
             txtNomeProduto.setText(p.getNome());
             txtcodigobarrasProduto.setText(p.getCodigo_barra());
             txtdescricaoProduto.setText(p.getDescricao());
+            SysFact.setData(p);
+            btn_controleStock.setDisable(false);
             estadoBTN();
         }
     }
@@ -507,7 +526,7 @@ public class ProdutoController implements Initializable {
 
     }
 
-    public void resetCampos() {
+    public void resetCampos() throws SQLException {
         labIDPreco.setText("");
         txtPreco.setText("");
         dataInicio.setValue(LocalDate.now());
@@ -526,7 +545,9 @@ public class ProdutoController implements Initializable {
         txtNomeProduto.setText("");
         txtcodigobarrasProduto.setText("");
         txtdescricaoProduto.setText("");
+        btn_controleStock.setDisable(true);
         estadoBTN();
+        showProduto();
     }
 
 }

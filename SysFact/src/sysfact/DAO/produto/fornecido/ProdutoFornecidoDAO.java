@@ -15,7 +15,6 @@ import sysfact.model.armazem.Armazem;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.produto.Produto;
 import sysfact.model.produto.fornecido.ProdutoFornecido;
-import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
 
 /**
@@ -36,7 +35,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
     public void addEntity(ProdutoFornecido t) {
         try {
             sql = "insert into produto_fornecido (quantidade,data_fornecida,custo, fk_id_armazem,fk_id_produto, "
-                    + "fk_id_agente,fk_id_usuario) value (?,?,?,?,?,?,?)";
+                    + "fk_id_fornecedor,fk_id_usuario) value (?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -45,7 +44,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             ps.setDouble(3, t.getCusto());
             ps.setInt(4, t.getArmazem().getId());
             ps.setInt(5, t.getProduto().getId());
-            ps.setInt(6, t.getAgente().getId());
+            ps.setInt(6, t.getFornecedor().getId());
             ps.setInt(7, t.getUsuario().getId());
 
             ps.execute();
@@ -57,22 +56,20 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
     }
 
     @Override
-    public void updateEntityByID(ProdutoFornecido t) {
+    public void updateEntityByID(ProdutoFornecido t, int id) {
         try {
-            sql = "update produto_fornecido set quantidade=?,data_fornecida=?,"
-                    + "custo=?, fk_id_armazem=?,fk_id_produto=?,"
-                    + "fk_id_agente=?, fk_id_usuario=? where id=?";
+            sql = "update produto_fornecido set quantidade=?,data_fornecida=?,custo=?, fk_id_armazem=?, "
+                    + "fk_id_fornecedor=?,fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, t.getQuantidade());
             ps.setString(2, t.getData_fornecida());
             ps.setDouble(3, t.getCusto());
             ps.setInt(4, t.getArmazem().getId());
-            ps.setInt(5, t.getProduto().getId());
-            ps.setInt(6, t.getAgente().getId());
-            ps.setInt(7, t.getUsuario().getId());
+            ps.setInt(5, t.getFornecedor().getId());
+            ps.setInt(6, t.getUsuario().getId());
 
-            ps.setInt(8, t.getId());
+            ps.setInt(7, id);
 
             ps.execute();
             ps.close();
@@ -107,11 +104,11 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 c.setProduto(p);
                 Cliente ag = new Cliente();
                 ag.setNome(result.getString("nome_f"));
-                c.setAgente(ag);
-                c.setActive_or_not(result.getBoolean("active_or_not"));
-                if (c.isActive_or_not()) {
-                    lista.add(c);
-                }
+//                c.setAgente(ag);
+//                c.setActive_or_not(result.getBoolean("active_or_not"));
+//                if (c.isActive_or_not()) {
+//                    lista.add(c);
+//                }
             }
             result.close();
             ps.close();
@@ -144,12 +141,12 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 c.setProduto(p);
                 Cliente ag = new Cliente();
                 ag.setId(result.getInt("fk_id_agente"));
-                c.setAgente(ag);
-                Usuario u = new Usuario();
-                u.setId(result.getInt("fk_id_usuario"));
-                c.setUsuario(u);
-                c.setData_criacao(result.getString("data_criacao"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
+//                c.setAgente(ag);
+//                Usuario u = new Usuario();
+//                u.setId(result.getInt("fk_id_usuario"));
+//                c.setUsuario(u);
+//                c.setData_criacao(result.getString("data_criacao"));
+//                c.setActive_or_not(result.getBoolean("active_or_not"));
             }
             result.close();
             ps.close();

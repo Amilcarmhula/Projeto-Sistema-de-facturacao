@@ -51,6 +51,9 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btn_artigos;
+    
+    @FXML
+    private Button btn_vendas;
 
     /*Butoes do modulo de configuracao*/
     @FXML
@@ -106,6 +109,9 @@ public class MainController implements Initializable {
             anchorMain.getChildren().setAll(pane);
         } else if (e.getSource() == btn_armazem) {
             pane = FXMLLoader.load(getClass().getResource("../modulo_inventario/armazemView/armazemView.fxml"));
+            anchorMain.getChildren().setAll(pane);
+        }else if (e.getSource() == btn_vendas) {
+            pane = FXMLLoader.load(getClass().getResource("../modulo_venda/vendaView/vendasView.fxml"));
             anchorMain.getChildren().setAll(pane);
         }
     }

@@ -21,9 +21,17 @@ public class FormataDatas {
         String data = df.format(dataActual);
         return data;
     }
+    public static String invoiceNumber(){
+        Date dataActual = new Date();
+//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("MM");
+        System.out.println(df);
+//        SimpleDateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss.SSS");
+        String data = df.format(dataActual);
+        return data;
+    }
     
-//    public static void main(String[] args) {
-//        FormataDatas d = new FormataDatas();
-//        System.out.println("A data formatada: "+d.returnData());
-//    }
+    public static void main(String[] args) {
+        System.out.println("A data formatada: "+FormataDatas.invoiceNumber());
+    }
 }

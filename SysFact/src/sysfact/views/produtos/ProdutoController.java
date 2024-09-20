@@ -597,8 +597,8 @@ public class ProdutoController implements Initializable {
         produtotabelaProdutoFornecido.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
 
-        fornecedortabelaProdutoFornecido.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getAgente().getNome()));
+//        fornecedortabelaProdutoFornecido.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(cellData.getValue().getAgente().getNome()));
 
         armazemtabelaProdutoFornecido.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome()));
@@ -686,7 +686,7 @@ public class ProdutoController implements Initializable {
         pf.setArmazem(a);
         Cliente ag = new Cliente();
         ag.setId(Integer.parseInt(ps_txtIDFornecedor.getText()));
-        pf.setAgente(ag);
+//        pf.setAgente(ag);
         pf.setUsuario(userData);
         xDAO.addEntity(pf);
         showProdutoFornecido();

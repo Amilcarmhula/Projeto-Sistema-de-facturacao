@@ -338,3 +338,39 @@ VALUES ('Água Mineral 500ml', '7894321000074', 'Água mineral natural sem gás 
 INSERT INTO produto (nome, descricao, contole_stock, fk_id_categoria, fk_id_unidade_medida, fk_id_taxa_imposto)
 VALUES ('Consultoria em Segurança da Informação', 'Serviço de consultoria para implementação de políticas de segurança da informação', FALSE, 5, 1, 2);
 
+
+
+INSERT INTO precovenda (preco, data_inicio, data_fim, estado, fk_id_produto, fk_id_usuario) VALUES 
+(155.55, '2024-09-10', '2024-09-16', 1, 1, 1);
+
+INSERT INTO precovenda (preco, data_inicio, data_fim, estado, fk_id_produto, fk_id_usuario) VALUES 
+(60.00, '2024-09-17', '2024-09-18', 1, 1, 1), 
+(350.00, '2024-09-17', '2024-09-19', 1, 2, 1), 
+(35000.00, '2024-09-17', '2024-09-20', 1, 3, 1), 
+(1500.00, '2024-09-17', NULL, 1, 4, 1), 
+(5000.00, '2024-09-17', NULL, 1, 5, 1), 
+(30.00, '2024-09-17', '2024-09-21', 1, 6, 1), 
+(400.00, '2024-09-17', '2024-09-22', 1, 7, 1), 
+(45000.00, '2024-09-17', '2024-09-23', 1, 8, 1), 
+(40.00, '2024-09-17', '2024-09-24', 1, 9, 1), 
+(5000.00, '2024-09-17', '2024-09-25', 1, 10, 1), 
+(375.00, '2024-09-17', '2024-09-26', 1, 11, 1), 
+(12000.00, '2024-09-17', '2024-09-27', 1, 12, 1), 
+(800.00, '2024-09-17', NULL, 1, 13, 1), 
+(20.00, '2024-09-17', '2024-09-28', 1, 14, 1), 
+(6000.00, '2024-09-17', NULL, 1, 15, 1);
+
+
+SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.contole_stock, 
+		c.id as id_categoria, c.familia as categoria,
+        u.id as id_unidade, u.sigla as unidade,
+        t.id as id_taxa, t.identificador as taxa,
+        pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,
+        s.saldo
+FROM produto p
+	LEFT JOIN categoria c ON c.id = p.fk_id_categoria
+    LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida
+    LEFT JOIN taxa_imposto t ON t.id = p.fk_id_taxa_imposto
+    LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id AND pv.estado=true
+    LEFT JOIN stock s ON s.fk_id_produto=p.id;
+	-- where pv.estado=true;

@@ -126,7 +126,6 @@ public class AddFornecedorController implements Initializable {
     @FXML
     private TextField txtIDEndereco;
 
-
     @FXML
     private TextField txtNuit;
 
@@ -198,7 +197,9 @@ public class AddFornecedorController implements Initializable {
         )
         );
         if (SysFact.getData() != null) {
-            txtIDCliente.setText((String) SysFact.getData());
+            if (SysFact.getData() instanceof String) {
+                txtIDCliente.setText((String) SysFact.getData());
+            }
         }
 
         try {
@@ -547,8 +548,6 @@ public class AddFornecedorController implements Initializable {
     /*
     Funcoes de Reset Campos
      */
-    
-
     public void resetCliente() throws SQLException {
         txtIDCliente.setText("");
         combTipoCliente.setPromptText("Tipo de cliente");
@@ -560,7 +559,7 @@ public class AddFornecedorController implements Initializable {
         restContacto();
         resetEndereco();
     }
-    
+
     public void restContacto() {
         txtIDContacto.setText("");
         txtResponsavel.setText("");

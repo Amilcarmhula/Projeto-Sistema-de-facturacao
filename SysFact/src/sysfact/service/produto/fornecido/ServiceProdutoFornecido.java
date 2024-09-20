@@ -11,7 +11,7 @@ import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.produto.Produto;
 import sysfact.model.produto.fornecido.ProdutoFornecido;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.MenssagensDeDialogo;
+import sysfact.util.MetodosUteis;
 
 /**
  *
@@ -66,9 +66,9 @@ public class ServiceProdutoFornecido {
         pf.setCusto(custo);
         try{
             produtoFornecidoDao.addEntity(pf);
-            MenssagensDeDialogo.showInfo("Info", "Stock actualizado com sucesso.");
+            MetodosUteis.showInfo("Info", "Stock actualizado com sucesso.");
         }catch(Exception e){
-            MenssagensDeDialogo.showErro("Erro", "Erro ao adicionar/actualizar sock!");
+            MetodosUteis.showErro("Erro", "Erro ao adicionar/actualizar sock!");
         }
         
         

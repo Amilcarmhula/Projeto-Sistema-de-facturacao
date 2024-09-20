@@ -241,6 +241,7 @@ create table produto(
 
 -- CALL atualizar_estado_precovenda();
 
+
 CREATE TABLE precovenda (
     id integer PRIMARY KEY AUTO_INCREMENT,
     preco DECIMAL(10, 2) NOT NULL,
@@ -445,9 +446,7 @@ create table contacto_empresa(
 
 -- Tabelas para armazenar dados das facturacoes
 create table factura(
-	id integer primary key auto_increment,
-    tipo varchar(30) not null,
-    numero integer not null,
+    numero varchar(20) primary key,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_vencimento datetime not null,
     estado boolean default 0 not null,
@@ -460,7 +459,7 @@ create table factura(
     foreign key (fk_id_cliente) references cliente(id)
 );
 -- tipo,quantidade,preco_unitario,subtotal,fk_id_desconto,fk_id_produto,fk_id_factura,fk_id_servico,fk_id_usuario
--- drop table item_factura;
+drop table item_factura;
 create table item_factura(
 	id integer primary key auto_increment,
     quantidade decimal(10,2) not null,
@@ -475,6 +474,42 @@ create table item_factura(
     foreign key (fk_id_produto) references produto(id),
     foreign key (fk_id_factura) references factura(id)
 );
+
+DELIMITER //
+CREATE TRIGGER before_insert_item_factura
+BEFORE INSERT ON item_factura
+FOR EACH ROW
+BEGIN
+    DECLARE preco DECIMAL(10,2);
+    DECLARE percentagem_desconto DECIMAL(4,3) DEFAULT 0;
+
+    -- Obter o preço do produto da tabela precovenda com estado = 1
+    SELECT preco INTO preco
+    FROM precovenda
+    WHERE fk_id_produto = NEW.fk_id_produto AND estado = 1
+    LIMIT 1;
+
+    -- Verificar se existe um desconto associado
+    IF NEW.fk_id_desconto IS NOT NULL THEN
+        -- Obter a percentagem do desconto
+        SELECT percentagem INTO percentagem_desconto
+        FROM desconto
+        WHERE id = NEW.fk_id_desconto
+        LIMIT 1;
+        
+        -- Se a percentagem de desconto não for encontrada, usar 0
+        IF percentagem_desconto IS NULL THEN
+            SET percentagem_desconto = 0;
+        END IF;
+    END IF;
+
+    -- Calcular o subtotal aplicando o desconto se existir
+    SET NEW.subtotal = NEW.quantidade * preco * (1 - percentagem_desconto);
+END//
+DELIMITER ;
+
+
+
 
 create table metodo_pagamento(
 	id integer primary key auto_increment,

@@ -16,6 +16,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import sysfact.SysFact;
 
 /**
  * FXML Controller class
@@ -119,7 +120,12 @@ public class VendasController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        System.out.println(SysFact.getData());
+        if (SysFact.getData() == null) {
+            anchorVendas.setDisable(true);
+        }else{
+            labNumeroFactura.setText((String) SysFact.getData());
+        }
     }
 
 }

@@ -12,8 +12,8 @@ import java.util.Date;
  * @author JM-Tecnologias
  */
 public class FormataDatas {
-    
-    public String returnData(){
+
+    public String returnData() {
         Date dataActual = new Date();
 //        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -21,17 +21,36 @@ public class FormataDatas {
         String data = df.format(dataActual);
         return data;
     }
-    public static String invoiceNumber(){
+
+    public static String invoiceNumber(String tipo) {
+        String invNumber;
         Date dataActual = new Date();
-//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat df = new SimpleDateFormat("MM");
-        System.out.println(df);
-//        SimpleDateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss.SSS");
-        String data = df.format(dataActual);
-        return data;
+        SimpleDateFormat tf = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss:SSS");
+        String[] data = tf.format(dataActual).split(":");
+
+        invNumber = data[0] + "-";
+        int number = Integer.parseInt(data[1]) + Integer.parseInt(data[2])
+                + Integer.parseInt(data[3]) + Integer.parseInt(data[4])
+                + Integer.parseInt(data[5]) + Integer.parseInt(data[6]);
+        invNumber += number + "/";
+        if (tipo.equals("FR")) {
+            invNumber += 1;
+        } else if (tipo.equals("FP")) {
+            invNumber += 2;
+        }else if(tipo == null){
+            invNumber += 2;
+        }
+        return invNumber;
     }
-    
+
     public static void main(String[] args) {
-        System.out.println("A data formatada: "+FormataDatas.invoiceNumber());
+        System.out.println(FormataDatas.invoiceNumber("FP"));
+        System.out.println(FormataDatas.invoiceNumber("FP"));
+        System.out.println(FormataDatas.invoiceNumber("FP"));
+        System.out.println(FormataDatas.invoiceNumber("FP"));
+        System.out.println(FormataDatas.invoiceNumber("FP"));
+        System.out.println(FormataDatas.invoiceNumber("FP"));
+        System.out.println(FormataDatas.invoiceNumber("FP"));
+        
     }
 }

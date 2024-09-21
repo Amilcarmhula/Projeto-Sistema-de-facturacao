@@ -5,6 +5,8 @@
 package sysfact.util;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javafx.scene.control.Alert;
 
@@ -13,7 +15,16 @@ import javafx.scene.control.Alert;
  * @author JM-Tecnologias
  */
 public class MetodosUteis {
-    
+
+    public static String datePlusXcDays(int x) {
+        LocalDate currentDate = LocalDate.now(); // Get the current date
+        LocalDate futureDate = currentDate.plusDays(x); // Add the specified number of days
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = futureDate.format(df); // Format the future date
+        //        System.out.println("A data final será: " + formattedDate + " após adicionados " + x + " dias");
+        return formattedDate;
+    }
+
     public static String invoiceNumber(String tipo) {
         String invNumber;
         Date dataActual = new Date();
@@ -32,7 +43,7 @@ public class MetodosUteis {
         }
         return invNumber;
     }
-    
+
     public static void showErro(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -48,5 +59,7 @@ public class MetodosUteis {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    
+
+    public static void main(String[] args) {
+    }
 }

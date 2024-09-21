@@ -446,8 +446,9 @@ create table contacto_empresa(
 use _sysface;
 drop table factura;
 drop table itemfactura;
-drop table pagamento;
 drop table metodo_pagamento;
+drop table pagamento;
+
 
 drop trigger before_insert_itemfactura;
 
@@ -456,7 +457,7 @@ drop trigger before_insert_itemfactura;
 create table factura(
     numero varchar(20) primary key,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data_vencimento datetime not null,
+    data_vencimento date not null,
     estado boolean not null,
     fk_id_empresa integer not null,
     fk_id_cliente integer not null,

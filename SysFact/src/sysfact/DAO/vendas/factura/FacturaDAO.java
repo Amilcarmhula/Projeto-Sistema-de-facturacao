@@ -31,22 +31,21 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     @Override
     public void addEntity(Factura t) {
         try {
-            sql = "insert into factura (tipo,numero,data_vencimento,total,"
-                    + "fk_id_empresa,fk_id_agente,fk_id_usuario)"
-                    + " value (?,?,?,?,?,?,?)";
+            sql = "insert into factura (numero,data_vencimento, estado,"
+                    + "fk_id_empresa,fk_id_cliente,fk_id_usuario)"
+                    + " value (?,?,?,?,?,?)";
             ps = con.prepareStatement(sql);
-//            ps.setString(1, t.getTipo());
-//            ps.setLong(2, t.getNumero());
-//            ps.setString(3, t.getData_vencimento());
-//            ps.setDouble(4, t.getTotal());
-//            ps.setInt(5, t.getFk_id_empresa());
-//            ps.setInt(6, t.getFk_id_agente());
-//            ps.setInt(7, t.getFk_id_usuario());
+            ps.setString(1, t.getNumero());
+            ps.setString(2, t.getData_vencimento());
+            ps.setBoolean(3, t.isEstado());
+            ps.setInt(4, t.getEmpresa().getId());
+            ps.setInt(5, t.getCliente().getId());
+            ps.setInt(6, t.getUsuario().getId());
 
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Factura: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao criar Factura: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
 //

@@ -443,6 +443,14 @@ create table contacto_empresa(
     foreign key (fk_id_empresa) references empresa(id)
 );
 
+use _sysface;
+drop table factura;
+drop table item_factura;
+drop table pagamento;
+drop table metodo_pagamento;
+
+drop trigger before_insert_item_factura;
+
 
 -- Tabelas para armazenar dados das facturacoes
 create table factura(
@@ -450,7 +458,6 @@ create table factura(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_vencimento datetime not null,
     estado boolean default 0 not null,
-    total decimal(10,2) not null,
     fk_id_empresa integer not null,
     fk_id_cliente integer not null,
     fk_id_usuario integer not null,
@@ -458,26 +465,27 @@ create table factura(
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_cliente) references cliente(id)
 );
--- tipo,quantidade,preco_unitario,subtotal,fk_id_desconto,fk_id_produto,fk_id_factura,fk_id_servico,fk_id_usuario
-drop table item_factura;
-create table item_factura(
+
+
+create table itemfactura(
 	id integer primary key auto_increment,
     quantidade decimal(10,2) not null,
     subtotal decimal(10,2) not null,
     fk_id_desconto integer,
     fk_id_produto integer not null,
-    fk_id_factura integer not null,
+    fk_numero varchar(20) not null,
     fk_id_usuario integer not null,
     data_adicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_desconto) references desconto(id),
     foreign key (fk_id_produto) references produto(id),
-    foreign key (fk_id_factura) references factura(id)
+    foreign key (fk_numero) references factura(numero)
 );
 
+
 DELIMITER //
-CREATE TRIGGER before_insert_item_factura
-BEFORE INSERT ON item_factura
+CREATE TRIGGER before_insert_itemfactura
+BEFORE INSERT ON itemfactura
 FOR EACH ROW
 BEGIN
     DECLARE preco DECIMAL(10,2);
@@ -509,8 +517,6 @@ END//
 DELIMITER ;
 
 
-
-
 create table metodo_pagamento(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -524,11 +530,11 @@ create table pagamento(
     referencia_numero_fatura integer not null,
     valor decimal(10,2) not null,
     fk_id_metodo_pagamento integer not null,
-    fk_id_factura integer not null,
+    fk_numero varchar(20) not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_metodo_pagamento) references metodo_pagamento(id),
-    foreign key (fk_id_factura) references factura(id)
+    foreign key (fk_numero) references factura(numero)
 );
 

@@ -4,9 +4,11 @@
  */
 package sysfact.model.vendas.factura;
 
+import java.util.List;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.empresa.Empresa;
 import sysfact.model.usuario.Usuario;
+import sysfact.model.vendas.factura.itens.Item;
 
 
 /**
@@ -15,70 +17,33 @@ import sysfact.model.usuario.Usuario;
  */
 public class Factura {
 
-    private int id;
-    private String tipo;
-    private long numero;
-    private boolean estado;
-    private double total;
+    private String numero;
     private String data_criacao;
     private String data_vencimento;
+    private List<Item> itens;
+    private boolean estado;
     private Empresa empresa;
-    private Cliente agente;
+    private Cliente cliente;
     private Usuario usuario;
-    private boolean active_or_not;
 
     public Factura() {
     }
 
-    public Factura(String tipo, long numero, boolean estado, double total, String data_vencimento, Empresa empresa, Cliente agente, Usuario usuario) {
-        this.tipo = tipo;
+    public Factura(String numero, String data_vencimento, List<Item> itens, boolean estado, Empresa empresa, Cliente cliente) {
         this.numero = numero;
-        this.estado = estado;
-        this.total = total;
         this.data_vencimento = data_vencimento;
+        this.itens = itens;
+        this.estado = estado;
         this.empresa = empresa;
-        this.agente = agente;
-        this.usuario = usuario;
+        this.cliente = cliente;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public long getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(long numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
-    }
-
-    public boolean isEstado() {
-        return estado;
-    }
-
-    public void setEstado(boolean estado) {
-        this.estado = estado;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
     }
 
     public String getData_criacao() {
@@ -97,6 +62,22 @@ public class Factura {
         this.data_vencimento = data_vencimento;
     }
 
+    public List<Item> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<Item> itens) {
+        this.itens = itens;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
     public Empresa getEmpresa() {
         return empresa;
     }
@@ -105,12 +86,12 @@ public class Factura {
         this.empresa = empresa;
     }
 
-    public Cliente getAgente() {
-        return agente;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setAgente(Cliente agente) {
-        this.agente = agente;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public Usuario getUsuario() {
@@ -120,15 +101,5 @@ public class Factura {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
-    public boolean isActive_or_not() {
-        return active_or_not;
-    }
-
-    public void setActive_or_not(boolean active_or_not) {
-        this.active_or_not = active_or_not;
-    }
-
-    
    
 }

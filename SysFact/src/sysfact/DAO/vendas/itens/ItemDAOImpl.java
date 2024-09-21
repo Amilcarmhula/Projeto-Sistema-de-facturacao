@@ -11,12 +11,12 @@ import java.util.List;
  * @author JM-Tecnologias
  */
 public interface ItemDAOImpl<T> {
-    void  addEntity(List<T> t);
-    void updateEntityByID(T t, int id);
-    List<T> listAllEntities();
-    T searchEntityByName(String name);
-    void deleteEntityByROOT(int id);
-    void deleteEntityByUSER(int id);
+//    void  addEntity(List<T> t);
+//    void updateEntityByID(T t, int id);
+//    List<T> listAllEntities();
+//    T searchEntityByName(String name);
+//    void deleteEntityByROOT(int id);
+//    void deleteEntityByUSER(int id);
 
 //    List<T> searchListEntityByName(String name);
 

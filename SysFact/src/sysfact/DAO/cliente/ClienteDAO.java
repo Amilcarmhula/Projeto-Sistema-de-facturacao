@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
+import sysfact.model.cliente.endereco.EnderecoCliente;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
 
@@ -100,7 +101,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                     }
                 }
 
-                c.setContactoCliente(listaContactos);
+                c.setContactosCliente(listaContactos);
                 lista.add(c);
             }
             result.close();
@@ -111,7 +112,70 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         }
         return lista;
     }
-    
+
+    @Override
+    public ObservableList<Cliente> listAllForSearch() {
+        ObservableList<Cliente> lista = FXCollections.observableArrayList();
+        try {
+            sql = "SELECT c.id,c.tipo,c.nome,c.apelido as razaosocial,c.nuit,"
+                    + "GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR ' ') AS contatos, "
+                    + "ct.email as email, "
+                    + "GROUP_CONCAT(DISTINCT CONCAT(e.id, '- ', e.avenida, '- ',e.rua, '- ',e.numero, '- ',e.bairro, '- ',e.cidade, '- ',e.provincia, '- ',e.codigo_postal )) AS endereco "
+                    + "FROM cliente c "
+                    + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id "
+                    + "LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id AND e.tipo = 'Facturação' "
+                    + "GROUP BY c.id, c.nome, c.apelido, c.nuit";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                Cliente c = new Cliente();
+                c.setId(result.getInt("id"));
+                c.setTipo(result.getString("tipo"));
+                c.setNome(result.getString("nome"));
+                c.setApelido(result.getString("razaosocial"));
+                c.setNuit(result.getInt("nuit"));
+                ContactoCliente cont = new ContactoCliente();
+                cont.setEmail(result.getString("email"));
+                c.setContactoCliente(cont);
+               
+                List<ContactoCliente> listaContactos = new ArrayList<>();
+                String contactos = result.getString("contatos");
+                if (contactos != null && !contactos.trim().isEmpty()) {
+                    for (String split : contactos.split(" ")) {
+                        ContactoCliente cc = new ContactoCliente();
+                        cc.setContacto(split);
+                        listaContactos.add(cc);
+                    }
+                }
+                c.setContactosCliente(listaContactos);
+
+//                List<EnderecoCliente> listaEnderecos = new ArrayList<>();
+                String enderecos = result.getString("endereco");
+                EnderecoCliente end = null;
+                if (enderecos != null && !enderecos.trim().isEmpty()) {
+                    String[] split = enderecos.split("- ");
+                    end = new EnderecoCliente();
+                    end.setId(Integer.parseInt(split[0]));
+                    end.setAvenida(split[1]);
+                    end.setRua(split[2]);
+                    end.setNumero(Integer.parseInt(split[3]));
+                    end.setBairro(split[4]);
+                    end.setCidade(split[5]);
+                    end.setProvincia(split[6]);
+                    end.setCodigoPostal(Integer.parseInt(split[7]));
+                }
+                c.setEnderecoCliente(end);
+                lista.add(c);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+
+        }
+        return lista;
+    }
+
     @Override
     public Cliente getLastEntity() {
         Cliente c = null;
@@ -135,7 +199,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         }
         return c;
     }
-    
+
     @Override
     public Cliente getEntityByID(int id) {
         Cliente c = null;
@@ -160,7 +224,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         }
         return c;
     }
-    
+
     @Override
     public void deleteEntity(int x) {
         try {
@@ -176,38 +240,4 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         }
     }
 
-    
-    
-    
-    
-    
-    
-    @Override
-    public ObservableList<Cliente> listAllEntitiesTypeFornecedor() {
-        ObservableList<Cliente> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from cliente";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                Cliente c = new Cliente();
-                c.setId(result.getInt("id"));
-                c.setTipo(result.getString("tipo"));
-                c.setApelido(result.getString("apelido"));
-                c.setData_criacao(result.getString("data_criacao"));
-                c.setNome(result.getString("nome"));
-                c.setNuit(result.getInt("nuit"));
-                Usuario u = new Usuario();
-                u.setId(result.getInt("fk_id_usuario"));
-                c.setUsuario(u);
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
-
-        }
-        return lista;
-    }
-    
 }

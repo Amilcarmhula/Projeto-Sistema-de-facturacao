@@ -23,21 +23,23 @@ public class Cliente {
     private String apelido;
     private int nuit;
     private String data_criacao;
-    private List<ContactoCliente> contactoCliente;
-    private List<EnderecoCliente> enderecoCliente;
+    private List<ContactoCliente> contactosCliente;
+    private List<EnderecoCliente> enderecosCliente;
+    private ContactoCliente contactoCliente;
+    private EnderecoCliente enderecoCliente;
     private Usuario usuario;
     
 
     public Cliente() {
     }
 
-    public Cliente(String tipo, String nome, String apelido, int nuit, List<ContactoCliente> contactoCliente, List<EnderecoCliente> enderecoCliente, Usuario usuario) {
+    public Cliente(String tipo, String nome, String apelido, int nuit, List<ContactoCliente> contactosCliente, List<EnderecoCliente> enderecosCliente, Usuario usuario) {
         this.tipo = tipo;
         this.nome = nome;
         this.apelido = apelido;
         this.nuit = nuit;
-        this.contactoCliente = contactoCliente;
-        this.enderecoCliente = enderecoCliente;
+        this.contactosCliente = contactosCliente;
+        this.enderecosCliente = enderecosCliente;
         this.usuario = usuario;
     }
 
@@ -91,31 +93,62 @@ public class Cliente {
         this.data_criacao = data_criacao;
     }
 
-    public List<ContactoCliente> getContactoCliente() {
+    public List<ContactoCliente> getContactosCliente() {
+        return contactosCliente;
+    }
+
+    public void setContactosCliente(List<ContactoCliente> contactosCliente) {
+        this.contactosCliente = contactosCliente;
+    }
+
+    public List<EnderecoCliente> getEnderecosCliente() {
+        return enderecosCliente;
+    }
+
+    public void setEnderecosCliente(List<EnderecoCliente> enderecosCliente) {
+        this.enderecosCliente = enderecosCliente;
+    }
+
+    public ContactoCliente getContactoCliente() {
         return contactoCliente;
     }
+
+    public void setContactoCliente(ContactoCliente contactoCliente) {
+        this.contactoCliente = contactoCliente;
+    }
+
+    public EnderecoCliente getEnderecoCliente() {
+        return enderecoCliente;
+    }
+
+    public void setEnderecoCliente(EnderecoCliente enderecoCliente) {
+        this.enderecoCliente = enderecoCliente;
+    }
+
+    
     
     public String printContatos(){
         String contacto = "";
-        if(contactoCliente != null){
-            for (ContactoCliente c : contactoCliente) {
-                contacto += c.getContacto() + ";   ";
+        if(contactosCliente != null){
+            for (ContactoCliente c : contactosCliente) {
+                contacto += c.getContacto() + "; ";
             }
         }
         return contacto;
     }
-
-    public void setContactoCliente(List<ContactoCliente> contactoCliente) {
-        this.contactoCliente = contactoCliente;
+    
+    public String printEnderecos(){
+        String endereco = "";
+        if(enderecoCliente != null){
+            endereco = enderecoCliente.getAvenida()+", "+enderecoCliente.getRua()+
+                    ", "+enderecoCliente.getNumero()+"; "+enderecoCliente.getBairro()
+                    +", "+enderecoCliente.getCidade()+", "+enderecoCliente.getProvincia()
+                    +"-"+enderecoCliente.getCodigoPostal();
+        }
+        return endereco;
     }
 
-    public List<EnderecoCliente> getEnderecoCliente() {
-        return enderecoCliente;
-    }
-
-    public void setEnderecoCliente(List<EnderecoCliente> enderecoCliente) {
-        this.enderecoCliente = enderecoCliente;
-    }
+   
     
 
     public Usuario getUsuario() {

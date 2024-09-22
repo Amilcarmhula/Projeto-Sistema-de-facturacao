@@ -2,7 +2,6 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -305,61 +304,57 @@
                               <Font name="System Bold" size="34.0" />
                            </font>
                         </Label>
-                        <Label layoutX="980.0" layoutY="6.0" text="FACTURA N°" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="26.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labNumeroFactura" layoutX="1191.0" layoutY="6.0" text="000000000000" textFill="WHITE" AnchorPane.rightAnchor="50.0">
-                           <font>
-                              <Font name="System Bold" size="26.0" />
-                           </font>
-                        </Label>
                      </children>
                   </AnchorPane>
-                  <TextField fx:id="txtEnderecoCliente" alignment="CENTER" disable="true" layoutX="100.0" layoutY="111.0" prefHeight="30.0" prefWidth="322.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtEnderecoCliente" alignment="CENTER" disable="true" layoutX="273.0" layoutY="106.0" prefHeight="25.0" prefWidth="451.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <FontAwesomeIconView fill="#4a56e1b8" glyphName="SHOPPING_CART" layoutX="853.0" layoutY="131.0" size="90" />
-                  <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="962.0" layoutY="71.0" prefHeight="73.0" prefWidth="340.0" text="0.00">
-                     <font>
-                        <Font name="System Bold" size="50.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="1308.0" layoutY="71.0" text="MT">
-                     <font>
-                        <Font name="System Bold" size="47.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="contaItensCarrinho" layoutX="918.0" layoutY="65.0" mnemonicParsing="false" stylesheets="@../../style/dashboard.css" text="0" textFill="WHITE">
+                  <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="1170.0" layoutY="105.0" prefHeight="27.0" prefWidth="99.0" text="Valido Ate:">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
-                     <styleClass>
-                        <String fx:value="rounded-btn" />
-                        <String fx:value="red-bg" />
-                     </styleClass>
-                  </Button>
-                  <Button fx:id="btnAddCliente" alignment="BOTTOM_CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="79.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="66.0" stylesheets="@../../style/dashboard.css" text="Cliente" textAlignment="CENTER" textFill="WHITE">
+                  </Label>
+                  <TextField fx:id="txtNomeCLiente" alignment="CENTER" disable="true" layoutX="273.0" layoutY="71.0" prefHeight="25.0" prefWidth="285.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="System Bold" size="12.0" />
                      </font>
-                     <styleClass>
-                        <String fx:value="Squared-border" />
-                        <String fx:value="shadow-efect" />
-                        <String fx:value="hand-efect" />
-                        <String fx:value="gray-bg" />
-                     </styleClass>
-                     <cursor>
-                        <Cursor fx:constant="DEFAULT" />
-                     </cursor>
-                  </Button>
-                  <FontAwesomeIconView fill="RED" glyphName="USER_PLUS" layoutX="36.0" layoutY="102.0" size="20" />
-                  <TextField fx:id="txtNomeCLiente" alignment="CENTER" disable="true" layoutX="100.0" layoutY="71.0" prefHeight="30.0" prefWidth="322.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  </TextField>
+                  <TextField fx:id="txtNomeCLiente1" alignment="CENTER" disable="true" layoutX="564.0" layoutY="71.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="txtNomeCLiente11" alignment="CENTER" disable="true" layoutX="732.0" layoutY="106.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="txtNomeCLiente13" alignment="CENTER" disable="true" layoutX="700.0" layoutY="71.0" prefHeight="25.0" prefWidth="221.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </TextField>
+                  <ComboBox fx:id="combTipoFactura" layoutX="14.0" layoutY="102.0" onAction="#selecionaFactura" prefWidth="150.0" />
+                  <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutX="20.0" layoutY="68.0" prefHeight="27.0" prefWidth="139.0" text="Tipo de Factura:">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="998.0" layoutY="62.0" text="FACTURA N°" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="26.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="labNumeroFactura" layoutX="1170.0" layoutY="62.0" text="000000000000" textFill="WHITE" AnchorPane.rightAnchor="61.0">
+                     <font>
+                        <Font name="System Bold" size="26.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtIDCliente" alignment="CENTER" layoutX="178.0" layoutY="71.0" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="25.0" prefWidth="84.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
                </children>

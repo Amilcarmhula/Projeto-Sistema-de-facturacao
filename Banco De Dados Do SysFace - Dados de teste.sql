@@ -1,6 +1,49 @@
 use _sysface;
 
 
+
+SELECT c.id,c.tipo,c.nome,c.apelido as razaosocial,c.nuit, 
+                    GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos,
+                    GROUP_CONCAT(DISTINCT CONCAT(e.id,'-', e.avenida, '-',e.rua, '-',e.numero, '-',e.bairro, '-',e.cidade, '-',e.provincia, '-',e.codigo_postal)) AS endereco,
+                    ct.email as email
+                    FROM cliente c 
+                    LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id 
+					LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id AND e.tipo = 'Envio' 
+                    GROUP BY c.id, c.nome, c.apelido, c.nuit;
+                    
+select * from endereco_cliente; 
+update endereco_cliente set tipo='Envio' where id=20; 
+                    
+                    
+SELECT 
+    c.id,
+    c.tipo,
+    c.nome,
+    c.apelido AS razaosocial,
+    c.nuit,
+    GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR ' ') AS contatos,
+    GROUP_CONCAT(
+        DISTINCT CONCAT(
+            e.avenida, ' ', 
+            e.rua, ' ', 
+            e.numero, ' ', 
+            e.bairro, ', ', 
+            e.cidade, ', ', 
+            e.provincia, ' ', 
+            e.codigo_postal
+        ) SEPARATOR ', '
+    ) AS endereco
+FROM 
+    cliente c
+LEFT JOIN 
+    contacto_cliente ct ON ct.fk_id_cliente = c.id
+LEFT JOIN 
+    endereco_cliente e ON e.fk_id_cliente = c.id 
+    AND e.tipo = 'Facturação' -- Filtrando pelo tipo de endereço aqui
+GROUP BY 
+    c.id, c.nome, c.apelido, c.nuit;
+
+
  -- select * from agente inner join contacto_agente on agente.id=contacto_agente.fk_id_agente;
 -- select contacto, email, contacto_agente.data_criacao from contacto_agente inner join agente on agente.id=contacto_agente.fk_id_agente;
 -- select * from contacto_agente where fk_id_agente=2;
@@ -374,3 +417,35 @@ FROM produto p
     LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id AND pv.estado=true
     LEFT JOIN stock s ON s.fk_id_produto=p.id;
 	-- where pv.estado=true;
+    
+    INSERT INTO empresa (nome, apelido, nuit) VALUES
+('Tech Solutions', 'Lda', 123456789),
+('Smart Innovations', 'SA', 987654321),
+('MZ Technologies', 'Corp', 456789123),
+('Global Services', 'Ltd', 654321987),
+('Innovate Africa', 'SARL', 321987654);
+
+INSERT INTO endereco_empresa (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_empresa) VALUES
+('Maputo', 'Maputo', 'Coop', '24 de Julho', 'Rua 12', 1100, 15, 'Facturação', 1),
+('Nampula', 'Nampula', 'Namutequeliua', 'Independência', 'Rua 5', 3100, 22, 'Envio', 2),
+('Sofala', 'Beira', 'Chaimite', 'Samora Machel', 'Rua 9', 2100, 10, 'Facturação', 3),
+('Gaza', 'Xai-Xai', 'Centro', 'Eduardo Mondlane', 'Rua 2', 1200, 5, 'Envio', 4),
+('Tete', 'Tete', 'Matundo', 'Julius Nyerere', 'Rua 1', 4100, 7, 'Facturação', 5);
+
+INSERT INTO contacto_empresa (contacto, email, fk_id_empresa, fk_id_usuario) VALUES
+('841234567', 'info@techsolutions.com', 1, 1),
+('842345678', 'contact@smartinnovations.com', 2, 1),
+('843456789', 'support@mztechnologies.com', 3, 1),
+('844567890', 'sales@globalservices.com', 4, 1),
+('845678901', 'info@innovateafrica.com', 5, 1);
+
+INSERT INTO contabancaria (nome_banco, numero, nib, nuib, fk_id_empresa, fk_id_usuario) VALUES
+('Banco Comercial e de Investimentos', '12345678', '12345678901234567890', '123456789', 1, 1),
+('Millennium BIM', '87654321', '98765432109876543210', '987654321', 2, 1),
+('Standard Bank', '11223344', '12344321123443211234', '123443211', 3, 1),
+('Moza Banco', '44332211', '43211234432112344321', '432112344', 4, 1),
+('Banco Único', '55667788', '98767898765432109876', '987654321', 5, 1);
+
+
+
+

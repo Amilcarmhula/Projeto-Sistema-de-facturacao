@@ -13,8 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -35,6 +37,7 @@ import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController;
 
 /**
  * FXML Controller class
@@ -51,8 +54,6 @@ public class AddClienteController implements Initializable {
     private Button btnAddContacto;
     @FXML
     private Button btnAddEndereco;
-    @FXML
-    private Button btnClose;
 
     @FXML
     private ComboBox<String> combProvincia;
@@ -147,10 +148,15 @@ public class AddClienteController implements Initializable {
     @FXML
     private TextField txtSite;
 
-    public void close() {
-//        System.exit(0);
-        Stage stage = (Stage) btnClose.getScene().getWindow();
-        stage.close();
+    public void close(ActionEvent event) {
+        if (ClienteSearchController.returnToMain()) {
+            ClienteSearchController.setX(false);
+            ClienteSearchController.setMainStage(null);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+            
+        } else {
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+        }
     }
 
     public void addORupdateContacto() throws SQLException {

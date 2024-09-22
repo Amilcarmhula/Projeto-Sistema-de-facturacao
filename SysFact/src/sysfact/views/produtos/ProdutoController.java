@@ -488,7 +488,7 @@ public class ProdutoController implements Initializable {
     public void showFornecedores() throws SQLException {
 
         ClienteDAO aDAO = new ClienteDAO();
-        listaAgentes = aDAO.listAllEntitiesTypeFornecedor();
+//        listaAgentes = aDAO.listAllEntitiesTypeFornecedor();
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
         nometabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nome"));

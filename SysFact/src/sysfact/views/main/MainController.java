@@ -116,46 +116,46 @@ public class MainController implements Initializable {
             pane = FXMLLoader.load(getClass().getResource("../modulo_inventario/armazemView/armazemView.fxml"));
             anchorMain.getChildren().setAll(pane);
         } else if (e.getSource() == btn_vendas) {
-            // Criando o diálogo personalizado
-            Dialog<String> dialog = new Dialog<>();
-            dialog.setTitle("Caixa de seleção");
-            dialog.setHeaderText("Por favor, selecione o tipo de factura:");
-
-            // Configurando o botão OK/Cancelar
-            ButtonType okButtonType = new ButtonType("OK", ButtonType.OK.getButtonData());
-            dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
-
-            // Criando o ComboBox e adicionando opções
-            ComboBox<String> comboBox = new ComboBox<>();
-            comboBox.getItems().addAll("Factura Recibo", "Factura Proforma");
-            comboBox.setPromptText("Selecione uma factura");
-
-            // Adicionando o ComboBox ao layout do diálogo
-            VBox content = new VBox();
-            content.setSpacing(10);
-            content.getChildren().addAll(new Label("Opções:"), comboBox);
-            dialog.getDialogPane().setContent(content);
-
-            // Habilitando o botão OK somente se uma opção for selecionada
-            dialog.getDialogPane().lookupButton(okButtonType).setDisable(true);
-            comboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-                dialog.getDialogPane().lookupButton(okButtonType).setDisable(newValue == null);
-            });
-
-            // Processando a resposta do usuário
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == okButtonType) {
-                    return comboBox.getValue();
-                }
-                return null;
-            });
-
-            // Exibindo o diálogo e capturando o resultado
-            Optional<String> result = dialog.showAndWait();
-            result.ifPresent(selectedOption -> {
-                SysFact.setData(MetodosUteis.invoiceNumber(selectedOption));
-//            System.out.println("Opção selecionada: " + selectedOption);
-            });
+//            // Criando o diálogo personalizado
+//            Dialog<String> dialog = new Dialog<>();
+//            dialog.setTitle("Caixa de seleção");
+//            dialog.setHeaderText("Por favor, selecione o tipo de factura:");
+//
+//            // Configurando o botão OK/Cancelar
+//            ButtonType okButtonType = new ButtonType("OK", ButtonType.OK.getButtonData());
+//            dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+//
+//            // Criando o ComboBox e adicionando opções
+//            ComboBox<String> comboBox = new ComboBox<>();
+//            comboBox.getItems().addAll("Factura Recibo", "Factura Proforma");
+//            comboBox.setPromptText("Selecione uma factura");
+//
+//            // Adicionando o ComboBox ao layout do diálogo
+//            VBox content = new VBox();
+//            content.setSpacing(10);
+//            content.getChildren().addAll(new Label("Opções:"), comboBox);
+//            dialog.getDialogPane().setContent(content);
+//
+//            // Habilitando o botão OK somente se uma opção for selecionada
+//            dialog.getDialogPane().lookupButton(okButtonType).setDisable(true);
+//            comboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+//                dialog.getDialogPane().lookupButton(okButtonType).setDisable(newValue == null);
+//            });
+//
+//            // Processando a resposta do usuário
+//            dialog.setResultConverter(dialogButton -> {
+//                if (dialogButton == okButtonType) {
+//                    return comboBox.getValue();
+//                }
+//                return null;
+//            });
+//
+//            // Exibindo o diálogo e capturando o resultado
+//            Optional<String> result = dialog.showAndWait();
+//            result.ifPresent(selectedOption -> {
+//                SysFact.setData(MetodosUteis.invoiceNumber(selectedOption));
+////            System.out.println("Opção selecionada: " + selectedOption);
+//            });
             pane = FXMLLoader.load(getClass().getResource("../modulo_venda/vendaView/vendasView.fxml"));
             anchorMain.getChildren().setAll(pane);
 

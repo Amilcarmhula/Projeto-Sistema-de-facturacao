@@ -6,6 +6,7 @@ package sysfact.views.modulo_venda.vendaView;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +32,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sysfact.SysFact;
+import sysfact.dao.cliente.ClienteDAO;
+import sysfact.model.cliente.Cliente;
 import sysfact.util.MetodosUteis;
 
 /**
@@ -116,12 +119,6 @@ public class VendasController implements Initializable {
     private TextArea txtDescricaoProdutoServico;
 
     @FXML
-    private TextField txtEnderecoCliente;
-
-    @FXML
-    private TextField txtNomeCLiente;
-
-    @FXML
     private TextField txtPesquisaProdutoServico;
 
     @FXML
@@ -130,7 +127,22 @@ public class VendasController implements Initializable {
     @FXML
     private TextField txtTrocos;
     @FXML
+    private Label labValidade;
+    @FXML
+    private Label labDataInicial;
+
+    @FXML
     private TextField txtIDCliente;
+    @FXML
+    private TextField txtEnderecoCliente;
+    @FXML
+    private TextField txtNomeCLiente;
+    @FXML
+    private TextField txtNuitCLiente;
+    @FXML
+    private TextField txtContactoCLiente;
+    @FXML
+    private TextField txtEmailCLiente;
 
     @FXML
     private TextField txtValor;
@@ -152,18 +164,35 @@ public class VendasController implements Initializable {
             }
         }
     }
-    
-    public void getSearchClienteKEY(KeyEvent keyEvt) {
+
+    public void getSearchClienteKEY(KeyEvent keyEvt) throws SQLException {
         if (keyEvt.getCode().equals(KeyCode.ENTER)) {
-            System.out.println("YES");
+            ClienteDAO xDAO = new ClienteDAO();
+            Cliente x = xDAO.getClieneByID(Integer.parseInt(txtIDCliente.getText()));
+            if (x != null) {
+                txtIDCliente.setText(x.getId()+"");
+                txtEnderecoCliente.setText(x.printEnderecos());
+                txtNomeCLiente.setText(x.getApelido());
+                txtNuitCLiente.setText(x.getNuit()+"");
+                txtContactoCLiente.setText(x.printContatos());
+                txtEmailCLiente.setText(x.getContactoCliente().getEmail());
+            }
+
         }
     }
+
     public void selecionaFactura() {
-        labNumeroFactura.setText(MetodosUteis.invoiceNumber(combTipoFactura.getValue()));
+        labNumeroFactura.setText(MetodosUteis.invoiceNumber(combTipoFactura.getSelectionModel().getSelectedItem()));
+        if(combTipoFactura.getValue().equals("Factura Recibo")){
+            labValidade.setText(MetodosUteis.datePlusXDays(0));
+        }else if(combTipoFactura.getValue().equals("Factura Proforma")){
+            labValidade.setText(MetodosUteis.datePlusXDays(7));
+        }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        labDataInicial.setText("De: "+MetodosUteis.actualDate());
         combTipoFactura.setItems(FXCollections.observableArrayList(
                 "Factura Recibo", "Factura Proforma"
         ));

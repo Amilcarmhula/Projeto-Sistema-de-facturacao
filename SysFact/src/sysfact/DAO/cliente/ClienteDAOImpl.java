@@ -5,6 +5,7 @@
 package sysfact.dao.cliente;
 
 import javafx.collections.ObservableList;
+import sysfact.model.cliente.Cliente;
 
 /**
  *
@@ -22,6 +23,7 @@ public interface ClienteDAOImpl<T> {
 
     ObservableList<T> listAllEntities();
     ObservableList<T> listAllForSearch();
+    T getClieneByID(int id);
 
 //    ObservableList<T> listAllEntitiesTypeFornecedor();
 //    void deleteEntityByROOT(int id);

@@ -286,11 +286,7 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="147.0" prefWidth="1409.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-               <styleClass>
-                  <String fx:value="Squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
+            <AnchorPane prefHeight="147.0" prefWidth="1409.0" styleClass="Squared-border" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <AnchorPane layoutX="652.0" layoutY="7.0" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <styleClass>
@@ -311,7 +307,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="1170.0" layoutY="105.0" prefHeight="27.0" prefWidth="99.0" text="Valido Ate:">
+                  <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="1153.0" layoutY="105.0" prefHeight="27.0" prefWidth="99.0" text="Valido Ate:">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -321,17 +317,17 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="txtNomeCLiente1" alignment="CENTER" disable="true" layoutX="564.0" layoutY="71.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtNuitCLiente" alignment="CENTER" disable="true" layoutX="564.0" layoutY="71.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="txtNomeCLiente11" alignment="CENTER" disable="true" layoutX="732.0" layoutY="106.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtEmailCLiente" alignment="CENTER" disable="true" layoutX="732.0" layoutY="106.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="txtNomeCLiente13" alignment="CENTER" disable="true" layoutX="700.0" layoutY="71.0" prefHeight="25.0" prefWidth="221.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtContactoCLiente" alignment="CENTER" disable="true" layoutX="700.0" layoutY="71.0" prefHeight="25.0" prefWidth="265.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -342,12 +338,12 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="998.0" layoutY="62.0" text="FACTURA N°" textFill="WHITE">
+                  <Label layoutX="1007.0" layoutY="62.0" text="FACTURA N°" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="26.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labNumeroFactura" layoutX="1170.0" layoutY="62.0" text="000000000000" textFill="WHITE" AnchorPane.rightAnchor="61.0">
+                  <Label fx:id="labNumeroFactura" layoutX="1170.0" layoutY="62.0" prefHeight="38.0" prefWidth="180.0" textFill="WHITE" AnchorPane.rightAnchor="61.0">
                      <font>
                         <Font name="System Bold" size="26.0" />
                      </font>
@@ -357,6 +353,16 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
+                  <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1260.0" layoutY="105.0" prefHeight="27.0" prefWidth="99.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="labDataInicial" alignment="CENTER_RIGHT" layoutX="1007.0" layoutY="105.0" prefHeight="27.0" prefWidth="139.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
             <TableView fx:id="tabelaItens" layoutX="26.0" layoutY="163.0" prefHeight="579.0" prefWidth="945.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0">

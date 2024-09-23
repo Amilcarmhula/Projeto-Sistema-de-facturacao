@@ -7,10 +7,16 @@ package sysfact.views.modulo_venda.vendaView;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +39,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
+import sysfact.dao.desconto.DescontoDAO;
+import sysfact.dao.produto.ProdutoDAO;
 import sysfact.model.cliente.Cliente;
+import sysfact.model.desconto.Desconto;
+import sysfact.model.produto.Produto;
 import sysfact.util.MetodosUteis;
 
 /**
@@ -69,6 +79,9 @@ public class VendasController implements Initializable {
 
     @FXML
     private ComboBox<?> comboPagemento;
+    
+    @FXML
+    private ComboBox<String> combDesconto;
 
     @FXML
     private Label labDesconto;
@@ -114,6 +127,9 @@ public class VendasController implements Initializable {
 
     @FXML
     private TableColumn<?, ?> taxatabelaItens;
+    
+    @FXML
+    private TableColumn<?, ?> unidadetabelaItens;
 
     @FXML
     private TextArea txtDescricaoProdutoServico;
@@ -207,16 +223,42 @@ public class VendasController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        labDataInicial.setText("De: " + MetodosUteis.actualDate());
-        combTipoFactura.setItems(FXCollections.observableArrayList(
-                "Factura Recibo", "Factura Proforma"
-        ));
-//        System.out.println(SysFact.getData());
-//        if (SysFact.getData() == null) {
-//            anchorVendas.setDisable(true);
-//        } else {
-//            labNumeroFactura.setText((String) SysFact.getData());
-//        }
+        try {
+            labDataInicial.setText("De: " + MetodosUteis.actualDate());
+            combTipoFactura.setItems(FXCollections.observableArrayList(
+                    "Factura Recibo", "Factura Proforma"
+            ));
+            populateComboDesconto();
+            mapeaProduto();
+        } catch (SQLException ex) {
+            Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private ObservableList<Desconto> listaDescontos;
+    private Map<String, Integer> mapaDesconto;
+    public void populateComboDesconto() throws SQLException{
+        DescontoDAO xDAO = new DescontoDAO();
+        mapaDesconto = new HashMap<>();
+        listaDescontos = xDAO.listAllEntities();
+        List<String> lista = new ArrayList<>();
+        for (Desconto d : listaDescontos) {
+            mapaDesconto.put(d.getNome(), d.getId());
+            lista.add(d.getNome());
+        }
+        combDesconto.setItems(FXCollections.observableArrayList(lista));
+    }
+    
+    private ObservableList<Produto> listaProduto;
+    private Map<Integer, Produto> mapaProdutos;
+
+    public void mapeaProduto() throws SQLException {
+        ProdutoDAO aDAO = new ProdutoDAO();
+        listaProduto = aDAO.getCombinedEntities();
+        mapaProdutos = new HashMap<>();
+        for (Produto p : listaProduto) {
+            mapaProdutos.put(p.getId(), p);
+        }
     }
 
 }

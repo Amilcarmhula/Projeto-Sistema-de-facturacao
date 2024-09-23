@@ -91,15 +91,15 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + "         u.id as id_unidade, u.identificador, u.sigla,"
                     + "         t.id as id_taxa, t.identificador as taxa, t.percentagem,"
                     + "         pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,"
-                    + "         s.saldo, "
-                    + "         pf.fk_id_armazem "
+                    + "         s.saldo, s.fk_id_armazem, "
+                    + "         a.nome AS nome_armazem, a.estado AS estado_armazem " 
                     + "FROM produto p "
-                    + "LEFT JOIN produto_fornecido pf ON pf.fk_id_produto = p.id "
                     + "LEFT JOIN categoria c ON c.id = p.fk_id_categoria "
                     + "LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida "
                     + "LEFT JOIN taxa_imposto t ON t.id = p.fk_id_taxa_imposto "
                     + "LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id AND pv.estado=true "
-                    + "LEFT JOIN stock s ON s.fk_id_produto=p.id";
+                    + "LEFT JOIN stock s ON s.fk_id_produto=p.id "
+                    + "LEFT JOIN armazem a ON a.id = s.fk_id_armazem";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
@@ -134,6 +134,8 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 c.setContole_stock(result.getBoolean("contole_stock"));
                 Armazem arm = new Armazem();
                 arm.setId(result.getInt("fk_id_armazem"));
+                arm.setNome(result.getString("nome_armazem"));
+                arm.setEstado(result.getBoolean("estado_armazem"));
                 c.setArmazem(arm);
                 lista.add(c);
             }

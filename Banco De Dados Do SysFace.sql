@@ -355,37 +355,73 @@ create trigger trigger_registra_entrada
     end//
 delimiter ;
 
+select * from factura;
+select * from itemfactura;
+select * from movimento_produto;
+select * from produto_fornecido;
+select * from produto;
+select * from stock;
+
+SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.contole_stock, 
+                    c.id as id_categoria, c.familia as categoria,
+                    u.id as id_unidade, u.identificador, u.sigla,
+                    t.id as id_taxa, t.identificador as taxa, t.percentagem,
+                    pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,
+                    s.saldo, s.fk_id_armazem,
+                    a.nome AS nome_armazem, a.estado AS estado_armazem
+                    FROM produto p 
+                    LEFT JOIN categoria c ON c.id = p.fk_id_categoria 
+                    LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida 
+                    LEFT JOIN taxa_imposto t ON t.id = p.fk_id_taxa_imposto 
+                    LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id AND pv.estado=true 
+                    LEFT JOIN stock s ON s.fk_id_produto=p.id
+                    LEFT JOIN armazem a ON a.id = s.fk_id_armazem;
 
 create table stock(
-	fk_id_produto integer primary key,
+	fk_id_produto integer,
+    fk_id_armazem integer,
     saldo integer not null,
-    foreign key(fk_id_produto) references produto(id)
+    primary key (fk_id_produto,fk_id_armazem),
+    foreign key(fk_id_produto) references produto(id),
+    foreign key(fk_id_armazem) references armazem(id)
 );
 
-delimiter //
-create trigger trigger_update_saldo_stock
-	after insert on movimento_produto
-    for each row
-    begin
-		update stock set  saldo=(SELECT 
-			(SUM(CASE WHEN tipo_movimento = 'Entrada' THEN quantidade ELSE 0 END) - 
-			 SUM(CASE WHEN tipo_movimento = 'Saída' THEN quantidade ELSE 0 END)) AS saldo_produto
-		FROM movimento_produto WHERE fk_id_produto=new.fk_id_produto)
-        where fk_id_produto=new.fk_id_produto;
-	end//
-delimiter;
+DELIMITER //
 
--- Trigger para tabela stock para manter os dados de estoque actualizados
-delimiter //
-create trigger trigger_registra_produto
-	after insert on produto
-    for each row
-    begin
-		if new.contole_stock = true then
-			insert into stock (fk_id_produto,saldo) value (new.id,0);
-        end if;
-    end//
-delimiter ;
+CREATE TRIGGER trigger_update_saldostock
+    AFTER INSERT ON movimento_produto
+    FOR EACH ROW
+BEGIN
+    -- Verifica se a combinação de fk_id_produto e fk_id_armazem já existe na tabela stock
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM stock 
+        WHERE fk_id_produto = NEW.fk_id_produto 
+          AND fk_id_armazem = NEW.fk_id_armazem
+    ) THEN
+        -- Insere um novo registro com saldo inicial 0 caso a combinação não exista
+        INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
+        VALUES (NEW.fk_id_produto, NEW.fk_id_armazem, 0);
+    END IF;
+
+    -- Atualiza o saldo com base nos movimentos registrados
+    UPDATE stock 
+    SET saldo = (
+        SELECT 
+            (SUM(CASE WHEN tipo_movimento = 'Entrada' THEN quantidade ELSE 0 END) - 
+             SUM(CASE WHEN tipo_movimento = 'Saída' THEN quantidade ELSE 0 END)) AS saldo_produto
+        FROM movimento_produto 
+        WHERE fk_id_produto = NEW.fk_id_produto 
+          AND fk_id_armazem = NEW.fk_id_armazem
+    )
+    WHERE fk_id_produto = NEW.fk_id_produto 
+      AND fk_id_armazem = NEW.fk_id_armazem;
+END//
+
+DELIMITER ;
+
+
+
 
 
 

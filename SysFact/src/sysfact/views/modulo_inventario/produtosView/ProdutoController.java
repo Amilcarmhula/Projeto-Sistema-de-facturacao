@@ -75,6 +75,8 @@ public class ProdutoController implements Initializable {
     @FXML
     private TableColumn<Produto, String> artigo;
     @FXML
+    private TableColumn<Produto, String> armazem;
+    @FXML
     private TableColumn<Produto, String> datafim;
     @FXML
     private TableColumn<Produto, String> datainicio;
@@ -319,6 +321,8 @@ public class ProdutoController implements Initializable {
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         artigo.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        armazem.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome()));
         codigobarras.setCellValueFactory(new PropertyValueFactory<>("codigo_barra"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 

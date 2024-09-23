@@ -95,14 +95,15 @@
             <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="391.0" onMouseClicked="#selectedRow" prefHeight="539.0" prefWidth="1411.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                <columns>
                   <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
+                  <TableColumn fx:id="armazem" prefWidth="209.0" text="Armazem" />
                   <TableColumn fx:id="artigo" prefWidth="209.0" text="Artigo" />
                   <TableColumn fx:id="codigobarras" prefWidth="123.0" text="Codigo de barras" />
                   <TableColumn fx:id="descricao" prefWidth="241.0" resizable="false" text="Descrição" />
                   <TableColumn fx:id="unidade" prefWidth="63.0" resizable="false" text="Unidade" />
                   <TableColumn fx:id="categoria" prefWidth="139.0" resizable="false" text="Categoria" />
-                  <TableColumn fx:id="taxa" prefWidth="87.0" resizable="false" text="Taxa" />
+                  <TableColumn fx:id="taxa" prefWidth="68.0" resizable="false" text="Taxa" />
                   <TableColumn fx:id="preco" prefWidth="117.0" resizable="false" text="Preco" />
-                  <TableColumn fx:id="datainicio" prefWidth="107.0" resizable="false" text="Data de inicio" />
+                  <TableColumn fx:id="datainicio" prefWidth="126.0" resizable="false" text="Data de inicio" />
                   <TableColumn fx:id="datafim" prefWidth="96.0" resizable="false" text="Data de fim" />
                   <TableColumn fx:id="stock" prefWidth="53.0" resizable="false" text="Stock" />
                   <TableColumn fx:id="quantidade" prefWidth="57.0" resizable="false" text="Qtd." />

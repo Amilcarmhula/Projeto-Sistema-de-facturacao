@@ -96,9 +96,10 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="101.0" layoutY="362.0" onMouseClicked="#selectedRow" prefHeight="316.0" prefWidth="857.0" AnchorPane.leftAnchor="101.0">
+      <TableView fx:id="tabelaProduto" layoutX="8.0" layoutY="362.0" onMouseClicked="#selectedRow" prefHeight="316.0" prefWidth="1036.0" AnchorPane.leftAnchor="8.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
+            <TableColumn fx:id="armazem" prefWidth="209.0" text="Armazem" />
             <TableColumn fx:id="artigo" prefWidth="209.0" text="Artigo" />
             <TableColumn fx:id="descricao" prefWidth="241.0" resizable="false" text="Descrição" />
             <TableColumn fx:id="unidade" prefWidth="63.0" resizable="false" text="Unidade" />

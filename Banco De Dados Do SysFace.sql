@@ -443,13 +443,13 @@ create table contacto_empresa(
     foreign key (fk_id_empresa) references empresa(id)
 );
 
-use _sysface;
-drop table factura;
-drop table item_factura;
-drop table pagamento;
-drop table metodo_pagamento;
+-- use _sysface;
+-- drop table factura;
+-- drop table item_factura;
+-- drop table pagamento;
+-- drop table metodo_pagamento;
 
-drop trigger before_insert_item_factura;
+-- drop trigger before_insert_item_factura;
 
 
 -- Tabelas para armazenar dados das facturacoes

@@ -39,12 +39,12 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <TextField fx:id="txtPrecovenda" alignment="CENTER" disable="true" layoutX="10.0" layoutY="87.0" prefHeight="25.0" prefWidth="180.0" promptText="Preço unitário" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0">
+                        <TextField fx:id="txtPrecovenda" alignment="CENTER" disable="true" layoutX="10.0" layoutY="87.0" prefHeight="25.0" prefWidth="139.0" promptText="Preço unitário" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="txtQuantidade" alignment="CENTER" layoutX="353.0" layoutY="55.0" prefHeight="25.0" prefWidth="84.0" promptText="Qtd." stylesheets="@../../style/dashboard.css" AnchorPane.rightAnchor="14.0">
+                        <TextField fx:id="txtQuantidade" alignment="CENTER" layoutX="154.0" layoutY="87.0" prefHeight="25.0" prefWidth="84.0" promptText="Qtd." stylesheets="@../../style/dashboard.css" AnchorPane.rightAnchor="213.0">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -58,7 +58,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </TextField>
-                        <TextArea fx:id="txtDescricaoProdutoServico" layoutX="10.0" layoutY="119.0" prefHeight="88.0" prefWidth="429.0" promptText="Descrição " styleClass="shadow" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                        <TextArea fx:id="txtDescricao" layoutX="10.0" layoutY="119.0" prefHeight="88.0" prefWidth="429.0" promptText="Descrição " styleClass="shadow" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -74,7 +74,7 @@
                               <String fx:value="shadow-efect" />
                            </styleClass>
                         </Button>
-                        <TextField fx:id="txtNome" alignment="CENTER" disable="true" layoutX="192.0" layoutY="55.0" prefHeight="20.0" prefWidth="155.0" promptText="Nome" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="192.0">
+                        <TextField fx:id="txtNome" alignment="CENTER" disable="true" layoutX="192.0" layoutY="55.0" prefHeight="25.0" prefWidth="244.0" promptText="Nome" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="192.0">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -89,7 +89,7 @@
                               <String fx:value="hand-efect" />
                            </styleClass>
                         </TextField>
-                        <ComboBox fx:id="combDesconto" layoutX="195.0" layoutY="86.0" prefHeight="25.0" prefWidth="233.0" promptText="Desconto" />
+                        <ComboBox fx:id="combDesconto" layoutX="242.0" layoutY="86.0" prefHeight="25.0" prefWidth="197.0" promptText="Desconto" />
                      </children>
                      <styleClass>
                         <String fx:value="blue-bg" />

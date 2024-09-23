@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
@@ -44,6 +46,7 @@ import sysfact.dao.produto.ProdutoDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.desconto.Desconto;
 import sysfact.model.produto.Produto;
+import sysfact.model.taxa_imposto.TaxaImposto;
 import sysfact.util.MetodosUteis;
 
 /**
@@ -132,14 +135,20 @@ public class VendasController implements Initializable {
     private TableColumn<?, ?> unidadetabelaItens;
 
     @FXML
-    private TextArea txtDescricaoProdutoServico;
-
+    private TextArea txtDescricao;
     @FXML
-    private TextField txtPesquisaProdutoServico;
-
+    private TextField txtPrecovenda;
     @FXML
     private TextField txtQuantidade;
-
+    @FXML
+    private TextField txtStock;
+    @FXML
+    private TextField txtNome;
+    @FXML
+    private TextField txtID;
+    
+    @FXML
+    private TextField txtValor;
     @FXML
     private TextField txtTrocos;
     @FXML
@@ -161,9 +170,6 @@ public class VendasController implements Initializable {
     private TextField txtEmailCLiente;
 
     @FXML
-    private TextField txtValor;
-
-    @FXML
     private ComboBox<String> combTipoFactura;
 
     public void getSearchCliente(MouseEvent mouseEvt) {
@@ -182,7 +188,7 @@ public class VendasController implements Initializable {
     }
 
     public void getSearchProduto(MouseEvent mouseEvt) {
-        if (mouseEvt.getClickCount() == 2) {
+        if (mouseEvt.getClickCount() == 1) {
             try {
                 Parent parente = FXMLLoader.load(getClass().getResource("searchProduto/produtoSearch.fxml"));
                 Scene scene = new Scene(parente);
@@ -220,6 +226,26 @@ public class VendasController implements Initializable {
             labValidade.setText(MetodosUteis.datePlusXDays(7));
         }
     }
+    public void getDataForProduto() throws SQLException {
+        populateComboDesconto();
+        txtID.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!oldValue && newValue) {
+                    if (SysFact.getData() instanceof Produto) {
+                        Produto x = (Produto) SysFact.getData();
+                        if (x != null) {
+                            txtID.setText(String.valueOf(x.getId()));
+                            txtStock.setText(String.valueOf(x.getStock().getSaldo()));
+                            txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
+                            txtNome.setText(x.getNome());
+                            txtDescricao.setText(x.getDescricao());
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -230,6 +256,7 @@ public class VendasController implements Initializable {
             ));
             populateComboDesconto();
             mapeaProduto();
+            getDataForProduto();
         } catch (SQLException ex) {
             Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -4,6 +4,10 @@
  */
 package sysfact.model.empresa;
 
+import sysfact.model.empresa.conta.ContaBancaria;
+import sysfact.model.empresa.contacto.ContactoEmpresa;
+import sysfact.model.empresa.endereco.EnderecoEmpresa;
+
 
 /**
  *
@@ -15,16 +19,21 @@ public class Empresa {
     private String nome;
     private String apelido;
     private int nuit;
+    private ContactoEmpresa contactoEmpresa;
+    private EnderecoEmpresa enderecoEmpresa;
+    private ContaBancaria contaBancaria;
     private String data_criacao;
-    private boolean active_or_not;
 
     public Empresa() {
     }
 
-    public Empresa( String nome, String apelido, int nuit) {
+    public Empresa(String nome, String apelido, int nuit, ContactoEmpresa contactoEmpresa, EnderecoEmpresa enderecoEmpresa,ContaBancaria contaBancaria) {
         this.nome = nome;
         this.apelido = apelido;
         this.nuit = nuit;
+        this.contactoEmpresa = contactoEmpresa;
+        this.enderecoEmpresa = enderecoEmpresa;
+        this.contaBancaria = contaBancaria;
     }
 
     public int getId() {
@@ -59,6 +68,22 @@ public class Empresa {
         this.nuit = nuit;
     }
 
+    public ContactoEmpresa getContactoEmpresa() {
+        return contactoEmpresa;
+    }
+
+    public void setContactoEmpresa(ContactoEmpresa contactoEmpresa) {
+        this.contactoEmpresa = contactoEmpresa;
+    }
+
+    public EnderecoEmpresa getEnderecoEmpresa() {
+        return enderecoEmpresa;
+    }
+
+    public void setEnderecoEmpresa(EnderecoEmpresa enderecoEmpresa) {
+        this.enderecoEmpresa = enderecoEmpresa;
+    }
+
     public String getData_criacao() {
         return data_criacao;
     }
@@ -67,13 +92,13 @@ public class Empresa {
         this.data_criacao = data_criacao;
     }
 
-    public boolean isActive_or_not() {
-        return active_or_not;
+    public ContaBancaria getContaBancaria() {
+        return contaBancaria;
     }
 
-    public void setActive_or_not(boolean active_or_not) {
-        this.active_or_not = active_or_not;
+    public void setContaBancaria(ContaBancaria contaBancaria) {
+        this.contaBancaria = contaBancaria;
     }
-    
+
     
 }

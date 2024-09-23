@@ -23,6 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sysfact.dao.empresa.EmpresaDAO;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
 
@@ -77,6 +78,8 @@ public class MainController implements Initializable {
 
                     /*Dados de login a serem armazenados*/
                     SysFact.setUserData(user);
+                    EmpresaDAO empresaData = new EmpresaDAO();
+                    SysFact.setEmpresaData(empresaData.getEmpresaData());
                     btnlogin.getScene().getWindow().hide();
                     Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/main/main.fxml"));
 

@@ -63,7 +63,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </TextArea>
-                        <Button fx:id="btnAddItem" layoutX="15.0" layoutY="215.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="426.0" stylesheets="@../../style/dashboard.css" text="Adicionar item" textFill="WHITE" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                        <Button fx:id="btnAddItem" layoutX="15.0" layoutY="215.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="30.0" prefWidth="426.0" stylesheets="@../../style/dashboard.css" text="Adicionar item" textFill="WHITE" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
@@ -181,7 +181,7 @@
                               <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="30" />
                            </graphic>
                         </Button>
-                        <Button fx:id="btnFinalizaFactura" layoutX="54.0" layoutY="342.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../style/dashboard.css" text="Finalizar" textFill="WHITE">
+                        <Button fx:id="btnFinalizaFactura" layoutX="54.0" layoutY="342.0" mnemonicParsing="false" onAction="#criarFactura" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../style/dashboard.css" text="Finalizar" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -280,7 +280,7 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="147.0" prefWidth="1409.0" styleClass="Squared-border" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <AnchorPane prefHeight="160.0" prefWidth="1431.0" styleClass="Squared-border" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <AnchorPane layoutX="652.0" layoutY="7.0" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <styleClass>
@@ -295,7 +295,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <TextField fx:id="txtEnderecoCliente" alignment="CENTER" disable="true" layoutX="273.0" layoutY="106.0" prefHeight="25.0" prefWidth="451.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtEnderecoCliente" alignment="CENTER" disable="true" layoutX="230.0" layoutY="125.0" prefHeight="25.0" prefWidth="451.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -305,28 +305,28 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtNomeCLiente" alignment="CENTER" disable="true" layoutX="273.0" layoutY="71.0" prefHeight="25.0" prefWidth="285.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtNomeCLiente" alignment="CENTER" disable="true" layoutX="230.0" layoutY="96.0" prefHeight="25.0" prefWidth="285.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="txtNuitCLiente" alignment="CENTER" disable="true" layoutX="564.0" layoutY="71.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtNuitCLiente" alignment="CENTER" disable="true" layoutX="521.0" layoutY="96.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="txtEmailCLiente" alignment="CENTER" disable="true" layoutX="732.0" layoutY="106.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtEmailCLiente" alignment="CENTER" disable="true" layoutX="689.0" layoutY="125.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="txtContactoCLiente" alignment="CENTER" disable="true" layoutX="700.0" layoutY="71.0" prefHeight="25.0" prefWidth="265.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtContactoCLiente" alignment="CENTER" disable="true" layoutX="657.0" layoutY="96.0" prefHeight="25.0" prefWidth="265.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <ComboBox fx:id="combTipoFactura" layoutX="14.0" layoutY="102.0" onAction="#selecionaFactura" prefHeight="25.0" prefWidth="130.0" promptText="Tipo De Factura" />
-                  <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutX="20.0" layoutY="68.0" prefHeight="27.0" prefWidth="139.0" text="Tipo de Factura:">
+                  <ComboBox fx:id="combTipoFactura" layoutX="171.0" layoutY="58.0" onAction="#selecionaFactura" prefHeight="25.0" prefWidth="148.0" promptText="Tipo De Factura" />
+                  <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="57.0" prefHeight="27.0" prefWidth="139.0" text="Tipo de Factura:">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -341,7 +341,7 @@
                         <Font name="System Bold" size="26.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtIDCliente" alignment="CENTER" layoutX="178.0" layoutY="71.0" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="25.0" prefWidth="84.0" promptText="ID" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtIDCliente" alignment="CENTER" layoutX="135.0" layoutY="96.0" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="25.0" prefWidth="84.0" promptText="ID" stylesheets="@../../style/dashboard.css">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -351,7 +351,7 @@
                         <String fx:value="hand-efect" />
                      </styleClass>
                   </TextField>
-                  <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1260.0" layoutY="105.0" prefHeight="27.0" prefWidth="99.0">
+                  <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1260.0" layoutY="105.0" prefHeight="27.0" prefWidth="113.0">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>

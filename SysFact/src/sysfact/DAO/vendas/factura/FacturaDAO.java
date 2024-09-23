@@ -6,10 +6,7 @@ package sysfact.dao.vendas.factura;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JOptionPane;
 import sysfact.model.vendas.factura.Factura;
 import sysfact.util.Conexao;
@@ -31,16 +28,15 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     @Override
     public void addEntity(Factura t) {
         try {
-            sql = "insert into factura (numero,data_vencimento, estado,"
+            sql = "insert into factura (numero,data_vencimento,"
                     + "fk_id_empresa,fk_id_cliente,fk_id_usuario)"
-                    + " value (?,?,?,?,?,?)";
+                    + " value (?,?,?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, t.getNumero());
             ps.setString(2, t.getData_vencimento());
-            ps.setBoolean(3, t.isEstado());
-            ps.setInt(4, t.getEmpresa().getId());
-            ps.setInt(5, t.getCliente().getId());
-            ps.setInt(6, t.getUsuario().getId());
+            ps.setInt(3, t.getEmpresa().getId());
+            ps.setInt(4, t.getCliente().getId());
+            ps.setInt(5, t.getUsuario().getId());
 
             ps.execute();
             ps.close();

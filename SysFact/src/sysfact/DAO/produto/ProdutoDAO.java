@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javax.swing.JOptionPane;
+import sysfact.model.armazem.Armazem;
 import sysfact.model.categoria.Categoria;
 import sysfact.model.preco.PrecoVenda;
 import sysfact.model.produto.Produto;
@@ -90,8 +91,10 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + "         u.id as id_unidade, u.identificador, u.sigla,"
                     + "         t.id as id_taxa, t.identificador as taxa, t.percentagem,"
                     + "         pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,"
-                    + "         s.saldo "
+                    + "         s.saldo, "
+                    + "         pf.fk_id_armazem "
                     + "FROM produto p "
+                    + "LEFT JOIN produto_fornecido pf ON pf.fk_id_produto = p.id "
                     + "LEFT JOIN categoria c ON c.id = p.fk_id_categoria "
                     + "LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida "
                     + "LEFT JOIN taxa_imposto t ON t.id = p.fk_id_taxa_imposto "
@@ -129,6 +132,9 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 s.setSaldo(result.getInt("saldo"));
                 c.setStock(s);
                 c.setContole_stock(result.getBoolean("contole_stock"));
+                Armazem arm = new Armazem();
+                arm.setId(result.getInt("fk_id_armazem"));
+                c.setArmazem(arm);
                 lista.add(c);
             }
             result.close();

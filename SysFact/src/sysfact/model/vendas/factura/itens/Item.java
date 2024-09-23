@@ -4,6 +4,7 @@
  */
 package sysfact.model.vendas.factura.itens;
 
+import sysfact.model.armazem.Armazem;
 import sysfact.model.desconto.Desconto;
 import sysfact.model.produto.Produto;
 import sysfact.model.usuario.Usuario;
@@ -17,24 +18,26 @@ import sysfact.model.vendas.factura.Factura;
 public class Item {
 
     private int id;
-    private double quantidade;
+    private int quantidade;
     private double subtotal;
     private Desconto desconto;
     private Produto produto;
     private Factura factura;
     private Usuario usuario;
+    private Armazem armazem;
     private String data_criacao;
 
     public Item() {
     }
 
-    public Item(double quantidade, double subtotal, Desconto desconto, Produto produto, Factura factura, Usuario usuario) {
+    public Item(int quantidade, double subtotal, Desconto desconto, Produto produto, Factura factura, Usuario usuario,Armazem armazem) {
         this.quantidade = quantidade;
         this.subtotal = subtotal;
         this.desconto = desconto;
         this.produto = produto;
         this.factura = factura;
         this.usuario = usuario;
+        this.armazem = armazem;
     }
 
     public int getId() {
@@ -45,11 +48,11 @@ public class Item {
         this.id = id;
     }
 
-    public double getQuantidade() {
+    public int getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(double quantidade) {
+    public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
 
@@ -99,6 +102,14 @@ public class Item {
 
     public void setData_criacao(String data_criacao) {
         this.data_criacao = data_criacao;
+    }
+
+    public Armazem getArmazem() {
+        return armazem;
+    }
+
+    public void setArmazem(Armazem armazem) {
+        this.armazem = armazem;
     }
 
 }

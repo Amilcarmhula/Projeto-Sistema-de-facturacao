@@ -1,5 +1,18 @@
 use _sysface;
 
+SELECT 
+    e.id, e.nome, e.apelido AS razao, e.nuit,   
+    en.provincia, en.cidade, en.bairro, en.avenida, en.rua, en.codigo_postal, en.numero, en.tipo,
+    c.contacto, c.email, c.website    
+FROM 
+    empresa e
+LEFT JOIN 
+    endereco_empresa en ON e.id = en.fk_id_empresa
+LEFT JOIN 
+    contacto_empresa c ON e.id = c.fk_id_empresa;
+
+
+
 
 
 SELECT c.id,c.tipo,c.nome,c.apelido as razaosocial,c.nuit, 
@@ -9,6 +22,7 @@ SELECT c.id,c.tipo,c.nome,c.apelido as razaosocial,c.nuit,
                     FROM cliente c 
                     LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id 
 					LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id AND e.tipo = 'Envio' 
+                    where c.id=9
                     GROUP BY c.id, c.nome, c.apelido, c.nuit;
                     
 select * from endereco_cliente; 
@@ -409,8 +423,10 @@ SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.contole_stock,
         u.id as id_unidade, u.sigla as unidade,
         t.id as id_taxa, t.identificador as taxa,
         pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,
-        s.saldo
+        s.saldo,
+        pf.fk_id_armazem
 FROM produto p
+	LEFT JOIN produto_fornecido pf ON pf.fk_id_produto = p.id
 	LEFT JOIN categoria c ON c.id = p.fk_id_categoria
     LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida
     LEFT JOIN taxa_imposto t ON t.id = p.fk_id_taxa_imposto
@@ -432,12 +448,10 @@ INSERT INTO endereco_empresa (provincia, cidade, bairro, avenida, rua, codigo_po
 ('Gaza', 'Xai-Xai', 'Centro', 'Eduardo Mondlane', 'Rua 2', 1200, 5, 'Envio', 4),
 ('Tete', 'Tete', 'Matundo', 'Julius Nyerere', 'Rua 1', 4100, 7, 'Facturação', 5);
 
-INSERT INTO contacto_empresa (contacto, email, fk_id_empresa, fk_id_usuario) VALUES
-('841234567', 'info@techsolutions.com', 1, 1),
-('842345678', 'contact@smartinnovations.com', 2, 1),
-('843456789', 'support@mztechnologies.com', 3, 1),
-('844567890', 'sales@globalservices.com', 4, 1),
-('845678901', 'info@innovateafrica.com', 5, 1);
+INSERT INTO contacto_empresa (contacto, email, website, fk_id_empresa, fk_id_usuario)
+VALUES 
+    ('+258843212345', 'contato@empresa1.com', 'www.empresa1.com', 1, 1);
+
 
 INSERT INTO contabancaria (nome_banco, numero, nib, nuib, fk_id_empresa, fk_id_usuario) VALUES
 ('Banco Comercial e de Investimentos', '12345678', '12345678901234567890', '123456789', 1, 1),

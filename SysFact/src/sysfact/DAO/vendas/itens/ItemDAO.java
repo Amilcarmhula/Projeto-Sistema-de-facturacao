@@ -27,30 +27,30 @@ public class ItemDAO implements ItemDAOImpl<Item> {
     public ItemDAO() throws SQLException {
         this.con = Conexao.getConexao();
     }
-//
-//    @Override
-//    public void addEntity(List<Item> items) {
-//        try {
-//            for (Item t : items) {
-//                    sql = "insert into item_factura (quantidade,fk_id_precovenda,"
-//                            + "subtotal,fk_id_desconto,fk_id_taxa_imposto,fk_id_produto,fk_id_factura,"
-//                            + "fk_id_usuario) value (?,?,?,?,?,?,?,?)";
-//                    ps = con.prepareStatement(sql);
-//                    ps.setInt(1, t.getQuantidade());
-//                    ps.setDouble(3, t.getSubtotal());
-//                    ps.setInt(4, t.getDesconto().getId());
-//                    ps.setInt(6, t.getProduto().getId());
-//                    ps.setInt(7, t.getFactura().getId());
-//                    ps.setInt(8, t.getUsuario().getId());
-//                
-//                ps.execute();
-//                ps.close();
-//            }
-//
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
+
+    @Override
+    public void addEntity(List<Item> items) {
+        try {
+            for (Item t : items) {
+                    sql = "insert into itemfactura (quantidade, subtotal,fk_id_desconto,fk_id_produto,fk_numero,"
+                            + "fk_id_usuario, fk_id_armazem) value (?,?,?,?,?,?,?)";
+                    ps = con.prepareStatement(sql);
+                    ps.setInt(1, t.getQuantidade());// ***********
+                    ps.setDouble(2, t.getSubtotal());// ***********
+                    ps.setInt(3, t.getDesconto().getId());// ***********
+                    ps.setInt(4, t.getProduto().getId());// ***********
+                    ps.setString(5, t.getFactura().getNumero());// ***********
+                    ps.setInt(6, t.getUsuario().getId());// ***********
+                    ps.setInt(7, t.getArmazem().getId());// ***********
+                
+                ps.execute();
+                ps.close();
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 //
 //    @Override
 //    public void updateEntityByID(Item t, int id) {

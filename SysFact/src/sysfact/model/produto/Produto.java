@@ -4,7 +4,7 @@
  */
 package sysfact.model.produto;
 
-import java.util.List;
+import sysfact.model.armazem.Armazem;
 import sysfact.model.categoria.Categoria;
 import sysfact.model.preco.PrecoVenda;
 import sysfact.model.stock.Stock;
@@ -28,11 +28,14 @@ public class Produto {
     private PrecoVenda precovenda;
     private Stock stock;
     private String data_criacao;
+    private Armazem armazem;
 
     public Produto() {
     }
 
-    public Produto(String nome, String codigo_barra, String descricao, boolean contole_stock, Categoria categoria, UnidadeMedida unidade_medida, TaxaImposto taxa_imposto, PrecoVenda precovenda, Stock stock) {
+    public Produto(String nome, String codigo_barra, String descricao, 
+            boolean contole_stock, Categoria categoria, UnidadeMedida unidade_medida,
+            TaxaImposto taxa_imposto, PrecoVenda precovenda, Stock stock, Armazem armazem) {
         this.nome = nome;
         this.codigo_barra = codigo_barra;
         this.descricao = descricao;
@@ -42,6 +45,7 @@ public class Produto {
         this.taxa_imposto = taxa_imposto;
         this.precovenda = precovenda;
         this.stock = stock;
+        this.armazem = armazem;
     }
 
     public int getId() {
@@ -130,6 +134,14 @@ public class Produto {
 
     public void setData_criacao(String data_criacao) {
         this.data_criacao = data_criacao;
+    }
+
+    public Armazem getArmazem() {
+        return armazem;
+    }
+
+    public void setArmazem(Armazem armazem) {
+        this.armazem = armazem;
     }
 
     

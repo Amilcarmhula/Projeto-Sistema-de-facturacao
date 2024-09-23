@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sysfact.model.empresa.Empresa;
 import sysfact.model.usuario.Usuario;
 
 /**
@@ -20,6 +21,31 @@ import sysfact.model.usuario.Usuario;
 public class SysFact extends Application {
     private static Usuario userData;
     private static Object data;
+    private static Empresa empresaData;
+
+    public static Empresa getEmpresaData() {
+        return empresaData;
+    }
+
+    public static void setEmpresaData(Empresa empresaData) {
+        SysFact.empresaData = empresaData;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
 
     public static Object getData() {
         return data;

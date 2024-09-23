@@ -33,6 +33,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -43,10 +44,19 @@ import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.desconto.DescontoDAO;
 import sysfact.dao.produto.ProdutoDAO;
+import sysfact.dao.vendas.factura.FacturaDAO;
+import sysfact.dao.vendas.itens.ItemDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.desconto.Desconto;
+import sysfact.model.empresa.Empresa;
+import sysfact.model.preco.PrecoVenda;
 import sysfact.model.produto.Produto;
 import sysfact.model.taxa_imposto.TaxaImposto;
+import sysfact.model.unidade_medida.UnidadeMedida;
+import sysfact.model.usuario.Usuario;
+import sysfact.model.vendas.factura.Factura;
+import sysfact.model.vendas.factura.itens.Item;
+import sysfact.model.vendas.factura.itens.TableModelItems;
 import sysfact.util.MetodosUteis;
 
 /**
@@ -55,6 +65,9 @@ import sysfact.util.MetodosUteis;
  * @author JM-Tecnologias
  */
 public class VendasController implements Initializable {
+
+    private Empresa empresaData;
+    private Usuario userData;
 
     @FXML
     private AnchorPane anchorVendas;
@@ -82,7 +95,7 @@ public class VendasController implements Initializable {
 
     @FXML
     private ComboBox<?> comboPagemento;
-    
+
     @FXML
     private ComboBox<String> combDesconto;
 
@@ -108,31 +121,31 @@ public class VendasController implements Initializable {
     private Label labTotalGeral;
 
     @FXML
-    private TableView<?> tabelaItens;
+    private TableView<TableModelItems> tabelaItens;
 
     @FXML
-    private TableColumn<?, ?> nometabelaItens;
+    private TableColumn<TableModelItems, String> nometabelaItens;
 
     @FXML
-    private TableColumn<?, ?> precotabelaItens;
+    private TableColumn<TableModelItems, Double> precotabelaItens;
 
     @FXML
-    private TableColumn<?, ?> quantidadetabelaItens;
+    private TableColumn<TableModelItems, Integer> quantidadetabelaItens;
 
     @FXML
-    private TableColumn<?, ?> subTotaltabelaItens;
+    private TableColumn<TableModelItems, Double> subTotaltabelaItens;
 
     @FXML
-    private TableColumn<?, ?> descontotabelaItens;
+    private TableColumn<TableModelItems, Double> descontotabelaItens;
 
     @FXML
-    private TableColumn<?, ?> idtabelaItens;
+    private TableColumn<TableModelItems, Integer> idtabelaItens;
 
     @FXML
-    private TableColumn<?, ?> taxatabelaItens;
-    
+    private TableColumn<TableModelItems, Double> taxatabelaItens;
+
     @FXML
-    private TableColumn<?, ?> unidadetabelaItens;
+    private TableColumn<TableModelItems, String> unidadetabelaItens;
 
     @FXML
     private TextArea txtDescricao;
@@ -146,7 +159,7 @@ public class VendasController implements Initializable {
     private TextField txtNome;
     @FXML
     private TextField txtID;
-    
+
     @FXML
     private TextField txtValor;
     @FXML
@@ -226,20 +239,50 @@ public class VendasController implements Initializable {
             labValidade.setText(MetodosUteis.datePlusXDays(7));
         }
     }
-    public void getDataForProduto() throws SQLException {
-        populateComboDesconto();
+
+    public void getDataOnFocus() throws SQLException {
+        txtIDCliente.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!oldValue && newValue) {
+                    if (SysFact.getData() instanceof Cliente) {
+                        try {
+                            Cliente c = (Cliente) SysFact.getData();
+                            ClienteDAO xDAO = new ClienteDAO();
+                            Cliente x = xDAO.getClieneByID(c.getId());
+                            if (x != null) {
+                                txtIDCliente.setText(x.getId() + "");
+                                txtEnderecoCliente.setText(x.printEnderecos());
+                                txtNomeCLiente.setText(x.getApelido());
+                                txtNuitCLiente.setText(x.getNuit() + "");
+                                txtContactoCLiente.setText(x.printContatos());
+                                txtEmailCLiente.setText(x.getContactoCliente().getEmail());
+                            }
+                        } catch (SQLException ex) {
+                            Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });
+
         txtID.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
                     if (SysFact.getData() instanceof Produto) {
-                        Produto x = (Produto) SysFact.getData();
-                        if (x != null) {
-                            txtID.setText(String.valueOf(x.getId()));
-                            txtStock.setText(String.valueOf(x.getStock().getSaldo()));
-                            txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
-                            txtNome.setText(x.getNome());
-                            txtDescricao.setText(x.getDescricao());
+                        try {
+                            mapeaProduto();
+                            Produto x = (Produto) SysFact.getData();
+                            if (x != null) {
+                                txtID.setText(String.valueOf(x.getId()));
+                                txtStock.setText(String.valueOf(x.getStock().getSaldo()));
+                                txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
+                                txtNome.setText(x.getNome());
+                                txtDescricao.setText(x.getDescricao());
+                            }
+                        } catch (SQLException ex) {
+                            Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
@@ -247,8 +290,22 @@ public class VendasController implements Initializable {
         });
     }
 
+    private void initTableItems() {
+        idtabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Integer>("id"));
+        nometabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, String>("nome"));
+        precotabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Double>("preco"));
+        unidadetabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, String>("sigla"));
+        quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Integer>("qtd"));
+        descontotabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Double>("desconto"));
+        taxatabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Double>("taxa"));
+        subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Double>("subtotal"));
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        initTableItems();
+        this.userData = SysFact.getUserData();
+        this.empresaData = SysFact.getEmpresaData();
         try {
             labDataInicial.setText("De: " + MetodosUteis.actualDate());
             combTipoFactura.setItems(FXCollections.observableArrayList(
@@ -256,26 +313,27 @@ public class VendasController implements Initializable {
             ));
             populateComboDesconto();
             mapeaProduto();
-            getDataForProduto();
+            getDataOnFocus();
         } catch (SQLException ex) {
             Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private ObservableList<Desconto> listaDescontos;
-    private Map<String, Integer> mapaDesconto;
-    public void populateComboDesconto() throws SQLException{
+    private Map<String, Desconto> mapaDesconto;
+
+    public void populateComboDesconto() throws SQLException {
         DescontoDAO xDAO = new DescontoDAO();
         mapaDesconto = new HashMap<>();
         listaDescontos = xDAO.listAllEntities();
         List<String> lista = new ArrayList<>();
         for (Desconto d : listaDescontos) {
-            mapaDesconto.put(d.getNome(), d.getId());
+            mapaDesconto.put(d.getNome(), d);
             lista.add(d.getNome());
         }
         combDesconto.setItems(FXCollections.observableArrayList(lista));
     }
-    
+
     private ObservableList<Produto> listaProduto;
     private Map<Integer, Produto> mapaProdutos;
 
@@ -286,6 +344,72 @@ public class VendasController implements Initializable {
         for (Produto p : listaProduto) {
             mapaProdutos.put(p.getId(), p);
         }
+    }
+
+    public void populateTableItems() {
+        int id = Integer.parseInt(txtID.getText());
+        Produto x = mapaProdutos.get(id);
+        int qtd = Integer.parseInt(txtQuantidade.getText());
+        Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());
+        TableModelItems data = new TableModelItems();
+        data.setId(x.getId());
+        data.setNome(x.getNome());
+        data.setPreco(x.getPrecovenda().getPreco());
+        data.setSigla(x.getUnidade_medida().getSigla());
+        data.setDesconto(desconto.getNome());
+        data.setQtd(qtd);
+        data.setTaxa(x.getTaxa_imposto().getIdentificador());
+        double subtotal = qtd * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem()) * (1 - desconto.getPercentagem());
+        data.setSubtotal(subtotal);
+
+        tabelaItens.getItems().add(data);
+        resetProduto();
+    }
+
+    public void criarFactura() throws SQLException {
+        Factura f = new Factura();
+        f.setNumero(labNumeroFactura.getText());
+        f.setData_vencimento(labValidade.getText());
+        f.setEmpresa(empresaData);
+        f.setUsuario(userData);
+        ClienteDAO xDAO = new ClienteDAO();
+        Cliente x = xDAO.getClieneByID(Integer.parseInt(txtIDCliente.getText()));
+        f.setCliente(x);
+        FacturaDAO fDAO = new FacturaDAO();
+        fDAO.addEntity(f);
+        registraItens();
+    }
+    
+    public void registraItens() throws SQLException{
+        Item i = null;
+        ObservableList<TableModelItems> itens = tabelaItens.getItems();
+        List<Item> listaItems = new ArrayList<>();
+        for (TableModelItems item : itens) {
+            i = new Item();
+            Produto p = mapaProdutos.get(item.getId());
+            i.setProduto(p);
+            i.setQuantidade(item.getQtd());
+            i.setSubtotal(item.getSubtotal());
+            Desconto desconto = mapaDesconto.get(item.getDesconto());
+            i.setDesconto(desconto);
+            i.setArmazem(p.getArmazem());
+            i.setUsuario(userData);
+            Factura f = new Factura();
+            f.setNumero(labNumeroFactura.getText());
+            i.setFactura(f);
+            listaItems.add(i);
+        }
+        ItemDAO iDAO = new ItemDAO();
+        iDAO.addEntity(listaItems);
+    }
+
+    public void resetProduto() {
+        txtID.setText("");
+        txtStock.setText("");
+        txtPrecovenda.setText("");
+        txtNome.setText("");
+        txtDescricao.setText("");
+        txtQuantidade.setText("");
     }
 
 }

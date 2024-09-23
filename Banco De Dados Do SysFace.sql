@@ -355,9 +355,7 @@ create trigger trigger_registra_entrada
     end//
 delimiter ;
 
-select * from produto_fornecido;
-select * from movimento_produto;
-select * from stock;
+
 create table stock(
 	fk_id_produto integer primary key,
     saldo integer not null,
@@ -392,6 +390,7 @@ delimiter ;
 
 
 
+
 --  Banco de dados da empresa no sistema Sysface
  create table empresa(
 	id integer primary key auto_increment,
@@ -419,7 +418,6 @@ create table endereco_empresa(
 create table contacto_empresa(
 	id integer primary key auto_increment,
     contacto varchar(20) not null,
-    pessoa_de_contacto varchar(100),
 	email varchar(50) unique,
     website varchar(50) unique,
     fk_id_empresa integer not null,
@@ -443,20 +441,20 @@ create table contacto_empresa(
     foreign key (fk_id_empresa) references empresa(id)
 );
 
--- use _sysface;
+use _sysface;
 -- drop table factura;
--- drop table item_factura;
+-- drop table itemfactura;
 -- drop table pagamento;
 -- drop table metodo_pagamento;
-
--- drop trigger before_insert_item_factura;
+-- drop trigger before_insert_itemfactura;
 
 
 -- Tabelas para armazenar dados das facturacoes
+select * from factura;
 create table factura(
     numero varchar(20) primary key,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data_vencimento datetime not null,
+    data_vencimento date not null,
     estado boolean default 0 not null,
     fk_id_empresa integer not null,
     fk_id_cliente integer not null,
@@ -475,46 +473,57 @@ create table itemfactura(
     fk_id_produto integer not null,
     fk_numero varchar(20) not null,
     fk_id_usuario integer not null,
+    fk_id_armazem integer not null,
     data_adicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_desconto) references desconto(id),
     foreign key (fk_id_produto) references produto(id),
     foreign key (fk_numero) references factura(numero)
 );
+-- Trigger para tabela movimento_produto manter dados de movimento de ENTRADA, SAIDA ou AJUSTE de estoque
+delimiter //
+create trigger trigger_registra_saida
+	after insert on itemfactura
+    for each row
+    begin
+		insert into movimento_produto (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem)
+        value ('Saída',new.data_adicao,new.quantidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
+    end//
+delimiter ;
 
+-- DELIMITER //
+-- CREATE TRIGGER before_insert_itemfactura
+-- BEFORE INSERT ON itemfactura
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE preco DECIMAL(10,2);
+--     DECLARE percentagem_desconto DECIMAL(4,3) DEFAULT 0;
 
-DELIMITER //
-CREATE TRIGGER before_insert_itemfactura
-BEFORE INSERT ON itemfactura
-FOR EACH ROW
-BEGIN
-    DECLARE preco DECIMAL(10,2);
-    DECLARE percentagem_desconto DECIMAL(4,3) DEFAULT 0;
+--     -- Obter o preço do produto da tabela precovenda com estado = 1
+--     SELECT preco INTO preco
+--     FROM precovenda
+--     WHERE fk_id_produto = NEW.fk_id_produto AND estado = 1
+--     LIMIT 1;
 
-    -- Obter o preço do produto da tabela precovenda com estado = 1
-    SELECT preco INTO preco
-    FROM precovenda
-    WHERE fk_id_produto = NEW.fk_id_produto AND estado = 1
-    LIMIT 1;
+--     -- Verificar se existe um desconto associado
+--     IF NEW.fk_id_desconto IS NOT NULL THEN
+--         -- Obter a percentagem do desconto
+--         SELECT percentagem INTO percentagem_desconto
+--         FROM desconto
+--         WHERE id = NEW.fk_id_desconto
+--         LIMIT 1;
+--         
+--         -- Se a percentagem de desconto não for encontrada, usar 0
+--         IF percentagem_desconto IS NULL THEN
+--             SET percentagem_desconto = 0;
+--         END IF;
+--     END IF;
 
-    -- Verificar se existe um desconto associado
-    IF NEW.fk_id_desconto IS NOT NULL THEN
-        -- Obter a percentagem do desconto
-        SELECT percentagem INTO percentagem_desconto
-        FROM desconto
-        WHERE id = NEW.fk_id_desconto
-        LIMIT 1;
-        
-        -- Se a percentagem de desconto não for encontrada, usar 0
-        IF percentagem_desconto IS NULL THEN
-            SET percentagem_desconto = 0;
-        END IF;
-    END IF;
-
-    -- Calcular o subtotal aplicando o desconto se existir
-    SET NEW.subtotal = NEW.quantidade * preco * (1 - percentagem_desconto);
-END//
-DELIMITER ;
+--     -- Calcular o subtotal aplicando o desconto se existir
+--     SET NEW.subtotal = NEW.quantidade * preco * (1 - percentagem_desconto);
+-- END//
+-- DELIMITER ;
 
 
 create table metodo_pagamento(

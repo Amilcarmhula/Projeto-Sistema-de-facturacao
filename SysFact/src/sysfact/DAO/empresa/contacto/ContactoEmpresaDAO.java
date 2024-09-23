@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sysfact.DAO;
+package sysfact.dao.empresa.contacto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ import sysfact.logical.ContactoEmpresa;
  *
  * @author JM-Tecnologias
  */
-public class ContactoEmpresaDAO implements DaoImpl<ContactoEmpresa> {
+public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpresa> {
 
     private Connection con;
     private PreparedStatement ps;

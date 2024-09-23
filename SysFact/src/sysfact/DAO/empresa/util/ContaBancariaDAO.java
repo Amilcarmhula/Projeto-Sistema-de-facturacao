@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sysfact.DAO;
+package sysfact.dao.empresa.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import sysfact.logical.ContaBancaria;
+import sysfact.model.empresa.conta.ContaBancaria;
 import sysfact.util.Conexao;
 
 /**
@@ -37,11 +37,11 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNome_banco());
-            ps.setLong(2, t.getNumero());
-            ps.setLong(3, t.getNib());
-            ps.setLong(4, t.getNuib());
-            ps.setInt(5, t.getFk_id_empresa());
-            ps.setInt(6, t.getFk_id_usuario());
+            ps.setString(2, t.getNumero());
+            ps.setString(3, t.getNib());
+            ps.setString(4, t.getNuib());
+            ps.setInt(5, t.getEmpresa().getId());
+            ps.setInt(6, t.getUsuario().getId());
 
             ps.execute();
             ps.close();
@@ -59,11 +59,11 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNome_banco());
-            ps.setLong(2, t.getNumero());
-            ps.setLong(3, t.getNib());
-            ps.setLong(4, t.getNuib());
-            ps.setInt(5, t.getFk_id_empresa());
-            ps.setInt(6, t.getFk_id_usuario());
+            ps.setString(2, t.getNumero());
+            ps.setString(3, t.getNib());
+            ps.setString(4, t.getNuib());
+            ps.setInt(5, t.getEmpresa().getId());
+            ps.setInt(6, t.getUsuario().getId());
             ps.setInt(7, id);
 
             ps.execute();
@@ -85,13 +85,12 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
                 ContaBancaria c = new ContaBancaria();
                 c.setId(result.getInt("id"));
                 c.setNome_banco(result.getString("nome_banco"));
-                c.setNumero(result.getLong("numero"));
-                c.setNib(result.getLong("nib"));
-                c.setNuib(result.getLong("nuib"));
-                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
-                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
+                c.setNumero(result.getString("numero"));
+                c.setNib(result.getString("nib"));
+                c.setNuib(result.getString("nuib"));
+//                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
+//                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
                 lista.add(c);
             }
             result.close();
@@ -114,13 +113,12 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
                 c = new ContaBancaria();
                 c.setId(result.getInt("id"));
                 c.setNome_banco(result.getString("nome_banco"));
-                c.setNumero(result.getLong("numero"));
-                c.setNib(result.getLong("nib"));
-                c.setNuib(result.getLong("nuib"));
-                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
-                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
+                c.setNumero(result.getString("numero"));
+                c.setNib(result.getString("nib"));
+                c.setNuib(result.getString("nuib"));
+//                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
+//                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
             }
             result.close();
             ps.close();

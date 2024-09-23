@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package sysfact.DAO;
+package sysfact.dao.empresa.contacto;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author JM-Tecnologias
  */
-public interface DaoImpl<T> {
+public interface ContactoEmpresaDAOImpl<T> {
     void  addEntity(T t);
     void updateEntityByID(T t, int id);
     List<T> listAllEntities();

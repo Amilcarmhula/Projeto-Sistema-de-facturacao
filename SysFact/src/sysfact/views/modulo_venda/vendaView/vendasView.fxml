@@ -30,7 +30,6 @@
                            <styleClass>
                               <String fx:value="headers-color" />
                               <String fx:value="top-Squared-border" />
-                              <String fx:value="shadow" />
                            </styleClass>
                            <children>
                               <Label alignment="CENTER" layoutX="100.0" text="Itens da factura" textFill="WHITE" AnchorPane.topAnchor="0.0">
@@ -90,10 +89,15 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="txtID" alignment="CENTER" disable="true" layoutX="30.0" layoutY="55.0" prefHeight="34.0" prefWidth="84.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0">
+                        <TextField fx:id="txtID" alignment="CENTER" layoutX="30.0" layoutY="55.0" onMouseClicked="#getSearchProduto" prefHeight="34.0" prefWidth="84.0" promptText="ID" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
                         </TextField>
                      </children>
                      <styleClass>
@@ -107,7 +111,6 @@
                            <styleClass>
                               <String fx:value="headers-color" />
                               <String fx:value="top-Squared-border" />
-                              <String fx:value="shadow" />
                            </styleClass>
                            <children>
                               <Label alignment="CENTER" layoutX="100.0" text="Finalizar factura" textFill="WHITE" AnchorPane.topAnchor="0.0">
@@ -292,7 +295,6 @@
                      <styleClass>
                         <String fx:value="headers-color" />
                         <String fx:value="top-Squared-border" />
-                        <String fx:value="shadow" />
                      </styleClass>
                      <children>
                         <Label alignment="CENTER" layoutX="29.0" text="Vendas" textFill="WHITE" AnchorPane.topAnchor="0.0">
@@ -348,10 +350,15 @@
                         <Font name="System Bold" size="26.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtIDCliente" alignment="CENTER" layoutX="178.0" layoutY="71.0" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="25.0" prefWidth="84.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css">
+                  <TextField fx:id="txtIDCliente" alignment="CENTER" layoutX="178.0" layoutY="71.0" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="25.0" prefWidth="84.0" promptText="ID" stylesheets="@../../style/dashboard.css">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                        <String fx:value="hand-efect" />
+                     </styleClass>
                   </TextField>
                   <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1260.0" layoutY="105.0" prefHeight="27.0" prefWidth="99.0">
                      <font>
@@ -365,7 +372,7 @@
                   </Label>
                </children>
             </AnchorPane>
-            <TableView fx:id="tabelaItens" layoutX="26.0" layoutY="163.0" prefHeight="579.0" prefWidth="945.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0">
+            <TableView fx:id="tabelaItens" layoutX="26.0" layoutY="163.0" prefHeight="579.0" prefWidth="945.0" styleClass="bottom-Squared-border" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0">
                <columns>
                   <TableColumn fx:id="idtabelaItens" prefWidth="29.0" text="#" />
                   <TableColumn fx:id="nometabelaItens" prefWidth="420.0" text="Descrição" />
@@ -375,16 +382,11 @@
                   <TableColumn fx:id="taxatabelaItens" prefWidth="70.0" text="Taxa" />
                   <TableColumn fx:id="subTotaltabelaItens" prefWidth="159.0" text="Total" />
                </columns>
-               <styleClass>
-                  <String fx:value="bottom-Squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
             </TableView>
          </children>
          <styleClass>
             <String fx:value="blue-bg" />
             <String fx:value="Squared-border" />
-            <String fx:value="shadow" />
          </styleClass>
       </AnchorPane>
    </children>

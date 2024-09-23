@@ -10,17 +10,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancharVendas11" prefHeight="478.0" prefWidth="1186.0" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController">
+<AnchorPane fx:id="ancharVendas11" prefHeight="478.0" prefWidth="1186.0" styleClass="blue-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController">
    <children>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <styleClass>
-            <String fx:value="headers-color" />
-            <String fx:value="shadow" />
-         </styleClass>
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" styleClass="headers-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="CENTER" layoutX="75.0" text="Clientes" textFill="WHITE" AnchorPane.topAnchor="0.0">
+            <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Consulta de Clientes" textFill="WHITE" AnchorPane.topAnchor="10.0">
                <font>
-                  <Font name="System Bold" size="34.0" />
+                  <Font name="System Bold" size="20.0" />
                </font>
             </Label>
             <Button layoutX="22.0" layoutY="10.0" mnemonicParsing="false" onAction="#close" prefHeight="50.0" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -28,9 +24,8 @@
                   <FontAwesomeIconView fill="WHITE" glyphName="ARROW_LEFT" size="35" />
                </graphic>
                <styleClass>
-                  <String fx:value="tranp-bg" />
-                  <String fx:value="shadow-efect" />
-                  <String fx:value="hand-efect" />
+                  <String fx:value="gray-bg" />
+                  <String fx:value="close-categoria" />
                </styleClass>
             </Button>
          </children>
@@ -90,8 +85,4 @@
          </children>
       </AnchorPane>
    </children>
-   <styleClass>
-      <String fx:value="blue-bg" />
-      <String fx:value="shadow" />
-   </styleClass>
 </AnchorPane>

@@ -15,8 +15,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
@@ -33,6 +35,7 @@ import sysfact.controller.CategoriaControle;
 import sysfact.dao.categoria.CategoriaDAO;
 import sysfact.model.categoria.Categoria;
 import sysfact.service.caregoria.ServicoCategoria;
+import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
  * FXML Controller class
@@ -76,10 +79,15 @@ public class AddCategoriaController implements Initializable {
     @FXML
     private TextArea ps_txtdescricaoCategoria;
 
-    public void close() {
-//        System.exit(0);
-        Stage stage = (Stage) btnClose.getScene().getWindow();
-        stage.close();
+   public void close(ActionEvent event) {
+        if (ProdutoSearchController.returnToMain()) {
+            ProdutoSearchController.setX(false);
+            ProdutoSearchController.setMainStage(null);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+            
+        } else {
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+        }
     }
 
     @Override

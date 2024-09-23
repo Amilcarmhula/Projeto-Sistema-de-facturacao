@@ -14,17 +14,17 @@
    <children>
       <AnchorPane layoutX="116.0" layoutY="14.0" prefHeight="49.0" prefWidth="600.0" styleClass="headers-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="14.0" layoutY="10.0" text="Cadastro de Taxas e Impostos">
+            <Label layoutX="75.0" layoutY="10.0" text="Cadastro de Taxas e Impostos">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnClose" layoutX="509.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Button fx:id="btnClose" layoutX="509.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="30" />
+                  <FontAwesomeIconView fill="WHITE" glyphName="ARROW_LEFT" size="35" />
                </graphic>
                <styleClass>
-                  <String fx:value="tranp-bg" />
+                  <String fx:value="gray-bg" />
                   <String fx:value="close-categoria" />
                </styleClass>
             </Button>

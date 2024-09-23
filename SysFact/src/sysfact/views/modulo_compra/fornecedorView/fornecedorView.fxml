@@ -57,7 +57,6 @@
                <styleClass>
                   <String fx:value="headers-color" />
                   <String fx:value="top-Squared-border" />
-                  <String fx:value="shadow" />
                </styleClass>
                <children>
                   <Label alignment="CENTER" layoutX="29.0" text="Fornecedores" textFill="WHITE" AnchorPane.topAnchor="0.0">
@@ -103,7 +102,6 @@
          <styleClass>
             <String fx:value="blue-bg" />
             <String fx:value="Squared-border" />
-            <String fx:value="shadow" />
          </styleClass>
       </AnchorPane>
    </children>

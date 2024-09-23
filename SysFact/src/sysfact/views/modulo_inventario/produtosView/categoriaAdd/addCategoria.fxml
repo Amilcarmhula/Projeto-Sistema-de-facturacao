@@ -123,16 +123,16 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="25.0" prefWidth="686.0" styleClass="headers-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="49.0" prefWidth="686.0" styleClass="headers-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="CENTER" layoutX="29.0" prefHeight="45.0" prefWidth="362.0" text="Cadastro de Categorias" textFill="WHITE" AnchorPane.topAnchor="0.0">
+            <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="75.0" layoutY="10.0" prefHeight="7.0" prefWidth="362.0" text="Cadastro de Categorias" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="30.0" />
+                  <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnClose" layoutX="599.0" layoutY="13.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="30.0" stylesheets="@../../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Button fx:id="btnClose" layoutX="599.0" layoutY="13.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="30" />
+                  <FontAwesomeIconView fill="WHITE" glyphName="ARROW_LEFT" size="35" />
                </graphic>
                <styleClass>
                   <String fx:value="gray-bg" />

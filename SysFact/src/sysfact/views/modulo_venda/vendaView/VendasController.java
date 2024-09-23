@@ -165,15 +165,30 @@ public class VendasController implements Initializable {
         }
     }
 
+    public void getSearchProduto(MouseEvent mouseEvt) {
+        if (mouseEvt.getClickCount() == 2) {
+            try {
+                Parent parente = FXMLLoader.load(getClass().getResource("searchProduto/produtoSearch.fxml"));
+                Scene scene = new Scene(parente);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.initStyle(StageStyle.TRANSPARENT);
+                stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     public void getSearchClienteKEY(KeyEvent keyEvt) throws SQLException {
         if (keyEvt.getCode().equals(KeyCode.ENTER)) {
             ClienteDAO xDAO = new ClienteDAO();
             Cliente x = xDAO.getClieneByID(Integer.parseInt(txtIDCliente.getText()));
             if (x != null) {
-                txtIDCliente.setText(x.getId()+"");
+                txtIDCliente.setText(x.getId() + "");
                 txtEnderecoCliente.setText(x.printEnderecos());
                 txtNomeCLiente.setText(x.getApelido());
-                txtNuitCLiente.setText(x.getNuit()+"");
+                txtNuitCLiente.setText(x.getNuit() + "");
                 txtContactoCLiente.setText(x.printContatos());
                 txtEmailCLiente.setText(x.getContactoCliente().getEmail());
             }
@@ -183,16 +198,16 @@ public class VendasController implements Initializable {
 
     public void selecionaFactura() {
         labNumeroFactura.setText(MetodosUteis.invoiceNumber(combTipoFactura.getSelectionModel().getSelectedItem()));
-        if(combTipoFactura.getValue().equals("Factura Recibo")){
+        if (combTipoFactura.getValue().equals("Factura Recibo")) {
             labValidade.setText(MetodosUteis.datePlusXDays(0));
-        }else if(combTipoFactura.getValue().equals("Factura Proforma")){
+        } else if (combTipoFactura.getValue().equals("Factura Proforma")) {
             labValidade.setText(MetodosUteis.datePlusXDays(7));
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        labDataInicial.setText("De: "+MetodosUteis.actualDate());
+        labDataInicial.setText("De: " + MetodosUteis.actualDate());
         combTipoFactura.setItems(FXCollections.observableArrayList(
                 "Factura Recibo", "Factura Proforma"
         ));

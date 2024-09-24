@@ -300,7 +300,6 @@ INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUES
 ('Taxa Reduzida', 0.075, 'Taxa de imposto reduzida para produtos essenciais'),
 ('Isento', 0.00, 'Produtos isentos de imposto');
 
-
 INSERT INTO desconto (nome, percentagem, descricao) VALUES
 ('Isento', 0.0, 'Desconto aplicado em produtos sem desconto'),
 ('Desconto de Lançamento', 0.1, 'Desconto aplicado em novos produtos no lançamento'),
@@ -416,22 +415,6 @@ INSERT INTO precovenda (preco, data_inicio, data_fim, estado, fk_id_produto, fk_
 (20.00, '2024-09-17', '2024-09-28', 1, 14, 1), 
 (6000.00, '2024-09-17', NULL, 1, 15, 1);
 
-
-SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.contole_stock, 
-		c.id as id_categoria, c.familia as categoria,
-        u.id as id_unidade, u.sigla as unidade,
-        t.id as id_taxa, t.identificador as taxa,
-        pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,
-        s.saldo,
-        pf.fk_id_armazem
-FROM produto p
-	LEFT JOIN produto_fornecido pf ON pf.fk_id_produto = p.id
-	LEFT JOIN categoria c ON c.id = p.fk_id_categoria
-    LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida
-    LEFT JOIN taxa_imposto t ON t.id = p.fk_id_taxa_imposto
-    LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id AND pv.estado=true
-    LEFT JOIN stock s ON s.fk_id_produto=p.id;
-	-- where pv.estado=true;
     
     INSERT INTO empresa (nome, apelido, nuit) VALUES
 ('JM-Tecnolofias Sociedade Unipessoal', 'Lda', 123456789);
@@ -448,5 +431,14 @@ INSERT INTO contabancaria (nome_banco, numero, nib, nuib, fk_id_empresa, fk_id_u
 ('Banco Comercial e de Investimentos', '12345678', '12345678901234567890', '123456789', 1, 1);
 
 
+INSERT INTO documentocomercial (sigla, diasuteis, descricao) VALUES
+('FA', 5, 'Fatura: Documento comercial que representa a venda de produtos ou serviços, devendo ser emitida no ato da venda ou até 5 dias úteis após a transação.'),
+('FP', 30, 'Fatura Proforma: Documento preliminar usado para cotações e propostas comerciais. Não possui validade fiscal, com uma validade aproximada de 30 dias.'),
+('FR', 1, 'Fatura Recibo: Documento que combina a fatura e o recibo, emitido simultaneamente à venda e ao pagamento.'),
+('FS', 1, 'Fatura Simplificada: Utilizada para vendas de baixo valor ou operações simples, devendo ser emitida no momento da venda.'),
+('GT', 1, 'Guia de Transporte: Documento que deve acompanhar o transporte de mercadorias, emitido antes da movimentação dos produtos.'),
+('NC', 30, 'Nota de Crédito: Documento emitido para corrigir ou anular uma fatura anterior, geralmente emitida até 30 dias após a transação original.'),
+('ECL', 30, 'Extrato de Conta Corrente de Clientes: Relatório periódico que detalha as transações entre a empresa e o cliente, com prazos flexíveis, geralmente mensal.'),
+('ND', 30, 'Nota de Débito: Documento emitido para cobrar valores adicionais de um cliente, emitido até 30 dias após a identificação do valor a ser cobrado.');
 
 

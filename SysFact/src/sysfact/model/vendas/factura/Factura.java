@@ -8,6 +8,7 @@ import java.util.List;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.empresa.Empresa;
 import sysfact.model.usuario.Usuario;
+import sysfact.model.vendas.documetos.DocumentosComerciais;
 import sysfact.model.vendas.factura.itens.Item;
 
 
@@ -20,6 +21,7 @@ public class Factura {
     private String numero;
     private String data_criacao;
     private String data_vencimento;
+    private DocumentosComerciais docComerciais;
     private List<Item> itens;
     private boolean estado;
     private Empresa empresa;
@@ -29,13 +31,15 @@ public class Factura {
     public Factura() {
     }
 
-    public Factura(String numero, String data_vencimento, List<Item> itens, boolean estado, Empresa empresa, Cliente cliente) {
+    public Factura(String numero, String data_vencimento, List<Item> itens, 
+            boolean estado, Empresa empresa, Cliente cliente, DocumentosComerciais docComerciais) {
         this.numero = numero;
         this.data_vencimento = data_vencimento;
         this.itens = itens;
         this.estado = estado;
         this.empresa = empresa;
         this.cliente = cliente;
+        this.docComerciais = docComerciais;
     }
 
     public String getNumero() {
@@ -100,6 +104,14 @@ public class Factura {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public DocumentosComerciais getDocComerciais() {
+        return docComerciais;
+    }
+
+    public void setDocComerciais(DocumentosComerciais docComerciais) {
+        this.docComerciais = docComerciais;
     }
    
 }

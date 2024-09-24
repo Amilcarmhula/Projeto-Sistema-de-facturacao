@@ -205,9 +205,10 @@ public class AddClienteController implements Initializable {
                 "Cabo Delgado"
         )
         );
-        if (SysFact.getData() != null) {
-            if (SysFact.getData() instanceof String) {
-                txtIDCliente.setText((String) SysFact.getData());
+        if (SysFact.getData() != null)  {
+            if (SysFact.getData() instanceof Cliente) {
+                Cliente x = (Cliente) SysFact.getData();
+                txtIDCliente.setText(x.getId()+"");
             }
         }
 

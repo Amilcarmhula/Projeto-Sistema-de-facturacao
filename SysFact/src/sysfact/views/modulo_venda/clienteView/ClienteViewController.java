@@ -195,7 +195,7 @@ public class ClienteViewController implements Initializable {
     public void selectedLineCliente() throws SQLException {
         Cliente c = tabelaCliente.getSelectionModel().getSelectedItem();
         if (c != null) {
-            SysFact.setData(String.valueOf(c.getId()));
+            SysFact.setData(c);
             txtIDCliente.setText(String.valueOf(c.getId()));
             btnAdd.setText("Actualizar");
         }

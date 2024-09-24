@@ -17,13 +17,10 @@ import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -44,16 +41,15 @@ import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.desconto.DescontoDAO;
 import sysfact.dao.produto.ProdutoDAO;
+import sysfact.dao.vendas.documentos.DocumentosComerciaisDAO;
 import sysfact.dao.vendas.factura.FacturaDAO;
 import sysfact.dao.vendas.itens.ItemDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.desconto.Desconto;
 import sysfact.model.empresa.Empresa;
-import sysfact.model.preco.PrecoVenda;
 import sysfact.model.produto.Produto;
-import sysfact.model.taxa_imposto.TaxaImposto;
-import sysfact.model.unidade_medida.UnidadeMedida;
 import sysfact.model.usuario.Usuario;
+import sysfact.model.vendas.documetos.DocumentosComerciais;
 import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
 import sysfact.model.vendas.factura.itens.TableModelItems;
@@ -183,7 +179,7 @@ public class VendasController implements Initializable {
     private TextField txtEmailCLiente;
 
     @FXML
-    private ComboBox<String> combTipoFactura;
+    private ComboBox<String> combTipoDoc;
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 2) {
@@ -232,12 +228,11 @@ public class VendasController implements Initializable {
     }
 
     public void selecionaFactura() {
-        labNumeroFactura.setText(MetodosUteis.invoiceNumber(combTipoFactura.getSelectionModel().getSelectedItem()));
-        if (combTipoFactura.getValue().equals("Factura Recibo")) {
-            labValidade.setText(MetodosUteis.datePlusXDays(0));
-        } else if (combTipoFactura.getValue().equals("Factura Proforma")) {
-            labValidade.setText(MetodosUteis.datePlusXDays(7));
-        }
+        String tipoDoc = combTipoDoc.getSelectionModel().getSelectedItem();
+        DocumentosComerciais doc = mapaDocComercial.get(tipoDoc);
+        labNumeroFactura.setText(MetodosUteis.invoiceNumber(doc.getId()));
+        labValidade.setText(MetodosUteis.datePlusXDays(doc.getDiasUteis()));
+         
     }
 
     public void getDataOnFocus() throws SQLException {
@@ -308,15 +303,27 @@ public class VendasController implements Initializable {
         this.empresaData = SysFact.getEmpresaData();
         try {
             labDataInicial.setText("De: " + MetodosUteis.actualDate());
-            combTipoFactura.setItems(FXCollections.observableArrayList(
-                    "Factura Recibo", "Factura Proforma"
-            ));
+            populateComboFactura();
             populateComboDesconto();
             mapeaProduto();
             getDataOnFocus();
         } catch (SQLException ex) {
             Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    private ObservableList<DocumentosComerciais> listaDocComercial;
+    private Map<String, DocumentosComerciais> mapaDocComercial;
+    public void populateComboFactura() throws SQLException{
+        DocumentosComerciaisDAO dc = new DocumentosComerciaisDAO();
+        listaDocComercial = dc.listAllEntities();
+        mapaDocComercial = new HashMap<>();
+        List<String> lista = new ArrayList<>();
+        for (DocumentosComerciais doc : listaDocComercial) {
+            mapaDocComercial.put(doc.getSigla(), doc);
+            lista.add(doc.getSigla());
+        }
+        combTipoDoc.setItems(FXCollections.observableArrayList(lista));
+        DocumentosComerciais d = new DocumentosComerciais();
     }
 
     private ObservableList<Desconto> listaDescontos;
@@ -374,8 +381,11 @@ public class VendasController implements Initializable {
         f.setUsuario(userData);
         ClienteDAO xDAO = new ClienteDAO();
         Cliente x = xDAO.getClieneByID(Integer.parseInt(txtIDCliente.getText()));
+        DocumentosComerciais d = mapaDocComercial.get(combTipoDoc.getValue());
         f.setCliente(x);
+        f.setDocComerciais(d);
         FacturaDAO fDAO = new FacturaDAO();
+        
         fDAO.addEntity(f);
         registraItens();
     }
@@ -401,6 +411,14 @@ public class VendasController implements Initializable {
         }
         ItemDAO iDAO = new ItemDAO();
         iDAO.addEntity(listaItems);
+    }
+    
+    public void displayPrice(){
+        Item i = null;
+        ObservableList<TableModelItems> itens = tabelaItens.getItems();
+        List<Item> listaItems = new ArrayList<>();
+        for (TableModelItems item : itens) {}
+        
     }
 
     public void resetProduto() {

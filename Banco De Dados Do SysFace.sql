@@ -1,5 +1,5 @@
--- drop database _sysface;
--- create database _sysface;
+drop database _sysface;
+create database _sysface;
 
 
 use _sysface;
@@ -411,16 +411,17 @@ create trigger trigger_registra_saida
 delimiter ;
 
 
+
+
+
+
+
 create table metodo_pagamento(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-
-
-
 
 -- transacoes 
 create table transacoes(

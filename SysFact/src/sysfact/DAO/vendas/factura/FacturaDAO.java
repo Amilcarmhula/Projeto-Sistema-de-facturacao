@@ -29,14 +29,15 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     public void addEntity(Factura t) {
         try {
             sql = "insert into factura (numero,data_vencimento,"
-                    + "fk_id_empresa,fk_id_cliente,fk_id_usuario)"
-                    + " value (?,?,?,?,?)";
+                    + "fk_id_empresa,fk_id_cliente,fk_id_usuario,fk_id_doc)"
+                    + " value (?,?,?,?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, t.getNumero());
             ps.setString(2, t.getData_vencimento());
             ps.setInt(3, t.getEmpresa().getId());
             ps.setInt(4, t.getCliente().getId());
             ps.setInt(5, t.getUsuario().getId());
+            ps.setInt(6, t.getDocComerciais().getId());
 
             ps.execute();
             ps.close();

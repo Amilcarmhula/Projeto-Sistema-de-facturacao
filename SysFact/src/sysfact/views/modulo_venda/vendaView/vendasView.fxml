@@ -325,7 +325,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <ComboBox fx:id="combTipoFactura" layoutX="171.0" layoutY="58.0" onAction="#selecionaFactura" prefHeight="25.0" prefWidth="148.0" promptText="Tipo De Factura" />
+                  <ComboBox fx:id="combTipoDoc" layoutX="171.0" layoutY="58.0" onAction="#selecionaFactura" prefHeight="25.0" prefWidth="66.0" />
                   <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="57.0" prefHeight="27.0" prefWidth="139.0" text="Tipo de Factura:">
                      <font>
                         <Font name="System Bold" size="18.0" />

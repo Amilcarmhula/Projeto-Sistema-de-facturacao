@@ -232,7 +232,7 @@ public class VendasController implements Initializable {
         DocumentosComerciais doc = mapaDocComercial.get(tipoDoc);
         labNumeroFactura.setText(MetodosUteis.invoiceNumber(doc.getId()));
         labValidade.setText(MetodosUteis.datePlusXDays(doc.getDiasUteis()));
-         
+
     }
 
     public void getDataOnFocus() throws SQLException {
@@ -313,7 +313,8 @@ public class VendasController implements Initializable {
     }
     private ObservableList<DocumentosComerciais> listaDocComercial;
     private Map<String, DocumentosComerciais> mapaDocComercial;
-    public void populateComboFactura() throws SQLException{
+
+    public void populateComboFactura() throws SQLException {
         DocumentosComerciaisDAO dc = new DocumentosComerciaisDAO();
         listaDocComercial = dc.listAllEntities();
         mapaDocComercial = new HashMap<>();
@@ -371,6 +372,7 @@ public class VendasController implements Initializable {
 
         tabelaItens.getItems().add(data);
         resetProduto();
+        displayPrice();
     }
 
     public void criarFactura() throws SQLException {
@@ -385,12 +387,12 @@ public class VendasController implements Initializable {
         f.setCliente(x);
         f.setDocComerciais(d);
         FacturaDAO fDAO = new FacturaDAO();
-        
+
         fDAO.addEntity(f);
         registraItens();
     }
-    
-    public void registraItens() throws SQLException{
+
+    public void registraItens() throws SQLException {
         Item i = null;
         ObservableList<TableModelItems> itens = tabelaItens.getItems();
         List<Item> listaItems = new ArrayList<>();
@@ -412,13 +414,23 @@ public class VendasController implements Initializable {
         ItemDAO iDAO = new ItemDAO();
         iDAO.addEntity(listaItems);
     }
-    
-    public void displayPrice(){
-        Item i = null;
+
+    public void displayPrice() {
         ObservableList<TableModelItems> itens = tabelaItens.getItems();
-        List<Item> listaItems = new ArrayList<>();
-        for (TableModelItems item : itens) {}
-        
+        double subtotal = 0;
+        double desc = 0;
+        double total = 0;
+        for (TableModelItems item : itens) {
+            Produto x = mapaProdutos.get(item.getId());
+            subtotal += item.getQtd() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem());
+            Desconto desconto = mapaDesconto.get(item.getDesconto());
+            desc += (item.getQtd() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem()))*desconto.getPercentagem();
+            total += item.getSubtotal();
+        }
+        labSubtotal.setText(subtotal+" MZN");
+        labDesconto.setText(desc+" MZN");
+        labTotalGeral.setText(total+" MZN");
+
     }
 
     public void resetProduto() {

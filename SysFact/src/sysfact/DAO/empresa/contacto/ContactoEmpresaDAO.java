@@ -11,8 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import sysfact.model.empresa.contacto.ContactoEmpresa;
 import sysfact.util.Conexao;
-import sysfact.logical.ContactoEmpresa;
 
 /**
  *
@@ -38,8 +38,8 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
 
             ps.setString(1, t.getContacto());
             ps.setString(2, t.getEmail());
-            ps.setInt(3, t.getFk_id_empresa());
-            ps.setInt(4, t.getFk_id_usuario());
+            ps.setInt(3, t.getEmpresa().getId());
+            ps.setInt(4, t.getUsuario().getId());
 
 
             ps.execute();
@@ -59,8 +59,8 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
 
              ps.setString(1, t.getContacto());
             ps.setString(2, t.getEmail());
-            ps.setInt(3, t.getFk_id_empresa());
-            ps.setInt(4, t.getFk_id_usuario());
+            ps.setInt(3, t.getEmpresa().getId());
+            ps.setInt(4, t.getUsuario().getId());
             ps.setInt(5, id);
 
             ps.execute();
@@ -83,10 +83,9 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
                 c.setId(result.getInt("id"));
                 c.setContacto(result.getString("contacto"));
                 c.setEmail(result.getString("email"));
-                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
-                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
+//                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
+//                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
                 lista.add(c);
             }
             result.close();
@@ -111,10 +110,9 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
                 c.setId(result.getInt("id"));
                 c.setContacto(result.getString("contacto"));
                 c.setEmail(result.getString("email"));
-                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
-                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
+//                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
+//                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
             }
             result.close();
             ps.close();

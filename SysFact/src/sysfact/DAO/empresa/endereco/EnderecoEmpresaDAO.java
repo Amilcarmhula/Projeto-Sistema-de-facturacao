@@ -11,8 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import sysfact.model.empresa.endereco.EnderecoEmpresa;
 import sysfact.util.Conexao;
-import sysfact.logical.EnderecoEmpresa;
 
 /**
  *
@@ -43,7 +43,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
             ps.setInt(6, t.getCodigoPostal());
             ps.setInt(7, t.getNumero());
             ps.setString(8, t.getTipo());
-            ps.setInt(9, t.getFk_id_empresa());
+//            ps.setInt(9, t.getFk_id_empresa());
 
             ps.execute();
             ps.close();
@@ -68,7 +68,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
             ps.setInt(6, t.getCodigoPostal());
             ps.setInt(7, t.getNumero());
             ps.setString(8, t.getTipo());
-            ps.setInt(9, t.getFk_id_empresa());
+//            ps.setInt(9, t.getFk_id_empresa());
             ps.setInt(10, id);
 
             ps.execute();
@@ -98,8 +98,8 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
                 c.setNumero(result.getInt("numero"));
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setTipo(result.getString("tipo"));
-                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
+//                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
+//                c.setActive_or_not(result.getBoolean("active_or_not"));
                 lista.add(c);
             }
             result.close();
@@ -131,8 +131,8 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
                 c.setNumero(result.getInt("numero"));
                 c.setData_criacao(result.getString("data_criacao"));
                 c.setTipo(result.getString("tipo"));
-                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
-                c.setActive_or_not(result.getBoolean("active_or_not"));
+//                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
+//                c.setActive_or_not(result.getBoolean("active_or_not"));
             }
             result.close();
             ps.close();

@@ -39,8 +39,8 @@ public class PagamentoDAO implements DaoImpl<Pagamento> {
             ps.setLong(2, t.getReferencia_numero_fatura());
             ps.setDouble(3, t.getValor());
             ps.setDouble(4, t.getFk_id_metodo_pagamento());
-            ps.setInt(5, t.getFk_id_factura());
-            ps.setInt(6, t.getFk_id_usuario());
+            ps.setString(5, t.getFactura().getNumero());
+            ps.setInt(6, t.getUsuario().getId());
 
             ps.execute();
             ps.close();
@@ -61,8 +61,8 @@ public class PagamentoDAO implements DaoImpl<Pagamento> {
             ps.setLong(2, t.getReferencia_numero_fatura());
             ps.setDouble(3, t.getValor());
             ps.setDouble(4, t.getFk_id_metodo_pagamento());
-            ps.setInt(5, t.getFk_id_factura());
-            ps.setInt(6, t.getFk_id_usuario());
+            ps.setString(5, t.getFactura().getNumero());
+            ps.setInt(6, t.getUsuario().getId());
             ps.setInt(7, id);
 
             ps.execute();
@@ -87,8 +87,8 @@ public class PagamentoDAO implements DaoImpl<Pagamento> {
                 u.setReferencia_numero_fatura(result.getLong("referencia_numero_fatura"));
                 u.setValor(result.getDouble("valor"));
                 u.setFk_id_metodo_pagamento(result.getInt("fk_id_metodo_pagamento"));
-                u.setFk_id_factura(result.getInt("fk_id_factura"));
-                u.setFk_id_usuario(result.getInt("fk_id_usuario"));
+//                u.setFactura(result.getInt("fk_id_factura"));
+//                u.setUsuario(result.getInt("fk_id_usuario"));
                 u.setData_criacao(result.getString("data_criacao"));
                 u.setActive_or_not(result.getBoolean("active_or_not"));
                 lista.add(u);
@@ -116,8 +116,8 @@ public class PagamentoDAO implements DaoImpl<Pagamento> {
                 u.setReferencia_numero_fatura(result.getLong("referencia_numero_fatura"));
                 u.setValor(result.getDouble("valor"));
                 u.setFk_id_metodo_pagamento(result.getInt("fk_id_metodo_pagamento"));
-                u.setFk_id_factura(result.getInt("fk_id_factura"));
-                u.setFk_id_usuario(result.getInt("fk_id_usuario"));
+//                u.setFactura(result.getInt("fk_id_factura"));
+//                u.setUsuario(result.getInt("fk_id_usuario"));
                 u.setData_criacao(result.getString("data_criacao"));
                 u.setActive_or_not(result.getBoolean("active_or_not"));
             }

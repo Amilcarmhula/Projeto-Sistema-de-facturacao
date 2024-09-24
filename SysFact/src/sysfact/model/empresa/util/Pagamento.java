@@ -4,8 +4,9 @@
  */
 package sysfact.model.empresa.util;
 
-import sysfact.logical.Factura;
-import sysfact.logical.Usuario;
+import sysfact.model.usuario.Usuario;
+import sysfact.model.vendas.factura.Factura;
+
 
 /**
  *
@@ -19,8 +20,8 @@ public class Pagamento {
     private double valor;
     private int fk_id_metodo_pagamento;
     private String data_criacao;
-    private int fk_id_factura;
-    private int fk_id_usuario;
+    private Factura factura;
+    private Usuario usuario;
     private boolean active_or_not;
 
     public Pagamento() {
@@ -31,9 +32,9 @@ public class Pagamento {
         this.referencia_numero_fatura = referencia_numero_fatura;
         this.valor = valor;
         this.fk_id_metodo_pagamento = fk_id_metodo_pagamento.getId();
-        this.fk_id_factura = fk_id_factura.getId();
-        this.fk_id_usuario = fk_id_usuario.getId();
-    }
+        this.factura = fk_id_factura;
+        this.usuario = fk_id_usuario;
+                }
 
     public int getId() {
         return id;
@@ -83,22 +84,23 @@ public class Pagamento {
         this.data_criacao = data_criacao;
     }
 
-    public int getFk_id_factura() {
-        return fk_id_factura;
+    public Factura getFactura() {
+        return factura;
     }
 
-    public void setFk_id_factura(int fk_id_factura) {
-        this.fk_id_factura = fk_id_factura;
+    public void setFactura(Factura factura) {
+        this.factura = factura;
     }
 
-    public int getFk_id_usuario() {
-        return fk_id_usuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setFk_id_usuario(int fk_id_usuario) {
-        this.fk_id_usuario = fk_id_usuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
+    
     public boolean isActive_or_not() {
         return active_or_not;
     }

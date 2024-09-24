@@ -137,49 +137,6 @@ create table contacto_armazem(
     foreign key (fk_id_usuario) references usuario(id)
 );
 
-
--- create table endereco(
--- 	id integer primary key auto_increment,
---     provincia varchar(50),
---     cidade varchar(50),
---     bairro varchar(50),
---     avenida varchar(50),
---     rua varchar(30),
---     codigo_postal integer,
---     numero integer not null,
---     tipo varchar(10),
--- 	fk_id_cliente integer,
---     fk_id_fornecedor integer,
---     fk_id_armazem integer,
---     fk_id_usuario integer not null,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     foreign key (fk_id_cliente) references cliente(id),
---     foreign key (fk_id_fornecedor) references fornecedor(id),
---     foreign key (fk_id_armazem) references armazem(id),
---     foreign key (fk_id_usuario) references usuario(id),
---     check(tipo in('Facturação','Envio')),
---     check(
--- 		(fk_id_cliente is not null and (fk_id_fornecedor is null and fk_id_armazem is null))
---         or 
---         (fk_id_fornecedor is not null and (fk_id_cliente is null and fk_id_armazem is null))
---         or 
---         (fk_id_armazem is not null and (fk_id_cliente is null and fk_id_fornecedor is null))
--- 	)
--- );
-
-
-
--- create table categoria(
--- 	id integer primary key auto_increment,
---     tipo varchar(30) not null,
---     nome varchar(50) not null,
---     descricao text,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
--- );
-
--- version II
-
-
 create table categoria(
 	id integer primary key auto_increment,
     tipo varchar(30) not null,
@@ -209,9 +166,6 @@ create table taxa_imposto(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- insert into armazem (nome, cidade, bairro,avenida, rua,codigo_postal,numero) value ('Armazem 3', 'Maracuene', 'Jardim', 'av. Cardoso', 'Junta', 1122,300);
--- ALTER TABLE armazem DROP COLUMN provincia;
-
 create table desconto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -236,10 +190,6 @@ create table produto(
     foreign key (fk_id_unidade_medida) references unidade_medida(id)
 );
 
-
-    
-
--- CALL atualizar_estado_precovenda();
 
 
 CREATE TABLE precovenda (
@@ -272,15 +222,7 @@ DELIMITER ;
 CREATE EVENT evento_atualizar_precovenda
 ON SCHEDULE EVERY 1 DAY
 DO
-    CALL atualizar_estado_precovenda();
-
-
--- SELECT p.id,
--- 			(SELECT nome FROM produto WHERE p.fk_id_produto = produto.id) AS nome_p,
---             (SELECT nome FROM agente WHERE p.fk_id_agente = agente.id) AS nome_f,
---             (SELECT nome FROM armazem WHERE p.fk_id_armazem = armazem.id) AS nome_a,
--- p.quantidade, p.custo, p.data_fornedida, p.active_or_not FROM produto_fornecido p;
-          
+    -- CALL atualizar_estado_precovenda();
 
 create table produto_fornecido(
 	id integer primary key auto_increment,
@@ -297,39 +239,6 @@ create table produto_fornecido(
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_fornecedor) references fornecedor(id)
 );
-
--- select * from precovenda;
--- select sum(quantidade) from movimento_produto where id=1;
-
--- select sum(quantidade ) from movimento_produto where id=2;
-
-
--- select * from precovenda;
--- select sum(quantidade) from movimento_produto where id=1;
-
-
--- select sum(quantidade ) from movimento_produto where id=2;
-
--- select sum(quantidade) from movimento_produto;
--- select * from movimento_produto;
-
--- SELECT 
---     (SUM(CASE WHEN tipo_movimento = 'Entrada' THEN quantidade ELSE 0 END) - 
---      SUM(CASE WHEN tipo_movimento = 'Saída' THEN quantidade ELSE 0 END)) AS saldo_produto
--- FROM movimento_produto
--- WHERE fk_id_produto = 1
---   AND active_or_not = 1; -- Considerando apenas registros ativos
---  
--- update stock set  saldo=(SELECT 
---     (SUM(CASE WHEN tipo_movimento = 'Entrada' THEN quantidade ELSE 0 END) - 
---      SUM(CASE WHEN tipo_movimento = 'Saída' THEN quantidade ELSE 0 END)) AS saldo_produto
--- FROM movimento_produto
--- WHERE fk_id_produto = 2) where fk_id_produto=2;
-
--- select * from movimento_produto;
--- insert into movimento_produto (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem ) 
--- value ('Saída','2024-09-10', 8, 2,1,1);
-
 
 
 create table movimento_produto(
@@ -354,28 +263,6 @@ create trigger trigger_registra_entrada
 		insert into movimento_produto (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem) value ('Entrada',new.data_fornecida,new.quantidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
     end//
 delimiter ;
-
-select * from factura;
-select * from itemfactura;
-select * from movimento_produto;
-select * from produto_fornecido;
-select * from produto;
-select * from stock;
-
-SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.contole_stock, 
-                    c.id as id_categoria, c.familia as categoria,
-                    u.id as id_unidade, u.identificador, u.sigla,
-                    t.id as id_taxa, t.identificador as taxa, t.percentagem,
-                    pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,
-                    s.saldo, s.fk_id_armazem,
-                    a.nome AS nome_armazem, a.estado AS estado_armazem
-                    FROM produto p 
-                    LEFT JOIN categoria c ON c.id = p.fk_id_categoria 
-                    LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida 
-                    LEFT JOIN taxa_imposto t ON t.id = p.fk_id_taxa_imposto 
-                    LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id AND pv.estado=true 
-                    LEFT JOIN stock s ON s.fk_id_produto=p.id
-                    LEFT JOIN armazem a ON a.id = s.fk_id_armazem;
 
 create table stock(
 	fk_id_produto integer,
@@ -421,12 +308,6 @@ END//
 DELIMITER ;
 
 
-
-
-
-
-
-
 --  Banco de dados da empresa no sistema Sysface
  create table empresa(
 	id integer primary key auto_increment,
@@ -462,7 +343,7 @@ create table contacto_empresa(
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_empresa) references empresa(id)
 );
--- id,nome_banco,numero,nib,nuib,fk_id_empresa,fk_id_usuario,data_criacao,active_or_not
+
 
  create table contabancaria(
 	id integer primary key auto_increment,
@@ -477,16 +358,15 @@ create table contacto_empresa(
     foreign key (fk_id_empresa) references empresa(id)
 );
 
-use _sysface;
--- drop table factura;
--- drop table itemfactura;
--- drop table pagamento;
--- drop table metodo_pagamento;
--- drop trigger before_insert_itemfactura;
-
+-- Armazena as siglas das facturas e o numero de dias uteis
+create table documentocomercial(
+	id integer primary key auto_increment,
+    sigla varchar(10) not null,
+    diasuteis integer not null,
+    descricao text not null    
+);
 
 -- Tabelas para armazenar dados das facturacoes
-select * from factura;
 create table factura(
     numero varchar(20) primary key,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -495,6 +375,8 @@ create table factura(
     fk_id_empresa integer not null,
     fk_id_cliente integer not null,
     fk_id_usuario integer not null,
+    fk_id_doc integer not null,
+    foreign key (fk_id_doc) references documentocomercial(id),
     foreign key (fk_id_empresa) references empresa(id),
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_cliente) references cliente(id)
@@ -528,39 +410,6 @@ create trigger trigger_registra_saida
     end//
 delimiter ;
 
--- DELIMITER //
--- CREATE TRIGGER before_insert_itemfactura
--- BEFORE INSERT ON itemfactura
--- FOR EACH ROW
--- BEGIN
---     DECLARE preco DECIMAL(10,2);
---     DECLARE percentagem_desconto DECIMAL(4,3) DEFAULT 0;
-
---     -- Obter o preço do produto da tabela precovenda com estado = 1
---     SELECT preco INTO preco
---     FROM precovenda
---     WHERE fk_id_produto = NEW.fk_id_produto AND estado = 1
---     LIMIT 1;
-
---     -- Verificar se existe um desconto associado
---     IF NEW.fk_id_desconto IS NOT NULL THEN
---         -- Obter a percentagem do desconto
---         SELECT percentagem INTO percentagem_desconto
---         FROM desconto
---         WHERE id = NEW.fk_id_desconto
---         LIMIT 1;
---         
---         -- Se a percentagem de desconto não for encontrada, usar 0
---         IF percentagem_desconto IS NULL THEN
---             SET percentagem_desconto = 0;
---         END IF;
---     END IF;
-
---     -- Calcular o subtotal aplicando o desconto se existir
---     SET NEW.subtotal = NEW.quantidade * preco * (1 - percentagem_desconto);
--- END//
--- DELIMITER ;
-
 
 create table metodo_pagamento(
 	id integer primary key auto_increment,
@@ -569,17 +418,45 @@ create table metodo_pagamento(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table pagamento(
+
+
+
+
+-- transacoes 
+create table transacoes(
 	id integer primary key auto_increment,
-    data_pagamento datetime,
-    referencia_numero_fatura integer not null,
+    data_pagamento date,
     valor decimal(10,2) not null,
+    tipo_transacao VARCHAR(50) NOT NULL, -- Ex: Entrada, Saída
+    tipo_pagamento varchar(20) not null, -- caixa, conta corrente
+    descricao text,
+    fk_id_contabancaria integer,
     fk_id_metodo_pagamento integer not null,
-    fk_numero varchar(20) not null,
+    fk_numero varchar(20),
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_contabancaria) references contabancaria(id),
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_metodo_pagamento) references metodo_pagamento(id),
     foreign key (fk_numero) references factura(numero)
+);
+
+					-- As tabelas abaixo serao populadas atravez de trigger's
+
+-- esta tabela sera actualizada com uma trigger
+CREATE TABLE caixa (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    saldo_inicial DECIMAL(10, 2) NOT NULL,
+    saldo_atual DECIMAL(10, 2) NOT NULL,
+    fk_id_transacoes integer not null,
+    foreign key (fk_id_transacoes) references transacoes(id)
+);
+-- conta corrente
+ create table contacorrente(
+	id integer primary key auto_increment,
+	saldo_inicial DECIMAL(10, 2) NOT NULL,
+	saldo_atual DECIMAL(10, 2) NOT NULL, 
+    fk_id_transacoes integer not null,
+    foreign key (fk_id_transacoes) references transacoes(id)
 );
 

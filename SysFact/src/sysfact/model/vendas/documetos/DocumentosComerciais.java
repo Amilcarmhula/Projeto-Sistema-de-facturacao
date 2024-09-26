@@ -11,14 +11,16 @@ package sysfact.model.vendas.documetos;
 public class DocumentosComerciais {
     private int id;
     private String sigla;
+    private String nome;
     private String descricao;
     private int diasUteis;
 
     public DocumentosComerciais() {
     }
 
-    public DocumentosComerciais(String sigla, String descricao, int diasUteis) {
+    public DocumentosComerciais(String sigla,String nome, String descricao, int diasUteis) {
         this.sigla = sigla;
+        this.nome = nome;
         this.descricao = descricao;
         this.diasUteis = diasUteis;
     }
@@ -37,6 +39,14 @@ public class DocumentosComerciais {
 
     public void setSigla(String sigla) {
         this.sigla = sigla;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getDescricao() {

@@ -26,12 +26,7 @@ public class Teste {
      */
     public static void main(String[] args) throws SQLException {
         
-        DocumentosComerciaisDAO dc = new DocumentosComerciaisDAO();
-        DocumentosComerciais d = new DocumentosComerciais();
-        List<DocumentosComerciais> lista = dc.listAllEntities();
-        for(DocumentosComerciais doc : lista){
-            System.out.println(doc.getId());
-        }
+        
 //        Cliente c = new Cliente();
 //        ClienteDAO cdao = new ClienteDAO();
 //        ObservableList<Cliente> listaClientes = cdao.listAllEntities();

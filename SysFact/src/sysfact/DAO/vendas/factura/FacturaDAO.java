@@ -6,9 +6,14 @@ package sysfact.dao.vendas.factura;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import sysfact.model.vendas.factura.Factura;
+import sysfact.reports.facturas.ClienteData;
+import sysfact.reports.facturas.itensFacturaData;
 import sysfact.util.Conexao;
 
 /**
@@ -24,13 +29,13 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     public FacturaDAO() throws SQLException {
         this.con = Conexao.getConexao();
     }
-    
+
     @Override
     public void addEntity(Factura t) {
         try {
             sql = "insert into factura (numero,data_vencimento,"
-                    + "fk_id_empresa,fk_id_cliente,fk_id_usuario,fk_id_doc)"
-                    + " value (?,?,?,?,?,?)";
+                    + "fk_id_empresa,fk_id_cliente,fk_id_usuario,fk_id_doc,data_criacao)"
+                    + " value (?,?,?,?,?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, t.getNumero());
             ps.setString(2, t.getData_vencimento());
@@ -38,12 +43,57 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             ps.setInt(4, t.getCliente().getId());
             ps.setInt(5, t.getUsuario().getId());
             ps.setInt(6, t.getDocComerciais().getId());
+            ps.setString(7, t.getData_criacao());
 
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao criar Factura: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public List<itensFacturaData> getItensFacturaData(String factura) {
+        List<itensFacturaData> lista = new ArrayList<>();
+        itensFacturaData c = null;
+        try {
+            sql = "SELECT "
+                    + "p.nome, "
+                    + "p.descricao, "
+                    + "i.quantidade, "
+                    + "pv.preco, "
+                    + "ip.identificador, "
+                    + "ip.percentagem AS taxa_imposto, "
+                    + "d.nome AS titulo_desconto, "
+                    + "d.percentagem AS percentagem_desconto,"
+                    + "i.subtotal "
+                    + "FROM factura f "
+                    + "LEFT JOIN itemfactura i ON i.fk_numero = f.numero "
+                    + "LEFT JOIN desconto d ON d.id = i.fk_id_desconto "
+                    + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
+                    + "LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id "
+                    + "LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto "
+                    + "WHERE f.numero = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, factura);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                c = new itensFacturaData();
+                c.setNomeProduto(result.getString("nome"));
+                c.setDescricaoProduto(result.getString("descricao"));
+                c.setQuantidadeProduto(result.getInt("quantidade"));
+                c.setPrecoProduto(result.getDouble("preco"));
+                c.setTaxaProduto(result.getDouble("taxa_imposto"));
+                c.setDescontoProduto(result.getDouble("percentagem_desconto"));
+                c.setTotaProduto(result.getDouble("subtotal"));
+                lista.add(c);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+
+        }
+        return lista;
     }
 //
 //    @Override

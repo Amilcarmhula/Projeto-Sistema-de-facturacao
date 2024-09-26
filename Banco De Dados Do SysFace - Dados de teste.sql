@@ -1,86 +1,76 @@
 use _sysface;
-
--- SELECT 
---     e.id, e.nome, e.apelido AS razao, e.nuit,   
---     en.provincia, en.cidade, en.bairro, en.avenida, en.rua, en.codigo_postal, en.numero, en.tipo,
---     c.contacto, c.email, c.website,
---     a.nome_banco, a.numero, a.nib, a.nuib
--- FROM 
---     empresa e
--- LEFT JOIN 
---     endereco_empresa en ON e.id = en.fk_id_empresa
--- LEFT JOIN 
---     contacto_empresa c ON e.id = c.fk_id_empresa
--- LEFT JOIN 
--- 	contabancaria a ON e.id=a.fk_id_empresa;
-
--- select * from contabancaria;
-
-
-
--- SELECT c.id,c.tipo,c.nome,c.apelido as razaosocial,c.nuit, 
---                     GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos,
---                     GROUP_CONCAT(DISTINCT CONCAT(e.id,'-', e.avenida, '-',e.rua, '-',e.numero, '-',e.bairro, '-',e.cidade, '-',e.provincia, '-',e.codigo_postal)) AS endereco,
---                     ct.email as email
---                     FROM cliente c 
---                     LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id 
--- 					LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id AND e.tipo = 'Envio' 
---                     where c.id=9
---                     GROUP BY c.id, c.nome, c.apelido, c.nuit;
---                     
--- select * from endereco_cliente; 
--- update endereco_cliente set tipo='Envio' where id=20; 
---                     
---                     
--- SELECT 
---     c.id,
---     c.tipo,
---     c.nome,
---     c.apelido AS razaosocial,
---     c.nuit,
---     GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR ' ') AS contatos,
---     GROUP_CONCAT(
---         DISTINCT CONCAT(
---             e.avenida, ' ', 
---             e.rua, ' ', 
---             e.numero, ' ', 
---             e.bairro, ', ', 
---             e.cidade, ', ', 
---             e.provincia, ' ', 
---             e.codigo_postal
---         ) SEPARATOR ', '
---     ) AS endereco
--- FROM 
---     cliente c
--- LEFT JOIN 
---     contacto_cliente ct ON ct.fk_id_cliente = c.id
--- LEFT JOIN 
---     endereco_cliente e ON e.fk_id_cliente = c.id 
---     AND e.tipo = 'Facturação' -- Filtrando pelo tipo de endereço aqui
--- GROUP BY 
---     c.id, c.nome, c.apelido, c.nuit;
+-- Dados da Factura
+SELECT 
+    p.nome, 
+    p.descricao, 
+    i.quantidade, 
+    pv.preco, 
+    ip.identificador, 
+    ip.percentagem AS taxa_imposto, 
+    d.nome AS titulo_desconto, 
+    d.percentagem AS percentagem_desconto,
+    i.subtotal
+FROM 
+    factura f
+    LEFT JOIN itemfactura i ON i.fk_numero = f.numero
+    LEFT JOIN desconto d ON d.id = i.fk_id_desconto
+    LEFT JOIN produto p ON p.id = i.fk_id_produto
+    LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id
+    LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto
+WHERE 
+    f.numero = '2024-262/3';
+    
+-- Calculo de totais para fecho da factura
+SELECT 
+    -- Calculo de total sem taxa nem desconto
+    sum(ii.quantidade * pv2.preco) as subtotal,
+    
+    -- Calculando o valor total do desconto
+    sum((((ii.quantidade * pv2.preco) * ip2.percentagem)+ii.quantidade * pv2.preco) * dd.percentagem) AS desconto,
+    
+    -- Calculando o valor total do imposto
+    sum(ii.quantidade * pv2.preco * ip2.percentagem) AS taxas,
+    -- Soma do total geral
+    sum(ii.subtotal) as total_geral
+FROM 
+    factura ff
+    LEFT JOIN itemfactura ii ON ii.fk_numero = ff.numero
+    LEFT JOIN desconto dd ON dd.id = ii.fk_id_desconto
+    LEFT JOIN produto pp ON pp.id = ii.fk_id_produto
+    LEFT JOIN precovenda pv2 ON pv2.fk_id_produto = pp.id
+    LEFT JOIN taxa_imposto ip2 ON ip2.id = pp.fk_id_taxa_imposto    
+WHERE 
+    ff.numero = '2024-262/3';
+    
+-- Dados do cliente da factura
+SELECT 
+	c.apelido, c.nuit,
+    CONCAT( e.avenida, ', ',e.rua, ', ',e.numero, '; ',e.bairro, '-,',e.cidade, ', ',e.provincia, '-',e.codigo_postal ) as endereco,
+	GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR ' ') AS contatos,ct.email
+FROM 
+    factura f
+    LEFT JOIN cliente c ON c.id = f.fk_id_cliente
+    LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
+    LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id
+WHERE 
+    f.numero = '2024-262/3';
+select * from itemfactura;
 
 
- -- select * from agente inner join contacto_agente on agente.id=contacto_agente.fk_id_agente;
--- select contacto, email, contacto_agente.data_criacao from contacto_agente inner join agente on agente.id=contacto_agente.fk_id_agente;
--- select * from contacto_agente where fk_id_agente=2;
--- select * from contacto_agente;
 
 
---  insert into usuario(nome, usuario, senha) value ('Jr Mula','user',1111);
--- update usuario set nome='Jr Mula', usuario='root', senha=4321, codigo=407 where id=1;
 
---  select * from usuario;
--- select * from endereco_agente;
--- select * from contacto_agente;
 
--- 	UPDATE agente
--- 	INNER JOIN endereco_agente ON agente.id = endereco_agente.fk_id_agente
--- 	INNER JOIN contacto_agente ON agente.id = contacto_agente.fk_id_agente
--- 	SET agente.active_or_not = true,
--- 		endereco_agente.active_or_not = true,
--- 		contacto_agente.active_or_not = true
--- 	WHERE agente.id = 1;
+
+
+
+
+
+
+
+
+
+
 
 INSERT INTO cliente (tipo, nome, apelido, nuit, fk_id_usuario)
 VALUES
@@ -94,40 +84,6 @@ VALUES
 ('Pessoa Jurídica', 'Transporte Rápido', 'TransRápido Ltda', 963852741, 1),
 ('Pessoa Física', 'Fernanda Oliveira', 'Nanda', 741852963, 1),
 ('Pessoa Física', 'Roberto Souza', 'Beto', 369258147, 1);
-
-
--- SELECT c.id, c.nome, c.apelido, c.nuit, 
---        -- e.provincia, e.cidade, e.bairro, e.avenida, e.rua, e.codigo_postal, e.numero, e.tipo AS tipo_endereco,
---        ct.pessoa_de_contacto, ct.contacto, ct.email, ct.website
--- FROM cliente c
--- -- LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id
--- LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id;
-
--- SELECT c.id, 
---        c.nome, 
---        c.apelido, 
---        c.nuit, 
---        GROUP_CONCAT(CONCAT(ct.pessoa_de_contacto, ': ', ct.contacto, ', ', ct.email, ', ', ct.website) SEPARATOR ' | ') AS contatos
--- FROM cliente c
--- LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
--- GROUP BY c.id, c.nome, c.apelido, c.nuit;
-
--- SELECT c.id, 
--- 	   c.tipo,
---        c.nome, 
---        c.apelido as razaosocial, 
---        c.nuit, 
---        GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos
--- FROM cliente c
--- LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
--- GROUP BY c.id, c.nome, c.apelido, c.nuit;
-
--- SELECT c.id,c.tipo,c.nome,c.apelido as razaosocial,c.nuit, 
---                     GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos 
---                     FROM cliente c 
---                     LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id 
---                     GROUP BY c.id, c.nome, c.apelido, c.nuit;
-
 
 
 -- Dados de endereços
@@ -431,14 +387,13 @@ INSERT INTO contabancaria (nome_banco, numero, nib, nuib, fk_id_empresa, fk_id_u
 ('Banco Comercial e de Investimentos', '12345678', '12345678901234567890', '123456789', 1, 1);
 
 
-INSERT INTO documentocomercial (sigla, diasuteis, descricao) VALUES
-('FA', 5, 'Fatura: Documento comercial que representa a venda de produtos ou serviços, devendo ser emitida no ato da venda ou até 5 dias úteis após a transação.'),
-('FP', 30, 'Fatura Proforma: Documento preliminar usado para cotações e propostas comerciais. Não possui validade fiscal, com uma validade aproximada de 30 dias.'),
-('FR', 1, 'Fatura Recibo: Documento que combina a fatura e o recibo, emitido simultaneamente à venda e ao pagamento.'),
-('FS', 1, 'Fatura Simplificada: Utilizada para vendas de baixo valor ou operações simples, devendo ser emitida no momento da venda.'),
-('GT', 1, 'Guia de Transporte: Documento que deve acompanhar o transporte de mercadorias, emitido antes da movimentação dos produtos.'),
-('NC', 30, 'Nota de Crédito: Documento emitido para corrigir ou anular uma fatura anterior, geralmente emitida até 30 dias após a transação original.'),
-('ECL', 30, 'Extrato de Conta Corrente de Clientes: Relatório periódico que detalha as transações entre a empresa e o cliente, com prazos flexíveis, geralmente mensal.'),
-('ND', 30, 'Nota de Débito: Documento emitido para cobrar valores adicionais de um cliente, emitido até 30 dias após a identificação do valor a ser cobrado.');
+INSERT INTO documentocomercial (sigla, nome, diasuteis, descricao) VALUES
+('FA','Fatura', 5, 'Fatura: Documento comercial que representa a venda de produtos ou serviços, devendo ser emitida no ato da venda ou até 5 dias úteis após a transação.'),
+('FP','Fatura Proforma', 30, 'Fatura Proforma: Documento preliminar usado para cotações e propostas comerciais. Não possui validade fiscal, com uma validade aproximada de 30 dias.'),
+('FR','Fatura Recibo', 1, 'Fatura Recibo: Documento que combina a fatura e o recibo, emitido simultaneamente à venda e ao pagamento.'),
+('FS','Fatura Simplificada', 1, 'Fatura Simplificada: Utilizada para vendas de baixo valor ou operações simples, devendo ser emitida no momento da venda.'),
+('GT','Guia de Transporte', 1, 'Guia de Transporte: Documento que deve acompanhar o transporte de mercadorias, emitido antes da movimentação dos produtos.'),
+('NC','Nota de Crédito', 30, 'Nota de Crédito: Documento emitido para corrigir ou anular uma fatura anterior, geralmente emitida até 30 dias após a transação original.'),
+('ND','Nota de Débito', 30, 'Nota de Débito: Documento emitido para cobrar valores adicionais de um cliente, emitido até 30 dias após a identificação do valor a ser cobrado.');
 
 

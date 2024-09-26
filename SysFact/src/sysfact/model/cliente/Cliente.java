@@ -31,9 +31,11 @@ public class Cliente {
     
 
     public Cliente() {
+        super();
     }
 
     public Cliente(String tipo, String nome, String apelido, int nuit, List<ContactoCliente> contactosCliente, List<EnderecoCliente> enderecosCliente, Usuario usuario) {
+        super();
         this.tipo = tipo;
         this.nome = nome;
         this.apelido = apelido;

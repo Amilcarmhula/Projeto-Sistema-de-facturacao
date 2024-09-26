@@ -215,7 +215,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="1103.0" layoutY="105.0" prefHeight="27.0" prefWidth="99.0" text="Valido Ate:">
+                  <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="1130.0" layoutY="105.0" prefHeight="27.0" prefWidth="99.0" text="Valido Ate:">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -240,12 +240,12 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </TextField>
-                  <Label layoutX="957.0" layoutY="62.0" text="FACTURA N°" textFill="WHITE">
+                  <Label layoutX="942.0" layoutY="62.0" text="FACTURA N°" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="26.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labNumeroFactura" layoutX="1120.0" layoutY="62.0" prefHeight="38.0" prefWidth="180.0" textFill="WHITE">
+                  <Label fx:id="labNumeroFactura" layoutX="1105.0" layoutY="62.0" prefHeight="38.0" prefWidth="180.0" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="26.0" />
                      </font>
@@ -260,12 +260,17 @@
                         <String fx:value="hand-efect" />
                      </styleClass>
                   </TextField>
-                  <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1210.0" layoutY="105.0" prefHeight="27.0" prefWidth="113.0">
+                  <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1237.0" layoutY="105.0" prefHeight="27.0" prefWidth="113.0">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labDataInicial" alignment="CENTER_RIGHT" layoutX="957.0" layoutY="105.0" prefHeight="27.0" prefWidth="139.0">
+                  <Label fx:id="labDataInicial" alignment="CENTER_RIGHT" layoutX="984.0" layoutY="105.0" prefHeight="27.0" prefWidth="139.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="labTotalFactura2" alignment="CENTER_RIGHT" layoutX="941.0" layoutY="108.0" prefHeight="27.0" prefWidth="38.0" text="De:">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>

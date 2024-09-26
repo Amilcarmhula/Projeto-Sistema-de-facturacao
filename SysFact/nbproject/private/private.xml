@@ -5,6 +5,7 @@
         <group>
             <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/views/modulo_venda/vendaView/VendasController.java</file>
             <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/model/vendas/factura/itens/Item.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/model/vendas/factura/itens/TableModelItems.java</file>
             <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/dao/vendas/itens/ItemDAO.java</file>
         </group>
     </open-files>

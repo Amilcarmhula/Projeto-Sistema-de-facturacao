@@ -17,6 +17,7 @@ import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.reports.facturas.ClienteData;
 import sysfact.util.Conexao;
 
 /**
@@ -112,8 +113,6 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         }
         return lista;
     }
-    
-    
 
     @Override
     public ObservableList<Cliente> listAllForSearch() {
@@ -139,7 +138,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 ContactoCliente cont = new ContactoCliente();
                 cont.setEmail(result.getString("email"));
                 c.setContactoCliente(cont);
-               
+
                 List<ContactoCliente> listaContactos = new ArrayList<>();
                 String contactos = result.getString("contatos");
                 if (contactos != null && !contactos.trim().isEmpty()) {
@@ -177,8 +176,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         }
         return lista;
     }
-    
-    
+
     @Override
     public Cliente getClieneByID(int id) {
         Cliente c = null;
@@ -205,7 +203,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 ContactoCliente cont = new ContactoCliente();
                 cont.setEmail(result.getString("email"));
                 c.setContactoCliente(cont);
-               
+
                 List<ContactoCliente> listaContactos = new ArrayList<>();
                 String contactos = result.getString("contatos");
                 if (contactos != null && !contactos.trim().isEmpty()) {
@@ -233,7 +231,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                     end.setCodigoPostal(Integer.parseInt(split[7]));
                 }
                 c.setEnderecoCliente(end);
-                
+
             }
             result.close();
             ps.close();
@@ -289,6 +287,37 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e,
                     "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+        return c;
+    }
+
+    public ClienteData getClinteFacturaData(String factura) {
+        ClienteData c = null;
+        try {
+            sql = "SELECT c.apelido, c.nuit,"
+                    + "CONCAT(e.avenida,', ',e.rua,', ',e.numero,'; ',e.bairro,', ',e.cidade,', ',e.provincia,'- ',e.codigo_postal ) as endereco,"
+                    + "GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR '; ') AS contatos,ct.email "
+                    + "FROM factura f "
+                    + "LEFT JOIN cliente c ON c.id = f.fk_id_cliente "
+                    + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id "
+                    + "LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id "
+                    + "WHERE f.numero = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, factura);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                c = new ClienteData();
+                c.setApelido(result.getString("apelido"));
+                c.setNuit(result.getInt("nuit"));
+                c.setContacto(result.getString("contatos"));
+                c.setEndereco(result.getString("endereco"));
+                c.setEmail(result.getString("email"));
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+
         }
         return c;
     }

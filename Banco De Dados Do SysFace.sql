@@ -1,5 +1,5 @@
-drop database _sysface;
-create database _sysface;
+-- drop database _sysface;
+-- create database _sysface;
 
 
 use _sysface;
@@ -362,24 +362,25 @@ create table contacto_empresa(
 create table documentocomercial(
 	id integer primary key auto_increment,
     sigla varchar(10) not null,
+    nome varchar(30) not null,
     diasuteis integer not null,
     descricao text not null    
 );
 
 -- Tabelas para armazenar dados das facturacoes
-create table factura(
-    numero varchar(20) primary key,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data_vencimento date not null,
-    estado boolean default 0 not null,
-    fk_id_empresa integer not null,
-    fk_id_cliente integer not null,
-    fk_id_usuario integer not null,
-    fk_id_doc integer not null,
-    foreign key (fk_id_doc) references documentocomercial(id),
-    foreign key (fk_id_empresa) references empresa(id),
-    foreign key (fk_id_usuario) references usuario(id),
-    foreign key (fk_id_cliente) references cliente(id)
+CREATE TABLE factura (
+    numero VARCHAR(20) PRIMARY KEY,
+    data_criacao DATE,
+    data_vencimento DATE NOT NULL,
+    estado BOOLEAN DEFAULT 0 NOT NULL,
+    fk_id_empresa INTEGER NOT NULL,
+    fk_id_cliente INTEGER NOT NULL,
+    fk_id_usuario INTEGER NOT NULL,
+    fk_id_doc INTEGER NOT NULL,
+    FOREIGN KEY (fk_id_doc) REFERENCES documentocomercial(id),
+    FOREIGN KEY (fk_id_empresa) REFERENCES empresa(id),
+    FOREIGN KEY (fk_id_usuario) REFERENCES usuario(id),
+    FOREIGN KEY (fk_id_cliente) REFERENCES cliente(id)
 );
 
 

@@ -302,7 +302,7 @@ public class VendasController implements Initializable {
         this.userData = SysFact.getUserData();
         this.empresaData = SysFact.getEmpresaData();
         try {
-            labDataInicial.setText("De: " + MetodosUteis.actualDate());
+            labDataInicial.setText(MetodosUteis.actualDate());
             populateComboFactura();
             populateComboDesconto();
             mapeaProduto();
@@ -320,11 +320,10 @@ public class VendasController implements Initializable {
         mapaDocComercial = new HashMap<>();
         List<String> lista = new ArrayList<>();
         for (DocumentosComerciais doc : listaDocComercial) {
-            mapaDocComercial.put(doc.getSigla(), doc);
-            lista.add(doc.getSigla());
+            mapaDocComercial.put(doc.getNome(), doc);
+            lista.add(doc.getNome());
         }
         combTipoDoc.setItems(FXCollections.observableArrayList(lista));
-        DocumentosComerciais d = new DocumentosComerciais();
     }
 
     private ObservableList<Desconto> listaDescontos;
@@ -379,6 +378,7 @@ public class VendasController implements Initializable {
         Factura f = new Factura();
         f.setNumero(labNumeroFactura.getText());
         f.setData_vencimento(labValidade.getText());
+        f.setData_criacao(labDataInicial.getText());
         f.setEmpresa(empresaData);
         f.setUsuario(userData);
         ClienteDAO xDAO = new ClienteDAO();

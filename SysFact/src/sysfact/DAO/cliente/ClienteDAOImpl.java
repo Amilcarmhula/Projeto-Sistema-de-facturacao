@@ -24,6 +24,7 @@ public interface ClienteDAOImpl<T> {
     ObservableList<T> listAllEntities();
     ObservableList<T> listAllForSearch();
     T getClieneByID(int id);
+//     getClinteFacturaData(String x);
 
 //    ObservableList<T> listAllEntitiesTypeFornecedor();
 //    void deleteEntityByROOT(int id);

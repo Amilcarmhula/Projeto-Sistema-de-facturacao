@@ -56,6 +56,7 @@ public class GeraFactura {
             ClienteData cliente = x.getClinteFacturaData("2024-262/3");
             detalhesCliente.add(cliente);
             JRBeanCollectionDataSource clienteDataSource = new JRBeanCollectionDataSource(detalhesCliente);
+            JRBeanCollectionDataSource clienteDataSource2 = new JRBeanCollectionDataSource(detalhesCliente);
 
             List<itensFacturaData> itensLista = new ArrayList<itensFacturaData>();
             FacturaDAO fd = new FacturaDAO();
@@ -65,8 +66,16 @@ public class GeraFactura {
             }
             JRBeanCollectionDataSource tableDataSource = new JRBeanCollectionDataSource(itensLista);
 
+            FacturaDAO fTotais = new FacturaDAO();
+            itensFacturaData ifdata = fTotais.getTotaisFacturaData("2024-262/3");
             Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("TABLE_DATA_SOURCE", tableDataSource);
+            
+            parametros.put("SUB-TOTAL", ifdata.getSubtotal());
+            parametros.put("DESCONTO", ifdata.getDesconto());
+            parametros.put("TAXAS", ifdata.getTaxas());
+            parametros.put("TOTAL-GERAL", ifdata.getTotal_geral());
+            
 
             JasperPrint jPrint = JasperFillManager.fillReport(jReport, parametros, clienteDataSource);
             

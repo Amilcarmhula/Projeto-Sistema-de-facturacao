@@ -43,12 +43,14 @@ WHERE
     ff.numero = '2024-262/3';
     
 -- Dados do cliente da factura
-SELECT 
+SELECT f.numero, f.data_criacao, f.data_vencimento,
+	dc.nome as tipo,
 	c.apelido, c.nuit,
     CONCAT( e.avenida, ', ',e.rua, ', ',e.numero, '; ',e.bairro, '-,',e.cidade, ', ',e.provincia, '-',e.codigo_postal ) as endereco,
 	GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR ' ') AS contatos,ct.email
 FROM 
     factura f
+    LEFT JOIN documentocomercial dc ON f.fk_id_doc = dc.id
     LEFT JOIN cliente c ON c.id = f.fk_id_cliente
     LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
     LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id

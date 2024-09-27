@@ -76,6 +76,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             ps = con.prepareStatement(sql);
             ps.setString(1, factura);
             ResultSet result = ps.executeQuery();
+            double sub = 0;
             while (result.next()) {
                 c = new itensFacturaData();
                 c.setNomeProduto(result.getString("nome"));
@@ -85,6 +86,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 c.setTaxaProduto(result.getDouble("taxa_imposto"));
                 c.setDescontoProduto(result.getDouble("percentagem_desconto"));
                 c.setTotaProduto(result.getDouble("subtotal"));
+                sub += c.getQuantidadeProduto() * c.getPrecoProduto();
+                c.setSubtotal(sub);
                 lista.add(c);
             }
             result.close();
@@ -94,6 +97,42 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 
         }
         return lista;
+    }
+
+    public itensFacturaData getTotaisFacturaData(String factura) {
+        itensFacturaData c = null;
+        try {
+            sql = "SELECT "
+                    + "sum(ii.quantidade * pv2.preco) as subtotal,"
+                    + "sum((((ii.quantidade * pv2.preco) * ip2.percentagem)+ii.quantidade * pv2.preco) * dd.percentagem) AS desconto,"
+                    + "sum(ii.quantidade * pv2.preco * ip2.percentagem) AS taxas,"
+                    + "sum(ii.subtotal) as total_geral "
+                    + "FROM factura ff "
+                    + "    LEFT JOIN itemfactura ii ON ii.fk_numero = ff.numero "
+                    + "    LEFT JOIN desconto dd ON dd.id = ii.fk_id_desconto "
+                    + "    LEFT JOIN produto pp ON pp.id = ii.fk_id_produto "
+                    + "    LEFT JOIN precovenda pv2 ON pv2.fk_id_produto = pp.id "
+                    + "    LEFT JOIN taxa_imposto ip2 ON ip2.id = pp.fk_id_taxa_imposto "
+                    + "WHERE ff.numero = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, factura);
+            ResultSet result = ps.executeQuery();
+            double sub = 0;
+            while (result.next()) {
+                c = new itensFacturaData();
+                c.setSubtotal(result.getDouble("subtotal"));
+                c.setDesconto(result.getDouble("desconto"));
+                c.setTaxas(result.getDouble("taxas"));
+                c.setTotal_geral(result.getDouble("total_geral"));
+                
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+
+        }
+        return c;
     }
 //
 //    @Override

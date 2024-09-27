@@ -16,19 +16,26 @@ public class itensFacturaData {
     private double taxaProduto;
     private double descontoProduto;
     private double totaProduto;
+    private double subtotal;
+    private double desconto;
+    private double taxas;
+    private double total_geral;
 
     public itensFacturaData() {
     }
 
-    public itensFacturaData(String nomeProduto, String descricaoProduto, int quantidadeProduto,
-            double taxaProduto, double descontoProduto, double totalProduto, double precoProduto) {
+    public itensFacturaData(String nomeProduto, String descricaoProduto, int quantidadeProduto, double precoProduto, double taxaProduto, double descontoProduto, double totaProduto, double subtotal, double desconto, double taxas, double total_geral) {
         this.nomeProduto = nomeProduto;
         this.descricaoProduto = descricaoProduto;
         this.quantidadeProduto = quantidadeProduto;
+        this.precoProduto = precoProduto;
         this.taxaProduto = taxaProduto;
         this.descontoProduto = descontoProduto;
-        this.totaProduto = totalProduto;
-        this.precoProduto = precoProduto;
+        this.totaProduto = totaProduto;
+        this.subtotal = subtotal;
+        this.desconto = desconto;
+        this.taxas = taxas;
+        this.total_geral = total_geral;
     }
 
     public String getNomeProduto() {
@@ -55,6 +62,14 @@ public class itensFacturaData {
         this.quantidadeProduto = quantidadeProduto;
     }
 
+    public double getPrecoProduto() {
+        return precoProduto;
+    }
+
+    public void setPrecoProduto(double precoProduto) {
+        this.precoProduto = precoProduto;
+    }
+
     public double getTaxaProduto() {
         return taxaProduto;
     }
@@ -79,13 +94,37 @@ public class itensFacturaData {
         this.totaProduto = totaProduto;
     }
 
-    public double getPrecoProduto() {
-        return precoProduto;
+    public double getSubtotal() {
+        return subtotal;
     }
 
-    public void setPrecoProduto(double precoProduto) {
-        this.precoProduto = precoProduto;
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
     }
-    
+
+    public double getDesconto() {
+        return desconto;
+    }
+
+    public void setDesconto(double desconto) {
+        this.desconto = desconto;
+    }
+
+    public double getTaxas() {
+        return taxas;
+    }
+
+    public void setTaxas(double taxas) {
+        this.taxas = taxas;
+    }
+
+    public double getTotal_geral() {
+        return total_geral;
+    }
+
+    public void setTotal_geral(double total_geral) {
+        this.total_geral = total_geral;
+    }
+
     
 }

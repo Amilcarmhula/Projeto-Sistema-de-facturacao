@@ -17,7 +17,7 @@ VALUES
 ('Gerente de Estoque'),
 ('Operador de Vendas');
 
-create table permissao(
+create table permissao( 
 	id integer primary key auto_increment,
     tipo varchar(4) not null,
     descricao varchar(40) not null

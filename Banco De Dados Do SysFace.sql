@@ -4,14 +4,63 @@
 
 use _sysface;
 
+
+create table nivel_acesso(
+	id integer primary key auto_increment,
+    descricao varchar(50) not null
+);
+
+INSERT INTO nivel_acesso (descricao)
+VALUES
+('Administrador'),
+('Gerente de Finanças'),
+('Gerente de Estoque'),
+('Operador de Vendas');
+
+create table permissao(
+	id integer primary key auto_increment,
+    tipo varchar(4) not null,
+    descricao varchar(40) not null
+);
+
+INSERT INTO permissao (tipo, descricao) VALUES
+('0000', 'Nenhuma permissão'),
+('0001', 'Delete'),
+('0010', 'Update'),
+('0011', 'Update, Delete'),
+('0100', 'Read'),
+('0101', 'Read, Delete'),
+('0110', 'Read, Update'),
+('0111', 'Read, Update, Delete'),
+('1000', 'Create'),
+('1001', 'Create, Delete'),
+('1010', 'Create, Update'),
+('1011', 'Create, Update, Delete'),
+('1100', 'Create, Read'),
+('1101', 'Create, Read, Delete'),
+('1110', 'Create, Read, Update'),
+('1111', 'Todas as permissões (CRUD completo)');
+
+
 create table usuario(
 	id integer primary key auto_increment,
-    nome varchar(50) not null,
-    usuario varchar(50) not null unique,
-    senha integer not null,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    nome varchar(100) not null,
+    email varchar(100) not null unique,
+    usuario varchar(15) not null,
+    senha varchar(100) not null,
+    estado boolean default 0 not null,
+    fk_nivel_acesso integer not null,
+    fk_permissao integer not null,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key(fk_nivel_acesso) references nivel_acesso(id),
+    foreign key(fk_permissao) references permissao(id)
 );
- insert into usuario(nome, usuario, senha) value ('Amilcar Mula','user',1111);
+-- Inserindo três usuários na tabela `usuario`
+INSERT INTO usuario (nome, email, username, senha, estado, fk_nivel_acesso, fk_permissao)
+VALUES
+('Amilcar Mula', 'amilcar.mula@example.com', 'root', 'senha123', 1, 1, 15),  -- Permissão: Create, Read, Update
+('Maria Oliveira', 'maria.oliveira@example.com', 'mariao', 'senha123', 1, 2, 1),  -- Permissão: Create
+('Carlos Santos', 'carlos.santos@example.com', 'carloss', 'senha123', 1, 3, 1);  -- Permissão: Read, Update, Delete
  
  
  create table cliente(

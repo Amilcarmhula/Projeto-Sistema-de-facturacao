@@ -12,22 +12,24 @@ package sysfact.model.usuario;
 public class Usuario {
     private int id;
     private String nome;
+    private String email;
     private String usuario;
-    private int senha;
-    private int codigo;
+    private String senha;
+    private boolean estado;
+    private NivelAcesso nivelAcesso;
+    private Permissao permissao;
     private String data_criacao;
-    private boolean active_or_not;
     
     public Usuario(){}
 
-    public Usuario(int id, String nome, String usuario, int senha, int codigo, String data_criacao, boolean active_or_not) {
-        this.id = id;
+    public Usuario(String nome, String email, String usuario, String senha, boolean estado, NivelAcesso nivelAcesso, Permissao permissao) {
         this.nome = nome;
+        this.email = email;
         this.usuario = usuario;
         this.senha = senha;
-        this.codigo = codigo;
-        this.data_criacao = data_criacao;
-        this.active_or_not = active_or_not;
+        this.estado = estado;
+        this.nivelAcesso = nivelAcesso;
+        this.permissao = permissao;
     }
 
     public int getId() {
@@ -46,6 +48,14 @@ public class Usuario {
         this.nome = nome;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getUsuario() {
         return usuario;
     }
@@ -54,20 +64,36 @@ public class Usuario {
         this.usuario = usuario;
     }
 
-    public int getSenha() {
+    public String getSenha() {
         return senha;
     }
 
-    public void setSenha(int senha) {
+    public void setSenha(String senha) {
         this.senha = senha;
     }
 
-    public int getCodigo() {
-        return codigo;
+    public boolean isEstado() {
+        return estado;
     }
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public NivelAcesso getNivelAcesso() {
+        return nivelAcesso;
+    }
+
+    public void setNivelAcesso(NivelAcesso nivelAcesso) {
+        this.nivelAcesso = nivelAcesso;
+    }
+
+    public Permissao getPermissao() {
+        return permissao;
+    }
+
+    public void setPermissao(Permissao permissao) {
+        this.permissao = permissao;
     }
 
     public String getData_criacao() {
@@ -78,15 +104,5 @@ public class Usuario {
         this.data_criacao = data_criacao;
     }
 
-    public boolean isActive_or_not() {
-        return active_or_not;
-    }
-
-    public void setEstadoActive(boolean active_or_not) {
-        this.active_or_not = active_or_not;
-    }
-
    
-    
-    
 }

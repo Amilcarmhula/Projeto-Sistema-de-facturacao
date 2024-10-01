@@ -10,7 +10,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javax.swing.JOptionPane;
+import sysfact.SysFact;
+import sysfact.dao.empresa.EmpresaDAO;
+import sysfact.model.usuario.NivelAcesso;
+import sysfact.model.usuario.Permissao;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
 
@@ -28,25 +38,28 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
         this.con = Conexao.getConexao();
     }
 
-    public Usuario login(Usuario u) {
+    public Usuario login(String u, String s) {
         Usuario user = null;
         try {
-            sql = "select * from usuario where usuario=? and codigo=? and senha=?";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, u.getUsuario());
-            ps.setInt(2, u.getCodigo());
-            ps.setInt(3, u.getSenha());
+            String sql = "select * from usuario where usuario=? and senha=?";
+            PreparedStatement ps = Conexao.getConexao().prepareStatement(sql);
+            ps.setString(1, u);
+            ps.setString(2, s);
 
             ResultSet result = ps.executeQuery();
-            while (result.next()) {
+            if (result.next()) {
                 user = new Usuario();
                 user.setId(result.getInt("id"));
                 user.setNome(result.getString("nome"));
-                user.setUsuario(result.getString("usuario"));
-                user.setSenha(result.getInt("senha"));
-                user.setCodigo(result.getInt("codigo"));
+                user.setEmail(result.getString("email"));
+                NivelAcesso n = new NivelAcesso();
+                n.setId(result.getInt("fk_nivel_acesso"));
+                user.setNivelAcesso(n);
+                Permissao p = new Permissao();
+                p.setId(result.getInt("fk_permissao"));
+                user.setPermissao(p);
+                user.setEstado(result.getBoolean("estado"));
                 user.setData_criacao(result.getString("data_criacao"));
-                user.setEstadoActive(result.getBoolean("active_or_not"));
             }
             result.close();
             ps.close();
@@ -55,136 +68,151 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
         }
         return user;
     }
-    
 
-    @Override
-    public void addEntity(Usuario t) {
-        try {
-            sql = "insert into usuario (nome, usuario, senha, codigo) value (?,?,?,?)";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, t.getNome());
-            ps.setString(2, t.getUsuario());
-            ps.setInt(3, t.getSenha());
-            ps.setInt(4, t.getCodigo());
-
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Usuario: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    @Override
-    public void updateEntityByID(Usuario t) {
-        try {
-            sql = "update usuario set nome=?, usuario=?, senha=?, codigo=?"
-                    + " where id=?";
-            ps = con.prepareStatement(sql);
-
-            ps.setString(1, t.getNome());
-            ps.setString(2, t.getUsuario());
-            ps.setInt(3, t.getSenha());
-            ps.setInt(4, t.getCodigo());
-            ps.setInt(5, t.getId());
-
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Usuario: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    @Override
-    public ObservableList<Usuario> listAllEntities() {
-        ObservableList<Usuario> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from usuario";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                Usuario u = new Usuario();
-                u.setId(result.getInt("id"));
-                u.setNome(result.getString("nome"));
-                u.setUsuario(result.getString("usuario"));
-                u.setSenha(result.getInt("senha"));
-                u.setCodigo(result.getInt("codigo"));
-                u.setData_criacao(result.getString("data_criacao"));
-                u.setEstadoActive(result.getBoolean("active_or_not"));
-                lista.add(u);
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao Buscar Usuarios: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-        return lista;
-    }
 //
 //    @Override
-//    public Usuario searchEntityByName(String name) {
-//        Usuario u = null;
+//    public void addEntity(Usuario t) {
 //        try {
-//            sql = "select * from usuario where nome like ?";
+//            sql = "insert into usuario (nome, usuario, senha, codigo) value (?,?,?,?)";
 //            ps = con.prepareStatement(sql);
-//            ps.setString(1, "%" + name + "%");
+//            ps.setString(1, t.getNome());
+//            ps.setString(2, t.getUsuario());
+//            ps.setString(3, t.getSenha());
+//            ps.setInt(4, t.getCodigo());
+//
+//            ps.execute();
+//            ps.close();
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Falha ao adicionar Usuario: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
+//
+//    @Override
+//    public void updateEntityByID(Usuario t) {
+//        try {
+//            sql = "update usuario set nome=?, usuario=?, senha=?, codigo=?"
+//                    + " where id=?";
+//            ps = con.prepareStatement(sql);
+//
+//            ps.setString(1, t.getNome());
+//            ps.setString(2, t.getUsuario());
+//            ps.setString(3, t.getSenha());
+//            ps.setInt(4, t.getCodigo());
+//            ps.setInt(5, t.getId());
+//
+//            ps.execute();
+//            ps.close();
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Falha ao actulizar Usuario: "
+//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
+//
+//    @Override
+//    public ObservableList<Usuario> listAllEntities() {
+//        ObservableList<Usuario> lista = FXCollections.observableArrayList();
+//        try {
+//            sql = "select * from usuario";
+//            ps = con.prepareStatement(sql);
 //            ResultSet result = ps.executeQuery();
-////            if (result.next()) {
 //            while (result.next()) {
-//                u = new Usuario();
+//                Usuario u = new Usuario();
 //                u.setId(result.getInt("id"));
 //                u.setNome(result.getString("nome"));
 //                u.setUsuario(result.getString("usuario"));
-//                u.setSenha(result.getInt("senha"));
+//                u.setSenha(result.getString("senha"));
 //                u.setCodigo(result.getInt("codigo"));
 //                u.setData_criacao(result.getString("data_criacao"));
 //                u.setEstadoActive(result.getBoolean("active_or_not"));
+//                lista.add(u);
 //            }
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Usuario: " + ex,
-//                    "Informação", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(null, "Falha ao Buscar Usuarios: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
 //        }
-//        return u;
-//
+//        return lista;
 //    }
-
+////
+////    @Override
+////    public Usuario searchEntityByName(String name) {
+////        Usuario u = null;
+////        try {
+////            sql = "select * from usuario where nome like ?";
+////            ps = con.prepareStatement(sql);
+////            ps.setString(1, "%" + name + "%");
+////            ResultSet result = ps.executeQuery();
+//////            if (result.next()) {
+////            while (result.next()) {
+////                u = new Usuario();
+////                u.setId(result.getInt("id"));
+////                u.setNome(result.getString("nome"));
+////                u.setUsuario(result.getString("usuario"));
+////                u.setSenha(result.getInt("senha"));
+////                u.setCodigo(result.getInt("codigo"));
+////                u.setData_criacao(result.getString("data_criacao"));
+////                u.setEstadoActive(result.getBoolean("active_or_not"));
+////            }
+////            result.close();
+////            ps.close();
+////        } catch (SQLException ex) {
+////            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Usuario: " + ex,
+////                    "Informação", JOptionPane.ERROR_MESSAGE);
+////        }
+////        return u;
+////
+////    }
+//
+////    @Override
+////    public List<Usuario> searchListEntityByName(String name) {
+////        List<Usuario>  user= new ArrayList<>();
+////        Usuario u = null;
+////        try {
+////            sql = "select * from usuario where nome like ?";
+////            ps = con.prepareStatement(sql);
+////            ps.setString(1, "%" + name + "%");
+////            ResultSet result = ps.executeQuery();
+////            while (result.next()) {
+////                u = new Usuario();
+////                u.setId(result.getInt("id"));
+////                u.setNome(result.getString("nome"));
+////                u.setUsuario(result.getString("usuario"));
+////                u.setSenha(result.getInt("senha"));
+////                u.setCodigo(result.getInt("codigo"));
+////                u.setData_criacao(result.getString("data_criacao"));
+////                u.setEstadoActive(result.getBoolean("active_or_not"));
+////                user.add(u);
+////            }
+////            result.close();
+////            ps.close();
+////        } catch (SQLException ex) {
+////            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Usuario: " + ex,
+////                    "Informação", JOptionPane.ERROR_MESSAGE);
+////        }
+////        return user;
+////    }
+////    @Override
+////    public void deleteEntityByROOT(int id) {
+////        try {
+////            sql = "delete from usuario where id=?";
+////            ps = con.prepareStatement(sql);
+////
+////            ps.setInt(1, id);
+////            ps.execute();
+////            ps.close();
+////        } catch (SQLException ex) {
+////            JOptionPane.showMessageDialog(null, "Erro ao deletar Usuario: "
+////                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+////        }
+////    }
+//
 //    @Override
-//    public List<Usuario> searchListEntityByName(String name) {
-//        List<Usuario>  user= new ArrayList<>();
-//        Usuario u = null;
+//    public void deleteEntityByUSER(Usuario u) {
 //        try {
-//            sql = "select * from usuario where nome like ?";
-//            ps = con.prepareStatement(sql);
-//            ps.setString(1, "%" + name + "%");
-//            ResultSet result = ps.executeQuery();
-//            while (result.next()) {
-//                u = new Usuario();
-//                u.setId(result.getInt("id"));
-//                u.setNome(result.getString("nome"));
-//                u.setUsuario(result.getString("usuario"));
-//                u.setSenha(result.getInt("senha"));
-//                u.setCodigo(result.getInt("codigo"));
-//                u.setData_criacao(result.getString("data_criacao"));
-//                u.setEstadoActive(result.getBoolean("active_or_not"));
-//                user.add(u);
-//            }
-//            result.close();
-//            ps.close();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Usuario: " + ex,
-//                    "Informação", JOptionPane.ERROR_MESSAGE);
-//        }
-//        return user;
-//    }
-//    @Override
-//    public void deleteEntityByROOT(int id) {
-//        try {
-//            sql = "delete from usuario where id=?";
+//            sql = "update usuario set active_or_not=false where id=?";
 //            ps = con.prepareStatement(sql);
 //
-//            ps.setInt(1, id);
+//            ps.setInt(1, u.getId());
 //            ps.execute();
 //            ps.close();
 //        } catch (SQLException ex) {
@@ -192,19 +220,4 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 //                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
 //        }
 //    }
-
-    @Override
-    public void deleteEntityByUSER(Usuario u) {
-        try {
-            sql = "update usuario set active_or_not=false where id=?";
-            ps = con.prepareStatement(sql);
-
-            ps.setInt(1, u.getId());
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Usuario: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-    }
 }

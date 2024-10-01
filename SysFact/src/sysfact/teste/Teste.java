@@ -8,9 +8,11 @@ import java.sql.SQLException;
 import java.util.List;
 import javafx.collections.ObservableList;
 import sysfact.dao.cliente.ClienteDAO;
+import sysfact.dao.usuario.UsuarioDAO;
 import sysfact.dao.vendas.documentos.DocumentosComerciaisDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
+import sysfact.model.usuario.Usuario;
 import sysfact.model.vendas.documetos.DocumentosComerciais;
 
 
@@ -25,6 +27,9 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
+        UsuarioDAO u = new UsuarioDAO();
+        Usuario x = u.login("caloss", "senha123");
+        System.out.println("user: "+x.getNivelAcesso().getId());
         
         
 //        Cliente c = new Cliente();

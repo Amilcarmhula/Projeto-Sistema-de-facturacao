@@ -1,5 +1,5 @@
--- drop database _sysface;
--- create database _sysface;
+drop database _sysface;
+create database _sysface;
 
 
 use _sysface;
@@ -9,6 +9,25 @@ create table nivel_acesso(
 	id integer primary key auto_increment,
     descricao varchar(50) not null
 );
+create table permissao( 
+	id integer primary key auto_increment,
+    tipo varchar(4) not null,
+    descricao varchar(40) not null
+);
+create table usuario(
+	id integer primary key auto_increment,
+    nome varchar(100) not null,
+    email varchar(100) not null unique,
+    usuario varchar(15) not null,
+    senha varchar(100) not null,
+    estado boolean default 0 not null,
+    fk_nivel_acesso integer not null,
+    fk_permissao integer not null,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key(fk_nivel_acesso) references nivel_acesso(id),
+    foreign key(fk_permissao) references permissao(id)
+);
+-- Inserindo três usuários na tabela `usuario`
 
 INSERT INTO nivel_acesso (descricao)
 VALUES
@@ -16,13 +35,6 @@ VALUES
 ('Gerente de Finanças'),
 ('Gerente de Estoque'),
 ('Operador de Vendas');
-
-create table permissao( 
-	id integer primary key auto_increment,
-    tipo varchar(4) not null,
-    descricao varchar(40) not null
-);
-
 INSERT INTO permissao (tipo, descricao) VALUES
 ('0000', 'Nenhuma permissão'),
 ('0001', 'Delete'),
@@ -40,23 +52,7 @@ INSERT INTO permissao (tipo, descricao) VALUES
 ('1101', 'Create, Read, Delete'),
 ('1110', 'Create, Read, Update'),
 ('1111', 'Todas as permissões (CRUD completo)');
-
-
-create table usuario(
-	id integer primary key auto_increment,
-    nome varchar(100) not null,
-    email varchar(100) not null unique,
-    usuario varchar(15) not null,
-    senha varchar(100) not null,
-    estado boolean default 0 not null,
-    fk_nivel_acesso integer not null,
-    fk_permissao integer not null,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key(fk_nivel_acesso) references nivel_acesso(id),
-    foreign key(fk_permissao) references permissao(id)
-);
--- Inserindo três usuários na tabela `usuario`
-INSERT INTO usuario (nome, email, username, senha, estado, fk_nivel_acesso, fk_permissao)
+INSERT INTO usuario (nome, email, usuario, senha, estado, fk_nivel_acesso, fk_permissao)
 VALUES
 ('Amilcar Mula', 'amilcar.mula@example.com', 'root', 'senha123', 1, 1, 15),  -- Permissão: Create, Read, Update
 ('Maria Oliveira', 'maria.oliveira@example.com', 'mariao', 'senha123', 1, 2, 1),  -- Permissão: Create

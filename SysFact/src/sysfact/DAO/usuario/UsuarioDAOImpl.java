@@ -11,12 +11,13 @@ import javafx.collections.ObservableList;
  * @author JM-Tecnologias
  */
 public interface UsuarioDAOImpl<T> {
-     void  addEntity(T t);
-    void updateEntityByID(T t);
-    ObservableList<T> listAllEntities();
+    T login(String u, String s);
+//     void  addEntity(T t);
+//    void updateEntityByID(T t);
+//    ObservableList<T> listAllEntities();
 //    T searchEntityByName(String name);
 //    void deleteEntityByROOT(int id);
-    void deleteEntityByUSER(T x);
+//    void deleteEntityByUSER(T x);
 //    ObservableList<T> searchListEntityByName(String name);
 }
 

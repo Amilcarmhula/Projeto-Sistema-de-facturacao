@@ -24,14 +24,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sysfact.dao.empresa.EmpresaDAO;
+import sysfact.dao.usuario.UsuarioDAO;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
+import sysfact.util.MetodosUteis;
 
 /**
  *
  * @author JM-Tecnologias
  */
 public class MainController implements Initializable {
+
     private double x = 0;
     private double y = 0;
 
@@ -50,39 +53,21 @@ public class MainController implements Initializable {
 
     public void log() throws SQLException, IOException {
         Alert alert;
-        Usuario u = new Usuario();
+        Usuario user = null;
         if (txtusarname.getText().isEmpty() || txtpassword.getText().isEmpty()) {
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Mensagem de Erro.");
-            alert.setHeaderText(null);
-            alert.setContentText("Campos Usuario, cogido ou senha nao preenchidos!");
-            alert.showAndWait();
+            MetodosUteis.showErro("Mensagem de Erro.", "Campos Usuario, cogido ou senha nao preenchidos!");
         } else {
-            u.setUsuario(txtusarname.getText());
-            u.setSenha(Integer.parseInt(txtpassword.getText()));
-            Usuario user = null;
             try {
-                String sql = "select * from usuario where usuario=? and senha=?";
-                PreparedStatement ps = Conexao.getConexao().prepareStatement(sql);
-                ps.setString(1, u.getUsuario());
-                ps.setInt(2, u.getSenha());
-
-                ResultSet result = ps.executeQuery();
-                if (result.next()) {
-                    user = new Usuario();
-                    user.setId(result.getInt("id"));
-                    user.setNome(result.getString("nome"));
-                    user.setUsuario(result.getString("usuario"));
-//                    user.setSenha(result.getInt("senha"));
-                    user.setData_criacao(result.getString("data_criacao"));
-
+                UsuarioDAO z = new UsuarioDAO();
+                user = z.login(txtusarname.getText(), txtpassword.getText());
+                if (user != null) {
                     /*Dados de login a serem armazenados*/
                     SysFact.setUserData(user);
                     EmpresaDAO empresaData = new EmpresaDAO();
                     SysFact.setEmpresaData(empresaData.getEmpresaData());
                     btnlogin.getScene().getWindow().hide();
-                    Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/main/main.fxml"));
 
+                    Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/main/main.fxml"));
                     Stage stage = new Stage();
                     root.setOnMousePressed((MouseEvent event) -> {
                         x = event.getSceneX();
@@ -104,26 +89,11 @@ public class MainController implements Initializable {
                     stage.initStyle(StageStyle.TRANSPARENT);
                     stage.setScene(scene);
                     stage.show();
-//                    alert = new Alert(AlertType.INFORMATION);
-//                    alert.setTitle("Mensagem de Erro.");
-//                    alert.setHeaderText("Teste");
-//                    alert.setContentText("Sucesso!");
-//                    alert.showAndWait();
                 } else {
-                    alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Mensagem de Erro.");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Usuario nao encontrado! ");
-                    alert.showAndWait();
+                    MetodosUteis.showInfo("Mensagem de Erro.", "User nao existe! ");
                 }
-                result.close();
-                ps.close();
             } catch (SQLException ex) {
-                alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Mensagem de Erro.");
-                alert.setHeaderText(null);
-                alert.setContentText("Erro ao se logar-se: " + ex);
-                alert.showAndWait();
+                MetodosUteis.showErro("Mensagem de Erro.", "Erro ao se logar-se: " + ex);
             }
         }
     }

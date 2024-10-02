@@ -4,6 +4,7 @@
  */
 package sysfact.service.produto.fornecido;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.scene.control.Alert;
 import sysfact.dao.produto.fornecido.ProdutoFornecidoDAO;
 import sysfact.model.armazem.Armazem;
@@ -68,7 +69,7 @@ public class ServiceProdutoFornecido {
             produtoFornecidoDao.addEntity(pf);
             MetodosUteis.showInfo("Info", "Stock actualizado com sucesso.");
         }catch(Exception e){
-            MetodosUteis.showErro("Erro", "Erro ao adicionar/actualizar sock!");
+            MetodosUteis.showErro(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro ao adicionar/actualizar sock!");
         }
         
         

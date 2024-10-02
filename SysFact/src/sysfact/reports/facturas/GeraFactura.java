@@ -48,26 +48,27 @@ public class GeraFactura {
 //            viewer.show();
         try {
 
+//            String jasperPath = "C:\\Users\\JM-Tecnologias\\JaspersoftWorkspace\\SysFaceReports\\RelatorioFacturas.jasper";
             String jasperPath = "C:\\Users\\JM-Tecnologias\\JaspersoftWorkspace\\SysFaceReports\\RelatorioFacturas.jasper";
             JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile(jasperPath);
 
             List<ClienteData> detalhesCliente = new ArrayList<ClienteData>();
             ClienteDAO x = new ClienteDAO();
-            ClienteData cliente = x.getClinteFacturaData("2024-262/3");
+            ClienteData cliente = x.getClinteFacturaData("2024-223/2");
             detalhesCliente.add(cliente);
             JRBeanCollectionDataSource clienteDataSource = new JRBeanCollectionDataSource(detalhesCliente);
             JRBeanCollectionDataSource clienteDataSource2 = new JRBeanCollectionDataSource(detalhesCliente);
 
             List<itensFacturaData> itensLista = new ArrayList<itensFacturaData>();
             FacturaDAO fd = new FacturaDAO();
-            List<itensFacturaData> lista = fd.getItensFacturaData("2024-262/3");
+            List<itensFacturaData> lista = fd.getItensFacturaData("2024-223/2");
             for (itensFacturaData facturaData : lista) {
                 itensLista.add(facturaData);
             }
             JRBeanCollectionDataSource tableDataSource = new JRBeanCollectionDataSource(itensLista);
 
             FacturaDAO fTotais = new FacturaDAO();
-            itensFacturaData ifdata = fTotais.getTotaisFacturaData("2024-262/3");
+            itensFacturaData ifdata = fTotais.getTotaisFacturaData("2024-223/2");
             Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("TABLE_DATA_SOURCE", tableDataSource);
             

@@ -4,6 +4,7 @@
  */
 package sysfact.dao.usuario;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +24,7 @@ import sysfact.model.usuario.NivelAcesso;
 import sysfact.model.usuario.Permissao;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
+import sysfact.util.MetodosUteis;
 
 /**
  *
@@ -30,6 +32,7 @@ import sysfact.util.Conexao;
  */
 public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 
+    private MetodosUteis metodosUteis;
     private Connection con;
     private PreparedStatement ps;
     private String sql;
@@ -60,11 +63,13 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
                 user.setPermissao(p);
                 user.setEstado(result.getBoolean("estado"));
                 user.setData_criacao(result.getString("data_criacao"));
+            }else{
+                MetodosUteis.showInfo("Info", "Usuario nao existe!");
             }
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Usuario nao encontrado: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            MetodosUteis.showErro(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro com banco de dados: " + ex);
         }
         return user;
     }

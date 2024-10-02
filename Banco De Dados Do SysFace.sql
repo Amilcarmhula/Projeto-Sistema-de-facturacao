@@ -1,9 +1,9 @@
-drop database _sysface;
-create database _sysface;
+-- drop database _sysface;
+-- create database _sysface;
 
 
 use _sysface;
-
+select * from factura;
 
 create table nivel_acesso(
 	id integer primary key auto_increment,

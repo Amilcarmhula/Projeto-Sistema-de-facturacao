@@ -4,6 +4,8 @@
  */
 package sysfact.util;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -46,12 +48,24 @@ public class MetodosUteis {
         invNumber += number + "/"+tipo;
         return invNumber;
     }
+    
+    public static String validaString(FontAwesomeIcon icon, String data){
+        if(data == null || data.isEmpty()){
+            showErro(icon, "Erro de dados", "Preencha todos campos obrigatorios!");
+            return "";
+        }
+        return data;
+    }
 
-    public static void showErro(String title, String message) {
+
+    public static void showErro(FontAwesomeIcon icon,String title, String message) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+        FontAwesomeIconView erroIcon = new FontAwesomeIconView(icon);
+        erroIcon.setStyle("-fx-fill: red; -fx-font-size: 30px;");
+        alert.setGraphic(erroIcon);
         alert.showAndWait();
     }
 

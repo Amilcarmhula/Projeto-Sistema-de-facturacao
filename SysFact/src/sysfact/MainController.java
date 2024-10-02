@@ -4,6 +4,7 @@
  */
 package sysfact;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
@@ -26,6 +27,7 @@ import javafx.stage.StageStyle;
 import sysfact.dao.empresa.EmpresaDAO;
 import sysfact.dao.usuario.UsuarioDAO;
 import sysfact.model.usuario.Usuario;
+import sysfact.service.usuario.ServiceUsuario;
 import sysfact.util.Conexao;
 import sysfact.util.MetodosUteis;
 
@@ -34,7 +36,6 @@ import sysfact.util.MetodosUteis;
  * @author JM-Tecnologias
  */
 public class MainController implements Initializable {
-
     private double x = 0;
     private double y = 0;
 
@@ -54,12 +55,15 @@ public class MainController implements Initializable {
     public void log() throws SQLException, IOException {
         Alert alert;
         Usuario user = null;
-        if (txtusarname.getText().isEmpty() || txtpassword.getText().isEmpty()) {
-            MetodosUteis.showErro("Mensagem de Erro.", "Campos Usuario, cogido ou senha nao preenchidos!");
-        } else {
+//        if (txtusarname.getText().isEmpty() || txtpassword.getText().isEmpty()) {
+//            MetodosUteis.showErro("Mensagem de Erro.", "Campos Usuario, cogido ou senha nao preenchidos!");
+//        } else {
             try {
                 UsuarioDAO z = new UsuarioDAO();
-                user = z.login(txtusarname.getText(), txtpassword.getText());
+                ServiceUsuario service = new ServiceUsuario(z);
+                user = service.authLogin(txtusarname.getText(), txtpassword.getText());
+                
+//                user = z.login(txtusarname.getText(), txtpassword.getText());
                 if (user != null) {
                     /*Dados de login a serem armazenados*/
                     SysFact.setUserData(user);
@@ -89,13 +93,13 @@ public class MainController implements Initializable {
                     stage.initStyle(StageStyle.TRANSPARENT);
                     stage.setScene(scene);
                     stage.show();
-                } else {
-                    MetodosUteis.showInfo("Mensagem de Erro.", "User nao existe! ");
+//                } else {
+//                    MetodosUteis.showInfo("Mensagem de Erro.", "User nao existe! ");
                 }
             } catch (SQLException ex) {
-                MetodosUteis.showErro("Mensagem de Erro.", "Erro ao se logar-se: " + ex);
+                MetodosUteis.showErro(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Mensagem de Erro.", "Erro ao se logar-se: " + ex);
             }
-        }
+//        }
     }
 
     @Override

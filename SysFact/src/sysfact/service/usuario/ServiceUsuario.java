@@ -15,15 +15,15 @@ import sysfact.util.MetodosUteis;
  */
 public class ServiceUsuario {
 
-    private UsuarioDAO usuarioDAO;
+    private final UsuarioDAO usuarioDAO;
 
     public ServiceUsuario(UsuarioDAO usuarioDAO) {
         this.usuarioDAO = usuarioDAO;
     }
     
     public Usuario authLogin(String user, String pwd) {
-        Usuario usuario = null;
-        user = MetodosUteis.validaString(FontAwesomeIcon.EXCLAMATION_TRIANGLE,user);
+        Usuario usuario;
+        user = MetodosUteis.validaString(FontAwesomeIcon.USER_TIMES,user);
         pwd = MetodosUteis.validaString(FontAwesomeIcon.EXCLAMATION_TRIANGLE,pwd);
 
         usuario = usuarioDAO.login(user, pwd);

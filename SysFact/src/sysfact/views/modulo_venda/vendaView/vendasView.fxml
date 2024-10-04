@@ -148,6 +148,11 @@
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
+                                    <Label text="Taxas:">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
                                     <Label text="Desconto:">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
@@ -167,6 +172,11 @@
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
+                                    <Label fx:id="labTaxas" text="0.0">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
                                     <Label fx:id="labDesconto" text="0.0">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
@@ -181,7 +191,7 @@
                               </VBox>
                            </children>
                         </AnchorPane>
-                        <ComboBox fx:id="combTipoDoc" layoutX="235.0" layoutY="84.0" onAction="#selecionaFactura" prefHeight="25.0" prefWidth="66.0" />
+                        <ComboBox fx:id="combTipoDoc" layoutX="235.0" layoutY="84.0" onAction="#selecionaFactura" prefHeight="25.0" prefWidth="180.0" />
                         <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutX="24.0" layoutY="79.0" prefHeight="35.0" prefWidth="197.0" text="Tipo de Factura:">
                            <font>
                               <Font name="System Bold" size="24.0" />
@@ -289,7 +299,7 @@
                   <TableColumn fx:id="subTotaltabelaItens" prefWidth="97.0" text="Total" />
                </columns>
             </TableView>
-            <Button fx:id="btnRemoveItem" layoutX="672.0" layoutY="853.0" mnemonicParsing="false" stylesheets="@../../style/dashboard.css" text="Remover Item" textFill="WHITE">
+            <Button fx:id="btnRemoveItem" layoutX="672.0" layoutY="853.0" mnemonicParsing="false" onAction="#removeItens" stylesheets="@../../style/dashboard.css" text="Remover Item" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="34.0" />
                </font>

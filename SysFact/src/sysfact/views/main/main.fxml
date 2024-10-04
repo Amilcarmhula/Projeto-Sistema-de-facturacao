@@ -24,7 +24,7 @@
                <top>
                   <AnchorPane prefHeight="45.0" prefWidth="1700.0" stylesheets="@../../style/dashboard.css" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane prefHeight="35.0" prefWidth="1700.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane prefHeight="35.0" prefWidth="1700.0" styleClass="blue-bg" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Label layoutX="14.0" layoutY="5.0" text="Sistema de facturação e controle de estoque" textFill="WHITE">
                                  <font>
@@ -42,11 +42,6 @@
                                  </graphic>
                               </Button>
                            </children>
-                           <styleClass>
-                              <String fx:value="blue-bg" />
-                              <String fx:value="bottom-Squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
                         </AnchorPane>
                      </children>
                      <styleClass>
@@ -60,25 +55,7 @@
                      <children>
                         <AnchorPane layoutX="26.0" layoutY="284.0" prefHeight="1655.0" prefWidth="250.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Button layoutX="22.0" layoutY="795.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="98.0" stylesheets="@../../style/dashboard.css" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="25.0" />
-                                 </font>
-                                 <graphic>
-                                    <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" size="60" />
-                                 </graphic>
-                                 <styleClass>
-                                    <String fx:value="btn-logout" />
-                                    <String fx:value="hand-efect" />
-                                    <String fx:value="Squared-border" />
-                                 </styleClass>
-                              </Button>
-                              <Label layoutX="128.0" layoutY="827.0" text="Logout" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="25.0" />
-                                 </font>
-                              </Label>
-                              <Accordion layoutX="27.0" layoutY="375.0" prefHeight="392.0" prefWidth="250.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                              <Accordion layoutX="27.0" layoutY="393.0" prefHeight="392.0" prefWidth="250.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                 <panes>
                                     <TitledPane animated="false" text="Contabilidade" textFill="WHITE">
                                        <content>
@@ -399,7 +376,6 @@
                               </Button>
                            </children>
                            <styleClass>
-                              <String fx:value="shadow" />
                               <String fx:value="blue-bg" />
                               <String fx:value="top-Squared-border" />
                            </styleClass>

@@ -3,7 +3,7 @@
 
 
 use _sysface;
-select * from factura;
+select * from empresa;
 
 create table nivel_acesso(
 	id integer primary key auto_increment,
@@ -383,9 +383,7 @@ create table contacto_empresa(
 	email varchar(50) unique,
     website varchar(50) unique,
     fk_id_empresa integer not null,
-    fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_empresa) references empresa(id)
 );
 
@@ -397,9 +395,7 @@ create table contacto_empresa(
     nib varchar(100),
     nuib varchar(100),
     fk_id_empresa integer not null,
-    fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_empresa) references empresa(id)
 );
 

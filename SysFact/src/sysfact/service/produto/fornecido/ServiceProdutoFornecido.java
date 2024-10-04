@@ -67,9 +67,9 @@ public class ServiceProdutoFornecido {
         pf.setCusto(custo);
         try{
             produtoFornecidoDao.addEntity(pf);
-            MetodosUteis.showInfo("Info", "Stock actualizado com sucesso.");
+            MetodosUteis.showDialog(FontAwesomeIcon.CHECK,"Info", "Stock actualizado com sucesso.");
         }catch(Exception e){
-            MetodosUteis.showErro(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro ao adicionar/actualizar sock!");
+            MetodosUteis.showDialog(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro ao adicionar/actualizar sock!");
         }
         
         

@@ -32,7 +32,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
     public void addEntity(ContaBancaria t) {
         try {
             sql = "insert into contabancaria (nome_banco,numero,nib,nuib,"
-                    + "fk_id_empresa,fk_id_usuario) value (?,?,?,?)";
+                    + "fk_id_empresa) value (?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -41,7 +41,6 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
             ps.setString(3, t.getNib());
             ps.setString(4, t.getNuib());
             ps.setInt(5, t.getEmpresa().getId());
-            ps.setInt(6, t.getUsuario().getId());
 
             ps.execute();
             ps.close();
@@ -55,7 +54,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
     public void updateEntityByID(ContaBancaria t, int id) {
         try {
             sql = "update contabancaria set nome_banco=?,numero=?,nib=?,nuib=?,"
-                    + "fk_id_empresa=?,fk_id_usuario=? where id=?";
+                    + "fk_id_empresa=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNome_banco());
@@ -63,8 +62,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
             ps.setString(3, t.getNib());
             ps.setString(4, t.getNuib());
             ps.setInt(5, t.getEmpresa().getId());
-            ps.setInt(6, t.getUsuario().getId());
-            ps.setInt(7, id);
+            ps.setInt(6, id);
 
             ps.execute();
             ps.close();

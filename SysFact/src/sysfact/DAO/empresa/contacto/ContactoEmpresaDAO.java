@@ -31,15 +31,15 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
     @Override
     public void addEntity(ContactoEmpresa t) {
         try {
-            sql = "insert into contacto_empresa (contacto, email, "
-                    + "fk_id_empresa, fk_id_usuario) value (?,?,?,?)";
+            sql = "insert into contacto_empresa (contacto, email,website, "
+                    + "fk_id_empresa) value (?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getContacto());
             ps.setString(2, t.getEmail());
-            ps.setInt(3, t.getEmpresa().getId());
-            ps.setInt(4, t.getUsuario().getId());
+            ps.setString(3, t.getWebsite());
+            ps.setInt(4, t.getEmpresa().getId());
 
 
             ps.execute();
@@ -54,13 +54,13 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
     public void updateEntityByID(ContactoEmpresa t, int id) {
         try {
             sql = "update contacto_empresa set contacto=?, email=?, "
-                    + "fk_id_empresa=?, fk_id_usuario=? where id=?";
+                    + "website=?, fk_id_empresa=? where id=?";
             ps = con.prepareStatement(sql);
 
              ps.setString(1, t.getContacto());
             ps.setString(2, t.getEmail());
-            ps.setInt(3, t.getEmpresa().getId());
-            ps.setInt(4, t.getUsuario().getId());
+            ps.setString(3, t.getWebsite());
+            ps.setInt(4, t.getEmpresa().getId());
             ps.setInt(5, id);
 
             ps.execute();
@@ -83,6 +83,7 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
                 c.setId(result.getInt("id"));
                 c.setContacto(result.getString("contacto"));
                 c.setEmail(result.getString("email"));
+                c.setWebsite(result.getString("website"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));

@@ -9,68 +9,53 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="bg-transparent" stylesheets="@style/loginStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.MainController">
+<AnchorPane prefHeight="600.0" prefWidth="400.0" styleClass="left-form" stylesheets="@style/loginStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.MainController">
    <children>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="bg-transparent" stylesheets="@style/loginStyle.css">
-         <children>
-            <AnchorPane prefHeight="600.0" prefWidth="400.0" styleClass="left-form" stylesheets="@style/loginStyle.css">
-               <children>
-                  <Button fx:id="btnlogin" layoutX="90.0" layoutY="500.0" mnemonicParsing="false" onAction="#log" prefHeight="37.0" prefWidth="230.0" styleClass="login-btn" stylesheets="@style/loginStyle.css" text="Login">
-                     <font>
-                        <Font name="Berlin Sans FB Demi Bold" size="48.0" />
-                     </font>
-                     <effect>
-                        <DropShadow height="10.0" radius="4.5" spread="0.2" width="10.0">
-                           <color>
-                              <Color opacity="0.6000000238418579" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                  </Button>
-                  <Label layoutX="145.0" layoutY="26.0" text="Login" textAlignment="CENTER">
-                     <font>
-                        <Font name="Berlin Sans FB Demi Bold" size="48.0" />
-                     </font>
-                  </Label>
-                  <Button mnemonicParsing="false" onAction="#close" styleClass="close" stylesheets="@style/loginStyle.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="CLOSE" />
-                     </graphic>
-                  </Button>
-                  <Label alignment="CENTER" layoutY="135.0" text="JM-Invoice Stock Master" textAlignment="CENTER" textFill="#c72a98" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                     <font>
-                        <Font name="Berlin Sans FB Demi Bold" size="30.0" />
-                     </font>
-                  </Label>
-                  <PasswordField fx:id="txtpassword" layoutX="90.0" layoutY="440.0" prefWidth="230.0" promptText="Senha" styleClass="textfield" stylesheets="@style/loginStyle.css">
-                     <effect>
-                        <DropShadow height="10.0" radius="4.5" spread="0.2" width="10.0">
-                           <color>
-                              <Color opacity="0.6000000238418579" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                  </PasswordField>
-                  <ImageView fitHeight="295.0" fitWidth="357.0" layoutX="22.0" layoutY="152.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@image/LOGOTIPO.png" />
-                     </image>
-                  </ImageView>
-                  <TextField fx:id="txtusarname" layoutX="90.0" layoutY="397.0" prefHeight="30.0" prefWidth="230.0" promptText="Usuário" styleClass="textfield" stylesheets="@style/loginStyle.css">
-                     <effect>
-                        <DropShadow height="10.0" radius="4.5" spread="0.2" width="10.0">
-                           <color>
-                              <Color opacity="0.6000000238418579" />
-                           </color>
-                        </DropShadow>
-                     </effect></TextField>
-               </children>
-            </AnchorPane>
-         </children>
-      </AnchorPane>
+      <Button fx:id="btnlogin" layoutX="90.0" layoutY="481.0" mnemonicParsing="false" onAction="#log" prefHeight="20.0" prefWidth="230.0" styleClass="login-btn" stylesheets="@style/loginStyle.css" text="Login">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Label layoutX="163.0" layoutY="39.0" styleClass="texttitle" stylesheets="@style/loginStyle.css" text="Login" textAlignment="CENTER">
+         <font>
+            <Font name="Berlin Sans FB Demi Bold" size="30.0" />
+         </font>
+      </Label>
+      <Button mnemonicParsing="false" onAction="#close" styleClass="close" stylesheets="@style/loginStyle.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+         <graphic>
+            <FontAwesomeIconView glyphName="CLOSE" size="20" />
+         </graphic>
+      </Button>
+      <Label alignment="CENTER" layoutY="135.0" text="JM-Invoice Stock Master" textAlignment="CENTER" textFill="#c72a98" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <font>
+            <Font name="Berlin Sans FB Demi Bold" size="30.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="txtpassword" layoutX="90.0" layoutY="440.0" onKeyPressed="#callLog" prefWidth="230.0" promptText="Senha" styleClass="textfield" stylesheets="@style/loginStyle.css">
+         <effect>
+            <DropShadow height="10.0" radius="4.5" spread="0.2" width="10.0">
+               <color>
+                  <Color opacity="0.6000000238418579" />
+               </color>
+            </DropShadow>
+         </effect>
+      </PasswordField>
+      <ImageView fitHeight="295.0" fitWidth="357.0" layoutX="22.0" layoutY="152.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@image/LOGOTIPO.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="txtusarname" layoutX="90.0" layoutY="397.0" onKeyPressed="#callLog" prefHeight="20.0" prefWidth="230.0" promptText="Usuário" styleClass="textfield" stylesheets="@style/loginStyle.css">
+         <effect>
+            <DropShadow height="10.0" radius="4.5" spread="0.2" width="10.0">
+               <color>
+                  <Color opacity="0.6000000238418579" />
+               </color>
+            </DropShadow>
+         </effect>
+      </TextField>
    </children>
-</StackPane>
+</AnchorPane>

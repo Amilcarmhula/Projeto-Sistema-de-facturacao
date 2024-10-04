@@ -21,6 +21,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -36,6 +38,7 @@ import sysfact.util.MetodosUteis;
  * @author JM-Tecnologias
  */
 public class MainController implements Initializable {
+
     private double x = 0;
     private double y = 0;
 
@@ -52,54 +55,49 @@ public class MainController implements Initializable {
         System.exit(0);
     }
 
+    public void callLog(KeyEvent keyEvt) throws SQLException, IOException {
+        if (keyEvt.getCode().equals(KeyCode.ENTER)) {
+            log();
+        }
+    }
+
     public void log() throws SQLException, IOException {
         Alert alert;
         Usuario user = null;
-//        if (txtusarname.getText().isEmpty() || txtpassword.getText().isEmpty()) {
-//            MetodosUteis.showErro("Mensagem de Erro.", "Campos Usuario, cogido ou senha nao preenchidos!");
-//        } else {
-            try {
-                UsuarioDAO z = new UsuarioDAO();
-                ServiceUsuario service = new ServiceUsuario(z);
-                user = service.authLogin(txtusarname.getText(), txtpassword.getText());
-                
-//                user = z.login(txtusarname.getText(), txtpassword.getText());
-                if (user != null) {
-                    /*Dados de login a serem armazenados*/
-                    SysFact.setUserData(user);
-                    EmpresaDAO empresaData = new EmpresaDAO();
-                    SysFact.setEmpresaData(empresaData.getEmpresaData());
-                    btnlogin.getScene().getWindow().hide();
+            UsuarioDAO z = new UsuarioDAO();
+            ServiceUsuario service = new ServiceUsuario(z);
+            user = service.authLogin(txtusarname.getText(), txtpassword.getText());
 
-                    Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/main/main.fxml"));
-                    Stage stage = new Stage();
-                    root.setOnMousePressed((MouseEvent event) -> {
-                        x = event.getSceneX();
-                        y = event.getSceneY();
-                    });
+            if (user != null) {
+                /*Dados de login a serem armazenados*/
+                SysFact.setUserData(user);
+                EmpresaDAO empresaData = new EmpresaDAO();
+                SysFact.setEmpresaData(empresaData.getEmpresaData());
+                btnlogin.getScene().getWindow().hide();
 
-                    root.setOnMouseDragged((MouseEvent event) -> {
-                        stage.setX(event.getScreenX() - x);
-                        stage.setY(event.getScreenY() - y);
+                Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/main/main.fxml"));
+                Stage stage = new Stage();
+                root.setOnMousePressed((MouseEvent event) -> {
+                    x = event.getSceneX();
+                    y = event.getSceneY();
+                });
 
-                        stage.setOpacity(.5);
-                    });
+                root.setOnMouseDragged((MouseEvent event) -> {
+                    stage.setX(event.getScreenX() - x);
+                    stage.setY(event.getScreenY() - y);
 
-                    root.setOnMouseReleased((MouseEvent event) -> {
-                        stage.setOpacity(1);
-                    });
-                    Scene scene = new Scene(root);
+                    stage.setOpacity(.5);
+                });
 
-                    stage.initStyle(StageStyle.TRANSPARENT);
-                    stage.setScene(scene);
-                    stage.show();
-//                } else {
-//                    MetodosUteis.showInfo("Mensagem de Erro.", "User nao existe! ");
-                }
-            } catch (SQLException ex) {
-                MetodosUteis.showErro(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Mensagem de Erro.", "Erro ao se logar-se: " + ex);
+                root.setOnMouseReleased((MouseEvent event) -> {
+                    stage.setOpacity(1);
+                });
+                Scene scene = new Scene(root);
+
+                stage.initStyle(StageStyle.TRANSPARENT);
+                stage.setScene(scene);
+                stage.show();
             }
-//        }
     }
 
     @Override

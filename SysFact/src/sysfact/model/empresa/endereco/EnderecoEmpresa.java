@@ -18,15 +18,13 @@ public class EnderecoEmpresa extends Endereco {
     private int id;
     private String data_criacao;
     private Empresa empresa;
-    private Usuario usuario;
 
     public EnderecoEmpresa() {
     }
 
-    public EnderecoEmpresa(Empresa cliente, Usuario usuario, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
+    public EnderecoEmpresa(Empresa cliente, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
         super(provincia, cidade, bairro, avenida, rua, codigoPostal, numero, tipo);
         this.empresa = cliente;
-        this.usuario = usuario;
     }
 
     public int getId() {
@@ -52,14 +50,4 @@ public class EnderecoEmpresa extends Endereco {
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
-
-  
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-    
 }

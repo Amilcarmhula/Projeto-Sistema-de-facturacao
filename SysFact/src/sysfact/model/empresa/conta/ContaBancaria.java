@@ -20,19 +20,17 @@ public class ContaBancaria {
     private String nib;
     private String nuib;
     private Empresa empresa;
-    private Usuario usuario;
     private String data_criacao;
 
     public ContaBancaria() {
     }
 
-    public ContaBancaria(String nome_banco, String numero, String nib, String nuib, Empresa empresa, Usuario usuario) {
+    public ContaBancaria(String nome_banco, String numero, String nib, String nuib, Empresa empresa) {
         this.nome_banco = nome_banco;
         this.numero = numero;
         this.nib = nib;
         this.nuib = nuib;
         this.empresa = empresa;
-        this.usuario = usuario;
     }
 
     public int getId() {
@@ -81,14 +79,6 @@ public class ContaBancaria {
 
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
     public String getData_criacao() {

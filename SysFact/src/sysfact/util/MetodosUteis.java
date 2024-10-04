@@ -51,29 +51,21 @@ public class MetodosUteis {
     
     public static String validaString(FontAwesomeIcon icon, String data){
         if(data == null || data.isEmpty()){
-            showErro(icon, "Erro de dados", "Preencha todos campos obrigatorios!");
+            showDialog(icon, "Erro de dados", "Preencha todos campos obrigatorios!");
             return "";
         }
         return data;
     }
 
 
-    public static void showErro(FontAwesomeIcon icon,String title, String message) {
+    public static void showDialog(FontAwesomeIcon icon,String title, String message) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         FontAwesomeIconView erroIcon = new FontAwesomeIconView(icon);
-        erroIcon.setStyle("-fx-fill: red; -fx-font-size: 30px;");
+        erroIcon.setStyle("-fx-fill: rgba(35,35,35,.3); -fx-font-size: 30px;");
         alert.setGraphic(erroIcon);
-        alert.showAndWait();
-    }
-
-    public static void showInfo(String title, String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
         alert.showAndWait();
     }
 

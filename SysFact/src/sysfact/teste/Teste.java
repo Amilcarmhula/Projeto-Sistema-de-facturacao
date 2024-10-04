@@ -5,19 +5,18 @@
 package sysfact.teste;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import javafx.collections.ObservableList;
+import java.util.Map;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
 import sysfact.dao.cliente.ClienteDAO;
-import sysfact.dao.usuario.UsuarioDAO;
-import sysfact.dao.vendas.documentos.DocumentosComerciaisDAO;
-import sysfact.model.cliente.Cliente;
-import sysfact.model.cliente.contacto.ContactoCliente;
-import sysfact.model.usuario.Usuario;
-import sysfact.model.vendas.documetos.DocumentosComerciais;
-
-
-
-
+import sysfact.reports.facturas.ClienteData;
 
 /**
  *
@@ -29,11 +28,32 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        UsuarioDAO u = new UsuarioDAO();
-        Usuario x = u.login("caloss", "senha123");
-        System.out.println("user: "+x.getNivelAcesso().getId());
-        
-        
+        String sourceFileName = "C:\\Users\\JM-Tecnologias\\JaspersoftWorkspace\\SysFaceReports\\RelatorioFacturas.jasper";
+        String printFileName = null;
+        List<ClienteData> detalhesCliente = new ArrayList<ClienteData>();
+        ClienteDAO x = new ClienteDAO();
+        ClienteData cliente = x.getClinteFacturaData("2024-777/2");
+        detalhesCliente.add(cliente);
+        JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(detalhesCliente);
+
+        Map<String, Object> parameters = new HashMap<>();
+        try {
+            printFileName = JasperFillManager.fillReportToFile(sourceFileName, parameters, beanColDataSource);
+            if (printFileName != null) {
+                // Exportar para PDF
+                JasperExportManager.exportReportToPdfFile(printFileName, "C://sample_report.pdf");
+                // Exportar para HTML
+                JasperExportManager.exportReportToHtmlFile(printFileName, "C://sample_report.html");
+
+       
+
+                System.out.println("Relatório exportado com sucesso.");
+            }
+        } catch (JRException e) {
+            System.err.println("Erro ao gerar o relatório: " + e.getMessage());
+            e.printStackTrace();
+        }
+
 //        Cliente c = new Cliente();
 //        ClienteDAO cdao = new ClienteDAO();
 //        ObservableList<Cliente> listaClientes = cdao.listAllEntities();
@@ -52,15 +72,12 @@ public class Teste {
 //
 //            
 //        }
-        
 //        UnidadeMedida x = new UnidadeMedida();
 //        UnidadeMedidaDAO z = new UnidadeMedidaDAO();
 ////        x.setId(3);
 //        x.setIdentificador("kilo grama");
 //        x.setSigla("kg");
 //        z.addEntity(x);
-        
-        
 //        ProdutoDAO pd = new ProdutoDAO();
 //        ObservableList<Produto> lista = pd.listAllEntities2();
 //        for (Produto p : lista) {
@@ -68,7 +85,6 @@ public class Teste {
 //            System.out.println(""+p.getUnidade_medida().getIdentificador());
 //
 //        }
-
 //        for (Map.Entry<Integer, String> entry : mapa.entrySet()) {
 //            Object key = entry.getKey();
 //            Object val = entry.getValue();

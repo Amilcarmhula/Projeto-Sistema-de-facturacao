@@ -99,6 +99,9 @@ public class VendasController implements Initializable {
     private Label labDesconto;
 
     @FXML
+    private Label labTaxas;
+
+    @FXML
     private Label labDivida;
 
     @FXML
@@ -392,6 +395,8 @@ public class VendasController implements Initializable {
         registraItens();
     }
 
+    
+
     public void registraItens() throws SQLException {
         Item i = null;
         ObservableList<TableModelItems> itens = tabelaItens.getItems();
@@ -419,20 +424,25 @@ public class VendasController implements Initializable {
         ObservableList<TableModelItems> itens = tabelaItens.getItems();
         double subtotal = 0;
         double desc = 0;
+        double taxa = 0;
         double total = 0;
         for (TableModelItems item : itens) {
             Produto x = mapaProdutos.get(item.getId());
-            subtotal += item.getQtd() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem());
+            subtotal += item.getQtd() * x.getPrecovenda().getPreco();
+            taxa += item.getQtd() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem();
             Desconto desconto = mapaDesconto.get(item.getDesconto());
-            desc += (item.getQtd() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem()))*desconto.getPercentagem();
+            desc += (item.getQtd() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem())) * desconto.getPercentagem();
             total += item.getSubtotal();
         }
-        labSubtotal.setText(subtotal+" MZN");
-        labDesconto.setText(desc+" MZN");
-        labTotalGeral.setText(total+" MZN");
-
+        labSubtotal.setText(String.format("%.2f",subtotal) + " MZN");
+        labDesconto.setText(String.format("%.2f",desc) + " MZN");
+        labTaxas.setText(String.format("%.2f",taxa) + " MZN");
+        labTotalGeral.setText(String.format("%.2f",total) + " MZN");
     }
-
+public void removeItens() {
+        tabelaItens.getItems().removeAll(tabelaItens.getSelectionModel().getSelectedItem());
+        displayPrice();
+    }
     public void resetProduto() {
         txtID.setText("");
         txtStock.setText("");

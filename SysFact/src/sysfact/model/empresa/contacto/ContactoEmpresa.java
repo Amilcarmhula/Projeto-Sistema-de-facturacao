@@ -17,16 +17,14 @@ import sysfact.model.usuario.Usuario;
 public class ContactoEmpresa extends Contacto{
     private int id;
     private Empresa empresa;
-    private Usuario usuario;
     private String data_criacao;
     
     
     public ContactoEmpresa(){}
 
-    public ContactoEmpresa(Empresa empresa, Usuario usuario, String contacto, String email, String webSite) {
+    public ContactoEmpresa(Empresa empresa, String contacto, String email, String webSite) {
         super(contacto, email, webSite);
         this.empresa = empresa;
-        this.usuario = usuario;
     }
 
     public int getId() {
@@ -43,14 +41,6 @@ public class ContactoEmpresa extends Contacto{
 
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
     public String getData_criacao() {

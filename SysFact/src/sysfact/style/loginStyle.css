@@ -8,15 +8,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 */
 
 .left-form{
-    /*-fx-background-color:linear-gradient(to bottom right, #272b3f, #256b51);    -fx-background-color:linear-gradient(to bottom right, #272b3f, #256b51);*/
     -fx-background-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
-    -fx-border-color:#000;
     -fx-border-width:.4px 0px .4px .4px;
-}
-
-
-.bg-transparent{
-    -fx-background-color:transparent;
 }
 
 .close{
@@ -27,29 +20,33 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color:rgba(35, 35, 35, .3);
 }
 
+.texttitle{
+    /*-fx-font-size:15px;*/
+    -fx-font-family:"Berlin Sans FB Demi";
+}
 .textfield{
     -fx-background-color:linear-gradient(to bottom, #efefef, #eee);
     -fx-background-radius:20px;
     /* -fx-border-color:#000; */
     /* -fx-border-width:4px; */
-    -fx-box-shadow: 0px 0px 10px 5px;
-    -fx-border-outline:0px ;
+    /*-fx-box-shadow: 0px 0px 10px 5px;*/
+    /*-fx-border-outline:0px ;*/
     -fx-border-radius:20px;
-    -fx-font-size:15px;
-    -fx-font-family:"Arial";
-    
+    /*-fx-font-size:15px;*/
+    -fx-font-family:"Berlin Sans FB Demi";
+
 }
-.textfield:focused{
+/*.textfield:focused{
     -fx-background-color:#fff;
     -fx-border-color:linear-gradient(to bottom right, #272b3f, #256b51);
     -fx-border-width:.8px;
-}
+}*/
 
 .login-btn{
-    -fx-background-color:linear-gradient(to bottom, #21a7ae,#368981);
+    -fx-background-color:rgba(35, 35, 35, .3);
     -fx-background-radius:20px;
-    -fx-text-fill:#000;
-    -fx-font-size:20px;
-    -fx-font-family:"Arial";
+    /*-fx-text-fill:#000;*/
+    /*-fx-font-size:20px;*/
+    -fx-font-family:"Berlin Sans FB Demi";
     -fx-cursor:hand;
 }

@@ -64,12 +64,12 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
                 user.setEstado(result.getBoolean("estado"));
                 user.setData_criacao(result.getString("data_criacao"));
             }else{
-                MetodosUteis.showInfo("Info", "Usuario nao existe!");
+                MetodosUteis.showDialog(FontAwesomeIcon.CHECK,"Info", "Usuario nao existe!!");
             }
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            MetodosUteis.showErro(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro com banco de dados: " + ex);
+            MetodosUteis.showDialog(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro com banco de dados: " + ex);
         }
         return user;
     }

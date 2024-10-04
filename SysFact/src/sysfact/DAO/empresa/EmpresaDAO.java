@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import sysfact.model.empresa.Empresa;
 import sysfact.model.empresa.conta.ContaBancaria;
@@ -71,8 +73,9 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
         try {
             sql = "SELECT e.id, e.nome, e.apelido AS razao, e.nuit, "
                     + "en.provincia, en.cidade, en.bairro, en.avenida, en.rua, en.codigo_postal, en.numero, en.tipo,"
-                    + "c.contacto, c.email, c.website,"
-                    + "a.nome_banco, a.numero, a.nib, a.nuib "
+                    + "GROUP_CONCAT(DISTINCT c.contacto SEPARATOR ' ') AS contatos, "
+                    + "c.email, c.website,"
+                    + "a.nome_banco, a.numero as numeroConta, a.nib, a.nuib "
                     + "FROM empresa e "
                     + "LEFT JOIN endereco_empresa en ON e.id = en.fk_id_empresa "
                     + "LEFT JOIN contacto_empresa c ON e.id = c.fk_id_empresa "
@@ -95,15 +98,27 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
                 e.setNumero(result.getInt("numero"));
                 empresa.setEnderecoEmpresa(e);
                 ContactoEmpresa ce = new ContactoEmpresa();
-                ce.setContacto(result.getString("contacto"));
+//                ce.setContacto(result.getString("contacto"));
                 ce.setEmail(result.getString("email"));
                 ce.setWebsite(result.getString("website"));
                 empresa.setContactoEmpresa(ce);
+                
+                List<ContactoEmpresa> listaContactos = new ArrayList<>();
+                String contactos = result.getString("contatos");
+                if (contactos != null && !contactos.trim().isEmpty()) {
+                    for (String split : contactos.split(" ")) {
+                        ContactoEmpresa cc = new ContactoEmpresa();
+                        cc.setContacto(split);
+                        listaContactos.add(cc);
+                    }
+                }
+                empresa.setContactosEmpresa(listaContactos);
+                
                 ContaBancaria conta = new ContaBancaria();
                 conta.setNome_banco(result.getString("nome_banco"));
                 conta.setNib(result.getString("nib"));
                 conta.setNuib(result.getString("nuib"));
-                conta.setNumero(result.getString("numero"));
+                conta.setNumero(result.getString("numeroConta"));
                 empresa.setContaBancaria(conta);
 
             }

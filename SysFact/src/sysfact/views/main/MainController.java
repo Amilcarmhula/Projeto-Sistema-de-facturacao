@@ -6,7 +6,6 @@ package sysfact.views.main;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,17 +15,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sysfact.SysFact;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.MetodosUteis;
 
 /**
  * FXML Controller class
@@ -67,16 +61,31 @@ public class MainController implements Initializable {
     private Button btn_unidades;
     @FXML
     private Button btn_categorias;
+    @FXML
+    private Button btn_dashboard11;
+    @FXML
+    private Button btn_cliente11;
+    @FXML
+    private Button btn_produtos11;
+    @FXML
+    private Button btn_facturas111;
+    @FXML
+    private Button btn_produtos112;
+    @FXML
+    private Button btn_stock;
     
+    @FXML
     public void close() {
         System.exit(0);
     }
     
+    @FXML
     public void minimize() {
         Stage stage = (Stage) anchorMain.getScene().getWindow();
         stage.setIconified(true);
     }
     
+    @FXML
     public void getViews(ActionEvent e) {
         String view = "";
         if (e.getSource() == btn_taxas) {

@@ -140,7 +140,7 @@ public class ClienteViewController implements Initializable {
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
                                 + "-glyph-size:28px;"
-                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                                + "-fx-fill:#000000b3;"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             Cliente x = tabelaCliente.getSelectionModel().getSelectedItem();
@@ -195,8 +195,8 @@ public class ClienteViewController implements Initializable {
     public void selectedLineCliente() throws SQLException {
         Cliente c = tabelaCliente.getSelectionModel().getSelectedItem();
         if (c != null) {
-            SysFact.setData(c);
             txtIDCliente.setText(String.valueOf(c.getId()));
+            SysFact.setData(c);
             btnAdd.setText("Actualizar");
         }
 

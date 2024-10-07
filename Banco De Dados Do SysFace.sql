@@ -3,7 +3,7 @@
 
 
 use _sysface;
-select * from empresa;
+desc contabancaria;
 
 create table nivel_acesso(
 	id integer primary key auto_increment,

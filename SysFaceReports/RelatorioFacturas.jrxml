@@ -4,20 +4,24 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="rgba(194, 194, 194, 0.2784314)"/>
+			<bottomPen lineWidth="0.5" lineColor="rgba(194, 194, 194, 0.2784314)"/>
 		</box>
 	</style>
-	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+	<style name="Table_TD" mode="Opaque" backcolor="rgba(255, 255, 255, 0.0)">
 		<box>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="rgba(194, 194, 194, 0.2784314)"/>
+			<bottomPen lineWidth="0.5" lineColor="rgba(194, 194, 194, 0.2784314)"/>
 		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="rgba(251, 253, 255, 0.0)"/>
+		</conditionalStyle>
 	</style>
-	<style name="Table_CH" mode="Opaque" backcolor="#B8B8B8">
+	<style name="Table_CH" mode="Opaque" backcolor="#E6E6E6">
 		<box>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="rgba(194, 194, 194, 0.2784314)"/>
+			<bottomPen lineWidth="0.5" lineColor="rgba(194, 194, 194, 0.2784314)"/>
 		</box>
 	</style>
 	<subDataset name="TABLE_DATASET" uuid="363be0fe-fda6-4c0e-9733-a2c1a66fcd78">
@@ -38,6 +42,16 @@
 	<parameter name="DESCONTO" class="java.lang.Double"/>
 	<parameter name="TAXAS" class="java.lang.Double"/>
 	<parameter name="TOTAL-GERAL" class="java.lang.Double"/>
+	<parameter name="nomeEmpresa" class="java.lang.String"/>
+	<parameter name="nuitEmpresa" class="java.lang.Integer"/>
+	<parameter name="enderecoEmpresa" class="java.lang.String"/>
+	<parameter name="contactoEmpresa" class="java.lang.String"/>
+	<parameter name="emailEmpresa" class="java.lang.String"/>
+	<parameter name="websiteEmpresa" class="java.lang.String"/>
+	<parameter name="nomeBanco" class="java.lang.String"/>
+	<parameter name="nibConta" class="java.lang.String"/>
+	<parameter name="nuibConta" class="java.lang.String"/>
+	<parameter name="numeroConta" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -62,14 +76,14 @@
 		</band>
 	</background>
 	<title>
-		<band height="240" splitType="Stretch">
+		<band height="236" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image>
 				<reportElement x="-61" y="-29" width="262" height="198" uuid="a4ba868b-fcd2-45da-94ca-a5731d9d8f51"/>
 				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/SysFact/src/sysfact/image/LOGOTIPO.png"]]></imageExpression>
 			</image>
 			<line>
-				<reportElement x="0" y="234" width="555" height="1" forecolor="#386340" uuid="d0d8dd39-4572-4ac5-8ed6-187c4c071faf">
+				<reportElement x="0" y="231" width="555" height="1" forecolor="#386340" uuid="d0d8dd39-4572-4ac5-8ed6-187c4c071faf">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -93,7 +107,7 @@
 				<textFieldExpression><![CDATA[$F{apelido}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="195" width="41" height="20" uuid="a09e7703-6199-44ed-bf8b-571b069e8fda">
+				<reportElement x="0" y="192" width="41" height="20" uuid="a09e7703-6199-44ed-bf8b-571b069e8fda">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -105,7 +119,7 @@
 				<text><![CDATA[NUIT:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="214" width="60" height="20" uuid="b6d4a90f-7f68-4435-a319-c7b231a4aeaf">
+				<reportElement x="0" y="211" width="60" height="20" uuid="b6d4a90f-7f68-4435-a319-c7b231a4aeaf">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -117,7 +131,7 @@
 				<text><![CDATA[Endereco:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="349" y="195" width="50" height="20" uuid="2363b25f-5b2a-4647-b7c9-7d1f0c695b10">
+				<reportElement x="349" y="192" width="50" height="20" uuid="2363b25f-5b2a-4647-b7c9-7d1f0c695b10">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -129,7 +143,7 @@
 				<text><![CDATA[Contacto:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="349" y="214" width="50" height="20" uuid="a1879ff5-e084-4b6a-83f9-8040dac2c33a">
+				<reportElement x="349" y="211" width="50" height="20" uuid="a1879ff5-e084-4b6a-83f9-8040dac2c33a">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -141,14 +155,14 @@
 				<text><![CDATA[E-mail:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="35" y="195" width="100" height="23" forecolor="#4F4A4A" uuid="33442251-584c-41d6-b693-e243c615a797"/>
+				<reportElement x="35" y="192" width="100" height="23" forecolor="#4F4A4A" uuid="33442251-584c-41d6-b693-e243c615a797"/>
 				<textElement>
 					<font fontName="Berlin Sans FB"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nuit}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="51" y="215" width="298" height="19" forecolor="#4F4A4A" uuid="e74cd1fb-d251-433e-8549-40b2ab337f53">
+				<reportElement x="51" y="212" width="298" height="19" forecolor="#4F4A4A" uuid="e74cd1fb-d251-433e-8549-40b2ab337f53">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
@@ -157,7 +171,7 @@
 				<textFieldExpression><![CDATA[$F{endereco}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="399" y="195" width="151" height="23" forecolor="#4F4A4A" uuid="64a228c1-8535-472d-b6ed-e522591c874f">
+				<reportElement x="399" y="192" width="151" height="23" forecolor="#4F4A4A" uuid="64a228c1-8535-472d-b6ed-e522591c874f">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
@@ -166,7 +180,7 @@
 				<textFieldExpression><![CDATA[$F{contacto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="389" y="214" width="176" height="23" forecolor="#4F4A4A" uuid="f097c316-e81c-4ff7-8d2e-4e1ee66488fc">
+				<reportElement x="389" y="211" width="176" height="23" forecolor="#4F4A4A" uuid="f097c316-e81c-4ff7-8d2e-4e1ee66488fc">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
@@ -182,7 +196,7 @@
 					<font fontName="Berlin Sans FB" size="16"/>
 					<paragraph rightIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["JM-Tecnologias, Sociedade Unipessoal Limitada"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{nomeEmpresa}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="169" y="55" width="386" height="20" uuid="474f21d7-f7a0-4f77-b0ae-d63bb173ad89">
@@ -193,7 +207,7 @@
 					<font fontName="Berlin Sans FB" size="8"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["NUIT:123456789"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["NUIT: "+$P{nuitEmpresa}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="169" y="66" width="386" height="20" uuid="bd8ca267-7a7c-41eb-823b-5924de9a3509">
@@ -204,7 +218,7 @@
 					<font fontName="Berlin Sans FB" size="8" isItalic="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Avenida Julius Nyerere, Rua 2, 456; Polana-,Maputo, Maputo-1200"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{enderecoEmpresa}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="169" y="78" width="386" height="20" uuid="76045767-91a0-4de7-8d95-0bc24af8c575">
@@ -215,7 +229,7 @@
 					<font fontName="Berlin Sans FB" size="8"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["(+258) 84 710 0793 / 87 820 1993"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{contactoEmpresa}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="169" y="87" width="386" height="20" uuid="d84f8bcd-6b6c-4ca2-9d61-5a2bf297980a">
@@ -226,7 +240,7 @@
 					<font fontName="Berlin Sans FB" size="8"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["info@jm-tecnologias.co.mz"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{emailEmpresa}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="290" y="144" width="30" height="14" uuid="becebedc-2ce8-42cf-8132-2f05df2d97e1"/>
@@ -295,19 +309,27 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="169" y="97" width="386" height="20" uuid="522f95ae-267b-4a0b-841b-a24df1fc31d2">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="8"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{websiteEmpresa}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
 		<band splitType="Stretch"/>
 	</pageHeader>
-	<columnHeader>
-		<band height="25" splitType="Stretch"/>
-	</columnHeader>
 	<detail>
-		<band height="55" splitType="Stretch">
+		<band height="54" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<componentElement>
-				<reportElement x="0" y="3" width="555" height="50" uuid="d65e400f-8b69-4102-8658-54acdb9c4b2f">
+				<reportElement x="0" y="1" width="555" height="50" backcolor="rgba(255, 255, 255, 0.0)" uuid="d65e400f-8b69-4102-8658-54acdb9c4b2f">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -491,62 +513,94 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="103" splitType="Stretch">
+		<band height="112" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
-				<reportElement x="10" y="13" width="300" height="16" forecolor="#4F4A4A" uuid="c80804d8-f643-41e9-a837-f1ca7babffd6"/>
+				<reportElement x="8" y="2" width="300" height="16" forecolor="#4F4A4A" uuid="c80804d8-f643-41e9-a837-f1ca7babffd6"/>
 				<textElement>
 					<font fontName="Berlin Sans FB" isBold="false" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Pagamento 50% na Adjudicação, e 50% no acto de entrega.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="30" width="191" height="14" forecolor="#4F4A4A" uuid="a222f1be-9f98-46c0-ad2f-0df7d02ae179"/>
+				<reportElement x="8" y="19" width="191" height="14" forecolor="#4F4A4A" uuid="a222f1be-9f98-46c0-ad2f-0df7d02ae179"/>
 				<textElement>
 					<font fontName="Berlin Sans FB" isBold="false" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Tempo de produção: 7 dias  úteis.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="50" width="100" height="14" uuid="b0fa7123-ab89-4bab-93ce-ef4ad1fce9a5"/>
+				<reportElement x="8" y="39" width="100" height="14" uuid="b0fa7123-ab89-4bab-93ce-ef4ad1fce9a5"/>
 				<textElement>
 					<font fontName="Berlin Sans FB" isBold="false" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Dados bancários]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="66" width="100" height="14" forecolor="#4F4A4A" uuid="0c82742a-eb70-4a93-a1c9-ebe5f06021cd"/>
-				<textElement>
-					<font fontName="Berlin Sans FB" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Conta Banco Único:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="10" y="80" width="20" height="14" forecolor="#4F4A4A" uuid="64a007f2-3a9d-4b00-9700-f87402d3d659"/>
+				<reportElement x="8" y="83" width="20" height="14" forecolor="#4F4A4A" uuid="64a007f2-3a9d-4b00-9700-f87402d3d659">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<textElement>
 					<font fontName="Berlin Sans FB" isBold="false"/>
 				</textElement>
 				<text><![CDATA[NIB:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="99" y="66" width="70" height="14" uuid="c87c8d6f-23dd-4c04-9a74-687295b38a3b"/>
+			<textField>
+				<reportElement x="8" y="55" width="172" height="14" forecolor="#4F4A4A" uuid="4aa4110f-42c5-4ca3-99c5-b2d441d47319">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font fontName="Berlin Sans FB"/>
 				</textElement>
-				<text><![CDATA[ 00019948008]]></text>
+				<textFieldExpression><![CDATA[$P{nomeBanco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="28" y="83" width="280" height="14" uuid="8a333bc2-0bd3-4bf2-b190-08f0d0414f38">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nibConta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="35" y="97" width="295" height="14" uuid="4a2ba835-be6b-45c3-951b-0d68caedd231">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nuibConta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="97" width="27" height="14" forecolor="#4F4A4A" uuid="d93fe188-9313-44cb-b347-74550000e7b3">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB" isBold="false"/>
+				</textElement>
+				<text><![CDATA[NUIB:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="30" y="80" width="120" height="14" uuid="8c5471ac-d002-4fd9-b6b2-30f467e8e5f2"/>
+			<textField>
+				<reportElement x="90" y="69" width="209" height="14" uuid="e86118f7-5c6d-4ea0-93c1-9b1605fb6ed1">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font fontName="Berlin Sans FB"/>
 				</textElement>
-				<text><![CDATA[004300000001994800845]]></text>
+				<textFieldExpression><![CDATA[$P{numeroConta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="69" width="82" height="14" forecolor="#4F4A4A" uuid="a0623325-9ec3-4df7-ab74-2bb89bc2e7af">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Numero de conta:]]></text>
 			</staticText>
 		</band>
 	</columnFooter>
-	<pageFooter>
-		<band height="100" splitType="Stretch"/>
-	</pageFooter>
 	<lastPageFooter>
 		<band height="21">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -607,7 +661,7 @@
 						<font fontName="Berlin Sans FB"/>
 						<paragraph rightIndent="5"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{TOTAL-GERAL}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{TOTAL-GERAL}+" MZN"]]></textFieldExpression>
 				</textField>
 			</frame>
 			<rectangle>

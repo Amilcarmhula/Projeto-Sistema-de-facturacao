@@ -4,6 +4,7 @@
  */
 package sysfact.model.stock;
 
+import sysfact.model.armazem.Armazem;
 import sysfact.model.produto.Produto;
 
 /**
@@ -12,14 +13,16 @@ import sysfact.model.produto.Produto;
  */
 public class Stock {
     private Produto produto;
+    private Armazem armazem;
     private int saldo;
 
     public Stock() {
     }
 
-    public Stock(Produto produto, int saldo) {
+    public Stock(Produto produto, int saldo, Armazem armazem) {
         this.produto = produto;
         this.saldo = saldo;
+        this.armazem = armazem;
     }
 
     public Produto getProduto() {
@@ -28,6 +31,14 @@ public class Stock {
 
     public void setProduto(Produto produto) {
         this.produto = produto;
+    }
+
+    public Armazem getArmazem() {
+        return armazem;
+    }
+
+    public void setArmazem(Armazem armazem) {
+        this.armazem = armazem;
     }
 
     public int getSaldo() {

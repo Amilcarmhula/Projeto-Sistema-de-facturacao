@@ -28,29 +28,29 @@ import sysfact.model.usuario.Usuario;
  * @author JM-Tecnologias
  */
 public class MainController implements Initializable {
-    
+
     private Usuario user;
-    
+
     @FXML
     private AnchorPane anchorMain;
-    
+
     @FXML
     private Label labUserName;
-    
+
     @FXML
     private Button btn_cliente;
     @FXML
     private Button btn_dashboard;
-    
+
     @FXML
     private Button btn_fornecedor;
-    
+
     @FXML
     private Button btn_armazem;
-    
+
     @FXML
     private Button btn_artigos;
-    
+
     @FXML
     private Button btn_vendas;
 
@@ -73,18 +73,25 @@ public class MainController implements Initializable {
     private Button btn_produtos112;
     @FXML
     private Button btn_stock;
-    
+
     @FXML
     public void close() {
         System.exit(0);
     }
-    
+
     @FXML
     public void minimize() {
         Stage stage = (Stage) anchorMain.getScene().getWindow();
         stage.setIconified(true);
     }
-    
+
+    @FXML
+    public void maximize() {
+        Stage stage = (Stage) anchorMain.getScene().getWindow();
+        // Verifica se a janela já está maximizada, para alternar entre maximizar e restaurar. EXPAND
+        stage.setMaximized(!stage.isMaximized());
+    }
+
     @FXML
     public void getViews(ActionEvent e) {
         String view = "";
@@ -181,7 +188,7 @@ public class MainController implements Initializable {
 //        result.ifPresent(name -> System.out.println("Nome inserido: " + name));
         }
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.user = SysFact.getUserData();

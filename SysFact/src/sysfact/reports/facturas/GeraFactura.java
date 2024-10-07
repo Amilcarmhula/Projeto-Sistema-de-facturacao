@@ -12,34 +12,35 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.fonts.FontExtensionsCollector;
-import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.empresa.EmpresaDAO;
 import sysfact.dao.vendas.factura.FacturaDAO;
 import sysfact.model.empresa.Empresa;
 
-
-
 /**
  *
  * @author JM-Tecnologias
  */
+
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperCompileManager;
+
 public class GeraFactura {
 
     public static void main(String[] args) throws SQLException {
-        try { 
-             
+        try {
+        // O resto do código para gerar o relatório...
 
 //            String jasperPath = "C:\\Users\\JM-Tecnologias\\JaspersoftWorkspace\\SysFaceReports\\RelatorioFacturas.jasper";
-            String jasperPath = "C:\\Users\\JM-Tecnologias\\JaspersoftWorkspace\\SysFaceReports\\RelatorioFacturas.jasper";
-            JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile(jasperPath);
+            String jasperPath = "C:\\Users\\JM-Tecnologias\\Documents\\NetBeansProjects\\Projeto Sistema de facturacao\\SysFaceReports\\RelatorioFacturas.jrxml";
+//            JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile(jasperPath);
+            JasperReport jReport = JasperCompileManager.compileReport(jasperPath);
+
 
             List<ClienteData> detalhesCliente = new ArrayList<ClienteData>();
             ClienteDAO x = new ClienteDAO();

@@ -1,9 +1,41 @@
 /*
- * Empty Stylesheet file.
+ * sistema de cores.
  */
+.primary-color{
+    -fx-background-color: #17b5c3;
+}
+
+.secondary-color{
+    -fx-background-color: #000000b3;
+}
+.base-color{
+    -fx-background-color: #fff;
+}
 
 
+.white-bg{
+    -fx-background-color: #fff;
+}
+.tranp-bg{
+    -fx-background-color: transparent;
+}
+.gray-bg{
+    -fx-background-color: rgba(35, 35, 35, .3);
+}
 
+.blue-bg{
+    -fx-background-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
+}
+.headers-color{
+    -fx-background-color: rgba(35, 35, 35, .5);
+}
+
+/*
+ * Efeito Sombra.
+ */
+.shadow{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.3), 5,0,0,3);
+}
 
 .close{
     -fx-background-color:transparent;
@@ -17,7 +49,7 @@
 
 .close:hover{
     -fx-background-color:#ff3547;
-    -fx-background-radius: 0px 0px 10px 0px;
+    /*-fx-background-radius: 0px 0px 10px 0px;*/
 }
 
 .close-categoria:hover{
@@ -50,25 +82,6 @@
     -fx-background-color: rgba(55, 55, 179, 0.25);
 }
 
-.shadow{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.8), 9,0,0,0);
-}
-.white-bg{
-    -fx-background-color: #fff;
-}
-.tranp-bg{
-    -fx-background-color: transparent;
-}
-.gray-bg{
-    -fx-background-color: rgba(35, 35, 35, .3);
-}
-
-.blue-bg{
-    -fx-background-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
-}
-.headers-color{
-    -fx-background-color: rgba(35, 35, 35, .5);
-}
 .border-less {
     -fx-border-color: transparent;
     -fx-border-width: 0px;
@@ -100,22 +113,26 @@
 }
 
 .table-view{
-    -fx-border-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
+    -fx-border-color: #17b5c3;
     -fx-background-color: transparent;
-    -fx-border-radius: 10px 10px 0px 0px;
+    /*-fx-border-radius: 10px 10px 0px 0px;*/
     -fx-border-width: 3px;
 }
 
 .table-view .column-header-background{
-    -fx-background-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
-    -fx-background-radius: 10px 10px 0px 0px;
+    -fx-background-color: #17b5c3;
+    /*-fx-background-radius: 10px 10px 0px 0px;*/
 }
 
 .table-view .column-header, .filter{
     -fx-background-color: transparent;
     -fx-size:40px;
 }
-
+/* Selected Row Styling */
+.table-view .table-row-cell:selected {
+    -fx-background-color: rgba(23, 180, 194, 0.5);
+    -fx-text-fill: black;
+}
 .table-view .column-header, .label{
     -fx-text-fill: #fff;
 }
@@ -123,24 +140,22 @@
 /* Row Styling */
 /* Estilizando as células da tabela */
 .table-view .table-row-cell {
-    -fx-background-color: transparent; /* Fundo das linhas */
-    /*-fx-text-fill: white;               Texto branco nas linhas */
-    -fx-font-size: 16px;               /* Tamanho maior do texto */
-    /*-fx-font-weight: bold;*/
+    -fx-background-color: transparent;
+    -fx-font-size: 16px;
 }
 
 .table-view .scroll-bar:vertical {
-    -fx-background-color: transparent; /* Cor de fundo das barras de rolagem */
+    -fx-background-color: transparent;
 }
 
 .table-view .scroll-bar:horizontal {
-    -fx-background-color: transparent; /* Cor de fundo das barras de rolagem */
+    -fx-background-color: transparent;
 }
 
 .table-view .scroll-bar .thumb {
-    -fx-background-color:  rgba(35, 35, 35, .5); /* Cor do 'thumb' da barra de rolagem */
-    -fx-background-insets: 6;       
-    -fx-background-radius: 20px;    /* Raio das bordas do 'thumb' */
+    -fx-background-color:  rgba(35, 35, 35, .5);
+    -fx-background-insets: 6;
+    -fx-background-radius: 20px;
 }
 
 /* Alternate Row Colors */
@@ -158,11 +173,7 @@
     -fx-text-fill: #000000;
 }*/
 
-/* Selected Row Styling */
-/*.table-row-cell:selected {
-    -fx-background-color: #00ff00;  Change selected row color 
-    -fx-text-fill: #000000;  Change selected row text color 
-}*/
+
 
 /* Add padding to row cells */
 /*.table-row-cell {
@@ -170,21 +181,30 @@
 }*/
 
 .tab-pane{
-    -fx-border-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
+    -fx-border-color:#17b5c3;
     -fx-background-color: transparent;
-    -fx-border-radius: 10px;
     -fx-border-width: 3px;
 }
 
 .tab-pane .tab-header-background{
-    -fx-background-color:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);
-    -fx-background-radius: 10px 10px 0px 0px;
+    -fx-background-color:#17b5c3;
+    /*-fx-background-radius: 10px 10px 0px 0px;*/
 }
 
-/*.tab-pane .tab, .filter{
-    -fx-background-color: transparent;
-    -fx-size:80px;
-}*/
+.tab-pane .tab {
+    -fx-background-color: #000000b3;
+    -fx-border-radius: 10px 10px 0px 0px;
+    -fx-padding: 10px 155px 10px 155px;
+    -fx-cursor: hand;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+
 
 
 
@@ -211,11 +231,7 @@
 
 
 /* Selected tab styling */
-.tab-pane .tab {
-    -fx-background-color: linear-gradient(to bottom right, #00ff004d, #0000ff80);
-    -fx-border-radius: 10px 10px 0px 0px;
-    -fx-padding: 10px;
-}
+
 
 /* Hover effect for tabs */
 /*.tab-pane .tab:hover {
@@ -232,12 +248,7 @@
 }*/
 
 /* Styling label inside tabs */
-.tab-pane .tab .tab-label {
-    -fx-text-fill: #ffffff; 
-    -fx-font-size: 18px; 
-    -fx-font-weight: bold;
-    
-}
+
 
 
 
@@ -269,7 +280,7 @@
 .combo-box .list-cell:filled:selected {
     /*-fx-background-color: #007bff;  Cor de fundo quando selecionado */
     /*-fx-text-fill: #ffffff;  Cor do texto quando selecionado */
-    /*-fx-font-weight: bold;  Aplica bold ao item selecionado*/ 
+    /*-fx-font-weight: bold;  Aplica bold ao item selecionado*/
 }
 
 
@@ -281,24 +292,31 @@
 
 
 .accordion {
-    -fx-background-color: transparent;  
-    /*-fx-border-color: #cccccc;*/      
-      /*-fx-border-width: 2px;*/         
-    /*-fx-border-radius: 5px;*/          
+    -fx-background-color: transparent;
+    /*-fx-border-color: #cccccc;*/
+    /*-fx-border-width: 2px;*/
+    /*-fx-border-radius: 5px;*/
 }
 
-
+.titled-pane {
+    /*-fx-background-color: transparent;*/
+    /*-fx-text-fill: white;*/
+    /*-fx-font-weight: bold;*/
+    /*-fx-padding: 10px;*/
+    /*-fx-border-color: #17b5c3;*/
+    /*-fx-border-width: 0 0 1px 0;*/
+}
 .titled-pane > .title {
-    -fx-background-color: transparent;   
-    -fx-text-fill: white;          
-    /*-fx-font-weight: bold;*/          
-    /*-fx-padding: 10px;*/              
-    /*-fx-border-color: #cccccc;*/       
-    /*-fx-border-width: 0 0 1px 0;*/     
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    /*-fx-font-weight: bold;*/
+    /*-fx-padding: 10px;*/
+    /*-fx-border-color: #17b5c3;*/
+    /*-fx-border-width: 0 0 1px 0;*/
 }
 
 .titled-pane > .content {
-    -fx-background-color: transparent;  
+    -fx-background-color: transparent;
     /*-fx-padding: 10px;*/
 }
 
@@ -317,6 +335,81 @@
 /* Estilo para os trilhos das barras de rolagem */
 .scroll-pane .scroll-bar .thumb {
     -fx-background-color:  rgba(35, 35, 35, .5); /* Cor do 'thumb' da barra de rolagem */
-    -fx-background-insets: 6;       
+    -fx-background-insets: 6;
     -fx-background-radius: 20px;    /* Raio das bordas do 'thumb' */
+}
+
+/* Estilizando o campo do DatePicker */
+.date-picker {
+    -fx-background-color: #17b5c3;
+    /*-fx-border-color: #000000b3;*/
+    /*-fx-border-radius: 5;*/
+    /*-fx-background-radius: 5;*/
+    -fx-font-size: 14px;
+    -fx-text-fill: #fff;
+}
+
+/* Estilizando a lista de datas (calendário) */
+.date-picker .arrow,
+.date-picker .spinner {
+    -fx-background-color: #17b5c3;
+}
+
+.date-picker .text-field {
+    -fx-background-color: #17b5c3;
+    -fx-text-fill: #fff;
+}
+
+.date-picker-popup {
+    -fx-background-color: #17b5c3;
+    -fx-border-radius: 5;
+}
+
+
+/* Estilo para o StackedBarChart */
+.chart {
+    -fx-background-color: transparent; /* Fundo transparente */
+}
+
+.chart-title {
+    -fx-font-size: 16px; /* Tamanho da fonte do título do gráfico */
+    -fx-text-fill: #333; /* Cor do texto do título */
+}
+
+/* Estilo para o eixo X */
+.axis.x {
+    -fx-label-fill: #666; /* Cor dos rótulos do eixo X */
+    -fx-font-size: 12px; /* Tamanho da fonte dos rótulos do eixo X */
+}
+
+/* Estilo para o eixo Y */
+.axis.y {
+    -fx-label-fill: #666; /* Cor dos rótulos do eixo Y */
+    -fx-font-size: 12px; /* Tamanho da fonte dos rótulos do eixo Y */
+}
+
+/* Estilo para as barras do gráfico */
+.bar-chart .chart-bar {
+    -fx-bar-fill: #17b5c3; /* Cor padrão das barras */
+    -fx-opacity: 0.9; /* Opacidade das barras */
+}
+
+/* Estilo para as séries individuais */
+.series0 .chart-bar {
+    -fx-bar-fill: #0076a8; /* Cor para a primeira série */
+}
+
+.series1 .chart-bar {
+    -fx-bar-fill: #e1e1e1; /* Cor para a segunda série */
+}
+
+/* Efeito de hover nas barras */
+.chart-bar:hover {
+    -fx-opacity: 1; /* Opacidade total ao passar o mouse */
+}
+
+/* Estilo para os rótulos de dados */
+.chart-data-label {
+    -fx-font-size: 10px; /* Tamanho da fonte dos rótulos de dados */
+    -fx-text-fill: #fff; /* Cor do texto dos rótulos de dados */
 }

@@ -31,7 +31,7 @@ import sysfact.model.stock.Stock;
 public class DashboardController implements Initializable {
 
     @FXML
-    private BarChart<String, Number> barChart;
+    private BarChart<Number, String> barChart;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -46,17 +46,18 @@ public class DashboardController implements Initializable {
     public void showStock() throws SQLException {
         StockDAO x = new StockDAO();
         listaStock = x.getStock();
-        XYChart.Series<String, Number> dados = new XYChart.Series<>();
-        dados.setName("Contole de Stock");
+        XYChart.Series<Number, String> dados = new XYChart.Series<>();
+//        dados.setName("Contole de Stock");
         for (Stock s : listaStock) {
-            dados.getData().add(new XYChart.Data<>(s.getProduto().getNome(), s.getSaldo()));
+            dados.getData().add(new XYChart.Data<>(s.getSaldo(),s.getProduto().getNome()));
         }
         barChart.setCategoryGap(20);
         barChart.getData().addAll(dados);
+        barChart.getStylesheets().add(getClass().getResource("estiloGrafico.css").toExternalForm());
         // Para cada dado, adicionar o valor como rótulo em cima da barra
-        for (XYChart.Data<String, Number> data : dados.getData()) {
+        for (XYChart.Data<Number, String> data : dados.getData()) {
             // Criar um label com o valor Y
-            Text label = new Text(String.valueOf(data.getYValue()));
+            Text label = new Text(String.valueOf(data.getXValue()));
             
             // Estilizando o rótulo
             label.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-fill: #000;");

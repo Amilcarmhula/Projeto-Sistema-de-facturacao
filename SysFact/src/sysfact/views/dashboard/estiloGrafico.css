@@ -1,0 +1,42 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Oct 8, 2024, 8:58:05 AM
+    Author     : JM-Tecnologias
+*/
+
+/* Estilo geral para o BarChart */
+.bar-chart {
+    -fx-background-color: transparent; /* Fundo transparente */
+}
+
+/* Estilo do título do gráfico */
+.chart-title {
+    -fx-font-size: 28px; /* Tamanho da fonte do título */
+    -fx-text-fill: #333;  /* Cor do título */
+}
+
+/* Estilo para o eixo X */
+/*.axis .axis-label {
+    -fx-text-fill: #666;  Cor dos rótulos do eixo X 
+    -fx-font-size: 12px;  Tamanho da fonte dos rótulos do eixo X 
+}*/
+
+/* Estilo para o eixo Y */
+.axis .axis-label {
+    -fx-text-fill: #666; /* Cor dos rótulos do eixo Y */
+    -fx-font-size: 20px; /* Tamanho da fonte dos rótulos do eixo Y */
+}
+
+/* Estilo para as barras */
+.chart-bar {
+    -fx-bar-fill: #17b5c3; /* Cor padrão das barras */
+    /*-fx-opacity: 1;  Opacidade das barras */
+}
+
+/* Efeito de hover nas barras */
+.chart-bar:hover {
+    -fx-opacity: 0.4; /* Aumentar a opacidade ao passar o mouse */
+}

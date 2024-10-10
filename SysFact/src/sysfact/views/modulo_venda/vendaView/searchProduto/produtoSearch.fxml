@@ -13,9 +13,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="704.0" prefWidth="1058.0" styleClass="blue-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController">
+<AnchorPane prefHeight="704.0" prefWidth="1058.0" styleClass="base-color" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController">
    <children>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" styleClass="headers-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" styleClass="primary-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Artigos &amp; Servicos" textFill="WHITE" AnchorPane.topAnchor="10.0">
                <font>
@@ -34,69 +34,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="72.0" prefWidth="1036.0" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0">
-         <styleClass>
-            <String fx:value="white-bg" />
-            <String fx:value="Squared-border" />
-            <String fx:value="shadow" />
-         </styleClass>
-         <children>
-            <AnchorPane layoutX="12.0" layoutY="28.0" prefHeight="60.0" prefWidth="1391.0" stylesheets="@../../../../style/dashboard.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-               <styleClass>
-                  <String fx:value="blue-bg" />
-                  <String fx:value="Squared-border" />
-               </styleClass>
-               <children>
-                  <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="53.0" layoutY="14.0" prefHeight="25.0" prefWidth="82.0" promptText="ID" stylesheets="@../../../../style/dashboard.css">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <TextField fx:id="txtNomeProduto" layoutX="144.0" layoutY="14.0" prefHeight="25.0" prefWidth="240.0" promptText="Nome do artigo" stylesheets="@../../../../style/dashboard.css">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <TextField fx:id="txtcodigobarrasProduto" layoutX="395.0" layoutY="14.0" prefHeight="25.0" prefWidth="209.0" promptText="Codigo de barras" stylesheets="@../../../../style/dashboard.css">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <TextField fx:id="txtdescricaoProduto" layoutX="613.0" layoutY="14.0" prefHeight="25.0" prefWidth="396.0" promptText="Descricao" stylesheets="@../../../../style/dashboard.css">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <Button layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#resetCampos" stylesheets="@../../../../style/dashboard.css">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="20" />
-                     </graphic>
-                     <styleClass>
-                        <String fx:value="gray-bg" />
-                        <String fx:value="shadow-efect" />
-                     </styleClass>
-                  </Button>
-               </children>
-            </AnchorPane>
-         </children>
-      </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="8.0" layoutY="362.0" onMouseClicked="#selectedRow" prefHeight="316.0" prefWidth="1036.0" AnchorPane.leftAnchor="8.0">
+      <TableView fx:id="tabelaProduto" layoutX="8.0" layoutY="362.0" onMouseClicked="#selectedRow" prefHeight="333.0" prefWidth="1036.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
             <TableColumn fx:id="armazem" prefWidth="209.0" text="Armazem" />
@@ -109,140 +47,192 @@
             <TableColumn fx:id="btntabelaProduto" prefWidth="52.0" resizable="false" />
          </columns>
       </TableView>
-      <TextField fx:id="txtIDCategoria" layoutX="279.0" layoutY="152.0" onMouseClicked="#getFamiliaView" prefHeight="25.0" prefWidth="67.0" stylesheets="@../../../../style/dashboard.css">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <styleClass>
-            <String fx:value="text-squared-border" />
-            <String fx:value="shadow" />
-         </styleClass>
-      </TextField>
-      <TextField fx:id="txtIDUnidade" layoutX="279.0" layoutY="192.0" onMouseClicked="#getUnidadeView" prefHeight="25.0" prefWidth="67.0" stylesheets="@../../../../style/dashboard.css">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <styleClass>
-            <String fx:value="text-squared-border" />
-            <String fx:value="shadow" />
-         </styleClass>
-      </TextField>
-      <TextField fx:id="txtIDTaxa" layoutX="279.0" layoutY="231.0" onMouseClicked="#getTaxaView" prefHeight="25.0" prefWidth="67.0" stylesheets="@../../../../style/dashboard.css">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <styleClass>
-            <String fx:value="text-squared-border" />
-            <String fx:value="shadow" />
-         </styleClass>
-      </TextField>
-      <TextField fx:id="txtPreco" layoutX="806.0" layoutY="152.0" prefHeight="25.0" prefWidth="114.0" promptText="Preco" stylesheets="@../../../../style/dashboard.css">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <styleClass>
-            <String fx:value="text-squared-border" />
-            <String fx:value="shadow" />
-         </styleClass>
-      </TextField>
-      <DatePicker fx:id="dataInicio" layoutX="806.0" layoutY="192.0" prefHeight="25.0" prefWidth="114.0" />
-      <DatePicker fx:id="dataFim" layoutX="806.0" layoutY="231.0" prefHeight="25.0" prefWidth="114.0" />
-      <Label layoutX="62.0" layoutY="150.0" prefHeight="30.0" prefWidth="191.0" text="Familia:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="62.0" layoutY="189.0" prefHeight="30.0" prefWidth="191.0" text="Unidade de Medida:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="62.0" layoutY="229.0" prefHeight="30.0" prefWidth="168.0" text="Taxa/Imposto:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="labCategoria" layoutX="358.0" layoutY="150.0" prefHeight="30.0" prefWidth="217.0">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="labUnidade" layoutX="359.0" layoutY="190.0" prefHeight="30.0" prefWidth="217.0">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="labTaxa" layoutX="358.0" layoutY="229.0" prefHeight="30.0" prefWidth="217.0">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="651.0" layoutY="150.0" prefHeight="30.0" prefWidth="82.0" text="Preco:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="651.0" layoutY="189.0" prefHeight="30.0" prefWidth="141.0" text="Data de Inicio:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="651.0" layoutY="229.0" prefHeight="30.0" prefWidth="126.0" text="Data de FIm:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="651.0" layoutY="269.0" prefHeight="30.0" prefWidth="180.0" text="Controle de Stock:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <CheckBox fx:id="checkControle" layoutX="895.0" layoutY="271.0" mnemonicParsing="false">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </CheckBox>
-      <Button fx:id="btnAddProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="432.0" layoutY="312.0" mnemonicParsing="false" onAction="#addORupdate" prefHeight="36.0" prefWidth="273.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-         <styleClass>
-            <String fx:value="Squared-border" />
-            <String fx:value="shadow-efect" />
-            <String fx:value="hand-efect" />
-            <String fx:value="gray-bg" />
-         </styleClass>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </Button>
-      <TextField fx:id="txtPesquisar" layoutX="109.0" layoutY="316.0" prefHeight="25.0" prefWidth="309.0" promptText="Pesquisar produto" stylesheets="@../../../../style/dashboard.css">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <styleClass>
-            <String fx:value="text-squared-border" />
-            <String fx:value="shadow" />
-         </styleClass>
-      </TextField>
-      <Label fx:id="labIDPreco" layoutX="936.0" layoutY="150.0" prefHeight="30.0" prefWidth="82.0">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Button fx:id="btn_controleStock" disable="true" layoutX="744.0" layoutY="312.0" mnemonicParsing="false" onAction="#getStockView" prefHeight="36.0" prefWidth="126.0" stylesheets="@../../../../style/dashboard.css" text="Stock" textFill="WHITE">
-         <graphic>
-            <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="20" />
-         </graphic>
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-         <styleClass>
-            <String fx:value="gray-bg" />
-            <String fx:value="Squared-border" />
-            <String fx:value="hand-efect" />
-            <String fx:value="shadow-efect" />
-         </styleClass>
-      </Button>
+      <AnchorPane prefHeight="246.0" prefWidth="1058.0" styleClass="secondary-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0">
+         <children>
+            <TextField fx:id="txtIDCategoria" layoutX="257.0" layoutY="33.0" onMouseClicked="#getFamiliaView" prefHeight="25.0" prefWidth="67.0" stylesheets="@../../../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtIDUnidade" layoutX="257.0" layoutY="73.0" onMouseClicked="#getUnidadeView" prefHeight="25.0" prefWidth="67.0" stylesheets="@../../../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtIDTaxa" layoutX="257.0" layoutY="112.0" onMouseClicked="#getTaxaView" prefHeight="25.0" prefWidth="67.0" stylesheets="@../../../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtPreco" layoutX="784.0" layoutY="33.0" prefHeight="25.0" prefWidth="114.0" promptText="Preco" stylesheets="@../../../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <DatePicker fx:id="dataInicio" layoutX="784.0" layoutY="73.0" prefHeight="25.0" prefWidth="114.0" />
+            <DatePicker fx:id="dataFim" layoutX="784.0" layoutY="112.0" prefHeight="25.0" prefWidth="114.0" />
+            <Label layoutX="40.0" layoutY="31.0" prefHeight="30.0" prefWidth="191.0" text="Familia:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="40.0" layoutY="70.0" prefHeight="30.0" prefWidth="191.0" text="Unidade de Medida:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="40.0" layoutY="110.0" prefHeight="30.0" prefWidth="168.0" text="Taxa/Imposto:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="labCategoria" layoutX="336.0" layoutY="31.0" prefHeight="30.0" prefWidth="217.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="labUnidade" layoutX="337.0" layoutY="71.0" prefHeight="30.0" prefWidth="217.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="labTaxa" layoutX="336.0" layoutY="110.0" prefHeight="30.0" prefWidth="217.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="629.0" layoutY="31.0" prefHeight="30.0" prefWidth="82.0" text="Preco:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="629.0" layoutY="70.0" prefHeight="30.0" prefWidth="141.0" text="Data de Inicio:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="629.0" layoutY="110.0" prefHeight="30.0" prefWidth="126.0" text="Data de FIm:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="629.0" layoutY="150.0" prefHeight="30.0" prefWidth="180.0" text="Controle de Stock:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <CheckBox fx:id="checkControle" layoutX="873.0" layoutY="152.0" mnemonicParsing="false">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </CheckBox>
+            <Label fx:id="labIDPreco" layoutX="914.0" layoutY="31.0" prefHeight="30.0" prefWidth="82.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnAddProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="388.0" layoutY="196.0" mnemonicParsing="false" onAction="#addORupdate" prefHeight="36.0" prefWidth="273.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="shadow-efect" />
+                  <String fx:value="hand-efect" />
+                  <String fx:value="secondary-color" />
+               </styleClass>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Button>
+            <TextField fx:id="txtPesquisar" layoutX="65.0" layoutY="200.0" prefHeight="25.0" prefWidth="309.0" promptText="Pesquisar produto" stylesheets="@../../../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <Button fx:id="btn_controleStock" disable="true" layoutX="700.0" layoutY="196.0" mnemonicParsing="false" onAction="#getStockView" prefHeight="36.0" prefWidth="126.0" stylesheets="@../../../../style/dashboard.css" text="Stock" textFill="WHITE">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="20" />
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="hand-efect" />
+                  <String fx:value="shadow-efect" />
+                  <String fx:value="secondary-color" />
+               </styleClass>
+            </Button>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="60.0" prefWidth="1021.0" styleClass="secondary-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="53.0" layoutY="14.0" prefHeight="25.0" prefWidth="82.0" promptText="ID" stylesheets="@../../../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtNomeProduto" layoutX="144.0" layoutY="14.0" prefHeight="25.0" prefWidth="240.0" promptText="Nome do artigo" stylesheets="@../../../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtcodigobarrasProduto" layoutX="395.0" layoutY="14.0" prefHeight="25.0" prefWidth="209.0" promptText="Codigo de barras" stylesheets="@../../../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtdescricaoProduto" layoutX="613.0" layoutY="14.0" prefHeight="25.0" prefWidth="396.0" promptText="Descricao" stylesheets="@../../../../style/dashboard.css">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <Button layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#resetCampos" stylesheets="@../../../../style/dashboard.css">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="20" />
+               </graphic>
+               <styleClass>
+                  <String fx:value="secondary-color" />
+                  <String fx:value="hand-efect" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+            </Button>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

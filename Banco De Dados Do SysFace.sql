@@ -267,7 +267,7 @@ DELIMITER ;
 CREATE EVENT evento_atualizar_precovenda
 ON SCHEDULE EVERY 1 DAY
 DO
-    -- CALL atualizar_estado_precovenda();
+	-- CALL atualizar_estado_precovenda();
 
 create table produto_fornecido(
 	id integer primary key auto_increment,

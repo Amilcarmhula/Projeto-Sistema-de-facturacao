@@ -22,6 +22,7 @@ import sysfact.util.MetodosUteis;
  * @author JM-Tecnologias
  */
 public class StockDAO implements StockDAOImpl<Stock> {
+
     private Connection con;
     private PreparedStatement ps;
     private String sql;
@@ -31,13 +32,34 @@ public class StockDAO implements StockDAOImpl<Stock> {
     }
 
     @Override
-    public ObservableList<Stock> getStock() {
+    public ObservableList<Stock> getStock(Integer cat, Integer arm) {
         ObservableList<Stock> lista = FXCollections.observableArrayList();
         try {
-            sql = "select p.nome as produto, s.saldo from stock s "
-                    + "LEFT JOIN armazem a ON a.id=s.fk_id_armazem=a.id "
-                    + "LEFT JOIN produto p ON s.fk_id_produto=p.id";
+            sql = "SELECT p.nome AS produto, s.saldo "
+                    + "FROM produto p "
+                    + "JOIN stock s ON p.id = s.fk_id_produto "
+                    + "JOIN categoria c ON p.fk_id_categoria = c.id "
+                    + "JOIN armazem a ON s.fk_id_armazem = a.id "
+                    + "WHERE (? IS NULL OR c.id = ?) "
+                    + "AND (? IS NULL OR a.id = ?) ";
             ps = con.prepareStatement(sql);
+
+        // Se a categoria ou armazém não forem informados, passar valores nulos
+        if (cat == null) {
+            ps.setNull(1, java.sql.Types.INTEGER); // Para ? IS NULL
+            ps.setNull(2, java.sql.Types.INTEGER); // Para c.id = ?
+        } else {
+            ps.setInt(1, cat);  // Para ? IS NULL
+            ps.setInt(2, cat);  // Para c.id = ?
+        }
+
+        if (arm == null) {
+            ps.setNull(3, java.sql.Types.INTEGER); // Para ? IS NULL
+            ps.setNull(4, java.sql.Types.INTEGER); // Para a.id = ?
+        } else {
+            ps.setInt(3, arm);  // Para ? IS NULL
+            ps.setInt(4, arm);  // Para a.id = ?
+        }
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 Stock s = new Stock();
@@ -45,14 +67,12 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 p.setNome(result.getString("produto"));
                 s.setSaldo(result.getInt("saldo"));
                 s.setProduto(p);
-//                Armazem arm = new Armazem();
-//                arm.setId(result.getInt("fk_id_armazem"));
                 lista.add(s);
             }
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            MetodosUteis.showDialog(FontAwesomeIcon.COG, "Erro", "Erro ao Buscar Produto: "+ex);
+            MetodosUteis.showDialog(FontAwesomeIcon.COG, "Erro", "Erro ao Buscar Produto: " + ex);
         }
         return lista;
     }

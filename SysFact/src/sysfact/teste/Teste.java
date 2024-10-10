@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.collections.ObservableList;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -16,6 +17,8 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import sysfact.dao.cliente.ClienteDAO;
+import sysfact.dao.stock.StockDAO;
+import sysfact.model.stock.Stock;
 import sysfact.reports.facturas.ClienteData;
 
 /**
@@ -28,31 +31,13 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        String sourceFileName = "C:\\Users\\JM-Tecnologias\\JaspersoftWorkspace\\SysFaceReports\\RelatorioFacturas.jasper";
-        String printFileName = null;
-        List<ClienteData> detalhesCliente = new ArrayList<ClienteData>();
-        ClienteDAO x = new ClienteDAO();
-        ClienteData cliente = x.getClinteFacturaData("2024-777/2");
-        detalhesCliente.add(cliente);
-        JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(detalhesCliente);
-
-        Map<String, Object> parameters = new HashMap<>();
-        try {
-            printFileName = JasperFillManager.fillReportToFile(sourceFileName, parameters, beanColDataSource);
-            if (printFileName != null) {
-                // Exportar para PDF
-                JasperExportManager.exportReportToPdfFile(printFileName, "C://sample_report.pdf");
-                // Exportar para HTML
-                JasperExportManager.exportReportToHtmlFile(printFileName, "C://sample_report.html");
-
-       
-
-                System.out.println("Relatório exportado com sucesso.");
-            }
-        } catch (JRException e) {
-            System.err.println("Erro ao gerar o relatório: " + e.getMessage());
-            e.printStackTrace();
+        StockDAO x = new StockDAO();
+        ObservableList<Stock> listaClientes = x.getStock(1, 1);
+        for (Stock cli : listaClientes) {
+            System.out.println(cli.getProduto().getNome());
+            System.out.println(cli.getSaldo());
         }
+        
 
 //        Cliente c = new Cliente();
 //        ClienteDAO cdao = new ClienteDAO();

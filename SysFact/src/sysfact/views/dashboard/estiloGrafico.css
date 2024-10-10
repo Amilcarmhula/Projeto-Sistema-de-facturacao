@@ -37,6 +37,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 /* Efeito de hover nas barras */
-.chart-bar:hover {
-    -fx-opacity: 0.4; /* Aumentar a opacidade ao passar o mouse */
-}
+/*.chart-bar:hover {
+    -fx-bar-fill: #000000b3;  Aumentar a opacidade ao passar o mouse 
+}*/

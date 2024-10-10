@@ -11,5 +11,5 @@ import javafx.collections.ObservableList;
  * @author JM-Tecnologias
  */
 public interface StockDAOImpl<T> {
-    ObservableList<T> getStock();
+    ObservableList<T> getStock(Integer cat, Integer arm);
 }

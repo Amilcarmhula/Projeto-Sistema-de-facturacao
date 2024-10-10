@@ -30,12 +30,12 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
 
     @Override
     public void addEntity(Categoria t) {
-       try {
+        try {
             sql = "insert into categoria (tipo, grupo, subgrupo, familia,"
                     + " descricao) value (?,?,?,?,?)";
-        
+
             ps = con.prepareStatement(sql);
-        
+
             ps.setString(1, t.getTipo());
             ps.setString(2, t.getGrupo());
             ps.setString(3, t.getSubgrupo());
@@ -44,10 +44,10 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
 
             ps.execute();
             ps.close();
-            } catch (SQLException ex) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Categoria: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }
 
     @Override
@@ -87,7 +87,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
                 c.setSubgrupo(result.getString("subgrupo"));
                 c.setFamilia(result.getString("familia"));
                 c.setDescricao(result.getString("descricao"));
-                    lista.add(c);
+                lista.add(c);
             }
             result.close();
             ps.close();
@@ -97,11 +97,10 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
         return lista;
     }
 
-    
     @Override
     public void deleteEntityByUSER(Categoria x) {
         try {
-            sql =  "delete from categoria where id=?";
+            sql = "delete from categoria where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x.getId());

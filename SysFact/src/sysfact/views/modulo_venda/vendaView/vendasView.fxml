@@ -19,24 +19,30 @@
          <children>
             <AnchorPane layoutX="652.0" layoutY="7.0" prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button layoutX="77.0" layoutY="7.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="191.0" stylesheets="@../../../style/dashboard.css" text="Cerregar factura" textFill="WHITE">
-                     <styleClass>
-                        <String fx:value="secondary-color" />
-                        <String fx:value="hand-efect" />
-                     </styleClass>
-                     <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
-                     </font>
-                  </Button>
-                  <Button layoutX="297.0" layoutY="7.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="191.0" stylesheets="@../../../style/dashboard.css" text="Button" textFill="WHITE">
-                     <styleClass>
-                        <String fx:value="secondary-color" />
-                        <String fx:value="hand-efect" />
-                     </styleClass>
-                     <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
-                     </font>
-                  </Button>
+                  <AnchorPane layoutY="7.0" prefHeight="36.0" prefWidth="438.0">
+                     <children>
+                        <Button layoutX="11.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="191.0" stylesheets="@../../../style/dashboard.css" text="Detalhes de Cliente" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="Berlin Sans FB" size="20.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="secondary-color" />
+                              <String fx:value="shadow-efect" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
+                        </Button>
+                        <Button layoutX="213.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="212.0" stylesheets="@../../../style/dashboard.css" text="Relatorio de Clientes" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="Berlin Sans FB" size="20.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="secondary-color" />
+                              <String fx:value="shadow-efect" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
+                        </Button>
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
             <TextField fx:id="txtEnderecoCliente" alignment="CENTER" disable="true" layoutX="207.0" layoutY="125.0" prefHeight="25.0" prefWidth="451.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">

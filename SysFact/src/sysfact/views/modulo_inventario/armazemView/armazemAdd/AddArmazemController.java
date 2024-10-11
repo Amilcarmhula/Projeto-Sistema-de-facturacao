@@ -137,7 +137,7 @@ public class AddArmazemController implements Initializable {
     private TextField txtNome;
 
     @FXML
-    private TextArea txtDescricao;
+    private TextField txtDescricao;
 
     @FXML
     private TextField txtResponsavel;
@@ -184,7 +184,7 @@ public class AddArmazemController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.userData = SysFact.getUserData();
-        txtDescricao.setWrapText(true);
+//        txtDescricao.setWrapText(true);
         combTipoCliente.setItems(FXCollections.observableArrayList("Central", "Regional", "Loga", "..."));
         combTipoEndereco.setItems(FXCollections.observableArrayList("Facturação", "Envio"));
         combProvincia.setItems(FXCollections.observableArrayList(

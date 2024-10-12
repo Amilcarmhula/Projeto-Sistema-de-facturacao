@@ -13,16 +13,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancharVendas1" prefHeight="484.0" prefWidth="800.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_inventario.produtosView.categoriaAdd.AddCategoriaController">
+<AnchorPane fx:id="ancharVendas1" prefHeight="484.0" prefWidth="800.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_configs.categoriaView.CategoriaViewController">
    <children>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="686.0" styleClass="primary-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="686.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="75.0" layoutY="10.0" prefHeight="7.0" prefWidth="362.0" text="Cadastro de Categorias" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnClose" layoutX="599.0" layoutY="13.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Button fx:id="btnClose" layoutX="599.0" layoutY="13.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="ARROW_LEFT" size="35" />
                </graphic>
@@ -35,7 +35,7 @@
       </AnchorPane>
       <AnchorPane prefHeight="180.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <TextField fx:id="ps_txtpesquisar" alignment="CENTER" layoutX="381.0" layoutY="149.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="377.0" promptText="Pesquisar categoria" stylesheets="@../../../../style/dashboard.css">
+            <TextField fx:id="ps_txtpesquisar" alignment="CENTER" layoutX="381.0" layoutY="149.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="377.0" promptText="Pesquisar categoria">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -45,7 +45,7 @@
                </styleClass>
             </TextField>
             <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="718.0" layoutY="166.0" size="15" />
-            <TextField fx:id="ps_txtIDCategoria" alignment="CENTER" disable="true" layoutX="99.0" layoutY="6.0" prefHeight="25.0" prefWidth="114.0" promptText="ID" stylesheets="@../../../../style/dashboard.css">
+            <TextField fx:id="ps_txtIDCategoria" alignment="CENTER" disable="true" layoutX="99.0" layoutY="6.0" prefHeight="25.0" prefWidth="114.0" promptText="ID">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -54,7 +54,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="ps_txtgrupoCategoria" layoutX="99.0" layoutY="40.0" prefHeight="25.0" prefWidth="280.0" promptText="Grupo" stylesheets="@../../../../style/dashboard.css">
+            <TextField fx:id="ps_txtgrupoCategoria" layoutX="99.0" layoutY="40.0" prefHeight="25.0" prefWidth="280.0" promptText="Grupo">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -63,7 +63,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="ps_txtsubgrupoCategoria" layoutX="99.0" layoutY="77.0" prefHeight="25.0" prefWidth="280.0" promptText="Subgrupo" stylesheets="@../../../../style/dashboard.css">
+            <TextField fx:id="ps_txtsubgrupoCategoria" layoutX="99.0" layoutY="77.0" prefHeight="25.0" prefWidth="280.0" promptText="Subgrupo">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -72,7 +72,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="ps_txtfamiliaCategoria" layoutX="99.0" layoutY="113.0" prefHeight="25.0" prefWidth="280.0" promptText="Família" stylesheets="@../../../../style/dashboard.css">
+            <TextField fx:id="ps_txtfamiliaCategoria" layoutX="99.0" layoutY="113.0" prefHeight="25.0" prefWidth="280.0" promptText="Família">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -87,7 +87,7 @@
                </font>
             </TextArea>
             <ComboBox fx:id="ps_combTipoCategoria" layoutX="216.0" layoutY="6.0" prefHeight="20.0" prefWidth="160.0" promptText="Selecione a Categoria" />
-            <Button fx:id="btnAddCategoria" alignment="CENTER" layoutX="100.0" layoutY="143.0" mnemonicParsing="false" onAction="#addORupdateCategoria" prefHeight="30.0" prefWidth="267.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="btnAddCategoria" alignment="CENTER" layoutX="100.0" layoutY="143.0" mnemonicParsing="false" onAction="#addORupdateCategoria" prefHeight="30.0" prefWidth="267.0" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

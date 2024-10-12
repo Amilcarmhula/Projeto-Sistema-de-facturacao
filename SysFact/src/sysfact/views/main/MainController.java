@@ -13,13 +13,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import sysfact.SysFact;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.LoadAndMoveUtilities;
@@ -102,7 +100,7 @@ public class MainController implements Initializable {
         } else if (e.getSource() == btn_unidades) {
             path = "../views/modulo_configs/unidadeView/unidadeView.fxml";
         } else if (e.getSource() == btn_categorias) {
-            path = "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml";
+            path = "../views/modulo_configs/categoriaView/categoriaView.fxml";
         }
         LoadAndMoveUtilities.showAsPopUP(e, null);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
@@ -126,6 +124,7 @@ public class MainController implements Initializable {
             anchorMain.getChildren().setAll(pane);
         } else if (e.getSource() == btn_artigos) {
             pane = FXMLLoader.load(getClass().getResource("../modulo_inventario/produtosView/produtoAdd.fxml"));
+//            System.out.println(anchorMain.getChildren().remove(0).getId());
             anchorMain.getChildren().setAll(pane);
         } else if (e.getSource() == btn_cliente) {
             pane = FXMLLoader.load(getClass().getResource("../modulo_venda/clienteView/clienteView.fxml"));

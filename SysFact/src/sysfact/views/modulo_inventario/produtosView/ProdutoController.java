@@ -6,7 +6,6 @@ package sysfact.views.modulo_inventario.produtosView;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -25,11 +24,8 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -43,13 +39,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.preco.PrecoVendaDAO;
 import sysfact.dao.produto.ProdutoDAO;
 import sysfact.model.categoria.Categoria;
-import sysfact.model.preco.PrecoVenda;
 import sysfact.model.produto.Produto;
 import sysfact.model.taxa_imposto.TaxaImposto;
 import sysfact.model.unidade_medida.UnidadeMedida;
@@ -57,7 +51,6 @@ import sysfact.model.usuario.Usuario;
 import sysfact.service.precovenda.ServicePrecoVenda;
 import sysfact.service.produto.Serviceproduto;
 import sysfact.util.LoadAndMoveUtilities;
-import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
  * FXML Controller class
@@ -197,7 +190,7 @@ public class ProdutoController implements Initializable {
     public void getFamiliaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             LoadAndMoveUtilities.showAsPopUP(null, evt);
-            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml");
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/categoriaView/categoriaView.fxml");
         
 //            try {
 //                Parent parente = FXMLLoader.load(getClass().getResource("../"));

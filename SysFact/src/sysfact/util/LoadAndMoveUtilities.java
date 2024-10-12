@@ -64,7 +64,7 @@ public class LoadAndMoveUtilities {
             if (modal != null) {
                 stage.initModality(modal);
                 stage.showAndWait();//Bloqueia ate que esta seja fechada
-            }else{
+            } else {
                 stage.show();
             }
         } catch (IOException ex) {
@@ -76,22 +76,28 @@ public class LoadAndMoveUtilities {
     removida ou ocultada
      */
     private static AnchorPane baseAnchorPane;
+    private static AnchorPane anchorPaneAux;
     private static boolean estadoPopUP;
 
     /*
     Mostra nova tela, ocultando a anterior e bloqueando acesso a controles da tela
     anterior
-    */
+     */
     public static void showAsPopUP(/*AnchorPane baseAnchorPane,*/ActionEvent aevent, MouseEvent mevent) {
         if (aevent != null) {
             Node source = (Node) aevent.getSource();
             LoadAndMoveUtilities.baseAnchorPane = (AnchorPane) source.getScene().lookup("#anchorMain");
-            baseAnchorPane.setVisible(false);
+//            baseAnchorPane.setVisible(false);
+            anchorPaneAux = (AnchorPane) baseAnchorPane.getChildren().get(0);
+            baseAnchorPane.getChildren().remove(0);
+
         }
         if (mevent != null) {
             Node source = (Node) mevent.getSource();
             LoadAndMoveUtilities.baseAnchorPane = (AnchorPane) source.getScene().lookup("#anchorMain");
-            baseAnchorPane.setVisible(false);
+//            baseAnchorPane.setVisible(false);
+            anchorPaneAux = (AnchorPane) baseAnchorPane.getChildren().get(0);
+            baseAnchorPane.getChildren().remove(0);
         }
     }
 
@@ -109,21 +115,24 @@ public class LoadAndMoveUtilities {
     public static boolean returnToBaseAnchor() {
         if (baseAnchorPane != null) {
             setEstadoPopUP(true);
-            baseAnchorPane.setVisible(true);
+//            baseAnchorPane.setVisible(true);
+            baseAnchorPane.getChildren().setAll(anchorPaneAux);
+
         }
         return isEstadoPopUP();
     }
-    
+
     /*
     Variavel que ira armazenar a stage antes de ser
      ocultada
      */
     private static Stage baseStage;
     private static boolean estadoStage;
+
     /*
     Mostra nova tela, sem ocultando a anterior e  ne bloqueando acesso a controles da tela
     anterior
-    */
+     */
     public static void showStage(ActionEvent event, MouseEvent evt) {
         if (event != null) {
             LoadAndMoveUtilities.baseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -149,8 +158,5 @@ public class LoadAndMoveUtilities {
             baseStage.show(); // Mostra a janela principal novamente
         }
         return isEstadoStage();
-    }
-
-    public static void main(String[] args) {
     }
 }

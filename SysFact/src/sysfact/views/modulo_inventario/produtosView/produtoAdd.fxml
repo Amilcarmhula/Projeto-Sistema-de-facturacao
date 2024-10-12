@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="910.0" prefWidth="1432.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_inventario.produtosView.ProdutoController">
+<AnchorPane fx:id="anchorProduto" prefHeight="910.0" prefWidth="1432.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_inventario.produtosView.ProdutoController">
    <children>
       <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

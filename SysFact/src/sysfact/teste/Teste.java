@@ -4,6 +4,7 @@
  */
 package sysfact.teste;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.stock.StockDAO;
 import sysfact.model.stock.Stock;
 import sysfact.reports.facturas.ClienteData;
+import sysfact.util.ValidationUtilities;
 
 /**
  *
@@ -31,12 +33,7 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        StockDAO x = new StockDAO();
-        ObservableList<Stock> listaClientes = x.getStock(1, 1);
-        for (Stock cli : listaClientes) {
-            System.out.println(cli.getProduto().getNome());
-            System.out.println(cli.getSaldo());
-        }
+        String nome = ValidationUtilities.validaString(FontAwesomeIcon.ERASER, "");
         
 
 //        Cliente c = new Cliente();

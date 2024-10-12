@@ -42,15 +42,4 @@ public class FormataDatas {
         }
         return invNumber;
     }
-
-    public static void main(String[] args) {
-        System.out.println(FormataDatas.invoiceNumber("FP"));
-        System.out.println(FormataDatas.invoiceNumber("FP"));
-        System.out.println(FormataDatas.invoiceNumber("FP"));
-        System.out.println(FormataDatas.invoiceNumber("FP"));
-        System.out.println(FormataDatas.invoiceNumber("FP"));
-        System.out.println(FormataDatas.invoiceNumber("FP"));
-        System.out.println(FormataDatas.invoiceNumber("FP"));
-        
-    }
 }

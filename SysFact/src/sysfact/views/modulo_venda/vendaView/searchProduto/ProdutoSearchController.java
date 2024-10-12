@@ -6,7 +6,6 @@ package sysfact.views.modulo_venda.vendaView.searchProduto;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -25,11 +24,8 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -42,7 +38,6 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.preco.PrecoVendaDAO;
@@ -251,7 +246,7 @@ public class ProdutoSearchController implements Initializable {
     public void getFamiliaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             ProdutoSearchController.showStage(null, evt);
-            LoadAndMoveUtilities.loadFXML(null, "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml");
+            LoadAndMoveUtilities.loadFXML(null, "../views/modulo_configs/categoriaView/categoriaView.fxml");
 //            try {
 //                Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml"));
 //                Scene scene = new Scene(parente);

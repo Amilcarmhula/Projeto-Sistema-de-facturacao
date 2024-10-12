@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package sysfact.views.modulo_inventario.produtosView.categoriaAdd;
+package sysfact.views.modulo_configs.categoriaView;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -44,7 +44,7 @@ import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchControlle
  *
  * @author JM-Tecnologias
  */
-public class AddCategoriaController implements Initializable {
+public class CategoriaViewController implements Initializable {
 
     @FXML
     private Button btnClose;
@@ -115,7 +115,7 @@ public class AddCategoriaController implements Initializable {
         try {
             showCategoria();
         } catch (SQLException ex) {
-            Logger.getLogger(AddCategoriaController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CategoriaViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -171,7 +171,7 @@ public class AddCategoriaController implements Initializable {
                                 showCategoria();
                                 resetCategorias();
                             } catch (SQLException ex) {
-                                Logger.getLogger(AddCategoriaController.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(CategoriaViewController.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         });
                         setGraphic(deleteIcon);

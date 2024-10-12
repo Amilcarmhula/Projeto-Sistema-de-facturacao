@@ -25,7 +25,7 @@ public class ServiceUsuario {
     public Usuario authLogin(String user, String pwd) {
         Usuario usuario;
         user = ValidationUtilities.validaString(FontAwesomeIcon.USER_TIMES,user);
-        pwd = ValidationUtilities.validaString(FontAwesomeIcon.EXCLAMATION_TRIANGLE,pwd);
+        pwd = ValidationUtilities.validaString(FontAwesomeIcon.USER_TIMES,pwd);
 
         usuario = usuarioDAO.login(user, pwd);
 

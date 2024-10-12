@@ -8,6 +8,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import sysfact.dao.usuario.UsuarioDAO;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.MetodosUteis;
+import sysfact.util.ValidationUtilities;
 
 /**
  *
@@ -23,8 +24,8 @@ public class ServiceUsuario {
     
     public Usuario authLogin(String user, String pwd) {
         Usuario usuario;
-        user = MetodosUteis.validaString(FontAwesomeIcon.USER_TIMES,user);
-        pwd = MetodosUteis.validaString(FontAwesomeIcon.EXCLAMATION_TRIANGLE,pwd);
+        user = ValidationUtilities.validaString(FontAwesomeIcon.USER_TIMES,user);
+        pwd = ValidationUtilities.validaString(FontAwesomeIcon.EXCLAMATION_TRIANGLE,pwd);
 
         usuario = usuarioDAO.login(user, pwd);
 

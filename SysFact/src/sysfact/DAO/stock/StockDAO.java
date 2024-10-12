@@ -16,6 +16,7 @@ import sysfact.model.produto.Produto;
 import sysfact.model.stock.Stock;
 import sysfact.util.Conexao;
 import sysfact.util.MetodosUteis;
+import sysfact.util.ValidationUtilities;
 
 /**
  *
@@ -72,7 +73,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            MetodosUteis.showDialog(FontAwesomeIcon.COG, "Erro", "Erro ao Buscar Produto: " + ex);
+            ValidationUtilities.showDialog(FontAwesomeIcon.COG, "Erro", "Erro ao Buscar Produto: " + ex);
         }
         return lista;
     }

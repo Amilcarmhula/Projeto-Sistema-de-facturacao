@@ -54,6 +54,7 @@ import sysfact.model.vendas.documetos.DocumentosComerciais;
 import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
 import sysfact.model.vendas.factura.itens.TableModelItems;
+import sysfact.util.InvoiceUtilities;
 import sysfact.util.MetodosUteis;
 
 /**
@@ -240,8 +241,8 @@ public class VendasController implements Initializable {
     public void selecionaFactura() {
         String tipoDoc = combTipoDoc.getSelectionModel().getSelectedItem();
         DocumentosComerciais doc = mapaDocComercial.get(tipoDoc);
-        labNumeroFactura.setText(MetodosUteis.invoiceNumber(doc.getId()));
-        labValidade.setText(MetodosUteis.datePlusXDays(doc.getDiasUteis()));
+        labNumeroFactura.setText(InvoiceUtilities.invoiceNumber(doc.getId()));
+        labValidade.setText(InvoiceUtilities.datePlusXDays(doc.getDiasUteis()));
 
     }
 
@@ -312,7 +313,7 @@ public class VendasController implements Initializable {
         this.userData = SysFact.getUserData();
         this.empresaData = SysFact.getEmpresaData();
         try {
-            labDataInicial.setText(MetodosUteis.actualDate());
+            labDataInicial.setText(InvoiceUtilities.actualDate());
             populateComboFactura();
             populateComboDesconto();
             mapeaProduto();

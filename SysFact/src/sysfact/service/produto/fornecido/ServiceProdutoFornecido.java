@@ -13,6 +13,7 @@ import sysfact.model.produto.Produto;
 import sysfact.model.produto.fornecido.ProdutoFornecido;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.MetodosUteis;
+import sysfact.util.ValidationUtilities;
 
 /**
  *
@@ -67,9 +68,9 @@ public class ServiceProdutoFornecido {
         pf.setCusto(custo);
         try{
             produtoFornecidoDao.addEntity(pf);
-            MetodosUteis.showDialog(FontAwesomeIcon.CHECK,"Info", "Stock actualizado com sucesso.");
+            ValidationUtilities.showDialog(FontAwesomeIcon.CHECK,"Info", "Stock actualizado com sucesso.");
         }catch(Exception e){
-            MetodosUteis.showDialog(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro ao adicionar/actualizar sock!");
+            ValidationUtilities.showDialog(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro ao adicionar/actualizar sock!");
         }
         
         

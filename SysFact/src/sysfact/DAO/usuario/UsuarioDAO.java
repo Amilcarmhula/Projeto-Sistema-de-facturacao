@@ -25,6 +25,7 @@ import sysfact.model.usuario.Permissao;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
 import sysfact.util.MetodosUteis;
+import sysfact.util.ValidationUtilities;
 
 /**
  *
@@ -64,12 +65,12 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
                 user.setEstado(result.getBoolean("estado"));
                 user.setData_criacao(result.getString("data_criacao"));
             }else{
-                MetodosUteis.showDialog(FontAwesomeIcon.CHECK,"Info", "Usuario nao existe!!");
+                ValidationUtilities.showDialog(FontAwesomeIcon.CHECK,"Info", "Usuario nao existe!!");
             }
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            MetodosUteis.showDialog(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro com banco de dados: " + ex);
+            ValidationUtilities.showDialog(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro com banco de dados: " + ex);
         }
         return user;
     }

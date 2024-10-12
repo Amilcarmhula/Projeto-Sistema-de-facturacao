@@ -13,8 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -35,6 +37,7 @@ import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.fornecedor.contacto.ContactoFornecedor;
 import sysfact.model.fornecedor.endereco.EnderecoFornecedor;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.MetodosUteis;
 
 /**
  * FXML Controller class
@@ -144,10 +147,12 @@ public class AddFornecedorController implements Initializable {
     @FXML
     private TextField txtSite;
 
-    public void close() {
-//        System.exit(0);
-        Stage stage = (Stage) btnClose.getScene().getWindow();
-        stage.close();
+    public void close(ActionEvent event) {
+        if (MetodosUteis.returnToBaseAnchor()) {
+            MetodosUteis.setEstadoPopUP(false);
+            MetodosUteis.showAsPopUP(null, null);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+        } 
     }
 
     public void addORupdateContacto() throws SQLException {
@@ -303,7 +308,7 @@ public class AddFornecedorController implements Initializable {
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
                                 + "-glyph-size:28px;"
-                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                                + "-fx-fill:#000000b3;"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             EnderecoFornecedor a = tabelaEndereco.getSelectionModel().getSelectedItem();
@@ -365,7 +370,7 @@ public class AddFornecedorController implements Initializable {
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
                                 + "-glyph-size:28px;"
-                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                                + "-fx-fill:#000000b3;"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             ContactoFornecedor x = tabelaContacto.getSelectionModel().getSelectedItem();

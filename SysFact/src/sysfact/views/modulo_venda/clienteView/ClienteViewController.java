@@ -6,7 +6,6 @@ package sysfact.views.modulo_venda.clienteView;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -16,11 +15,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -28,13 +25,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.Modality;
 import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.MetodosUteis;
 
 /**
  * FXML Controller class
@@ -77,18 +74,16 @@ public class ClienteViewController implements Initializable {
 
     @FXML
     private TextField txtPesquisa;
-    
-    public void getViewAddCliente(){
-        try {
-            Parent parente = FXMLLoader.load(getClass().getResource("../clienteView/clienteAdd/addCliente.fxml"));
-            Scene scene = new Scene(parente);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+    public void getViewAddCliente(ActionEvent evt) {
+        /*
+        Metodo para mostrar a nova tela ocultando a anterior
+        */
+        MetodosUteis.showAsPopUP(evt, null);
+        /* O caminho para o FXML a ser carregado deve considerar o pacote 
+        onde se encontra o metodo estatico MetodosUteis.loadFXML(path)
+         */
+        MetodosUteis.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
     }
 
     @Override

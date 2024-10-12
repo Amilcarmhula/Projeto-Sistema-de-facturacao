@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -35,6 +37,7 @@ import sysfact.SysFact;
 import sysfact.dao.armazem.ArmazemDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.MetodosUteis;
 
 /**
  * FXML Controller class
@@ -80,17 +83,20 @@ public class ArmazemViewController implements Initializable {
     @FXML
     private TextField txtPesquisa;
     
-    public void getViewAddCliente(){
-        try {
-            Parent parente = FXMLLoader.load(getClass().getResource("../armazemView/armazemAdd/addArmazem.fxml"));
-            Scene scene = new Scene(parente);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(ArmazemViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void getViewAddCliente(ActionEvent evt){
+        MetodosUteis.showAsPopUP(evt, null);
+            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/armazemView/armazemAdd/addArmazem.fxml");
+        
+//        try {
+//            Parent parente = FXMLLoader.load(getClass().getResource("../armazemView/armazemAdd/addArmazem.fxml"));
+//            Scene scene = new Scene(parente);
+//            Stage stage = new Stage();
+//            stage.setScene(scene);
+//            stage.initStyle(StageStyle.TRANSPARENT);
+//            stage.show();
+//        } catch (IOException ex) {
+//            Logger.getLogger(ArmazemViewController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     @Override

@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -35,6 +37,7 @@ import sysfact.SysFact;
 import sysfact.dao.fornecedor.FornecedorDAO;
 import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.MetodosUteis;
 
 /**
  * FXML Controller class
@@ -78,17 +81,25 @@ public class FornecedorViewController implements Initializable {
     @FXML
     private TextField txtPesquisa;
     
-    public void getViewAddCliente(){
-        try {
-            Parent parente = FXMLLoader.load(getClass().getResource("../fornecedorView/fornecedorAdd/addFornecedor.fxml"));
-            Scene scene = new Scene(parente);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(FornecedorViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void getViewAddCliente(ActionEvent evt){
+        /*
+        Metodo para mostrar a nova tela ocultando a anterior
+        */
+        MetodosUteis.showAsPopUP(evt, null);
+        /* O caminho para o FXML a ser carregado deve considerar o pacote 
+        onde se encontra o metodo estatico MetodosUteis.loadFXML(path)
+         */
+        MetodosUteis.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_compra/fornecedorView/fornecedorAdd/addFornecedor.fxml");
+//        try {
+//            Parent parente = FXMLLoader.load(getClass().getResource("../fornecedorView/fornecedorAdd/addFornecedor.fxml"));
+//            Scene scene = new Scene(parente);
+//            Stage stage = new Stage();
+//            stage.setScene(scene);
+//            stage.initStyle(StageStyle.TRANSPARENT);
+//            stage.show();
+//        } catch (IOException ex) {
+//            Logger.getLogger(FornecedorViewController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     @Override
@@ -139,7 +150,7 @@ public class FornecedorViewController implements Initializable {
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
                                 + "-glyph-size:28px;"
-                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                                + "-fx-fill:#000000b3;"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             Fornecedor x = tabelaCliente.getSelectionModel().getSelectedItem();

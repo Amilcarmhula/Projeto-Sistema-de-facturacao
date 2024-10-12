@@ -37,6 +37,8 @@ import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.MetodosUteis;
+import sysfact.views.modulo_venda.clienteView.ClienteViewController;
 import sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController;
 
 /**
@@ -148,15 +150,17 @@ public class AddClienteController implements Initializable {
     @FXML
     private TextField txtSite;
 
+    
     public void close(ActionEvent event) {
-        if (ClienteSearchController.returnToMain()) {
-            ClienteSearchController.setX(false);
-            ClienteSearchController.setMainStage(null);
+        if (MetodosUteis.returnToStage()) {
+            MetodosUteis.setEstadoStage(false);
+            MetodosUteis.showStage(null,null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-            
-        } else {
+        } else if (MetodosUteis.returnToBaseAnchor()) {
+            MetodosUteis.setEstadoPopUP(false);
+            MetodosUteis.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        }
+        } 
     }
 
     public void addORupdateContacto() throws SQLException {
@@ -205,10 +209,10 @@ public class AddClienteController implements Initializable {
                 "Cabo Delgado"
         )
         );
-        if (SysFact.getData() != null)  {
+        if (SysFact.getData() != null) {
             if (SysFact.getData() instanceof Cliente) {
                 Cliente x = (Cliente) SysFact.getData();
-                txtIDCliente.setText(x.getId()+"");
+                txtIDCliente.setText(x.getId() + "");
             }
         }
 

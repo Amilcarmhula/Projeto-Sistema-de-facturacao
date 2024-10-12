@@ -26,12 +26,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.MetodosUteis;
 
 /**
  * FXML Controller class
@@ -47,7 +49,6 @@ public class ClienteSearchController implements Initializable {
 
     @FXML
     private Button btnAdd;
-
 
     @FXML
     private TextField txtIDCliente;
@@ -72,50 +73,17 @@ public class ClienteSearchController implements Initializable {
 
     @FXML
     private TextField txtPesquisa;
-    
-    private static Stage mainStage;
-    private static boolean x;
 
-    public static void setMainStage(Stage mainStage) {
-        ClienteSearchController.mainStage = mainStage;
-    }
-
-    public static boolean isX() {
-        return x;
-    }
-
-    public static void setX(boolean x) {
-        ClienteSearchController.x = x;
-    }
-    
-    public static boolean returnToMain(){
-        if (mainStage != null) {
-            setX(true);
-            mainStage.show(); // Mostra a janela principal novamente
-        }
-        return isX();
-    }
-    
-    public void close(ActionEvent event){
+    public void close(ActionEvent event) {
+        MetodosUteis.returnToBaseAnchor();
+        MetodosUteis.setEstadoPopUP(false);
+        MetodosUteis.showAsPopUP(null, null);
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
     }
-    
-    public void getViewAddCliente(ActionEvent event){
-        try {
-            mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            System.out.println("Fonte: "+mainStage.getScene().getWindow());
-            mainStage.hide(); // Esconde a janela principal
-            
-            Parent parente = FXMLLoader.load(getClass().getResource("../../clienteView/clienteAdd/addCliente.fxml"));
-            Scene scene = new Scene(parente);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
 
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteSearchController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void getViewAddCliente(ActionEvent event) {
+        MetodosUteis.showStage(event,null);
+        MetodosUteis.loadFXML(null, "../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
     }
 
     @Override
@@ -154,8 +122,6 @@ public class ClienteSearchController implements Initializable {
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getContactoCliente().getEmail())));
         enderecotabelaCliente.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().printEnderecos())));
-
-        
 
         FilteredList<Cliente> dadosFiltrados = new FilteredList<>(listaClientes, b -> true);
         txtPesquisa.textProperty().addListener((observable, oldValue, newValue) -> {

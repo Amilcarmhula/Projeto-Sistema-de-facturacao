@@ -27,6 +27,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -40,6 +41,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -54,6 +56,8 @@ import sysfact.model.unidade_medida.UnidadeMedida;
 import sysfact.model.usuario.Usuario;
 import sysfact.service.precovenda.ServicePrecoVenda;
 import sysfact.service.produto.Serviceproduto;
+import sysfact.util.MetodosUteis;
+import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
  * FXML Controller class
@@ -97,7 +101,7 @@ public class ProdutoController implements Initializable {
 
     @FXML
     private Button btnAddProduto;
-    
+
     @FXML
     private Button btn_controleStock;
 
@@ -189,63 +193,112 @@ public class ProdutoController implements Initializable {
         txtPreco.setText(currencyFormat.format(0)); // Set initial value
 
     }
-    
+
     public void getFamiliaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            try {
-                Parent parente = FXMLLoader.load(getClass().getResource("../produtosView/categoriaAdd/addCategoria.fxml"));
-                Scene scene = new Scene(parente);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                stage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            MetodosUteis.showAsPopUP(null, evt);
+            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml");
+        
+//            try {
+//                Parent parente = FXMLLoader.load(getClass().getResource("../"));
+//                Scene scene = new Scene(parente);
+//                Stage stage = new Stage();
+//                stage.setScene(scene);
+//                stage.initStyle(StageStyle.TRANSPARENT);
+//                stage.show();
+//            } catch (IOException ex) {
+//                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }
 
-    public void getStockView() {
-            try {
-                Parent parente = FXMLLoader.load(getClass().getResource("../stockView/addStock.fxml"));
-                Scene scene = new Scene(parente);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                stage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    public void getStockView(ActionEvent evt) {
+        MetodosUteis.showAsPopUP(evt, null);
+            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
         
+//        try {
+//            Parent parente = FXMLLoader.load(getClass().getResource("../"));
+//            Scene scene = new Scene(parente);
+//            Stage stage = new Stage();
+//            stage.setScene(scene);
+//            stage.initStyle(StageStyle.TRANSPARENT);
+//            stage.show();
+//        } catch (IOException ex) {
+//            Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
     }
 
     public void getUnidadeView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            try {
-                Parent parente = FXMLLoader.load(getClass().getResource("../../modulo_configs/unidadeView/unidadeView.fxml"));
-                Scene scene = new Scene(parente);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                stage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            MetodosUteis.showAsPopUP(null, evt);
+            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/unidadeView/unidadeView.fxml");
+        
+//            try {
+//                Parent parente = FXMLLoader.load(getClass().getResource("../.."));
+//                Scene scene = new Scene(parente);
+//                Stage stage = new Stage();
+//                stage.setScene(scene);
+//                stage.initStyle(StageStyle.TRANSPARENT);
+//                stage.show();
+//            } catch (IOException ex) {
+//                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
+    }
+    
+/*
+    Variavel que ira armazenar a stage antes de ser
+     ocultada
+     */
+    private static Stage baseStage;
+    private static boolean estadoStage;
+    /*
+    Mostra nova tela, sem ocultando a anterior e  ne bloqueando acesso a controles da tela
+    anterior
+    */
+    public static void showStage(ActionEvent event, MouseEvent evt) {
+        if (event != null) {
+            baseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            baseStage.hide(); // Esconde a janela principal
+        }
+        if (evt != null) {
+            baseStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
+            baseStage.hide(); // Esconde a janela principal
+        }
+    }
+
+    public static boolean isEstadoStage() {
+        return estadoStage;
+    }
+
+    public static void setEstadoStage(boolean estadoStage) {
+        ProdutoController.estadoStage = estadoStage;
+    }
+
+    public static boolean returnToStage() {
+        if (baseStage != null) {
+            setEstadoStage(true);
+            baseStage.show(); // Mostra a janela principal novamente
+        }
+        return isEstadoStage();
     }
 
     public void getTaxaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            try {
-                Parent parente = FXMLLoader.load(getClass().getResource("../../modulo_configs/taxasView/taxaView.fxml"));
-                Scene scene = new Scene(parente);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                stage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            MetodosUteis.showAsPopUP(null, evt);
+            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/taxasView/taxaView.fxml");
+        
+//            try {
+//                Parent parente = FXMLLoader.load(getClass().getResource("../../modulo_configs/taxasView/taxaView.fxml"));
+//                Scene scene = new Scene(parente);
+//                Stage stage = new Stage();
+//                stage.setScene(scene);
+//                stage.initStyle(StageStyle.TRANSPARENT);
+//                stage.show();
+//            } catch (IOException ex) {
+//                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }
 
@@ -448,14 +501,13 @@ public class ProdutoController implements Initializable {
             } else {
                 dataInicio.setValue(LocalDate.parse(p.getPrecovenda().getData_inicio()));
             }
-            
-            if (p.getPrecovenda().getData_fim()== null) {
+
+            if (p.getPrecovenda().getData_fim() == null) {
                 dataFim.setValue(LocalDate.now());
             } else {
                 dataFim.setValue(LocalDate.parse(p.getPrecovenda().getData_fim()));
             }
-            
-            
+
             checkControle.setSelected(p.isContole_stock());
 
             labCategoria.setText(p.getCategoria().getFamilia());
@@ -496,7 +548,7 @@ public class ProdutoController implements Initializable {
         showProduto();
         resetCampos();
     }
-    
+
     public void addPrecoVendaONSelected() throws SQLException {
         PrecoVendaDAO pvDAO = new PrecoVendaDAO();
         ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);

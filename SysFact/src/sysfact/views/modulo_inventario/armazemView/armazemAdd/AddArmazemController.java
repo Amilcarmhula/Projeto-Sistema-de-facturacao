@@ -13,8 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -36,6 +38,7 @@ import sysfact.model.armazem.Armazem;
 import sysfact.model.armazem.contacto.ContactoArmazem;
 import sysfact.model.armazem.endereco.EnderecoArmazem;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.MetodosUteis;
 
 /**
  * FXML Controller class
@@ -148,10 +151,16 @@ public class AddArmazemController implements Initializable {
     @FXML
     private TextField txtSite;
 
-    public void close() {
-//        System.exit(0);
-        Stage stage = (Stage) btnClose.getScene().getWindow();
-        stage.close();
+    public void close(ActionEvent event) {
+        if (MetodosUteis.returnToStage()) {
+            MetodosUteis.setEstadoStage(false);
+            MetodosUteis.showStage(null,null);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+        } else if (MetodosUteis.returnToBaseAnchor()) {
+            MetodosUteis.setEstadoPopUP(false);
+            MetodosUteis.showAsPopUP(null, null);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+        } 
     }
 
     public void addORupdateContacto() throws SQLException {

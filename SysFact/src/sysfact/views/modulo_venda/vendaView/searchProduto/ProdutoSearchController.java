@@ -54,6 +54,7 @@ import sysfact.model.unidade_medida.UnidadeMedida;
 import sysfact.model.usuario.Usuario;
 import sysfact.service.precovenda.ServicePrecoVenda;
 import sysfact.service.produto.Serviceproduto;
+import sysfact.util.MetodosUteis;
 
 /**
  * FXML Controller class
@@ -134,31 +135,22 @@ public class ProdutoSearchController implements Initializable {
     @FXML
     private TextField txtPesquisar;
 
-    private static Stage mainStage;
-    private static boolean x;
-
-    public static void setMainStage(Stage mainStage) {
-        ProdutoSearchController.mainStage = mainStage;
-    }
-
-    public static boolean isX() {
-        return x;
-    }
-
-    public static void setX(boolean x) {
-        ProdutoSearchController.x = x;
-    }
-
-    public static boolean returnToMain() {
-        if (mainStage != null) {
-            setX(true);
-            mainStage.show(); // Mostra a janela principal novamente
-        }
-        return isX();
-    }
-
     public void close(ActionEvent event) {
-        ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+//        System.out.println("INICIO");
+//        System.out.println(MetodosUteis.returnToBaseAnchor());
+//        System.out.println(MetodosUteis.returnToStage());
+        if (MetodosUteis.returnToStage()) {
+            MetodosUteis.setEstadoStage(false);
+            MetodosUteis.showStage(null, null);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+        } else if (MetodosUteis.returnToBaseAnchor()) {
+            MetodosUteis.setEstadoPopUP(false);
+            MetodosUteis.showAsPopUP(null, null);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+        }
+//        System.out.println("FIM");
+//        System.out.println(MetodosUteis.returnToBaseAnchor());
+//        System.out.println(MetodosUteis.returnToStage());
     }
 
     public void addORupdate() throws SQLException {
@@ -216,71 +208,113 @@ public class ProdutoSearchController implements Initializable {
         txtPreco.setText(currencyFormat.format(0)); // Set initial value
 
     }
+    
+    /*
+    Variavel que ira armazenar a stage antes de ser
+     ocultada
+     */
+    private static Stage baseStage;
+    private static boolean estadoStage;
+
+    /*
+    Mostra nova tela, sem ocultando a anterior e  ne bloqueando acesso a controles da tela
+    anterior
+     */
+    public static void showStage(ActionEvent event, MouseEvent evt) {
+        if (event != null) {
+            baseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            baseStage.hide(); // Esconde a janela principal
+        }
+        if (evt != null) {
+            baseStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
+            baseStage.hide(); // Esconde a janela principal
+        }
+    }
+
+    public static boolean isEstadoStage() {
+        return estadoStage;
+    }
+
+    public static void setEstadoStage(boolean estadoStage) {
+        ProdutoSearchController.estadoStage = estadoStage;
+    }
+
+    public static boolean returnToStage() {
+        if (baseStage != null) {
+            setEstadoStage(true);
+            baseStage.show(); // Mostra a janela principal novamente
+        }
+        baseStage = null;
+        return isEstadoStage();
+    }
 
     public void getFamiliaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            mainStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-            mainStage.hide(); // Esconde a janela principal
-            try {
-                Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml"));
-                Scene scene = new Scene(parente);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                stage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            ProdutoSearchController.showStage(null, evt);
+            MetodosUteis.loadFXML(null, "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml");
+//            try {
+//                Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml"));
+//                Scene scene = new Scene(parente);
+//                Stage stage = new Stage();
+//                stage.setScene(scene);
+//                stage.initStyle(StageStyle.TRANSPARENT);
+//                stage.show();
+//            } catch (IOException ex) {
+//                Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }
 
     public void getStockView(ActionEvent evt) {
-        mainStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-        mainStage.hide(); // Esconde a janela principal
-        try {
-            Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_inventario/stockView/addStock.fxml"));
-            Scene scene = new Scene(parente);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ProdutoSearchController.showStage(evt, null);
+        MetodosUteis.loadFXML(null, "../views/modulo_inventario/stockView/addStock.fxml");
 
+//        mainStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
+//        mainStage.hide(); // Esconde a janela principal
+//        try {
+//            Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_inventario/stockView/addStock.fxml"));
+//            Scene scene = new Scene(parente);
+//            Stage stage = new Stage();
+//            stage.setScene(scene);
+//            stage.initStyle(StageStyle.TRANSPARENT);
+//            stage.show();
+//        } catch (IOException ex) {
+//            Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     public void getUnidadeView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            mainStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-            mainStage.hide(); // Esconde a janela principal
-            try {
-                Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_configs/unidadeView/unidadeView.fxml"));
-                Scene scene = new Scene(parente);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                stage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            ProdutoSearchController.showStage(null, evt);
+            MetodosUteis.loadFXML(null, "../views/modulo_configs/unidadeView/unidadeView.fxml");
+//            try {
+//                Parent parente = FXMLLoader.load(getClass().getResource("../../../"));
+//                Scene scene = new Scene(parente);
+//                Stage stage = new Stage();
+//                stage.setScene(scene);
+//                stage.initStyle(StageStyle.TRANSPARENT);
+//                stage.show();
+//            } catch (IOException ex) {
+//                Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }
 
     public void getTaxaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            mainStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-            mainStage.hide(); // Esconde a janela principal
-            try {
-                Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_configs/taxasView/taxaView.fxml"));
-                Scene scene = new Scene(parente);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                stage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            ProdutoSearchController.showStage(null, evt);
+            MetodosUteis.loadFXML(null, "../views/modulo_configs/taxasView/taxaView.fxml");
+//            try {
+//                Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_configs/"));
+//                Scene scene = new Scene(parente);
+//       Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
+//            }              Stage stage = new Stage();
+//                stage.setScene(scene);
+//                stage.initStyle(StageStyle.TRANSPARENT);
+//                stage.show();
+//            } catch (IOException ex) {
+//                Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }
 

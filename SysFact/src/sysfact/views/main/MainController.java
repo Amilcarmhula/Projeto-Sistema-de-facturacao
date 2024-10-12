@@ -17,10 +17,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sysfact.SysFact;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.MetodosUteis;
 
 /**
  * FXML Controller class
@@ -94,22 +96,25 @@ public class MainController implements Initializable {
 
     @FXML
     public void getViews(ActionEvent e) {
-        String view = "";
+        String path = "";
         if (e.getSource() == btn_taxas) {
-            view = "../modulo_configs/taxasView/taxaView.fxml";
+            path = "../views/modulo_configs/taxasView/taxaView.fxml";
         } else if (e.getSource() == btn_unidades) {
-            view = "../modulo_configs/unidadeView/unidadeView.fxml";
+            path = "../views/modulo_configs/unidadeView/unidadeView.fxml";
         } else if (e.getSource() == btn_categorias) {
-            view = "../modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml";
+            path = "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml";
         }
-        try {
-            Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource(view))));
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        MetodosUteis.showAsPopUP(e, null);
+            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, path);
+        
+//        try {
+//            Stage stage = new Stage();
+//            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource(path))));
+//            stage.initStyle(StageStyle.TRANSPARENT);
+//            stage.show();
+//        } catch (IOException ex) {
+//            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     // Carregar a primeira tela no centro

@@ -30,6 +30,7 @@ import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.unidademedida.UnidadeMedidaDAO;
 import sysfact.model.unidade_medida.UnidadeMedida;
+import sysfact.util.MetodosUteis;
 import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
@@ -76,14 +77,15 @@ public class UnidadeViewController implements Initializable {
     private TableColumn<UnidadeMedida, String> unidade;
 
     public void close(ActionEvent event) {
-        if (ProdutoSearchController.returnToMain()) {
-            ProdutoSearchController.setX(false);
-            ProdutoSearchController.setMainStage(null);
+        if (ProdutoSearchController.returnToStage()) {
+            ProdutoSearchController.setEstadoStage(false);
+            ProdutoSearchController.showStage(null,null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-            
-        } else {
+        } else if (MetodosUteis.returnToBaseAnchor()) {
+            MetodosUteis.setEstadoPopUP(false);
+            MetodosUteis.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        }
+        } 
     }
 
     public void estadoBTN() {

@@ -35,6 +35,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sysfact.SysFact;
@@ -186,31 +187,37 @@ public class VendasController implements Initializable {
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 2) {
-            try {
-                Parent parente = FXMLLoader.load(getClass().getResource("searchCliente/clienteSearch.fxml"));
-                Scene scene = new Scene(parente);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                stage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        MetodosUteis.showAsPopUP(null, mouseEvt);
+        MetodosUteis.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
+//            try {
+//                Parent parente = FXMLLoader.load(getClass().getResource("searchCliente/clienteSearch.fxml"));
+//                Scene scene = new Scene(parente);
+//                Stage stage = new Stage();
+//                stage.setScene(scene);
+//                stage.initStyle(StageStyle.TRANSPARENT);
+//                stage.show();
+//            } catch (IOException ex) {
+//                Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }
 
     public void getSearchProduto(MouseEvent mouseEvt) {
-        if (mouseEvt.getClickCount() == 1) {
-            try {
-                Parent parente = FXMLLoader.load(getClass().getResource("searchProduto/produtoSearch.fxml"));
-                Scene scene = new Scene(parente);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                stage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if (mouseEvt.getClickCount() == 2) {
+            MetodosUteis.showAsPopUP(null, mouseEvt);
+
+        MetodosUteis.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/vendaView/searchProduto/produtoSearch.fxml");
+//          
+//            try {
+//                Parent parente = FXMLLoader.load(getClass().getResource("searchProduto/produtoSearch.fxml"));
+//                Scene scene = new Scene(parente);
+//                Stage stage = new Stage();
+//                stage.setScene(scene);
+//                stage.initStyle(StageStyle.TRANSPARENT);
+//                stage.show();
+//            } catch (IOException ex) {
+//                Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }
 

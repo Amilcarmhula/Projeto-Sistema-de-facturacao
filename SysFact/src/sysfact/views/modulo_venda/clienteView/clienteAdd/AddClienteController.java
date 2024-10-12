@@ -37,6 +37,7 @@ import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.MetodosUteis;
 import sysfact.views.modulo_venda.clienteView.ClienteViewController;
 import sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController;
@@ -224,7 +225,8 @@ public class AddClienteController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(AddClienteController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        estadoBTNCliente();
+        ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
+//        estadoBTNCliente();
         estadoBTNContacto();
     }
 

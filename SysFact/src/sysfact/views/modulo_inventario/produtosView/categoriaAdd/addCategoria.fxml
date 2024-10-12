@@ -35,7 +35,7 @@
       </AnchorPane>
       <AnchorPane prefHeight="180.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <TextField fx:id="ps_txtpesquisar" alignment="CENTER" layoutX="353.0" layoutY="149.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="377.0" promptText="Pesquisar categoria" stylesheets="@../../../../style/dashboard.css">
+            <TextField fx:id="ps_txtpesquisar" alignment="CENTER" layoutX="381.0" layoutY="149.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="377.0" promptText="Pesquisar categoria" stylesheets="@../../../../style/dashboard.css">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -44,8 +44,8 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="690.0" layoutY="166.0" size="15" />
-            <TextField fx:id="ps_txtIDCategoria" alignment="CENTER" disable="true" layoutX="71.0" layoutY="6.0" prefHeight="25.0" prefWidth="114.0" promptText="ID" stylesheets="@../../../../style/dashboard.css">
+            <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="718.0" layoutY="166.0" size="15" />
+            <TextField fx:id="ps_txtIDCategoria" alignment="CENTER" disable="true" layoutX="99.0" layoutY="6.0" prefHeight="25.0" prefWidth="114.0" promptText="ID" stylesheets="@../../../../style/dashboard.css">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -54,7 +54,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="ps_txtgrupoCategoria" layoutX="71.0" layoutY="40.0" prefHeight="25.0" prefWidth="280.0" promptText="Grupo" stylesheets="@../../../../style/dashboard.css">
+            <TextField fx:id="ps_txtgrupoCategoria" layoutX="99.0" layoutY="40.0" prefHeight="25.0" prefWidth="280.0" promptText="Grupo" stylesheets="@../../../../style/dashboard.css">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -63,7 +63,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="ps_txtsubgrupoCategoria" layoutX="71.0" layoutY="77.0" prefHeight="25.0" prefWidth="280.0" promptText="Subgrupo" stylesheets="@../../../../style/dashboard.css">
+            <TextField fx:id="ps_txtsubgrupoCategoria" layoutX="99.0" layoutY="77.0" prefHeight="25.0" prefWidth="280.0" promptText="Subgrupo" stylesheets="@../../../../style/dashboard.css">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -72,7 +72,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="ps_txtfamiliaCategoria" layoutX="71.0" layoutY="113.0" prefHeight="25.0" prefWidth="280.0" promptText="Família" stylesheets="@../../../../style/dashboard.css">
+            <TextField fx:id="ps_txtfamiliaCategoria" layoutX="99.0" layoutY="113.0" prefHeight="25.0" prefWidth="280.0" promptText="Família" stylesheets="@../../../../style/dashboard.css">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -81,19 +81,16 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextArea fx:id="ps_txtdescricaoCategoria" layoutX="359.0" layoutY="6.0" prefHeight="133.0" prefWidth="362.0">
+            <TextArea fx:id="ps_txtdescricaoCategoria" layoutX="387.0" layoutY="6.0" prefHeight="133.0" prefWidth="362.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </TextArea>
-            <ComboBox fx:id="ps_combTipoCategoria" layoutX="188.0" layoutY="6.0" prefHeight="20.0" prefWidth="160.0" promptText="Selecione a Categoria" />
-            <Button fx:id="btnAddCategoria" alignment="CENTER" layoutX="91.0" layoutY="143.0" mnemonicParsing="false" onAction="#addCategoria" prefHeight="30.0" prefWidth="105.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
+            <ComboBox fx:id="ps_combTipoCategoria" layoutX="216.0" layoutY="6.0" prefHeight="20.0" prefWidth="160.0" promptText="Selecione a Categoria" />
+            <Button fx:id="btnAddCategoria" alignment="CENTER" layoutX="100.0" layoutY="143.0" mnemonicParsing="false" onAction="#addORupdateCategoria" prefHeight="30.0" prefWidth="267.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
-               <graphic>
-                  <FontAwesomeIconView fill="#00a1ff" glyphName="PLUS" size="15" strokeType="OUTSIDE" />
-               </graphic>
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -103,22 +100,19 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <Button fx:id="btnUpdadeCategoria" alignment="CENTER" layoutX="222.0" layoutY="144.0" mnemonicParsing="false" onAction="#updateCategoria" prefHeight="30.0" prefWidth="105.0" stylesheets="@../../../../style/dashboard.css" text="Actualizar" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
+            <Button layoutX="55.0" layoutY="4.0" mnemonicParsing="false" prefWidth="35.0">
                <graphic>
-                  <FontAwesomeIconView fx:id="btnUpdateCategoria" fill="#00ff18" glyphName="REFRESH" size="15" />
+                  <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="15" />
                </graphic>
                <styleClass>
                   <String fx:value="secondary-color" />
-                  <String fx:value="hand-efect" />
                   <String fx:value="shadow-efect" />
+                  <String fx:value="hand-efect" />
                </styleClass>
             </Button>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaCategoria" onMouseClicked="#selectedLineCategoria" prefHeight="238.0" prefWidth="675.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <TableView fx:id="tabelaCategoria" onMouseClicked="#selectedLineCategoria" prefHeight="248.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <columns>
             <TableColumn fx:id="IDtabelaCategoria" prefWidth="29.0" text="ID" />
             <TableColumn fx:id="tipotabelaCategoria" prefWidth="85.0" text="Tipo" />

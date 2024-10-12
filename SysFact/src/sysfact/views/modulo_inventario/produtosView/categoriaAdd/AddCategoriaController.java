@@ -35,6 +35,7 @@ import sysfact.controller.CategoriaControle;
 import sysfact.dao.categoria.CategoriaDAO;
 import sysfact.model.categoria.Categoria;
 import sysfact.service.caregoria.ServicoCategoria;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.MetodosUteis;
 import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
@@ -47,6 +48,9 @@ public class AddCategoriaController implements Initializable {
 
     @FXML
     private Button btnClose;
+    
+    @FXML
+    private Button btnAddCategoria;
 
     @FXML
     private TableView<Categoria> tabelaCategoria;
@@ -90,6 +94,14 @@ public class AddCategoriaController implements Initializable {
             MetodosUteis.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } 
+    }
+   
+   public void addORupdateCategoria() throws SQLException {
+        if ("".equals(ps_txtIDCategoria.getText())) {
+            addCategoria();
+        } else {
+            updateCategoria();
+        }
     }
 
     @Override
@@ -216,6 +228,7 @@ public class AddCategoriaController implements Initializable {
             ps_txtsubgrupoCategoria.setText(x.getSubgrupo());
             ps_txtfamiliaCategoria.setText(x.getFamilia());
             ps_txtdescricaoCategoria.setText(x.getDescricao());
+            ButtonUtilities.buttonChangeText(btnAddCategoria, ps_txtIDCategoria);
 //            resetCategorias();
         } else {
             resetCategorias();

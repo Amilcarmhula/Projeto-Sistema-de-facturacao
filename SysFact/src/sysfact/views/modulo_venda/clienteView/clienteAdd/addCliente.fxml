@@ -15,7 +15,7 @@
 
 <AnchorPane prefHeight="586.0" prefWidth="788.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_venda.clienteView.clienteAdd.AddClienteController">
    <children>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="secondary-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="primary-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Cadastro de clientes" textFill="WHITE" AnchorPane.topAnchor="10.0">
                <font>
@@ -204,7 +204,7 @@
             </Tab>
          </tabs>
       </TabPane>
-      <AnchorPane layoutY="50.0" prefHeight="110.0" prefWidth="788.0" styleClass="primary-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane layoutY="50.0" prefHeight="110.0" prefWidth="788.0" styleClass="secondary-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="83.0" layoutY="14.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css">
                <font>

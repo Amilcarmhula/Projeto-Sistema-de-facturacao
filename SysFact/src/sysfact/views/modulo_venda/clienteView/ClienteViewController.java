@@ -31,6 +31,7 @@ import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.MetodosUteis;
 
 /**
@@ -192,7 +193,8 @@ public class ClienteViewController implements Initializable {
         if (c != null) {
             txtIDCliente.setText(String.valueOf(c.getId()));
             SysFact.setData(c);
-            btnAdd.setText("Actualizar");
+            ButtonUtilities.buttonChangeText(btnAdd, txtIDCliente);
+//            btnAdd.setText("Actualizar");
         }
 
     }

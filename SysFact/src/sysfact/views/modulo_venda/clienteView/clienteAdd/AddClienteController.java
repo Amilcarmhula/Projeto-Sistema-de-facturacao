@@ -226,32 +226,7 @@ public class AddClienteController implements Initializable {
             Logger.getLogger(AddClienteController.class.getName()).log(Level.SEVERE, null, ex);
         }
         ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
-//        estadoBTNCliente();
-        estadoBTNContacto();
-    }
-
-    public void estadoBTNCliente() {
-        if (!"".equals(txtIDCliente.getText())) {
-            btnAddCliente.setText("Actualizar");
-        } else {
-            btnAddCliente.setText("Adicionar");
-        }
-    }
-
-    public void estadoBTNContacto() {
-        if (!"".equals(txtIDContacto.getText())) {
-            btnAddContacto.setText("Actualizar");
-        } else {
-            btnAddContacto.setText("Adicionar");
-        }
-    }
-
-    public void estadoBTNendereco() {
-        if (!"".equals(txtIDEndereco.getText())) {
-            btnAddEndereco.setText("Actualizar");
-        } else {
-            btnAddEndereco.setText("Adicionar");
-        }
+        ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
     }
 
     /*
@@ -545,7 +520,7 @@ public class AddClienteController implements Initializable {
             txtContacto.setText(x.getContacto());
             txtEmail.setText(x.getEmail());
             txtSite.setText(x.getWebsite());
-            estadoBTNContacto();
+            ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
         }
     }
 
@@ -561,7 +536,7 @@ public class AddClienteController implements Initializable {
             combProvincia.setValue(x.getProvincia());
             txtRua.setText(x.getRua());
             combTipoEndereco.setValue(x.getTipo());
-            estadoBTNendereco();
+            ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
         }
     }
 
@@ -574,7 +549,7 @@ public class AddClienteController implements Initializable {
         txtNome.setText("");
         txtRazao.setText("");
         txtNuit.setText("");
-        estadoBTNCliente();
+        ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
         showContactos();
         showEndereco();
         restContacto();
@@ -587,7 +562,7 @@ public class AddClienteController implements Initializable {
         txtContacto.setText("");
         txtEmail.setText("");
         txtSite.setText("");
-        estadoBTNContacto();
+        ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
     }
 
     public void resetEndereco() {
@@ -600,7 +575,7 @@ public class AddClienteController implements Initializable {
         combProvincia.setPromptText("Provincia");
         txtRua.setText("");
         combTipoEndereco.setPromptText("Tipo de endereco");
-        estadoBTNendereco();
+        ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
     }
 
 }

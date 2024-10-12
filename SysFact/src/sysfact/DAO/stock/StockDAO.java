@@ -15,7 +15,7 @@ import sysfact.model.armazem.Armazem;
 import sysfact.model.produto.Produto;
 import sysfact.model.stock.Stock;
 import sysfact.util.Conexao;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 import sysfact.util.ValidationUtilities;
 
 /**

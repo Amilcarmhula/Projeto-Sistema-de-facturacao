@@ -56,7 +56,7 @@ import sysfact.model.unidade_medida.UnidadeMedida;
 import sysfact.model.usuario.Usuario;
 import sysfact.service.precovenda.ServicePrecoVenda;
 import sysfact.service.produto.Serviceproduto;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
@@ -196,8 +196,8 @@ public class ProdutoController implements Initializable {
 
     public void getFamiliaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            MetodosUteis.showAsPopUP(null, evt);
-            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml");
+            LoadAndMoveUtilities.showAsPopUP(null, evt);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml");
         
 //            try {
 //                Parent parente = FXMLLoader.load(getClass().getResource("../"));
@@ -213,8 +213,8 @@ public class ProdutoController implements Initializable {
     }
 
     public void getStockView(ActionEvent evt) {
-        MetodosUteis.showAsPopUP(evt, null);
-            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
+        LoadAndMoveUtilities.showAsPopUP(evt, null);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
         
 //        try {
 //            Parent parente = FXMLLoader.load(getClass().getResource("../"));
@@ -231,8 +231,8 @@ public class ProdutoController implements Initializable {
 
     public void getUnidadeView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            MetodosUteis.showAsPopUP(null, evt);
-            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/unidadeView/unidadeView.fxml");
+            LoadAndMoveUtilities.showAsPopUP(null, evt);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/unidadeView/unidadeView.fxml");
         
 //            try {
 //                Parent parente = FXMLLoader.load(getClass().getResource("../.."));
@@ -286,8 +286,8 @@ public class ProdutoController implements Initializable {
 
     public void getTaxaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            MetodosUteis.showAsPopUP(null, evt);
-            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/taxasView/taxaView.fxml");
+            LoadAndMoveUtilities.showAsPopUP(null, evt);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/taxasView/taxaView.fxml");
         
 //            try {
 //                Parent parente = FXMLLoader.load(getClass().getResource("../../modulo_configs/taxasView/taxaView.fxml"));

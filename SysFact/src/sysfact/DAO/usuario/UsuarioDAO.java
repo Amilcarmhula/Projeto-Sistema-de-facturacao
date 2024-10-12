@@ -24,7 +24,7 @@ import sysfact.model.usuario.NivelAcesso;
 import sysfact.model.usuario.Permissao;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 import sysfact.util.ValidationUtilities;
 
 /**
@@ -33,7 +33,7 @@ import sysfact.util.ValidationUtilities;
  */
 public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 
-    private MetodosUteis metodosUteis;
+    private LoadAndMoveUtilities metodosUteis;
     private Connection con;
     private PreparedStatement ps;
     private String sql;

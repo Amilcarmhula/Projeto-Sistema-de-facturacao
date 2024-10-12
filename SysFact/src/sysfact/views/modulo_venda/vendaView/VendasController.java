@@ -55,7 +55,7 @@ import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
 import sysfact.model.vendas.factura.itens.TableModelItems;
 import sysfact.util.InvoiceUtilities;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class
@@ -188,8 +188,8 @@ public class VendasController implements Initializable {
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 2) {
-        MetodosUteis.showAsPopUP(null, mouseEvt);
-        MetodosUteis.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
+        LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
 //            try {
 //                Parent parente = FXMLLoader.load(getClass().getResource("searchCliente/clienteSearch.fxml"));
 //                Scene scene = new Scene(parente);
@@ -205,9 +205,9 @@ public class VendasController implements Initializable {
 
     public void getSearchProduto(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 2) {
-            MetodosUteis.showAsPopUP(null, mouseEvt);
+            LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
 
-        MetodosUteis.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/vendaView/searchProduto/produtoSearch.fxml");
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/vendaView/searchProduto/produtoSearch.fxml");
 //          
 //            try {
 //                Parent parente = FXMLLoader.load(getClass().getResource("searchProduto/produtoSearch.fxml"));

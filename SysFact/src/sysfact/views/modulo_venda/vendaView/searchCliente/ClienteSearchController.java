@@ -33,7 +33,7 @@ import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class
@@ -75,15 +75,15 @@ public class ClienteSearchController implements Initializable {
     private TextField txtPesquisa;
 
     public void close(ActionEvent event) {
-        MetodosUteis.returnToBaseAnchor();
-        MetodosUteis.setEstadoPopUP(false);
-        MetodosUteis.showAsPopUP(null, null);
+        LoadAndMoveUtilities.returnToBaseAnchor();
+        LoadAndMoveUtilities.setEstadoPopUP(false);
+        LoadAndMoveUtilities.showAsPopUP(null, null);
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
     }
 
     public void getViewAddCliente(ActionEvent event) {
-        MetodosUteis.showStage(event,null);
-        MetodosUteis.loadFXML(null, "../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
+        LoadAndMoveUtilities.showStage(event,null);
+        LoadAndMoveUtilities.loadFXML(null, "../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
     }
 
     @Override

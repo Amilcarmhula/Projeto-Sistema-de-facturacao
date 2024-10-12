@@ -54,7 +54,7 @@ import sysfact.model.unidade_medida.UnidadeMedida;
 import sysfact.model.usuario.Usuario;
 import sysfact.service.precovenda.ServicePrecoVenda;
 import sysfact.service.produto.Serviceproduto;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class
@@ -137,20 +137,20 @@ public class ProdutoSearchController implements Initializable {
 
     public void close(ActionEvent event) {
 //        System.out.println("INICIO");
-//        System.out.println(MetodosUteis.returnToBaseAnchor());
-//        System.out.println(MetodosUteis.returnToStage());
-        if (MetodosUteis.returnToStage()) {
-            MetodosUteis.setEstadoStage(false);
-            MetodosUteis.showStage(null, null);
+//        System.out.println(LoadAndMoveUtilities.returnToBaseAnchor());
+//        System.out.println(LoadAndMoveUtilities.returnToStage());
+        if (LoadAndMoveUtilities.returnToStage()) {
+            LoadAndMoveUtilities.setEstadoStage(false);
+            LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } else if (MetodosUteis.returnToBaseAnchor()) {
-            MetodosUteis.setEstadoPopUP(false);
-            MetodosUteis.showAsPopUP(null, null);
+        } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+            LoadAndMoveUtilities.setEstadoPopUP(false);
+            LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
 //        System.out.println("FIM");
-//        System.out.println(MetodosUteis.returnToBaseAnchor());
-//        System.out.println(MetodosUteis.returnToStage());
+//        System.out.println(LoadAndMoveUtilities.returnToBaseAnchor());
+//        System.out.println(LoadAndMoveUtilities.returnToStage());
     }
 
     public void addORupdate() throws SQLException {
@@ -251,7 +251,7 @@ public class ProdutoSearchController implements Initializable {
     public void getFamiliaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             ProdutoSearchController.showStage(null, evt);
-            MetodosUteis.loadFXML(null, "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml");
+            LoadAndMoveUtilities.loadFXML(null, "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml");
 //            try {
 //                Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml"));
 //                Scene scene = new Scene(parente);
@@ -267,7 +267,7 @@ public class ProdutoSearchController implements Initializable {
 
     public void getStockView(ActionEvent evt) {
         ProdutoSearchController.showStage(evt, null);
-        MetodosUteis.loadFXML(null, "../views/modulo_inventario/stockView/addStock.fxml");
+        LoadAndMoveUtilities.loadFXML(null, "../views/modulo_inventario/stockView/addStock.fxml");
 
 //        mainStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
 //        mainStage.hide(); // Esconde a janela principal
@@ -286,7 +286,7 @@ public class ProdutoSearchController implements Initializable {
     public void getUnidadeView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             ProdutoSearchController.showStage(null, evt);
-            MetodosUteis.loadFXML(null, "../views/modulo_configs/unidadeView/unidadeView.fxml");
+            LoadAndMoveUtilities.loadFXML(null, "../views/modulo_configs/unidadeView/unidadeView.fxml");
 //            try {
 //                Parent parente = FXMLLoader.load(getClass().getResource("../../../"));
 //                Scene scene = new Scene(parente);
@@ -303,7 +303,7 @@ public class ProdutoSearchController implements Initializable {
     public void getTaxaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             ProdutoSearchController.showStage(null, evt);
-            MetodosUteis.loadFXML(null, "../views/modulo_configs/taxasView/taxaView.fxml");
+            LoadAndMoveUtilities.loadFXML(null, "../views/modulo_configs/taxasView/taxaView.fxml");
 //            try {
 //                Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_configs/"));
 //                Scene scene = new Scene(parente);

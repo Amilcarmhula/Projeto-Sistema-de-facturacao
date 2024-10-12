@@ -38,7 +38,7 @@ import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.ButtonUtilities;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 import sysfact.views.modulo_venda.clienteView.ClienteViewController;
 import sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController;
 
@@ -153,13 +153,13 @@ public class AddClienteController implements Initializable {
 
     
     public void close(ActionEvent event) {
-        if (MetodosUteis.returnToStage()) {
-            MetodosUteis.setEstadoStage(false);
-            MetodosUteis.showStage(null,null);
+        if (LoadAndMoveUtilities.returnToStage()) {
+            LoadAndMoveUtilities.setEstadoStage(false);
+            LoadAndMoveUtilities.showStage(null,null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } else if (MetodosUteis.returnToBaseAnchor()) {
-            MetodosUteis.setEstadoPopUP(false);
-            MetodosUteis.showAsPopUP(null, null);
+        } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+            LoadAndMoveUtilities.setEstadoPopUP(false);
+            LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } 
     }

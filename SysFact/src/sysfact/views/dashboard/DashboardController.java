@@ -32,7 +32,7 @@ import sysfact.dao.stock.StockDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.categoria.Categoria;
 import sysfact.model.stock.Stock;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 import sysfact.util.ValidationUtilities;
 
 /**

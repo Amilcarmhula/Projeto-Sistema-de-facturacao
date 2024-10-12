@@ -32,7 +32,7 @@ import sysfact.dao.cliente.ClienteDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.ButtonUtilities;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class
@@ -80,11 +80,11 @@ public class ClienteViewController implements Initializable {
         /*
         Metodo para mostrar a nova tela ocultando a anterior
         */
-        MetodosUteis.showAsPopUP(evt, null);
+        LoadAndMoveUtilities.showAsPopUP(evt, null);
         /* O caminho para o FXML a ser carregado deve considerar o pacote 
-        onde se encontra o metodo estatico MetodosUteis.loadFXML(path)
+        onde se encontra o metodo estatico LoadAndMoveUtilities.loadFXML(path)
          */
-        MetodosUteis.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
     }
 
     @Override

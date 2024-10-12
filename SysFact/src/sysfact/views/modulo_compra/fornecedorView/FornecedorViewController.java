@@ -37,7 +37,7 @@ import sysfact.SysFact;
 import sysfact.dao.fornecedor.FornecedorDAO;
 import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class
@@ -85,11 +85,11 @@ public class FornecedorViewController implements Initializable {
         /*
         Metodo para mostrar a nova tela ocultando a anterior
         */
-        MetodosUteis.showAsPopUP(evt, null);
+        LoadAndMoveUtilities.showAsPopUP(evt, null);
         /* O caminho para o FXML a ser carregado deve considerar o pacote 
-        onde se encontra o metodo estatico MetodosUteis.loadFXML(path)
+        onde se encontra o metodo estatico LoadAndMoveUtilities.loadFXML(path)
          */
-        MetodosUteis.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_compra/fornecedorView/fornecedorAdd/addFornecedor.fxml");
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_compra/fornecedorView/fornecedorAdd/addFornecedor.fxml");
 //        try {
 //            Parent parente = FXMLLoader.load(getClass().getResource("../fornecedorView/fornecedorAdd/addFornecedor.fxml"));
 //            Scene scene = new Scene(parente);

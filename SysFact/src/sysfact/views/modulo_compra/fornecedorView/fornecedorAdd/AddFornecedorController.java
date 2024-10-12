@@ -37,7 +37,7 @@ import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.fornecedor.contacto.ContactoFornecedor;
 import sysfact.model.fornecedor.endereco.EnderecoFornecedor;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class
@@ -148,9 +148,9 @@ public class AddFornecedorController implements Initializable {
     private TextField txtSite;
 
     public void close(ActionEvent event) {
-        if (MetodosUteis.returnToBaseAnchor()) {
-            MetodosUteis.setEstadoPopUP(false);
-            MetodosUteis.showAsPopUP(null, null);
+        if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+            LoadAndMoveUtilities.setEstadoPopUP(false);
+            LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } 
     }

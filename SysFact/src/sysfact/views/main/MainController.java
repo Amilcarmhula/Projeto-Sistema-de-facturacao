@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sysfact.SysFact;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class
@@ -104,8 +104,8 @@ public class MainController implements Initializable {
         } else if (e.getSource() == btn_categorias) {
             path = "../views/modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml";
         }
-        MetodosUteis.showAsPopUP(e, null);
-            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, path);
+        LoadAndMoveUtilities.showAsPopUP(e, null);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
         
 //        try {
 //            Stage stage = new Stage();
@@ -174,7 +174,7 @@ public class MainController implements Initializable {
 //            // Exibindo o diálogo e capturando o resultado
 //            Optional<String> result = dialog.showAndWait();
 //            result.ifPresent(selectedOption -> {
-//                SysFact.setData(MetodosUteis.invoiceNumber(selectedOption));
+//                SysFact.setData(LoadAndMoveUtilities.invoiceNumber(selectedOption));
 ////            System.out.println("Opção selecionada: " + selectedOption);
 //            });
             pane = FXMLLoader.load(getClass().getResource("../modulo_venda/vendaView/vendasView.fxml"));

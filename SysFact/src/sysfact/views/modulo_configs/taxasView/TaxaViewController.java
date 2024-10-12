@@ -30,7 +30,7 @@ import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.taxaimposto.TaxaImpostoDAO;
 import sysfact.model.taxa_imposto.TaxaImposto;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
@@ -82,9 +82,9 @@ public class TaxaViewController implements Initializable {
             ProdutoSearchController.showStage(null,null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
-        else if (MetodosUteis.returnToBaseAnchor()) {
-            MetodosUteis.setEstadoPopUP(false);
-            MetodosUteis.showAsPopUP(null, null);
+        else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+            LoadAndMoveUtilities.setEstadoPopUP(false);
+            LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
     }

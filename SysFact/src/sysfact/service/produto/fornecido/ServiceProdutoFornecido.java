@@ -12,7 +12,7 @@ import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.produto.Produto;
 import sysfact.model.produto.fornecido.ProdutoFornecido;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 import sysfact.util.ValidationUtilities;
 
 /**

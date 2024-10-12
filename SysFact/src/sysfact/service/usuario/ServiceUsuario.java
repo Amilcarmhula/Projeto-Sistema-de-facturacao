@@ -7,7 +7,7 @@ package sysfact.service.usuario;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import sysfact.dao.usuario.UsuarioDAO;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 import sysfact.util.ValidationUtilities;
 
 /**

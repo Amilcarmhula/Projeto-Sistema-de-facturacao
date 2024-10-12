@@ -31,7 +31,7 @@ import sysfact.dao.usuario.UsuarioDAO;
 import sysfact.model.usuario.Usuario;
 import sysfact.service.usuario.ServiceUsuario;
 import sysfact.util.Conexao;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 
 /**
  *

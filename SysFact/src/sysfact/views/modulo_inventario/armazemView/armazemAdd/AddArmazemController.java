@@ -38,7 +38,7 @@ import sysfact.model.armazem.Armazem;
 import sysfact.model.armazem.contacto.ContactoArmazem;
 import sysfact.model.armazem.endereco.EnderecoArmazem;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class
@@ -152,13 +152,13 @@ public class AddArmazemController implements Initializable {
     private TextField txtSite;
 
     public void close(ActionEvent event) {
-        if (MetodosUteis.returnToStage()) {
-            MetodosUteis.setEstadoStage(false);
-            MetodosUteis.showStage(null,null);
+        if (LoadAndMoveUtilities.returnToStage()) {
+            LoadAndMoveUtilities.setEstadoStage(false);
+            LoadAndMoveUtilities.showStage(null,null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } else if (MetodosUteis.returnToBaseAnchor()) {
-            MetodosUteis.setEstadoPopUP(false);
-            MetodosUteis.showAsPopUP(null, null);
+        } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+            LoadAndMoveUtilities.setEstadoPopUP(false);
+            LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } 
     }

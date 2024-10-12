@@ -4,13 +4,7 @@
  */
 package sysfact.util;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -18,8 +12,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -30,60 +22,10 @@ import javafx.stage.StageStyle;
  *
  * @author JM-Tecnologias
  */
-public class MetodosUteis {
+public class LoadAndMoveUtilities {
 
     private static double x = 0;
     private static double y = 0;
-
-//    public static String datePlusXDays(int x) {
-//        LocalDate currentDate = LocalDate.now(); // Get the current date
-//        LocalDate futureDate = currentDate.plusDays(x); // Add the specified number of days
-//        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//        String formattedDate = futureDate.format(df); // Format the future date
-//        //        System.out.println("A data final será: " + formattedDate + " após adicionados " + x + " dias");
-//        return formattedDate;
-//    }
-//
-//    public static String actualDate() {
-//        LocalDate currentDate = LocalDate.now(); // Get the current date
-//        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//        String formattedDate = currentDate.format(df); // Format the future date
-//        //        System.out.println("A data final será: " + formattedDate + " após adicionados " + x + " dias");
-//        return formattedDate;
-//    }
-//
-//    public static String invoiceNumber(int tipo) {
-//        String invNumber;
-//        Date dataActual = new Date();
-//        SimpleDateFormat tf = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss:SSS");
-//        String[] data = tf.format(dataActual).split(":");
-//
-//        invNumber = data[0] + "-";
-//        int number = Integer.parseInt(data[1]) + Integer.parseInt(data[2])
-//                + Integer.parseInt(data[3]) + Integer.parseInt(data[4])
-//                + Integer.parseInt(data[5]) + Integer.parseInt(data[6]);
-//        invNumber += number + "/" + tipo;
-//        return invNumber;
-//    }
-
-//    public static String validaString(FontAwesomeIcon icon, String data) {
-//        if (data == null || data.isEmpty()) {
-//            showDialog(icon, "Erro de dados", "Preencha todos campos obrigatorios!");
-//            return "";
-//        }
-//        return data;
-//    }
-//
-//    public static void showDialog(FontAwesomeIcon icon, String title, String message) {
-//        Alert alert = new Alert(AlertType.ERROR);
-//        alert.setTitle(title);
-//        alert.setHeaderText(null);
-//        alert.setContentText(message);
-//        FontAwesomeIconView erroIcon = new FontAwesomeIconView(icon);
-//        erroIcon.setStyle("-fx-fill: rgba(35,35,35,.3); -fx-font-size: 30px;");
-//        alert.setGraphic(erroIcon);
-//        alert.showAndWait();
-//    }
 
     public static void moveWindows(Parent root, Stage stage) {
         root.setOnMousePressed((MouseEvent event) -> {
@@ -105,14 +47,14 @@ public class MetodosUteis {
 
     public static void loadFXML(Modality modal, String path) {
         try {
-            Parent root = FXMLLoader.load(MetodosUteis.class.getResource(path));
+            Parent root = FXMLLoader.load(LoadAndMoveUtilities.class.getResource(path));
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setScene(scene);
             /*
             Metodo para mover tela
              */
-            MetodosUteis.moveWindows(root, stage);
+            LoadAndMoveUtilities.moveWindows(root, stage);
 
             stage.initStyle(StageStyle.TRANSPARENT);
             /*
@@ -126,7 +68,7 @@ public class MetodosUteis {
                 stage.show();
             }
         } catch (IOException ex) {
-            Logger.getLogger(MetodosUteis.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoadAndMoveUtilities.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /*
@@ -143,12 +85,12 @@ public class MetodosUteis {
     public static void showAsPopUP(/*AnchorPane baseAnchorPane,*/ActionEvent aevent, MouseEvent mevent) {
         if (aevent != null) {
             Node source = (Node) aevent.getSource();
-            MetodosUteis.baseAnchorPane = (AnchorPane) source.getScene().lookup("#anchorMain");
+            LoadAndMoveUtilities.baseAnchorPane = (AnchorPane) source.getScene().lookup("#anchorMain");
             baseAnchorPane.setVisible(false);
         }
         if (mevent != null) {
             Node source = (Node) mevent.getSource();
-            MetodosUteis.baseAnchorPane = (AnchorPane) source.getScene().lookup("#anchorMain");
+            LoadAndMoveUtilities.baseAnchorPane = (AnchorPane) source.getScene().lookup("#anchorMain");
             baseAnchorPane.setVisible(false);
         }
     }
@@ -161,7 +103,7 @@ public class MetodosUteis {
     }
 
     public static void setEstadoPopUP(boolean estadoPopUP) {
-        MetodosUteis.estadoPopUP = estadoPopUP;
+        LoadAndMoveUtilities.estadoPopUP = estadoPopUP;
     }
 
     public static boolean returnToBaseAnchor() {
@@ -184,12 +126,12 @@ public class MetodosUteis {
     */
     public static void showStage(ActionEvent event, MouseEvent evt) {
         if (event != null) {
-            MetodosUteis.baseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            MetodosUteis.baseStage.hide(); // Esconde a janela principal
+            LoadAndMoveUtilities.baseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            LoadAndMoveUtilities.baseStage.hide(); // Esconde a janela principal
         }
         if (evt != null) {
-            MetodosUteis.baseStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-            MetodosUteis.baseStage.hide(); // Esconde a janela principal
+            LoadAndMoveUtilities.baseStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
+            LoadAndMoveUtilities.baseStage.hide(); // Esconde a janela principal
         }
     }
 
@@ -198,7 +140,7 @@ public class MetodosUteis {
     }
 
     public static void setEstadoStage(boolean estadoStage) {
-        MetodosUteis.estadoStage = estadoStage;
+        LoadAndMoveUtilities.estadoStage = estadoStage;
     }
 
     public static boolean returnToStage() {

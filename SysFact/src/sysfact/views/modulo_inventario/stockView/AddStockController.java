@@ -36,7 +36,7 @@ import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.produto.Produto;
 import sysfact.model.usuario.Usuario;
 import sysfact.service.produto.fornecido.ServiceProdutoFornecido;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 //import sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController;
 import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
@@ -107,9 +107,9 @@ public class AddStockController implements Initializable {
             ProdutoSearchController.setEstadoStage(false);
             ProdutoSearchController.showStage(null,null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } else if (MetodosUteis.returnToBaseAnchor()) {
-            MetodosUteis.setEstadoPopUP(false);
-            MetodosUteis.showAsPopUP(null, null);
+        } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+            LoadAndMoveUtilities.setEstadoPopUP(false);
+            LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } 
     }

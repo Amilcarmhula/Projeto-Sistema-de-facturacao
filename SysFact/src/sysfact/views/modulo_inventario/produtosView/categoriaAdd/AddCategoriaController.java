@@ -36,7 +36,7 @@ import sysfact.dao.categoria.CategoriaDAO;
 import sysfact.model.categoria.Categoria;
 import sysfact.service.caregoria.ServicoCategoria;
 import sysfact.util.ButtonUtilities;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
@@ -89,9 +89,9 @@ public class AddCategoriaController implements Initializable {
             ProdutoSearchController.setEstadoStage(false);
             ProdutoSearchController.showStage(null,null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } else if (MetodosUteis.returnToBaseAnchor()) {
-            MetodosUteis.setEstadoPopUP(false);
-            MetodosUteis.showAsPopUP(null, null);
+        } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+            LoadAndMoveUtilities.setEstadoPopUP(false);
+            LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } 
     }

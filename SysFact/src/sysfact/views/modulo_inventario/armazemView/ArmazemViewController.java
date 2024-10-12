@@ -37,7 +37,7 @@ import sysfact.SysFact;
 import sysfact.dao.armazem.ArmazemDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.MetodosUteis;
+import sysfact.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class
@@ -84,8 +84,8 @@ public class ArmazemViewController implements Initializable {
     private TextField txtPesquisa;
     
     public void getViewAddCliente(ActionEvent evt){
-        MetodosUteis.showAsPopUP(evt, null);
-            MetodosUteis.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/armazemView/armazemAdd/addArmazem.fxml");
+        LoadAndMoveUtilities.showAsPopUP(evt, null);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/armazemView/armazemAdd/addArmazem.fxml");
         
 //        try {
 //            Parent parente = FXMLLoader.load(getClass().getResource("../armazemView/armazemAdd/addArmazem.fxml"));

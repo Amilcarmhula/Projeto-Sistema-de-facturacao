@@ -73,15 +73,15 @@
       </AnchorPane>
       <AnchorPane layoutY="160.0" prefHeight="670.0" prefWidth="1432.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <TableView fx:id="tabelaCliente" onMouseClicked="#selectedLineCliente" prefHeight="110.0" prefWidth="727.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <TableView fx:id="tabelaCliente" onMouseClicked="#selectedLineCliente" prefHeight="110.0" prefWidth="727.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                <columns>
                   <TableColumn fx:id="IDtabelaCliente" prefWidth="29.0" text="ID" />
                   <TableColumn fx:id="tipotabelaCliente" prefWidth="174.0" text="Tipo" />
                   <TableColumn fx:id="nometabelaCliente" prefWidth="289.0" text="Nome" />
                   <TableColumn fx:id="contactotabelaCliente" minWidth="0.0" prefWidth="286.0" text="Contacto" />
                   <TableColumn fx:id="descricaotabelaCliente" prefWidth="480.0" text="Descricao" />
-                  <TableColumn fx:id="estadotabelaCliente" prefWidth="100.0" text="Estado" />
-                  <TableColumn fx:id="btntabelaCliente" prefWidth="44.0" />
+                  <TableColumn fx:id="estadotabelaCliente" prefWidth="115.0" text="Estado" />
+                  <TableColumn fx:id="btntabelaCliente" prefWidth="52.0" />
                </columns>
             </TableView>
          </children>

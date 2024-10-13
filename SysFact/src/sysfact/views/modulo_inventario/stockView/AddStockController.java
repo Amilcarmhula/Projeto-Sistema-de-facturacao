@@ -36,9 +36,9 @@ import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.produto.Produto;
 import sysfact.model.usuario.Usuario;
 import sysfact.service.produto.fornecido.ServiceProdutoFornecido;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 //import sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController;
-import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
  * FXML Controller class
@@ -50,9 +50,6 @@ public class AddStockController implements Initializable {
     private Usuario userData;
     @FXML
     private Button btnAdd;
-
-    @FXML
-    private Button btnClose;
 
     @FXML
     private TableView<Armazem> tabelaArmazem;
@@ -103,25 +100,15 @@ public class AddStockController implements Initializable {
     private TextField txtQuantidade;
 
     public void close(ActionEvent event) {
-        if (ProdutoSearchController.returnToStage()) {
-            ProdutoSearchController.setEstadoStage(false);
-            ProdutoSearchController.showStage(null,null);
+        if (LoadAndMoveUtilities.returnToStage()) {
+            LoadAndMoveUtilities.setEstadoStage(false);
+            LoadAndMoveUtilities.showStage(null,null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } 
-    }
-    
-    
-
-    public void addORupdate() throws SQLException {
-//        if ("".equals(txtIDContacto.getText())) {
-//            addContacto();
-//        } else {
-//            updateContacto();
-//        }
     }
     
     public void priceFormaterProduto() {
@@ -172,7 +159,7 @@ public class AddStockController implements Initializable {
             this.userData = SysFact.getUserData();
             showFornecedores();
             showArmazens();
-            estadoBTN();
+            ButtonUtilities.buttonChangeText(btnAdd, txtIDProduto);
         } catch (SQLException ex) {
             Logger.getLogger(AddStockController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -282,15 +269,4 @@ public class AddStockController implements Initializable {
                 String.valueOf(dataAquisicao.getValue() == null ? "" : dataAquisicao.getValue()), 
                 Double.valueOf(txtCustoAquisicao.getText().equals("") ? "0" : txtCustoAquisicao.getText().split(" ")[1].replace(".", "").replace(",", ".")));
     }
-//;    
-    
-
-    public void estadoBTN() {
-//        if (!"".equals(txtIDCliente.getText())) {
-//            btnAddCliente.setText("Actualizar");
-//        } else {
-//            btnAddCliente.setText("Adicionar");
-//        }
-    }
-
 }

@@ -48,7 +48,7 @@ public class CategoriaViewController implements Initializable {
 
     @FXML
     private Button btnClose;
-    
+
     @FXML
     private Button btnAddCategoria;
 
@@ -84,19 +84,19 @@ public class CategoriaViewController implements Initializable {
     @FXML
     private TextArea ps_txtdescricaoCategoria;
 
-   public void close(ActionEvent event) {
-        if (ProdutoSearchController.returnToStage()) {
-            ProdutoSearchController.setEstadoStage(false);
-            ProdutoSearchController.showStage(null,null);
+    public void close(ActionEvent event) {
+        if (LoadAndMoveUtilities.returnToStage()) {
+            LoadAndMoveUtilities.setEstadoStage(false);
+            LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } 
+        }
     }
-   
-   public void addORupdateCategoria() throws SQLException {
+
+    public void addORupdateCategoria() throws SQLException {
         if ("".equals(ps_txtIDCategoria.getText())) {
             addCategoria();
         } else {
@@ -246,8 +246,7 @@ public class CategoriaViewController implements Initializable {
         sc.registaCategoria(ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
                 ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
                 ps_txtdescricaoCategoria.getText());
-        
-        
+
 //        Categoria a = new Categoria();
 //        a.setTipo(ps_combTipoCategoria.getValue());
 //        a.setGrupo(ps_txtgrupoCategoria.getText());
@@ -286,6 +285,8 @@ public class CategoriaViewController implements Initializable {
         ps_txtsubgrupoCategoria.setText("");
         ps_txtfamiliaCategoria.setText("");
         ps_txtdescricaoCategoria.setText("");
+        ButtonUtilities.buttonChangeText(btnAddCategoria, ps_txtIDCategoria);
+
     }
 
 }

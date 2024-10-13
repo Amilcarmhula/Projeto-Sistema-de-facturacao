@@ -100,7 +100,7 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <Button layoutX="55.0" layoutY="4.0" mnemonicParsing="false" prefWidth="35.0">
+            <Button layoutX="55.0" layoutY="4.0" mnemonicParsing="false" onAction="#resetCategorias" prefWidth="35.0">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="15" />
                </graphic>

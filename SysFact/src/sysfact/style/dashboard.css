@@ -3,6 +3,7 @@
  */
 .primary-color{
     -fx-background-color: #17b5c3;
+    /*-fx-background-color: #00da5d;*/
 }
 
 .secondary-color{
@@ -11,7 +12,6 @@
 .base-color{
     -fx-background-color: #fff;
 }
-
 
 .white-bg{
     -fx-background-color: #fff;
@@ -34,12 +34,21 @@
  * Efeito Sombra.
  */
 .shadow{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.3), 5,0,0,3);
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.3), 5,0,0,3);*/
+}
+
+/*
+ * textField degsin
+ */
+.text-field:focused{
+    -fx-border-color:#17b5c3;
+    -fx-border-width:0px 0px 5px 0px;
 }
 
 .close{
     -fx-background-color:transparent;
     -fx-cursor:hand;
+    
 }
 
 .close-categoria{
@@ -92,7 +101,7 @@
     -fx-background-radius: 10px;
 }
 .text-squared-border{
-    -fx-background-radius: 20px;
+    /*-fx-background-radius: 20px;*/
 }
 .border-radius{
     -fx-border-radius: 20px;

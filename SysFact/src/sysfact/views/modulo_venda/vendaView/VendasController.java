@@ -4,7 +4,6 @@
  */
 package sysfact.views.modulo_venda.vendaView;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,10 +18,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -36,8 +32,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.desconto.DescontoDAO;
@@ -188,18 +182,8 @@ public class VendasController implements Initializable {
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 2) {
-        LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
-        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
-//            try {
-//                Parent parente = FXMLLoader.load(getClass().getResource("searchCliente/clienteSearch.fxml"));
-//                Scene scene = new Scene(parente);
-//                Stage stage = new Stage();
-//                stage.setScene(scene);
-//                stage.initStyle(StageStyle.TRANSPARENT);
-//                stage.show();
-//            } catch (IOException ex) {
-//                Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+            LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
         }
     }
 
@@ -207,18 +191,7 @@ public class VendasController implements Initializable {
         if (mouseEvt.getClickCount() == 2) {
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
 
-        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/vendaView/searchProduto/produtoSearch.fxml");
-//          
-//            try {
-//                Parent parente = FXMLLoader.load(getClass().getResource("searchProduto/produtoSearch.fxml"));
-//                Scene scene = new Scene(parente);
-//                Stage stage = new Stage();
-//                stage.setScene(scene);
-//                stage.initStyle(StageStyle.TRANSPARENT);
-//                stage.show();
-//            } catch (IOException ex) {
-//                Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_venda/vendaView/searchProduto/produtoSearch.fxml");
         }
     }
 
@@ -403,8 +376,6 @@ public class VendasController implements Initializable {
         registraItens();
     }
 
-    
-
     public void registraItens() throws SQLException {
         Item i = null;
         ObservableList<TableModelItems> itens = tabelaItens.getItems();
@@ -442,15 +413,17 @@ public class VendasController implements Initializable {
             desc += (item.getQtd() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem())) * desconto.getPercentagem();
             total += item.getSubtotal();
         }
-        labSubtotal.setText(String.format("%.2f",subtotal) + " MZN");
-        labDesconto.setText(String.format("%.2f",desc) + " MZN");
-        labTaxas.setText(String.format("%.2f",taxa) + " MZN");
-        labTotalGeral.setText(String.format("%.2f",total) + " MZN");
+        labSubtotal.setText(String.format("%.2f", subtotal) + " MZN");
+        labDesconto.setText(String.format("%.2f", desc) + " MZN");
+        labTaxas.setText(String.format("%.2f", taxa) + " MZN");
+        labTotalGeral.setText(String.format("%.2f", total) + " MZN");
     }
-public void removeItens() {
+
+    public void removeItens() {
         tabelaItens.getItems().removeAll(tabelaItens.getSelectionModel().getSelectedItem());
         displayPrice();
     }
+
     public void resetProduto() {
         txtID.setText("");
         txtStock.setText("");

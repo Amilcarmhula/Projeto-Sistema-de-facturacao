@@ -222,7 +222,7 @@
                </styleClass>
             </TextField>
             <ComboBox fx:id="combTipoCliente" layoutX="223.0" layoutY="15.0" prefHeight="25.0" prefWidth="130.0" promptText="Tipo de Cliente" />
-            <Button fx:id="btnAddCliente" layoutX="564.0" layoutY="75.0" mnemonicParsing="false" onAction="#addORupdateCliente" prefHeight="20.0" prefWidth="105.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+            <Button fx:id="btnAddArmazem" layoutX="564.0" layoutY="75.0" mnemonicParsing="false" onAction="#addORupdateCliente" prefHeight="20.0" prefWidth="105.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

@@ -30,6 +30,7 @@ import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.taxaimposto.TaxaImpostoDAO;
 import sysfact.model.taxa_imposto.TaxaImposto;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
@@ -77,22 +78,15 @@ public class TaxaViewController implements Initializable {
     private Button btnClose;
 
     public void close(ActionEvent event) {
-        if (ProdutoSearchController.returnToStage()) {
-            ProdutoSearchController.setEstadoStage(false);
-            ProdutoSearchController.showStage(null,null);
+        if (LoadAndMoveUtilities.returnToStage()) {
+            LoadAndMoveUtilities.setEstadoStage(false);
+            LoadAndMoveUtilities.showStage(null,null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
         else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        }
-    }
-    public void estadoBTN() {
-        if (!"".equals(txtID.getText())) {
-            btnAdd.setText("Actualizar");
-        } else {
-            btnAdd.setText("Adicionar");
         }
     }
     
@@ -227,7 +221,8 @@ public class TaxaViewController implements Initializable {
             txtDescricao.setText(x.getDescricao());
             txtPercentagem.setText(String.valueOf(x.getPercentagem()*100));
             txtTaxa.setText(x.getIdentificador());
-            estadoBTN();
+            ButtonUtilities.buttonChangeText(btnAdd, txtID);
+
             SysFact.setData(x);
         }
     }
@@ -237,7 +232,7 @@ public class TaxaViewController implements Initializable {
         txtDescricao.setText("");
         txtPercentagem.setText("");
         txtTaxa.setText("");
-        estadoBTN();
+        ButtonUtilities.buttonChangeText(btnAdd, txtID);
         showTaxas();
         
     }

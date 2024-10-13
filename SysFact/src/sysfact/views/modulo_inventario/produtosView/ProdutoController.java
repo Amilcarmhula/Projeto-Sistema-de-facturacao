@@ -50,6 +50,7 @@ import sysfact.model.unidade_medida.UnidadeMedida;
 import sysfact.model.usuario.Usuario;
 import sysfact.service.precovenda.ServicePrecoVenda;
 import sysfact.service.produto.Serviceproduto;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
 /**
@@ -143,13 +144,13 @@ public class ProdutoController implements Initializable {
         }
     }
 
-    public void estadoBTN() {
-        if (!"".equals(txtIDProduto.getText()) || !"".equals(labIDPreco.getText())) {
-            btnAddProduto.setText("Actualizar");
-        } else {
-            btnAddProduto.setText("Adicionar");
-        }
-    }
+//    public void estadoBTN() {
+//        if (!"".equals(txtIDProduto.getText()) || !"".equals(labIDPreco.getText())) {
+//            btnAddProduto.setText("Actualizar");
+//        } else {
+//            btnAddProduto.setText("Adicionar");
+//        }
+//    }
 
     public void priceFormaterProduto() {
         // Define the Locale for currency formatting (Mozambique)
@@ -253,11 +254,13 @@ public class ProdutoController implements Initializable {
     public static void showStage(ActionEvent event, MouseEvent evt) {
         if (event != null) {
             baseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            baseStage.hide(); // Esconde a janela principal
+//            baseStage.hide(); // Esconde a janela principal
+            baseStage.setOpacity(0);
         }
         if (evt != null) {
             baseStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-            baseStage.hide(); // Esconde a janela principal
+//            baseStage.hide(); // Esconde a janela principal
+            baseStage.setOpacity(0);
         }
     }
 
@@ -272,7 +275,8 @@ public class ProdutoController implements Initializable {
     public static boolean returnToStage() {
         if (baseStage != null) {
             setEstadoStage(true);
-            baseStage.show(); // Mostra a janela principal novamente
+//            baseStage.show(); // Mostra a janela principal novamente
+            baseStage.setOpacity(1);
         }
         return isEstadoStage();
     }
@@ -351,7 +355,7 @@ public class ProdutoController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        estadoBTN();
+        ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
     }
 
     private ObservableList<Produto> listaProduto;
@@ -403,7 +407,7 @@ public class ProdutoController implements Initializable {
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
                                 + "-glyph-size:28px;"
-                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                                + "-fx-fill:#000000b3;"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             Produto a = tabelaProduto.getSelectionModel().getSelectedItem();
@@ -517,7 +521,7 @@ public class ProdutoController implements Initializable {
             txtdescricaoProduto.setText(p.getDescricao());
             SysFact.setData(p);
             btn_controleStock.setDisable(false);
-            estadoBTN();
+            ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         }
     }
 
@@ -595,7 +599,7 @@ public class ProdutoController implements Initializable {
         txtcodigobarrasProduto.setText("");
         txtdescricaoProduto.setText("");
         btn_controleStock.setDisable(true);
-        estadoBTN();
+        ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         showProduto();
     }
 

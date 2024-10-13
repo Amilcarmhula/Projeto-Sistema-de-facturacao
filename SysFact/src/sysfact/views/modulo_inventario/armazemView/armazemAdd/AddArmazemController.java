@@ -38,6 +38,7 @@ import sysfact.model.armazem.Armazem;
 import sysfact.model.armazem.contacto.ContactoArmazem;
 import sysfact.model.armazem.endereco.EnderecoArmazem;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
 /**
@@ -50,7 +51,7 @@ public class AddArmazemController implements Initializable {
     private Usuario userData;
 
     @FXML
-    private Button btnAddCliente;
+    private Button btnAddArmazem;
     @FXML
     private Button btnAddContacto;
     @FXML
@@ -224,33 +225,11 @@ public class AddArmazemController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(AddArmazemController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        estadoBTNCliente();
-        estadoBTNContacto();
+        ButtonUtilities.buttonChangeText(btnAddArmazem, txtIDCliente);
+        ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
     }
-
-    public void estadoBTNCliente() {
-        if (!"".equals(txtIDCliente.getText())) {
-            btnAddCliente.setText("Actualizar");
-        } else {
-            btnAddCliente.setText("Adicionar");
-        }
-    }
-
-    public void estadoBTNContacto() {
-        if (!"".equals(txtIDContacto.getText())) {
-            btnAddContacto.setText("Actualizar");
-        } else {
-            btnAddContacto.setText("Adicionar");
-        }
-    }
-
-    public void estadoBTNendereco() {
-        if (!"".equals(txtIDEndereco.getText())) {
-            btnAddEndereco.setText("Actualizar");
-        } else {
-            btnAddEndereco.setText("Adicionar");
-        }
-    }
+    
+//    
 
     /*
     Funcoes de Consultas
@@ -317,7 +296,7 @@ public class AddArmazemController implements Initializable {
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
                                 + "-glyph-size:28px;"
-                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                                + "-fx-fill:#000000b3;"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             EnderecoArmazem a = tabelaEndereco.getSelectionModel().getSelectedItem();
@@ -537,7 +516,7 @@ public class AddArmazemController implements Initializable {
             txtContacto.setText(x.getContacto());
             txtEmail.setText(x.getEmail());
             txtSite.setText(x.getWebsite());
-            estadoBTNContacto();
+            ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
         }
     }
 
@@ -553,7 +532,7 @@ public class AddArmazemController implements Initializable {
             combProvincia.setValue(x.getProvincia());
             txtRua.setText(x.getRua());
             combTipoEndereco.setValue(x.getTipo());
-            estadoBTNendereco();
+            ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
         }
     }
 
@@ -565,7 +544,7 @@ public class AddArmazemController implements Initializable {
         combTipoCliente.setPromptText("Tipo de cliente");
         txtDescricao.setText("");
         txtNome.setText("");
-        estadoBTNCliente();
+        ButtonUtilities.buttonChangeText(btnAddArmazem, txtIDCliente);
         showContactos();
         showEndereco();
         restContacto();
@@ -578,7 +557,7 @@ public class AddArmazemController implements Initializable {
         txtContacto.setText("");
         txtEmail.setText("");
         txtSite.setText("");
-        estadoBTNContacto();
+        ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
     }
 
     public void resetEndereco() {
@@ -591,7 +570,7 @@ public class AddArmazemController implements Initializable {
         combProvincia.setPromptText("Provincia");
         txtRua.setText("");
         combTipoEndereco.setPromptText("Tipo de endereco");
-        estadoBTNendereco();
+        ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
     }
 
 }

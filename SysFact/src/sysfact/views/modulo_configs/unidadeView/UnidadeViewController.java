@@ -30,6 +30,7 @@ import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.unidademedida.UnidadeMedidaDAO;
 import sysfact.model.unidade_medida.UnidadeMedida;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
@@ -77,23 +78,16 @@ public class UnidadeViewController implements Initializable {
     private TableColumn<UnidadeMedida, String> unidade;
 
     public void close(ActionEvent event) {
-        if (ProdutoSearchController.returnToStage()) {
-            ProdutoSearchController.setEstadoStage(false);
-            ProdutoSearchController.showStage(null,null);
+        if (LoadAndMoveUtilities.returnToStage()) {
+            LoadAndMoveUtilities.setEstadoStage(false);
+            LoadAndMoveUtilities.showStage(null,null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+        }
+        else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } 
-    }
-
-    public void estadoBTN() {
-        if (!"".equals(txtID.getText())) {
-            btnAdd.setText("Actualizar");
-        } else {
-            btnAdd.setText("Adicionar");
-        }
     }
 
     public void addORupdateTaxa() throws SQLException {
@@ -230,7 +224,7 @@ public class UnidadeViewController implements Initializable {
             txtUnidade.setText(x.getIdentificador());
             txtSigla.setText(x.getSigla());
             txtDescricao.setText(x.getDescricao());
-            estadoBTN();
+            ButtonUtilities.buttonChangeText(btnAdd, txtID);
             SysFact.setData(x);
         }
     }
@@ -240,7 +234,7 @@ public class UnidadeViewController implements Initializable {
         txtDescricao.setText("");
         txtSigla.setText("");
         txtUnidade.setText("");
-        estadoBTN();
+        ButtonUtilities.buttonChangeText(btnAdd, txtID);
         showUnidades();
 
     }

@@ -6,7 +6,6 @@ package sysfact.views.modulo_inventario.armazemView;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -18,10 +17,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -30,13 +26,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.armazem.ArmazemDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
 /**
@@ -86,17 +81,6 @@ public class ArmazemViewController implements Initializable {
     public void getViewAddCliente(ActionEvent evt){
         LoadAndMoveUtilities.showAsPopUP(evt, null);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/armazemView/armazemAdd/addArmazem.fxml");
-        
-//        try {
-//            Parent parente = FXMLLoader.load(getClass().getResource("../armazemView/armazemAdd/addArmazem.fxml"));
-//            Scene scene = new Scene(parente);
-//            Stage stage = new Stage();
-//            stage.setScene(scene);
-//            stage.initStyle(StageStyle.TRANSPARENT);
-//            stage.show();
-//        } catch (IOException ex) {
-//            Logger.getLogger(ArmazemViewController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
 
     @Override
@@ -148,7 +132,7 @@ public class ArmazemViewController implements Initializable {
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
                                 + "-glyph-size:28px;"
-                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                                + "-fx-fill:#000000b3;"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             Armazem x = tabelaCliente.getSelectionModel().getSelectedItem();
@@ -205,7 +189,7 @@ public class ArmazemViewController implements Initializable {
         if (c != null) {
             SysFact.setData(String.valueOf(c.getId()));
             txtIDCliente.setText(String.valueOf(c.getId()));
-            btnAdd.setText("Actualizar");
+            ButtonUtilities.buttonChangeText(btnAdd, txtIDCliente);
         }
 
     }

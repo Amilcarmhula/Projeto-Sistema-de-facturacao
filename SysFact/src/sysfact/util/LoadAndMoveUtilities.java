@@ -12,8 +12,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -87,17 +93,31 @@ public class LoadAndMoveUtilities {
         if (aevent != null) {
             Node source = (Node) aevent.getSource();
             LoadAndMoveUtilities.baseAnchorPane = (AnchorPane) source.getScene().lookup("#anchorMain");
+            // Deixa a AnchorPane invisiver para mostrar a outra janela
 //            baseAnchorPane.setVisible(false);
-            anchorPaneAux = (AnchorPane) baseAnchorPane.getChildren().get(0);
-            baseAnchorPane.getChildren().remove(0);
 
+            // Armazena a AnchorPane que sera removida numa variavel auxiliar
+            //para que possa ser restaurada quando voltarmos a janela
+//            anchorPaneAux = (AnchorPane) baseAnchorPane.getChildren().get(0);
+//            baseAnchorPane.getChildren().remove(0);
+
+            BoxBlur blur = new BoxBlur(5, 5, 5);
+            baseAnchorPane.setEffect(blur);
         }
         if (mevent != null) {
             Node source = (Node) mevent.getSource();
             LoadAndMoveUtilities.baseAnchorPane = (AnchorPane) source.getScene().lookup("#anchorMain");
+            // Deixa a AnchorPane invisiver para mostrar a outra janela
 //            baseAnchorPane.setVisible(false);
-            anchorPaneAux = (AnchorPane) baseAnchorPane.getChildren().get(0);
-            baseAnchorPane.getChildren().remove(0);
+
+            // Armazena a AnchorPane que sera removida numa variavel auxiliar
+            //para que possa ser restaurada quando voltarmos a janela
+//            anchorPaneAux = (AnchorPane) baseAnchorPane.getChildren().get(0);
+//            baseAnchorPane.getChildren().remove(0);
+//            BoxBlur blur = new BoxBlur(5, 5, 5);
+//            baseAnchorPane.setEffect(blur);
+            BoxBlur blur = new BoxBlur(5, 5, 5);
+            baseAnchorPane.setEffect(blur);
         }
     }
 
@@ -116,9 +136,11 @@ public class LoadAndMoveUtilities {
         if (baseAnchorPane != null) {
             setEstadoPopUP(true);
 //            baseAnchorPane.setVisible(true);
-            baseAnchorPane.getChildren().setAll(anchorPaneAux);
+//            baseAnchorPane.getChildren().setAll(anchorPaneAux);
+            baseAnchorPane.setEffect(null);
 
         }
+        baseAnchorPane = null;
         return isEstadoPopUP();
     }
 
@@ -136,12 +158,17 @@ public class LoadAndMoveUtilities {
     public static void showStage(ActionEvent event, MouseEvent evt) {
         if (event != null) {
             LoadAndMoveUtilities.baseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            LoadAndMoveUtilities.baseStage.hide(); // Esconde a janela principal
+//            LoadAndMoveUtilities.baseStage.hide(); // Esconde a janela principal
+            LoadAndMoveUtilities.baseStage.setOpacity(0); // Esconde a janela principal
+
         }
         if (evt != null) {
             LoadAndMoveUtilities.baseStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-            LoadAndMoveUtilities.baseStage.hide(); // Esconde a janela principal
+//            LoadAndMoveUtilities.baseStage.hide(); // Esconde a janela principal
+            LoadAndMoveUtilities.baseStage.setOpacity(0); // Esconde a janela principal
+
         }
+        
     }
 
     public static boolean isEstadoStage() {
@@ -155,8 +182,10 @@ public class LoadAndMoveUtilities {
     public static boolean returnToStage() {
         if (baseStage != null) {
             setEstadoStage(true);
-            baseStage.show(); // Mostra a janela principal novamente
+//            baseStage.show(); // Mostra a janela principal novamente
+            baseStage.setOpacity(1);
         }
+        baseStage = null;
         return isEstadoStage();
     }
 }

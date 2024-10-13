@@ -37,6 +37,7 @@ import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.fornecedor.contacto.ContactoFornecedor;
 import sysfact.model.fornecedor.endereco.EnderecoFornecedor;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
 /**
@@ -152,7 +153,7 @@ public class AddFornecedorController implements Initializable {
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } 
+        }
     }
 
     public void addORupdateContacto() throws SQLException {
@@ -215,32 +216,9 @@ public class AddFornecedorController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(AddFornecedorController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        estadoBTNCliente();
-        estadoBTNContacto();
-    }
+        ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
+        ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
 
-    public void estadoBTNCliente() {
-        if (!"".equals(txtIDCliente.getText())) {
-            btnAddCliente.setText("Actualizar");
-        } else {
-            btnAddCliente.setText("Adicionar");
-        }
-    }
-
-    public void estadoBTNContacto() {
-        if (!"".equals(txtIDContacto.getText())) {
-            btnAddContacto.setText("Actualizar");
-        } else {
-            btnAddContacto.setText("Adicionar");
-        }
-    }
-
-    public void estadoBTNendereco() {
-        if (!"".equals(txtIDEndereco.getText())) {
-            btnAddEndereco.setText("Actualizar");
-        } else {
-            btnAddEndereco.setText("Adicionar");
-        }
     }
 
     /*
@@ -530,7 +508,7 @@ public class AddFornecedorController implements Initializable {
             txtContacto.setText(x.getContacto());
             txtEmail.setText(x.getEmail());
             txtSite.setText(x.getWebsite());
-            estadoBTNContacto();
+            ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
         }
     }
 
@@ -546,7 +524,7 @@ public class AddFornecedorController implements Initializable {
             combProvincia.setValue(x.getProvincia());
             txtRua.setText(x.getRua());
             combTipoEndereco.setValue(x.getTipo());
-            estadoBTNendereco();
+            ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
         }
     }
 
@@ -558,7 +536,7 @@ public class AddFornecedorController implements Initializable {
         combTipoCliente.setPromptText("Tipo de cliente");
         txtRazao.setText("");
         txtNuit.setText("");
-        estadoBTNCliente();
+        ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
         showContactos();
         showEndereco();
         restContacto();
@@ -571,7 +549,8 @@ public class AddFornecedorController implements Initializable {
         txtContacto.setText("");
         txtEmail.setText("");
         txtSite.setText("");
-        estadoBTNContacto();
+        ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
+
     }
 
     public void resetEndereco() {
@@ -584,7 +563,8 @@ public class AddFornecedorController implements Initializable {
         combProvincia.setPromptText("Provincia");
         txtRua.setText("");
         combTipoEndereco.setPromptText("Tipo de endereco");
-        estadoBTNendereco();
+        ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
+
     }
 
 }

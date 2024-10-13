@@ -37,6 +37,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import sysfact.SysFact;
@@ -49,6 +50,7 @@ import sysfact.model.unidade_medida.UnidadeMedida;
 import sysfact.model.usuario.Usuario;
 import sysfact.service.precovenda.ServicePrecoVenda;
 import sysfact.service.produto.Serviceproduto;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
 /**
@@ -131,21 +133,16 @@ public class ProdutoSearchController implements Initializable {
     private TextField txtPesquisar;
 
     public void close(ActionEvent event) {
-//        System.out.println("INICIO");
-//        System.out.println(LoadAndMoveUtilities.returnToBaseAnchor());
-//        System.out.println(LoadAndMoveUtilities.returnToStage());
         if (LoadAndMoveUtilities.returnToStage()) {
             LoadAndMoveUtilities.setEstadoStage(false);
             LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+        }
+        if (LoadAndMoveUtilities.returnToBaseAnchor()) {
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
-//        System.out.println("FIM");
-//        System.out.println(LoadAndMoveUtilities.returnToBaseAnchor());
-//        System.out.println(LoadAndMoveUtilities.returnToStage());
     }
 
     public void addORupdate() throws SQLException {
@@ -157,14 +154,6 @@ public class ProdutoSearchController implements Initializable {
         } else if (!"".equals(txtIDProduto.getText()) && !"0".equals(labIDPreco.getText())) {
             updateProduto();
             updatePrecoVenda();
-        }
-    }
-
-    public void estadoBTN() {
-        if (!"".equals(txtIDProduto.getText()) || !"".equals(labIDPreco.getText())) {
-            btnAddProduto.setText("Actualizar");
-        } else {
-            btnAddProduto.setText("Adicionar");
         }
     }
 
@@ -203,113 +192,30 @@ public class ProdutoSearchController implements Initializable {
         txtPreco.setText(currencyFormat.format(0)); // Set initial value
 
     }
-    
-    /*
-    Variavel que ira armazenar a stage antes de ser
-     ocultada
-     */
-    private static Stage baseStage;
-    private static boolean estadoStage;
-
-    /*
-    Mostra nova tela, sem ocultando a anterior e  ne bloqueando acesso a controles da tela
-    anterior
-     */
-    public static void showStage(ActionEvent event, MouseEvent evt) {
-        if (event != null) {
-            baseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            baseStage.hide(); // Esconde a janela principal
-        }
-        if (evt != null) {
-            baseStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-            baseStage.hide(); // Esconde a janela principal
-        }
-    }
-
-    public static boolean isEstadoStage() {
-        return estadoStage;
-    }
-
-    public static void setEstadoStage(boolean estadoStage) {
-        ProdutoSearchController.estadoStage = estadoStage;
-    }
-
-    public static boolean returnToStage() {
-        if (baseStage != null) {
-            setEstadoStage(true);
-            baseStage.show(); // Mostra a janela principal novamente
-        }
-        baseStage = null;
-        return isEstadoStage();
-    }
 
     public void getFamiliaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            ProdutoSearchController.showStage(null, evt);
-            LoadAndMoveUtilities.loadFXML(null, "../views/modulo_configs/categoriaView/categoriaView.fxml");
-//            try {
-//                Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_inventario/produtosView/categoriaAdd/addCategoria.fxml"));
-//                Scene scene = new Scene(parente);
-//                Stage stage = new Stage();
-//                stage.setScene(scene);
-//                stage.initStyle(StageStyle.TRANSPARENT);
-//                stage.show();
-//            } catch (IOException ex) {
-//                Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+            LoadAndMoveUtilities.showStage(null, evt);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/categoriaView/categoriaView.fxml");
         }
     }
 
     public void getStockView(ActionEvent evt) {
-        ProdutoSearchController.showStage(evt, null);
-        LoadAndMoveUtilities.loadFXML(null, "../views/modulo_inventario/stockView/addStock.fxml");
-
-//        mainStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-//        mainStage.hide(); // Esconde a janela principal
-//        try {
-//            Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_inventario/stockView/addStock.fxml"));
-//            Scene scene = new Scene(parente);
-//            Stage stage = new Stage();
-//            stage.setScene(scene);
-//            stage.initStyle(StageStyle.TRANSPARENT);
-//            stage.show();
-//        } catch (IOException ex) {
-//            Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        LoadAndMoveUtilities.showStage(evt, null);
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
     }
 
     public void getUnidadeView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            ProdutoSearchController.showStage(null, evt);
-            LoadAndMoveUtilities.loadFXML(null, "../views/modulo_configs/unidadeView/unidadeView.fxml");
-//            try {
-//                Parent parente = FXMLLoader.load(getClass().getResource("../../../"));
-//                Scene scene = new Scene(parente);
-//                Stage stage = new Stage();
-//                stage.setScene(scene);
-//                stage.initStyle(StageStyle.TRANSPARENT);
-//                stage.show();
-//            } catch (IOException ex) {
-//                Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+            LoadAndMoveUtilities.showStage(null, evt);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/unidadeView/unidadeView.fxml");
         }
     }
 
     public void getTaxaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            ProdutoSearchController.showStage(null, evt);
-            LoadAndMoveUtilities.loadFXML(null, "../views/modulo_configs/taxasView/taxaView.fxml");
-//            try {
-//                Parent parente = FXMLLoader.load(getClass().getResource("../../../modulo_configs/"));
-//                Scene scene = new Scene(parente);
-//       Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
-//            }              Stage stage = new Stage();
-//                stage.setScene(scene);
-//                stage.initStyle(StageStyle.TRANSPARENT);
-//                stage.show();
-//            } catch (IOException ex) {
-//                Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+            LoadAndMoveUtilities.showStage(null, evt);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/taxasView/taxaView.fxml");
         }
     }
 
@@ -369,7 +275,7 @@ public class ProdutoSearchController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(ProdutoSearchController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        estadoBTN();
+        ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
     }
 
     private ObservableList<Produto> listaProduto;
@@ -392,16 +298,8 @@ public class ProdutoSearchController implements Initializable {
 
         unidade.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getUnidade_medida().getSigla()));
-//        categoria.setCellValueFactory(cellData
-//                -> new SimpleStringProperty(cellData.getValue().getCategoria().getFamilia()));
-//        taxa.setCellValueFactory(cellData
-//                -> new SimpleStringProperty(cellData.getValue().getTaxa_imposto().getIdentificador()));
         preco.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrecovenda().getPreco()) + "MZN"));
-//        datainicio.setCellValueFactory(cellData
-//                -> new SimpleStringProperty(cellData.getValue().getPrecovenda().getData_inicio()));
-//        datafim.setCellValueFactory(cellData
-//                -> new SimpleStringProperty(cellData.getValue().getPrecovenda().getData_fim()));
         quantidade.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getSaldo())));
 
@@ -421,7 +319,7 @@ public class ProdutoSearchController implements Initializable {
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
                                 + "-glyph-size:28px;"
-                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                                + "-fx-fill:#000000b3;"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             Produto a = tabelaProduto.getSelectionModel().getSelectedItem();
@@ -535,7 +433,7 @@ public class ProdutoSearchController implements Initializable {
             txtdescricaoProduto.setText(p.getDescricao());
             SysFact.setData(p);
             btn_controleStock.setDisable(false);
-            estadoBTN();
+            ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         }
     }
 
@@ -613,7 +511,7 @@ public class ProdutoSearchController implements Initializable {
         txtcodigobarrasProduto.setText("");
         txtdescricaoProduto.setText("");
         btn_controleStock.setDisable(true);
-        estadoBTN();
+        ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         showProduto();
     }
 

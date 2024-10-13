@@ -4,7 +4,6 @@
  */
 package sysfact.views.modulo_venda.vendaView.searchCliente;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -16,11 +15,8 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -28,11 +24,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
 /**
@@ -79,11 +75,20 @@ public class ClienteSearchController implements Initializable {
         LoadAndMoveUtilities.setEstadoPopUP(false);
         LoadAndMoveUtilities.showAsPopUP(null, null);
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+//        if (LoadAndMoveUtilities.returnToStage()) {
+//            LoadAndMoveUtilities.setEstadoStage(false);
+//            LoadAndMoveUtilities.showStage(null, null);
+//            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+//        } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+//            LoadAndMoveUtilities.setEstadoPopUP(false);
+//            LoadAndMoveUtilities.showAsPopUP(null, null);
+//            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+//        }
     }
 
     public void getViewAddCliente(ActionEvent event) {
-        LoadAndMoveUtilities.showStage(event,null);
-        LoadAndMoveUtilities.loadFXML(null, "../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
+        LoadAndMoveUtilities.showStage(event, null);
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
     }
 
     @Override
@@ -157,7 +162,7 @@ public class ClienteSearchController implements Initializable {
         if (c != null) {
             SysFact.setData(c);
             txtIDCliente.setText(String.valueOf(c.getId()));
-            btnAdd.setText("Actualizar");
+            ButtonUtilities.buttonChangeText(btnAdd, txtIDCliente);
         }
 
     }

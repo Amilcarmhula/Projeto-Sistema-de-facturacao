@@ -43,7 +43,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="391.0" onMouseClicked="#selectedRow" prefHeight="536.0" prefWidth="1428.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
+      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="391.0" onMouseClicked="#selectedRow" prefHeight="536.0" prefWidth="1428.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
             <TableColumn fx:id="armazem" prefWidth="209.0" text="Armazem" />

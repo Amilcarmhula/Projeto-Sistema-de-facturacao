@@ -32,6 +32,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.desconto.DescontoDAO;
@@ -50,6 +51,7 @@ import sysfact.model.vendas.factura.itens.Item;
 import sysfact.model.vendas.factura.itens.TableModelItems;
 import sysfact.util.InvoiceUtilities;
 import sysfact.util.LoadAndMoveUtilities;
+import sysfact.util.report.ReportUtilities;
 
 /**
  * FXML Controller class
@@ -374,7 +376,10 @@ public class VendasController implements Initializable {
 
         fDAO.addEntity(f);
         registraItens();
+        f.criaRelatorio(f.getNumero_fac());
+        
     }
+    
 
     public void registraItens() throws SQLException {
         Item i = null;

@@ -5,12 +5,16 @@
 package sysfact.teste;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -33,12 +37,11 @@ import sysfact.util.ValidationUtilities;
  */
 public class Teste {
 
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        Double numero = 3.45000;
-//        System.out.println(Double.valueOf());
 
 //        Cliente c = new Cliente();
 //        FacturaDAO dao = new FacturaDAO();
@@ -77,10 +80,8 @@ public class Teste {
 //            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNib());
 //            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNuib());
 //            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNumero_conta());
+        System.out.println("____________________________________________________");
 
-            System.out.println("____________________________________________________");
-                       
-            
 //            System.out.println("______________________Cliente______________________");
 //            
 //

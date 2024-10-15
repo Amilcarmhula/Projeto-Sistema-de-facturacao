@@ -9,20 +9,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRDatasetParameter;
-import net.sf.jasperreports.engine.JREmptyDataSource;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.stage.Modality;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import sysfact.dao.cliente.ClienteDAO;
-import sysfact.dao.empresa.EmpresaDAO;
 import sysfact.dao.vendas.factura.FacturaDAO;
-import sysfact.model.empresa.Empresa;
 
 /**
  *
@@ -38,6 +36,49 @@ import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
 
 public class GeraFacturaV2 {
+    
+
+    public void genarateJasperReport(String jasperPath, Map<String, Object> mapParams, JRBeanCollectionDataSource dataSOURCE) {
+        try {
+//            String jasperPath = "C:\\Users\\JM-Tecnologias\\JaspersoftWorkspace\\SysFaceReports\\RelatorioFacturas.jrxml";
+            JasperReport compiledReport = JasperCompileManager.compileReport(jasperPath);
+
+            // Preencher o relatório
+            JasperPrint printableReport = JasperFillManager.fillReport(compiledReport, mapParams, dataSOURCE);
+            /*
+            Configura escolha decisao de escolha de visualizacao e impressao ou salvar documento
+             */
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Opcoes de relatorio.");
+            dialog.setContentText("Deseja salvar ou visualizar a Factura?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            // Configurando o botão View/Save
+            ButtonType btnVisualizar = new ButtonType("Visualizar", ButtonType.OK.getButtonData());
+            ButtonType btnClose = new ButtonType("Close", ButtonType.CANCEL.getButtonData());
+            ButtonType btnSaveView = new ButtonType("Salvar&Visualizar", ButtonType.YES.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnVisualizar, btnSaveView, btnClose);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnVisualizar) {
+                // Apenas exibir o relatório
+                JasperViewer viewer = new JasperViewer(printableReport, false);
+                viewer.setTitle("Factura");
+                viewer.setVisible(true);
+            } else if (result.get() == btnSaveView) {
+                //Salva o relatório
+                JasperExportManager.exportReportToPdfFile(printableReport, "C:\\JM-InvSM\\Modelo.pdf");
+                // Exibir o relatório
+                JasperViewer viewer = new JasperViewer(printableReport, false);
+                viewer.setTitle("Factura");
+                viewer.setVisible(true);
+            } else if (result.get() == btnClose) {
+                System.out.println("Aqui nao salva nem visualiza; esta associado ao botao close da tela!");
+            }
+        } catch (JRException ex) {
+            Logger.getLogger(GeraFacturaV2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public static void main(String[] args) throws SQLException {
         try {

@@ -4,12 +4,20 @@
  */
 package sysfact.model.vendas.factura;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import sysfact.dao.vendas.factura.FacturaDAO;
+import sysfact.dao.vendas.itens.ItemDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.empresa.Empresa;
 import sysfact.model.usuario.Usuario;
 import sysfact.model.vendas.documetos.DocumentosComerciais;
 import sysfact.model.vendas.factura.itens.Item;
+import sysfact.util.report.ReportUtilities;
 
 /**
  *
@@ -31,7 +39,7 @@ public class Factura {
         super();
     }
 
-    public Factura(String numero, String data_vencimento,Item itens,
+    public Factura(String numero, String data_vencimento, Item itens,
             boolean estado, Empresa empresa, Cliente cliente, DocumentosComerciais docComerciais) {
         super();
         this.numero_fac = numero;
@@ -41,6 +49,29 @@ public class Factura {
         this.empresa = empresa;
         this.cliente = cliente;
         this.docComerciais = docComerciais;
+    }
+
+    public void criaRelatorio(String numeroFactura) throws SQLException {
+//        String numeroFactura = "2024-1010/2"; // Número da fatura
+
+        List<Factura> detalhesFactura = new ArrayList<Factura>();
+        Factura detalhes = new FacturaDAO().getFacturaData(numeroFactura);
+        detalhesFactura.add(detalhes);
+        JRBeanCollectionDataSource facturaDetalhesDATASOURCE = new JRBeanCollectionDataSource(detalhesFactura);
+
+        ItemDAO x = new ItemDAO();
+        List<Item> detalhesItens = x.getItensData(numeroFactura);
+
+        // Configurar o DataSource para os itens
+        JRBeanCollectionDataSource itemDataSource = new JRBeanCollectionDataSource(detalhesItens);
+
+        // Passar parâmetros para o relatório
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        parametros.put("TABLE_DATA_SOURCE", itemDataSource); 
+        parametros.put("NOMEFACTURA", numeroFactura);
+        String path = "C:\\Users\\JM-Tecnologias\\Documents\\NetBeansProjects\\Projeto Sistema de facturacao\\SysFaceReports\\RelatorioFacturas.jrxml";
+        
+        ReportUtilities.genarateJasperReport(path, parametros, facturaDetalhesDATASOURCE);
     }
 
     public String getNumero_fac() {
@@ -289,24 +320,26 @@ public class Factura {
         }
         return null;
     }
+
     public String getNib() {
         if (empresa != null) {
             return empresa.getContaBancaria().getNib();//
         }
         return null;
     }
+
     public String getNuib() {
         if (empresa != null) {
             return empresa.getContaBancaria().getNuib();//
         }
         return null;
     }
+
     public String getNumero_conta() {
         if (empresa != null) {
             return empresa.getContaBancaria().getNumero_conta();//
         }
         return null;
     }
-    
 
 }

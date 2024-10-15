@@ -18,8 +18,8 @@ public class Armazem {
 
     private int id;
     private String tipo;
-    private String nome;
-    private String descricao;
+    private String nome_arm;
+    private String descricao_arm;
     private boolean estado;
     private String data_criacao;
     private List<ContactoArmazem> contactoArmazem;
@@ -31,8 +31,8 @@ public class Armazem {
 
     public Armazem(String tipo, String nome, String descricao, List<ContactoArmazem> contactoArmazem, List<EnderecoArmazem> enderecoArmazem) {
         this.tipo = tipo;
-        this.nome = nome;
-        this.descricao = descricao;
+        this.nome_arm = nome;
+        this.descricao_arm = descricao;
         this.contactoArmazem = contactoArmazem;
         this.enderecoArmazem = enderecoArmazem;
     }
@@ -53,20 +53,20 @@ public class Armazem {
         this.tipo = tipo;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNome_arm() {
+        return nome_arm;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNome_arm(String nome_arm) {
+        this.nome_arm = nome_arm;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescricao_arm() {
+        return descricao_arm;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescricao_arm(String descricao_arm) {
+        this.descricao_arm = descricao_arm;
     }
 
     public boolean isEstado() {
@@ -89,7 +89,7 @@ public class Armazem {
         String contacto = "";
         if(contactoArmazem != null){
             for (ContactoArmazem c : contactoArmazem) {
-                contacto += c.getContacto() + ";   ";
+                contacto += c.getContacto_arm() + ";   ";
             }
         }
         return contacto;

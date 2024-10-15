@@ -11,17 +11,18 @@ package sysfact.model.desconto;
  */
 public class Desconto {
     private int id;
-    private String nome;
-    private double percentagem;
+    private String nomeDesconto;
+    private double percentagemDesconto;
     private String descricao;
     private String data_criacao;
     
-    public Desconto(){}
+    public Desconto(){super();}
 
     public Desconto(int id, String nome, double percentagem, String descricao, String data_criacao) {
+        super();
         this.id = id;
-        this.nome = nome;
-        this.percentagem = percentagem;
+        this.nomeDesconto = nome;
+        this.percentagemDesconto = percentagem;
         this.descricao = descricao;
         this.data_criacao = data_criacao;
     }
@@ -34,20 +35,20 @@ public class Desconto {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeDesconto() {
+        return nomeDesconto;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeDesconto(String nomeDesconto) {
+        this.nomeDesconto = nomeDesconto;
     }
 
-    public double getPercentagem() {
-        return percentagem;
+    public double getPercentagemDesconto() {
+        return percentagemDesconto;
     }
 
-    public void setPercentagem(double percentagem) {
-        this.percentagem = percentagem;
+    public void setPercentagemDesconto(double percentagemDesconto) {
+        this.percentagemDesconto = percentagemDesconto;
     }
 
     public String getDescricao() {

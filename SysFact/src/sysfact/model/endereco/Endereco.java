@@ -32,35 +32,35 @@ public class Endereco {
         this.tipo = tipo;
     }
 
-    public String getProvincia() {
+    public String getProvincia_emp() {
         return provincia;
     }
 
-    public void setProvincia(String provincia) {
+    public void setProvincia_emp(String provincia) {
         this.provincia = provincia;
     }
 
-    public String getCidade() {
+    public String getCidade_emp() {
         return cidade;
     }
 
-    public void setCidade(String cidade) {
+    public void setCidade_emp(String cidade) {
         this.cidade = cidade;
     }
 
-    public String getBairro() {
+    public String getBairro_emp() {
         return bairro;
     }
 
-    public void setBairro(String bairro) {
+    public void setBairro_emp(String bairro) {
         this.bairro = bairro;
     }
 
-    public String getAvenida() {
+    public String getAvenida_emp() {
         return avenida;
     }
 
-    public void setAvenida(String avenida) {
+    public void setAvenida_emp(String avenida) {
         this.avenida = avenida;
     }
 

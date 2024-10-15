@@ -4,7 +4,6 @@
  */
 package sysfact.model.fornecedor.endereco;
 
-import sysfact.model.endereco.Endereco;
 import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.usuario.Usuario;
 
@@ -13,20 +12,34 @@ import sysfact.model.usuario.Usuario;
  *
  * @author JM-Tecnologias
  */
-public class EnderecoFornecedor extends Endereco {
+public class EnderecoFornecedor{
 
-    private int id;
+    private int id; 
     private String data_criacao;
     private Fornecedor fornecedor;
     private Usuario usuario;
+    private String provincia_forn;
+    private String cidade_forn;
+    private String bairro_forn;
+    private String avenida_forn;
+    private String rua_forn;
+    private int codigoPostal_forn;
+    private int numero_forn;
+    private String tipo_forn;
 
     public EnderecoFornecedor() {
     }
 
-    public EnderecoFornecedor(Fornecedor fornecedor, Usuario usuario, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
-        super(provincia, cidade, bairro, avenida, rua, codigoPostal, numero, tipo);
+    public EnderecoFornecedor(Fornecedor fornecedor, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
         this.fornecedor = fornecedor;
-        this.usuario = usuario;
+        this.provincia_forn = provincia;
+        this.cidade_forn = cidade;
+        this.bairro_forn = bairro;
+        this.avenida_forn = avenida;
+        this.rua_forn = rua;
+        this.codigoPostal_forn = codigoPostal;
+        this.numero_forn = numero;
+        this.tipo_forn = tipo;
     }
 
     public int getId() {
@@ -60,5 +73,71 @@ public class EnderecoFornecedor extends Endereco {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    public String getProvincia_forn() {
+        return provincia_forn;
+    }
+
+    public void setProvincia_forn(String provincia_forn) {
+        this.provincia_forn = provincia_forn;
+    }
+
+    public String getCidade_forn() {
+        return cidade_forn;
+    }
+
+    public void setCidade_forn(String cidade_forn) {
+        this.cidade_forn = cidade_forn;
+    }
+
+    public String getBairro_forn() {
+        return bairro_forn;
+    }
+
+    public void setBairro_forn(String bairro_forn) {
+        this.bairro_forn = bairro_forn;
+    }
+
+    public String getAvenida_forn() {
+        return avenida_forn;
+    }
+
+    public void setAvenida_forn(String avenida_forn) {
+        this.avenida_forn = avenida_forn;
+    }
+
+    public String getRua_forn() {
+        return rua_forn;
+    }
+
+    public void setRua_forn(String rua_forn) {
+        this.rua_forn = rua_forn;
+    }
+
+    public int getCodigoPostal_forn() {
+        return codigoPostal_forn;
+    }
+
+    public void setCodigoPostal_forn(int codigoPostal_forn) {
+        this.codigoPostal_forn = codigoPostal_forn;
+    }
+
+    public int getNumero_forn() {
+        return numero_forn;
+    }
+
+    public void setNumero_forn(int numero_forn) {
+        this.numero_forn = numero_forn;
+    }
+
+    public String getTipo_forn() {
+        return tipo_forn;
+    }
+
+    public void setTipo_forn(String tipo_forn) {
+        this.tipo_forn = tipo_forn;
+    }
+
+   
     
 }

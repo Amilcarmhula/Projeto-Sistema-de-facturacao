@@ -5,7 +5,6 @@
 package sysfact.model.armazem.endereco;
 
 import sysfact.model.armazem.Armazem;
-import sysfact.model.endereco.Endereco;
 import sysfact.model.usuario.Usuario;
 
 
@@ -13,20 +12,34 @@ import sysfact.model.usuario.Usuario;
  *
  * @author JM-Tecnologias
  */
-public class EnderecoArmazem extends Endereco {
+public class EnderecoArmazem{
 
     private int id;
     private String data_criacao;
     private Armazem armazem;
     private Usuario usuario;
+    private String provincia_arm;
+    private String cidade_arm;
+    private String bairro_arm;
+    private String avenida_arm;
+    private String rua_arm;
+    private int codigoPostal_arm;
+    private int numero_arm;
+    private String tipo_arm;
 
     public EnderecoArmazem() {
     }
 
-    public EnderecoArmazem(Armazem fornecedor, Usuario usuario, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
-        super(provincia, cidade, bairro, avenida, rua, codigoPostal, numero, tipo);
-        this.armazem = fornecedor;
-        this.usuario = usuario;
+    public EnderecoArmazem(Armazem armazem, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
+        this.armazem = armazem;
+        this.provincia_arm = provincia;
+        this.cidade_arm = cidade;
+        this.bairro_arm = bairro;
+        this.avenida_arm = avenida;
+        this.rua_arm = rua;
+        this.codigoPostal_arm = codigoPostal;
+        this.numero_arm = numero;
+        this.tipo_arm = tipo;
     }
 
     public int getId() {
@@ -60,5 +73,70 @@ public class EnderecoArmazem extends Endereco {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    public String getProvincia_arm() {
+        return provincia_arm;
+    }
+
+    public void setProvincia_arm(String provincia_arm) {
+        this.provincia_arm = provincia_arm;
+    }
+
+    public String getCidade_arm() {
+        return cidade_arm;
+    }
+
+    public void setCidade_arm(String cidade_arm) {
+        this.cidade_arm = cidade_arm;
+    }
+
+    public String getBairro_arm() {
+        return bairro_arm;
+    }
+
+    public void setBairro_arm(String bairro_arm) {
+        this.bairro_arm = bairro_arm;
+    }
+
+    public String getAvenida_arm() {
+        return avenida_arm;
+    }
+
+    public void setAvenida_arm(String avenida_arm) {
+        this.avenida_arm = avenida_arm;
+    }
+
+    public String getRua_arm() {
+        return rua_arm;
+    }
+
+    public void setRua_arm(String rua_arm) {
+        this.rua_arm = rua_arm;
+    }
+
+    public int getCodigoPostal_arm() {
+        return codigoPostal_arm;
+    }
+
+    public void setCodigoPostal_arm(int codigoPostal_arm) {
+        this.codigoPostal_arm = codigoPostal_arm;
+    }
+
+    public int getNumero_arm() {
+        return numero_arm;
+    }
+
+    public void setNumero_arm(int numero_arm) {
+        this.numero_arm = numero_arm;
+    }
+
+    public String getTipo_arm() {
+        return tipo_arm;
+    }
+
+    public void setTipo_arm(String tipo_arm) {
+        this.tipo_arm = tipo_arm;
+    }
+
     
 }

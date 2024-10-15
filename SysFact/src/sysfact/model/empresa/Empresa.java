@@ -16,9 +16,9 @@ import sysfact.model.empresa.endereco.EnderecoEmpresa;
 public class Empresa {
 
     private int id;
-    private String nome;
-    private String apelido;
-    private int nuit;
+    private String nome_emp;
+    private String razao_emp;
+    private int nuit_emp;
     private ContactoEmpresa contactoEmpresa;
     private List<ContactoEmpresa> contactosEmpresa;
     private EnderecoEmpresa enderecoEmpresa;
@@ -29,9 +29,9 @@ public class Empresa {
     }
 
     public Empresa(String nome, String apelido, int nuit, ContactoEmpresa contactoEmpresa, EnderecoEmpresa enderecoEmpresa, ContaBancaria contaBancaria) {
-        this.nome = nome;
-        this.apelido = apelido;
-        this.nuit = nuit;
+        this.nome_emp = nome;
+        this.razao_emp = apelido;
+        this.nuit_emp = nuit;
         this.contactoEmpresa = contactoEmpresa;
         this.enderecoEmpresa = enderecoEmpresa;
         this.contaBancaria = contaBancaria;
@@ -45,28 +45,28 @@ public class Empresa {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNome_emp() {
+        return nome_emp;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNome_emp(String nome_emp) {
+        this.nome_emp = nome_emp;
     }
 
-    public String getApelido() {
-        return apelido;
+    public String getRazao_emp() {
+        return razao_emp;
     }
 
-    public void setApelido(String apelido) {
-        this.apelido = apelido;
+    public void setRazao_emp(String razao_emp) {
+        this.razao_emp = razao_emp;
     }
 
-    public int getNuit() {
-        return nuit;
+    public int getNuit_emp() {
+        return nuit_emp;
     }
 
-    public void setNuit(int nuit) {
-        this.nuit = nuit;
+    public void setNuit_emp(int nuit_emp) {
+        this.nuit_emp = nuit_emp;
     }
 
     public ContactoEmpresa getContactoEmpresa() {
@@ -89,7 +89,7 @@ public class Empresa {
         String contacto = "";
         if (contactoEmpresa != null) {
             for (ContactoEmpresa c : contactosEmpresa) {
-                contacto += c.getContacto() + "; ";
+                contacto += c.getContacto_emp() + "; ";
             }
         }
         return contacto;
@@ -106,10 +106,10 @@ public class Empresa {
     public String printEnderecos() {
         String endereco = "";
         if (enderecoEmpresa != null) {
-            endereco = enderecoEmpresa.getAvenida() + ", " + enderecoEmpresa.getRua()
-                    + ", " + enderecoEmpresa.getNumero() + "; " + enderecoEmpresa.getBairro()
-                    + ", " + enderecoEmpresa.getCidade() + ", " + enderecoEmpresa.getProvincia()
-                    + "-" + enderecoEmpresa.getCodigoPostal();
+            endereco = enderecoEmpresa.getAvenida_emp() + ", " + enderecoEmpresa.getRua_emp()
+                    + ", " + enderecoEmpresa.getNumero_emp() + "; " + enderecoEmpresa.getBairro_emp()
+                    + ", " + enderecoEmpresa.getCidade_emp() + ", " + enderecoEmpresa.getProvincia_emp()
+                    + "-" + enderecoEmpresa.getCodigoPostal_emp();
         }
         return endereco;
     }

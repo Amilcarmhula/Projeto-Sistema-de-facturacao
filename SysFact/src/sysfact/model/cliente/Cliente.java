@@ -19,9 +19,9 @@ public class Cliente {
 
     private int id;
     private String tipo;
-    private String nome;
-    private String apelido;
-    private int nuit;
+    private String nome_cli;
+    private String razao_cli;
+    private int nuit_cli;
     private String data_criacao;
     private List<ContactoCliente> contactosCliente;
     private List<EnderecoCliente> enderecosCliente;
@@ -37,9 +37,9 @@ public class Cliente {
     public Cliente(String tipo, String nome, String apelido, int nuit, List<ContactoCliente> contactosCliente, List<EnderecoCliente> enderecosCliente, Usuario usuario) {
         super();
         this.tipo = tipo;
-        this.nome = nome;
-        this.apelido = apelido;
-        this.nuit = nuit;
+        this.nome_cli = nome;
+        this.razao_cli = apelido;
+        this.nuit_cli = nuit;
         this.contactosCliente = contactosCliente;
         this.enderecosCliente = enderecosCliente;
         this.usuario = usuario;
@@ -63,28 +63,28 @@ public class Cliente {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNome_cli() {
+        return nome_cli;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNome_cli(String nome_cli) {
+        this.nome_cli = nome_cli;
     }
 
-    public String getApelido() {
-        return apelido;
+    public String getRazao_cli() {
+        return razao_cli;
     }
 
-    public void setApelido(String apelido) {
-        this.apelido = apelido;
+    public void setRazao_cli(String razao_cli) {
+        this.razao_cli = razao_cli;
     }
 
-    public int getNuit() {
-        return nuit;
+    public int getNuit_cli() {
+        return nuit_cli;
     }
 
-    public void setNuit(int nuit) {
-        this.nuit = nuit;
+    public void setNuit_cli(int nuit_cli) {
+        this.nuit_cli = nuit_cli;
     }
 
     public String getData_criacao() {
@@ -133,7 +133,7 @@ public class Cliente {
         String contacto = "";
         if(contactosCliente != null){
             for (ContactoCliente c : contactosCliente) {
-                contacto += c.getContacto() + "; ";
+                contacto += c.getContacto_cli() + "; ";
             }
         }
         return contacto;
@@ -142,10 +142,10 @@ public class Cliente {
     public String printEnderecos(){
         String endereco = "";
         if(enderecoCliente != null){
-            endereco = enderecoCliente.getAvenida()+", "+enderecoCliente.getRua()+
-                    ", "+enderecoCliente.getNumero()+"; "+enderecoCliente.getBairro()
-                    +", "+enderecoCliente.getCidade()+", "+enderecoCliente.getProvincia()
-                    +"-"+enderecoCliente.getCodigoPostal();
+            endereco = enderecoCliente.getAvenida_cli()+", "+enderecoCliente.getRua_cli()+
+                    ", "+enderecoCliente.getNumero_cli()+"; "+enderecoCliente.getBairro_cli()
+                    +", "+enderecoCliente.getCidade_cli()+", "+enderecoCliente.getProvincia_cli()
+                    +"-"+enderecoCliente.getCodigoPostal_cli();
         }
         return endereco;
     }

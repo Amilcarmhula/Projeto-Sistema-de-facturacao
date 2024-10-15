@@ -1,9 +1,8 @@
--- drop database _sysface;
--- create database _sysface;
+drop database _sysface;
+create database _sysface;
 
 
 use _sysface;
-desc contabancaria;
 
 create table nivel_acesso(
 	id integer primary key auto_increment,
@@ -63,7 +62,7 @@ VALUES
 	id integer primary key auto_increment,
     tipo varchar(50) not null, --  (Pessoa Física/Jurídica)
     nome varchar(100) not null,
-    apelido varchar(50), -- Razao social
+    razaosocial varchar(100), -- Razao social
     nuit integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -357,7 +356,7 @@ DELIMITER ;
  create table empresa(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
-    apelido varchar(30),
+    razaosocial varchar(100),
     nuit integer,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -15,7 +15,7 @@
 
 <AnchorPane prefHeight="608.0" prefWidth="788.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_inventario.armazemView.armazemAdd.AddArmazemController">
    <children>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Cadastro de Armazens" textFill="WHITE" AnchorPane.topAnchor="10.0">
                <font>
@@ -94,15 +94,6 @@
                               <String fx:value="shadow-efect" />
                            </styleClass>
                         </Button>
-                        <TextField fx:id="txtSite" layoutX="14.0" layoutY="51.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="287.0" promptText="website" stylesheets="@../../../../style/dashboard.css">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
                      </children>
                   </AnchorPane>
                </content>
@@ -205,7 +196,7 @@
             </Tab>
          </tabs>
       </TabPane>
-      <AnchorPane prefHeight="110.0" prefWidth="1003.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <AnchorPane prefHeight="110.0" prefWidth="1003.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
             <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="96.0" layoutY="15.0" prefHeight="25.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css">
                <font>

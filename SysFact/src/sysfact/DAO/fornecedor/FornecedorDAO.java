@@ -37,9 +37,9 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
         try {
             sql = "insert into fornecedor (tipo,razaosocial,nuit,fk_id_usuario) value (?,?,?,?)";
             ps = con.prepareStatement(sql);
-            ps.setString(1, c.getTipo());
-            ps.setString(2, c.getRazaosocial());
-            ps.setInt(3, c.getNuit());
+            ps.setString(1, c.getTipo_forn());
+            ps.setString(2, c.getRazaosocial_forn());
+            ps.setInt(3, c.getNuit_forn());
             ps.setInt(4, c.getUsuario().getId());
 
             ps.execute();
@@ -56,9 +56,9 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
                     + " where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, c.getTipo());
-            ps.setString(2, c.getRazaosocial());
-            ps.setInt(3, c.getNuit());
+            ps.setString(1, c.getTipo_forn());
+            ps.setString(2, c.getRazaosocial_forn());
+            ps.setInt(3, c.getNuit_forn());
             ps.setInt(4, c.getUsuario().getId());
             ps.setInt(5, id);
 
@@ -84,15 +84,15 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
             while (result.next()) {
                 Fornecedor c = new Fornecedor();
                 c.setId(result.getInt("id"));
-                c.setTipo(result.getString("tipo"));
-                c.setRazaosocial(result.getString("razaosocial"));
-                c.setNuit(result.getInt("nuit"));
+                c.setTipo_forn(result.getString("tipo"));
+                c.setRazaosocial_forn(result.getString("razaosocial"));
+                c.setNuit_forn(result.getInt("nuit"));
                 List<ContactoFornecedor> listaContactos = new ArrayList<>();
                 String contactos = result.getString("contatos");
                 if (contactos != null && !contactos.trim().isEmpty()) {
                     for (String split : contactos.split(" ")) {
                         ContactoFornecedor cc = new ContactoFornecedor();
-                        cc.setContacto(split);
+                        cc.setContacto_forn(split);
                         listaContactos.add(cc);
                     }
                 }
@@ -108,7 +108,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
         }
         return lista;
     }
-    
+
     @Override
     public Fornecedor getLastEntity() {
         Fornecedor c = null;
@@ -119,9 +119,9 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
             while (result.next()) {
                 c = new Fornecedor();
                 c.setId(result.getInt("id"));
-                c.setTipo(result.getString("tipo"));
-                c.setRazaosocial(result.getString("razaosocial"));
-                c.setNuit(result.getInt("nuit"));
+                c.setTipo_forn(result.getString("tipo"));
+                c.setRazaosocial_forn(result.getString("razaosocial"));
+                c.setNuit_forn(result.getInt("nuit"));
             }
             result.close();
             ps.close();
@@ -131,7 +131,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
         }
         return c;
     }
-    
+
     @Override
     public Fornecedor getEntityByID(int id) {
         Fornecedor c = null;
@@ -143,9 +143,9 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
             while (result.next()) {
                 c = new Fornecedor();
                 c.setId(result.getInt("id"));
-                c.setTipo(result.getString("tipo"));
-                c.setRazaosocial(result.getString("razaosocial"));
-                c.setNuit(result.getInt("nuit"));
+                c.setTipo_forn(result.getString("tipo"));
+                c.setRazaosocial_forn(result.getString("razaosocial"));
+                c.setNuit_forn(result.getInt("nuit"));
             }
             result.close();
             ps.close();
@@ -155,7 +155,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
         }
         return c;
     }
-    
+
     @Override
     public void deleteEntity(int x) {
         try {
@@ -171,12 +171,6 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
         }
     }
 
-    
-    
-    
-    
-    
-    
     @Override
     public ObservableList<Fornecedor> listAllEntitiesTypeFornecedor() {
         ObservableList<Fornecedor> lista = FXCollections.observableArrayList();
@@ -187,9 +181,9 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
             while (result.next()) {
                 Fornecedor c = new Fornecedor();
                 c.setId(result.getInt("id"));
-                c.setTipo(result.getString("tipo"));
-                c.setRazaosocial(result.getString("razaosocial"));
-                c.setNuit(result.getInt("nuit"));
+                c.setTipo_forn(result.getString("tipo"));
+                c.setRazaosocial_forn(result.getString("razaosocial"));
+                c.setNuit_forn(result.getInt("nuit"));
                 Usuario u = new Usuario();
                 u.setId(result.getInt("fk_id_usuario"));
                 c.setUsuario(u);
@@ -203,6 +197,4 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
         return lista;
     }
 
-   
-    
 }

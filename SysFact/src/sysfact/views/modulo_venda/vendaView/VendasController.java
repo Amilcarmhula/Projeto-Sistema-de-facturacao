@@ -181,14 +181,14 @@ public class VendasController implements Initializable {
     private ComboBox<String> combTipoDoc;
 
     public void getSearchCliente(MouseEvent mouseEvt) {
-        if (mouseEvt.getClickCount() == 2) {
+        if (mouseEvt.getClickCount() == 1) {
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
         }
     }
 
     public void getSearchProduto(MouseEvent mouseEvt) {
-        if (mouseEvt.getClickCount() == 2) {
+        if (mouseEvt.getClickCount() == 1) {
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
 
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_venda/vendaView/searchProduto/produtoSearch.fxml");
@@ -202,10 +202,10 @@ public class VendasController implements Initializable {
             if (x != null) {
                 txtIDCliente.setText(x.getId() + "");
                 txtEnderecoCliente.setText(x.printEnderecos());
-                txtNomeCLiente.setText(x.getApelido());
-                txtNuitCLiente.setText(x.getNuit() + "");
+                txtNomeCLiente.setText(x.getRazao_cli());
+                txtNuitCLiente.setText(x.getNuit_cli() + "");
                 txtContactoCLiente.setText(x.printContatos());
-                txtEmailCLiente.setText(x.getContactoCliente().getEmail());
+                txtEmailCLiente.setText(x.getContactoCliente().getEmail_cli());
             }
 
         }
@@ -232,10 +232,10 @@ public class VendasController implements Initializable {
                             if (x != null) {
                                 txtIDCliente.setText(x.getId() + "");
                                 txtEnderecoCliente.setText(x.printEnderecos());
-                                txtNomeCLiente.setText(x.getApelido());
-                                txtNuitCLiente.setText(x.getNuit() + "");
+                                txtNomeCLiente.setText(x.getRazao_cli());
+                                txtNuitCLiente.setText(x.getNuit_cli() + "");
                                 txtContactoCLiente.setText(x.printContatos());
-                                txtEmailCLiente.setText(x.getContactoCliente().getEmail());
+                                txtEmailCLiente.setText(x.getContactoCliente().getEmail_cli());
                             }
                         } catch (SQLException ex) {
                             Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
@@ -257,7 +257,7 @@ public class VendasController implements Initializable {
                                 txtID.setText(String.valueOf(x.getId()));
                                 txtStock.setText(String.valueOf(x.getStock().getSaldo()));
                                 txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
-                                txtNome.setText(x.getNome());
+                                txtNome.setText(x.getNomeProduto());
                                 txtDescricao.setText(x.getDescricao());
                             }
                         } catch (SQLException ex) {
@@ -304,8 +304,8 @@ public class VendasController implements Initializable {
         mapaDocComercial = new HashMap<>();
         List<String> lista = new ArrayList<>();
         for (DocumentosComerciais doc : listaDocComercial) {
-            mapaDocComercial.put(doc.getNome(), doc);
-            lista.add(doc.getNome());
+            mapaDocComercial.put(doc.getNome_doc(), doc);
+            lista.add(doc.getNome_doc());
         }
         combTipoDoc.setItems(FXCollections.observableArrayList(lista));
     }
@@ -319,8 +319,8 @@ public class VendasController implements Initializable {
         listaDescontos = xDAO.listAllEntities();
         List<String> lista = new ArrayList<>();
         for (Desconto d : listaDescontos) {
-            mapaDesconto.put(d.getNome(), d);
-            lista.add(d.getNome());
+            mapaDesconto.put(d.getNomeDesconto(), d);
+            lista.add(d.getNomeDesconto());
         }
         combDesconto.setItems(FXCollections.observableArrayList(lista));
     }
@@ -344,13 +344,13 @@ public class VendasController implements Initializable {
         Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());
         TableModelItems data = new TableModelItems();
         data.setId(x.getId());
-        data.setNome(x.getNome());
+        data.setNome(x.getNomeProduto());
         data.setPreco(x.getPrecovenda().getPreco());
         data.setSigla(x.getUnidade_medida().getSigla());
-        data.setDesconto(desconto.getNome());
+        data.setDesconto(desconto.getNomeDesconto());
         data.setQtd(qtd);
-        data.setTaxa(x.getTaxa_imposto().getIdentificador());
-        double subtotal = qtd * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem()) * (1 - desconto.getPercentagem());
+        data.setTaxa(x.getTaxa_imposto().getNomeImposto());
+        double subtotal = qtd * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto()) * (1 - desconto.getPercentagemDesconto());
         data.setSubtotal(subtotal);
 
         tabelaItens.getItems().add(data);
@@ -360,7 +360,7 @@ public class VendasController implements Initializable {
 
     public void criarFactura() throws SQLException {
         Factura f = new Factura();
-        f.setNumero(labNumeroFactura.getText());
+        f.setNumero_fac(labNumeroFactura.getText());
         f.setData_vencimento(labValidade.getText());
         f.setData_criacao(labDataInicial.getText());
         f.setEmpresa(empresaData);
@@ -391,7 +391,7 @@ public class VendasController implements Initializable {
             i.setArmazem(p.getArmazem());
             i.setUsuario(userData);
             Factura f = new Factura();
-            f.setNumero(labNumeroFactura.getText());
+            f.setNumero_fac(labNumeroFactura.getText());
             i.setFactura(f);
             listaItems.add(i);
         }
@@ -408,9 +408,9 @@ public class VendasController implements Initializable {
         for (TableModelItems item : itens) {
             Produto x = mapaProdutos.get(item.getId());
             subtotal += item.getQtd() * x.getPrecovenda().getPreco();
-            taxa += item.getQtd() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem();
+            taxa += item.getQtd() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
             Desconto desconto = mapaDesconto.get(item.getDesconto());
-            desc += (item.getQtd() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagem())) * desconto.getPercentagem();
+            desc += (item.getQtd() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto())) * desconto.getPercentagemDesconto();
             total += item.getSubtotal();
         }
         labSubtotal.setText(String.format("%.2f", subtotal) + " MZN");

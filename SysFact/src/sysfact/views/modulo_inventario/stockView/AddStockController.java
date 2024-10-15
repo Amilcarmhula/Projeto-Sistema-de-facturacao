@@ -173,8 +173,8 @@ public class AddStockController implements Initializable {
         listaFornecedoress = aDAO.listAllEntities();
 
         IDtabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("id"));
-        razaotabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("razaosocial"));
-        nuittabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("nuit"));
+        razaotabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("razaosocial_forn"));
+        nuittabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("nuit_forn"));
         contactotabelaFornecedor.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
 
@@ -186,9 +186,9 @@ public class AddStockController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getRazaosocial().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getRazaosocial_forn().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (String.valueOf(x.getNuit()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (String.valueOf(x.getNuit_forn()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else {
                     return false;
@@ -218,8 +218,8 @@ public class AddStockController implements Initializable {
 
         IDtabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        nometabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        descricaotabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+        nometabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("nome_arm"));
+        descricaotabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("descricao_arm"));
         estadotabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
 
@@ -231,9 +231,9 @@ public class AddStockController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNome_arm().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (x.getDescricao_arm().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else if (x.getTipo().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;

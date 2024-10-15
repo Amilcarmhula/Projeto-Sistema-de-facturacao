@@ -11,5 +11,6 @@ package sysfact.dao.vendas.factura;
 public interface FacturaDAOImpl<T> {
     
     void addEntity(T x);
+    T getFacturaData(String factura);
     
 }

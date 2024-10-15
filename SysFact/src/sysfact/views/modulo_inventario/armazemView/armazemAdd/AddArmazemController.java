@@ -78,8 +78,6 @@ public class AddArmazemController implements Initializable {
     private TableColumn<ContactoArmazem, String> emailtabelaContacto;
     @FXML
     private TableColumn<ContactoArmazem, String> btntabelaContacto;
-    @FXML
-    private TableColumn<ContactoArmazem, String> websitetabelaContacto;
 
     @FXML
     private TableView<EnderecoArmazem> tabelaEndereco;
@@ -239,8 +237,8 @@ public class AddArmazemController implements Initializable {
         Armazem c = xDAO.getLastEntity();
         txtIDCliente.setText(String.valueOf(c.getId()));
         combTipoCliente.setValue(c.getTipo());
-        txtNome.setText(c.getNome());
-        txtDescricao.setText(c.getDescricao());
+        txtNome.setText(c.getNome_arm());
+        txtDescricao.setText(c.getDescricao_arm());
         showContactos();
     }
 
@@ -249,8 +247,8 @@ public class AddArmazemController implements Initializable {
         if (!"".equals(txtIDCliente.getText())) {
             Armazem c = xDAO.getEntityByID(Integer.parseInt(txtIDCliente.getText()));
             combTipoCliente.setValue(c.getTipo());
-            txtNome.setText(c.getNome());
-            txtDescricao.setText(c.getDescricao());
+            txtNome.setText(c.getNome_arm());
+            txtDescricao.setText(c.getDescricao_arm());
             showContactos();
         }
 
@@ -272,14 +270,14 @@ public class AddArmazemController implements Initializable {
         }
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        provinciatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("provincia"));
-        cidadetabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("cidade"));
-        bairrotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("bairro"));
-        avenidatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("avenida"));
-        ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua"));
-        codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal"));
-        numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero"));
+        tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo_arm"));
+        provinciatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("provincia_arm"));
+        cidadetabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("cidade_arm"));
+        bairrotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("bairro_arm"));
+        avenidatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("avenida_arm"));
+        ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua_arm"));
+        codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal_arm"));
+        numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero_arm"));
         //add cell of button edit 
         Callback<TableColumn<EnderecoArmazem, String>, TableCell<EnderecoArmazem, String>> cellFoctory = (TableColumn<EnderecoArmazem, String> param) -> {
             // make cell containing buttons
@@ -337,10 +335,9 @@ public class AddArmazemController implements Initializable {
         }
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
-        contactotabelaContacto.setCellValueFactory(new PropertyValueFactory<>("contacto"));
-        emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email"));
-        responsaveltabelaContacto.setCellValueFactory(new PropertyValueFactory<>("responsavel"));
-        websitetabelaContacto.setCellValueFactory(new PropertyValueFactory<>("website"));
+        contactotabelaContacto.setCellValueFactory(new PropertyValueFactory<>("contacto_arm"));
+        emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email_arm"));
+        responsaveltabelaContacto.setCellValueFactory(new PropertyValueFactory<>("responsavel_arm"));
 
         //add cell of button edit 
         Callback<TableColumn<ContactoArmazem, String>, TableCell<ContactoArmazem, String>> cellFoctory = (TableColumn<ContactoArmazem, String> param) -> {
@@ -358,7 +355,7 @@ public class AddArmazemController implements Initializable {
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
                                 + "-glyph-size:28px;"
-                                + "-fx-fill:linear-gradient(to bottom right, #00ff004d 0%, #0000ff80 50%, #ff00004d 100%);"
+                                + "-fx-fill:#000000b3;"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             ContactoArmazem x = tabelaContacto.getSelectionModel().getSelectedItem();
@@ -390,8 +387,8 @@ public class AddArmazemController implements Initializable {
     public void addCliente() throws SQLException {
         Armazem x = new Armazem();
         x.setTipo(combTipoCliente.getValue());
-        x.setNome(txtNome.getText());
-        x.setDescricao(txtDescricao.getText());
+        x.setNome_arm(txtNome.getText());
+        x.setDescricao_arm(txtDescricao.getText());
         ArmazemDAO xDAO = new ArmazemDAO();
         xDAO.addEntity(x);
         showCliente();
@@ -399,10 +396,9 @@ public class AddArmazemController implements Initializable {
 
     public void addContacto() throws SQLException {
         ContactoArmazem x = new ContactoArmazem();
-        x.setContacto(txtContacto.getText());
-        x.setEmail(txtEmail.getText());
-        x.setResponsavel(txtResponsavel.getText());
-        x.setWebsite(txtSite.getText());
+        x.setContacto_arm(txtContacto.getText());
+        x.setEmail_arm(txtEmail.getText());
+        x.setResponsavel_arm(txtResponsavel.getText());
         Armazem c = new Armazem();
         c.setId(Integer.parseInt(txtIDCliente.getText()));
         x.setArmazem(c);
@@ -416,17 +412,17 @@ public class AddArmazemController implements Initializable {
     public void addEndereco() {
         Alert alert;
         EnderecoArmazem x = new EnderecoArmazem();
-        x.setAvenida(txtAvenida.getText());
-        x.setBairro(txtBairro.getText());
-        x.setCidade(txtCidade.getText());
+        x.setAvenida_arm(txtAvenida.getText());
+        x.setBairro_arm(txtBairro.getText());
+        x.setCidade_arm(txtCidade.getText());
         Armazem c = new Armazem();
         c.setId(Integer.parseInt(txtIDCliente.getText()));
         x.setArmazem(c);
-        x.setCodigoPostal(Integer.parseInt(txtCodigooPostal.getText()));
-        x.setNumero(Integer.parseInt(txtNumeroEndereco.getText()));
-        x.setProvincia(combProvincia.getValue());
-        x.setRua(txtRua.getText());
-        x.setTipo(combTipoEndereco.getValue());
+        x.setCodigoPostal_arm(Integer.parseInt(txtCodigooPostal.getText()));
+        x.setNumero_arm(Integer.parseInt(txtNumeroEndereco.getText()));
+        x.setProvincia_arm(combProvincia.getValue());
+        x.setRua_arm(txtRua.getText());
+        x.setTipo_arm(combTipoEndereco.getValue());
         x.setUsuario(userData);
         try {
             EnderecoArmazemDAO xDAO = new EnderecoArmazemDAO();
@@ -449,8 +445,8 @@ public class AddArmazemController implements Initializable {
         Alert alert;
         Armazem x = new Armazem();
         x.setTipo(combTipoCliente.getValue());
-        x.setNome(txtNome.getText());
-        x.setDescricao(txtDescricao.getText());
+        x.setNome_arm(txtNome.getText());
+        x.setDescricao_arm(txtDescricao.getText());
         ArmazemDAO xDAO;
         try {
             xDAO = new ArmazemDAO();
@@ -468,10 +464,9 @@ public class AddArmazemController implements Initializable {
 
     public void updateContacto() throws SQLException {
         ContactoArmazem x = new ContactoArmazem();
-        x.setContacto(txtContacto.getText());
-        x.setEmail(txtEmail.getText());
-        x.setResponsavel(txtResponsavel.getText());
-        x.setWebsite(txtSite.getText());
+        x.setContacto_arm(txtContacto.getText());
+        x.setEmail_arm(txtEmail.getText());
+        x.setResponsavel_arm(txtResponsavel.getText());
         x.setUsuario(userData);
         ContactoArmazemDAO xDAO = new ContactoArmazemDAO();
         xDAO.updateEntityByID(x, Integer.parseInt(txtIDContacto.getText()));
@@ -482,14 +477,14 @@ public class AddArmazemController implements Initializable {
     public void updateEndereco() {
         Alert alert;
         EnderecoArmazem x = new EnderecoArmazem();
-        x.setAvenida(txtAvenida.getText());
-        x.setBairro(txtBairro.getText());
-        x.setCidade(txtCidade.getText());
-        x.setCodigoPostal(Integer.parseInt(txtCodigooPostal.getText()));
-        x.setNumero(Integer.parseInt(txtNumeroEndereco.getText()));
-        x.setProvincia(combProvincia.getValue());
-        x.setRua(txtRua.getText());
-        x.setTipo(combTipoEndereco.getValue());
+        x.setAvenida_arm(txtAvenida.getText());
+        x.setBairro_arm(txtBairro.getText());
+        x.setCidade_arm(txtCidade.getText());
+        x.setCodigoPostal_arm(Integer.parseInt(txtCodigooPostal.getText()));
+        x.setNumero_arm(Integer.parseInt(txtNumeroEndereco.getText()));
+        x.setProvincia_arm(combProvincia.getValue());
+        x.setRua_arm(txtRua.getText());
+        x.setTipo_arm(combTipoEndereco.getValue());
         x.setUsuario(userData);
         try {
             EnderecoArmazemDAO xDAO = new EnderecoArmazemDAO();
@@ -512,10 +507,9 @@ public class AddArmazemController implements Initializable {
         ContactoArmazem x = tabelaContacto.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDContacto.setText(String.valueOf(x.getId()));
-            txtResponsavel.setText(x.getResponsavel());
-            txtContacto.setText(x.getContacto());
-            txtEmail.setText(x.getEmail());
-            txtSite.setText(x.getWebsite());
+            txtResponsavel.setText(x.getResponsavel_arm());
+            txtContacto.setText(x.getContacto_arm());
+            txtEmail.setText(x.getEmail_arm());
             ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
         }
     }
@@ -524,14 +518,14 @@ public class AddArmazemController implements Initializable {
         EnderecoArmazem x = tabelaEndereco.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDEndereco.setText(String.valueOf(x.getId()));
-            txtAvenida.setText(x.getAvenida());
-            txtBairro.setText(x.getBairro());
-            txtCidade.setText(x.getCidade());
-            txtCodigooPostal.setText(String.valueOf(x.getCodigoPostal()));
-            txtNumeroEndereco.setText(String.valueOf(x.getNumero()));
-            combProvincia.setValue(x.getProvincia());
-            txtRua.setText(x.getRua());
-            combTipoEndereco.setValue(x.getTipo());
+            txtAvenida.setText(x.getAvenida_arm());
+            txtBairro.setText(x.getBairro_arm());
+            txtCidade.setText(x.getCidade_arm());
+            txtCodigooPostal.setText(String.valueOf(x.getCodigoPostal_arm()));
+            txtNumeroEndereco.setText(String.valueOf(x.getNumero_arm()));
+            combProvincia.setValue(x.getProvincia_arm());
+            txtRua.setText(x.getRua_arm());
+            combTipoEndereco.setValue(x.getTipo_arm());
             ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
         }
     }

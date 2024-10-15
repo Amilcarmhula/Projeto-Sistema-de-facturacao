@@ -36,10 +36,10 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
 
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getContacto());
-            ps.setString(2, t.getEmail());
-            ps.setString(3, t.getWebsite());
-            ps.setString(4, t.getResponsavel());
+            ps.setString(1, t.getContacto_forn());
+            ps.setString(2, t.getEmail_forn());
+            ps.setString(3, t.getWebsite_forn());
+            ps.setString(4, t.getResponsavel_forn());
             ps.setInt(5, t.getFornecedor().getId());
             ps.setInt(6, t.getUsuario().getId());
 
@@ -58,10 +58,10 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
                     + "pessoa_de_contacto=?, fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getContacto());
-            ps.setString(2, t.getEmail());
-            ps.setString(3, t.getWebsite());
-            ps.setString(4, t.getResponsavel());
+            ps.setString(1, t.getContacto_forn());
+            ps.setString(2, t.getEmail_forn());
+            ps.setString(3, t.getWebsite_forn());
+            ps.setString(4, t.getResponsavel_forn());
             ps.setInt(5, t.getUsuario().getId());
             ps.setInt(6, id);
 
@@ -83,10 +83,10 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
             while (result.next()) {
                 ContactoFornecedor c = new ContactoFornecedor();
                 c.setId(result.getInt("id"));
-                c.setContacto(result.getString("contacto"));
-                c.setEmail(result.getString("email"));
-                c.setWebsite(result.getString("website"));
-                c.setResponsavel(result.getString("pessoa_de_contacto"));
+                c.setContacto_forn(result.getString("contacto"));
+                c.setEmail_forn(result.getString("email"));
+                c.setWebsite_forn(result.getString("website"));
+                c.setResponsavel_forn(result.getString("pessoa_de_contacto"));
                 lista.add(c);
             }
             result.close();
@@ -108,10 +108,10 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
             while (result.next()) {
                 ContactoFornecedor c = new ContactoFornecedor();
                 c.setId(result.getInt("id"));
-                c.setContacto(result.getString("contacto"));
-                c.setEmail(result.getString("email"));
-                c.setWebsite(result.getString("website"));
-                c.setResponsavel(result.getString("pessoa_de_contacto"));
+                c.setContacto_forn(result.getString("contacto"));
+                c.setEmail_forn(result.getString("email"));
+                c.setWebsite_forn(result.getString("website"));
+                c.setResponsavel_forn(result.getString("pessoa_de_contacto"));
                 lista.add(c);
             }
             result.close();

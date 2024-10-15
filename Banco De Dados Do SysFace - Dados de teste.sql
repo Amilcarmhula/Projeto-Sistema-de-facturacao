@@ -18,9 +18,9 @@ FROM
     LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id
     LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto
 WHERE 
-    f.numero = '2024-262/3';
-    
--- Calculo de totais para fecho da factura
+    f.numero = '2024-777/2';
+--     
+-- -- Calculo de totais para fecho da factura
 SELECT 
     -- Calculo de total sem taxa nem desconto
     sum(ii.quantidade * pv2.preco) as subtotal,
@@ -40,23 +40,23 @@ FROM
     LEFT JOIN precovenda pv2 ON pv2.fk_id_produto = pp.id
     LEFT JOIN taxa_imposto ip2 ON ip2.id = pp.fk_id_taxa_imposto    
 WHERE 
-    ff.numero = '2024-262/3';
-    
--- Dados do cliente da factura
-SELECT f.numero, f.data_criacao, f.data_vencimento,
-	dc.nome as tipo,
-	c.apelido, c.nuit,
-    CONCAT( e.avenida, ', ',e.rua, ', ',e.numero, '; ',e.bairro, '-,',e.cidade, ', ',e.provincia, '-',e.codigo_postal ) as endereco,
-	GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR ' ') AS contatos,ct.email
-FROM 
-    factura f
-    LEFT JOIN documentocomercial dc ON f.fk_id_doc = dc.id
-    LEFT JOIN cliente c ON c.id = f.fk_id_cliente
-    LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
-    LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id
-WHERE 
-    f.numero = '2024-262/3';
-select * from itemfactura;
+    ff.numero = '2024-777/2';
+--     
+-- -- Dados do cliente da factura
+-- SELECT f.numero, f.data_criacao, f.data_vencimento,
+-- 	dc.nome as tipo,
+-- 	c.apelido, c.nuit,
+--     CONCAT( e.avenida, ', ',e.rua, ', ',e.numero, '; ',e.bairro, '-,',e.cidade, ', ',e.provincia, '-',e.codigo_postal ) as endereco,
+-- 	GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR ' ') AS contatos,ct.email
+-- FROM 
+--     factura f
+--     LEFT JOIN documentocomercial dc ON f.fk_id_doc = dc.id
+--     LEFT JOIN cliente c ON c.id = f.fk_id_cliente
+--     LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id
+--     LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id
+-- WHERE 
+--     f.numero = '2024-262/3';
+-- select * from itemfactura;
 
 
 
@@ -215,7 +215,7 @@ INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_po
 ('Gaza', 'Xai-Xai', 'Bairro Patrice Lumumba', 'Avenida Eduardo Mondlane', 'Rua do Comércio', 1201, 36, 'Comercial', 6, 1),
 ('Cabo Delgado', 'Pemba', 'Bairro Cariaco', 'Avenida dos Heróis', 'Rua dos Pescadores', 1801, 27, 'Comercial', 7, 1),
 ('Manica', 'Chimoio', 'Bairro 25 de Setembro', 'Avenida 25 de Setembro', 'Rua da Paz', 1501, 18, 'Comercial', 8, 1);
-
+select * from contacto_armazem;
 
 INSERT INTO contacto_armazem (pessoa_de_contacto, contacto, email, fk_id_armazem, fk_id_usuario) VALUES
 ('João Pereira', '823456789', 'joao.pereira@centralmaputo.com', 1, 1),
@@ -229,7 +229,7 @@ INSERT INTO contacto_armazem (pessoa_de_contacto, contacto, email, fk_id_armazem
 
 
 INSERT INTO categoria (tipo, grupo, subgrupo, familia, descricao) VALUES
-('Produto', 'Alimentação', 'Bebidas', 'Refrigerantes', 'Categoria de bebidas não alcoólicas'),
+-- ('Produto', 'Alimentação', 'Bebidas', 'Refrigerantes', 'Categoria de bebidas não alcoólicas'),
 ('Produto', 'Alimentação', 'Congelados', 'Carnes', 'Categoria de carnes congeladas'),
 ('Produto', 'Eletrônicos', 'Computadores', 'Laptops', 'Categoria de laptops e notebooks'),
 ('Serviço', 'Manutenção', 'Equipamentos', 'Computadores', 'Serviços de manutenção de computadores'),
@@ -268,7 +268,6 @@ INSERT INTO desconto (nome, percentagem, descricao) VALUES
 ('Desconto Black Friday', 0.3, 'Desconto massivo durante a Black Friday'),
 ('Desconto de Parceria', 0.125, 'Desconto exclusivo para parceiros comerciais'),
 ('Desconto de Natal', 0.1825, 'Desconto sazonal para o período de Natal');
-
 
 
 
@@ -373,22 +372,16 @@ INSERT INTO precovenda (preco, data_inicio, data_fim, estado, fk_id_produto, fk_
 (20.00, '2024-09-17', '2024-09-28', 1, 14, 1), 
 (6000.00, '2024-09-17', NULL, 1, 15, 1);
 
-    
-    INSERT INTO empresa (nome, apelido, nuit) VALUES
-('JM-Tecnolofias Sociedade Unipessoal', 'Lda', 123456789);
-
+    -- Informacao bases de uma empresa
+INSERT INTO empresa (nome, razaosocial, nuit) VALUES
+('JM-Tecnologias', 'JM-Tecnologias Sociedade Unipessoal.Lda', 123456789);
 INSERT INTO endereco_empresa (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_empresa) VALUES
 ('Maputo', 'Maputo', 'Coop', '24 de Julho', 'Rua 12', 1100, 15, 'Facturação', 1);
-
-INSERT INTO contacto_empresa (contacto, email, website, fk_id_empresa, fk_id_usuario)
+INSERT INTO contacto_empresa (contacto, email, website, fk_id_empresa)
 VALUES 
-    ('+258847100793', 'info@jm-tecnologias.co.mz', 'www.jm-tecnologias.co.mz', 1, 1);
-
-
-INSERT INTO contabancaria (nome_banco, numero, nib, nuib, fk_id_empresa, fk_id_usuario) VALUES
-('Banco Comercial e de Investimentos', '12345678', '12345678901234567890', '123456789', 1, 1);
-
-
+    ('+258879201993', 'comercial@jm-tecnologias.com', 'www.jm-tecnologias.com', 1);
+INSERT INTO contabancaria (nome_banco, numero, nib, nuib, fk_id_empresa) VALUES
+('Banco Comercial e de Investimentos', '12345678', '12345678901234567890', '123456789', 1);
 INSERT INTO documentocomercial (sigla, nome, diasuteis, descricao) VALUES
 ('FA','Fatura', 5, 'Fatura: Documento comercial que representa a venda de produtos ou serviços, devendo ser emitida no ato da venda ou até 5 dias úteis após a transação.'),
 ('FP','Fatura Proforma', 30, 'Fatura Proforma: Documento preliminar usado para cotações e propostas comerciais. Não possui validade fiscal, com uma validade aproximada de 30 dias.'),

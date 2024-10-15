@@ -4,13 +4,23 @@
  */
 package sysfact.dao.vendas.itens;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import sysfact.model.desconto.Desconto;
+import sysfact.model.preco.PrecoVenda;
+import sysfact.model.produto.Produto;
+import sysfact.model.taxa_imposto.TaxaImposto;
+import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
+import sysfact.reports.facturas.itensFacturaData;
 import sysfact.util.Conexao;
+import sysfact.util.ValidationUtilities;
 
 /**
  *
@@ -30,17 +40,17 @@ public class ItemDAO implements ItemDAOImpl<Item> {
     public void addEntity(List<Item> items) {
         try {
             for (Item t : items) {
-                    sql = "insert into itemfactura (quantidade, subtotal,fk_id_desconto,fk_id_produto,fk_numero,"
-                            + "fk_id_usuario, fk_id_armazem) value (?,?,?,?,?,?,?)";
-                    ps = con.prepareStatement(sql);
-                    ps.setInt(1, t.getQuantidade());// ***********
-                    ps.setDouble(2, t.getSubtotal());// ***********
-                    ps.setInt(3, t.getDesconto().getId());// ***********
-                    ps.setInt(4, t.getProduto().getId());// ***********
-                    ps.setString(5, t.getFactura().getNumero());// ***********
-                    ps.setInt(6, t.getUsuario().getId());// ***********
-                    ps.setInt(7, t.getArmazem().getId());// ***********
-                
+                sql = "insert into itemfactura (quantidade, subtotal,fk_id_desconto,fk_id_produto,fk_numero,"
+                        + "fk_id_usuario, fk_id_armazem) value (?,?,?,?,?,?,?)";
+                ps = con.prepareStatement(sql);
+                ps.setInt(1, t.getQuantidade());// ***********
+                ps.setDouble(2, t.getSubtotal());// ***********
+                ps.setInt(3, t.getDesconto().getId());// ***********
+                ps.setInt(4, t.getProduto().getId());// ***********
+                ps.setString(5, t.getFactura().getNumero_fac());// ***********
+                ps.setInt(6, t.getUsuario().getId());// ***********
+                ps.setInt(7, t.getArmazem().getId());// ***********
+
                 ps.execute();
                 ps.close();
             }
@@ -48,6 +58,61 @@ public class ItemDAO implements ItemDAOImpl<Item> {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public List<Item> getItensData(String factura) {
+        List<Item> lista = new ArrayList<>();
+        Item i = null;
+        try {
+            sql = "SELECT p.nome, p.descricao, pv.preco, "
+                    + "i.quantidade, i.subtotal, "
+                    + "ip.identificador as descricao_imposto, ip.percentagem AS imposto, "
+                    + "d.nome AS descricao_desconto, d.percentagem AS desconto, "
+                    + "f.numero "
+                    + "FROM itemfactura i "
+                    + "LEFT JOIN factura f ON f.numero = i.fk_numero "
+                    + "LEFT JOIN desconto d ON d.id = i.fk_id_desconto "
+                    + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
+                    + "LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id "
+                    + "LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto "
+                    + "WHERE i.fk_numero = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, factura);
+            ResultSet result = ps.executeQuery();
+            double sub = 0;
+            while (result.next()) {
+                i = new Item();
+                
+                Desconto d = new Desconto();
+                d.setNomeDesconto(result.getString("descricao_desconto"));
+                d.setPercentagemDesconto(result.getDouble("desconto"));
+                i.setDesconto(d);
+                i.setQuantidade(result.getInt("quantidade"));
+                i.setSubtotal(result.getDouble("subtotal"));
+                Produto p = new Produto();
+                p.setNomeProduto(result.getString("nome"));
+                p.setDescricao(result.getString("descricao"));
+                PrecoVenda pv = new PrecoVenda();
+                pv.setPreco(result.getDouble("preco"));
+                p.setPrecovenda(pv);
+                TaxaImposto t = new TaxaImposto();
+                t.setNomeImposto(result.getString("descricao_imposto"));
+                t.setPercentagemImposto(result.getDouble("imposto"));
+                p.setTaxa_imposto(t);
+                i.setProduto(p);
+                Factura f = new Factura();
+                f.setNumero_fac(result.getString("numero"));
+                i.setFactura(f);
+//                sub += i.getQuantidadeProduto() * i.getPrecoProduto();
+//                i.setSubtotal(sub);
+                lista.add(i);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Informação", "Erro ao carregar itens da Factura: " + e);
+        }
+        return lista;
     }
 //
 //    @Override

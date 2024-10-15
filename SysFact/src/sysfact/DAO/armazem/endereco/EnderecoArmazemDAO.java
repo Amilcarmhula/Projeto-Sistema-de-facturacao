@@ -34,19 +34,19 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
     public void addEntity(EnderecoArmazem t) {
         try {
             sql = "insert into endereco_armazem (provincia,cidade,bairro,avenida,"
-                    + "rua,codigo_postal,numero, tipo, fk_id_fornecedor, fk_id_usuario)"
+                    + "rua,codigo_postal,numero, tipo, fk_id_armazem, fk_id_usuario)"
                     + " value (?,?,?,?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getProvincia());
-            ps.setString(2, t.getCidade());
-            ps.setString(3, t.getBairro());
-            ps.setString(4, t.getAvenida());
-            ps.setString(5, t.getRua());
-            ps.setInt(6, t.getCodigoPostal());
-            ps.setInt(7, t.getNumero());
-            ps.setString(8, t.getTipo());
+            ps.setString(1, t.getProvincia_arm());
+            ps.setString(2, t.getCidade_arm());
+            ps.setString(3, t.getBairro_arm());
+            ps.setString(4, t.getAvenida_arm());
+            ps.setString(5, t.getRua_arm());
+            ps.setInt(6, t.getCodigoPostal_arm());
+            ps.setInt(7, t.getNumero_arm());
+            ps.setString(8, t.getTipo_arm());
             ps.setInt(9, t.getArmazem().getId());
             ps.setInt(10, t.getUsuario().getId());
 
@@ -65,14 +65,14 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
                     + "rua=?,codigo_postal=?,numero=?, tipo=?,fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getProvincia());
-            ps.setString(2, t.getCidade());
-            ps.setString(3, t.getBairro());
-            ps.setString(4, t.getAvenida());
-            ps.setString(5, t.getRua());
-            ps.setInt(6, t.getCodigoPostal());
-            ps.setInt(7, t.getNumero());
-            ps.setString(8, t.getTipo());
+            ps.setString(1, t.getProvincia_arm());
+            ps.setString(2, t.getCidade_arm());
+            ps.setString(3, t.getBairro_arm());
+            ps.setString(4, t.getAvenida_arm());
+            ps.setString(5, t.getRua_arm());
+            ps.setInt(6, t.getCodigoPostal_arm());
+            ps.setInt(7, t.getNumero_arm());
+            ps.setString(8, t.getTipo_arm());
             ps.setInt(9, t.getUsuario().getId());
             ps.setInt(10, id);
 
@@ -94,14 +94,14 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             while (result.next()) {
                 EnderecoArmazem c = new EnderecoArmazem();
                 c.setId(result.getInt("id"));
-                c.setProvincia(result.getString("provincia"));
-                c.setCidade(result.getString("cidade"));
-                c.setBairro(result.getString("bairro"));
-                c.setAvenida(result.getString("avenida"));
-                c.setRua(result.getString("rua"));
-                c.setCodigoPostal(result.getInt("codigo_postal"));
-                c.setNumero(result.getInt("numero"));
-                c.setTipo(result.getString("tipo"));
+                c.setProvincia_arm(result.getString("provincia"));
+                c.setCidade_arm(result.getString("cidade"));
+                c.setBairro_arm(result.getString("bairro"));
+                c.setAvenida_arm(result.getString("avenida"));
+                c.setRua_arm(result.getString("rua"));
+                c.setCodigoPostal_arm(result.getInt("codigo_postal"));
+                c.setNumero_arm(result.getInt("numero"));
+                c.setTipo_arm(result.getString("tipo"));
                 lista.add(c);
             }
             result.close();
@@ -122,14 +122,14 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             while (result.next()) {
                 EnderecoArmazem c = new EnderecoArmazem();
                 c.setId(result.getInt("id"));
-                c.setProvincia(result.getString("provincia"));
-                c.setCidade(result.getString("cidade"));
-                c.setBairro(result.getString("bairro"));
-                c.setAvenida(result.getString("avenida"));
-                c.setRua(result.getString("rua"));
-                c.setCodigoPostal(result.getInt("codigo_postal"));
-                c.setNumero(result.getInt("numero"));
-                c.setTipo(result.getString("tipo"));
+                c.setProvincia_arm(result.getString("provincia"));
+                c.setCidade_arm(result.getString("cidade"));
+                c.setBairro_arm(result.getString("bairro"));
+                c.setAvenida_arm(result.getString("avenida"));
+                c.setRua_arm(result.getString("rua"));
+                c.setCodigoPostal_arm(result.getInt("codigo_postal"));
+                c.setNumero_arm(result.getInt("numero"));
+                c.setTipo_arm(result.getString("tipo"));
                 lista.add(c);
             }
             result.close();

@@ -18,7 +18,7 @@ import sysfact.model.unidade_medida.UnidadeMedida;
 public class Produto {
 
     private int id;
-    private String nome;
+    private String nomeProduto;
     private String codigo_barra;
     private String descricao;
     private boolean contole_stock;
@@ -31,12 +31,14 @@ public class Produto {
     private Armazem armazem;
 
     public Produto() {
+        super();
     }
 
     public Produto(String nome, String codigo_barra, String descricao, 
             boolean contole_stock, Categoria categoria, UnidadeMedida unidade_medida,
             TaxaImposto taxa_imposto, PrecoVenda precovenda, Stock stock, Armazem armazem) {
-        this.nome = nome;
+        super();
+        this.nomeProduto = nome;
         this.codigo_barra = codigo_barra;
         this.descricao = descricao;
         this.contole_stock = contole_stock;
@@ -56,12 +58,12 @@ public class Produto {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeProduto() {
+        return nomeProduto;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
     }
 
     public String getCodigo_barra() {
@@ -143,6 +145,7 @@ public class Produto {
     public void setArmazem(Armazem armazem) {
         this.armazem = armazem;
     }
+    
 
     
 }

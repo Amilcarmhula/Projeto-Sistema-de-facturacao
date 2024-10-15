@@ -113,9 +113,9 @@ public class FornecedorViewController implements Initializable {
         listaClientes = aDAO.listAllEntities();
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        razaotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("razaosocial"));
-        nuittabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nuit"));
+        tipotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("tipo_forn"));
+        razaotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("razaosocial_forn"));
+        nuittabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nuit_forn"));
         contactotabelaCliente.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
 
@@ -166,9 +166,9 @@ public class FornecedorViewController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getRazaosocial().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getRazaosocial_forn().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (String.valueOf(x.getNuit()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (String.valueOf(x.getNuit_forn()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else {
                     return false;

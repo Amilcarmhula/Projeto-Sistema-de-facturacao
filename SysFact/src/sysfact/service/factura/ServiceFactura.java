@@ -21,7 +21,7 @@ public class ServiceFactura {
     public void criaFactura(){
         Factura f = new Factura();
         
-        f.setNumero("");
+        f.setNumero_fac("");
         f.setData_vencimento("");
         f.setCliente(null);
         f.setEmpresa(null);

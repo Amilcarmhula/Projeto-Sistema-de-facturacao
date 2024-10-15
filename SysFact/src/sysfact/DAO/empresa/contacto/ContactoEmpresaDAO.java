@@ -36,9 +36,9 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
 
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getContacto());
-            ps.setString(2, t.getEmail());
-            ps.setString(3, t.getWebsite());
+            ps.setString(1, t.getContacto_emp());
+            ps.setString(2, t.getEmail_emp());
+            ps.setString(3, t.getWebsite_emp());
             ps.setInt(4, t.getEmpresa().getId());
 
 
@@ -57,9 +57,9 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
                     + "website=?, fk_id_empresa=? where id=?";
             ps = con.prepareStatement(sql);
 
-             ps.setString(1, t.getContacto());
-            ps.setString(2, t.getEmail());
-            ps.setString(3, t.getWebsite());
+             ps.setString(1, t.getContacto_emp());
+            ps.setString(2, t.getEmail_emp());
+            ps.setString(3, t.getWebsite_emp());
             ps.setInt(4, t.getEmpresa().getId());
             ps.setInt(5, id);
 
@@ -81,9 +81,9 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
             while (result.next()) {
                 ContactoEmpresa c = new ContactoEmpresa();
                 c.setId(result.getInt("id"));
-                c.setContacto(result.getString("contacto"));
-                c.setEmail(result.getString("email"));
-                c.setWebsite(result.getString("website"));
+                c.setContacto_emp(result.getString("contacto"));
+                c.setEmail_emp(result.getString("email"));
+                c.setWebsite_emp(result.getString("website"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));
@@ -109,8 +109,8 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
             while (result.next()) {
                 c = new ContactoEmpresa();
                 c.setId(result.getInt("id"));
-                c.setContacto(result.getString("contacto"));
-                c.setEmail(result.getString("email"));
+                c.setContacto_emp(result.getString("contacto"));
+                c.setEmail_emp(result.getString("email"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                 c.setData_criacao(result.getString("data_criacao"));

@@ -37,7 +37,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNome_banco());
-            ps.setString(2, t.getNumero());
+            ps.setString(2, t.getNumero_conta());
             ps.setString(3, t.getNib());
             ps.setString(4, t.getNuib());
             ps.setInt(5, t.getEmpresa().getId());
@@ -58,7 +58,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNome_banco());
-            ps.setString(2, t.getNumero());
+            ps.setString(2, t.getNumero_conta());
             ps.setString(3, t.getNib());
             ps.setString(4, t.getNuib());
             ps.setInt(5, t.getEmpresa().getId());
@@ -83,7 +83,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
                 ContaBancaria c = new ContaBancaria();
                 c.setId(result.getInt("id"));
                 c.setNome_banco(result.getString("nome_banco"));
-                c.setNumero(result.getString("numero"));
+                c.setNumero_conta(result.getString("numero"));
                 c.setNib(result.getString("nib"));
                 c.setNuib(result.getString("nuib"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
@@ -111,7 +111,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
                 c = new ContaBancaria();
                 c.setId(result.getInt("id"));
                 c.setNome_banco(result.getString("nome_banco"));
-                c.setNumero(result.getString("numero"));
+                c.setNumero_conta(result.getString("numero"));
                 c.setNib(result.getString("nib"));
                 c.setNuib(result.getString("nuib"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));

@@ -19,7 +19,11 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.stock.StockDAO;
+import sysfact.dao.vendas.factura.FacturaDAO;
+import sysfact.dao.vendas.itens.ItemDAO;
 import sysfact.model.stock.Stock;
+import sysfact.model.vendas.factura.Factura;
+import sysfact.model.vendas.factura.itens.Item;
 import sysfact.reports.facturas.ClienteData;
 import sysfact.util.ValidationUtilities;
 
@@ -33,22 +37,50 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        String nome = ValidationUtilities.validaString(FontAwesomeIcon.ERASER, "");
-        
+        Double numero = 3.45000;
+//        System.out.println(Double.valueOf());
 
 //        Cliente c = new Cliente();
-//        ClienteDAO cdao = new ClienteDAO();
-//        ObservableList<Cliente> listaClientes = cdao.listAllEntities();
-//        for (Cliente cli : listaClientes) {
-//            System.out.println("ID: "+cli.getId());
-//            System.out.println("Tipo: "+cli.getTipo());
-//            System.out.println("Nome: " +cli.getNome());
-//            System.out.println("Apelido: "+cli.getApelido());
-//            System.out.println("Nuit: "+cli.getNuit());
-//            List<ContactoCliente> cc = cli.getContactoCliente();
-//            for (ContactoCliente contactoCliente : cc) {
-//                System.out.println("Contacto: "+contactoCliente.getContacto());
-//            }
+//        FacturaDAO dao = new FacturaDAO();
+//        Factura f = dao.getFacturaData("2024-1010/2");
+//        
+//            System.out.println("nome: "+f.getNumero_fac());
+//            System.out.println("nome: "+f.getData_criacao());
+//            System.out.println("nome: "+f.getData_vencimento());
+//            System.out.println("nome: "+f.getDocComerciais().getNome_doc());
+//            System.out.println("nome: "+f.getDocComerciais().getSigla_doc());
+//            System.out.println("nome: "+f.getCliente().getRazao_cli());
+//            System.out.println("nome: "+f.getCliente().getNuit_cli());
+//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getAvenida_cli());
+//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getRua_cli());
+//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getNumero_cli());
+//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getBairro_cli());
+//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getCidade_cli());
+//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getProvincia_cli());
+//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getCodigoPostal_cli());
+//            System.out.println("nome: "+f.getCliente().getContactoCliente().getContacto_cli());
+//            System.out.println("nome: "+f.getCliente().getContactoCliente().getEmail_cli());
+//            System.out.println("nome: "+f.getEmpresa().getNome_emp());
+//            System.out.println("nome: "+f.getEmpresa().getRazao_emp());
+//            System.out.println("nome: "+f.getEmpresa().getNuit_emp());
+//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getAvenida_emp());
+//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getBairro_emp());
+//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getCidade_emp());
+//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getProvincia_emp());
+//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getRua_emp());
+//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getCodigoPostal_emp());
+//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getNumero_emp());
+//            System.out.println("nome: "+f.getEmpresa().getContactoEmpresa().getContacto_emp());
+//            System.out.println("nome: "+f.getEmpresa().getContactoEmpresa().getEmail_emp());
+//            System.out.println("nome: "+f.getEmpresa().getContactoEmpresa().getWebsite_emp());
+//            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNome_banco());
+//            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNib());
+//            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNuib());
+//            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNumero_conta());
+
+            System.out.println("____________________________________________________");
+                       
+            
 //            System.out.println("______________________Cliente______________________");
 //            
 //

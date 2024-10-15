@@ -5,7 +5,6 @@
 package sysfact.model.cliente.endereco;
 
 import sysfact.model.cliente.Cliente;
-import sysfact.model.endereco.Endereco;
 import sysfact.model.usuario.Usuario;
 
 
@@ -13,21 +12,24 @@ import sysfact.model.usuario.Usuario;
  *
  * @author JM-Tecnologias
  */
-public class EnderecoCliente extends Endereco {
+public class EnderecoCliente  {
 
     private int id;
+    private String provincia_cli;
+    private String cidade_cli;
+    private String bairro_cli;
+    private String avenida_cli;
+    private String rua_cli;
+    private int codigoPostal_cli;
+    private int numero_cli;
+    private String tipo_cli;
     private String data_criacao;
     private Cliente cliente;
     private Usuario usuario;
 
     public EnderecoCliente() {
     }
-
-    public EnderecoCliente(Cliente cliente, Usuario usuario, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
-        super(provincia, cidade, bairro, avenida, rua, codigoPostal, numero, tipo);
-        this.cliente = cliente;
-        this.usuario = usuario;
-    }
+    
 
     public int getId() {
         return id;
@@ -35,6 +37,70 @@ public class EnderecoCliente extends Endereco {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getProvincia_cli() {
+        return provincia_cli;
+    }
+
+    public void setProvincia_cli(String provincia_cli) {
+        this.provincia_cli = provincia_cli;
+    }
+
+    public String getCidade_cli() {
+        return cidade_cli;
+    }
+
+    public void setCidade_cli(String cidade_cli) {
+        this.cidade_cli = cidade_cli;
+    }
+
+    public String getBairro_cli() {
+        return bairro_cli;
+    }
+
+    public void setBairro_cli(String bairro_cli) {
+        this.bairro_cli = bairro_cli;
+    }
+
+    public String getAvenida_cli() {
+        return avenida_cli;
+    }
+
+    public void setAvenida_cli(String avenida_cli) {
+        this.avenida_cli = avenida_cli;
+    }
+
+    public String getRua_cli() {
+        return rua_cli;
+    }
+
+    public void setRua_cli(String rua_cli) {
+        this.rua_cli = rua_cli;
+    }
+
+    public int getCodigoPostal_cli() {
+        return codigoPostal_cli;
+    }
+
+    public void setCodigoPostal_cli(int codigoPostal_cli) {
+        this.codigoPostal_cli = codigoPostal_cli;
+    }
+
+    public int getNumero_cli() {
+        return numero_cli;
+    }
+
+    public void setNumero_cli(int numero_cli) {
+        this.numero_cli = numero_cli;
+    }
+
+    public String getTipo_cli() {
+        return tipo_cli;
+    }
+
+    public void setTipo_cli(String tipo_cli) {
+        this.tipo_cli = tipo_cli;
     }
 
     public String getData_criacao() {
@@ -60,5 +126,7 @@ public class EnderecoCliente extends Endereco {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    
     
 }

@@ -43,7 +43,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
 
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getNome());
+            ps.setString(1, t.getNomeProduto());
             ps.setString(2, t.getCodigo_barra());
             ps.setString(3, t.getDescricao());
             ps.setInt(4, t.getCategoria().getId());
@@ -66,7 +66,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + "fk_id_unidade_medida=?,fk_id_taxa_imposto=? where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getNome());
+            ps.setString(1, t.getNomeProduto());
             ps.setString(2, t.getCodigo_barra());
             ps.setString(3, t.getDescricao());
             ps.setInt(4, t.getCategoria().getId());
@@ -105,7 +105,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             while (result.next()) {
                 Produto c = new Produto();
                 c.setId(result.getInt("id"));
-                c.setNome(result.getString("nome"));
+                c.setNomeProduto(result.getString("nome"));
                 c.setCodigo_barra(result.getString("codigo_barra"));
                 c.setDescricao(result.getString("descricao"));
                 Categoria cat = new Categoria();
@@ -119,8 +119,8 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 c.setUnidade_medida(u);
                 TaxaImposto t = new TaxaImposto();
                 t.setId(result.getInt("id_taxa"));
-                t.setIdentificador(result.getString("taxa"));
-                t.setPercentagem(result.getDouble("percentagem"));
+                t.setNomeImposto(result.getString("taxa"));
+                t.setPercentagemImposto(result.getDouble("percentagem"));
                 c.setTaxa_imposto(t);
                 PrecoVenda p = new PrecoVenda();
                 p.setId(result.getInt("id_preco"));
@@ -134,7 +134,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 c.setContole_stock(result.getBoolean("contole_stock"));
                 Armazem arm = new Armazem();
                 arm.setId(result.getInt("fk_id_armazem"));
-                arm.setNome(result.getString("nome_armazem"));
+                arm.setNome_arm(result.getString("nome_armazem"));
                 arm.setEstado(result.getBoolean("estado_armazem"));
                 c.setArmazem(arm);
                 lista.add(c);
@@ -182,7 +182,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             while (result.next()) {
                 Produto c = new Produto();
                 c.setId(result.getInt("id"));
-                c.setNome(result.getString("nome"));
+                c.setNomeProduto(result.getString("nome"));
                 c.setCodigo_barra(result.getString("codigo_barra"));
                 c.setDescricao(result.getString("descricao"));
                 Categoria cat = new Categoria();
@@ -214,7 +214,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             while (result.next()) {
                 Produto c = new Produto();
                 c.setId(result.getInt("id"));
-                c.setNome(result.getString("nome"));
+                c.setNomeProduto(result.getString("nome"));
                 c.setCodigo_barra(result.getString("codigo_barra"));
                 c.setDescricao(result.getString("descricao"));
                 Categoria cat = new Categoria();
@@ -249,7 +249,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             while (result.next()) {
                 Produto c = new Produto();
                 c.setId(result.getInt("id"));
-                c.setNome(result.getString("nome"));
+                c.setNomeProduto(result.getString("nome"));
                 c.setCodigo_barra(result.getString("codigo_barra"));
                 c.setDescricao(result.getString("descricao"));
                 Categoria cat = new Categoria();

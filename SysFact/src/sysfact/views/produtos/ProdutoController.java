@@ -463,7 +463,7 @@ public class ProdutoController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNomeProduto().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else if (x.getCodigo_barra().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
@@ -503,11 +503,11 @@ public class ProdutoController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (agente.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (agente.getNome_cli().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (agente.getApelido().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (agente.getRazao_cli().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (String.valueOf(agente.getNuit()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (String.valueOf(agente.getNuit_cli()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else {
                     return false;
@@ -542,11 +542,11 @@ public class ProdutoController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNome_arm().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (x.getDescricao_arm().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (String.valueOf(x.getDescricao()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (String.valueOf(x.getDescricao_arm()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else {
                     return false;
@@ -595,13 +595,13 @@ public class ProdutoController implements Initializable {
 
         // Binding complex fields using lambda expressions
         produtotabelaProdutoFornecido.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
+                -> new SimpleStringProperty(cellData.getValue().getProduto().getNomeProduto()));
 
 //        fornecedortabelaProdutoFornecido.setCellValueFactory(cellData
 //                -> new SimpleStringProperty(cellData.getValue().getAgente().getNome()));
 
         armazemtabelaProdutoFornecido.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome()));
+                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
 
         quantidadetabelaProdutoFornecido.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
         custotabelaProdutoFornecido.setCellValueFactory(new PropertyValueFactory<>("custo"));
@@ -623,7 +623,7 @@ public class ProdutoController implements Initializable {
 
             ps_txtIDProduto.setText(String.valueOf(x.getId()));
             ps_txtIDCategoria.setText(String.valueOf(x.getCategoria().getId()));
-            ps_txtNomeProduto.setText(x.getNome());
+            ps_txtNomeProduto.setText(x.getNomeProduto());
             ps_combunidademedidaProduto.setValue(x.getUnidade_medida().getSigla());
             ps_txtcodigobarrasProduto.setText(x.getCodigo_barra());
             ps_txtdescricaoProduto.setText(x.getDescricao());
@@ -701,7 +701,7 @@ public class ProdutoController implements Initializable {
         TaxaImpostoDAO tid = new TaxaImpostoDAO();
         TaxaImposto ti = new TaxaImposto();
 
-        a.setNome(ps_txtNomeProduto.getText());
+        a.setNomeProduto(ps_txtNomeProduto.getText());
         Categoria cat = new Categoria();
         cat.setId(Integer.parseInt(ps_txtIDCategoria.getText()));
         a.setCategoria(cat);
@@ -730,7 +730,7 @@ public class ProdutoController implements Initializable {
         TaxaImposto ti = new TaxaImposto();
 
         a.setId(Integer.parseInt(ps_txtIDProduto.getText()));
-        a.setNome(ps_txtNomeProduto.getText());
+        a.setNomeProduto(ps_txtNomeProduto.getText());
         Categoria cat = new Categoria();
         cat.setId(Integer.parseInt(ps_txtIDCategoria.getText()));
         a.setCategoria(cat);

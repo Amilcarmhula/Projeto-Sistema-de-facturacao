@@ -97,13 +97,13 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 c.setData_fornecida(result.getString("data_fornecida"));
                 c.setCusto(result.getDouble("custo"));
                 Armazem a = new Armazem();
-                a.setNome(result.getString("nome_a"));
+                a.setNome_arm(result.getString("nome_a"));
                 c.setArmazem(a);
                 Produto p = new Produto();
-                p.setNome(result.getString("nome_p"));
+                p.setNomeProduto(result.getString("nome_p"));
                 c.setProduto(p);
                 Cliente ag = new Cliente();
-                ag.setNome(result.getString("nome_f"));
+                ag.setNome_cli(result.getString("nome_f"));
 //                c.setAgente(ag);
 //                c.setActive_or_not(result.getBoolean("active_or_not"));
 //                if (c.isActive_or_not()) {

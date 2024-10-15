@@ -192,110 +192,26 @@ public class ProdutoController implements Initializable {
         if (evt.getClickCount() == 2) {
             LoadAndMoveUtilities.showAsPopUP(null, evt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/categoriaView/categoriaView.fxml");
-        
-//            try {
-//                Parent parente = FXMLLoader.load(getClass().getResource("../"));
-//                Scene scene = new Scene(parente);
-//                Stage stage = new Stage();
-//                stage.setScene(scene);
-//                stage.initStyle(StageStyle.TRANSPARENT);
-//                stage.show();
-//            } catch (IOException ex) {
-//                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
         }
     }
 
     public void getStockView(ActionEvent evt) {
         LoadAndMoveUtilities.showAsPopUP(evt, null);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
-        
-//        try {
-//            Parent parente = FXMLLoader.load(getClass().getResource("../"));
-//            Scene scene = new Scene(parente);
-//            Stage stage = new Stage();
-//            stage.setScene(scene);
-//            stage.initStyle(StageStyle.TRANSPARENT);
-//            stage.show();
-//        } catch (IOException ex) {
-//            Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
     }
 
     public void getUnidadeView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             LoadAndMoveUtilities.showAsPopUP(null, evt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/unidadeView/unidadeView.fxml");
-        
-//            try {
-//                Parent parente = FXMLLoader.load(getClass().getResource("../.."));
-//                Scene scene = new Scene(parente);
-//                Stage stage = new Stage();
-//                stage.setScene(scene);
-//                stage.initStyle(StageStyle.TRANSPARENT);
-//                stage.show();
-//            } catch (IOException ex) {
-//                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
         }
     }
     
-/*
-    Variavel que ira armazenar a stage antes de ser
-     ocultada
-     */
-    private static Stage baseStage;
-    private static boolean estadoStage;
-    /*
-    Mostra nova tela, sem ocultando a anterior e  ne bloqueando acesso a controles da tela
-    anterior
-    */
-    public static void showStage(ActionEvent event, MouseEvent evt) {
-        if (event != null) {
-            baseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            baseStage.hide(); // Esconde a janela principal
-            baseStage.setOpacity(0);
-        }
-        if (evt != null) {
-            baseStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-//            baseStage.hide(); // Esconde a janela principal
-            baseStage.setOpacity(0);
-        }
-    }
-
-    public static boolean isEstadoStage() {
-        return estadoStage;
-    }
-
-    public static void setEstadoStage(boolean estadoStage) {
-        ProdutoController.estadoStage = estadoStage;
-    }
-
-    public static boolean returnToStage() {
-        if (baseStage != null) {
-            setEstadoStage(true);
-//            baseStage.show(); // Mostra a janela principal novamente
-            baseStage.setOpacity(1);
-        }
-        return isEstadoStage();
-    }
 
     public void getTaxaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             LoadAndMoveUtilities.showAsPopUP(null, evt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/taxasView/taxaView.fxml");
-        
-//            try {
-//                Parent parente = FXMLLoader.load(getClass().getResource("../../modulo_configs/taxasView/taxaView.fxml"));
-//                Scene scene = new Scene(parente);
-//                Stage stage = new Stage();
-//                stage.setScene(scene);
-//                stage.initStyle(StageStyle.TRANSPARENT);
-//                stage.show();
-//            } catch (IOException ex) {
-//                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
         }
     }
 
@@ -308,7 +224,7 @@ public class ProdutoController implements Initializable {
                         TaxaImposto x = (TaxaImposto) SysFact.getData();
                         if (x != null) {
                             txtIDTaxa.setText(String.valueOf(x.getId()));
-                            labTaxa.setText(String.valueOf(x.getIdentificador() + ": " + (x.getPercentagem() * 100) + "%"));
+                            labTaxa.setText(String.valueOf(x.getNomeImposto() + ": " + (x.getPercentagemImposto() * 100) + "%"));
                         }
                     }
                 }
@@ -370,9 +286,9 @@ public class ProdutoController implements Initializable {
         }
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        artigo.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        artigo.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
         armazem.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome()));
+                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
         codigobarras.setCellValueFactory(new PropertyValueFactory<>("codigo_barra"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
@@ -381,7 +297,7 @@ public class ProdutoController implements Initializable {
         categoria.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getCategoria().getFamilia()));
         taxa.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getTaxa_imposto().getIdentificador()));
+                -> new SimpleStringProperty(cellData.getValue().getTaxa_imposto().getNomeImposto()));
         preco.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrecovenda().getPreco()) + "MZN"));
         datainicio.setCellValueFactory(cellData
@@ -465,7 +381,7 @@ public class ProdutoController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNomeProduto().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else if (x.getCodigo_barra().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
@@ -509,14 +425,14 @@ public class ProdutoController implements Initializable {
 
             labCategoria.setText(p.getCategoria().getFamilia());
             labUnidade.setText(p.getUnidade_medida().getIdentificador() + ": " + p.getUnidade_medida().getSigla());
-            labTaxa.setText(p.getTaxa_imposto().getIdentificador() + ": " + (p.getTaxa_imposto().getPercentagem() * 100) + "%");
+            labTaxa.setText(p.getTaxa_imposto().getNomeImposto() + ": " + (p.getTaxa_imposto().getPercentagemImposto() * 100) + "%");
 
             txtIDCategoria.setText(String.valueOf(p.getCategoria().getId()));
             txtIDUnidade.setText(String.valueOf(p.getUnidade_medida().getId()));
             txtIDTaxa.setText(String.valueOf(p.getTaxa_imposto().getId()));
 
             txtIDProduto.setText(String.valueOf(p.getId()));
-            txtNomeProduto.setText(p.getNome());
+            txtNomeProduto.setText(p.getNomeProduto());
             txtcodigobarrasProduto.setText(p.getCodigo_barra());
             txtdescricaoProduto.setText(p.getDescricao());
             SysFact.setData(p);

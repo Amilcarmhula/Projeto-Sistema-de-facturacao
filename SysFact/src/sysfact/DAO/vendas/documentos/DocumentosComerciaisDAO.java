@@ -38,8 +38,8 @@ public class DocumentosComerciaisDAO implements DocumentosComerciaisDAOImpl<Docu
             while (result.next()) {
                 DocumentosComerciais d = new DocumentosComerciais();
                 d.setId(result.getInt("id"));
-                d.setSigla(result.getString("sigla"));
-                d.setNome(result.getString("nome"));
+                d.setSigla_doc(result.getString("sigla"));
+                d.setNome_doc(result.getString("nome"));
                 d.setDiasUteis(result.getInt("diasuteis"));
                 d.setDescricao(result.getString("descricao"));
                 lista.add(d);

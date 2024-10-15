@@ -36,9 +36,9 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
 
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getContacto());
-            ps.setString(2, t.getEmail());
-            ps.setString(3, t.getWebsite());
+            ps.setString(1, t.getContacto_cli());
+            ps.setString(2, t.getEmail_cli());
+            ps.setString(3, t.getWebsite_cli());
             ps.setString(4, t.getResponsavel());
             ps.setInt(5, t.getCliente().getId());
             ps.setInt(6, t.getUsuario().getId());
@@ -58,9 +58,9 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
                     + "pessoa_de_contacto=?, fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getContacto());
-            ps.setString(2, t.getEmail());
-            ps.setString(3, t.getWebsite());
+            ps.setString(1, t.getContacto_cli());
+            ps.setString(2, t.getEmail_cli());
+            ps.setString(3, t.getWebsite_cli());
             ps.setString(4, t.getResponsavel());
             ps.setInt(5, t.getUsuario().getId());
             ps.setInt(6, id);
@@ -83,9 +83,9 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             while (result.next()) {
                 ContactoCliente c = new ContactoCliente();
                 c.setId(result.getInt("id"));
-                c.setContacto(result.getString("contacto"));
-                c.setEmail(result.getString("email"));
-                c.setWebsite(result.getString("website"));
+                c.setContacto_cli(result.getString("contacto"));
+                c.setEmail_cli(result.getString("email"));
+                c.setWebsite_cli(result.getString("website"));
                 c.setResponsavel(result.getString("pessoa_de_contacto"));
                 lista.add(c);
             }
@@ -108,9 +108,9 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             while (result.next()) {
                 ContactoCliente c = new ContactoCliente();
                 c.setId(result.getInt("id"));
-                c.setContacto(result.getString("contacto"));
-                c.setEmail(result.getString("email"));
-                c.setWebsite(result.getString("website"));
+                c.setContacto_cli(result.getString("contacto"));
+                c.setEmail_cli(result.getString("email"));
+                c.setWebsite_cli(result.getString("website"));
                 c.setResponsavel(result.getString("pessoa_de_contacto"));
                 lista.add(c);
             }

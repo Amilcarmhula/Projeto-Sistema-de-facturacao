@@ -35,14 +35,14 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
                     + "avenida,rua,codigo_postal,numero, tipo, fk_id_empresa) value (?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getProvincia());
-            ps.setString(2, t.getCidade());
-            ps.setString(3, t.getBairro());
-            ps.setString(4, t.getAvenida());
-            ps.setString(5, t.getRua());
-            ps.setInt(6, t.getCodigoPostal());
-            ps.setInt(7, t.getNumero());
-            ps.setString(8, t.getTipo());
+            ps.setString(1, t.getProvincia_emp());
+            ps.setString(2, t.getCidade_emp());
+            ps.setString(3, t.getBairro_emp());
+            ps.setString(4, t.getAvenida_emp());
+            ps.setString(5, t.getRua_emp());
+            ps.setInt(6, t.getCodigoPostal_emp());
+            ps.setInt(7, t.getNumero_emp());
+            ps.setString(8, t.getTipo_emp());
 //            ps.setInt(9, t.getFk_id_empresa());
 
             ps.execute();
@@ -60,14 +60,14 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
                     + "avenida=?,rua=?,codigo_postal=?,numero=?, tipo=?, fk_id_empresa=? where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getProvincia());
-            ps.setString(2, t.getCidade());
-            ps.setString(3, t.getBairro());
-            ps.setString(4, t.getAvenida());
-            ps.setString(5, t.getRua());
-            ps.setInt(6, t.getCodigoPostal());
-            ps.setInt(7, t.getNumero());
-            ps.setString(8, t.getTipo());
+            ps.setString(1, t.getProvincia_emp());
+            ps.setString(2, t.getCidade_emp());
+            ps.setString(3, t.getBairro_emp());
+            ps.setString(4, t.getAvenida_emp());
+            ps.setString(5, t.getRua_emp());
+            ps.setInt(6, t.getCodigoPostal_emp());
+            ps.setInt(7, t.getNumero_emp());
+            ps.setString(8, t.getTipo_emp());
 //            ps.setInt(9, t.getFk_id_empresa());
             ps.setInt(10, id);
 
@@ -89,15 +89,15 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
             while (result.next()) {
                 EnderecoEmpresa c = new EnderecoEmpresa();
                 c.setId(result.getInt("id"));
-                c.setProvincia(result.getString("provincia"));
-                c.setCidade(result.getString("cidade"));
-                c.setBairro(result.getString("bairro"));
-                c.setAvenida(result.getString("avenida"));
-                c.setRua(result.getString("rua"));
-                c.setCodigoPostal(result.getInt("codigo_postal"));
-                c.setNumero(result.getInt("numero"));
+                c.setProvincia_emp(result.getString("provincia"));
+                c.setCidade_emp(result.getString("cidade"));
+                c.setBairro_emp(result.getString("bairro"));
+                c.setAvenida_emp(result.getString("avenida"));
+                c.setRua_emp(result.getString("rua"));
+                c.setCodigoPostal_emp(result.getInt("codigo_postal"));
+                c.setNumero_emp(result.getInt("numero"));
                 c.setData_criacao(result.getString("data_criacao"));
-                c.setTipo(result.getString("tipo"));
+                c.setTipo_emp(result.getString("tipo"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setActive_or_not(result.getBoolean("active_or_not"));
                 lista.add(c);
@@ -122,15 +122,15 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
             while (result.next()) {
                 c = new EnderecoEmpresa();
                 c.setId(result.getInt("id"));
-                c.setProvincia(result.getString("provincia"));
-                c.setCidade(result.getString("cidade"));
-                c.setBairro(result.getString("bairro"));
-                c.setAvenida(result.getString("avenida"));
-                c.setRua(result.getString("rua"));
-                c.setCodigoPostal(result.getInt("codigo_postal"));
-                c.setNumero(result.getInt("numero"));
+                c.setProvincia_emp(result.getString("provincia"));
+                c.setCidade_emp(result.getString("cidade"));
+                c.setBairro_emp(result.getString("bairro"));
+                c.setAvenida_emp(result.getString("avenida"));
+                c.setRua_emp(result.getString("rua"));
+                c.setCodigoPostal_emp(result.getInt("codigo_postal"));
+                c.setNumero_emp(result.getInt("numero"));
                 c.setData_criacao(result.getString("data_criacao"));
-                c.setTipo(result.getString("tipo"));
+                c.setTipo_emp(result.getString("tipo"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setActive_or_not(result.getBoolean("active_or_not"));
             }

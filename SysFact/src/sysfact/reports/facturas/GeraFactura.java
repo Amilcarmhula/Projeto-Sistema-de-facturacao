@@ -70,14 +70,14 @@ public class GeraFactura {
             parametros.put("TAXAS", ifdata.getTaxas());
             parametros.put("TOTAL-GERAL", ifdata.getTotal_geral());
 
-            parametros.put("nomeEmpresa", e.getNome() + "." + e.getApelido());
-            parametros.put("nuitEmpresa", e.getNuit());
+            parametros.put("nomeEmpresa", e.getNome_emp() + "." + e.getRazao_emp());
+            parametros.put("nuitEmpresa", e.getNuit_emp());
             parametros.put("enderecoEmpresa", e.printEnderecos());
             parametros.put("contactoEmpresa", e.printContatos());
-            parametros.put("emailEmpresa", e.getContactoEmpresa().getEmail());
-            parametros.put("websiteEmpresa", e.getContactoEmpresa().getWebsite());
+            parametros.put("emailEmpresa", e.getContactoEmpresa().getEmail_emp());
+            parametros.put("websiteEmpresa", e.getContactoEmpresa().getWebsite_emp());
             parametros.put("nomeBanco", e.getContaBancaria().getNome_banco());
-            parametros.put("numeroConta", e.getContaBancaria().getNumero());
+            parametros.put("numeroConta", e.getContaBancaria().getNumero_conta());
             parametros.put("nibConta", e.getContaBancaria().getNib());
             parametros.put("nuibConta", e.getContaBancaria().getNuib());
 

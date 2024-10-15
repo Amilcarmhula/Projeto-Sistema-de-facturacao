@@ -11,8 +11,8 @@ package sysfact.model.taxa_imposto;
 public class TaxaImposto {
 
     private int id;
-    private String identificador;
-    private double percentagem;
+    private String nomeImposto;
+    private double percentagemImposto;
     private String descricao;
     private String data_criacao;
 
@@ -20,8 +20,8 @@ public class TaxaImposto {
     }
 
     public TaxaImposto(String identificador, double percentagem, String descricao, String data_criacao) {
-        this.identificador = identificador;
-        this.percentagem = percentagem;
+        this.nomeImposto = identificador;
+        this.percentagemImposto = percentagem;
         this.descricao = descricao;
     }
 
@@ -33,20 +33,20 @@ public class TaxaImposto {
         this.id = id;
     }
 
-    public String getIdentificador() {
-        return identificador;
+    public String getNomeImposto() {
+        return nomeImposto;
     }
 
-    public void setIdentificador(String identificador) {
-        this.identificador = identificador;
+    public void setNomeImposto(String nomeImposto) {
+        this.nomeImposto = nomeImposto;
     }
 
-    public double getPercentagem() {
-        return percentagem;
+    public double getPercentagemImposto() {
+        return percentagemImposto;
     }
 
-    public void setPercentagem(double percentagem) {
-        this.percentagem = percentagem;
+    public void setPercentagemImposto(double percentagemImposto) {
+        this.percentagemImposto = percentagemImposto;
     }
 
     public String getDescricao() {

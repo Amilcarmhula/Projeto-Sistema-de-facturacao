@@ -228,7 +228,7 @@ public class ProdutoSearchController implements Initializable {
                         TaxaImposto x = (TaxaImposto) SysFact.getData();
                         if (x != null) {
                             txtIDTaxa.setText(String.valueOf(x.getId()));
-                            labTaxa.setText(String.valueOf(x.getIdentificador() + ": " + (x.getPercentagem() * 100) + "%"));
+                            labTaxa.setText(String.valueOf(x.getNomeImposto() + ": " + (x.getPercentagemImposto() * 100) + "%"));
                         }
                     }
                 }
@@ -292,7 +292,7 @@ public class ProdutoSearchController implements Initializable {
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         artigo.setCellValueFactory(new PropertyValueFactory<>("nome"));
         armazem.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome()));
+                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
 //        codigobarras.setCellValueFactory(new PropertyValueFactory<>("codigo_barra"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
@@ -377,7 +377,7 @@ public class ProdutoSearchController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNomeProduto().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else if (x.getCodigo_barra().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
@@ -421,14 +421,14 @@ public class ProdutoSearchController implements Initializable {
 
             labCategoria.setText(p.getCategoria().getFamilia());
             labUnidade.setText(p.getUnidade_medida().getIdentificador() + ": " + p.getUnidade_medida().getSigla());
-            labTaxa.setText(p.getTaxa_imposto().getIdentificador() + ": " + (p.getTaxa_imposto().getPercentagem() * 100) + "%");
+            labTaxa.setText(p.getTaxa_imposto().getNomeImposto() + ": " + (p.getTaxa_imposto().getPercentagemImposto() * 100) + "%");
 
             txtIDCategoria.setText(String.valueOf(p.getCategoria().getId()));
             txtIDUnidade.setText(String.valueOf(p.getUnidade_medida().getId()));
             txtIDTaxa.setText(String.valueOf(p.getTaxa_imposto().getId()));
 
             txtIDProduto.setText(String.valueOf(p.getId()));
-            txtNomeProduto.setText(p.getNome());
+            txtNomeProduto.setText(p.getNomeProduto());
             txtcodigobarrasProduto.setText(p.getCodigo_barra());
             txtdescricaoProduto.setText(p.getDescricao());
             SysFact.setData(p);

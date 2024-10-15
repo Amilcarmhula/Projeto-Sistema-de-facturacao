@@ -228,9 +228,9 @@ public class AddFornecedorController implements Initializable {
         FornecedorDAO xDAO = new FornecedorDAO();
         Fornecedor c = xDAO.getLastEntity();
         txtIDCliente.setText(String.valueOf(c.getId()));
-        combTipoCliente.setValue(c.getTipo());
-        txtRazao.setText(c.getRazaosocial());
-        txtNuit.setText(String.valueOf(c.getNuit()));
+        combTipoCliente.setValue(c.getTipo_forn());
+        txtRazao.setText(c.getRazaosocial_forn());
+        txtNuit.setText(String.valueOf(c.getNuit_forn()));
         showContactos();
     }
 
@@ -238,9 +238,9 @@ public class AddFornecedorController implements Initializable {
         FornecedorDAO xDAO = new FornecedorDAO();
         if (!"".equals(txtIDCliente.getText())) {
             Fornecedor c = xDAO.getEntityByID(Integer.parseInt(txtIDCliente.getText()));
-            combTipoCliente.setValue(c.getTipo());
-            txtRazao.setText(c.getRazaosocial());
-            txtNuit.setText(String.valueOf(c.getNuit()));
+            combTipoCliente.setValue(c.getTipo_forn());
+            txtRazao.setText(c.getRazaosocial_forn());
+            txtNuit.setText(String.valueOf(c.getNuit_forn()));
             showContactos();
         }
 
@@ -262,14 +262,14 @@ public class AddFornecedorController implements Initializable {
         }
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        provinciatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("provincia"));
-        cidadetabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("cidade"));
-        bairrotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("bairro"));
-        avenidatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("avenida"));
-        ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua"));
-        codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal"));
-        numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero"));
+        tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo_forn"));
+        provinciatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("provincia_forn"));
+        cidadetabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("cidade_forn"));
+        bairrotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("bairro_forn"));
+        avenidatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("avenida_forn"));
+        ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua_forn"));
+        codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal_forn"));
+        numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero_forn"));
         //add cell of button edit 
         Callback<TableColumn<EnderecoFornecedor, String>, TableCell<EnderecoFornecedor, String>> cellFoctory = (TableColumn<EnderecoFornecedor, String> param) -> {
             // make cell containing buttons
@@ -327,10 +327,10 @@ public class AddFornecedorController implements Initializable {
         }
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
-        contactotabelaContacto.setCellValueFactory(new PropertyValueFactory<>("contacto"));
-        emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email"));
-        responsaveltabelaContacto.setCellValueFactory(new PropertyValueFactory<>("responsavel"));
-        websitetabelaContacto.setCellValueFactory(new PropertyValueFactory<>("website"));
+        contactotabelaContacto.setCellValueFactory(new PropertyValueFactory<>("contacto_forn"));
+        emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email_forn"));
+        responsaveltabelaContacto.setCellValueFactory(new PropertyValueFactory<>("responsavel_forn"));
+        websitetabelaContacto.setCellValueFactory(new PropertyValueFactory<>("website_forn"));
 
         //add cell of button edit 
         Callback<TableColumn<ContactoFornecedor, String>, TableCell<ContactoFornecedor, String>> cellFoctory = (TableColumn<ContactoFornecedor, String> param) -> {
@@ -379,9 +379,9 @@ public class AddFornecedorController implements Initializable {
      */
     public void addCliente() throws SQLException {
         Fornecedor x = new Fornecedor();
-        x.setTipo(combTipoCliente.getValue());
-        x.setRazaosocial(txtRazao.getText());
-        x.setNuit(Integer.parseInt(txtNuit.getText()));
+        x.setTipo_forn(combTipoCliente.getValue());
+        x.setRazaosocial_forn(txtRazao.getText());
+        x.setNuit_forn(Integer.parseInt(txtNuit.getText()));
         x.setUsuario(userData);
         FornecedorDAO xDAO = new FornecedorDAO();
         xDAO.addEntity(x);
@@ -390,10 +390,10 @@ public class AddFornecedorController implements Initializable {
 
     public void addContacto() throws SQLException {
         ContactoFornecedor x = new ContactoFornecedor();
-        x.setContacto(txtContacto.getText());
-        x.setEmail(txtEmail.getText());
-        x.setResponsavel(txtResponsavel.getText());
-        x.setWebsite(txtSite.getText());
+        x.setContacto_forn(txtContacto.getText());
+        x.setEmail_forn(txtEmail.getText());
+        x.setResponsavel_forn(txtResponsavel.getText());
+        x.setWebsite_forn(txtSite.getText());
         Fornecedor c = new Fornecedor();
         c.setId(Integer.parseInt(txtIDCliente.getText()));
         x.setFornecedor(c);
@@ -407,17 +407,17 @@ public class AddFornecedorController implements Initializable {
     public void addEndereco() {
         Alert alert;
         EnderecoFornecedor x = new EnderecoFornecedor();
-        x.setAvenida(txtAvenida.getText());
-        x.setBairro(txtBairro.getText());
-        x.setCidade(txtCidade.getText());
+        x.setAvenida_forn(txtAvenida.getText());
+        x.setBairro_forn(txtBairro.getText());
+        x.setCidade_forn(txtCidade.getText());
         Fornecedor c = new Fornecedor();
         c.setId(Integer.parseInt(txtIDCliente.getText()));
         x.setFornecedor(c);
-        x.setCodigoPostal(Integer.parseInt(txtCodigooPostal.getText()));
-        x.setNumero(Integer.parseInt(txtNumeroEndereco.getText()));
-        x.setProvincia(combProvincia.getValue());
-        x.setRua(txtRua.getText());
-        x.setTipo(combTipoEndereco.getValue());
+        x.setCodigoPostal_forn(Integer.parseInt(txtCodigooPostal.getText()));
+        x.setNumero_forn(Integer.parseInt(txtNumeroEndereco.getText()));
+        x.setProvincia_forn(combProvincia.getValue());
+        x.setRua_forn(txtRua.getText());
+        x.setTipo_forn(combTipoEndereco.getValue());
         x.setUsuario(userData);
         try {
             EnderecoFornecedorDAO xDAO = new EnderecoFornecedorDAO();
@@ -439,9 +439,9 @@ public class AddFornecedorController implements Initializable {
     public void updateCliente() {
         Alert alert;
         Fornecedor x = new Fornecedor();
-        x.setTipo(combTipoCliente.getValue());
-        x.setRazaosocial(txtRazao.getText());
-        x.setNuit(Integer.parseInt(txtNuit.getText()));
+        x.setTipo_forn(combTipoCliente.getValue());
+        x.setRazaosocial_forn(txtRazao.getText());
+        x.setNuit_forn(Integer.parseInt(txtNuit.getText()));
         x.setUsuario(userData);
         FornecedorDAO xDAO;
         try {
@@ -460,10 +460,10 @@ public class AddFornecedorController implements Initializable {
 
     public void updateContacto() throws SQLException {
         ContactoFornecedor x = new ContactoFornecedor();
-        x.setContacto(txtContacto.getText());
-        x.setEmail(txtEmail.getText());
-        x.setResponsavel(txtResponsavel.getText());
-        x.setWebsite(txtSite.getText());
+        x.setContacto_forn(txtContacto.getText());
+        x.setEmail_forn(txtEmail.getText());
+        x.setResponsavel_forn(txtResponsavel.getText());
+        x.setWebsite_forn(txtSite.getText());
         x.setUsuario(userData);
         ContactoFornecedorDAO xDAO = new ContactoFornecedorDAO();
         xDAO.updateEntityByID(x, Integer.parseInt(txtIDContacto.getText()));
@@ -474,14 +474,14 @@ public class AddFornecedorController implements Initializable {
     public void updateEndereco() {
         Alert alert;
         EnderecoFornecedor x = new EnderecoFornecedor();
-        x.setAvenida(txtAvenida.getText());
-        x.setBairro(txtBairro.getText());
-        x.setCidade(txtCidade.getText());
-        x.setCodigoPostal(Integer.parseInt(txtCodigooPostal.getText()));
-        x.setNumero(Integer.parseInt(txtNumeroEndereco.getText()));
-        x.setProvincia(combProvincia.getValue());
-        x.setRua(txtRua.getText());
-        x.setTipo(combTipoEndereco.getValue());
+        x.setAvenida_forn(txtAvenida.getText());
+        x.setBairro_forn(txtBairro.getText());
+        x.setCidade_forn(txtCidade.getText());
+        x.setCodigoPostal_forn(Integer.parseInt(txtCodigooPostal.getText()));
+        x.setNumero_forn(Integer.parseInt(txtNumeroEndereco.getText()));
+        x.setProvincia_forn(combProvincia.getValue());
+        x.setRua_forn(txtRua.getText());
+        x.setTipo_forn(combTipoEndereco.getValue());
         x.setUsuario(userData);
         try {
             EnderecoFornecedorDAO xDAO = new EnderecoFornecedorDAO();
@@ -504,10 +504,10 @@ public class AddFornecedorController implements Initializable {
         ContactoFornecedor x = tabelaContacto.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDContacto.setText(String.valueOf(x.getId()));
-            txtResponsavel.setText(x.getResponsavel());
-            txtContacto.setText(x.getContacto());
-            txtEmail.setText(x.getEmail());
-            txtSite.setText(x.getWebsite());
+            txtResponsavel.setText(x.getResponsavel_forn());
+            txtContacto.setText(x.getContacto_forn());
+            txtEmail.setText(x.getEmail_forn());
+            txtSite.setText(x.getWebsite_forn());
             ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
         }
     }
@@ -516,14 +516,14 @@ public class AddFornecedorController implements Initializable {
         EnderecoFornecedor x = tabelaEndereco.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDEndereco.setText(String.valueOf(x.getId()));
-            txtAvenida.setText(x.getAvenida());
-            txtBairro.setText(x.getBairro());
-            txtCidade.setText(x.getCidade());
-            txtCodigooPostal.setText(String.valueOf(x.getCodigoPostal()));
-            txtNumeroEndereco.setText(String.valueOf(x.getNumero()));
-            combProvincia.setValue(x.getProvincia());
-            txtRua.setText(x.getRua());
-            combTipoEndereco.setValue(x.getTipo());
+            txtAvenida.setText(x.getAvenida_forn());
+            txtBairro.setText(x.getBairro_forn());
+            txtCidade.setText(x.getCidade_forn());
+            txtCodigooPostal.setText(String.valueOf(x.getCodigoPostal_forn()));
+            txtNumeroEndereco.setText(String.valueOf(x.getNumero_forn()));
+            combProvincia.setValue(x.getProvincia_forn());
+            txtRua.setText(x.getRua_forn());
+            combTipoEndereco.setValue(x.getTipo_forn());
             ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
         }
     }

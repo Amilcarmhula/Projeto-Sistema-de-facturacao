@@ -36,9 +36,9 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
 
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getContacto());
-            ps.setString(2, t.getEmail());
-            ps.setString(3, t.getResponsavel());
+            ps.setString(1, t.getContacto_arm());
+            ps.setString(2, t.getEmail_arm());
+            ps.setString(3, t.getResponsavel_arm());
             ps.setInt(4, t.getArmazem().getId());
             ps.setInt(5, t.getUsuario().getId());
 
@@ -57,9 +57,9 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
                     + "pessoa_de_contacto=?, fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getContacto());
-            ps.setString(2, t.getEmail());
-            ps.setString(3, t.getResponsavel());
+            ps.setString(1, t.getContacto_arm());
+            ps.setString(2, t.getEmail_arm());
+            ps.setString(3, t.getResponsavel_arm());
             ps.setInt(4, t.getUsuario().getId());
             ps.setInt(5, id);
 
@@ -81,9 +81,9 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
             while (result.next()) {
                 ContactoArmazem c = new ContactoArmazem();
                 c.setId(result.getInt("id"));
-                c.setContacto(result.getString("contacto"));
-                c.setEmail(result.getString("email"));
-                c.setResponsavel(result.getString("pessoa_de_contacto"));
+                c.setContacto_arm(result.getString("contacto"));
+                c.setEmail_arm(result.getString("email"));
+                c.setResponsavel_arm(result.getString("pessoa_de_contacto"));
                 lista.add(c);
             }
             result.close();
@@ -105,9 +105,9 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
             while (result.next()) {
                 ContactoArmazem c = new ContactoArmazem();
                 c.setId(result.getInt("id"));
-                c.setContacto(result.getString("contacto"));
-                c.setEmail(result.getString("email"));
-                c.setResponsavel(result.getString("pessoa_de_contacto"));
+                c.setContacto_arm(result.getString("contacto"));
+                c.setEmail_arm(result.getString("email"));
+                c.setResponsavel_arm(result.getString("pessoa_de_contacto"));
                 lista.add(c);
             }
             result.close();

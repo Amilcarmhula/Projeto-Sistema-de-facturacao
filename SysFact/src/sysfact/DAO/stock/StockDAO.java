@@ -65,7 +65,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
             while (result.next()) {
                 Stock s = new Stock();
                 Produto p = new Produto();
-                p.setNome(result.getString("produto"));
+                p.setNomeProduto(result.getString("produto"));
                 s.setSaldo(result.getInt("saldo"));
                 s.setProduto(p);
                 lista.add(s);

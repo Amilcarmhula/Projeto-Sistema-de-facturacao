@@ -116,8 +116,8 @@ public class TaxaViewController implements Initializable {
         listaTaxas = xDAO.listAllEntities();
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipoTaxa.setCellValueFactory(new PropertyValueFactory<>("identificador"));
-        percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagem"));
+        tipoTaxa.setCellValueFactory(new PropertyValueFactory<>("nomeImposto"));
+        percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagemImposto"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
         //add cell of button edit 
@@ -167,7 +167,7 @@ public class TaxaViewController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getIdentificador().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNomeImposto().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
@@ -186,8 +186,8 @@ public class TaxaViewController implements Initializable {
     public void addTaxa() {
         TaxaImposto x = new TaxaImposto();
         x.setDescricao(txtDescricao.getText());
-        x.setIdentificador(txtTaxa.getText());
-        x.setPercentagem(Double.valueOf(txtPercentagem.getText())/100);
+        x.setNomeImposto(txtTaxa.getText());
+        x.setPercentagemImposto(Double.valueOf(txtPercentagem.getText())/100);
         try {
             TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
             xDAO.addEntity(x);
@@ -202,8 +202,8 @@ public class TaxaViewController implements Initializable {
     public void updateTaxa() {
         TaxaImposto x = new TaxaImposto();
         x.setDescricao(txtDescricao.getText());
-        x.setIdentificador(txtTaxa.getText());
-        x.setPercentagem(Double.valueOf(txtPercentagem.getText())/100);
+        x.setNomeImposto(txtTaxa.getText());
+        x.setPercentagemImposto(Double.valueOf(txtPercentagem.getText())/100);
         try {
             TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
             xDAO.updateEntityByID(x, Integer.parseInt(txtID.getText()));
@@ -219,8 +219,8 @@ public class TaxaViewController implements Initializable {
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
             txtDescricao.setText(x.getDescricao());
-            txtPercentagem.setText(String.valueOf(x.getPercentagem()*100));
-            txtTaxa.setText(x.getIdentificador());
+            txtPercentagem.setText(String.valueOf(x.getPercentagemImposto()*100));
+            txtTaxa.setText(x.getNomeImposto());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
 
             SysFact.setData(x);

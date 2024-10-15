@@ -97,8 +97,8 @@ public class DashboardController implements Initializable {
         List<String> lista = new ArrayList<>();
         lista.add("Todos...");
         for (Armazem armazem : listaArmazens) {
-            mapaArmazens.put(armazem.getNome(), armazem);
-            lista.add(armazem.getNome());
+            mapaArmazens.put(armazem.getNome_arm(), armazem);
+            lista.add(armazem.getNome_arm());
         }
         combArmazem.setItems(FXCollections.observableArrayList(lista));
     }
@@ -133,7 +133,7 @@ public class DashboardController implements Initializable {
         }
         ObservableList<PieChart.Data> lista = FXCollections.observableArrayList();
         for (Stock s : listaStock) {
-            PieChart.Data dados = new PieChart.Data(s.getProduto().getNome(), s.getSaldo());
+            PieChart.Data dados = new PieChart.Data(s.getProduto().getNomeProduto(), s.getSaldo());
             lista.add(dados);
         }
         // Adicionando dados ao gráfico de pizza
@@ -141,7 +141,7 @@ public class DashboardController implements Initializable {
 
         //Adiciona os dados na tabela
         produto.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getNome())));
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getNomeProduto())));
         saldo.setCellValueFactory(new PropertyValueFactory<Stock, Integer>("saldo"));
         tabelaStock.setItems(listaStock);
 

@@ -114,9 +114,9 @@ public class ClienteViewController implements Initializable {
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        nometabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        razaotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("apelido"));
-        nuittabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nuit"));
+        nometabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nome_cli"));
+        razaotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("razao_cli"));
+        nuittabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nuit_cli"));
         contactotabelaCliente.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
 
@@ -167,11 +167,11 @@ public class ClienteViewController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNome_cli().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (x.getApelido().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (x.getRazao_cli().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (String.valueOf(x.getNuit()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (String.valueOf(x.getNuit_cli()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else {
                     return false;

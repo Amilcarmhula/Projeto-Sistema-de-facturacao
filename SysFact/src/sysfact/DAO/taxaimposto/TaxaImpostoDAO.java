@@ -35,8 +35,8 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
             sql = "insert into taxa_imposto (identificador, percentagem, descricao)"
                     + " value (?,?,?)";
             ps = con.prepareStatement(sql);
-            ps.setString(1, t.getIdentificador());
-            ps.setDouble(2, t.getPercentagem());
+            ps.setString(1, t.getNomeImposto());
+            ps.setDouble(2, t.getPercentagemImposto());
             ps.setString(3, t.getDescricao());
 
             ps.execute();
@@ -53,8 +53,8 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
                     + " where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getIdentificador());
-            ps.setDouble(2, t.getPercentagem());
+            ps.setString(1, t.getNomeImposto());
+            ps.setDouble(2, t.getPercentagemImposto());
             ps.setString(3, t.getDescricao());
             ps.setInt(4, id);
 
@@ -76,8 +76,8 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
             while (result.next()) {
                 TaxaImposto ti = new TaxaImposto();
                 ti.setId(result.getInt("id"));
-                ti.setIdentificador(result.getString("identificador"));
-                ti.setPercentagem(result.getDouble("percentagem"));
+                ti.setNomeImposto(result.getString("identificador"));
+                ti.setPercentagemImposto(result.getDouble("percentagem"));
                 ti.setDescricao(result.getString("descricao"));
                 lista.add(ti);
             }
@@ -100,8 +100,8 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
             if (result.next()) {
                 ti = new TaxaImposto();
                 ti.setId(result.getInt("id"));
-                ti.setIdentificador(result.getString("identificador"));
-                ti.setPercentagem(result.getDouble("percentagem"));
+                ti.setNomeImposto(result.getString("identificador"));
+                ti.setPercentagemImposto(result.getDouble("percentagem"));
                 ti.setDescricao(result.getString("descricao"));
                 ti.setData_criacao(result.getString("data_criacao"));
             }

@@ -28,9 +28,11 @@ public class Item {
     private String data_criacao;
 
     public Item() {
+        super();
     }
 
     public Item(int quantidade, double subtotal, Desconto desconto, Produto produto, Factura factura, Usuario usuario,Armazem armazem) {
+        super();
         this.quantidade = quantidade;
         this.subtotal = subtotal;
         this.desconto = desconto;
@@ -111,5 +113,52 @@ public class Item {
     public void setArmazem(Armazem armazem) {
         this.armazem = armazem;
     }
+    
+    /*
+    Expondo Propriedades BEANS
+    */
+    
+    public String getNomeProduto(){
+        if(produto != null){
+            return  produto.getNomeProduto();
+        }
+        return null;
+    }
+    public String getDescricao(){
+        if (produto != null) {
+            return produto.getDescricao();
+        }
+        return null;
+    }
+    
+    public Double getPreco(){
+        if(produto != null){
+            return produto.getPrecovenda().getPreco();
+        }
+        return null;
+    }
+    
+    public Double getPercentagemImposto(){
+        if(produto != null){
+            return produto.getTaxa_imposto().getPercentagemImposto();
+        }
+        return null;
+    }
+    public Double getPercentagemDesconto(){
+        if(desconto != null){
+            return desconto.getPercentagemDesconto();
+        }
+        return null;
+    }
+    public String getNumero(){
+        if(factura !=null){
+            return factura.getNumero_fac();
+        }
+        return null;
+    }
+    
+    
+    
+    
 
 }

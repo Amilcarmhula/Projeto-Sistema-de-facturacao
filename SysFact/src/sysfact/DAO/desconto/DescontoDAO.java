@@ -41,8 +41,8 @@ public class DescontoDAO   implements DescontoDAOImpl<Desconto> {
             while (result.next()) {
                 Desconto c = new Desconto();
                 c.setId(result.getInt("id"));
-                c.setNome(result.getString("nome"));
-                c.setPercentagem(result.getDouble("percentagem"));
+                c.setNomeDesconto(result.getString("nome"));
+                c.setPercentagemDesconto(result.getDouble("percentagem"));
                 c.setDescricao(result.getString("descricao"));
                 c.setData_criacao(result.getString("data_criacao"));
                 lista.add(c);

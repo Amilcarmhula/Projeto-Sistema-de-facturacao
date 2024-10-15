@@ -39,7 +39,7 @@ public class PagamentoDAO implements DaoImpl<Pagamento> {
             ps.setLong(2, t.getReferencia_numero_fatura());
             ps.setDouble(3, t.getValor());
             ps.setDouble(4, t.getFk_id_metodo_pagamento());
-            ps.setString(5, t.getFactura().getNumero());
+            ps.setString(5, t.getFactura().getNumero_fac());
             ps.setInt(6, t.getUsuario().getId());
 
             ps.execute();
@@ -61,7 +61,7 @@ public class PagamentoDAO implements DaoImpl<Pagamento> {
             ps.setLong(2, t.getReferencia_numero_fatura());
             ps.setDouble(3, t.getValor());
             ps.setDouble(4, t.getFk_id_metodo_pagamento());
-            ps.setString(5, t.getFactura().getNumero());
+            ps.setString(5, t.getFactura().getNumero_fac());
             ps.setInt(6, t.getUsuario().getId());
             ps.setInt(7, id);
 

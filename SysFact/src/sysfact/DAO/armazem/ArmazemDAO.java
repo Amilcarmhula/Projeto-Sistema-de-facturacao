@@ -37,8 +37,8 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             sql = "insert into armazem (tipo,nome,descricao) value (?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, c.getTipo());
-            ps.setString(2, c.getNome());
-            ps.setString(3, c.getDescricao());
+            ps.setString(2, c.getNome_arm());
+            ps.setString(3, c.getDescricao_arm());
 
             ps.execute();
             ps.close();
@@ -55,8 +55,8 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             ps = con.prepareStatement(sql);
 
             ps.setString(1, c.getTipo());
-            ps.setString(2, c.getNome());
-            ps.setString(3, c.getDescricao());
+            ps.setString(2, c.getNome_arm());
+            ps.setString(3, c.getDescricao_arm());
             ps.setInt(4, id);
 
             ps.execute();
@@ -82,15 +82,15 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 Armazem c = new Armazem();
                 c.setId(result.getInt("id"));
                 c.setTipo(result.getString("tipo"));
-                c.setNome(result.getString("nome"));
-                c.setDescricao(result.getString("descricao"));
+                c.setNome_arm(result.getString("nome"));
+                c.setDescricao_arm(result.getString("descricao"));
                 c.setEstado(result.getBoolean("estado"));
                 List<ContactoArmazem> listaContactos = new ArrayList<>();
                 String contactos = result.getString("contatos");
                 if (contactos != null && !contactos.trim().isEmpty()) {
                     for (String split : contactos.split(" ")) {
                         ContactoArmazem cc = new ContactoArmazem();
-                        cc.setContacto(split);
+                        cc.setContacto_arm(split);
                         listaContactos.add(cc);
                     }
                 }
@@ -118,8 +118,8 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 c = new Armazem();
                 c.setId(result.getInt("id"));
                 c.setTipo(result.getString("tipo"));
-                c.setNome(result.getString("nome"));
-                c.setDescricao(result.getString("descricao"));
+                c.setNome_arm(result.getString("nome"));
+                c.setDescricao_arm(result.getString("descricao"));
             }
             result.close();
             ps.close();
@@ -142,8 +142,8 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 c = new Armazem();
                 c.setId(result.getInt("id"));
                 c.setTipo(result.getString("tipo"));
-                c.setNome(result.getString("nome"));
-                c.setDescricao(result.getString("descricao"));
+                c.setNome_arm(result.getString("nome"));
+                c.setDescricao_arm(result.getString("descricao"));
             }
             result.close();
             ps.close();
@@ -186,8 +186,8 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 Armazem c = new Armazem();
                 c.setId(result.getInt("id"));
                 c.setTipo(result.getString("tipo"));
-                c.setNome(result.getString("razaosocial"));
-                c.setDescricao(result.getString("descricao"));
+                c.setNome_arm(result.getString("razaosocial"));
+                c.setDescricao_arm(result.getString("descricao"));
             }
             result.close();
             ps.close();

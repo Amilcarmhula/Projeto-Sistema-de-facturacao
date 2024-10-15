@@ -40,14 +40,14 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
 
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getProvincia());
-            ps.setString(2, t.getCidade());
-            ps.setString(3, t.getBairro());
-            ps.setString(4, t.getAvenida());
-            ps.setString(5, t.getRua());
-            ps.setInt(6, t.getCodigoPostal());
-            ps.setInt(7, t.getNumero());
-            ps.setString(8, t.getTipo());
+            ps.setString(1, t.getProvincia_cli());
+            ps.setString(2, t.getCidade_cli());
+            ps.setString(3, t.getBairro_cli());
+            ps.setString(4, t.getAvenida_cli());
+            ps.setString(5, t.getRua_cli());
+            ps.setInt(6, t.getCodigoPostal_cli());
+            ps.setInt(7, t.getNumero_cli());
+            ps.setString(8, t.getTipo_cli());
             ps.setInt(9, t.getCliente().getId());
             ps.setInt(10, t.getUsuario().getId());
 
@@ -66,14 +66,14 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
                     + "rua=?,codigo_postal=?,numero=?, tipo=?,fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getProvincia());
-            ps.setString(2, t.getCidade());
-            ps.setString(3, t.getBairro());
-            ps.setString(4, t.getAvenida());
-            ps.setString(5, t.getRua());
-            ps.setInt(6, t.getCodigoPostal());
-            ps.setInt(7, t.getNumero());
-            ps.setString(8, t.getTipo());
+            ps.setString(1, t.getProvincia_cli());
+            ps.setString(2, t.getCidade_cli());
+            ps.setString(3, t.getBairro_cli());
+            ps.setString(4, t.getAvenida_cli());
+            ps.setString(5, t.getRua_cli());
+            ps.setInt(6, t.getCodigoPostal_cli());
+            ps.setInt(7, t.getNumero_cli());
+            ps.setString(8, t.getTipo_cli());
             ps.setInt(9, t.getUsuario().getId());
             ps.setInt(10, id);
 
@@ -95,14 +95,14 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             while (result.next()) {
                 EnderecoCliente c = new EnderecoCliente();
                 c.setId(result.getInt("id"));
-                c.setProvincia(result.getString("provincia"));
-                c.setCidade(result.getString("cidade"));
-                c.setBairro(result.getString("bairro"));
-                c.setAvenida(result.getString("avenida"));
-                c.setRua(result.getString("rua"));
-                c.setCodigoPostal(result.getInt("codigo_postal"));
-                c.setNumero(result.getInt("numero"));
-                c.setTipo(result.getString("tipo"));
+                c.setProvincia_cli(result.getString("provincia"));
+                c.setCidade_cli(result.getString("cidade"));
+                c.setBairro_cli(result.getString("bairro"));
+                c.setAvenida_cli(result.getString("avenida"));
+                c.setRua_cli(result.getString("rua"));
+                c.setCodigoPostal_cli(result.getInt("codigo_postal"));
+                c.setNumero_cli(result.getInt("numero"));
+                c.setTipo_cli(result.getString("tipo"));
                 lista.add(c);
             }
             result.close();
@@ -123,14 +123,14 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             while (result.next()) {
                 EnderecoCliente c = new EnderecoCliente();
                 c.setId(result.getInt("id"));
-                c.setProvincia(result.getString("provincia"));
-                c.setCidade(result.getString("cidade"));
-                c.setBairro(result.getString("bairro"));
-                c.setAvenida(result.getString("avenida"));
-                c.setRua(result.getString("rua"));
-                c.setCodigoPostal(result.getInt("codigo_postal"));
-                c.setNumero(result.getInt("numero"));
-                c.setTipo(result.getString("tipo"));
+                c.setProvincia_cli(result.getString("provincia"));
+                c.setCidade_cli(result.getString("cidade"));
+                c.setBairro_cli(result.getString("bairro"));
+                c.setAvenida_cli(result.getString("avenida"));
+                c.setRua_cli(result.getString("rua"));
+                c.setCodigoPostal_cli(result.getInt("codigo_postal"));
+                c.setNumero_cli(result.getInt("numero"));
+                c.setTipo_cli(result.getString("tipo"));
                 lista.add(c);
             }
             result.close();

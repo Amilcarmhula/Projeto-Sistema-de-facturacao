@@ -53,7 +53,7 @@ public class Serviceproduto {
         
         
         Produto p = new Produto();
-        p.setNome(nome);
+        p.setNomeProduto(nome);
         p.setCodigo_barra(codBarras);
         p.setContole_stock(controleStock);
         p.setDescricao(descricao); 
@@ -101,7 +101,7 @@ public class Serviceproduto {
         
         
         Produto p = new Produto();
-        p.setNome(nome);
+        p.setNomeProduto(nome);
         p.setCodigo_barra(codBarras);
         p.setDescricao(descricao);
         Categoria c = new Categoria();

@@ -16,7 +16,7 @@ public class ContaBancaria {
 
     private int id;
     private String nome_banco;
-    private String numero;
+    private String numero_conta;
     private String nib;
     private String nuib;
     private Empresa empresa;
@@ -27,7 +27,7 @@ public class ContaBancaria {
 
     public ContaBancaria(String nome_banco, String numero, String nib, String nuib, Empresa empresa) {
         this.nome_banco = nome_banco;
-        this.numero = numero;
+        this.numero_conta = numero;
         this.nib = nib;
         this.nuib = nuib;
         this.empresa = empresa;
@@ -49,12 +49,12 @@ public class ContaBancaria {
         this.nome_banco = nome_banco;
     }
 
-    public String getNumero() {
-        return numero;
+    public String getNumero_conta() {
+        return numero_conta;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setNumero_conta(String numero_conta) {
+        this.numero_conta = numero_conta;
     }
 
     public String getNib() {

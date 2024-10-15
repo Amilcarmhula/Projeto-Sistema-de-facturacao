@@ -237,9 +237,9 @@ public class AddClienteController implements Initializable {
         Cliente c = xDAO.getLastEntity();
         txtIDCliente.setText(String.valueOf(c.getId()));
         combTipoCliente.setValue(c.getTipo());
-        txtNome.setText(c.getNome());
-        txtRazao.setText(c.getApelido());
-        txtNuit.setText(String.valueOf(c.getNuit()));
+        txtNome.setText(c.getNome_cli());
+        txtRazao.setText(c.getRazao_cli());
+        txtNuit.setText(String.valueOf(c.getNuit_cli()));
         showContactos();
     }
 
@@ -248,9 +248,9 @@ public class AddClienteController implements Initializable {
         if (!"".equals(txtIDCliente.getText())) {
             Cliente c = xDAO.getEntityByID(Integer.parseInt(txtIDCliente.getText()));
             combTipoCliente.setValue(c.getTipo());
-            txtNome.setText(c.getNome());
-            txtRazao.setText(c.getApelido());
-            txtNuit.setText(String.valueOf(c.getNuit()));
+            txtNome.setText(c.getNome_cli());
+            txtRazao.setText(c.getRazao_cli());
+            txtNuit.setText(String.valueOf(c.getNuit_cli()));
             showContactos();
         }
 
@@ -272,14 +272,14 @@ public class AddClienteController implements Initializable {
         }
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        provinciatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("provincia"));
-        cidadetabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("cidade"));
-        bairrotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("bairro"));
-        avenidatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("avenida"));
-        ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua"));
-        codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal"));
-        numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero"));
+        tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo_cli"));
+        provinciatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("provincia_cli"));
+        cidadetabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("cidade_cli"));
+        bairrotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("bairro_cli"));
+        avenidatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("avenida_cli"));
+        ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua_cli"));
+        codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal_cli"));
+        numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero_cli"));
         //add cell of button edit 
         Callback<TableColumn<EnderecoCliente, String>, TableCell<EnderecoCliente, String>> cellFoctory = (TableColumn<EnderecoCliente, String> param) -> {
             // make cell containing buttons
@@ -337,10 +337,10 @@ public class AddClienteController implements Initializable {
         }
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
-        contactotabelaContacto.setCellValueFactory(new PropertyValueFactory<>("contacto"));
-        emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email"));
+        contactotabelaContacto.setCellValueFactory(new PropertyValueFactory<>("contacto_cli"));
+        emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email_cli"));
         responsaveltabelaContacto.setCellValueFactory(new PropertyValueFactory<>("responsavel"));
-        websitetabelaContacto.setCellValueFactory(new PropertyValueFactory<>("website"));
+        websitetabelaContacto.setCellValueFactory(new PropertyValueFactory<>("website_cli"));
 
         //add cell of button edit 
         Callback<TableColumn<ContactoCliente, String>, TableCell<ContactoCliente, String>> cellFoctory = (TableColumn<ContactoCliente, String> param) -> {
@@ -390,9 +390,9 @@ public class AddClienteController implements Initializable {
     public void addCliente() throws SQLException {
         Cliente x = new Cliente();
         x.setTipo(combTipoCliente.getValue());
-        x.setNome(txtNome.getText());
-        x.setApelido(txtRazao.getText());
-        x.setNuit(Integer.parseInt(txtNuit.getText()));
+        x.setNome_cli(txtNome.getText());
+        x.setRazao_cli(txtRazao.getText());
+        x.setNuit_cli(Integer.parseInt(txtNuit.getText()));
         x.setUsuario(userData);
         ClienteDAO xDAO = new ClienteDAO();
         xDAO.addEntity(x);
@@ -401,10 +401,10 @@ public class AddClienteController implements Initializable {
 
     public void addContacto() throws SQLException {
         ContactoCliente x = new ContactoCliente();
-        x.setContacto(txtContacto.getText());
-        x.setEmail(txtEmail.getText());
+        x.setContacto_cli(txtContacto.getText());
+        x.setEmail_cli(txtEmail.getText());
         x.setResponsavel(txtResponsavel.getText());
-        x.setWebsite(txtSite.getText());
+        x.setWebsite_cli(txtSite.getText());
         Cliente c = new Cliente();
         c.setId(Integer.parseInt(txtIDCliente.getText()));
         x.setCliente(c);
@@ -418,17 +418,17 @@ public class AddClienteController implements Initializable {
     public void addEndereco() {
         Alert alert;
         EnderecoCliente x = new EnderecoCliente();
-        x.setAvenida(txtAvenida.getText());
-        x.setBairro(txtBairro.getText());
-        x.setCidade(txtCidade.getText());
+        x.setAvenida_cli(txtAvenida.getText());
+        x.setBairro_cli(txtBairro.getText());
+        x.setCidade_cli(txtCidade.getText());
         Cliente c = new Cliente();
         c.setId(Integer.parseInt(txtIDCliente.getText()));
         x.setCliente(c);
-        x.setCodigoPostal(Integer.parseInt(txtCodigooPostal.getText()));
-        x.setNumero(Integer.parseInt(txtNumeroEndereco.getText()));
-        x.setProvincia(combProvincia.getValue());
-        x.setRua(txtRua.getText());
-        x.setTipo(combTipoEndereco.getValue());
+        x.setCodigoPostal_cli(Integer.parseInt(txtCodigooPostal.getText()));
+        x.setNumero_cli(Integer.parseInt(txtNumeroEndereco.getText()));
+        x.setProvincia_cli(combProvincia.getValue());
+        x.setRua_cli(txtRua.getText());
+        x.setTipo_cli(combTipoEndereco.getValue());
         x.setUsuario(userData);
         try {
             EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
@@ -451,9 +451,9 @@ public class AddClienteController implements Initializable {
         Alert alert;
         Cliente x = new Cliente();
         x.setTipo(combTipoCliente.getValue());
-        x.setNome(txtNome.getText());
-        x.setApelido(txtRazao.getText());
-        x.setNuit(Integer.parseInt(txtNuit.getText()));
+        x.setNome_cli(txtNome.getText());
+        x.setRazao_cli(txtRazao.getText());
+        x.setNuit_cli(Integer.parseInt(txtNuit.getText()));
         x.setUsuario(userData);
         ClienteDAO xDAO;
         try {
@@ -472,10 +472,10 @@ public class AddClienteController implements Initializable {
 
     public void updateContacto() throws SQLException {
         ContactoCliente x = new ContactoCliente();
-        x.setContacto(txtContacto.getText());
-        x.setEmail(txtEmail.getText());
+        x.setContacto_cli(txtContacto.getText());
+        x.setEmail_cli(txtEmail.getText());
         x.setResponsavel(txtResponsavel.getText());
-        x.setWebsite(txtSite.getText());
+        x.setWebsite_cli(txtSite.getText());
         x.setUsuario(userData);
         ContactoClienteDAO xDAO = new ContactoClienteDAO();
         xDAO.updateEntityByID(x, Integer.parseInt(txtIDContacto.getText()));
@@ -486,14 +486,14 @@ public class AddClienteController implements Initializable {
     public void updateEndereco() {
         Alert alert;
         EnderecoCliente x = new EnderecoCliente();
-        x.setAvenida(txtAvenida.getText());
-        x.setBairro(txtBairro.getText());
-        x.setCidade(txtCidade.getText());
-        x.setCodigoPostal(Integer.parseInt(txtCodigooPostal.getText()));
-        x.setNumero(Integer.parseInt(txtNumeroEndereco.getText()));
-        x.setProvincia(combProvincia.getValue());
-        x.setRua(txtRua.getText());
-        x.setTipo(combTipoEndereco.getValue());
+        x.setAvenida_cli(txtAvenida.getText());
+        x.setBairro_cli(txtBairro.getText());
+        x.setCidade_cli(txtCidade.getText());
+        x.setCodigoPostal_cli(Integer.parseInt(txtCodigooPostal.getText()));
+        x.setNumero_cli(Integer.parseInt(txtNumeroEndereco.getText()));
+        x.setProvincia_cli(combProvincia.getValue());
+        x.setRua_cli(txtRua.getText());
+        x.setTipo_cli(combTipoEndereco.getValue());
         x.setUsuario(userData);
         try {
             EnderecoClienteDAO xDAO = new EnderecoClienteDAO();
@@ -517,9 +517,9 @@ public class AddClienteController implements Initializable {
         if (x != null) {
             txtIDContacto.setText(String.valueOf(x.getId()));
             txtResponsavel.setText(x.getResponsavel());
-            txtContacto.setText(x.getContacto());
-            txtEmail.setText(x.getEmail());
-            txtSite.setText(x.getWebsite());
+            txtContacto.setText(x.getContacto_cli());
+            txtEmail.setText(x.getEmail_cli());
+            txtSite.setText(x.getWebsite_cli());
             ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
         }
     }
@@ -528,14 +528,14 @@ public class AddClienteController implements Initializable {
         EnderecoCliente x = tabelaEndereco.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDEndereco.setText(String.valueOf(x.getId()));
-            txtAvenida.setText(x.getAvenida());
-            txtBairro.setText(x.getBairro());
-            txtCidade.setText(x.getCidade());
-            txtCodigooPostal.setText(String.valueOf(x.getCodigoPostal()));
-            txtNumeroEndereco.setText(String.valueOf(x.getNumero()));
-            combProvincia.setValue(x.getProvincia());
-            txtRua.setText(x.getRua());
-            combTipoEndereco.setValue(x.getTipo());
+            txtAvenida.setText(x.getAvenida_cli());
+            txtBairro.setText(x.getBairro_cli());
+            txtCidade.setText(x.getCidade_cli());
+            txtCodigooPostal.setText(String.valueOf(x.getCodigoPostal_cli()));
+            txtNumeroEndereco.setText(String.valueOf(x.getNumero_cli()));
+            combProvincia.setValue(x.getProvincia_cli());
+            txtRua.setText(x.getRua_cli());
+            combTipoEndereco.setValue(x.getTipo_cli());
             ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
         }
     }

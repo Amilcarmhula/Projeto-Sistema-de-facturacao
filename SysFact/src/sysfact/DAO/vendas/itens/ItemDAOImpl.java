@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface ItemDAOImpl<T> {
     void  addEntity(List<T> t);
+    List<T> getItensData(String factura);
 //    void updateEntityByID(T t, int id);
 //    List<T> listAllEntities();
 //    T searchEntityByName(String name);

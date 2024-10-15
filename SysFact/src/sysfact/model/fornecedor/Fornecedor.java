@@ -18,9 +18,9 @@ import sysfact.model.usuario.Usuario;
 public class Fornecedor {
 
     private int id;
-    private String tipo;
-    private String razaosocial;
-    private int nuit;
+    private String tipo_forn;
+    private String razaosocial_forn;
+    private int nuit_forn;
     private String data_criacao;
     private List<ContactoFornecedor> contactoFornecedor;
     private List<EnderecoFornecedor> enderecoFornecedor;
@@ -31,21 +31,21 @@ public class Fornecedor {
     }
 
     public Fornecedor(String tipo, String razaosocial, int nuit, List<ContactoFornecedor> contactoFornecedor, List<EnderecoFornecedor> enderecoFornecedor, Usuario usuario) {
-        this.tipo = tipo;
-        this.razaosocial = razaosocial;
-        this.nuit = nuit;
+        this.tipo_forn = tipo;
+        this.razaosocial_forn = razaosocial;
+        this.nuit_forn = nuit;
         this.contactoFornecedor = contactoFornecedor;
         this.enderecoFornecedor = enderecoFornecedor;
         this.usuario = usuario;
     }
 
     
-    public String getTipo() {
-        return tipo;
+    public String getTipo_forn() {
+        return tipo_forn;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setTipo_forn(String tipo_forn) {
+        this.tipo_forn = tipo_forn;
     }
 
     
@@ -57,20 +57,20 @@ public class Fornecedor {
         this.id = id;
     }
 
-    public String getRazaosocial() {
-        return razaosocial;
+    public String getRazaosocial_forn() {
+        return razaosocial_forn;
     }
 
-    public void setRazaosocial(String razaosocial) {
-        this.razaosocial = razaosocial;
+    public void setRazaosocial_forn(String razaosocial_forn) {
+        this.razaosocial_forn = razaosocial_forn;
     }
 
-    public int getNuit() {
-        return nuit;
+    public int getNuit_forn() {
+        return nuit_forn;
     }
 
-    public void setNuit(int nuit) {
-        this.nuit = nuit;
+    public void setNuit_forn(int nuit_forn) {
+        this.nuit_forn = nuit_forn;
     }
 
     public String getData_criacao() {
@@ -89,7 +89,7 @@ public class Fornecedor {
         String contacto = "";
         if(contactoFornecedor != null){
             for (ContactoFornecedor c : contactoFornecedor) {
-                contacto += c.getContacto() + ";   ";
+                contacto += c.getContacto_forn() + ";   ";
             }
         }
         return contacto;

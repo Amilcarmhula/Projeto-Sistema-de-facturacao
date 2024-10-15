@@ -110,8 +110,8 @@ public class ArmazemViewController implements Initializable {
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        nometabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        descricaotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+        nometabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nome_arm"));
+        descricaotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("descricao_arm"));
         estadotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("estado"));
         contactotabelaCliente.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
@@ -163,9 +163,9 @@ public class ArmazemViewController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNome_arm().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
-                } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (x.getDescricao_arm().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else if (x.getTipo().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;

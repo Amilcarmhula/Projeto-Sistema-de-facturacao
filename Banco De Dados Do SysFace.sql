@@ -1,5 +1,5 @@
-drop database _sysface;
-create database _sysface;
+-- drop database _sysface;
+-- create database _sysface;
 
 
 use _sysface;
@@ -27,12 +27,13 @@ create table usuario(
     foreign key(fk_permissao) references permissao(id)
 );
 -- Inserindo três usuários na tabela `usuario`
-
+select * from nivel_acesso;
+update nivel_acesso set descricao='Operador de Estoque' where id=3;
 INSERT INTO nivel_acesso (descricao)
 VALUES
 ('Administrador'),
 ('Gerente de Finanças'),
-('Gerente de Estoque'),
+('Operador de Estoque'),
 ('Operador de Vendas');
 INSERT INTO permissao (tipo, descricao) VALUES
 ('0000', 'Nenhuma permissão'),

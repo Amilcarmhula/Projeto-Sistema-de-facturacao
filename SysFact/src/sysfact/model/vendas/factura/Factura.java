@@ -29,7 +29,7 @@ public class Factura {
     private String data_criacao;
     private String data_vencimento;
     private DocumentosComerciais docComerciais;
-    private Item itens;
+    private List<Item> itens;
     private boolean estado;
     private Empresa empresa;
     private Cliente cliente;
@@ -39,7 +39,7 @@ public class Factura {
         super();
     }
 
-    public Factura(String numero, String data_vencimento, Item itens,
+    public Factura(String numero, String data_vencimento, List<Item> itens,
             boolean estado, Empresa empresa, Cliente cliente, DocumentosComerciais docComerciais) {
         super();
         this.numero_fac = numero;
@@ -69,7 +69,8 @@ public class Factura {
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("TABLE_DATA_SOURCE", itemDataSource); 
         parametros.put("NOMEFACTURA", numeroFactura);
-        String path = "C:\\Users\\JM-Tecnologias\\Documents\\NetBeansProjects\\Projeto Sistema de facturacao\\SysFaceReports\\RelatorioFacturas.jrxml";
+//        String path = "../../reports/vendas/facturas/PF/RelatorioFacturas.jrxml";
+        String path = "C:\\Users\\JM-Tecnologias\\Documents\\NetBeansProjects\\Projeto Sistema de facturacao\\SysFact\\src\\sysfact\\reports\\vendas\\facturas\\PF\\RelatorioFacturas.jrxml";
         
         ReportUtilities.genarateJasperReport(path, parametros, facturaDetalhesDATASOURCE);
     }
@@ -98,11 +99,11 @@ public class Factura {
         this.data_vencimento = data_vencimento;
     }
 
-    public Item getItens() {
+    public List<Item> getItens() {
         return itens;
     }
 
-    public void setItens(Item itens) {
+    public void setItens(List<Item> itens) {
         this.itens = itens;
     }
 

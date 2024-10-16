@@ -4,15 +4,18 @@
  */
 package sysfact.views.modulo_venda.vendaView;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -32,14 +35,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.desconto.DescontoDAO;
 import sysfact.dao.produto.ProdutoDAO;
 import sysfact.dao.vendas.documentos.DocumentosComerciaisDAO;
 import sysfact.dao.vendas.factura.FacturaDAO;
-import sysfact.dao.vendas.itens.ItemDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.desconto.Desconto;
 import sysfact.model.empresa.Empresa;
@@ -48,10 +49,11 @@ import sysfact.model.usuario.Usuario;
 import sysfact.model.vendas.documetos.DocumentosComerciais;
 import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
-import sysfact.model.vendas.factura.itens.TableModelItems;
+import sysfact.service.cliente.ServiceCliente;
+import sysfact.service.vendas.factura.ServiceFactura;
 import sysfact.util.InvoiceUtilities;
 import sysfact.util.LoadAndMoveUtilities;
-import sysfact.util.report.ReportUtilities;
+import sysfact.util.ValidationUtilities;
 
 /**
  * FXML Controller class
@@ -62,12 +64,6 @@ public class VendasController implements Initializable {
 
     private Empresa empresaData;
     private Usuario userData;
-
-    @FXML
-    private AnchorPane anchorVendas;
-
-    @FXML
-    private Button btnAddCliente;
 
     @FXML
     private Button btnAddItem;
@@ -82,15 +78,6 @@ public class VendasController implements Initializable {
     private Button btnRemoveItem;
 
     @FXML
-    private Button contaItensCarrinho;
-
-    @FXML
-    private ComboBox<?> comboMetodoPagamento;
-
-    @FXML
-    private ComboBox<?> comboPagemento;
-
-    @FXML
     private ComboBox<String> combDesconto;
 
     @FXML
@@ -100,49 +87,40 @@ public class VendasController implements Initializable {
     private Label labTaxas;
 
     @FXML
-    private Label labDivida;
-
-    @FXML
     private Label labNumeroFactura;
-
-    @FXML
-    private Label labPagamento;
 
     @FXML
     private Label labSubtotal;
 
     @FXML
-    private Label labTotalFactura;
-
-    @FXML
     private Label labTotalGeral;
 
     @FXML
-    private TableView<TableModelItems> tabelaItens;
+    private TableView<Item> tabelaItens;
 
     @FXML
-    private TableColumn<TableModelItems, String> nometabelaItens;
+    private TableColumn<Item, String> nometabelaItens;
 
     @FXML
-    private TableColumn<TableModelItems, Double> precotabelaItens;
+    private TableColumn<Item, String> precotabelaItens;
 
     @FXML
-    private TableColumn<TableModelItems, Integer> quantidadetabelaItens;
+    private TableColumn<Item, Integer> quantidadetabelaItens;
 
     @FXML
-    private TableColumn<TableModelItems, Double> subTotaltabelaItens;
+    private TableColumn<Item, Double> subTotaltabelaItens;
 
     @FXML
-    private TableColumn<TableModelItems, Double> descontotabelaItens;
+    private TableColumn<Item, String> descontotabelaItens;
 
     @FXML
-    private TableColumn<TableModelItems, Integer> idtabelaItens;
+    private TableColumn<Item, Integer> idtabelaItens;
 
     @FXML
-    private TableColumn<TableModelItems, Double> taxatabelaItens;
+    private TableColumn<Item, String> taxatabelaItens;
 
     @FXML
-    private TableColumn<TableModelItems, String> unidadetabelaItens;
+    private TableColumn<Item, String> unidadetabelaItens;
 
     @FXML
     private TextArea txtDescricao;
@@ -157,10 +135,6 @@ public class VendasController implements Initializable {
     @FXML
     private TextField txtID;
 
-    @FXML
-    private TextField txtValor;
-    @FXML
-    private TextField txtTrocos;
     @FXML
     private Label labValidade;
     @FXML
@@ -221,6 +195,8 @@ public class VendasController implements Initializable {
 
     }
 
+    
+
     public void getDataOnFocus() throws SQLException {
         txtIDCliente.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -272,14 +248,18 @@ public class VendasController implements Initializable {
     }
 
     private void initTableItems() {
-        idtabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Integer>("id"));
-        nometabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, String>("nome"));
-        precotabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Double>("preco"));
-        unidadetabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, String>("sigla"));
-        quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Integer>("qtd"));
-        descontotabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Double>("desconto"));
-        taxatabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Double>("taxa"));
-        subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<TableModelItems, Double>("subtotal"));
+        idtabelaItens.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
+        nometabelaItens.setCellValueFactory(new PropertyValueFactory<Item, String>("nomeProduto"));
+        precotabelaItens.setCellValueFactory(cellData
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPrecovenda().getPreco()) + " MT"));
+        unidadetabelaItens.setCellValueFactory(cellData
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidade_medida().getSigla())));
+        quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<Item, Integer>("quantidade"));
+        descontotabelaItens.setCellValueFactory(cellData
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getDesconto().getPercentagemDesconto())));
+        taxatabelaItens.setCellValueFactory(cellData
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getTaxa_imposto().getPercentagemImposto())));
+        subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<Item, Double>("subtotal"));
     }
 
     @Override
@@ -340,58 +320,57 @@ public class VendasController implements Initializable {
     }
 
     public void populateTableItems() {
+        if(txtID.getText() == null || txtID.getText().isEmpty()){
+            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de dados.", "Produto/Servico nao selecionado!");
+            return;
+        }
+        
+        if(txtQuantidade.getText() == null || txtQuantidade.getText().isEmpty()){
+            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de dados.", "Quantidade nao informada!");
+            return;
+        }
         int id = Integer.parseInt(txtID.getText());
-        Produto x = mapaProdutos.get(id);
         int qtd = Integer.parseInt(txtQuantidade.getText());
+        
+        Produto x = mapaProdutos.get(id);
         Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());
-        TableModelItems data = new TableModelItems();
-        data.setId(x.getId());
-        data.setNome(x.getNomeProduto());
-        data.setPreco(x.getPrecovenda().getPreco());
-        data.setSigla(x.getUnidade_medida().getSigla());
-        data.setDesconto(desconto.getNomeDesconto());
-        data.setQtd(qtd);
-        data.setTaxa(x.getTaxa_imposto().getNomeImposto());
+        Item i = new Item();
+        i.setId(x.getId());
+        i.setProduto(x);
+        i.setDesconto(desconto);
+        i.setQuantidade(qtd);
         double subtotal = qtd * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto()) * (1 - desconto.getPercentagemDesconto());
-        data.setSubtotal(subtotal);
+        i.setSubtotal(subtotal);
 
-        tabelaItens.getItems().add(data);
+        tabelaItens.getItems().add(i);
         resetProduto();
         displayPrice();
     }
 
     public void criarFactura() throws SQLException {
-        Factura f = new Factura();
-        f.setNumero_fac(labNumeroFactura.getText());
-        f.setData_vencimento(labValidade.getText());
-        f.setData_criacao(labDataInicial.getText());
-        f.setEmpresa(empresaData);
-        f.setUsuario(userData);
-        ClienteDAO xDAO = new ClienteDAO();
-        Cliente x = xDAO.getClieneByID(Integer.parseInt(txtIDCliente.getText()));
-        DocumentosComerciais d = mapaDocComercial.get(combTipoDoc.getValue());
-        f.setCliente(x);
-        f.setDocComerciais(d);
+        int cli = Integer.parseInt(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
+        DocumentosComerciais doc = mapaDocComercial.get(combTipoDoc.getValue());
+
         FacturaDAO fDAO = new FacturaDAO();
-
-        fDAO.addEntity(f);
-        registraItens();
-        f.criaRelatorio(f.getNumero_fac());
-        
+        ServiceFactura service = new ServiceFactura(fDAO);
+        service.criaFactura(labNumeroFactura.getText(), labDataInicial.getText(),
+                labValidade.getText(), doc, cli, empresaData, userData, collectItens());
+        if(service.isEstado()){
+            resetFactura();
+        }
     }
-    
 
-    public void registraItens() throws SQLException {
+    public List<Item> collectItens() {
         Item i = null;
-        ObservableList<TableModelItems> itens = tabelaItens.getItems();
+        ObservableList<Item> itens = tabelaItens.getItems();
         List<Item> listaItems = new ArrayList<>();
-        for (TableModelItems item : itens) {
+        for (Item item : itens) {
             i = new Item();
             Produto p = mapaProdutos.get(item.getId());
             i.setProduto(p);
-            i.setQuantidade(item.getQtd());
+            i.setQuantidade(item.getQuantidade());
             i.setSubtotal(item.getSubtotal());
-            Desconto desconto = mapaDesconto.get(item.getDesconto());
+            Desconto desconto = mapaDesconto.get(item.getDesconto().getNomeDesconto());
             i.setDesconto(desconto);
             i.setArmazem(p.getArmazem());
             i.setUsuario(userData);
@@ -400,22 +379,21 @@ public class VendasController implements Initializable {
             i.setFactura(f);
             listaItems.add(i);
         }
-        ItemDAO iDAO = new ItemDAO();
-        iDAO.addEntity(listaItems);
+        return listaItems;
     }
 
     public void displayPrice() {
-        ObservableList<TableModelItems> itens = tabelaItens.getItems();
+        ObservableList<Item> itens = tabelaItens.getItems();
         double subtotal = 0;
         double desc = 0;
         double taxa = 0;
         double total = 0;
-        for (TableModelItems item : itens) {
+        for (Item item : itens) {
             Produto x = mapaProdutos.get(item.getId());
-            subtotal += item.getQtd() * x.getPrecovenda().getPreco();
-            taxa += item.getQtd() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
-            Desconto desconto = mapaDesconto.get(item.getDesconto());
-            desc += (item.getQtd() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto())) * desconto.getPercentagemDesconto();
+            subtotal += item.getQuantidade() * x.getPrecovenda().getPreco();
+            taxa += item.getQuantidade() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
+            Desconto desconto = mapaDesconto.get(item.getDesconto().getNomeDesconto());
+            desc += (item.getQuantidade() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto())) * desconto.getPercentagemDesconto();
             total += item.getSubtotal();
         }
         labSubtotal.setText(String.format("%.2f", subtotal) + " MZN");
@@ -436,6 +414,22 @@ public class VendasController implements Initializable {
         txtNome.setText("");
         txtDescricao.setText("");
         txtQuantidade.setText("");
+    }
+    public void resetFactura() {
+        tabelaItens.getItems().clear();
+        txtIDCliente.setText("");
+        txtEnderecoCliente.setText("");
+        txtNomeCLiente.setText("");
+        txtNuitCLiente.setText("");
+        txtContactoCLiente.setText("");
+        txtEmailCLiente.setText("");
+        
+        labSubtotal.setText("");
+        labDesconto.setText("");
+        labTaxas.setText("");
+        labTotalGeral.setText("");
+        labNumeroFactura.setText("");
+        labValidade.setText("");
     }
 
 }

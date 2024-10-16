@@ -92,7 +92,8 @@ public class SysFact extends Application {
             stage.setOpacity(1);
         });
 //      Remover os botoes de close, maximize e minimize
-        stage.initStyle(StageStyle.TRANSPARENT);
+System.out.println("Ola Mundo!S");
+stage.initStyle(StageStyle.TRANSPARENT);
         
         stage.setScene(scene);
         stage.show();

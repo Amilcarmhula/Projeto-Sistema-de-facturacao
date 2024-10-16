@@ -1,8 +1,6 @@
 use _sysface;
 CALL atualizar_estado_precovenda();
-select * from endereco_empresa;
-update endereco_empresa set avenida='Av. 24 de Julho' where id=1;
-desc empresa;
+select * from itemfactura;
 
 update empresa set apelido='JM-Tecnologias Soc.Unipe.Lda' where id = 1;
 

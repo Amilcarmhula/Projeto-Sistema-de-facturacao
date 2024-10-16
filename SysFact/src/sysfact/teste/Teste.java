@@ -6,6 +6,8 @@ package sysfact.teste;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.io.File;
+import java.nio.file.FileSystem;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,49 +39,68 @@ import sysfact.util.ValidationUtilities;
  */
 public class Teste {
 
+    public void returnFolder(File f) {
+        String root = f.getPath();
+        File file = new File(root);
+        String[] _subFolder = file.list();
+        for (int i = 0; i < _subFolder.length; i++) {
+//            root = "C:/";
+            root += _subFolder[i] + "/";
+            file = new File(root);
+            if (file.isDirectory()) {
+                returnFolder2(file);
+                System.out.println("Metodo 1: "+file);
+            }
+            
+//            System.out.println(file + ": " + file.isFile());
+        }
+    }
+
+    public File returnFolder2(File f) {
+        String root = f.getPath();
+        File file = new File(root);
+        String[] _subFolder = file.list();
+        for (int i = 0; i < _subFolder.length; i++) {
+//            root = "C:/";
+            root += _subFolder[i] + "/";
+            file = new File(root);
+            if (file.isDirectory()) {
+//                returnFolder(file);
+                System.out.println("Metodo 2: "+file);
+                return file;
+            }
+            
+//            System.out.println(file + ": " + file.isFile());
+        }
+        return file;
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
+        Teste t = new Teste();
+        t.returnFolder(new File("C:/"));
+//        File f = new File("C:/JM-InvSM/facturinha");
+//        if(!f.exists()){
+//            f.mkdir();
+//            System.out.println("pasta criada");
+//        }
 
-//        Cliente c = new Cliente();
-//        FacturaDAO dao = new FacturaDAO();
-//        Factura f = dao.getFacturaData("2024-1010/2");
-//        
-//            System.out.println("nome: "+f.getNumero_fac());
-//            System.out.println("nome: "+f.getData_criacao());
-//            System.out.println("nome: "+f.getData_vencimento());
-//            System.out.println("nome: "+f.getDocComerciais().getNome_doc());
-//            System.out.println("nome: "+f.getDocComerciais().getSigla_doc());
-//            System.out.println("nome: "+f.getCliente().getRazao_cli());
-//            System.out.println("nome: "+f.getCliente().getNuit_cli());
-//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getAvenida_cli());
-//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getRua_cli());
-//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getNumero_cli());
-//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getBairro_cli());
-//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getCidade_cli());
-//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getProvincia_cli());
-//            System.out.println("nome: "+f.getCliente().getEnderecoCliente().getCodigoPostal_cli());
-//            System.out.println("nome: "+f.getCliente().getContactoCliente().getContacto_cli());
-//            System.out.println("nome: "+f.getCliente().getContactoCliente().getEmail_cli());
-//            System.out.println("nome: "+f.getEmpresa().getNome_emp());
-//            System.out.println("nome: "+f.getEmpresa().getRazao_emp());
-//            System.out.println("nome: "+f.getEmpresa().getNuit_emp());
-//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getAvenida_emp());
-//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getBairro_emp());
-//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getCidade_emp());
-//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getProvincia_emp());
-//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getRua_emp());
-//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getCodigoPostal_emp());
-//            System.out.println("nome: "+f.getEmpresa().getEnderecoEmpresa().getNumero_emp());
-//            System.out.println("nome: "+f.getEmpresa().getContactoEmpresa().getContacto_emp());
-//            System.out.println("nome: "+f.getEmpresa().getContactoEmpresa().getEmail_emp());
-//            System.out.println("nome: "+f.getEmpresa().getContactoEmpresa().getWebsite_emp());
-//            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNome_banco());
-//            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNib());
-//            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNuib());
-//            System.out.println("nome: "+f.getEmpresa().getContaBancaria().getNumero_conta());
+//        String root = "C:/";
+//        File file = new File(root);
+//        String[] _subFolder = file.list();
+//        for (int i = 0; i < _subFolder.length; i++) {
+//            root = "C:/";
+//            root += _subFolder[i] + "/";
+//            file = new File(root);
+//            System.out.println(file + ": " + file.isFile());
+//        }
+
+//        if (!f.exists()) {
+//            f.mkdir();
+//            System.out.println("pasta criada");
+//        }
         System.out.println("____________________________________________________");
 
 //            System.out.println("______________________Cliente______________________");

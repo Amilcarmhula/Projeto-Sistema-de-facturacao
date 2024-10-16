@@ -36,6 +36,14 @@ public class ValidationUtilities {
         }
         return Double.parseDouble(String.format("%.2f", data));
     }
+    
+    public static Object validaObjecto(FontAwesomeIcon icon, Object data) {
+        if (data == null) {
+            showDialog(icon, "Erro de dados", "Dados invalidos!");
+            return null;
+        }
+        return data;
+    }
 
     public static void showDialog(FontAwesomeIcon icon, String title, String message) {
         Alert alert = new Alert(AlertType.INFORMATION);

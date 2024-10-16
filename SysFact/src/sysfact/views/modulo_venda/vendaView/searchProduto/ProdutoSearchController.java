@@ -290,7 +290,7 @@ public class ProdutoSearchController implements Initializable {
         }
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        artigo.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        artigo.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
         armazem.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
 //        codigobarras.setCellValueFactory(new PropertyValueFactory<>("codigo_barra"));

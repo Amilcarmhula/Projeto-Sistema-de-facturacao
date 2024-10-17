@@ -45,7 +45,7 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
     public Usuario login(String u, String s) {
         Usuario user = null;
         try {
-            String sql = "select * from usuario where usuario=? and senha=?";
+            String sql = "select * from usuario where usuario=? and senha=? and estado=1";
             PreparedStatement ps = Conexao.getConexao().prepareStatement(sql);
             ps.setString(1, u);
             ps.setString(2, s);
@@ -65,7 +65,7 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
                 user.setEstado(result.getBoolean("estado"));
                 user.setData_criacao(result.getString("data_criacao"));
             }else{
-                ValidationUtilities.showDialog(FontAwesomeIcon.CHECK,"Info", "Usuario nao existe!!");
+                ValidationUtilities.showDialog(FontAwesomeIcon.TIMES,"Info", "Usuario nao existe!!");
             }
             result.close();
             ps.close();

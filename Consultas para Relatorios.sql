@@ -1,6 +1,7 @@
 use _sysface;
 CALL atualizar_estado_precovenda();
-select * from itemfactura;
+select count(*) from itemfactura;
+select * from factura;
 
 update empresa set apelido='JM-Tecnologias Soc.Unipe.Lda' where id = 1;
 

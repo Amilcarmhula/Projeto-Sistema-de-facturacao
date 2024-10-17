@@ -1,9 +1,9 @@
 -- drop database _sysface;
--- create database _sysface;
+create database _sysface;
 
 
 use _sysface;
-
+select * from usuario;
 create table nivel_acesso(
 	id integer primary key auto_increment,
     descricao varchar(50) not null
@@ -27,8 +27,6 @@ create table usuario(
     foreign key(fk_permissao) references permissao(id)
 );
 -- Inserindo três usuários na tabela `usuario`
-select * from nivel_acesso;
-update nivel_acesso set descricao='Operador de Estoque' where id=3;
 INSERT INTO nivel_acesso (descricao)
 VALUES
 ('Administrador'),
@@ -69,14 +67,13 @@ VALUES
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_usuario) references usuario(id)
 );
-
 create table endereco_cliente(
 	id integer primary key auto_increment,
-    provincia varchar(50),
-    cidade varchar(50),
-    bairro varchar(50),
-    avenida varchar(50),
-    rua varchar(30),
+    provincia varchar(100),
+    cidade varchar(100),
+    bairro varchar(100),
+    avenida varchar(100),
+    rua varchar(50),
     codigo_postal integer,
     numero integer not null,
     tipo varchar(10),
@@ -87,14 +84,12 @@ create table endereco_cliente(
     foreign key (fk_id_usuario) references usuario(id),
     check(tipo in('Facturação','Envio'))
 );
-
-
 create table contacto_cliente(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
     contacto varchar(20) not null,
-	email varchar(50) unique,
-    website varchar(50) unique,
+	email varchar(100) unique,
+    website varchar(100),
     fk_id_cliente integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -112,7 +107,6 @@ create table fornecedor(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_usuario) references usuario(id)
 );
-
 create table endereco_fornecedor(
 	id integer primary key auto_increment,
     provincia varchar(50),
@@ -129,13 +123,12 @@ create table endereco_fornecedor(
     foreign key (fk_id_fornecedor) references fornecedor(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
-
 create table contacto_fornecedor(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
     contacto varchar(20) not null,
-	email varchar(50) unique,
-    website varchar(50) unique,
+	email varchar(100) unique,
+    website varchar(100) ,
     fk_id_fornecedor integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -151,8 +144,6 @@ create table armazem(
     estado boolean default 1 not null, -- Ativo/Inativo.
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-
 create table endereco_armazem(
 	id integer primary key auto_increment,
     provincia varchar(50),
@@ -169,7 +160,6 @@ create table endereco_armazem(
     foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
-
 create table contacto_armazem(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
@@ -190,10 +180,8 @@ create table categoria(
     familia varchar(50),
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    check(tipo in('Produto','Serviço'))
+    check(tipo in('Produtos','Serviços'))
 );
-
-    
 create table unidade_medida(
 	id integer primary key auto_increment,
     identificador varchar(50) not null,
@@ -201,8 +189,6 @@ create table unidade_medida(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ); 
-
-    
 create table taxa_imposto(
 	id integer primary key auto_increment,
     identificador varchar(50) not null,
@@ -210,14 +196,23 @@ create table taxa_imposto(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 create table desconto(
 	id integer primary key auto_increment,
-    nome varchar(50) not null,
+    identificador varchar(100) not null,
     percentagem decimal(4,3),
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+INSERT INTO desconto (identificador, percentagem, descricao) VALUES
+('Isento', 0.0, 'Desconto aplicado em produtos sem desconto'),
+('Desconto de Lançamento', 0.1, 'Desconto aplicado em novos produtos no lançamento'),
+('Desconto de Fim de Ano', 0.155, 'Desconto especial para vendas de final de ano'),
+('Desconto por Quantidade', 0.575, 'Desconto aplicado para compras em grandes quantidades'),
+('Desconto Promocional', 0.2, 'Desconto aplicado em promoções especiais por tempo limitado'),
+('Desconto Fidelidade', 0.8, 'Desconto para clientes fiéis com mais de 1 ano de compras'),
+('Desconto Black Friday', 0.3, 'Desconto massivo durante a Black Friday'),
+('Desconto de Parceria', 0.125, 'Desconto exclusivo para parceiros comerciais'),
+('Desconto de Natal', 0.1825, 'Desconto sazonal para o período de Natal');
 
 
 create table produto(
@@ -356,19 +351,18 @@ DELIMITER ;
 --  Banco de dados da empresa no sistema Sysface
  create table empresa(
 	id integer primary key auto_increment,
-    nome varchar(50) not null,
+    nome varchar(100) not null,
     razaosocial varchar(100),
     nuit integer,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 create table endereco_empresa(
 	id integer primary key auto_increment,
-    provincia varchar(50),
-    cidade varchar(50),
-    bairro varchar(50),
-    avenida varchar(50),
-    rua varchar(30),
+    provincia varchar(100),
+    cidade varchar(100),
+    bairro varchar(100),
+    avenida varchar(100),
+    rua varchar(50),
     codigo_postal integer,
     numero integer not null,
     tipo varchar(10),
@@ -376,7 +370,6 @@ create table endereco_empresa(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_empresa) references empresa(id)
 );
-
 create table contacto_empresa(
 	id integer primary key auto_increment,
     contacto varchar(20) not null,
@@ -386,8 +379,6 @@ create table contacto_empresa(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_empresa) references empresa(id)
 );
-
-
  create table contabancaria(
 	id integer primary key auto_increment,
     nome_banco varchar(50) not null,
@@ -398,6 +389,17 @@ create table contacto_empresa(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_empresa) references empresa(id)
 );
+    -- Informacao bases de uma empresa
+INSERT INTO empresa (nome, razaosocial, nuit) VALUES
+('JM-Tecnologias', 'JM-Tecnologias Sociedade Unipessoal, E.I', 122564800);
+INSERT INTO endereco_empresa (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_empresa) VALUES
+('Maputo', 'Matola', 'Patrice Lumumba', '24 de Julho', '21376', 1112, 211, 'Facturação', 1);
+INSERT INTO contacto_empresa (contacto, email, website, fk_id_empresa)
+VALUES 
+    ('+258879201993', 'infol@jm-tecnologias.co.mz', 'www.jm-tecnologias.co.mz', 1);
+INSERT INTO contabancaria (nome_banco, numero, nib, nuib, fk_id_empresa) VALUES
+('Banco Comercial e de Investimentos', '13945108110001', '000800003945108110195', '123456789', 1);
+
 
 -- Armazena as siglas das facturas e o numero de dias uteis
 create table documentocomercial(
@@ -407,6 +409,16 @@ create table documentocomercial(
     diasuteis integer not null,
     descricao text not null    
 );
+INSERT INTO documentocomercial (sigla, nome, diasuteis, descricao) VALUES
+('FA','Fatura', 5, 'Fatura: Documento comercial que representa a venda de produtos ou serviços, devendo ser emitida no ato da venda ou até 5 dias úteis após a transação.'),
+('FP','Fatura Proforma', 30, 'Fatura Proforma: Documento preliminar usado para cotações e propostas comerciais. Não possui validade fiscal, com uma validade aproximada de 30 dias.'),
+('FR','Fatura Recibo', 1, 'Fatura Recibo: Documento que combina a fatura e o recibo, emitido simultaneamente à venda e ao pagamento.'),
+('FS','Fatura Simplificada', 1, 'Fatura Simplificada: Utilizada para vendas de baixo valor ou operações simples, devendo ser emitida no momento da venda.'),
+('GT','Guia de Transporte', 1, 'Guia de Transporte: Documento que deve acompanhar o transporte de mercadorias, emitido antes da movimentação dos produtos.'),
+('NC','Nota de Crédito', 30, 'Nota de Crédito: Documento emitido para corrigir ou anular uma fatura anterior, geralmente emitida até 30 dias após a transação original.'),
+('ND','Nota de Débito', 30, 'Nota de Débito: Documento emitido para cobrar valores adicionais de um cliente, emitido até 30 dias após a identificação do valor a ser cobrado.');
+
+
 
 -- Tabelas para armazenar dados das facturacoes
 CREATE TABLE factura (
@@ -451,6 +463,24 @@ create trigger trigger_registra_saida
         value ('Saída',new.data_adicao,new.quantidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
     end//
 delimiter ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -67,7 +67,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
             sql = "SELECT p.nome, p.descricao, pv.preco, "
                     + "i.quantidade, i.subtotal, "
                     + "ip.identificador as descricao_imposto, ip.percentagem AS imposto, "
-                    + "d.nome AS descricao_desconto, d.percentagem AS desconto, "
+                    + "d.identificador AS descricao_desconto, d.percentagem AS desconto, "
                     + "f.numero "
                     + "FROM itemfactura i "
                     + "LEFT JOIN factura f ON f.numero = i.fk_numero "

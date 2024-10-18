@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
@@ -195,6 +197,24 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
 
         }
         return lista;
+    }
+    @Override
+    public int CountFornecedor() {
+        int total = 0;
+        try {
+            sql = "select count(*) as total from fornecedor";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            if (result.next()) { // Verifica se há resultados
+                total = result.getInt("total");
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FornecedorDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return total;
     }
 
 }

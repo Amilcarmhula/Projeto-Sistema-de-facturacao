@@ -8,6 +8,10 @@ package sysfact.teste;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Map;
+import sysfact.dao.cliente.ClienteDAO;
+import sysfact.dao.fornecedor.FornecedorDAO;
+import sysfact.dao.produto.fornecido.ProdutoFornecidoDAO;
 
 //import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 //import java.io.File;
@@ -74,17 +78,17 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-       String originalPath = "C:\\Users\\JM-Tecnologias\\Documents\\NetBeansProjects\\Projeto Sistema de facturacao\\SysFact";
-        
-        // Substitui as barras invertidas (\) por barras normais (/)
-        String updatedPath = originalPath.replace("\\", "/");
-        
-        // Exibe o resultado
-        System.out.println("Original: " + originalPath);
-        System.out.println("Atualizado: " + updatedPath);
+        Map<String, Integer> mapa = new ProdutoFornecidoDAO().getMovimentos(1, 1);
+        for (Map.Entry<String, Integer> entry : mapa.entrySet()) {
+            System.out.println(entry.getKey()+": " +entry.getValue());
+//            Object key = entry.getKey();
+//            Object val = entry.getValue();
+            
+        }
+        System.out.println("Total: " + new FornecedorDAO().CountFornecedor() );
         
 
-    }
+    
         
 //        UnidadeMedida x = new UnidadeMedida();
 //        UnidadeMedidaDAO z = new UnidadeMedidaDAO();
@@ -267,6 +271,6 @@ public class Teste {
 //        System.out.println("Data added: " + usuario.getData_criacao());
 //        System.out.println("Status: " + usuario.isActive_or_not());
 //        System.out.println("");
-    
+    }
 
 }

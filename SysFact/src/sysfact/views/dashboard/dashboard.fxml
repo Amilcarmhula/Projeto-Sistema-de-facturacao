@@ -46,12 +46,12 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="117.0" layoutY="90.0" prefHeight="28.0" prefWidth="134.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+                  <Label fx:id="labEntrada" layoutX="117.0" layoutY="90.0" prefHeight="28.0" prefWidth="134.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="117.0" layoutY="125.0" prefHeight="28.0" prefWidth="134.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+                  <Label fx:id="labSaida" layoutX="117.0" layoutY="125.0" prefHeight="28.0" prefWidth="134.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -137,12 +137,12 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="15.0" layoutY="90.0" prefHeight="28.0" prefWidth="116.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+                  <Label fx:id="labCliente" layoutX="15.0" layoutY="90.0" prefHeight="28.0" prefWidth="116.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="211.0" layoutY="125.0" prefHeight="28.0" prefWidth="89.0" text="0" textFill="WHITE">
+                  <Label fx:id="labFornecedor" layoutX="211.0" layoutY="125.0" prefHeight="28.0" prefWidth="89.0" text="0" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>

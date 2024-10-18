@@ -19,4 +19,5 @@ public interface FornecedorDAOImpl<T> {
     T getEntityByID(int id);
 //    void deleteEntityByROOT(int id);
     void deleteEntity(int x);
+    int CountFornecedor();
 }

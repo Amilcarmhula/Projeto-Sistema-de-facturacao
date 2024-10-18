@@ -29,4 +29,5 @@ public interface ClienteDAOImpl<T> {
 //    ObservableList<T> listAllEntitiesTypeFornecedor();
 //    void deleteEntityByROOT(int id);
     void deleteEntity(int x);
+    int CountClientes();
 }

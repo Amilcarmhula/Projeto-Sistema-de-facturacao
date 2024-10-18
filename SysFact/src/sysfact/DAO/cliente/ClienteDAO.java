@@ -10,14 +10,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
-import sysfact.model.usuario.Usuario;
-import sysfact.reports.facturas.ClienteData;
 import sysfact.util.Conexao;
 
 /**
@@ -291,44 +291,43 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         return c;
     }
 
-    public ClienteData getClinteFacturaData(String factura) {
-        ClienteData c = null;
-        try {
-            sql = "SELECT f.numero, f.data_criacao, f.data_vencimento,"
-                    + "dc.nome as tipo,"
-                    + "c.razaosocial, c.nuit,"
-                    + "CONCAT(e.avenida,', ',e.rua,', ',e.numero,'; ',e.bairro,', ',e.cidade,', ',e.provincia,'- ',e.codigo_postal ) as endereco,"
-                    + "GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR '; ') AS contatos,ct.email "
-                    + "FROM factura f "
-                    + "LEFT JOIN documentocomercial dc ON f.fk_id_doc = dc.id "
-                    + "LEFT JOIN cliente c ON c.id = f.fk_id_cliente "
-                    + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id "
-                    + "LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id "
-                    + "WHERE f.numero = ?";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, factura);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                c = new ClienteData();
-                c.setApelido(result.getString("razaosocial"));
-                c.setNuit(result.getInt("nuit"));
-                c.setContacto(result.getString("contatos"));
-                c.setEndereco(result.getString("endereco"));
-                c.setEmail(result.getString("email"));
-                c.setNumero(result.getString("numero"));
-                c.setData_criacao(result.getString("data_criacao"));
-                c.setData_vencimento(result.getString("data_vencimento"));
-                c.setTipo(result.getString("tipo"));
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
-
-        }
-        return c;
-    }
-
+//    public ClienteData getClinteFacturaData(String factura) {
+//        ClienteData c = null;
+//        try {
+//            sql = "SELECT f.numero, f.data_criacao, f.data_vencimento,"
+//                    + "dc.nome as tipo,"
+//                    + "c.razaosocial, c.nuit,"
+//                    + "CONCAT(e.avenida,', ',e.rua,', ',e.numero,'; ',e.bairro,', ',e.cidade,', ',e.provincia,'- ',e.codigo_postal ) as endereco,"
+//                    + "GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR '; ') AS contatos,ct.email "
+//                    + "FROM factura f "
+//                    + "LEFT JOIN documentocomercial dc ON f.fk_id_doc = dc.id "
+//                    + "LEFT JOIN cliente c ON c.id = f.fk_id_cliente "
+//                    + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id "
+//                    + "LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id "
+//                    + "WHERE f.numero = ?";
+//            ps = con.prepareStatement(sql);
+//            ps.setString(1, factura);
+//            ResultSet result = ps.executeQuery();
+//            while (result.next()) {
+//                c = new ClienteData();
+//                c.setApelido(result.getString("razaosocial"));
+//                c.setNuit(result.getInt("nuit"));
+//                c.setContacto(result.getString("contatos"));
+//                c.setEndereco(result.getString("endereco"));
+//                c.setEmail(result.getString("email"));
+//                c.setNumero(result.getString("numero"));
+//                c.setData_criacao(result.getString("data_criacao"));
+//                c.setData_vencimento(result.getString("data_vencimento"));
+//                c.setTipo(result.getString("tipo"));
+//            }
+//            result.close();
+//            ps.close();
+//        } catch (SQLException e) {
+//            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+//
+//        }
+//        return c;
+//    }
     @Override
     public void deleteEntity(int x) {
         try {
@@ -342,6 +341,25 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
             JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    @Override
+    public int CountClientes() {
+        int total = 0;
+        try {
+            sql = "select count(*) as total from cliente";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            if (result.next()) { // Verifica se há resultados
+                total = result.getInt("total");
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return total;
     }
 
 }

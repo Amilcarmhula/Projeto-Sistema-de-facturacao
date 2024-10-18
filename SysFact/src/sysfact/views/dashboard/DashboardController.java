@@ -14,25 +14,28 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import sysfact.dao.armazem.ArmazemDAO;
 import sysfact.dao.categoria.CategoriaDAO;
+import sysfact.dao.cliente.ClienteDAO;
+import sysfact.dao.fornecedor.FornecedorDAO;
+import sysfact.dao.produto.fornecido.ProdutoFornecidoDAO;
 import sysfact.dao.stock.StockDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.categoria.Categoria;
 import sysfact.model.stock.Stock;
-import sysfact.util.LoadAndMoveUtilities;
 import sysfact.util.ValidationUtilities;
 
 /**
@@ -59,15 +62,32 @@ public class DashboardController implements Initializable {
     @FXML
     private TableView<Stock> tabelaStock;
 
+    @FXML
+    private Label labSaida;
+
+    @FXML
+    private Label labEntrada;
+
+    @FXML
+    private Label labCliente;
+
+    @FXML
+    private Label labFornecedor;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         try {
             showStock();
+            showMovimentos();
+            showCountCliente();
+            showCountFornecedor();
             mapCategorias();
             mapArmazens();
         } catch (SQLException ex) {
             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        autoUpdade();
     }
     private ObservableList<Categoria> listaFamilias;
     private Map<String, Categoria> mapaCategorias;
@@ -121,7 +141,7 @@ public class DashboardController implements Initializable {
             arm = a.getId();
         }
         listaStock = x.getStock(cat, arm);
-        
+
         // Limpar dados antigos do gráfico e da tabela
         pieChart.getData().clear();
         tabelaStock.getItems().clear();
@@ -155,8 +175,121 @@ public class DashboardController implements Initializable {
             });
         }
     }
+    private Map<String, Integer> mapaMovimentos;
+
+    public void showMovimentos() throws SQLException {
+        // Tratando valores nulos ou vazios nos combos
+        Integer cat = null;
+        Integer arm = null;
+
+        if (combCategoria.getValue() != null && !combCategoria.getValue().isEmpty() && !combCategoria.getValue().equals("Todas...")) {
+            Categoria c = mapaCategorias.get(combCategoria.getValue());
+            cat = c.getId();
+        }
+
+        if (combArmazem.getValue() != null && !combArmazem.getValue().isEmpty() && !combArmazem.getValue().equals("Todos...")) {
+            Armazem a = mapaArmazens.get(combArmazem.getValue());
+            arm = a.getId();
+        }
+        mapaMovimentos = new ProdutoFornecidoDAO().getMovimentos(cat, arm);
+        if (!mapaMovimentos.isEmpty()) {
+            for (Map.Entry<String, Integer> entry : mapaMovimentos.entrySet()) {
+                if (entry.getKey().equals("entradas")) {
+                    labEntrada.setText(entry.getValue() + "");
+                }
+                if (entry.getKey().equals("saidas")) {
+                    labSaida.setText(entry.getValue() + "");
+                }
+            }
+        } else {
+            labEntrada.setText("0");
+            labSaida.setText("0");
+        }
+    }
+
+    public void showCountCliente() throws SQLException {
+        labCliente.setText(new ClienteDAO().CountClientes() + "");
+    }
+
+    public void showCountFornecedor() throws SQLException {
+        labFornecedor.setText(new FornecedorDAO().CountFornecedor() + "");
+    }
 
     public void selectedComboBox() throws SQLException {
+        showMovimentos();
         showStock();
     }
+
+//    public void autoUpdade() {
+//        Thread x = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int i = 0; i < 5; i++) {
+//                    try {
+//                        // Actualiza os dados a cada 10 segundos
+//                        showStock();
+//                        showMovimentos();
+//                        showCountCliente();
+//                        showCountFornecedor();
+//                        mapCategorias();
+//                        mapArmazens();
+//                    } catch (SQLException ex) {
+//                        Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//
+//                    try {
+//                        // A thread dorme por 1 segundo
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException ex) {
+//                        // Trata uma possível interrupção da thread
+//                        System.out.println("Erro: " + ex);
+//                    }
+//                }
+//                autoUpdade();
+//                // Imprime a mensagem "Fim" após o término do loop
+//                System.out.println("\nFim");
+//            }
+//        });
+//
+//        // Inicia a execução da thread
+//        x.start();
+//    }
+    public void autoUpdade() {
+        Thread x = new Thread(new Runnable() {
+            @Override
+            public void run() {
+//                for (int i = 0; i < 5; i++) {
+//                    System.out.println("#"+i);
+                    try {
+                        // Actualiza os dados a cada 10 segundos
+                        Platform.runLater(() -> { //To update UI elements from a background thread
+                            try {
+                                showStock();
+                                showMovimentos();
+                                showCountCliente();
+                                showCountFornecedor();
+                                mapCategorias();
+                                mapArmazens();
+                            } catch (SQLException ex) {
+                                Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        });
+
+                        // A thread dorme por 10 segundos
+                        Thread.sleep(10000);
+                    } catch (InterruptedException ex) {
+                        // Trata uma possível interrupção da thread
+                        System.out.println("Erro: " + ex);
+                    }
+//                }
+                autoUpdade();
+                // Imprime a mensagem "Fim" após o término do loop
+                System.out.println("\nFim");
+            }
+        });
+
+        // Inicia a execução da thread
+        x.start();
+    }
+
 }

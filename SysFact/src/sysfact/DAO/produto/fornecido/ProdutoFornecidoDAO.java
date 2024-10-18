@@ -4,10 +4,13 @@
  */
 package sysfact.dao.produto.fornecido;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
@@ -16,6 +19,7 @@ import sysfact.model.cliente.Cliente;
 import sysfact.model.produto.Produto;
 import sysfact.model.produto.fornecido.ProdutoFornecido;
 import sysfact.util.Conexao;
+import sysfact.util.ValidationUtilities;
 
 /**
  *
@@ -156,6 +160,54 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
         }
         return c;
 
+    }
+
+    public Map<String, Integer> getMovimentos(Integer cat, Integer arm) {
+        Map<String, Integer> mapa = new HashMap<>();
+        try {
+            sql = "SELECT "
+                    + "SUM(CASE WHEN mp.tipo_movimento = 'Entrada' THEN mp.quantidade ELSE 0 END) as entradas,"
+                    + "SUM(CASE WHEN mp.tipo_movimento = 'Saída' THEN mp.quantidade ELSE 0 END) AS saidas,"
+                    + "MONTH(mp.data_movimento) AS mes, "
+                    + "YEAR(mp.data_movimento) AS ano "
+                    + "FROM movimento_produto mp "
+                    + "LEFT JOIN produto p ON p.id = mp.fk_id_produto "
+                    + "LEFT JOIN categoria c ON c.id = p.fk_id_categoria "
+                    + "LEFT JOIN armazem a ON a.id = mp.fk_id_armazem "
+                    + "WHERE (? IS NULL OR c.id = ?)"
+                    + " AND (? IS NULL OR a.id = ?)"
+                    + " AND mp.data_movimento=current_date()"
+                    + " GROUP BY mes, ano";
+            ps = con.prepareStatement(sql);
+
+            // Se a categoria ou armazém não forem informados, passar valores nulos
+            if (cat == null) {
+                ps.setNull(1, java.sql.Types.INTEGER); // Para ? IS NULL
+                ps.setNull(2, java.sql.Types.INTEGER); // Para c.id = ?
+            } else {
+                ps.setInt(1, cat);  // Para ? IS NULL
+                ps.setInt(2, cat);  // Para c.id = ?
+            }
+
+            if (arm == null) {
+                ps.setNull(3, java.sql.Types.INTEGER); // Para ? IS NULL
+                ps.setNull(4, java.sql.Types.INTEGER); // Para a.id = ?
+            } else {
+                ps.setInt(3, arm);  // Para ? IS NULL
+                ps.setInt(4, arm);  // Para a.id = ?
+            }
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                mapa.put("entradas", result.getInt("entradas"));
+                mapa.put("saidas", result.getInt("saidas"));
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            System.out.println("Erro: "+ex);
+//            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro Dados", "Erro ao carregar movimentos de produto: " + ex);
+        }
+        return mapa;
     }
 
     @Override

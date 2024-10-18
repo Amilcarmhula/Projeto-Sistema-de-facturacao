@@ -18,7 +18,7 @@ FROM
     LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id
     LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto
 WHERE 
-    f.numero = '2024-777/2';
+    f.numero = '2024-1010/2';
 --     
 -- -- Calculo de totais para fecho da factura
 SELECT 
@@ -40,7 +40,7 @@ FROM
     LEFT JOIN precovenda pv2 ON pv2.fk_id_produto = pp.id
     LEFT JOIN taxa_imposto ip2 ON ip2.id = pp.fk_id_taxa_imposto    
 WHERE 
-    ff.numero = '2024-777/2';
+    ff.numero = '2024-1010/2';
 --     
 -- -- Dados do cliente da factura
 -- SELECT f.numero, f.data_criacao, f.data_vencimento,
@@ -74,7 +74,7 @@ WHERE
 
 
 
-INSERT INTO cliente (tipo, nome, apelido, nuit, fk_id_usuario)
+INSERT INTO cliente (tipo, nome, razaosocial, nuit, fk_id_usuario)
 VALUES
 ('Pessoa Física', 'Carlos Mendes', 'Carlinhos', 123456789, 1),
 ('Pessoa Jurídica', 'Tech Solutions', 'Tech Soluções Ltda', 987654321, 1),
@@ -91,16 +91,16 @@ VALUES
 -- Dados de endereços
 INSERT INTO endereco_cliente (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_cliente, fk_id_usuario)
 VALUES
-('Maputo', 'Maputo', 'Alto Maé', 'Avenida 25 de Setembro', 'Rua 1', 1100, 123, 'Facturação', 1, 1),
-('Maputo', 'Maputo', 'Polana', 'Avenida Julius Nyerere', 'Rua 2', 1200, 456, 'Envio', 2, 1),
-('Sofala', 'Beira', 'Munhava', 'Avenida Samora Machel', 'Rua 3', 2200, 789, 'Facturação', 3, 1),
-('Nampula', 'Nampula', 'Namicopo', 'Avenida Eduardo Mondlane', 'Rua 4', 3300, 101, 'Envio', 4, 1),
-('Maputo', 'Matola', 'T3', 'Avenida 4 de Outubro', 'Rua 5', 1400, 202, 'Facturação', 5, 1),
-('Inhambane', 'Inhambane', 'Chilwane', 'Avenida Patrice Lumumba', 'Rua 6', 5500, 303, 'Envio', 6, 1),
-('Gaza', 'Xai-Xai', 'Chongoene', 'Avenida dos Heróis', 'Rua 7', 6600, 404, 'Facturação', 7, 1),
-('Cabo Delgado', 'Pemba', 'Paquitequete', 'Avenida 25 de Junho', 'Rua 8', 7700, 505, 'Envio', 8, 1),
-('Zambézia', 'Quelimane', 'Sagrada Família', 'Avenida Marginal', 'Rua 9', 8800, 606, 'Facturação', 9, 1),
-('Manica', 'Chimoio', '3 de Fevereiro', 'Avenida 7 de Abril', 'Rua 10', 9900, 707, 'Envio', 10, 1);
+('Maputo', 'Maputo', 'Alto Maé', '25 de Setembro', ' 1', 1100, 123, 'Facturação', 1, 1),
+('Maputo', 'Maputo', 'Polana', 'Julius Nyerere', ' 2', 1200, 456, 'Envio', 2, 1),
+('Sofala', 'Beira', 'Munhava', 'Samora Machel', ' 3', 2200, 789, 'Facturação', 3, 1),
+('Nampula', 'Nampula', 'Namicopo', 'Eduardo Mondlane', ' 4', 3300, 101, 'Envio', 4, 1),
+('Maputo', 'Matola', 'T3', '4 de Outubro', ' 5', 1400, 202, 'Facturação', 5, 1),
+('Inhambane', 'Inhambane', 'Chilwane', 'Patrice Lumumba', ' 6', 5500, 303, 'Envio', 6, 1),
+('Gaza', 'Xai-Xai', 'Chongoene', 'dos Heróis', ' 7', 6600, 404, 'Facturação', 7, 1),
+('Cabo Delgado', 'Pemba', 'Paquitequete', '25 de Junho', ' 8', 7700, 505, 'Envio', 8, 1),
+('Zambézia', 'Quelimane', 'Sagrada Família', 'Marginal', ' 9', 8800, 606, 'Facturação', 9, 1),
+('Manica', 'Chimoio', '3 de Fevereiro', '7 de Abril', ' 10', 9900, 707, 'Envio', 10, 1);
 
 -- Inserir dados fictícios na tabela contacto_cliente
 INSERT INTO contacto_cliente (pessoa_de_contacto, contacto, email, website, fk_id_cliente, fk_id_usuario)
@@ -152,21 +152,21 @@ INSERT INTO fornecedor (tipo, razaosocial, nuit, fk_id_usuario) VALUES
 
 
 INSERT INTO endereco_fornecedor (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_fornecedor, fk_id_usuario) VALUES
-('Maputo', 'Maputo', 'Bairro Central', 'Avenida 25 de Setembro', 'Rua das Acácias', 1101, 23, 'Comercial', 1, 1),
-('Maputo', 'Matola', 'Bairro Liberdade', 'Avenida da Liberdade', 'Rua das Flores', 1102, 45, 'Comercial', 2, 1),
-('Gaza', 'Xai-Xai', 'Bairro Patrice Lumumba', 'Avenida Eduardo Mondlane', 'Rua do Comércio', 1201, 12, 'Comercial', 3, 1),
-('Inhambane', 'Maxixe', 'Bairro Maxixe', 'Avenida 7 de Abril', 'Rua do Mar', 1301, 5, 'Comercial', 4, 1),
-('Sofala', 'Beira', 'Ponta-Gêa', 'Avenida Samora Machel', 'Rua da Beira', 1401, 78, 'Comercial', 5, 1),
-('Manica', 'Chimoio', 'Bairro 25 de Setembro', 'Avenida 25 de Setembro', 'Rua da Paz', 1501, 18, 'Comercial', 6, 1),
-('Zambézia', 'Quelimane', 'Bairro Sinacura', 'Avenida Maguiguana', 'Rua Zambeze', 1601, 35, 'Comercial', 7, 1),
-('Nampula', 'Nampula', 'Bairro Muhala', 'Avenida das Industrias', 'Rua 24 de Julho', 1701, 10, 'Comercial', 8, 1),
-('Cabo Delgado', 'Pemba', 'Bairro Cariaco', 'Avenida dos Heróis', 'Rua dos Pescadores', 1801, 27, 'Comercial', 9, 1),
-('Niassa', 'Lichinga', 'Bairro Lichinga', 'Avenida da República', 'Rua das Montanhas', 1901, 50, 'Comercial', 10, 1),
-('Tete', 'Tete', 'Bairro Matundo', 'Avenida do Zambeze', 'Rua do Mercado', 2001, 8, 'Comercial', 11, 1),
-('Maputo', 'Matola', 'Bairro T-3', 'Avenida Julius Nyerere', 'Rua do Lazer', 1103, 120, 'Comercial', 12, 1),
-('Gaza', 'Chokwe', 'Bairro Ngala', 'Avenida Samora Machel', 'Rua Agrária', 1202, 36, 'Comercial', 13, 1),
-('Inhambane', 'Inhambane', 'Bairro Cemento', 'Avenida da Independência', 'Rua do Farol', 1302, 15, 'Comercial', 14, 1),
-('Manica', 'Manica', 'Bairro 7 de Abril', 'Avenida 7 de Abril', 'Rua das Mangueiras', 1502, 70, 'Comercial', 15, 1);
+('Maputo', 'Maputo', ' Central', ' 25 de Setembro', ' das Acácias', 1101, 23, 'Comercial', 1, 1),
+('Maputo', 'Matola', ' Liberdade', ' da Liberdade', ' das Flores', 1102, 45, 'Comercial', 2, 1),
+('Gaza', 'Xai-Xai', ' Patrice Lumumba', ' Eduardo Mondlane', ' do Comércio', 1201, 12, 'Comercial', 3, 1),
+('Inhambane', 'Maxixe', ' Maxixe', ' 7 de Abril', ' do Mar', 1301, 5, 'Comercial', 4, 1),
+('Sofala', 'Beira', 'Ponta-Gêa', ' Samora Machel', ' da Beira', 1401, 78, 'Comercial', 5, 1),
+('Manica', 'Chimoio', ' 25 de Setembro', ' 25 de Setembro', ' da Paz', 1501, 18, 'Comercial', 6, 1),
+('Zambézia', 'Quelimane', ' Sinacura', ' Maguiguana', ' Zambeze', 1601, 35, 'Comercial', 7, 1),
+('Nampula', 'Nampula', ' Muhala', ' das Industrias', ' 24 de Julho', 1701, 10, 'Comercial', 8, 1),
+('Cabo Delgado', 'Pemba', ' Cariaco', ' dos Heróis', ' dos Pescadores', 1801, 27, 'Comercial', 9, 1),
+('Niassa', 'Lichinga', ' Lichinga', ' da República', ' das Montanhas', 1901, 50, 'Comercial', 10, 1),
+('Tete', 'Tete', ' Matundo', ' do Zambeze', ' do Mercado', 2001, 8, 'Comercial', 11, 1),
+('Maputo', 'Matola', ' T-3', ' Julius Nyerere', ' do Lazer', 1103, 120, 'Comercial', 12, 1),
+('Gaza', 'Chokwe', ' Ngala', ' Samora Machel', ' Agrária', 1202, 36, 'Comercial', 13, 1),
+('Inhambane', 'Inhambane', ' Cemento', ' da Independência', ' do Farol', 1302, 15, 'Comercial', 14, 1),
+('Manica', 'Manica', ' 7 de Abril', ' 7 de Abril', ' das Mangueiras', 1502, 70, 'Comercial', 15, 1);
 
 
 INSERT INTO contacto_fornecedor (pessoa_de_contacto, contacto, email, website, fk_id_fornecedor, fk_id_usuario) VALUES
@@ -207,14 +207,14 @@ INSERT INTO armazem (nome, tipo, descricao, estado) VALUES
 
 
 INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_armazem, fk_id_usuario) VALUES
-('Maputo', 'Maputo', 'Bairro Central', 'Avenida 25 de Setembro', 'Rua das Acácias', 1101, 23, 'Comercial', 1, 1),
-('Sofala', 'Beira', 'Bairro Ponta-Gêa', 'Avenida Samora Machel', 'Rua da Beira', 1401, 10, 'Comercial', 2, 1),
-('Maputo', 'Matola', 'Bairro Liberdade', 'Avenida da Liberdade', 'Rua das Flores', 1102, 45, 'Comercial', 3, 1),
-('Nampula', 'Nampula', 'Bairro Muhala', 'Avenida das Industrias', 'Rua 24 de Julho', 1701, 5, 'Comercial', 4, 1),
-('Tete', 'Tete', 'Bairro Matundo', 'Avenida do Zambeze', 'Rua do Mercado', 2001, 12, 'Comercial', 5, 1),
-('Gaza', 'Xai-Xai', 'Bairro Patrice Lumumba', 'Avenida Eduardo Mondlane', 'Rua do Comércio', 1201, 36, 'Comercial', 6, 1),
-('Cabo Delgado', 'Pemba', 'Bairro Cariaco', 'Avenida dos Heróis', 'Rua dos Pescadores', 1801, 27, 'Comercial', 7, 1),
-('Manica', 'Chimoio', 'Bairro 25 de Setembro', 'Avenida 25 de Setembro', 'Rua da Paz', 1501, 18, 'Comercial', 8, 1);
+('Maputo', 'Maputo', ' Central', ' 25 de Setembro', ' das Acácias', 1101, 23, 'Comercial', 1, 1),
+('Sofala', 'Beira', ' Ponta-Gêa', ' Samora Machel', ' da Beira', 1401, 10, 'Comercial', 2, 1),
+('Maputo', 'Matola', ' Liberdade', ' da Liberdade', ' das Flores', 1102, 45, 'Comercial', 3, 1),
+('Nampula', 'Nampula', ' Muhala', ' das Industrias', ' 24 de Julho', 1701, 5, 'Comercial', 4, 1),
+('Tete', 'Tete', ' Matundo', ' do Zambeze', ' do Mercado', 2001, 12, 'Comercial', 5, 1),
+('Gaza', 'Xai-Xai', ' Patrice Lumumba', ' Eduardo Mondlane', ' do Comércio', 1201, 36, 'Comercial', 6, 1),
+('Cabo Delgado', 'Pemba', ' Cariaco', ' dos Heróis', ' dos Pescadores', 1801, 27, 'Comercial', 7, 1),
+('Manica', 'Chimoio', ' 25 de Setembro', ' 25 de Setembro', ' da Paz', 1501, 18, 'Comercial', 8, 1);
 select * from contacto_armazem;
 
 INSERT INTO contacto_armazem (pessoa_de_contacto, contacto, email, fk_id_armazem, fk_id_usuario) VALUES
@@ -229,17 +229,16 @@ INSERT INTO contacto_armazem (pessoa_de_contacto, contacto, email, fk_id_armazem
 
 
 INSERT INTO categoria (tipo, grupo, subgrupo, familia, descricao) VALUES
--- ('Produto', 'Alimentação', 'Bebidas', 'Refrigerantes', 'Categoria de bebidas não alcoólicas'),
-('Produto', 'Alimentação', 'Congelados', 'Carnes', 'Categoria de carnes congeladas'),
-('Produto', 'Eletrônicos', 'Computadores', 'Laptops', 'Categoria de laptops e notebooks'),
-('Serviço', 'Manutenção', 'Equipamentos', 'Computadores', 'Serviços de manutenção de computadores'),
-('Serviço', 'Consultoria', 'TI', 'Infraestrutura', 'Consultoria em infraestrutura de TI');
+('Produtos', 'Alimentares', 'Bebidas', 'Refrigerantes', 'Categoria de bebidas não alcoólicas'),
+('Produtos', 'Alimentares', 'Congelados', 'Carnes', 'Categoria de carnes congeladas'),
+('Produtos', 'Eletrônicos', 'Computadores', 'Laptops', 'Categoria de laptops e notebooks'),
+('Serviços', 'Manutenção', 'Equipamentos', 'Computadores', 'Serviços de manutenção de computadores'),
+('Serviços', 'Consultoria', 'TI', 'Infraestruturas', 'Consultoria em infraestrutura de TI');
 
 
-INSERT INTO unidade_medida (identificador, sigla, descricao) VALUE
-('Unidade', 'Un', 'Unidade padrao');
 INSERT INTO unidade_medida (identificador, sigla, descricao)
 VALUES 
+('Unidade', 'Un', 'Unidade padrao'),
 ('Quilograma', 'kg', 'Unidade de massa usada no sistema métrico'),
 ('Litro', 'L', 'Unidade de volume usada para medir líquidos'),
 ('Metro', 'm', 'Unidade de comprimento usada no sistema métrico'),
@@ -258,16 +257,7 @@ INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUES
 ('Taxa Reduzida', 0.075, 'Taxa de imposto reduzida para produtos essenciais'),
 ('Isento', 0.00, 'Produtos isentos de imposto');
 
-INSERT INTO desconto (nome, percentagem, descricao) VALUES
-('Isento', 0.0, 'Desconto aplicado em produtos sem desconto'),
-('Desconto de Lançamento', 0.1, 'Desconto aplicado em novos produtos no lançamento'),
-('Desconto de Fim de Ano', 0.155, 'Desconto especial para vendas de final de ano'),
-('Desconto por Quantidade', 0.575, 'Desconto aplicado para compras em grandes quantidades'),
-('Desconto Promocional', 0.2, 'Desconto aplicado em promoções especiais por tempo limitado'),
-('Desconto Fidelidade', 0.8, 'Desconto para clientes fiéis com mais de 1 ano de compras'),
-('Desconto Black Friday', 0.3, 'Desconto massivo durante a Black Friday'),
-('Desconto de Parceria', 0.125, 'Desconto exclusivo para parceiros comerciais'),
-('Desconto de Natal', 0.1825, 'Desconto sazonal para o período de Natal');
+
 
 
 
@@ -312,7 +302,7 @@ VALUES ('Serviço de Manutenção de Computador', 'Serviço de manutenção e re
 
 -- Serviço: Consultoria em Infraestrutura de TI
 INSERT INTO produto (nome, descricao, contole_stock, fk_id_categoria, fk_id_unidade_medida, fk_id_taxa_imposto)
-VALUES ('Consultoria em Infraestrutura de TI', 'Serviço de consultoria em infraestrutura de redes e servidores', FALSE, 5, 1, 2);
+VALUES ('Consultoria em Infraestrutura de TI', 'Serviço de consultoria em infraestrutura de redes e servidores', FALSE, 5, 1, 2); jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
 
 -- Produto: Fanta Laranja 350ml
 INSERT INTO produto (nome, codigo_barra, descricao, contole_stock, fk_id_categoria, fk_id_unidade_medida, fk_id_taxa_imposto)
@@ -372,23 +362,5 @@ INSERT INTO precovenda (preco, data_inicio, data_fim, estado, fk_id_produto, fk_
 (20.00, '2024-09-17', '2024-09-28', 1, 14, 1), 
 (6000.00, '2024-09-17', NULL, 1, 15, 1);
 
-    -- Informacao bases de uma empresa
-INSERT INTO empresa (nome, razaosocial, nuit) VALUES
-('JM-Tecnologias', 'JM-Tecnologias Sociedade Unipessoal.Lda', 123456789);
-INSERT INTO endereco_empresa (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_empresa) VALUES
-('Maputo', 'Maputo', 'Coop', '24 de Julho', 'Rua 12', 1100, 15, 'Facturação', 1);
-INSERT INTO contacto_empresa (contacto, email, website, fk_id_empresa)
-VALUES 
-    ('+258879201993', 'comercial@jm-tecnologias.com', 'www.jm-tecnologias.com', 1);
-INSERT INTO contabancaria (nome_banco, numero, nib, nuib, fk_id_empresa) VALUES
-('Banco Comercial e de Investimentos', '12345678', '12345678901234567890', '123456789', 1);
-INSERT INTO documentocomercial (sigla, nome, diasuteis, descricao) VALUES
-('FA','Fatura', 5, 'Fatura: Documento comercial que representa a venda de produtos ou serviços, devendo ser emitida no ato da venda ou até 5 dias úteis após a transação.'),
-('FP','Fatura Proforma', 30, 'Fatura Proforma: Documento preliminar usado para cotações e propostas comerciais. Não possui validade fiscal, com uma validade aproximada de 30 dias.'),
-('FR','Fatura Recibo', 1, 'Fatura Recibo: Documento que combina a fatura e o recibo, emitido simultaneamente à venda e ao pagamento.'),
-('FS','Fatura Simplificada', 1, 'Fatura Simplificada: Utilizada para vendas de baixo valor ou operações simples, devendo ser emitida no momento da venda.'),
-('GT','Guia de Transporte', 1, 'Guia de Transporte: Documento que deve acompanhar o transporte de mercadorias, emitido antes da movimentação dos produtos.'),
-('NC','Nota de Crédito', 30, 'Nota de Crédito: Documento emitido para corrigir ou anular uma fatura anterior, geralmente emitida até 30 dias após a transação original.'),
-('ND','Nota de Débito', 30, 'Nota de Débito: Documento emitido para cobrar valores adicionais de um cliente, emitido até 30 dias após a identificação do valor a ser cobrado.');
 
 

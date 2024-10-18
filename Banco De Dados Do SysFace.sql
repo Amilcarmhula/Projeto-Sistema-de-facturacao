@@ -1,9 +1,9 @@
 -- drop database _sysface;
-create database _sysface;
+-- create database _sysface;
 
 
 use _sysface;
-select * from usuario;
+
 create table nivel_acesso(
 	id integer primary key auto_increment,
     descricao varchar(50) not null

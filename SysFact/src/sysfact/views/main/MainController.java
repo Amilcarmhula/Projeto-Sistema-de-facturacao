@@ -81,7 +81,6 @@ public class MainController implements Initializable {
         System.exit(0);
     }
 
-
     @FXML
     public void minimize() {
         Stage stage = (Stage) anchorMain.getScene().getWindow();
@@ -99,26 +98,16 @@ public class MainController implements Initializable {
     public void getViews(ActionEvent e) {
         String path = "";
         if (e.getSource() == btn_taxas) {
-            path = FilePathFinderUtilities.pathBuilder(new File(System.getProperty("user.dir")), "taxaView.fxml");
+            path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "taxaView.fxml");
 //            path = "../views/modulo_configs/taxasView/taxaView.fxml";
         } else if (e.getSource() == btn_unidades) {
-            path = FilePathFinderUtilities.pathBuilder(new File(System.getProperty("user.dir")), "unidadeView.fxml");
-//            path = "../views/modulo_configs/unidadeView/unidadeView.fxml";
+            path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "unidadeView.fxml");
         } else if (e.getSource() == btn_categorias) {
-            path = FilePathFinderUtilities.pathBuilder(new File(System.getProperty("user.dir")), "categoriaView.fxml");
-//            path = "../views/modulo_configs/categoriaView/categoriaView.fxml";
+            path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "categoriaView.fxml");
         }
         LoadAndMoveUtilities.showAsPopUP(e, null);
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
 
-//        try {
-//            Stage stage = new Stage();
-//            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource(path))));
-//            stage.initStyle(StageStyle.TRANSPARENT);
-//            stage.show();
-//        } catch (IOException ex) {
-//            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
 
     // Carregar a primeira tela no centro
@@ -142,60 +131,8 @@ public class MainController implements Initializable {
             pane = FXMLLoader.load(getClass().getResource("../modulo_inventario/armazemView/armazemView.fxml"));
             anchorMain.getChildren().setAll(pane);
         } else if (e.getSource() == btn_vendas) {
-//            // Criando o diálogo personalizado
-//            Dialog<String> dialog = new Dialog<>();
-//            dialog.setTitle("Caixa de seleção");
-//            dialog.setHeaderText("Por favor, selecione o tipo de factura:");
-//
-//            // Configurando o botão OK/Cancelar
-//            ButtonType okButtonType = new ButtonType("OK", ButtonType.OK.getButtonData());
-//            dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
-//
-//            // Criando o ComboBox e adicionando opções
-//            ComboBox<String> comboBox = new ComboBox<>();
-//            comboBox.getItems().addAll("Factura Recibo", "Factura Proforma");
-//            comboBox.setPromptText("Selecione uma factura");
-//
-//            // Adicionando o ComboBox ao layout do diálogo
-//            VBox content = new VBox();
-//            content.setSpacing(10);
-//            content.getChildren().addAll(new Label("Opções:"), comboBox);
-//            dialog.getDialogPane().setContent(content);
-//
-//            // Habilitando o botão OK somente se uma opção for selecionada
-//            dialog.getDialogPane().lookupButton(okButtonType).setDisable(true);
-//            comboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-//                dialog.getDialogPane().lookupButton(okButtonType).setDisable(newValue == null);
-//            });
-//
-//            // Processando a resposta do usuário
-//            dialog.setResultConverter(dialogButton -> {
-//                if (dialogButton == okButtonType) {
-//                    return comboBox.getValue();
-//                }
-//                return null;
-//            });
-//
-//            // Exibindo o diálogo e capturando o resultado
-//            Optional<String> result = dialog.showAndWait();
-//            result.ifPresent(selectedOption -> {
-//                SysFact.setData(LoadAndMoveUtilities.invoiceNumber(selectedOption));
-////            System.out.println("Opção selecionada: " + selectedOption);
-//            });
             pane = FXMLLoader.load(getClass().getResource("../modulo_venda/vendaView/vendasView.fxml"));
             anchorMain.getChildren().setAll(pane);
-
-//             // Criando um diálogo de entrada de texto
-//        TextInputDialog dialog = new TextInputDialog();
-//        dialog.setTitle("Input Dialog");
-//        dialog.setHeaderText("Por favor, insira seu nome:");
-//        dialog.setContentText("Nome:");
-//
-//        // Mostrando o diálogo e aguardando a resposta do usuário
-//        Optional<String> result = dialog.showAndWait();
-//
-//        // Processando o valor inserido pelo usuário
-//        result.ifPresent(name -> System.out.println("Nome inserido: " + name));
         }
     }
 
@@ -211,29 +148,36 @@ public class MainController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
+//        minhaFuncao();
     }
-    /*
-    public void minhaFuncao() {
-        Thread x = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 5; i++) {
-                    // Imprime o número i no console de erro
-                    System.err.print(i + " ");
-                    try {
-                        // A thread dorme por 1 segundo
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        // Trata uma possível interrupção da thread
-                        System.out.println("Erro: " + ex);
-                    }
-                }
-                // Imprime a mensagem "Fim" após o término do loop
-                System.out.println("\nFim");
-            }
-        });
-        // Inicia a execução da thread
-        x.start();
-    }
-     */
+
+//    public void minhaFuncao() {
+//        Thread x = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int i = 0; i < 5; i++) {
+//                    // Imprime o número i no console de erro
+//                    System.out.print(i + " ");
+////                    pensar como acessar os metodos de consultas pertecentes a 
+////                    janela(anchorPane) que estara aberta no memonto para que sejam feitos updates
+////                    Os metodos de consulta nao podem chamar os metodos de reset de campos
+//                    try {
+//                        // A thread dorme por 1 segundo
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException ex) {
+//                        // Trata uma possível interrupção da thread
+//                        System.out.println("Erro: " + ex);
+//                    }
+//                }
+//                minhaFuncao();
+//
+//                // Imprime a mensagem "Fim" após o término do loop
+//                System.out.println("\nFim");
+//            }
+//        });
+//
+//        // Inicia a execução da thread
+//        x.start();
+//    }
+
 }

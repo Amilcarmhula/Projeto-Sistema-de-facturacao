@@ -53,7 +53,7 @@ public class ReportUtilities {
             if (result.get() == btnVisualizar) {
                 // Apenas exibir o relatório
                 JasperViewer viewer = new JasperViewer(printableReport, false);
-                viewer.setTitle("Factura");
+                viewer.setTitle("Relatorio");
                 viewer.setVisible(true);
             } else if (result.get() == btnSaveView) {
                 //Salva o relatório NOMEFACTURA

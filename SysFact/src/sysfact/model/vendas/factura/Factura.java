@@ -4,6 +4,7 @@
  */
 package sysfact.model.vendas.factura;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import sysfact.model.empresa.Empresa;
 import sysfact.model.usuario.Usuario;
 import sysfact.model.vendas.documetos.DocumentosComerciais;
 import sysfact.model.vendas.factura.itens.Item;
+import sysfact.util.FilePathFinderUtilities;
 import sysfact.util.report.ReportUtilities;
 
 /**
@@ -52,7 +54,6 @@ public class Factura {
     }
 
     public void criaRelatorio(String numeroFactura) throws SQLException {
-//        String numeroFactura = "2024-1010/2"; // Número da fatura
 
         List<Factura> detalhesFactura = new ArrayList<Factura>();
         Factura detalhes = new FacturaDAO().getFacturaData(numeroFactura);
@@ -67,11 +68,11 @@ public class Factura {
 
         // Passar parâmetros para o relatório
         Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("TABLE_DATA_SOURCE", itemDataSource); 
+        parametros.put("TABLE_DATA_SOURCE", itemDataSource);
         parametros.put("NOMEFACTURA", numeroFactura);
-//        String path = "../../reports/vendas/facturas/PF/RelatorioFacturas.jrxml";
-        String path = "C:\\Users\\JM-Tecnologias\\Documents\\NetBeansProjects\\Projeto Sistema de facturacao\\SysFact\\src\\sysfact\\reports\\vendas\\facturas\\PF\\RelatorioFacturas.jrxml";
         
+        String path = FilePathFinderUtilities.jasperReportPathBuilder(new File(System.getProperty("user.dir")), "RelatorioFacturas.jrxml");
+
         ReportUtilities.genarateJasperReport(path, parametros, facturaDetalhesDATASOURCE);
     }
 

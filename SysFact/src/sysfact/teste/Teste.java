@@ -4,110 +4,88 @@
  */
 package sysfact.teste;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+//import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+
 import java.io.File;
-import java.nio.file.FileSystem;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import sysfact.dao.cliente.ClienteDAO;
-import sysfact.dao.stock.StockDAO;
-import sysfact.dao.vendas.factura.FacturaDAO;
-import sysfact.dao.vendas.itens.ItemDAO;
-import sysfact.model.stock.Stock;
-import sysfact.model.vendas.factura.Factura;
-import sysfact.model.vendas.factura.itens.Item;
-import sysfact.reports.facturas.ClienteData;
-import sysfact.util.ValidationUtilities;
+
+//import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+//import java.io.File;
+//import java.nio.file.FileSystem;
+//import java.sql.SQLException;
+//import java.util.ArrayList;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//import java.util.Optional;
+//import javafx.collections.ObservableList;
+//import javafx.scene.control.Alert;
+//import javafx.scene.control.ButtonType;
+//import net.sf.jasperreports.engine.JRException;
+//import net.sf.jasperreports.engine.JRExporterParameter;
+//import net.sf.jasperreports.engine.JasperExportManager;
+//import net.sf.jasperreports.engine.JasperFillManager;
+//import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+//import net.sf.jasperreports.engine.export.JRXlsExporter;
+//import sysfact.dao.cliente.ClienteDAO;
+//import sysfact.dao.stock.StockDAO;
+//import sysfact.dao.vendas.factura.FacturaDAO;
+//import sysfact.dao.vendas.itens.ItemDAO;
+//import sysfact.model.stock.Stock;
+//import sysfact.model.vendas.factura.Factura;
+//import sysfact.model.vendas.factura.itens.Item;
+//import sysfact.reports.facturas.ClienteData;
+//import sysfact.util.ValidationUtilities;
 
 /**
  *
  * @author JM-Tecnologias
  */
 public class Teste {
-
-    public void returnFolder(File f) {
-        String root = f.getPath();
-        File file = new File(root);
-        String[] _subFolder = file.list();
-        for (int i = 0; i < _subFolder.length; i++) {
-//            root = "C:/";
-            root += _subFolder[i] + "/";
-            file = new File(root);
-            if (file.isDirectory()) {
-                returnFolder2(file);
-                System.out.println("Metodo 1: "+file);
+    // Método recursivo que busca um arquivo ou diretório a partir da pasta raiz
+    public static String search(File rootDirectory, String searchName) {
+    // Verifica se o diretório raiz existe e se é realmente um diretório
+    if (rootDirectory.exists() && rootDirectory.isDirectory()) {
+        // Lista todos os arquivos e subdiretórios no diretório raiz
+        File[] files = rootDirectory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                // Se o arquivo ou diretório atual corresponder ao nome de busca
+                if (file.getName().equalsIgnoreCase(searchName)) {
+                    String foundPath = file.getAbsolutePath();
+                    System.out.println("Encontrado: " + foundPath);
+                    return foundPath; // Retorna o caminho do arquivo encontrado
+                } 
+                // Se for um diretório, chama o método recursivamente
+                if (file.isDirectory()) {
+                    String foundInSubdirectory = search(file, searchName);
+                    if (foundInSubdirectory != null) {
+                        return foundInSubdirectory; // Retorna o caminho se encontrado em subdiretórios
+                    }
+                }
             }
-            
-//            System.out.println(file + ": " + file.isFile());
         }
+    } else {
+        System.out.println("O diretório raiz informado não existe ou não é um diretório válido.");
     }
-
-    public File returnFolder2(File f) {
-        String root = f.getPath();
-        File file = new File(root);
-        String[] _subFolder = file.list();
-        for (int i = 0; i < _subFolder.length; i++) {
-//            root = "C:/";
-            root += _subFolder[i] + "/";
-            file = new File(root);
-            if (file.isDirectory()) {
-//                returnFolder(file);
-                System.out.println("Metodo 2: "+file);
-                return file;
-            }
-            
-//            System.out.println(file + ": " + file.isFile());
-        }
-        return file;
-    }
-
+    return null; // Retorna null se o arquivo não for encontrado
+}
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        Teste t = new Teste();
-        t.returnFolder(new File("C:/"));
-//        File f = new File("C:/JM-InvSM/facturinha");
-//        if(!f.exists()){
-//            f.mkdir();
-//            System.out.println("pasta criada");
-//        }
+       String originalPath = "C:\\Users\\JM-Tecnologias\\Documents\\NetBeansProjects\\Projeto Sistema de facturacao\\SysFact";
+        
+        // Substitui as barras invertidas (\) por barras normais (/)
+        String updatedPath = originalPath.replace("\\", "/");
+        
+        // Exibe o resultado
+        System.out.println("Original: " + originalPath);
+        System.out.println("Atualizado: " + updatedPath);
+        
 
-//        String root = "C:/";
-//        File file = new File(root);
-//        String[] _subFolder = file.list();
-//        for (int i = 0; i < _subFolder.length; i++) {
-//            root = "C:/";
-//            root += _subFolder[i] + "/";
-//            file = new File(root);
-//            System.out.println(file + ": " + file.isFile());
-//        }
-
-//        if (!f.exists()) {
-//            f.mkdir();
-//            System.out.println("pasta criada");
-//        }
-        System.out.println("____________________________________________________");
-
-//            System.out.println("______________________Cliente______________________");
-//            
-//
-//            
-//        }
+    }
+        
 //        UnidadeMedida x = new UnidadeMedida();
 //        UnidadeMedidaDAO z = new UnidadeMedidaDAO();
 ////        x.setId(3);
@@ -289,6 +267,6 @@ public class Teste {
 //        System.out.println("Data added: " + usuario.getData_criacao());
 //        System.out.println("Status: " + usuario.isActive_or_not());
 //        System.out.println("");
-    }
+    
 
 }

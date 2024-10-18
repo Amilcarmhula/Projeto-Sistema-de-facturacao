@@ -193,6 +193,7 @@ public class AddClienteController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println("Directorio: "+System.getProperty("user.dir"));
         this.userData = SysFact.getUserData();
         combTipoCliente.setItems(FXCollections.observableArrayList("Pessoa Física", "Jurídica"));
         combTipoEndereco.setItems(FXCollections.observableArrayList("Facturação", "Envio"));

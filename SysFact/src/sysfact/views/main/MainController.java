@@ -4,9 +4,9 @@
  */
 package sysfact.views.main;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,16 +14,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sysfact.SysFact;
 import sysfact.model.usuario.Usuario;
+import sysfact.util.FilePathFinderUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
 /**
@@ -101,11 +99,14 @@ public class MainController implements Initializable {
     public void getViews(ActionEvent e) {
         String path = "";
         if (e.getSource() == btn_taxas) {
-            path = "../views/modulo_configs/taxasView/taxaView.fxml";
+            path = FilePathFinderUtilities.pathBuilder(new File(System.getProperty("user.dir")), "taxaView.fxml");
+//            path = "../views/modulo_configs/taxasView/taxaView.fxml";
         } else if (e.getSource() == btn_unidades) {
-            path = "../views/modulo_configs/unidadeView/unidadeView.fxml";
+            path = FilePathFinderUtilities.pathBuilder(new File(System.getProperty("user.dir")), "unidadeView.fxml");
+//            path = "../views/modulo_configs/unidadeView/unidadeView.fxml";
         } else if (e.getSource() == btn_categorias) {
-            path = "../views/modulo_configs/categoriaView/categoriaView.fxml";
+            path = FilePathFinderUtilities.pathBuilder(new File(System.getProperty("user.dir")), "categoriaView.fxml");
+//            path = "../views/modulo_configs/categoriaView/categoriaView.fxml";
         }
         LoadAndMoveUtilities.showAsPopUP(e, null);
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);

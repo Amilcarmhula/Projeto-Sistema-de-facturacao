@@ -4,6 +4,7 @@
  */
 package sysfact.dao.armazem;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.armazem.contacto.ContactoArmazem;
+import static sysfact.util.AlertUtilities.showDialog;
 import sysfact.util.Conexao;
 
 /**
@@ -32,23 +33,38 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
     }
 
     @Override
-    public void addEntity(Armazem c) {
+    public boolean addEntity(Armazem c) {
+        boolean isSuccess = false;
         try {
             sql = "insert into armazem (tipo,nome,descricao) value (?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, c.getTipo());
             ps.setString(2, c.getNome_arm());
             ps.setString(3, c.getDescricao_arm());
+            // Usando executeUpdate para verificar se uma linha foi inserida
+            int rowsAffected = ps.executeUpdate();
 
-            ps.execute();
-            ps.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar armazem: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(Armazem c, int id) {
+    public boolean updateEntityByID(Armazem c, int id) {
+        boolean isSuccess = false;
         try {
             sql = "update armazem set tipo=?,nome=?,descricao=?"
                     + " where id=?";
@@ -58,13 +74,25 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             ps.setString(2, c.getNome_arm());
             ps.setString(3, c.getDescricao_arm());
             ps.setInt(4, id);
+// Usando executeUpdate para verificar se uma linha foi inserida
+            int rowsAffected = ps.executeUpdate();
 
-            ps.execute();
-            ps.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao actualizar armazem: "
-                    + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro de persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -101,12 +129,12 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar armazem: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + e);
 
         }
         return lista;
     }
-    
+
     @Override
     public Armazem getLastEntity() {
         Armazem c = null;
@@ -124,12 +152,11 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar armazem: " + e,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + e);
         }
         return c;
     }
-    
+
     @Override
     public Armazem getEntityByID(int id) {
         Armazem c = null;
@@ -148,33 +175,41 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar armazem: " + e,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + e);
         }
         return c;
     }
-    
+
     @Override
-    public void deleteEntity(int x) {
+    public boolean deleteEntity(int x) {
+        boolean isSuccess = false;
         try {
             sql = "delete from armazem WHERE id = ?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x);
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar armazem: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: " + ex);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de exclusao", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
+
     }
 
-    
-    
-    
-    
-    
-    
     @Override
     public ObservableList<Armazem> listAllEntitiesTypeArmazem() {
         ObservableList<Armazem> lista = FXCollections.observableArrayList();
@@ -192,12 +227,10 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar armazem: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + e);
 
         }
         return lista;
     }
 
-   
-    
 }

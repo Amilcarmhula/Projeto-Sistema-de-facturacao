@@ -19,7 +19,7 @@ import sysfact.model.cliente.Cliente;
 import sysfact.model.produto.Produto;
 import sysfact.model.produto.fornecido.ProdutoFornecido;
 import sysfact.util.Conexao;
-import sysfact.util.ValidationUtilities;
+import sysfact.util.AlertUtilities;
 
 /**
  *
@@ -205,7 +205,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             ps.close();
         } catch (SQLException ex) {
             System.out.println("Erro: "+ex);
-//            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro Dados", "Erro ao carregar movimentos de produto: " + ex);
+//            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro Dados", "Erro ao carregar movimentos de produto: " + ex);
         }
         return mapa;
     }

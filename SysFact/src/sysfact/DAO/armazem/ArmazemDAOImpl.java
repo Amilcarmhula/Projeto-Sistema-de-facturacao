@@ -11,12 +11,12 @@ import javafx.collections.ObservableList;
  * @author JM-Tecnologias
  */
 public interface ArmazemDAOImpl<T> {
-    void  addEntity(T t);
-    void updateEntityByID(T t, int id);
+    boolean  addEntity(T t);
+    boolean updateEntityByID(T t, int id);
     ObservableList<T> listAllEntities();
     ObservableList<T> listAllEntitiesTypeArmazem();
     T getLastEntity();
     T getEntityByID(int id);
 //    void deleteEntityByROOT(int id);
-    void deleteEntity(int x);
+    boolean deleteEntity(int x);
 }

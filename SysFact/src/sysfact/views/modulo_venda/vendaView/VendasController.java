@@ -4,12 +4,11 @@
  */
 package sysfact.views.modulo_venda.vendaView;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -33,7 +32,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
@@ -49,11 +47,11 @@ import sysfact.model.usuario.Usuario;
 import sysfact.model.vendas.documetos.DocumentosComerciais;
 import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
-import sysfact.service.cliente.ServiceCliente;
 import sysfact.service.vendas.factura.ServiceFactura;
 import sysfact.util.InvoiceUtilities;
 import sysfact.util.LoadAndMoveUtilities;
-import sysfact.util.ValidationUtilities;
+import static sysfact.util.AlertUtilities.showErroNotification;
+import sysfact.util.FilePathFinderUtilities;
 
 /**
  * FXML Controller class
@@ -156,18 +154,21 @@ public class VendasController implements Initializable {
     @FXML
     private ComboBox<String> combTipoDoc;
 
+    ;
+
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
+            String path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "clienteSearch.fxml");
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
-            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
         }
     }
 
     public void getSearchProduto(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
+            String path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "produtoSearch.fxml");
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
-
-            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_venda/vendaView/searchProduto/produtoSearch.fxml");
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
         }
     }
 
@@ -194,8 +195,6 @@ public class VendasController implements Initializable {
         labValidade.setText(InvoiceUtilities.datePlusXDays(doc.getDiasUteis()));
 
     }
-
-    
 
     public void getDataOnFocus() throws SQLException {
         txtIDCliente.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -228,19 +227,19 @@ public class VendasController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
                     if (SysFact.getData() instanceof Produto) {
-                        try {
-                            mapeaProduto();
-                            Produto x = (Produto) SysFact.getData();
-                            if (x != null) {
-                                txtID.setText(String.valueOf(x.getId()));
-                                txtStock.setText(String.valueOf(x.getStock().getSaldo()));
-                                txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
-                                txtNome.setText(x.getNomeProduto());
-                                txtDescricao.setText(x.getDescricao());
-                            }
-                        } catch (SQLException ex) {
-                            Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
+//                        try {
+//                            mapeaProduto();
+                        Produto x = (Produto) SysFact.getData();
+                        if (x != null) {
+                            txtID.setText(String.valueOf(x.getId()));
+                            txtStock.setText(String.valueOf(x.getStock().getSaldo()));
+                            txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
+                            txtNome.setText(x.getNomeProduto());
+                            txtDescricao.setText(x.getDescricao());
                         }
+//                        } catch (SQLException ex) {
+//                            Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
                     }
                 }
             }
@@ -248,18 +247,18 @@ public class VendasController implements Initializable {
     }
 
     private void initTableItems() {
-        idtabelaItens.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
-        nometabelaItens.setCellValueFactory(new PropertyValueFactory<Item, String>("nomeProduto"));
+        idtabelaItens.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nometabelaItens.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
         precotabelaItens.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPrecovenda().getPreco()) + " MT"));
         unidadetabelaItens.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidade_medida().getSigla())));
-        quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<Item, Integer>("quantidade"));
+        quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
         descontotabelaItens.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getDesconto().getPercentagemDesconto())));
         taxatabelaItens.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getTaxa_imposto().getPercentagemImposto())));
-        subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<Item, Double>("subtotal"));
+        subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
     }
 
     @Override
@@ -320,18 +319,18 @@ public class VendasController implements Initializable {
     }
 
     public void populateTableItems() {
-        if(txtID.getText() == null || txtID.getText().isEmpty()){
-            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de dados.", "Produto/Servico nao selecionado!");
+        if (txtID.getText() == null || txtID.getText().isEmpty()) {
+            showErroNotification("Erro", "Produto/Servico nao selecionado!");
             return;
         }
-        
-        if(txtQuantidade.getText() == null || txtQuantidade.getText().isEmpty()){
-            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de dados.", "Quantidade nao informada!");
+
+        if (txtQuantidade.getText() == null || txtQuantidade.getText().isEmpty()) {
+            showErroNotification("Erro", "Quantidade nao informada!");
             return;
         }
         int id = Integer.parseInt(txtID.getText());
         int qtd = Integer.parseInt(txtQuantidade.getText());
-        
+
         Produto x = mapaProdutos.get(id);
         Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());
         Item i = new Item();
@@ -341,10 +340,14 @@ public class VendasController implements Initializable {
         i.setQuantidade(qtd);
         double subtotal = qtd * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto()) * (1 - desconto.getPercentagemDesconto());
         i.setSubtotal(subtotal);
+        if (x.getStock().getSaldo() <= qtd) {
+            tabelaItens.getItems().add(i);
+            resetProduto();
+            displayPrice();
+        } else {
+            showErroNotification("Erro", "Stock baixo. Produto nao pode ser comercializado!");
+        }
 
-        tabelaItens.getItems().add(i);
-        resetProduto();
-        displayPrice();
     }
 
     public void criarFactura() throws SQLException {
@@ -355,7 +358,7 @@ public class VendasController implements Initializable {
         ServiceFactura service = new ServiceFactura(fDAO);
         service.criaFactura(labNumeroFactura.getText(), labDataInicial.getText(),
                 labValidade.getText(), doc, cli, empresaData, userData, collectItens());
-        if(service.isEstado()){
+        if (service.isEstado()) {
             resetFactura();
         }
     }
@@ -415,6 +418,7 @@ public class VendasController implements Initializable {
         txtDescricao.setText("");
         txtQuantidade.setText("");
     }
+
     public void resetFactura() {
         tabelaItens.getItems().clear();
         txtIDCliente.setText("");
@@ -423,7 +427,7 @@ public class VendasController implements Initializable {
         txtNuitCLiente.setText("");
         txtContactoCLiente.setText("");
         txtEmailCLiente.setText("");
-        
+
         labSubtotal.setText("");
         labDesconto.setText("");
         labTaxas.setText("");

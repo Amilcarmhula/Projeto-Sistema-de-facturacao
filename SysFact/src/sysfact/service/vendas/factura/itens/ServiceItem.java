@@ -5,10 +5,14 @@
 package sysfact.service.vendas.factura.itens;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import java.sql.SQLException;
 import java.util.List;
 import sysfact.dao.vendas.itens.ItemDAO;
 import sysfact.model.vendas.factura.itens.Item;
-import sysfact.util.ValidationUtilities;
+import sysfact.util.AlertUtilities;
+import static sysfact.util.AlertUtilities.showDialog;
+import static sysfact.util.AlertUtilities.showErroNotification;
+import static sysfact.util.AlertUtilities.showSuccessNotification;
 
 /**
  *
@@ -22,9 +26,15 @@ public class ServiceItem {
     }
     public void registaItens(List<Item> itens){
         if(itens == null || itens.isEmpty()){
-            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de dados", "Nao existem itens na factura!");
+            showErroNotification("Erro", "Nao pode ser emitida factura sem itens!");
             return;
         }
-        itemDao.addEntity(itens);
+        
+        try {
+            itemDao.addEntity(itens);
+            showSuccessNotification("Sucesso", "Itens adicionados a factura com sucesso!");
+        } catch (Exception e) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao emitir factura!");
+        }
     }
 }

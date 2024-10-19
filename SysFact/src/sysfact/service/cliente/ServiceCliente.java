@@ -4,10 +4,9 @@
  */
 package sysfact.service.cliente;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.model.cliente.Cliente;
-import sysfact.util.ValidationUtilities;
+import static sysfact.util.AlertUtilities.showErroNotification;
 
 /**
  *
@@ -22,7 +21,7 @@ public class ServiceCliente {
     
     public Cliente getClienteByID(Integer id){
         if(id ==0){
-            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de validacao!", "Cliente nao definido!");
+            showErroNotification("Erro", "Cliente nao definido!");
             return null;
         }
         

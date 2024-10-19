@@ -5,22 +5,22 @@
 package sysfact.service.produto.fornecido;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.scene.control.Alert;
 import sysfact.dao.produto.fornecido.ProdutoFornecidoDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.fornecedor.Fornecedor;
 import sysfact.model.produto.Produto;
 import sysfact.model.produto.fornecido.ProdutoFornecido;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.LoadAndMoveUtilities;
-import sysfact.util.ValidationUtilities;
+import static sysfact.util.AlertUtilities.showDialog;
+import static sysfact.util.AlertUtilities.showErroNotification;
+import static sysfact.util.AlertUtilities.showSuccessNotification;
 
 /**
  *
  * @author JM-Tecnologias
  */
 public class ServiceProdutoFornecido {
-    private ProdutoFornecidoDAO produtoFornecidoDao;
+    private final ProdutoFornecidoDAO produtoFornecidoDao;
 
     public ServiceProdutoFornecido(ProdutoFornecidoDAO produtoFornecidoDao) {
         this.produtoFornecidoDao = produtoFornecidoDao;
@@ -31,25 +31,25 @@ public class ServiceProdutoFornecido {
         
         // Validações básicas antes de registrar a categoria
         if (id_arm <= 0) {
-            showErrorDialog("Erro de validação", "Armazem não definido.");
+            showErroNotification("Erro", "Armazem não definido!");
             return;
         }
         
         if (id_for <= 0) {
-            showErrorDialog("Erro de validação", "Fornecedor não definido.");
+            showErroNotification("Erro", "Fornecedor não definido!");
             return;
         }
         if ( qtd <= 0) {
-            showErrorDialog("Erro de validação", "Quantidade não definida.");
+            showErroNotification("Erro", "Quantidade não definida!");
             return;
         }
         if (custo <= 0) {
-            showErrorDialog("Erro de validação", "Preco não definido.");
+            showErroNotification("Erro", "Preco não pode ser nulo!");
             return;
         }
         
         if ( data_fornecida.isEmpty()) {
-            showErrorDialog("Erro de validação", "Data de fornecimento não definida.");
+            showErroNotification("Erro", "Data de fornecimento não pode ser nula!");
             return;
         }
         ProdutoFornecido pf = new ProdutoFornecido();
@@ -68,9 +68,9 @@ public class ServiceProdutoFornecido {
         pf.setCusto(custo);
         try{
             produtoFornecidoDao.addEntity(pf);
-            ValidationUtilities.showDialog(FontAwesomeIcon.CHECK,"Info", "Stock actualizado com sucesso.");
+            showSuccessNotification("Sucesso", "Stock actualizado com sucesso!");
         }catch(Exception e){
-            ValidationUtilities.showDialog(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro ao adicionar/actualizar sock!");
+            showDialog(FontAwesomeIcon.TIMES,"Erro", "Erro ao adicionar/actualizar sock!");
         }
         
         
@@ -78,11 +78,5 @@ public class ServiceProdutoFornecido {
     }
     
     
-    private void showErrorDialog(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 }

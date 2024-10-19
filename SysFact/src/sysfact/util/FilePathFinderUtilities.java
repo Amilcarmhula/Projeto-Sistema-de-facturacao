@@ -45,7 +45,7 @@ public class FilePathFinderUtilities {
     }
     
      // Método recursivo que busca um arquivo ou diretório a partir da pasta raiz
-    public static String jasperReportPathBuilder(File rootDirectory, String searchName) {
+    public static String absolutePathBuilder(File rootDirectory, String searchName) {
         // Verifica se o diretório raiz existe e se é realmente um diretório
         if (rootDirectory.exists() && rootDirectory.isDirectory()) {
             // Lista todos os arquivos e subdiretórios no diretório raiz
@@ -65,7 +65,7 @@ public class FilePathFinderUtilities {
                     }
                     // Se for um diretório, chama o método recursivamente
                     if (file.isDirectory()) {
-                        String foundInSubdirectory = jasperReportPathBuilder(file, searchName);
+                        String foundInSubdirectory = absolutePathBuilder(file, searchName);
                         if (foundInSubdirectory != null) {
                             return foundInSubdirectory; // Retorna o caminho se encontrado em subdiretórios
                         }
@@ -79,14 +79,6 @@ public class FilePathFinderUtilities {
     }
 
     public static void main(String[] args) {
-//        System.out.println(""+System.getProperty("user.dir"));
-        // Diretório raiz a partir do qual a busca será iniciada
-        File rootDirectory = new File(System.getProperty("user.dir"));
-        // Nome do arquivo ou diretório a ser buscado
-        String searchName = "clienteSearch.fxml";
-//        "C:\\Users\\JM-Tecnologias\\Documents\\NetBeansProjects\\Projeto Sistema de facturacao\\SysFact"
-
-        // Chamada do método de busca
-        System.out.println(fxmlPathBuilder(rootDirectory, searchName));
+        System.out.println(FilePathFinderUtilities.absolutePathBuilder(new File(System.getProperty("user.dir")), "danger.png"));
     }
 }

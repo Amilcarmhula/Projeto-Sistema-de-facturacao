@@ -4,12 +4,15 @@
  */
 package sysfact.service.produto;
 
-import javafx.scene.control.Alert;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import sysfact.dao.produto.ProdutoDAO;
 import sysfact.model.categoria.Categoria;
 import sysfact.model.produto.Produto;
 import sysfact.model.taxa_imposto.TaxaImposto;
 import sysfact.model.unidade_medida.UnidadeMedida;
+import static sysfact.util.AlertUtilities.showDialog;
+import static sysfact.util.AlertUtilities.showErroNotification;
+import static sysfact.util.AlertUtilities.showSuccessNotification;
 
 /**
  *
@@ -27,26 +30,27 @@ public class Serviceproduto {
         
         // Validações básicas antes de registrar a categoria
         if (id_cat == null || id_cat <= 0) {
-            showErrorDialog("Erro de validação", "Categoria não definida.");
+            showErroNotification("Erro", "Categoria não definida!");
             return;
         }
+
         if (id_uni == null || id_uni <= 0) {
-            showErrorDialog("Erro de validação", "Unidade de medida não definida.");
+            showErroNotification("Erro", "Unidade de medida não definida!");
             return;
         }
         
         if (id_tax == null || id_tax <= 0) {
-            showErrorDialog("Erro de validação", "Taxa/Imposto não definida.");
+            showErroNotification("Erro", "Taxa/Imposto não definida!");
             return;
         }
         
         if (nome == null || nome.isEmpty()) {
-            showErrorDialog("Erro de validação", "Nome do produto não definida.");
+            showErroNotification("Erro", "Nome do produto não pode ser null!");
             return;
         }
         
         if (codBarras == null || codBarras.isEmpty()) {
-            showErrorDialog("Erro de validação", "Sera definido Codigo de Barras padrao!");
+            showErroNotification("Erro", "Codigo de Barras nao definido. Sera definido codigo padrao");
             codBarras = "1000000000001";
         }
 
@@ -67,7 +71,13 @@ public class Serviceproduto {
         t.setId(id_tax);
         p.setTaxa_imposto(t);
         
-        produtoDao.addEntity(p);
+        
+        try {
+            produtoDao.addEntity(p);
+            showSuccessNotification("Sucesso", "Produto registado com sucesso!");
+        } catch (Exception e) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro", "Detalhes: " + e.getMessage());
+        }
     }
     
     public void actualizaProduto(int id, Integer id_cat, Integer id_uni, Integer id_tax,
@@ -75,26 +85,26 @@ public class Serviceproduto {
         
         // Validações básicas antes de registrar a categoria
         if (id_cat == null || id_cat <= 0) {
-            showErrorDialog("Erro de validação", "Categoria não definida.");
+            showErroNotification("Erro", "Categoria não definida!");
             return;
         }
         if (id_uni == null || id_uni <= 0) {
-            showErrorDialog("Erro de validação", "Unidade de medida não definida.");
+            showErroNotification("Erro", "Unidade de medida não definida!");
             return;
         }
         
         if (id_tax == null || id_tax <= 0) {
-            showErrorDialog("Erro de validação", "Taxa/Imposto não definida.");
+            showErroNotification("Erro", "Taxa/Imposto não definida!");
             return;
         }
         
         if (nome == null || nome.isEmpty()) {
-            showErrorDialog("Erro de validação", "Nome do produto não definida.");
+            showErroNotification("Erro", "Nome do produto não pode ser null!");
             return;
         }
         
         if (codBarras == null || codBarras.isEmpty()) {
-            showErrorDialog("Erro de validação", "Sera definido Codigo de Barras padrao!");
+            showErroNotification("Erro", "Codigo de Barras nao definido. Sera definido codigo padrao");
             codBarras = "1000000000001";
         }
 
@@ -114,16 +124,13 @@ public class Serviceproduto {
         t.setId(id_tax);
         p.setTaxa_imposto(t);
         
-        produtoDao.updateEntityByID(p, id);
+        try {
+            produtoDao.updateEntityByID(p, id);
+            showSuccessNotification("Sucesso", "Produto actualizado com sucesso!");
+        } catch (Exception e) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro", "Detalhes: " + e.getMessage());
+        }
     }
     
     
-    
-    private void showErrorDialog(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

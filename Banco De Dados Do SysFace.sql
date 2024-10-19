@@ -164,7 +164,7 @@ create table contacto_armazem(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
     contacto varchar(20) not null,
-	email varchar(50) unique,
+	email varchar(50),
     fk_id_armazem integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

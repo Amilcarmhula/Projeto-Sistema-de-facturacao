@@ -20,7 +20,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import sysfact.util.ValidationUtilities;
+import sysfact.util.AlertUtilities;
 
 /**
  *
@@ -67,7 +67,7 @@ public class ReportUtilities {
                 System.out.println("Aqui nao salva nem visualiza; esta associado ao botao close da tela!");
             }
         } catch (JRException ex) {
-            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Informacao", "Erro ao gerar relatorio de factura: "+ex);
+            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Informacao", "Erro ao gerar relatorio de factura: "+ex);
         }
     }
 }

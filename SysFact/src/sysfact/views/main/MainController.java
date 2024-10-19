@@ -14,11 +14,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
 import sysfact.SysFact;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.FilePathFinderUtilities;
@@ -179,5 +184,4 @@ public class MainController implements Initializable {
 //        // Inicia a execução da thread
 //        x.start();
 //    }
-
 }

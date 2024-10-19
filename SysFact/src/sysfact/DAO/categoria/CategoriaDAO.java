@@ -4,6 +4,7 @@
  */
 package sysfact.dao.categoria;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import sysfact.model.categoria.Categoria;
+import static sysfact.util.AlertUtilities.showDialog;
 import sysfact.util.Conexao;
 
 /**
@@ -29,7 +31,8 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
     }
 
     @Override
-    public void addEntity(Categoria t) {
+    public boolean addEntity(Categoria t) {
+        boolean isSuccess = false;
         try {
             sql = "insert into categoria (tipo, grupo, subgrupo, familia,"
                     + " descricao) value (?,?,?,?,?)";
@@ -42,16 +45,30 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             ps.setString(4, t.getFamilia());
             ps.setString(5, t.getDescricao());
 
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Categoria: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
+            // Usando executeUpdate para verificar se uma linha foi inserida
+            int rowsAffected = ps.executeUpdate();
 
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(Categoria t) {
+    public boolean updateEntityByID(Categoria t) {
+        boolean isSuccess = false;
         try {
             sql = "update categoria set tipo=?, grupo=?, subgrupo=?, familia=?,"
                     + " descricao=? where id=?";
@@ -64,12 +81,24 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             ps.setString(5, t.getDescricao());
             ps.setInt(6, t.getId());
 
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar categoria: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -98,17 +127,30 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
     }
 
     @Override
-    public void deleteEntityByUSER(Categoria x) {
+    public boolean deleteEntity(int x) {
+        boolean isSuccess = false;
         try {
             sql = "delete from categoria where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setInt(1, x.getId());
-            ps.execute();
-            ps.close();
+            ps.setInt(1, x);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar categoria: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de exclusao", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 }

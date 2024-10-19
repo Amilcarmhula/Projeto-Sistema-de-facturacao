@@ -18,13 +18,16 @@ import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
 import sysfact.service.cliente.ServiceCliente;
 import sysfact.service.vendas.factura.itens.ServiceItem;
-import sysfact.util.ValidationUtilities;
+import static sysfact.util.AlertUtilities.showDialog;
+import static sysfact.util.AlertUtilities.showErroNotification;
+import static sysfact.util.AlertUtilities.showSuccessNotification;
 
 /**
  *
  * @author JM-Tecnologias
  */
 public class ServiceFactura {
+
     private final FacturaDAO facturaDao;
     private final ItemDAO itemDao;
     private final ClienteDAO clienteDao;
@@ -43,28 +46,28 @@ public class ServiceFactura {
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
-    
-    public void criaFactura(String numero,  String dataCriacao, String dataVencimento,
-            DocumentosComerciais doc, Integer cli, Empresa emp, Usuario user, List<Item> itens) throws SQLException{
+
+    public void criaFactura(String numero, String dataCriacao, String dataVencimento,
+            DocumentosComerciais doc, Integer cli, Empresa emp, Usuario user, List<Item> itens) throws SQLException {
         Cliente cliente;
-        if(numero == null || numero.isEmpty()){
-            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de validação de dados", "Numero de factura nao gerado!");
+        if (numero == null || numero.isEmpty()) {
+            showErroNotification("Erro", "Tipo de factura nao selecionada!");
             return;
         }
-        
-        if(cli == null){
-            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de validação de dados", "Cliente nao definido!");
+
+        if (cli == null) {
+            showErroNotification("Erro", "Cliente nao pode ser nulo!");
             return;
-        }else{
-        ServiceCliente serviceCliente = new ServiceCliente(clienteDao);
-        cliente = serviceCliente.getClienteByID(cli);
+        } else {
+            ServiceCliente serviceCliente = new ServiceCliente(clienteDao);
+            cliente = serviceCliente.getClienteByID(cli);
         }
-        
-        if(itens == null || itens.isEmpty()){
-            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de dados", "Nao existem itens na factura!");
+
+        if (itens == null || itens.isEmpty()) {
+            showErroNotification("Erro", "Nao existem itens na factura!");
             return;
         }
-        
+
         Factura f = new Factura();
         f.setNumero_fac(numero);
         f.setData_criacao(dataCriacao);
@@ -73,10 +76,15 @@ public class ServiceFactura {
         f.setCliente(cliente);
         f.setEmpresa(emp);
         f.setUsuario(user);
-        facturaDao.addEntity(f);
         ServiceItem serviceItem = new ServiceItem(itemDao);
-        serviceItem.registaItens(itens);
-        f.criaRelatorio(numero);
-        setEstado(true);
+        try {
+            facturaDao.addEntity(f);
+            serviceItem.registaItens(itens);
+            f.criaRelatorio(numero);
+            setEstado(true);
+        } catch (SQLException e) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao emitir factura!");
+        }
+
     }
 }

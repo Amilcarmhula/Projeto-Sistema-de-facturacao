@@ -24,7 +24,7 @@ import sysfact.model.vendas.factura.Factura;
 import sysfact.reports.facturas.ClienteData;
 import sysfact.reports.facturas.itensFacturaData;
 import sysfact.util.Conexao;
-import sysfact.util.ValidationUtilities;
+import sysfact.util.AlertUtilities;
 
 /**
  *
@@ -147,7 +147,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             ps.close();
         } catch (SQLException e) {
             System.out.println("Erro ao carregar Dados da Factura: " + e);
-//            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Informação", "Erro ao carregar Dados da Factura: " + e);
+//            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Informação", "Erro ao carregar Dados da Factura: " + e);
         }
         return f;
     }

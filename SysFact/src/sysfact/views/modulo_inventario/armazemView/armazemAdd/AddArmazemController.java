@@ -38,6 +38,12 @@ import sysfact.model.armazem.Armazem;
 import sysfact.model.armazem.contacto.ContactoArmazem;
 import sysfact.model.armazem.endereco.EnderecoArmazem;
 import sysfact.model.usuario.Usuario;
+import sysfact.service.armazem.ServiceArmazem;
+import sysfact.service.armazem.contacto.ServiceContacto;
+import sysfact.service.armazem.endereco.ServiceEndereco;
+import sysfact.util.AlertUtilities;
+import static sysfact.util.AlertUtilities.showErroNotification;
+import static sysfact.util.AlertUtilities.showSuccessNotification;
 import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
@@ -153,13 +159,13 @@ public class AddArmazemController implements Initializable {
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
             LoadAndMoveUtilities.setEstadoStage(false);
-            LoadAndMoveUtilities.showStage(null,null);
+            LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } 
+        }
     }
 
     public void addORupdateContacto() throws SQLException {
@@ -172,9 +178,9 @@ public class AddArmazemController implements Initializable {
 
     public void addORupdateCliente() throws SQLException {
         if ("".equals(txtIDCliente.getText())) {
-            addCliente();
+            addArmazem();
         } else {
-            updateCliente();
+            updateArmazem();
         }
     }
 
@@ -226,13 +232,13 @@ public class AddArmazemController implements Initializable {
         ButtonUtilities.buttonChangeText(btnAddArmazem, txtIDCliente);
         ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
     }
-    
+
 //    
 
     /*
     Funcoes de Consultas
      */
-    public void showCliente() throws SQLException {
+    public void showLastStoreAdded() throws SQLException {
         ArmazemDAO xDAO = new ArmazemDAO();
         Armazem c = xDAO.getLastEntity();
         txtIDCliente.setText(String.valueOf(c.getId()));
@@ -298,13 +304,14 @@ public class AddArmazemController implements Initializable {
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             EnderecoArmazem a = tabelaEndereco.getSelectionModel().getSelectedItem();
-                            System.out.println(a.getId());
                             try {
-                                EnderecoArmazemDAO xDAO = new EnderecoArmazemDAO();
-                                xDAO.deleteEntity(a);
-                                showEndereco();
+                                ServiceEndereco service = new ServiceEndereco();
+                                service.excluir(a.getId());
+                                if (service.isOpsSuccess()) {
+                                    showEndereco();
+                                }
                             } catch (SQLException ex) {
-                                Logger.getLogger(Armazem.class.getName()).log(Level.SEVERE, null, ex);
+                                AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro no processo de exclusao", "Detalhes: "+ex);
                             }
                         });
                         setGraphic(deleteIcon);
@@ -359,13 +366,14 @@ public class AddArmazemController implements Initializable {
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             ContactoArmazem x = tabelaContacto.getSelectionModel().getSelectedItem();
-                            System.out.println(x.getId());
                             try {
-                                ContactoArmazemDAO xDAO = new ContactoArmazemDAO();
-                                xDAO.deleteEntity(x);
-                                showContactos();
+                                ServiceContacto service = new ServiceContacto();
+                                service.excluir(x.getId());
+                                if (service.isOpsSuccess()) {
+                                    showContactos();
+                                }
                             } catch (SQLException ex) {
-                                Logger.getLogger(Armazem.class.getName()).log(Level.SEVERE, null, ex);
+                                AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro no processo de exclusao", "Detalhes: "+ex);
                             }
                         });
                         setGraphic(deleteIcon);
@@ -384,120 +392,77 @@ public class AddArmazemController implements Initializable {
     /*
     Funcoes de Adicao de registros
      */
-    public void addCliente() throws SQLException {
-        Armazem x = new Armazem();
-        x.setTipo(combTipoCliente.getValue());
-        x.setNome_arm(txtNome.getText());
-        x.setDescricao_arm(txtDescricao.getText());
-        ArmazemDAO xDAO = new ArmazemDAO();
-        xDAO.addEntity(x);
-        showCliente();
+    public void addArmazem() throws SQLException {
+        ServiceArmazem servicee = new ServiceArmazem();
+        servicee.registaArmazem(combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
+        if (servicee.isOpsSuccess()) {
+            showLastStoreAdded();
+            servicee.setOpsSuccess(false);
+        }
+
     }
 
     public void addContacto() throws SQLException {
-        ContactoArmazem x = new ContactoArmazem();
-        x.setContacto_arm(txtContacto.getText());
-        x.setEmail_arm(txtEmail.getText());
-        x.setResponsavel_arm(txtResponsavel.getText());
-        Armazem c = new Armazem();
-        c.setId(Integer.parseInt(txtIDCliente.getText()));
-        x.setArmazem(c);
-        x.setUsuario(userData);
-        ContactoArmazemDAO xDAO = new ContactoArmazemDAO();
-        xDAO.addEntity(x);
-        showContactos();
-        restContacto();
+        ServiceContacto service = new ServiceContacto();
+        Integer id = Integer.valueOf(txtIDCliente.getText());
+        service.registaContacto(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
+        if (service.isOpsSuccess()) {
+            showContactos();
+            restContacto();
+        }
     }
 
-    public void addEndereco() {
-        Alert alert;
-        EnderecoArmazem x = new EnderecoArmazem();
-        x.setAvenida_arm(txtAvenida.getText());
-        x.setBairro_arm(txtBairro.getText());
-        x.setCidade_arm(txtCidade.getText());
-        Armazem c = new Armazem();
-        c.setId(Integer.parseInt(txtIDCliente.getText()));
-        x.setArmazem(c);
-        x.setCodigoPostal_arm(Integer.parseInt(txtCodigooPostal.getText()));
-        x.setNumero_arm(Integer.parseInt(txtNumeroEndereco.getText()));
-        x.setProvincia_arm(combProvincia.getValue());
-        x.setRua_arm(txtRua.getText());
-        x.setTipo_arm(combTipoEndereco.getValue());
-        x.setUsuario(userData);
-        try {
-            EnderecoArmazemDAO xDAO = new EnderecoArmazemDAO();
-            xDAO.addEntity(x);
+    public void addEndereco() throws SQLException {
+        ServiceEndereco service = new ServiceEndereco();
+        Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
+        Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
+        Integer id = Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
+        service.registaEndereco(txtAvenida.getText(), txtBairro.getText(), 
+                txtCidade.getText(), postal, numero, combProvincia.getValue(),
+                txtRua.getText(), combTipoEndereco.getValue(),id, userData);
+        if (service.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
-        } catch (SQLException ex) {
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Mensagem de Erro.");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao adicionar Endereco" + ex);
-            alert.showAndWait();
         }
     }
 
     /*
     Funcoes para Actualizar registros
      */
-    public void updateCliente() {
-        Alert alert;
-        Armazem x = new Armazem();
-        x.setTipo(combTipoCliente.getValue());
-        x.setNome_arm(txtNome.getText());
-        x.setDescricao_arm(txtDescricao.getText());
-        ArmazemDAO xDAO;
-        try {
-            xDAO = new ArmazemDAO();
-            xDAO.updateEntityByID(x, Integer.parseInt(txtIDCliente.getText()));
-            showContactos();
-        } catch (SQLException ex) {
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Mensagem de Erro.");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao actualizar cliente" + ex);
-            alert.showAndWait();
-        }
+    public void updateArmazem() throws SQLException {
+        ServiceArmazem servicee = new ServiceArmazem();
+        Integer id = Integer.valueOf(txtIDCliente.getText());
+        servicee.actualizaArmazem(id, combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
 
+        if (servicee.isOpsSuccess()) {
+            showContactos();
+            servicee.setOpsSuccess(false);
+        }
     }
 
     public void updateContacto() throws SQLException {
-        ContactoArmazem x = new ContactoArmazem();
-        x.setContacto_arm(txtContacto.getText());
-        x.setEmail_arm(txtEmail.getText());
-        x.setResponsavel_arm(txtResponsavel.getText());
-        x.setUsuario(userData);
-        ContactoArmazemDAO xDAO = new ContactoArmazemDAO();
-        xDAO.updateEntityByID(x, Integer.parseInt(txtIDContacto.getText()));
-        showContactos();
-        restContacto();
+        ServiceContacto service = new ServiceContacto();
+        Integer id = Integer.valueOf(txtIDContacto.getText());
+        service.actualizaContacto(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
+        if (service.isOpsSuccess()) {
+            showContactos();
+            restContacto();
+        }
     }
 
-    public void updateEndereco() {
-        Alert alert;
-        EnderecoArmazem x = new EnderecoArmazem();
-        x.setAvenida_arm(txtAvenida.getText());
-        x.setBairro_arm(txtBairro.getText());
-        x.setCidade_arm(txtCidade.getText());
-        x.setCodigoPostal_arm(Integer.parseInt(txtCodigooPostal.getText()));
-        x.setNumero_arm(Integer.parseInt(txtNumeroEndereco.getText()));
-        x.setProvincia_arm(combProvincia.getValue());
-        x.setRua_arm(txtRua.getText());
-        x.setTipo_arm(combTipoEndereco.getValue());
-        x.setUsuario(userData);
-        try {
-            EnderecoArmazemDAO xDAO = new EnderecoArmazemDAO();
-            xDAO.updateEntityByID(x, Integer.parseInt(txtIDEndereco.getText()));
+    public void updateEndereco() throws SQLException {
+        ServiceEndereco service = new ServiceEndereco();
+        Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
+        Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
+        Integer id = Integer.valueOf(txtIDEndereco.getText().equals("") ? "0" : txtIDEndereco.getText());
+        service.actualizaEndereco(txtAvenida.getText(), txtBairro.getText(), 
+                txtCidade.getText(), postal, numero, combProvincia.getValue(),
+                txtRua.getText(), combTipoEndereco.getValue(),id, userData);
+        if (service.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
-        } catch (SQLException ex) {
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Mensagem de Erro.");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao adicionar Endereco" + ex);
-            alert.showAndWait();
         }
+        
     }
 
     /*
@@ -550,7 +515,6 @@ public class AddArmazemController implements Initializable {
         txtResponsavel.setText("");
         txtContacto.setText("");
         txtEmail.setText("");
-        txtSite.setText("");
         ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
     }
 

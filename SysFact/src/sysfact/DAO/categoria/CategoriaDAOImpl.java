@@ -11,10 +11,10 @@ import javafx.collections.ObservableList;
  * @author JM-Tecnologias
  */
 public interface CategoriaDAOImpl<T> {
-    void  addEntity(T t);
-    void updateEntityByID(T t);
+    boolean  addEntity(T t);
+    boolean updateEntityByID(T t);
     ObservableList<T> listAllEntities();
 //    T searchEntityByName(String name);
 //    void deleteEntityByROOT(int id);
-    void deleteEntityByUSER(T x);
+    boolean deleteEntity(int x);
 }

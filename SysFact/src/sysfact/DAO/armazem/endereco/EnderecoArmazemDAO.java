@@ -4,6 +4,7 @@
  */
 package sysfact.dao.armazem.endereco;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,9 +13,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import sysfact.model.armazem.endereco.EnderecoArmazem;
+import static sysfact.util.AlertUtilities.showDialog;
 
 import sysfact.util.Conexao;
-
 
 /**
  *
@@ -31,7 +32,8 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
     }
 
     @Override
-    public void addEntity(EnderecoArmazem t) {
+    public boolean addEntity(EnderecoArmazem t) {
+        boolean isSuccess = false;
         try {
             sql = "insert into endereco_armazem (provincia,cidade,bairro,avenida,"
                     + "rua,codigo_postal,numero, tipo, fk_id_armazem, fk_id_usuario)"
@@ -50,16 +52,31 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             ps.setInt(9, t.getArmazem().getId());
             ps.setInt(10, t.getUsuario().getId());
 
-            ps.execute();
-            ps.close();
+            // Usando executeUpdate para verificar se uma linha foi inserida
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar armazem: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de persistencia!", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
 
     }
 
     @Override
-    public void updateEntityByID(EnderecoArmazem t, int id) {
+    public boolean updateEntityByID(EnderecoArmazem t, int id) {
+        boolean isSuccess = false;
         try {
             sql = "update endereco_armazem set provincia=?,cidade=?,bairro=?,avenida=?,"
                     + "rua=?,codigo_postal=?,numero=?, tipo=?,fk_id_usuario=? where id=?";
@@ -76,12 +93,25 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             ps.setInt(9, t.getUsuario().getId());
             ps.setInt(10, id);
 
-            ps.execute();
-            ps.close();
+            // Usando executeUpdate para verificar se uma linha foi inserida
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar armazem: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de persistencia!", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -107,17 +137,18 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar armazem: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + ex);
         }
         return lista;
     }
+
     @Override
     public ObservableList<EnderecoArmazem> searchEntityByCLiente(EnderecoArmazem agentID) {
         ObservableList<EnderecoArmazem> lista = FXCollections.observableArrayList();
         try {
             sql = "select * from endereco_armazem where fk_id_armazem=?";
             ps = con.prepareStatement(sql);
-            ps.setInt(1,agentID.getArmazem().getId());
+            ps.setInt(1, agentID.getArmazem().getId());
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 EnderecoArmazem c = new EnderecoArmazem();
@@ -135,23 +166,37 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar endereco: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + ex);
         }
         return lista;
     }
-    
-     @Override
-    public void deleteEntity(EnderecoArmazem id) {
+
+    @Override
+    public boolean deleteEntity(int id) {
+        boolean isSuccess = false;
         try {
             sql = "delete from endereco_armazem where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setInt(1, id.getId());
-            ps.execute();
-            ps.close();
+            ps.setInt(1, id);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: " + ex);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de exclusao", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 }

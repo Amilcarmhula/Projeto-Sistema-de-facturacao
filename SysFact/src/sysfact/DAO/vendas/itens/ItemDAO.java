@@ -20,7 +20,7 @@ import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
 import sysfact.reports.facturas.itensFacturaData;
 import sysfact.util.Conexao;
-import sysfact.util.ValidationUtilities;
+import sysfact.util.AlertUtilities;
 
 /**
  *
@@ -110,7 +110,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            ValidationUtilities.showDialog(FontAwesomeIcon.TIMES, "Informação", "Erro ao carregar itens da Factura: " + e);
+            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Informação", "Erro ao carregar itens da Factura: " + e);
         }
         return lista;
     }

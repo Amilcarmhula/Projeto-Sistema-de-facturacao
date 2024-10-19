@@ -7,8 +7,8 @@ package sysfact.service.usuario;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import sysfact.dao.usuario.UsuarioDAO;
 import sysfact.model.usuario.Usuario;
-import sysfact.util.LoadAndMoveUtilities;
-import sysfact.util.ValidationUtilities;
+import static sysfact.util.AlertUtilities.showDialog;
+import static sysfact.util.AlertUtilities.showErroNotification;
 
 /**
  *
@@ -21,13 +21,24 @@ public class ServiceUsuario {
     public ServiceUsuario(UsuarioDAO usuarioDAO) {
         this.usuarioDAO = usuarioDAO;
     }
-    
-    public Usuario authLogin(String user, String pwd) {
-        Usuario usuario;
-        user = ValidationUtilities.validaString(FontAwesomeIcon.USER_TIMES,user);
-        pwd = ValidationUtilities.validaString(FontAwesomeIcon.USER_TIMES,pwd);
 
-        usuario = usuarioDAO.login(user, pwd);
+    public Usuario authLogin(String user, String pwd) {
+        Usuario usuario = null;
+        if (user == null || user.isEmpty()) {
+            showErroNotification("Erro", "Usuario nao pode ser nula!");
+            return null;
+        }
+        if (pwd == null || pwd.isEmpty()) {
+            showErroNotification("Erro", "Senha nao pode ser nula!");
+            return null;
+        }
+
+        try {
+            usuario = usuarioDAO.login(user, pwd);
+            
+        } catch (Exception e) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro", "Detalhes: "+e);
+        }
 
         return usuario;
     }

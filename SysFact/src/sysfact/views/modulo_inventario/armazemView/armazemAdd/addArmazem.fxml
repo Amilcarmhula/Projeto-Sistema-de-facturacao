@@ -65,10 +65,9 @@
                         <TableView fx:id="tabelaContacto" layoutX="14.0" layoutY="93.0" onMouseClicked="#selecionaContacto" prefHeight="270.0" prefWidth="740.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
                            <columns>
                               <TableColumn fx:id="IDtabelaContacto" prefWidth="50.0" text="ID" />
-                              <TableColumn fx:id="responsaveltabelaContacto" prefWidth="145.0" text="Pessoa de Contacto" />
-                              <TableColumn fx:id="contactotabelaContacto" prefWidth="129.0" text="Numero" />
-                              <TableColumn fx:id="emailtabelaContacto" prefWidth="193.0" text="Email" />
-                              <TableColumn fx:id="websitetabelaContacto" prefWidth="208.0" text="Site" />
+                              <TableColumn fx:id="responsaveltabelaContacto" prefWidth="205.0" text="Pessoa de Contacto" />
+                              <TableColumn fx:id="contactotabelaContacto" prefWidth="128.0" text="Numero" />
+                              <TableColumn fx:id="emailtabelaContacto" prefWidth="341.0" text="Email" />
                               <TableColumn fx:id="btntabelaContacto" prefWidth="45.0" />
                            </columns>
                         </TableView>

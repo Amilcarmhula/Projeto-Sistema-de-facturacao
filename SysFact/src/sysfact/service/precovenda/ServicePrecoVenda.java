@@ -4,14 +4,16 @@
  */
 package sysfact.service.precovenda;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import sysfact.dao.preco.PrecoVendaDAO;
 import sysfact.model.preco.PrecoVenda;
 import sysfact.model.produto.Produto;
 import sysfact.model.usuario.Usuario;
+import static sysfact.util.AlertUtilities.showDialog;
+import static sysfact.util.AlertUtilities.showErroNotification;
+import static sysfact.util.AlertUtilities.showSuccessNotification;
 
 /**
  *
@@ -36,12 +38,12 @@ public class ServicePrecoVenda {
         data_fim = validarDataFim(data_fim);
         
         if (pro == null) {
-            showErrorDialog("Erro de validação", "Produto não definido.");
+            showErroNotification("Erro", "Produto não definido!");
             return;
         }
         
         if (user == null) {
-            showErrorDialog("Erro de validação", "Usuário não definido.");
+            showErroNotification("Erro", "Usuário não definido!");
             return;
         }
         System.out.println("P:"+preco);
@@ -54,9 +56,9 @@ public class ServicePrecoVenda {
 
         try {
             precoVendaDao.addEntity(pv);
-//            showInfoDialog("Sucesso", "Preço de venda registrado com sucesso.");
+            showSuccessNotification("Erro", "Preço registado com sucesso!");
         } catch (Exception e) {
-            showErrorDialog("Erro", "Erro ao registrar preço de venda: " + e.getMessage());
+            showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao registrar preço de venda: " + e.getMessage());
             System.out.println("Erro: " + e);
         }
     }
@@ -70,7 +72,7 @@ public class ServicePrecoVenda {
 
         
         if (user == null) {
-            showErrorDialog("Erro de validação", "Usuário não definido.");
+            showErroNotification("Erro", "Usuário não definido!");
             return;
         }
         PrecoVenda pv = new PrecoVenda();
@@ -81,16 +83,16 @@ public class ServicePrecoVenda {
 
         try {
             precoVendaDao.updateEntityByID(pv, id);
-            showInfoDialog("Sucesso", "Preço de venda registrado com sucesso.");
+            showSuccessNotification("Erro", "Preço actualizado com sucesso!");
         } catch (Exception e) {
-            showErrorDialog("Erro", "Erro ao registrar preço de venda: " + e.getMessage());
+            showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao actualizar preço de venda: " + e.getMessage());
             System.out.println("Erro: " + e);
         }
     }
 
     private double validarPreco(Double preco) {
         if (preco == null || preco <= 0) {
-            showErrorDialog("Erro de validação", "Preço inválido. Será definido um preço padrão.");
+            showErroNotification("Erro", "Preço nao pode ser nulo, Será definido um preço padrão.");
             return PRECO_PADRAO;
         }
         return preco;
@@ -98,13 +100,13 @@ public class ServicePrecoVenda {
 
     private String validarDataInicio(String data_inicio) {
         if (data_inicio == null || data_inicio.isEmpty()) {
-            showErrorDialog("Erro de validação", "Data inicial não definida. Será usada a data atual.");
+            showErroNotification("Erro", "Data inicial do preco não pode ser nula. Será usada a data atual!");
             return LocalDate.now().toString();
         }
         try {
             LocalDate.parse(data_inicio);
         } catch (DateTimeParseException e) {
-            showErrorDialog("Erro de validação", "Data inicial inválida. Será usada a data atual.");
+            showErroNotification("Erro", "Data inicial do preco não pode ser nula. Será usada a data atual!");
             return LocalDate.now().toString();
         }
         return data_inicio;
@@ -112,31 +114,15 @@ public class ServicePrecoVenda {
 
     private String validarDataFim(String data_fim) {
         if (data_fim == null || data_fim.isEmpty()) {
-            showErrorDialog("Erro de validação", "Data final não definida. Será usada a data padrão.");
+            showErroNotification("Erro", "Data final do preco não pode ser nula. Será usada uma data padrão!");
             return DATA_FIM_PADRAO;
         }
         try {
             LocalDate.parse(data_fim);
         } catch (DateTimeParseException e) {
-            showErrorDialog("Erro de validação", "Data final inválida. Será usada a data padrão.");
+            showErroNotification("Erro", "Data final do preco não pode ser nula. Será usada uma data padrão!");
             return DATA_FIM_PADRAO;
         }
         return data_fim;
-    }
-
-    private void showErrorDialog(String title, String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showInfoDialog(String title, String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

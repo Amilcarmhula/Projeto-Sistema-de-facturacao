@@ -29,8 +29,12 @@ import javafx.stage.Modality;
 import javafx.util.Callback;
 import sysfact.SysFact;
 import sysfact.dao.armazem.ArmazemDAO;
+import sysfact.dao.armazem.contacto.ContactoArmazemDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.usuario.Usuario;
+import sysfact.service.armazem.ServiceArmazem;
+import sysfact.service.armazem.contacto.ServiceContacto;
+import sysfact.util.AlertUtilities;
 import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
@@ -137,12 +141,13 @@ public class ArmazemViewController implements Initializable {
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             Armazem x = tabelaCliente.getSelectionModel().getSelectedItem();
                             try {
-                                ArmazemDAO xDAO = new ArmazemDAO();
-                                xDAO.deleteEntity(x.getId());
-                                showClientes();
-
+                                ServiceArmazem service = new ServiceArmazem();
+                                service.excluir(x.getId());
+                                if (service.isOpsSuccess()) {
+                                    showClientes();
+                                }
                             } catch (SQLException ex) {
-                                Logger.getLogger(Armazem.class.getName()).log(Level.SEVERE, null, ex);
+                                AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro no processo de exclusao", "Detalhes: "+ex);
                             }
                         });
                         setGraphic(deleteIcon);
@@ -163,11 +168,11 @@ public class ArmazemViewController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome_arm().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNome_arm().toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
-                } else if (x.getDescricao_arm().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (x.getDescricao_arm().toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
-                } else if (x.getTipo().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (x.getTipo().toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
                 } else {
                     return false;

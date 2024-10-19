@@ -31,13 +31,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import sysfact.SysFact;
-import sysfact.controller.CategoriaControle;
 import sysfact.dao.categoria.CategoriaDAO;
 import sysfact.model.categoria.Categoria;
-import sysfact.service.caregoria.ServicoCategoria;
+import sysfact.service.categoria.ServicoCategoria;
+import sysfact.util.AlertUtilities;
 import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
-import sysfact.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
  * FXML Controller class
@@ -111,7 +110,7 @@ public class CategoriaViewController implements Initializable {
 
         // Opcional: configurar a largura máxima do texto
         //ps_txtdescricaoProduto.setPrefColumnCount(30); // Ajuste conforme necessário
-        ps_combTipoCategoria.setItems(FXCollections.observableArrayList("Produto", "Serviço"));
+        ps_combTipoCategoria.setItems(FXCollections.observableArrayList("Produtos", "Serviços"));
         try {
             showCategoria();
         } catch (SQLException ex) {
@@ -130,12 +129,8 @@ public class CategoriaViewController implements Initializable {
     private ObservableList<Categoria> listaCategorias;
 
     public void showCategoria() throws SQLException {
-
-        CategoriaDAO xDAO = new CategoriaDAO();
-        ServicoCategoria sc = new ServicoCategoria(xDAO);
-        CategoriaControle catController = new CategoriaControle(sc);
-        catController.listaTodos();
-        listaCategorias = catController.listaTodos();
+        ServicoCategoria sc = new ServicoCategoria();
+        listaCategorias = sc.consultaCategorias();
 
         IDtabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -163,15 +158,14 @@ public class CategoriaViewController implements Initializable {
                                 + "-fx-fill:#000000b3;"
                         );
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            Categoria a = tabelaCategoria.getSelectionModel().getSelectedItem();
-                            System.out.println(a.getId());
+                            Categoria x = tabelaCategoria.getSelectionModel().getSelectedItem();
                             try {
-                                CategoriaDAO xDAO = new CategoriaDAO();
-                                xDAO.deleteEntityByUSER(a);
+                                ServicoCategoria service = new ServicoCategoria();
+                                service.excluir(x.getId());
                                 showCategoria();
                                 resetCategorias();
                             } catch (SQLException ex) {
-                                Logger.getLogger(CategoriaViewController.class.getName()).log(Level.SEVERE, null, ex);
+                                AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro no processo de exclusao", "Detalhes: "+ex);
                             }
                         });
                         setGraphic(deleteIcon);
@@ -240,34 +234,23 @@ public class CategoriaViewController implements Initializable {
         Funcoes para Adicionar informacoes ao banco de dados
      */
     public void addCategoria() throws SQLException {
-        CategoriaDAO xDAO = new CategoriaDAO();
-        ServicoCategoria sc = new ServicoCategoria(xDAO);
-//        CategoriaControle catController = new CategoriaControle(sc);
+        ServicoCategoria sc = new ServicoCategoria();
         sc.registaCategoria(ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
                 ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
                 ps_txtdescricaoCategoria.getText());
+        if (sc.isOpsSuccess()) {
+            resetCategorias();
+            showCategoria();
+        }
 
-//        Categoria a = new Categoria();
-//        a.setTipo(ps_combTipoCategoria.getValue());
-//        a.setGrupo(ps_txtgrupoCategoria.getText());
-//        a.setSubgrupo(ps_txtsubgrupoCategoria.getText());
-//        a.setFamilia(ps_txtfamiliaCategoria.getText());
-//        a.setDescricao(ps_txtdescricaoCategoria.getText());
-//
-//        xDAO.addEntity(a);
-        resetCategorias();
-        showCategoria();
     }
 
     /*
         Funcoes para Actualizar informacoes ao banco de dados
      */
     public void updateCategoria() throws SQLException {
-
-        CategoriaDAO xDAO = new CategoriaDAO();
-        ServicoCategoria sc = new ServicoCategoria(xDAO);
-        CategoriaControle catController = new CategoriaControle(sc);
-        catController.alteraCategoria(Integer.parseInt(ps_txtIDCategoria.getText()),
+        ServicoCategoria sc = new ServicoCategoria();
+        sc.actualizarCaregoria(Integer.parseInt(ps_txtIDCategoria.getText()),
                 ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
                 ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
                 ps_txtdescricaoCategoria.getText());

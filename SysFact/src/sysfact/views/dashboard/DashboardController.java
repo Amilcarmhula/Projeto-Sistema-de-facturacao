@@ -36,7 +36,7 @@ import sysfact.dao.stock.StockDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.categoria.Categoria;
 import sysfact.model.stock.Stock;
-import sysfact.util.ValidationUtilities;
+import sysfact.util.AlertUtilities;
 
 /**
  * FXML Controller class
@@ -148,7 +148,7 @@ public class DashboardController implements Initializable {
 
         // Verificar se a lista de estoque está vazia
         if (listaStock == null || listaStock.isEmpty()) {
-            ValidationUtilities.showDialog(FontAwesomeIcon.INFO, "Aviso", "Nenhum produto encontrado.");
+            AlertUtilities.showDialog(FontAwesomeIcon.INFO, "Aviso", "Nenhum produto encontrado.");
             return;
         }
         ObservableList<PieChart.Data> lista = FXCollections.observableArrayList();

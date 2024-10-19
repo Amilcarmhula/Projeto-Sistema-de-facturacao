@@ -174,10 +174,11 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                     + "LEFT JOIN produto p ON p.id = mp.fk_id_produto "
                     + "LEFT JOIN categoria c ON c.id = p.fk_id_categoria "
                     + "LEFT JOIN armazem a ON a.id = mp.fk_id_armazem "
-                    + "WHERE (? IS NULL OR c.id = ?)"
-                    + " AND (? IS NULL OR a.id = ?)"
-                    + " AND mp.data_movimento=current_date()"
-                    + " GROUP BY mes, ano";
+                    + "WHERE (? IS NULL OR c.id = ?) "
+                    + "AND (? IS NULL OR a.id = ?) "
+                    + "AND MONTH(mp.data_movimento)=MONTH(current_date()) "
+                    + "AND YEAR(mp.data_movimento)=YEAR(current_date()) "
+                    + "GROUP BY mes, ano";
             ps = con.prepareStatement(sql);
 
             // Se a categoria ou armazém não forem informados, passar valores nulos

@@ -7,7 +7,7 @@ SELECT
     pv.preco, 
     ip.identificador, 
     ip.percentagem AS taxa_imposto, 
-    d.nome AS titulo_desconto, 
+    d.identificador AS titulo_desconto, 
     d.percentagem AS percentagem_desconto,
     i.subtotal
 FROM 
@@ -302,7 +302,7 @@ VALUES ('Serviço de Manutenção de Computador', 'Serviço de manutenção e re
 
 -- Serviço: Consultoria em Infraestrutura de TI
 INSERT INTO produto (nome, descricao, contole_stock, fk_id_categoria, fk_id_unidade_medida, fk_id_taxa_imposto)
-VALUES ('Consultoria em Infraestrutura de TI', 'Serviço de consultoria em infraestrutura de redes e servidores', FALSE, 5, 1, 2); jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
+VALUES ('Consultoria em Infraestrutura de TI', 'Serviço de consultoria em infraestrutura de redes e servidores', FALSE, 5, 1, 2);
 
 -- Produto: Fanta Laranja 350ml
 INSERT INTO produto (nome, codigo_barra, descricao, contole_stock, fk_id_categoria, fk_id_unidade_medida, fk_id_taxa_imposto)
@@ -345,22 +345,53 @@ INSERT INTO produto (nome, descricao, contole_stock, fk_id_categoria, fk_id_unid
 VALUES ('Consultoria em Segurança da Informação', 'Serviço de consultoria para implementação de políticas de segurança da informação', FALSE, 5, 1, 2);
 
 
-INSERT INTO precovenda (preco, data_inicio, data_fim, estado, fk_id_produto, fk_id_usuario) VALUES 
-(60.00, '2024-09-17', '2024-09-18', 1, 1, 1), 
-(350.00, '2024-09-17', '2024-09-19', 1, 2, 1), 
-(35000.00, '2024-09-17', '2024-09-20', 1, 3, 1), 
-(1500.00, '2024-09-17', NULL, 1, 4, 1), 
-(5000.00, '2024-09-17', NULL, 1, 5, 1), 
-(30.00, '2024-09-17', '2024-09-21', 1, 6, 1), 
-(400.00, '2024-09-17', '2024-09-22', 1, 7, 1), 
-(45000.00, '2024-09-17', '2024-09-23', 1, 8, 1), 
-(40.00, '2024-09-17', '2024-09-24', 1, 9, 1), 
-(5000.00, '2024-09-17', '2024-09-25', 1, 10, 1), 
-(375.00, '2024-09-17', '2024-09-26', 1, 11, 1), 
-(12000.00, '2024-09-17', '2024-09-27', 1, 12, 1), 
-(800.00, '2024-09-17', NULL, 1, 13, 1), 
-(20.00, '2024-09-17', '2024-09-28', 1, 14, 1), 
-(6000.00, '2024-09-17', NULL, 1, 15, 1);
+-- INSERT INTO precovenda (preco, data_inicio, data_fim, estado, fk_id_produto, fk_id_usuario) VALUES 
+-- (60.00, '2024-09-17', '2024-09-18', 1, 1, 1), 
+-- (350.00, '2024-09-17', '2024-09-19', 1, 2, 1), 
+-- (35000.00, '2024-09-17', '2024-09-20', 1, 3, 1), 
+-- (1500.00, '2024-09-17', NULL, 1, 4, 1), 
+-- (5000.00, '2024-09-17', NULL, 1, 5, 1), 
+-- (30.00, '2024-09-17', '2024-09-21', 1, 6, 1), 
+-- (400.00, '2024-09-17', '2024-09-22', 1, 7, 1), 
+-- (45000.00, '2024-09-17', '2024-09-23', 1, 8, 1), 
+-- (40.00, '2024-09-17', '2024-09-24', 1, 9, 1), 
+-- (5000.00, '2024-09-17', '2024-09-25', 1, 10, 1), 
+-- (375.00, '2024-09-17', '2024-09-26', 1, 11, 1), 
+-- (12000.00, '2024-09-17', '2024-09-27', 1, 12, 1), 
+-- (800.00, '2024-09-17', NULL, 1, 13, 1), 
+-- (20.00, '2024-09-17', '2024-09-28', 1, 14, 1), 
+-- (6000.00, '2024-09-17', NULL, 1, 15, 1);
+
+SELECT    
+		SUM(CASE WHEN mp.tipo_movimento = 'Entrada' THEN mp.quantidade ELSE 0 END) as entradas,
+		SUM(CASE WHEN mp.tipo_movimento = 'Saída' THEN mp.quantidade ELSE 0 END) AS saidas,
+        MONTH(mp.data_movimento) AS mes,
+		YEAR(mp.data_movimento) AS ano
+        
+        FROM movimento_produto mp 
+        LEFT JOIN produto p ON p.id = mp.fk_id_produto
+        LEFT JOIN categoria c ON c.id = p.fk_id_categoria
+        LEFT JOIN armazem a ON a.id = mp.fk_id_armazem
+        WHERE (NULL IS NULL OR c.id = NULL) AND (NULL IS NULL OR a.id = NULL) and mp.data_movimento=current_date()
+       --  WHERE (1 IS NULL OR c.id = 1) AND (1 IS NULL OR a.id = 1) and mp.data_movimento=current_date()
+        GROUP BY mes, ano;
+        
+SELECT    
+		SUM(CASE WHEN mp.tipo_movimento = 'Entrada' THEN mp.quantidade ELSE 0 END) as entradas,
+		SUM(CASE WHEN mp.tipo_movimento = 'Saída' THEN mp.quantidade ELSE 0 END) AS saidas,
+        MONTH(mp.data_movimento) AS mes,
+		YEAR(mp.data_movimento) AS ano
+        
+        FROM movimento_produto mp 
+        LEFT JOIN produto p ON p.id = mp.fk_id_produto
+        LEFT JOIN categoria c ON c.id = p.fk_id_categoria
+        LEFT JOIN armazem a ON a.id = mp.fk_id_armazem
+        WHERE (NULL IS NULL OR c.id = NULL) AND (NULL IS NULL OR a.id = NULL) and MONTH(mp.data_movimento)=MONTH(current_date()) and YEAR(mp.data_movimento)=YEAR(current_date())
+       --  WHERE (1 IS NULL OR c.id = 1) AND (1 IS NULL OR a.id = 1) and mp.data_movimento=current_date()
+        GROUP BY mes, ano;
 
 
-
+select MONTH(current_date());        
+SELECT * FROM movimento_produto; 
+update movimento_produto set data_movimento = '2024-9-18' where id=3;
+    

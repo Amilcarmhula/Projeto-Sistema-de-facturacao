@@ -258,13 +258,11 @@ public class DashboardController implements Initializable {
         Thread x = new Thread(new Runnable() {
             @Override
             public void run() {
-//                for (int i = 0; i < 5; i++) {
-//                    System.out.println("#"+i);
                     try {
                         // Actualiza os dados a cada 10 segundos
                         Platform.runLater(() -> { //To update UI elements from a background thread
                             try {
-                                showStock();
+                                showStock(); // This as an UI component
                                 showMovimentos();
                                 showCountCliente();
                                 showCountFornecedor();

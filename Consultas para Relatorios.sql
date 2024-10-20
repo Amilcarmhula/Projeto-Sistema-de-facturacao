@@ -6,33 +6,31 @@ select * from factura;
 update empresa set apelido='JM-Tecnologias Soc.Unipe.Lda' where id = 1;
 
 SELECT 
-		-- Dados da Factura e Cliente
-		f.numero as numero_factura, f.data_criacao, f.data_vencimento,
-        doc.sigla, doc.nome as documento,
-        cli.razaosocial, cli.nuit as nuit_cliente,
-        CONCAT(ec.avenida,', ',ec.rua,', ',ec.numero,'; ',ec.bairro,', ',ec.cidade,', ',ec.provincia,'- ',ec.codigo_postal ) as endereco_cliente,
-        GROUP_CONCAT(DISTINCT cc.contacto ) AS contatos_cliente,cc.email as email_cliente, 
-        
-        -- Dados da Empresa
-        e.nome as nome_empresa, e.razaosocial, e.nuit as nuit_empresa, 
-        CONCAT(en.avenida,', ',en.rua,', ',en.numero,'; ',en.bairro,', ',en.cidade,', ',en.provincia,'- ',en.codigo_postal ) as endereco_empresa,
-        GROUP_CONCAT(DISTINCT c.contacto) AS contatos_empresa, 
-        c.email as email_empresa, c.website,
-        a.nome_banco, a.numero as numeroConta, a.nib, a.nuib 
-        
-        FROM factura f 
-        -- JOIN com Factura, Documentos e Cliente
-        LEFT JOIN documentocomercial doc ON f.fk_id_doc = doc.id 
-        LEFT JOIN cliente cli ON cli.id = f.fk_id_cliente 
-        LEFT JOIN contacto_cliente cc ON cc.fk_id_cliente = cli.id 
-        LEFT JOIN endereco_cliente ec ON ec.fk_id_cliente = cli.id 
-        -- JOIN com Empresa
-        LEFT JOIN empresa e ON f.fk_id_empresa=e.id
-        LEFT JOIN endereco_empresa en ON e.id = en.fk_id_empresa 
-		LEFT JOIN contacto_empresa c ON e.id = c.fk_id_empresa 
-        LEFT JOIN contabancaria a ON e.id=a.fk_id_empresa
-        WHERE f.numero = '2024-1010/2';
-        
+    -- Dados da Factura e Cliente
+    f.numero AS numero_factura, 
+    f.data_criacao, 
+    f.data_vencimento, 
+    f.estado,
+    doc.sigla, 
+    doc.nome AS documento,
+    cli.id AS cliente_id, 
+    cli.razaosocial, 
+    cli.nuit,
+    -- Soma do subtotal dos itens da fatura
+    SUM(i.subtotal) AS total_fatura
+    
+FROM factura f
+-- JOIN com Factura, Documentos e Cliente
+LEFT JOIN documentocomercial doc ON f.fk_id_doc = doc.id 
+LEFT JOIN cliente cli ON cli.id = f.fk_id_cliente
+LEFT JOIN itemfactura i ON i.fk_numero = f.numero
+
+-- Agrupar por todos os campos da fatura e cliente
+GROUP BY f.numero, f.data_criacao, f.data_vencimento, f.estado, 
+         doc.sigla, doc.nome, cli.id, cli.razaosocial, cli.nuit
+ORDER BY f.numero;
+
+ 
 -- Consultas de dados da Factura
 SELECT p.nome, p.descricao, pv.preco, 
                     i.quantidade, i.subtotal, 

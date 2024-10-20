@@ -43,6 +43,12 @@ public class MainController implements Initializable {
 
     @FXML
     private Label labUserName;
+    
+    @FXML
+    private Label labNivel;
+    
+    @FXML
+    private Label labEmail;
 
     @FXML
     private Button btn_cliente;
@@ -145,6 +151,8 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.user = SysFact.getUserData();
         labUserName.setText(user.getNome());
+        labEmail.setText(user.getEmail());
+        labNivel.setText(user.getNivelAcesso().getDescricao());
 //        btn_dashboard.setStyle("-fx-background-color: rgba(55, 55, 179, 0.25)");
         AnchorPane pane;
         try {

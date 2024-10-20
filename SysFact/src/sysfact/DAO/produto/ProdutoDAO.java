@@ -4,6 +4,7 @@
  */
 package sysfact.dao.produto;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +20,7 @@ import sysfact.model.produto.Produto;
 import sysfact.model.stock.Stock;
 import sysfact.model.taxa_imposto.TaxaImposto;
 import sysfact.model.unidade_medida.UnidadeMedida;
+import static sysfact.util.AlertUtilities.showDialog;
 import sysfact.util.Conexao;
 
 /**
@@ -58,7 +60,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         }
 
     }
-    
+
     @Override
     public void updateEntityByID(Produto t, int id) {
         try {
@@ -81,7 +83,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     @Override
     public ObservableList<Produto> getCombinedEntities() {
         ObservableList<Produto> lista = FXCollections.observableArrayList();
@@ -92,7 +94,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + "         t.id as id_taxa, t.identificador as taxa, t.percentagem,"
                     + "         pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,"
                     + "         s.saldo, s.fk_id_armazem, "
-                    + "         a.nome AS nome_armazem, a.estado AS estado_armazem " 
+                    + "         a.nome AS nome_armazem, a.estado AS estado_armazem "
                     + "FROM produto p "
                     + "LEFT JOIN categoria c ON c.id = p.fk_id_categoria "
                     + "LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida "
@@ -146,7 +148,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         }
         return lista;
     }
-    
+
     /*Busca o ID do ultimo produto adicionado para poder acicionar o preco*/
     @Override
     public Produto getLastEntity() {
@@ -168,9 +170,33 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         return x;
     }
 
-    
+    public int countProdutos(Integer cat) {
+        int total = 0;
+        try {
+            sql = "select count(*) as total_produto from produto p "
+                    + "LEFT JOIN categoria c ON c.id=p.fk_id_categoria "
+                    + "where (? IS NULL OR c.id = ?)";
+            ps = con.prepareStatement(sql);
+            // Se a categoria não for informado, passar valor nulo
+            if (cat == null) {
+                ps.setNull(1, java.sql.Types.INTEGER);
+                ps.setNull(2, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(1, cat);
+                ps.setInt(2, cat);
+            }
+            ResultSet result = ps.executeQuery();
+            if (result.next()) {
+                total = result.getInt("total_produto");
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro de contagem", "Detalhes: " + ex);
+        }
 
-    
+        return total;
+    }
 
     @Override
     public ObservableList<Produto> listAllEntities() {

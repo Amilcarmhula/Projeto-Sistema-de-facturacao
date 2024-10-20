@@ -36,57 +36,38 @@
       <AnchorPane prefHeight="180.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
             <TextField fx:id="ps_txtpesquisar" alignment="CENTER" layoutX="381.0" layoutY="149.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="377.0" promptText="Pesquisar categoria">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="718.0" layoutY="166.0" size="15" />
+            <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="718.0" layoutY="167.0" size="15" />
             <TextField fx:id="ps_txtIDCategoria" alignment="CENTER" disable="true" layoutX="99.0" layoutY="6.0" prefHeight="25.0" prefWidth="114.0" promptText="ID">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
             <TextField fx:id="ps_txtgrupoCategoria" layoutX="99.0" layoutY="40.0" prefHeight="25.0" prefWidth="280.0" promptText="Grupo">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
             <TextField fx:id="ps_txtsubgrupoCategoria" layoutX="99.0" layoutY="77.0" prefHeight="25.0" prefWidth="280.0" promptText="Subgrupo">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
             <TextField fx:id="ps_txtfamiliaCategoria" layoutX="99.0" layoutY="113.0" prefHeight="25.0" prefWidth="280.0" promptText="Família">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextArea fx:id="ps_txtdescricaoCategoria" layoutX="387.0" layoutY="6.0" prefHeight="133.0" prefWidth="362.0">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </TextArea>
-            <ComboBox fx:id="ps_combTipoCategoria" layoutX="216.0" layoutY="6.0" prefHeight="20.0" prefWidth="160.0" promptText="Selecione a Categoria" />
+            <TextArea fx:id="ps_txtdescricaoCategoria" layoutX="387.0" layoutY="6.0" prefHeight="133.0" prefWidth="362.0" />
+            <ComboBox fx:id="ps_combTipoCategoria" layoutX="216.0" layoutY="6.0" prefHeight="30.0" prefWidth="160.0" promptText="Selecione a Categoria" />
             <Button fx:id="btnAddCategoria" alignment="CENTER" layoutX="100.0" layoutY="143.0" mnemonicParsing="false" onAction="#addORupdateCategoria" prefHeight="30.0" prefWidth="267.0" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />

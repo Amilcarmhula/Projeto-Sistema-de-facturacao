@@ -42,15 +42,12 @@
       <AnchorPane layoutY="50.0" prefHeight="110.0" prefWidth="1405.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <TextField fx:id="txtPesquisa" alignment="CENTER" layoutX="10.0" layoutY="15.0" prefHeight="25.0" prefWidth="621.0" promptText="Pesquisar por cliente" stylesheets="@../../../style/dashboard.css">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="593.0" layoutY="32.0" size="15" />
+            <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="593.0" layoutY="35.0" size="15" />
             <Button fx:id="btnAdd" layoutX="1118.0" layoutY="15.0" mnemonicParsing="false" onAction="#getViewAddCliente" prefHeight="30.0" prefWidth="247.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -64,11 +61,7 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="10.0" layoutY="55.0" prefHeight="25.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-               <font>
-                  <Font name="Berlin Sans FB" size="12.0" />
-               </font>
-            </TextField>
+            <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="10.0" layoutY="55.0" prefHeight="25.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
          </children>
       </AnchorPane>
       <AnchorPane layoutY="160.0" prefHeight="670.0" prefWidth="1425.0" stylesheets="@../../../style/dashboard.css" translateZ="-18.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

@@ -34,6 +34,7 @@ import sysfact.dao.armazem.ArmazemDAO;
 import sysfact.dao.categoria.CategoriaDAO;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.fornecedor.FornecedorDAO;
+import sysfact.dao.produto.ProdutoDAO;
 import sysfact.dao.produto.fornecido.ProdutoFornecidoDAO;
 import sysfact.dao.stock.StockDAO;
 import sysfact.model.armazem.Armazem;
@@ -103,6 +104,21 @@ public class DashboardController implements Initializable {
     @FXML
     private Label labFornecedor;
 
+    @FXML
+    private Label labTotalProdutos;
+
+    @FXML
+    private Label labTotalStock;
+
+    @FXML
+    private Label labArmazem;
+
+    @FXML
+    private Label labCategoria;
+    
+    @FXML
+    private Label labDescricao;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -114,6 +130,10 @@ public class DashboardController implements Initializable {
             mapCategorias();
             mapArmazens();
             showFacturas();
+            showCountProdutos();
+            showCountStock();
+            labArmazem.setText(combArmazem.getValue() == null ? "Todos..." : combArmazem.getValue());
+            labCategoria.setText(combCategoria.getValue() == null ? "Todas..." : combArmazem.getValue());
         } catch (SQLException ex) {
             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -153,10 +173,11 @@ public class DashboardController implements Initializable {
         combArmazem.setItems(FXCollections.observableArrayList(lista));
     }
     private ObservableList<Factura> listaFacturas;
-    public void showFacturas() throws SQLException{
+
+    public void showFacturas() throws SQLException {
         ServiceFactura sf = new ServiceFactura();
         listaFacturas = sf.exibeFactura();
-        
+
         numero.setCellValueFactory(new PropertyValueFactory<>("numero_fac"));
         tipo.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getDocComerciais().getNome_doc()));
@@ -167,7 +188,7 @@ public class DashboardController implements Initializable {
         valor.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getItem().getSubtotal())));
         estado.setCellValueFactory(new PropertyValueFactory<>("estado"));
-       
+
         tabelaFactura.setItems(listaFacturas);
     }
 
@@ -263,9 +284,54 @@ public class DashboardController implements Initializable {
         labFornecedor.setText(new FornecedorDAO().CountFornecedor() + "");
     }
 
+    public void showCountProdutos() throws SQLException {
+        Integer cat = null;
+        if (combCategoria.getValue() == null || combCategoria.getValue().equals("Todas...")) {
+            labCategoria.setText("Todas...");
+            labDescricao.setText("A categoria inclui produtos de todas categorias existentes!");
+            labTotalProdutos.setText("Existem "+new ProdutoDAO().countProdutos(cat) + " produtos em todas categorias.");
+        }
+        if (combCategoria.getValue() != null && !combCategoria.getValue().isEmpty() && !combCategoria.getValue().equals("Todas...")) {
+            Categoria c = mapaCategorias.get(combCategoria.getValue());
+            cat = c.getId();
+            labDescricao.setText(c.getDescricao());
+            labCategoria.setText(combCategoria.getValue());
+            labTotalProdutos.setText("Existem "+new ProdutoDAO().countProdutos(cat) + " produtos na categoria "+combCategoria.getValue()+".");
+        }
+    }
+
+    public void showCountStock() throws SQLException {
+        Integer cat = null;
+        Integer arm = null;
+        if (combCategoria.getValue() == null || combCategoria.getValue().equals("Todas..."))  {
+            labCategoria.setText("Todas...");
+            labTotalStock.setText("Com "+new StockDAO().countStock(cat, arm) + " itens em stock no armazem selecionado");
+        }
+        if (combArmazem.getValue() == null || combArmazem.getValue().equals("Todos...")) {
+            labArmazem.setText("Todos...");
+            labTotalStock.setText("Com "+new StockDAO().countStock(cat, arm) + " itens em stock no em todos armazens.");
+        }
+        if (combCategoria.getValue() != null && !combCategoria.getValue().isEmpty() && !combCategoria.getValue().equals("Todas...")) {
+            Categoria c = mapaCategorias.get(combCategoria.getValue());
+            cat = c.getId();
+            labCategoria.setText(combCategoria.getValue());
+            labTotalStock.setText("Com "+new StockDAO().countStock(cat, arm) + " itens em stock na categoria "+combCategoria.getValue()+" em todos armazens.");
+        }
+
+        if (combArmazem.getValue() != null && !combArmazem.getValue().isEmpty() && !combArmazem.getValue().equals("Todos...")) {
+            Armazem a = mapaArmazens.get(combArmazem.getValue());
+            arm = a.getId();
+            labArmazem.setText(combArmazem.getValue());
+            labTotalStock.setText("Com "+new StockDAO().countStock(cat, arm) + " itens em stock no "+combArmazem.getValue()+".");
+        }
+        
+    }
+
     public void selectedComboBox() throws SQLException {
         showMovimentos();
         showStock();
+        showCountProdutos();
+        showCountStock();
     }
 
 //    public void autoUpdade() {
@@ -322,7 +388,7 @@ public class DashboardController implements Initializable {
                     });
 
                     // A thread dorme por 10 segundos
-                    Thread.sleep(10000);
+                    Thread.sleep(30000);
                 } catch (InterruptedException ex) {
                     // Trata uma possível interrupção da thread
                     System.out.println("Erro: " + ex);

@@ -17,9 +17,9 @@
    <children>
       <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Registro de Stock" textFill="WHITE" AnchorPane.topAnchor="10.0">
+            <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Registro de Stock" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
             <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -45,9 +45,6 @@
                            </font>
                         </TextField>
                         <TextField fx:id="txtPesquisafrnecedor" layoutX="369.0" layoutY="10.0" prefHeight="20.0" prefWidth="257.0" promptText="Pesquisar fornecedor" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="369.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
                            <styleClass>
                               <String fx:value="text-squared-border" />
                               <String fx:value="shadow" />
@@ -75,9 +72,6 @@
                            </font>
                         </TextField>
                         <TextField fx:id="txtPesquisaArmazem" layoutX="368.0" layoutY="10.0" prefHeight="20.0" prefWidth="257.0" promptText="Pesquisar armazem" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="368.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
                            <styleClass>
                               <String fx:value="text-squared-border" />
                               <String fx:value="shadow" />
@@ -100,15 +94,8 @@
       </TabPane>
       <AnchorPane prefHeight="93.0" prefWidth="837.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="56.0" layoutY="14.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </TextField>
+            <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="56.0" layoutY="14.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
             <TextField fx:id="txtQuantidade" alignment="CENTER" layoutX="181.0" layoutY="14.0" prefHeight="20.0" prefWidth="89.0" promptText="Qtd." stylesheets="@../../../style/dashboard.css">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
@@ -138,9 +125,6 @@
                </styleClass>
             </Button>
             <TextField fx:id="txtCustoAquisicao" layoutX="703.0" layoutY="17.0" prefHeight="25.0" prefWidth="126.0" stylesheets="@../../../style/dashboard.css">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />

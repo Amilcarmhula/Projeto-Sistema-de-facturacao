@@ -20,7 +20,7 @@
                <children>
                   <Button fx:id="btnlogin" layoutX="85.0" layoutY="445.0" mnemonicParsing="false" onAction="#log" prefHeight="20.0" prefWidth="230.0" stylesheets="@style/dashboard.css" text="Entrar">
                      <font>
-                        <Font name="Berlin Sans FB Bold" size="16.0" />
+                        <Font size="20.0" />
                      </font>
                      <styleClass>
                         <String fx:value="primary-color" />
@@ -58,9 +58,9 @@
          <children>
             <AnchorPane prefHeight="600.0" prefWidth="400.0" styleClass="primary-color" stylesheets="@style/dashboard.css">
                <children>
-                  <Label alignment="CENTER" layoutY="345.0" text="JM-Invoice Stock Master" textAlignment="CENTER" textFill="#c72a98" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <Label alignment="CENTER" layoutY="345.0" text="JM-Invoice Stock Master" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font name="Berlin Sans FB Demi Bold" size="30.0" />
+                        <Font size="36.0" />
                      </font>
                   </Label>
                   <ImageView fitHeight="295.0" fitWidth="357.0" layoutX="22.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true">

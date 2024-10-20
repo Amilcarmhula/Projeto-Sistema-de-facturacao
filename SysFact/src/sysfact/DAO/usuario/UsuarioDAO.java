@@ -25,7 +25,7 @@ import sysfact.model.usuario.Permissao;
 import sysfact.model.usuario.Usuario;
 import sysfact.util.Conexao;
 import sysfact.util.LoadAndMoveUtilities;
-import sysfact.util.AlertUtilities;
+import static sysfact.util.AlertUtilities.showDialog;
 import static sysfact.util.AlertUtilities.showSuccessNotification;
 
 /**
@@ -46,7 +46,12 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
     public Usuario login(String u, String s) {
         Usuario user = null;
         try {
-            sql = "select * from usuario where usuario=? and senha=? and estado=1";
+            sql = "select u.id, u.nome, u.email,u.estado,"
+                    + "p.tipo,n.descricao "
+                    + "from usuario u "
+                    + "LEFT JOIN nivel_acesso n ON u.fk_nivel_acesso=n.id "
+                    + "LEFT JOIN permissao p ON u.fk_permissao=p.id "
+                    + "where usuario=? and senha=? and estado=1";
             ps = Conexao.getConexao().prepareStatement(sql);
             ps.setString(1, u);
             ps.setString(2, s);
@@ -57,21 +62,20 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
                 user.setId(result.getInt("id"));
                 user.setNome(result.getString("nome"));
                 user.setEmail(result.getString("email"));
+                user.setEstado(result.getBoolean("estado"));
                 NivelAcesso n = new NivelAcesso();
-                n.setId(result.getInt("fk_nivel_acesso"));
+                n.setDescricao(result.getString("descricao"));
                 user.setNivelAcesso(n);
                 Permissao p = new Permissao();
-                p.setId(result.getInt("fk_permissao"));
+                p.setTipo(result.getString("tipo"));
                 user.setPermissao(p);
-                user.setEstado(result.getBoolean("estado"));
-                user.setData_criacao(result.getString("data_criacao"));
-            }else{
-                AlertUtilities.showDialog(FontAwesomeIcon.TIMES,"Info", "Usuario nao existe!!");
+            } else {
+                showDialog(FontAwesomeIcon.TIMES, "Info", "Usuario nao existe!!");
             }
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            AlertUtilities.showDialog(FontAwesomeIcon.EXCLAMATION_TRIANGLE,"Erro", "Erro com banco de dados: " + ex);
+            showDialog(FontAwesomeIcon.TIMES, "Erro", "Detalhes: " + ex);
         }
         return user;
     }

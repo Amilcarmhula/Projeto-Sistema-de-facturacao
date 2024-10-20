@@ -4,6 +4,9 @@
  */
 package sysfact.dao.vendas.factura;
 
+import javafx.collections.ObservableList;
+import sysfact.model.vendas.factura.Factura;
+
 /**
  *
  * @author JM-Tecnologias
@@ -12,5 +15,6 @@ public interface FacturaDAOImpl<T> {
     
     void addEntity(T x);
     T getFacturaData(String factura);
+    ObservableList<T> getFacturaToDashboard();
     
 }

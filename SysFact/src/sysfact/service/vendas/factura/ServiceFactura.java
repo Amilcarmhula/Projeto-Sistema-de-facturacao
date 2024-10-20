@@ -7,6 +7,7 @@ package sysfact.service.vendas.factura;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.SQLException;
 import java.util.List;
+import javafx.collections.ObservableList;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.vendas.factura.FacturaDAO;
 import sysfact.dao.vendas.itens.ItemDAO;
@@ -20,7 +21,6 @@ import sysfact.service.cliente.ServiceCliente;
 import sysfact.service.vendas.factura.itens.ServiceItem;
 import static sysfact.util.AlertUtilities.showDialog;
 import static sysfact.util.AlertUtilities.showErroNotification;
-import static sysfact.util.AlertUtilities.showSuccessNotification;
 
 /**
  *
@@ -33,8 +33,8 @@ public class ServiceFactura {
     private final ClienteDAO clienteDao;
     private boolean estado = false;
 
-    public ServiceFactura(FacturaDAO facturaDao) throws SQLException {
-        this.facturaDao = facturaDao;
+    public ServiceFactura() throws SQLException {
+        this.facturaDao = new FacturaDAO();
         this.itemDao = new ItemDAO();
         this.clienteDao = new ClienteDAO();
     }
@@ -86,5 +86,9 @@ public class ServiceFactura {
             showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao emitir factura!");
         }
 
+    }
+    
+    public ObservableList<Factura> exibeFactura() {
+        return facturaDao.getFacturaToDashboard();
     }
 }

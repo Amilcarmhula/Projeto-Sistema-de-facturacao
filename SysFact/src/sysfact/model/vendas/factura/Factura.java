@@ -32,6 +32,7 @@ public class Factura {
     private String data_vencimento;
     private DocumentosComerciais docComerciais;
     private List<Item> itens;
+    private Item item;
     private boolean estado;
     private Empresa empresa;
     private Cliente cliente;
@@ -98,6 +99,14 @@ public class Factura {
 
     public void setData_vencimento(String data_vencimento) {
         this.data_vencimento = data_vencimento;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     public List<Item> getItens() {

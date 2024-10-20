@@ -23,29 +23,29 @@
                      <children>
                         <Label alignment="CENTER" layoutX="104.0" text="Controle de movimentos mensais" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="Berlin Sans FB" size="18.0" />
                            </font>
                         </Label>
                      </children>
                   </AnchorPane>
                   <Label alignment="CENTER" layoutY="24.0" prefHeight="28.0" prefWidth="150.0" text="Entradas" textFill="WHITE" AnchorPane.leftAnchor="0.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
                   </Label>
                   <Label alignment="CENTER" layoutX="150.0" layoutY="24.0" prefHeight="28.0" prefWidth="150.0" text="Saídas" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
                   </Label>
                   <Label fx:id="labEntrada" alignment="CENTER" layoutY="49.0" prefHeight="28.0" prefWidth="134.0" text="0" textFill="WHITE" AnchorPane.leftAnchor="0.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
                   </Label>
                   <Label fx:id="labSaida" alignment="CENTER" layoutX="166.0" layoutY="49.0" prefHeight="28.0" prefWidth="134.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
                   </Label>
                </children>
@@ -58,12 +58,15 @@
                <children>
                   <Label alignment="CENTER_RIGHT" layoutY="60.0" prefHeight="28.0" prefWidth="337.0" text="Total de Facturas" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
                   </Label>
                   <Label layoutX="105.0" layoutY="14.0" prefHeight="45.0" prefWidth="200.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
                      <padding>
                         <Insets left="10.0" />
@@ -73,7 +76,7 @@
                      <children>
                         <Label alignment="CENTER" layoutX="104.0" text="Controle de facturas emitidas" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="Berlin Sans FB" size="18.0" />
                            </font>
                         </Label>
                      </children>
@@ -91,19 +94,22 @@
                      <children>
                         <Label alignment="CENTER" layoutX="104.0" prefWidth="305.0" text="Fornecedores" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="Berlin Sans FB" size="18.0" />
                            </font>
                         </Label>
                      </children>
                   </AnchorPane>
                   <Label alignment="CENTER_RIGHT" layoutX="15.0" layoutY="90.0" prefHeight="28.0" prefWidth="253.0" text="Total de Fornecedores" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
                   </Label>
                   <Label fx:id="labFornecedor" layoutX="98.0" layoutY="90.0" prefHeight="45.0" prefWidth="200.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
                   </Label>
                   <FontAwesomeIconView fill="WHITE" glyphName="USERS" layoutX="15.0" layoutY="55.0" size="60" />
@@ -119,20 +125,23 @@
                      <children>
                         <Label alignment="CENTER" layoutX="104.0" text="Clientes" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="Berlin Sans FB" size="18.0" />
                            </font>
                         </Label>
                      </children>
                   </AnchorPane>
                   <Label fx:id="labCliente4" layoutX="184.0" layoutY="18.0" prefHeight="45.0" prefWidth="200.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Total de Clientes" textFill="WHITE" AnchorPane.topAnchor="60.0">
+                  <Label alignment="CENTER_RIGHT" layoutY="60.0" prefHeight="28.0" prefWidth="300.0" text="Total de Clientes" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
                   </Label>
                   <ImageView fitHeight="50.0" fitWidth="75.0" layoutX="14.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -156,6 +165,13 @@
                 <TableColumn fx:id="saldo" prefWidth="51.0" resizable="false" text="Stock" />
               </columns>
             </TableView>
+            <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="335.0" prefWidth="444.0" styleClass="secondary-color" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label layoutX="31.0" layoutY="27.0" text="Descricao do armazem" />
+                  <Label layoutX="31.0" layoutY="57.0" text="Descricao da categoria" />
+                  <Label layoutX="31.0" layoutY="96.0" text="Contagem de produtos por categoria" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
       <ComboBox fx:id="combArmazem" layoutX="1254.0" layoutY="520.0" onAction="#selectedComboBox" prefHeight="25.0" prefWidth="157.0" promptText="Selecione o Armazem" />
@@ -168,7 +184,7 @@
                      <children>
                         <Label alignment="CENTER" layoutX="104.0" text="Clientes" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="Berlin Sans FB" size="18.0" />
                            </font>
                         </Label>
                      </children>
@@ -178,10 +194,13 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Total de Clientes" textFill="WHITE" AnchorPane.topAnchor="60.0">
+                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Total de Clientes" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
                   </Label>
                   <FontAwesomeIconView fill="WHITE" glyphName="USER" layoutX="33.0" layoutY="58.0" size="60" />
                </children>
@@ -196,20 +215,23 @@
                      <children>
                         <Label alignment="CENTER" layoutX="104.0" text="Controle de nivel de stock" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="Berlin Sans FB" size="18.0" />
                            </font>
                         </Label>
                      </children>
                   </AnchorPane>
                   <Label fx:id="labCliente1" layoutX="184.0" layoutY="18.0" prefHeight="45.0" prefWidth="200.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Nome do produto" textFill="WHITE" AnchorPane.topAnchor="60.0">
+                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Nome do produto" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
                   </Label>
                   <FontAwesomeIconView fill="WHITE" glyphName="CART_PLUS" layoutX="15.0" layoutY="55.0" size="60" />
                </children>
@@ -224,7 +246,7 @@
                      <children>
                         <Label alignment="CENTER" layoutX="104.0" text="Total de Facturamento" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="Berlin Sans FB" size="18.0" />
                            </font>
                         </Label>
                      </children>
@@ -234,10 +256,13 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Total em Caixa" textFill="WHITE" AnchorPane.topAnchor="60.0">
+                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Total em Caixa" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
                   </Label>
                   <FontAwesomeIconView fill="WHITE" glyphName="MONEY" layoutX="15.0" layoutY="60.0" size="60" />
                </children>
@@ -252,7 +277,7 @@
                      <children>
                         <Label alignment="CENTER" layoutX="104.0" text="Clientes" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="Berlin Sans FB" size="18.0" />
                            </font>
                         </Label>
                      </children>
@@ -262,10 +287,13 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Total de Clientes" textFill="WHITE" AnchorPane.topAnchor="60.0">
+                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Total de Clientes" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Berlin Sans FB" size="24.0" />
                      </font>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
                   </Label>
                   <ImageView fitHeight="50.0" fitWidth="75.0" layoutX="14.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -280,16 +308,15 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <TableView layoutX="3.0" layoutY="279.0" prefHeight="236.0" prefWidth="1432.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <TableView fx:id="tabelaFactura" layoutX="3.0" layoutY="279.0" prefHeight="236.0" prefWidth="1432.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <columns>
-          <TableColumn prefWidth="159.0" resizable="false" text="Numero" />
-          <TableColumn prefWidth="162.0" resizable="false" text="Tipo" />
-            <TableColumn prefWidth="466.0" resizable="false" text="Cliente" />
-            <TableColumn prefWidth="137.0" resizable="false" text="Data de emissao" />
-            <TableColumn prefWidth="150.0" resizable="false" text="Data de vencimento" />
-            <TableColumn prefWidth="122.0" resizable="false" text="Valor" />
-            <TableColumn prefWidth="133.0" resizable="false" text="Estado" />
-            <TableColumn prefWidth="91.0" resizable="false" />
+          <TableColumn fx:id="numero" prefWidth="191.0" resizable="false" text="Numero" />
+          <TableColumn fx:id="tipo" prefWidth="218.0" resizable="false" text="Tipo" />
+            <TableColumn fx:id="cliente" prefWidth="447.0" resizable="false" text="Cliente" />
+            <TableColumn fx:id="dataemissao" prefWidth="145.0" resizable="false" text="Data de emissao" />
+            <TableColumn fx:id="datavencimento" prefWidth="168.0" resizable="false" text="Data de vencimento" />
+            <TableColumn fx:id="valor" prefWidth="129.0" resizable="false" text="Valor" />
+            <TableColumn fx:id="estado" prefWidth="123.0" resizable="false" text="Estado" />
         </columns>
       </TableView>
    </children>

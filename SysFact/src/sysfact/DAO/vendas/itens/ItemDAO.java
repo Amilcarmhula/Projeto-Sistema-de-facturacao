@@ -18,7 +18,6 @@ import sysfact.model.produto.Produto;
 import sysfact.model.taxa_imposto.TaxaImposto;
 import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
-import sysfact.reports.facturas.itensFacturaData;
 import sysfact.util.Conexao;
 import sysfact.util.AlertUtilities;
 

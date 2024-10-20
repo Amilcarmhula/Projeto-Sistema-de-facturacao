@@ -8,10 +8,13 @@ package sysfact.teste;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.fornecedor.FornecedorDAO;
 import sysfact.dao.produto.fornecido.ProdutoFornecidoDAO;
+import sysfact.dao.vendas.factura.FacturaDAO;
+import sysfact.model.vendas.factura.Factura;
 
 //import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 //import java.io.File;
@@ -53,12 +56,10 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        Map<String, Integer> mapa = new ProdutoFornecidoDAO().getMovimentos(1, 1);
-        for (Map.Entry<String, Integer> entry : mapa.entrySet()) {
-            System.out.println(entry.getKey()+": " +entry.getValue());
-//            Object key = entry.getKey();
-//            Object val = entry.getValue();
-            
+        FacturaDAO f = new FacturaDAO();
+        List<Factura> fac = f.getFacturaToDashboard();
+        for (Factura factura : fac) {
+            System.out.println("Nome: "+factura.getCliente().getRazao_cli());
         }
         System.out.println("Total: " + new FornecedorDAO().CountFornecedor() );
         

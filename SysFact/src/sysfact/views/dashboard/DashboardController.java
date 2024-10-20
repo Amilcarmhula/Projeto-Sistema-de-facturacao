@@ -5,6 +5,7 @@
 package sysfact.views.dashboard;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,10 +24,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 import sysfact.dao.armazem.ArmazemDAO;
 import sysfact.dao.categoria.CategoriaDAO;
 import sysfact.dao.cliente.ClienteDAO;
@@ -36,6 +39,8 @@ import sysfact.dao.stock.StockDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.categoria.Categoria;
 import sysfact.model.stock.Stock;
+import sysfact.model.vendas.factura.Factura;
+import sysfact.service.vendas.factura.ServiceFactura;
 import sysfact.util.AlertUtilities;
 
 /**
@@ -44,6 +49,30 @@ import sysfact.util.AlertUtilities;
  * @author JM-Tecnologias
  */
 public class DashboardController implements Initializable {
+
+    @FXML
+    private TableView<Factura> tabelaFactura;
+
+    @FXML
+    private TableColumn<Factura, String> cliente;
+
+    @FXML
+    private TableColumn<Factura, String> dataemissao;
+
+    @FXML
+    private TableColumn<Factura, String> datavencimento;
+
+    @FXML
+    private TableColumn<Factura, Boolean> estado;
+
+    @FXML
+    private TableColumn<Factura, String> numero;
+
+    @FXML
+    private TableColumn<Factura, String> tipo;
+
+    @FXML
+    private TableColumn<Factura, String> valor;
 
     @FXML
     private PieChart pieChart;
@@ -84,6 +113,7 @@ public class DashboardController implements Initializable {
             showCountFornecedor();
             mapCategorias();
             mapArmazens();
+            showFacturas();
         } catch (SQLException ex) {
             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -121,6 +151,24 @@ public class DashboardController implements Initializable {
             lista.add(armazem.getNome_arm());
         }
         combArmazem.setItems(FXCollections.observableArrayList(lista));
+    }
+    private ObservableList<Factura> listaFacturas;
+    public void showFacturas() throws SQLException{
+        ServiceFactura sf = new ServiceFactura();
+        listaFacturas = sf.exibeFactura();
+        
+        numero.setCellValueFactory(new PropertyValueFactory<>("numero_fac"));
+        tipo.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getDocComerciais().getNome_doc()));
+        cliente.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getCliente().getRazao_cli()));
+        dataemissao.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
+        datavencimento.setCellValueFactory(new PropertyValueFactory<>("data_vencimento"));
+        valor.setCellValueFactory(cellData
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getItem().getSubtotal())));
+        estado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+       
+        tabelaFactura.setItems(listaFacturas);
     }
 
     private ObservableList<Stock> listaStock;
@@ -258,27 +306,27 @@ public class DashboardController implements Initializable {
         Thread x = new Thread(new Runnable() {
             @Override
             public void run() {
-                    try {
-                        // Actualiza os dados a cada 10 segundos
-                        Platform.runLater(() -> { //To update UI elements from a background thread
-                            try {
-                                showStock(); // This as an UI component
-                                showMovimentos();
-                                showCountCliente();
-                                showCountFornecedor();
-                                mapCategorias();
-                                mapArmazens();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        });
+                try {
+                    // Actualiza os dados a cada 10 segundos
+                    Platform.runLater(() -> { //To update UI elements from a background thread
+                        try {
+                            showStock(); // This as an UI component
+                            showMovimentos();
+                            showCountCliente();
+                            showCountFornecedor();
+                            mapCategorias();
+                            mapArmazens();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
 
-                        // A thread dorme por 10 segundos
-                        Thread.sleep(10000);
-                    } catch (InterruptedException ex) {
-                        // Trata uma possível interrupção da thread
-                        System.out.println("Erro: " + ex);
-                    }
+                    // A thread dorme por 10 segundos
+                    Thread.sleep(10000);
+                } catch (InterruptedException ex) {
+                    // Trata uma possível interrupção da thread
+                    System.out.println("Erro: " + ex);
+                }
 //                }
                 autoUpdade();
                 // Imprime a mensagem "Fim" após o término do loop

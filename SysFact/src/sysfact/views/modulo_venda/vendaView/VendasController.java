@@ -354,8 +354,7 @@ public class VendasController implements Initializable {
         int cli = Integer.parseInt(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
         DocumentosComerciais doc = mapaDocComercial.get(combTipoDoc.getValue());
 
-        FacturaDAO fDAO = new FacturaDAO();
-        ServiceFactura service = new ServiceFactura(fDAO);
+        ServiceFactura service = new ServiceFactura();
         service.criaFactura(labNumeroFactura.getText(), labDataInicial.getText(),
                 labValidade.getText(), doc, cli, empresaData, userData, collectItens());
         if (service.isEstado()) {

@@ -14,9 +14,9 @@
    <children>
       <AnchorPane layoutX="116.0" layoutY="14.0" prefHeight="50.0" prefWidth="600.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="75.0" layoutY="10.0" text="Cadastro de Unidades de Medidas">
+            <Label layoutX="75.0" layoutY="10.0" text="Cadastro de Unidades de Medidas" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
             <Button fx:id="btnClose" layoutX="509.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">

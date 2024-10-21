@@ -39,11 +39,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextField fx:id="txtIDFornecedor" disable="true" layoutX="70.0" layoutY="10.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="10.0">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </TextField>
+                        <TextField fx:id="txtIDFornecedor" disable="true" layoutX="70.0" layoutY="10.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="10.0" />
                         <TextField fx:id="txtPesquisafrnecedor" layoutX="369.0" layoutY="10.0" prefHeight="20.0" prefWidth="257.0" promptText="Pesquisar fornecedor" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="369.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <styleClass>
                               <String fx:value="text-squared-border" />
@@ -66,11 +62,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="306.0" prefWidth="760.0">
                      <children>
-                        <TextField fx:id="txtIDArmazem" disable="true" layoutX="70.0" layoutY="10.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="10.0">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </TextField>
+                        <TextField fx:id="txtIDArmazem" disable="true" layoutX="70.0" layoutY="10.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="10.0" />
                         <TextField fx:id="txtPesquisaArmazem" layoutX="368.0" layoutY="10.0" prefHeight="20.0" prefWidth="257.0" promptText="Pesquisar armazem" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="368.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <styleClass>
                               <String fx:value="text-squared-border" />
@@ -124,21 +116,21 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <TextField fx:id="txtCustoAquisicao" layoutX="703.0" layoutY="17.0" prefHeight="25.0" prefWidth="126.0" stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtCustoAquisicao" layoutX="703.0" layoutY="17.0" prefHeight="26.0" prefWidth="120.0" stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <Label layoutX="547.0" layoutY="17.0" text="Custo de aquisicao:">
+            <Label layoutX="547.0" layoutY="17.0" text="Custo de aquisicao:" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="16.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
             <DatePicker fx:id="dataAquisicao" layoutX="427.0" layoutY="14.0" prefHeight="25.0" prefWidth="114.0" />
-            <Label layoutX="282.0" layoutY="14.0" text="Data de aquisicao:">
+            <Label layoutX="282.0" layoutY="14.0" text="Data de aquisicao:" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="16.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
          </children>

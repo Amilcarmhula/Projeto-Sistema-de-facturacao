@@ -132,6 +132,17 @@ public class ProdutoSearchController implements Initializable {
     @FXML
     private TextField txtPesquisar;
 
+    @FXML
+    private TextField txtNivelStock;
+
+    public void stockControlChecked() {
+        if (checkControle.isSelected()) {
+            txtNivelStock.setDisable(false);
+        } else {
+            txtNivelStock.setDisable(true);
+        }
+    }
+
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
             LoadAndMoveUtilities.setEstadoStage(false);
@@ -279,15 +290,15 @@ public class ProdutoSearchController implements Initializable {
     }
 
     private ObservableList<Produto> listaProduto;
-    private Map<Integer, Produto> mapaProdutos;
+//    private Map<Integer, Produto> mapaProdutos;
 
     public void showProduto() throws SQLException {
         ProdutoDAO aDAO = new ProdutoDAO();
         listaProduto = aDAO.getCombinedEntities();
-        mapaProdutos = new HashMap<>();
-        for (Produto p : listaProduto) {
-            mapaProdutos.put(p.getId(), p);
-        }
+//        mapaProdutos = new HashMap<>();
+//        for (Produto p : listaProduto) {
+//            mapaProdutos.put(p.getId(), p);
+//        }
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         artigo.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
@@ -398,9 +409,10 @@ public class ProdutoSearchController implements Initializable {
     }
 
     public void selectedRow() {
-        Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
-        if (x != null) {
-            Produto p = mapaProdutos.get(x.getId());
+        Produto p = tabelaProduto.getSelectionModel().getSelectedItem();
+        
+        if (p != null) {
+//            Produto p = mapaProdutos.get(x.getId());
 
             labIDPreco.setText(String.valueOf(p.getPrecovenda().getId()));
             txtPreco.setText(String.valueOf(p.getPrecovenda().getPreco() + "0"));
@@ -418,11 +430,12 @@ public class ProdutoSearchController implements Initializable {
             }
 
             checkControle.setSelected(p.isContole_stock());
-
+            stockControlChecked();
+            
+            txtNivelStock.setText(String.valueOf(p.getNivelstock()));
             labCategoria.setText(p.getCategoria().getFamilia());
             labUnidade.setText(p.getUnidade_medida().getIdentificador() + ": " + p.getUnidade_medida().getSigla());
             labTaxa.setText(p.getTaxa_imposto().getNomeImposto() + ": " + (p.getTaxa_imposto().getPercentagemImposto() * 100) + "%");
-
             txtIDCategoria.setText(String.valueOf(p.getCategoria().getId()));
             txtIDUnidade.setText(String.valueOf(p.getUnidade_medida().getId()));
             txtIDTaxa.setText(String.valueOf(p.getTaxa_imposto().getId()));
@@ -441,7 +454,9 @@ public class ProdutoSearchController implements Initializable {
         ProdutoDAO xDAO = new ProdutoDAO();
         Serviceproduto sp = new Serviceproduto(xDAO);
         sp.registraProduto(Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
-                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(), txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), checkControle.isSelected());
+                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
+                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
+                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
 
         addPrecoVenda();
         resetCampos();
@@ -473,8 +488,10 @@ public class ProdutoSearchController implements Initializable {
     public void updateProduto() throws SQLException {
         ProdutoDAO xDAO = new ProdutoDAO();
         Serviceproduto sp = new Serviceproduto(xDAO);
-        sp.actualizaProduto(Integer.parseInt(txtIDProduto.getText()), Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
-                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(), txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText());
+        sp.actualizaProduto(Integer.parseInt(txtIDProduto.getText()),Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
+                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
+                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
+                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
 
         showProduto();
     }
@@ -497,7 +514,7 @@ public class ProdutoSearchController implements Initializable {
         dataInicio.setValue(LocalDate.now());
         dataFim.setValue(LocalDate.now());
         checkControle.setSelected(false);
-
+        stockControlChecked();
         labCategoria.setText("");
         labUnidade.setText("");
         labTaxa.setText("");

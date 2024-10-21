@@ -46,7 +46,7 @@
 			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{preco}*$F{percentagemImposto})))]]></variableExpression>
 		</variable>
 		<variable name="sum_descontos" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",(((($F{quantidade}*$F{preco})*$F{percentagemImposto})+$F{quantidade}*$F{preco})*$F{percentagemDesconto})))]]></variableExpression>
+			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{preco}*$F{percentagemDesconto})))]]></variableExpression>
 		</variable>
 		<variable name="sum_total" class="java.lang.Double" calculation="Sum">
 			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{subtotal})))]]></variableExpression>

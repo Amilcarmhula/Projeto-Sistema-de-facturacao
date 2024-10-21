@@ -91,4 +91,14 @@ public class ServiceFactura {
     public ObservableList<Factura> exibeFactura() {
         return facturaDao.getFacturaToDashboard();
     }
+    
+    public int contaFacturas(){
+        int total = facturaDao.countFactura();
+        return total;
+    }
+    
+    public double somaTotalFacturas(){
+        double total = facturaDao.totalPaidInvoice();
+        return total;
+    }
 }

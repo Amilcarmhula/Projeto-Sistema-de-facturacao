@@ -46,7 +46,6 @@ public class ServicePrecoVenda {
             showErroNotification("Erro", "Usuário não definido!");
             return;
         }
-        System.out.println("P:"+preco);
         PrecoVenda pv = new PrecoVenda();
         pv.setPreco(preco);
         pv.setData_inicio(data_inicio);
@@ -56,7 +55,7 @@ public class ServicePrecoVenda {
 
         try {
             precoVendaDao.addEntity(pv);
-            showSuccessNotification("Erro", "Preço registado com sucesso!");
+            showSuccessNotification("Sucesso", "Preço registado com sucesso!");
         } catch (Exception e) {
             showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao registrar preço de venda: " + e.getMessage());
             System.out.println("Erro: " + e);
@@ -83,7 +82,7 @@ public class ServicePrecoVenda {
 
         try {
             precoVendaDao.updateEntityByID(pv, id);
-            showSuccessNotification("Erro", "Preço actualizado com sucesso!");
+            showSuccessNotification("Sucesso", "Preço actualizado com sucesso!");
         } catch (Exception e) {
             showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao actualizar preço de venda: " + e.getMessage());
             System.out.println("Erro: " + e);

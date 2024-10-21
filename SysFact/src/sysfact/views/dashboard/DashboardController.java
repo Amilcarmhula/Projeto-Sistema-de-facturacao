@@ -115,9 +115,22 @@ public class DashboardController implements Initializable {
 
     @FXML
     private Label labCategoria;
-    
+
     @FXML
     private Label labDescricao;
+
+    @FXML
+    private Label labArmazemStock;
+
+    @FXML
+    private Label labSaldo;
+    @FXML
+    private Label labProdutoStock;
+    
+    @FXML
+    private Label labTotalFacturas;
+    @FXML
+    private Label labTotalPaidFacturas;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -132,12 +145,47 @@ public class DashboardController implements Initializable {
             showFacturas();
             showCountProdutos();
             showCountStock();
+            loadLowStockBalance();
             labArmazem.setText(combArmazem.getValue() == null ? "Todos..." : combArmazem.getValue());
             labCategoria.setText(combCategoria.getValue() == null ? "Todas..." : combArmazem.getValue());
         } catch (SQLException ex) {
             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        updadeLowStock();
         autoUpdade();
+    }
+    private ObservableList<Stock> listaLowStock;
+
+    public void loadLowStockBalance() throws SQLException {
+        StockDAO x = new StockDAO();
+        listaLowStock = x.loadLowStock();
+    }
+
+    public void updadeLowStock() {
+        Thread x = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (Stock stock : listaLowStock) {
+
+                    try {
+                        Platform.runLater(() -> {
+
+                            labArmazemStock.setText(stock.getArmazem().getNome_arm());
+                            labProdutoStock.setText(stock.getProduto().getNomeProduto());
+                            labSaldo.setText(stock.getSaldo() + "");
+                        });
+                        // A thread dorme por 5 segundo
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ex) {
+                        // Trata uma possível interrupção da thread
+                        System.out.println("Erro: " + ex);
+                    }
+                }
+                updadeLowStock();
+            }
+        });
+        // Inicia a execução da thread
+        x.start();
     }
     private ObservableList<Categoria> listaFamilias;
     private Map<String, Categoria> mapaCategorias;
@@ -289,42 +337,50 @@ public class DashboardController implements Initializable {
         if (combCategoria.getValue() == null || combCategoria.getValue().equals("Todas...")) {
             labCategoria.setText("Todas...");
             labDescricao.setText("A categoria inclui produtos de todas categorias existentes!");
-            labTotalProdutos.setText("Existem "+new ProdutoDAO().countProdutos(cat) + " produtos em todas categorias.");
+            labTotalProdutos.setText("Existem " + new ProdutoDAO().countProdutos(cat) + " produtos em todas categorias.");
         }
         if (combCategoria.getValue() != null && !combCategoria.getValue().isEmpty() && !combCategoria.getValue().equals("Todas...")) {
             Categoria c = mapaCategorias.get(combCategoria.getValue());
             cat = c.getId();
             labDescricao.setText(c.getDescricao());
             labCategoria.setText(combCategoria.getValue());
-            labTotalProdutos.setText("Existem "+new ProdutoDAO().countProdutos(cat) + " produtos na categoria "+combCategoria.getValue()+".");
+            labTotalProdutos.setText("Existem " + new ProdutoDAO().countProdutos(cat) + " produtos na categoria " + combCategoria.getValue() + ".");
         }
     }
 
     public void showCountStock() throws SQLException {
         Integer cat = null;
         Integer arm = null;
-        if (combCategoria.getValue() == null || combCategoria.getValue().equals("Todas..."))  {
+        if (combCategoria.getValue() == null || combCategoria.getValue().equals("Todas...")) {
             labCategoria.setText("Todas...");
-            labTotalStock.setText("Com "+new StockDAO().countStock(cat, arm) + " itens em stock no armazem selecionado");
+            labTotalStock.setText("Com " + new StockDAO().countStock(cat, arm) + " itens em stock no armazem selecionado");
         }
         if (combArmazem.getValue() == null || combArmazem.getValue().equals("Todos...")) {
             labArmazem.setText("Todos...");
-            labTotalStock.setText("Com "+new StockDAO().countStock(cat, arm) + " itens em stock no em todos armazens.");
+            labTotalStock.setText("Com " + new StockDAO().countStock(cat, arm) + " itens em stock no em todos armazens.");
         }
         if (combCategoria.getValue() != null && !combCategoria.getValue().isEmpty() && !combCategoria.getValue().equals("Todas...")) {
             Categoria c = mapaCategorias.get(combCategoria.getValue());
             cat = c.getId();
             labCategoria.setText(combCategoria.getValue());
-            labTotalStock.setText("Com "+new StockDAO().countStock(cat, arm) + " itens em stock na categoria "+combCategoria.getValue()+" em todos armazens.");
+            labTotalStock.setText("Com " + new StockDAO().countStock(cat, arm) + " itens em stock na categoria " + combCategoria.getValue() + " em todos armazens.");
         }
 
         if (combArmazem.getValue() != null && !combArmazem.getValue().isEmpty() && !combArmazem.getValue().equals("Todos...")) {
             Armazem a = mapaArmazens.get(combArmazem.getValue());
             arm = a.getId();
             labArmazem.setText(combArmazem.getValue());
-            labTotalStock.setText("Com "+new StockDAO().countStock(cat, arm) + " itens em stock no "+combArmazem.getValue()+".");
+            labTotalStock.setText("Com " + new StockDAO().countStock(cat, arm) + " itens em stock no " + combArmazem.getValue() + ".");
         }
-        
+
+    }
+    public void showCountInvoice() throws SQLException{
+        ServiceFactura sf = new ServiceFactura();
+        labTotalFacturas.setText(sf.contaFacturas()+"");
+    }
+    public void showTotalInvoicePaid() throws SQLException{
+        ServiceFactura sf = new ServiceFactura();
+        labTotalPaidFacturas.setText(String.format("%.2f",sf.somaTotalFacturas())+" Mt");
     }
 
     public void selectedComboBox() throws SQLException {
@@ -332,6 +388,14 @@ public class DashboardController implements Initializable {
         showStock();
         showCountProdutos();
         showCountStock();
+    }
+
+    public void showInvoice(MouseEvent evt) throws SQLException {
+        if (evt.getClickCount() == 2) {
+            Factura f = tabelaFactura.getSelectionModel().getSelectedItem();
+            f.criaRelatorio(f.getNumero_fac());
+        }
+
     }
 
 //    public void autoUpdade() {
@@ -380,6 +444,8 @@ public class DashboardController implements Initializable {
                             showMovimentos();
                             showCountCliente();
                             showCountFornecedor();
+                            showCountInvoice();
+                            showTotalInvoicePaid();
                             mapCategorias();
                             mapArmazens();
                         } catch (SQLException ex) {
@@ -387,8 +453,8 @@ public class DashboardController implements Initializable {
                         }
                     });
 
-                    // A thread dorme por 10 segundos
-                    Thread.sleep(30000);
+                    // A thread dorme por 1 minuto
+                    Thread.sleep(60000);
                 } catch (InterruptedException ex) {
                     // Trata uma possível interrupção da thread
                     System.out.println("Erro: " + ex);

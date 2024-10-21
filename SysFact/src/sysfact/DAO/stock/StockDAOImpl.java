@@ -12,4 +12,6 @@ import javafx.collections.ObservableList;
  */
 public interface StockDAOImpl<T> {
     ObservableList<T> getStock(Integer cat, Integer arm);
+    ObservableList<T> loadLowStock();
+    int countStock(Integer cat, Integer arm);
 }

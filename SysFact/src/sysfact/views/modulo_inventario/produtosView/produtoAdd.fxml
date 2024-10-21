@@ -57,6 +57,7 @@
             <TableColumn fx:id="datainicio" prefWidth="126.0" resizable="false" text="Data de inicio" />
             <TableColumn fx:id="datafim" prefWidth="96.0" resizable="false" text="Data de fim" />
             <TableColumn fx:id="stock" prefWidth="53.0" resizable="false" text="Stock" />
+            <TableColumn fx:id="nivelStock" prefWidth="57.0" resizable="false" text="Nivel" />
             <TableColumn fx:id="quantidade" prefWidth="57.0" resizable="false" text="Qtd." />
             <TableColumn fx:id="btntabelaProduto" prefWidth="52.0" resizable="false" />
          </columns>
@@ -87,7 +88,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <DatePicker fx:id="dataInicio" layoutX="884.0" layoutY="72.0" prefHeight="30.0" prefWidth="126.0" />
+            <DatePicker fx:id="dataInicio" layoutX="884.0" layoutY="70.0" prefHeight="30.0" prefWidth="126.0" />
             <DatePicker fx:id="dataFim" layoutX="884.0" layoutY="111.0" prefHeight="30.0" prefWidth="126.0" />
             <Label layoutX="140.0" layoutY="30.0" prefHeight="30.0" prefWidth="191.0" text="Familia:" textFill="WHITE">
                <font>
@@ -104,19 +105,19 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="labCategoria" layoutX="436.0" layoutY="30.0" prefHeight="30.0" prefWidth="217.0">
+            <Label fx:id="labCategoria" layoutX="436.0" layoutY="30.0" prefHeight="30.0" prefWidth="217.0" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="labUnidade" layoutX="437.0" layoutY="70.0" prefHeight="30.0" prefWidth="217.0">
+            <Label fx:id="labUnidade" layoutX="437.0" layoutY="70.0" prefHeight="30.0" prefWidth="217.0" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="labTaxa" layoutX="436.0" layoutY="109.0" prefHeight="30.0" prefWidth="217.0">
+            <Label fx:id="labTaxa" layoutX="436.0" layoutY="109.0" prefHeight="30.0" prefWidth="217.0" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
             <Label layoutX="729.0" layoutY="30.0" prefHeight="30.0" prefWidth="82.0" text="Preco:" textFill="WHITE">
@@ -139,7 +140,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <CheckBox fx:id="checkControle" layoutX="986.0" layoutY="151.0" mnemonicParsing="false">
+            <CheckBox fx:id="checkControle" layoutX="889.0" layoutY="151.0" mnemonicParsing="false" onAction="#stockControlChecked">
                <font>
                   <Font size="18.0" />
                </font>
@@ -183,6 +184,7 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
+            <TextField fx:id="txtNivelStock" disable="true" layoutX="920.0" layoutY="151.0" prefHeight="26.0" prefWidth="89.0" promptText="Nivel baixo" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="60.0" prefWidth="1391.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">

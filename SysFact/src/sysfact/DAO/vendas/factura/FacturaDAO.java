@@ -194,7 +194,45 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
         return lista;
     }
 
+    @Override
+    public int countFactura() {
+        int total = 0;
+        try {
+            sql = "select count(*) as total from factura";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            if (result.next()) { // Verifica se há resultados
+                total = result.getInt("total");
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de contagem", "Detalhes: " + ex);
+        }
 
+        return total;
+    }
+
+    @Override
+    public double totalPaidInvoice() {
+        double total = 0;
+        try {
+            sql = "SELECT SUM(i.subtotal) AS total_fatura FROM factura f "
+                    + "LEFT JOIN itemfactura i ON i.fk_numero = f.numero "
+                    + "where f.estado=1";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            if (result.next()) { // Verifica se há resultados
+                total = result.getInt("total_fatura");
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de somatorio de facturas", "Detalhes: " + ex);
+        }
+
+        return total;
+    }
     /*
     Metodo abaixo obsoleto
      */

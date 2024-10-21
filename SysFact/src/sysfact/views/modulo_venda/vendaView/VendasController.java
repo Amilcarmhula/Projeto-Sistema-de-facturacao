@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -154,7 +155,9 @@ public class VendasController implements Initializable {
     @FXML
     private ComboBox<String> combTipoDoc;
 
-    ;
+    private Map<Integer, Produto> mapaProdutos;
+    
+    private Random randNum;
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
@@ -226,20 +229,16 @@ public class VendasController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
-                    if (SysFact.getData() instanceof Produto) {
-//                        try {
-//                            mapeaProduto();
+                    if (SysFact.getData() instanceof Produto && SysFact.getData() != null) {
                         Produto x = (Produto) SysFact.getData();
-                        if (x != null) {
-                            txtID.setText(String.valueOf(x.getId()));
-                            txtStock.setText(String.valueOf(x.getStock().getSaldo()));
-                            txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
-                            txtNome.setText(x.getNomeProduto());
-                            txtDescricao.setText(x.getDescricao());
-                        }
-//                        } catch (SQLException ex) {
-//                            Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
+                        int num = randNum.nextInt(50);
+                        mapaProdutos.put(num, x);
+
+                        txtID.setText(num + "");
+                        txtStock.setText(String.valueOf(x.getStock().getSaldo()));
+                        txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
+                        txtNome.setText(x.getNomeProduto());
+                        txtDescricao.setText(x.getDescricao());
                     }
                 }
             }
@@ -259,18 +258,20 @@ public class VendasController implements Initializable {
         taxatabelaItens.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getTaxa_imposto().getPercentagemImposto())));
         subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
+        randNum = new Random();
+        mapaProdutos = new HashMap<>();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initTableItems();
+
         this.userData = SysFact.getUserData();
         this.empresaData = SysFact.getEmpresaData();
         try {
             labDataInicial.setText(InvoiceUtilities.actualDate());
             populateComboFactura();
             populateComboDesconto();
-            mapeaProduto();
             getDataOnFocus();
         } catch (SQLException ex) {
             Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
@@ -306,18 +307,6 @@ public class VendasController implements Initializable {
         combDesconto.setItems(FXCollections.observableArrayList(lista));
     }
 
-    private ObservableList<Produto> listaProduto;
-    private Map<Integer, Produto> mapaProdutos;
-
-    public void mapeaProduto() throws SQLException {
-        ProdutoDAO aDAO = new ProdutoDAO();
-        listaProduto = aDAO.getCombinedEntities();
-        mapaProdutos = new HashMap<>();
-        for (Produto p : listaProduto) {
-            mapaProdutos.put(p.getId(), p);
-        }
-    }
-
     public void populateTableItems() {
         if (txtID.getText() == null || txtID.getText().isEmpty()) {
             showErroNotification("Erro", "Produto/Servico nao selecionado!");
@@ -334,13 +323,15 @@ public class VendasController implements Initializable {
         Produto x = mapaProdutos.get(id);
         Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());
         Item i = new Item();
-        i.setId(x.getId());
+        i.setId(id);
         i.setProduto(x);
         i.setDesconto(desconto);
         i.setQuantidade(qtd);
-        double subtotal = qtd * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto()) * (1 - desconto.getPercentagemDesconto());
+        double taxa = qtd * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
+        double desc = qtd * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
+        double subtotal = qtd * x.getPrecovenda().getPreco() + taxa - desc;
         i.setSubtotal(subtotal);
-        if (x.getStock().getSaldo() <= qtd) {
+        if (x.getStock().getSaldo() > qtd) {
             tabelaItens.getItems().add(i);
             resetProduto();
             displayPrice();
@@ -395,8 +386,8 @@ public class VendasController implements Initializable {
             subtotal += item.getQuantidade() * x.getPrecovenda().getPreco();
             taxa += item.getQuantidade() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
             Desconto desconto = mapaDesconto.get(item.getDesconto().getNomeDesconto());
-            desc += (item.getQuantidade() * (x.getPrecovenda().getPreco() + x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto())) * desconto.getPercentagemDesconto();
-            total += item.getSubtotal();
+            desc += item.getQuantidade() * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
+            total = subtotal + taxa - desc;
         }
         labSubtotal.setText(String.format("%.2f", subtotal) + " MZN");
         labDesconto.setText(String.format("%.2f", desc) + " MZN");

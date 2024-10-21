@@ -22,6 +22,7 @@ public class Produto {
     private String codigo_barra;
     private String descricao;
     private boolean contole_stock;
+    private int nivelstock;
     private Categoria categoria;
     private UnidadeMedida unidade_medida;
     private TaxaImposto taxa_imposto;
@@ -35,7 +36,7 @@ public class Produto {
     }
 
     public Produto(String nome, String codigo_barra, String descricao, 
-            boolean contole_stock, Categoria categoria, UnidadeMedida unidade_medida,
+            boolean contole_stock, int nivelstock, Categoria categoria, UnidadeMedida unidade_medida,
             TaxaImposto taxa_imposto, PrecoVenda precovenda, Stock stock, Armazem armazem) {
         super();
         this.nomeProduto = nome;
@@ -48,6 +49,7 @@ public class Produto {
         this.precovenda = precovenda;
         this.stock = stock;
         this.armazem = armazem;
+        this.nivelstock = nivelstock;
     }
 
     public int getId() {
@@ -88,6 +90,14 @@ public class Produto {
 
     public void setContole_stock(boolean contole_stock) {
         this.contole_stock = contole_stock;
+    }
+
+    public int getNivelstock() {
+        return nivelstock;
+    }
+
+    public void setNivelstock(int nivelstock) {
+        this.nivelstock = nivelstock;
     }
 
     public Categoria getCategoria() {

@@ -50,36 +50,24 @@
       <AnchorPane prefHeight="246.0" prefWidth="1058.0" styleClass="secondary-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0">
          <children>
             <TextField fx:id="txtIDCategoria" layoutX="268.0" layoutY="33.0" onMouseClicked="#getFamiliaView" prefHeight="25.0" prefWidth="67.0" stylesheets="@../../../../style/dashboard.css">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
             <TextField fx:id="txtIDUnidade" layoutX="268.0" layoutY="73.0" onMouseClicked="#getUnidadeView" prefHeight="25.0" prefWidth="67.0" stylesheets="@../../../../style/dashboard.css">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
             <TextField fx:id="txtIDTaxa" layoutX="268.0" layoutY="112.0" onMouseClicked="#getTaxaView" prefHeight="25.0" prefWidth="67.0" stylesheets="@../../../../style/dashboard.css">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
             <TextField fx:id="txtPreco" layoutX="795.0" layoutY="33.0" prefHeight="25.0" prefWidth="114.0" promptText="Preco" stylesheets="@../../../../style/dashboard.css">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
@@ -102,19 +90,19 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="labCategoria" layoutX="347.0" layoutY="31.0" prefHeight="30.0" prefWidth="217.0">
+            <Label fx:id="labCategoria" layoutX="347.0" layoutY="31.0" prefHeight="30.0" prefWidth="217.0" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="labUnidade" layoutX="348.0" layoutY="71.0" prefHeight="30.0" prefWidth="217.0">
+            <Label fx:id="labUnidade" layoutX="348.0" layoutY="71.0" prefHeight="30.0" prefWidth="217.0" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="labTaxa" layoutX="347.0" layoutY="110.0" prefHeight="30.0" prefWidth="217.0">
+            <Label fx:id="labTaxa" layoutX="347.0" layoutY="110.0" prefHeight="30.0" prefWidth="217.0" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
             <Label layoutX="640.0" layoutY="31.0" prefHeight="30.0" prefWidth="82.0" text="Preco:" textFill="WHITE">
@@ -137,7 +125,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <CheckBox fx:id="checkControle" layoutX="884.0" layoutY="152.0" mnemonicParsing="false">
+            <CheckBox fx:id="checkControle" layoutX="794.0" layoutY="152.0" mnemonicParsing="false" onAction="#stockControlChecked">
                <font>
                   <Font size="18.0" />
                </font>
@@ -161,9 +149,6 @@
                </opaqueInsets>
             </Button>
             <TextField fx:id="txtPesquisar" layoutX="76.0" layoutY="200.0" prefHeight="25.0" prefWidth="309.0" promptText="Pesquisar produto" stylesheets="@../../../../style/dashboard.css">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
@@ -182,6 +167,7 @@
                   <String fx:value="secondary-color" />
                </styleClass>
             </Button>
+            <TextField fx:id="txtNivelStock" disable="true" layoutX="822.0" layoutY="153.0" prefHeight="26.0" prefWidth="89.0" promptText="Nivel baixo" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="60.0" prefWidth="1021.0" styleClass="secondary-color" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">

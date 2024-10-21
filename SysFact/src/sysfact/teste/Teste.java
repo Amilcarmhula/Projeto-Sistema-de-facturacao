@@ -10,10 +10,13 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.fornecedor.FornecedorDAO;
 import sysfact.dao.produto.fornecido.ProdutoFornecidoDAO;
+import sysfact.dao.stock.StockDAO;
 import sysfact.dao.vendas.factura.FacturaDAO;
+import sysfact.model.stock.Stock;
 import sysfact.model.vendas.factura.Factura;
 
 //import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -56,12 +59,9 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        FacturaDAO f = new FacturaDAO();
-        List<Factura> fac = f.getFacturaToDashboard();
-        for (Factura factura : fac) {
-            System.out.println("Nome: "+factura.getCliente().getRazao_cli());
-        }
-        System.out.println("Total: " + new FornecedorDAO().CountFornecedor() );
+        Random rand = new Random();
+        int x = rand.nextInt(300);
+        System.out.println(rand.nextInt(30));
         
 
     

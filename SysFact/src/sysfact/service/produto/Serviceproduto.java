@@ -26,7 +26,7 @@ public class Serviceproduto {
     }
     
     public void registraProduto(Integer id_cat, Integer id_uni, Integer id_tax,
-            String nome,String codBarras, String descricao, Boolean  controleStock){
+            String nome,String codBarras, String descricao, Boolean  controleStock, Integer nivelstock){
         
         // Validações básicas antes de registrar a categoria
         if (id_cat == null || id_cat <= 0) {
@@ -53,6 +53,11 @@ public class Serviceproduto {
             showErroNotification("Erro", "Codigo de Barras nao definido. Sera definido codigo padrao");
             codBarras = "1000000000001";
         }
+        
+        if (controleStock == true && nivelstock <= 0) {
+            showErroNotification("Erro", "Nivel de stock minimo nao informado!");
+            return;
+        }
 
         
         
@@ -60,6 +65,7 @@ public class Serviceproduto {
         p.setNomeProduto(nome);
         p.setCodigo_barra(codBarras);
         p.setContole_stock(controleStock);
+        p.setNivelstock(nivelstock);
         p.setDescricao(descricao); 
         Categoria c = new Categoria();
         c.setId(id_cat);
@@ -81,7 +87,7 @@ public class Serviceproduto {
     }
     
     public void actualizaProduto(int id, Integer id_cat, Integer id_uni, Integer id_tax,
-            String nome,String codBarras, String descricao){
+            String nome,String codBarras, String descricao,Boolean  controleStock, Integer nivelstock){
         
         // Validações básicas antes de registrar a categoria
         if (id_cat == null || id_cat <= 0) {
@@ -107,6 +113,11 @@ public class Serviceproduto {
             showErroNotification("Erro", "Codigo de Barras nao definido. Sera definido codigo padrao");
             codBarras = "1000000000001";
         }
+        
+        if (controleStock == true && nivelstock <= 0) {
+            showErroNotification("Erro", "Nivel de stock minimo nao informado!");
+            return;
+        }
 
         
         
@@ -114,6 +125,8 @@ public class Serviceproduto {
         p.setNomeProduto(nome);
         p.setCodigo_barra(codBarras);
         p.setDescricao(descricao);
+        p.setContole_stock(controleStock);
+        p.setNivelstock(nivelstock);
         Categoria c = new Categoria();
         c.setId(id_cat);
         p.setCategoria(c);

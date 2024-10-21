@@ -221,6 +221,7 @@ create table produto(
     codigo_barra varchar(50),
     descricao text,
     contole_stock boolean not null, -- define condicao se sera armazenado no stock pelo trigger_registra_produto
+    nivelstock integer default 0,
     fk_id_categoria integer not null,
     fk_id_unidade_medida integer,
     fk_id_taxa_imposto integer,

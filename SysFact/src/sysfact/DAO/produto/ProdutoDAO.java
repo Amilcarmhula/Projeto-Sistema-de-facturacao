@@ -41,7 +41,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     public void addEntity(Produto t) {
         try {
             sql = "insert into produto (nome,codigo_barra, descricao,fk_id_categoria, "
-                    + "fk_id_unidade_medida,fk_id_taxa_imposto,contole_stock) value (?,?,?,?,?,?,?)";
+                    + "fk_id_unidade_medida,fk_id_taxa_imposto,contole_stock,nivelstock) value (?,?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -52,6 +52,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setInt(5, t.getUnidade_medida().getId());
             ps.setInt(6, t.getTaxa_imposto().getId());
             ps.setBoolean(7, t.isContole_stock());
+            ps.setInt(8, t.getNivelstock());
 
             ps.execute();
             ps.close();
@@ -65,7 +66,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     public void updateEntityByID(Produto t, int id) {
         try {
             sql = "update produto set nome=?,codigo_barra=?, descricao=?,fk_id_categoria=?, "
-                    + "fk_id_unidade_medida=?,fk_id_taxa_imposto=? where id=?";
+                    + "fk_id_unidade_medida=?,fk_id_taxa_imposto=?, nivelstock=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNomeProduto());
@@ -74,7 +75,8 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setInt(4, t.getCategoria().getId());
             ps.setInt(5, t.getUnidade_medida().getId());
             ps.setInt(6, t.getTaxa_imposto().getId());
-            ps.setInt(7, id);
+            ps.setInt(7, t.getNivelstock());
+            ps.setInt(8, id);
 
             ps.execute();
             ps.close();
@@ -88,7 +90,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     public ObservableList<Produto> getCombinedEntities() {
         ObservableList<Produto> lista = FXCollections.observableArrayList();
         try {
-            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.contole_stock, "
+            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.contole_stock, p.nivelstock, "
                     + "		c.id as id_categoria, c.familia as categoria,"
                     + "         u.id as id_unidade, u.identificador, u.sigla,"
                     + "         t.id as id_taxa, t.identificador as taxa, t.percentagem,"
@@ -110,6 +112,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 c.setNomeProduto(result.getString("nome"));
                 c.setCodigo_barra(result.getString("codigo_barra"));
                 c.setDescricao(result.getString("descricao"));
+                c.setNivelstock(result.getInt("nivelstock"));
                 Categoria cat = new Categoria();
                 cat.setId(result.getInt("id_categoria"));
                 cat.setFamilia(result.getString("categoria"));
@@ -198,103 +201,104 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         return total;
     }
 
-    @Override
-    public ObservableList<Produto> listAllEntities() {
-        ObservableList<Produto> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from produto";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                Produto c = new Produto();
-                c.setId(result.getInt("id"));
-                c.setNomeProduto(result.getString("nome"));
-                c.setCodigo_barra(result.getString("codigo_barra"));
-                c.setDescricao(result.getString("descricao"));
-                Categoria cat = new Categoria();
-                cat.setId(result.getInt("fk_id_categoria"));
-                c.setCategoria(cat);
-//                c.setFk_id_taxa_imposto(result.getInt("fk_id_taxa_imposto"));
-//                c.setUnidade_medida(result.getInt("fk_id_unidade_medida"));
-                c.setData_criacao(result.getString("data_criacao"));
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-        return lista;
-    }
-
-    @Override
-    public ObservableList<Produto> listAllEntities2() {
-        ObservableList<Produto> lista = FXCollections.observableArrayList();
-
-        try {
-            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.fk_id_categoria,"
-                    + "(SELECT sigla FROM unidade_medida WHERE p.fk_id_unidade_medida = unidade_medida.id) AS sigla_unidade,"
-                    + "(SELECT tipo FROM categoria WHERE p.fk_id_categoria = categoria.id) AS cat_produto,"
-                    + "p.active_or_not FROM produto p";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                Produto c = new Produto();
-                c.setId(result.getInt("id"));
-                c.setNomeProduto(result.getString("nome"));
-                c.setCodigo_barra(result.getString("codigo_barra"));
-                c.setDescricao(result.getString("descricao"));
-                Categoria cat = new Categoria();
-                cat.setId(result.getInt("fk_id_categoria"));
-                cat.setTipo(result.getString("cat_produto"));
-                c.setCategoria(cat);
-//                c.setTaxa_imposto(result.getInt("fk_id_taxa_imposto"));
-//                c.setFk_id_unidade_medida(result.getInt("fk_id_unidade_medida"));
-                UnidadeMedida u = new UnidadeMedida();
-                u.setSigla(result.getString("sigla_unidade"));
-                c.setUnidade_medida(u);
+//    @Override
+//    public ObservableList<Produto> listAllEntities() {
+//        ObservableList<Produto> lista = FXCollections.observableArrayList();
+//        try {
+//            sql = "select * from produto";
+//            ps = con.prepareStatement(sql);
+//            ResultSet result = ps.executeQuery();
+//            while (result.next()) {
+//                Produto c = new Produto();
+//                c.setId(result.getInt("id"));
+//                c.setNomeProduto(result.getString("nome"));
+//                c.setCodigo_barra(result.getString("codigo_barra"));
+//                c.setDescricao(result.getString("descricao"));
+//                Categoria cat = new Categoria();
+//                cat.setId(result.getInt("fk_id_categoria"));
+//                c.setCategoria(cat);
+////                c.setFk_id_taxa_imposto(result.getInt("fk_id_taxa_imposto"));
+////                c.setUnidade_medida(result.getInt("fk_id_unidade_medida"));
 //                c.setData_criacao(result.getString("data_criacao"));
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-        return lista;
-    }
+//            }
+//            result.close();
+//            ps.close();
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//        }
+//        return lista;
+//    }
 
-    public ObservableList<Produto> searchEntityByCategoria(Produto prodID) {
-        ObservableList<Produto> lista = FXCollections.observableArrayList();
+//    @Override
+//    public ObservableList<Produto> listAllEntities2() {
+//        ObservableList<Produto> lista = FXCollections.observableArrayList();
+//
+//        try {
+//            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.fk_id_categoria,p.nivelstock"
+//                    + "(SELECT sigla FROM unidade_medida WHERE p.fk_id_unidade_medida = unidade_medida.id) AS sigla_unidade,"
+//                    + "(SELECT tipo FROM categoria WHERE p.fk_id_categoria = categoria.id) AS cat_produto,"
+//                    + "p.active_or_not FROM produto p";
+//            ps = con.prepareStatement(sql);
+//            ResultSet result = ps.executeQuery();
+//            while (result.next()) {
+//                Produto c = new Produto();
+//                c.setId(result.getInt("id"));
+//                c.setNomeProduto(result.getString("nome"));
+//                c.setCodigo_barra(result.getString("codigo_barra"));
+//                c.setDescricao(result.getString("descricao"));
+//                c.setNivelstock(result.getInt("nivelstock"));
+//                Categoria cat = new Categoria();
+//                cat.setId(result.getInt("fk_id_categoria"));
+//                cat.setTipo(result.getString("cat_produto"));
+//                c.setCategoria(cat);
+////                c.setTaxa_imposto(result.getInt("fk_id_taxa_imposto"));
+////                c.setFk_id_unidade_medida(result.getInt("fk_id_unidade_medida"));
+//                UnidadeMedida u = new UnidadeMedida();
+//                u.setSigla(result.getString("sigla_unidade"));
+//                c.setUnidade_medida(u);
+////                c.setData_criacao(result.getString("data_criacao"));
+//            }
+//            result.close();
+//            ps.close();
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//        }
+//        return lista;
+//    }
 
-        try {
-            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.fk_id_categoria,"
-                    + "                     (SELECT sigla FROM unidade_medida WHERE p.fk_id_unidade_medida = unidade_medida.id) AS sigla_unidade,"
-                    + "                     p.active_or_not FROM produto p where fk_id_categoria=? ";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, prodID.getCategoria().getId());
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                Produto c = new Produto();
-                c.setId(result.getInt("id"));
-                c.setNomeProduto(result.getString("nome"));
-                c.setCodigo_barra(result.getString("codigo_barra"));
-                c.setDescricao(result.getString("descricao"));
-                Categoria cat = new Categoria();
-                cat.setId(result.getInt("fk_id_categoria"));
-                c.setCategoria(cat);
-//                c.setTaxa_imposto(result.getInt("fk_id_taxa_imposto"));
-//                c.setFk_id_unidade_medida(result.getInt("fk_id_unidade_medida"));
-                UnidadeMedida u = new UnidadeMedida();
-                u.setSigla(result.getString("sigla_unidade"));
-                c.setUnidade_medida(u);
-//                c.setData_criacao(result.getString("data_criacao"));
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-        return lista;
-    }
+//    public ObservableList<Produto> searchEntityByCategoria(Produto prodID) {
+//        ObservableList<Produto> lista = FXCollections.observableArrayList();
+//
+//        try {
+//            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.fk_id_categoria,"
+//                    + "                     (SELECT sigla FROM unidade_medida WHERE p.fk_id_unidade_medida = unidade_medida.id) AS sigla_unidade,"
+//                    + "                     p.active_or_not FROM produto p where fk_id_categoria=? ";
+//            ps = con.prepareStatement(sql);
+//            ps.setInt(1, prodID.getCategoria().getId());
+//            ResultSet result = ps.executeQuery();
+//            while (result.next()) {
+//                Produto c = new Produto();
+//                c.setId(result.getInt("id"));
+//                c.setNomeProduto(result.getString("nome"));
+//                c.setCodigo_barra(result.getString("codigo_barra"));
+//                c.setDescricao(result.getString("descricao"));
+//                Categoria cat = new Categoria();
+//                cat.setId(result.getInt("fk_id_categoria"));
+//                c.setCategoria(cat);
+////                c.setTaxa_imposto(result.getInt("fk_id_taxa_imposto"));
+////                c.setFk_id_unidade_medida(result.getInt("fk_id_unidade_medida"));
+//                UnidadeMedida u = new UnidadeMedida();
+//                u.setSigla(result.getString("sigla_unidade"));
+//                c.setUnidade_medida(u);
+////                c.setData_criacao(result.getString("data_criacao"));
+//            }
+//            result.close();
+//            ps.close();
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//        }
+//        return lista;
+//    }
 
 //    @Override
 //    public Produto searchEntityByName(String name) {

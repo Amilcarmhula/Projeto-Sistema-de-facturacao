@@ -55,7 +55,7 @@
             <TextField fx:id="txtNuitCLiente" alignment="CENTER" disable="true" layoutX="498.0" layoutY="91.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
             <TextField fx:id="txtEmailCLiente" alignment="CENTER" disable="true" layoutX="666.0" layoutY="125.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
             <TextField fx:id="txtContactoCLiente" alignment="CENTER" disable="true" layoutX="634.0" layoutY="91.0" prefHeight="25.0" prefWidth="265.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <Label layoutX="942.0" layoutY="62.0" text="FACTURA N°" textFill="WHITE">
+            <Label layoutX="942.0" layoutY="65.0" text="FACTURA N°" textFill="WHITE">
                <font>
                   <Font size="26.0" />
                </font>
@@ -71,17 +71,17 @@
                   <String fx:value="hand-efect" />
                </styleClass>
             </TextField>
-            <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1237.0" layoutY="105.0" prefHeight="27.0" prefWidth="113.0">
+            <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1237.0" layoutY="105.0" prefHeight="27.0" prefWidth="113.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="labDataInicial" alignment="CENTER_RIGHT" layoutX="984.0" layoutY="105.0" prefHeight="27.0" prefWidth="139.0">
+            <Label fx:id="labDataInicial" alignment="CENTER_RIGHT" layoutX="1001.0" layoutY="105.0" prefHeight="27.0" prefWidth="122.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="labTotalFactura2" alignment="CENTER_RIGHT" layoutX="941.0" layoutY="108.0" prefHeight="27.0" prefWidth="38.0" text="De:" textFill="WHITE">
+            <Label fx:id="labTotalFactura2" alignment="CENTER_RIGHT" layoutX="954.0" layoutY="105.0" prefHeight="27.0" prefWidth="38.0" text="De:" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>

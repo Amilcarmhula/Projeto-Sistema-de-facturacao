@@ -43,7 +43,7 @@
                   <FontAwesomeIconView fill="WHITE" glyphName="MINUS" size="30" />
                </graphic>
             </Button>
-            <Label fx:id="labEmail" alignment="CENTER_RIGHT" layoutX="945.0" layoutY="17.0" prefHeight="50.0" prefWidth="577.0" text="amilcar.v.mula@hotmail.com" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="labEmail" alignment="CENTER_RIGHT" layoutX="945.0" layoutY="17.0" prefHeight="50.0" prefWidth="577.0" text="E-mail" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="18.0" />
                </font>

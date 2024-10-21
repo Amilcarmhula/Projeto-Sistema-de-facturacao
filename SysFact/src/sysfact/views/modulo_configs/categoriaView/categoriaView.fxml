@@ -17,9 +17,9 @@
    <children>
       <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="686.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="75.0" layoutY="10.0" prefHeight="7.0" prefWidth="362.0" text="Cadastro de Categorias" textFill="WHITE">
+            <Label contentDisplay="CENTER" layoutX="75.0" layoutY="10.0" prefHeight="7.0" prefWidth="362.0" text="Cadastro de Categorias" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
             <Button fx:id="btnClose" layoutX="599.0" layoutY="13.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">

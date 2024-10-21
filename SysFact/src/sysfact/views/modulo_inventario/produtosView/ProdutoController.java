@@ -59,9 +59,9 @@ import sysfact.util.LoadAndMoveUtilities;
  * @author JM-Tecnologias
  */
 public class ProdutoController implements Initializable {
-
+    
     private Usuario userData;
-
+    
     @FXML
     private TableView<Produto> tabelaProduto;
     @FXML
@@ -85,6 +85,8 @@ public class ProdutoController implements Initializable {
     @FXML
     private TableColumn<Produto, String> quantidade;
     @FXML
+    private TableColumn<Produto, Integer> nivelStock;
+    @FXML
     private TableColumn<Produto, String> stock;
     @FXML
     private TableColumn<Produto, String> taxa;
@@ -92,13 +94,13 @@ public class ProdutoController implements Initializable {
     private TableColumn<Produto, String> unidade;
     @FXML
     private TableColumn<Produto, String> btntabelaProduto;
-
+    
     @FXML
     private Button btnAddProduto;
-
+    
     @FXML
     private Button btn_controleStock;
-
+    
     @FXML
     private CheckBox checkControle;
     @FXML
@@ -131,7 +133,17 @@ public class ProdutoController implements Initializable {
     private TextField txtdescricaoProduto;
     @FXML
     private TextField txtPesquisar;
-
+    @FXML
+    private TextField txtNivelStock;
+    
+    public void stockControlChecked() {
+        if (checkControle.isSelected()) {
+            txtNivelStock.setDisable(false);
+        } else {
+            txtNivelStock.setDisable(true);
+        }
+    }
+    
     public void addORupdate() throws SQLException {
         if ("".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
             addProduto();
@@ -151,7 +163,6 @@ public class ProdutoController implements Initializable {
 //            btnAddProduto.setText("Adicionar");
 //        }
 //    }
-
     public void priceFormaterProduto() {
         // Define the Locale for currency formatting (Mozambique)
         Locale locale = new Locale("pt", "MZ");
@@ -165,11 +176,11 @@ public class ProdutoController implements Initializable {
 
             // Remove all non-numeric characters
             String newText = change.getControlNewText().replaceAll("[^\\d]", "");
-
+            
             if (newText.isEmpty()) {
                 newText = "0";
             }
-
+            
             try {
                 // Convert to a number and format as currency
                 double value = Double.parseDouble(newText) / 100.0;
@@ -178,7 +189,7 @@ public class ProdutoController implements Initializable {
             } catch (NumberFormatException e) {
                 return null; // Invalid input
             }
-
+            
             return change;
         });
 
@@ -187,19 +198,19 @@ public class ProdutoController implements Initializable {
         txtPreco.setText(currencyFormat.format(0)); // Set initial value
 
     }
-
+    
     public void getFamiliaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             LoadAndMoveUtilities.showAsPopUP(null, evt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/categoriaView/categoriaView.fxml");
         }
     }
-
+    
     public void getStockView(ActionEvent evt) {
         LoadAndMoveUtilities.showAsPopUP(evt, null);
-            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
     }
-
+    
     public void getUnidadeView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             LoadAndMoveUtilities.showAsPopUP(null, evt);
@@ -207,14 +218,13 @@ public class ProdutoController implements Initializable {
         }
     }
     
-
     public void getTaxaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             LoadAndMoveUtilities.showAsPopUP(null, evt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/taxasView/taxaView.fxml");
         }
     }
-
+    
     public void getData() {
         txtIDTaxa.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -239,7 +249,7 @@ public class ProdutoController implements Initializable {
                         if (x != null) {
                             txtIDUnidade.setText(String.valueOf(x.getId()));
                             labUnidade.setText(x.getIdentificador() + ": " + x.getSigla());
-
+                            
                         }
                     }
                 }
@@ -260,7 +270,7 @@ public class ProdutoController implements Initializable {
             }
         });
     }
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         priceFormaterProduto();
@@ -273,10 +283,10 @@ public class ProdutoController implements Initializable {
         }
         ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
     }
-
+    
     private ObservableList<Produto> listaProduto;
     private Map<Integer, Produto> mapaProdutos;
-
+    
     public void showProduto() throws SQLException {
         ProdutoDAO aDAO = new ProdutoDAO();
         listaProduto = aDAO.getCombinedEntities();
@@ -284,14 +294,14 @@ public class ProdutoController implements Initializable {
         for (Produto p : listaProduto) {
             mapaProdutos.put(p.getId(), p);
         }
-
+        
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         artigo.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
         armazem.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
         codigobarras.setCellValueFactory(new PropertyValueFactory<>("codigo_barra"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
-
+        
         unidade.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getUnidade_medida().getSigla()));
         categoria.setCellValueFactory(cellData
@@ -306,7 +316,8 @@ public class ProdutoController implements Initializable {
                 -> new SimpleStringProperty(cellData.getValue().getPrecovenda().getData_fim()));
         quantidade.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getSaldo())));
-
+        nivelStock.setCellValueFactory(new PropertyValueFactory<>("nivelstock"));
+        
         Callback<TableColumn<Produto, String>, TableCell<Produto, String>> cellFoctory = (TableColumn<Produto, String> param) -> {
             // make cell containing buttons
             final TableCell<Produto, String> cell = new TableCell<Produto, String>() {
@@ -318,7 +329,7 @@ public class ProdutoController implements Initializable {
                         setGraphic(null);
                         setText(null);
                     } else {
-
+                        
                         FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                         deleteIcon.setStyle(
                                 " -fx-cursor: hand ;"
@@ -341,7 +352,7 @@ public class ProdutoController implements Initializable {
                     }
                 }
             };
-
+            
             return cell;
         };
         btntabelaProduto.setCellFactory(cellFoctory);
@@ -362,21 +373,21 @@ public class ProdutoController implements Initializable {
                         check.setDisable(true);
                         Produto produto = getTableView().getItems().get(getIndex());
                         check.setSelected(produto.isContole_stock());
-
+                        
                         setGraphic(check);
                         setText(null);
                     }
                 }
             };
-
+            
             return cell;
         };
         stock.setCellFactory(cellFoctory2);
-
+        
         FilteredList<Produto> dadosFiltrados = new FilteredList<>(listaProduto, b -> true);
         txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(x -> {
-
+                
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
@@ -392,45 +403,46 @@ public class ProdutoController implements Initializable {
                 } else {
                     return false;
                 }
-
+                
             });
         });
         SortedList<Produto> sortedData = new SortedList<>(dadosFiltrados);
         sortedData.comparatorProperty().bind(tabelaProduto.comparatorProperty());
-
+        
         tabelaProduto.setItems(sortedData);
     }
-
+    
     public void selectedRow() {
         Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
             Produto p = mapaProdutos.get(x.getId());
-
+            
             labIDPreco.setText(String.valueOf(p.getPrecovenda().getId()));
             txtPreco.setText(String.valueOf(p.getPrecovenda().getPreco() + "0"));
-
+            
             if (p.getPrecovenda().getData_inicio() == null) {
                 dataInicio.setValue(LocalDate.now());
             } else {
                 dataInicio.setValue(LocalDate.parse(p.getPrecovenda().getData_inicio()));
             }
-
+            
             if (p.getPrecovenda().getData_fim() == null) {
                 dataFim.setValue(LocalDate.now());
             } else {
                 dataFim.setValue(LocalDate.parse(p.getPrecovenda().getData_fim()));
             }
-
+            
             checkControle.setSelected(p.isContole_stock());
-
+            stockControlChecked();
+            
             labCategoria.setText(p.getCategoria().getFamilia());
             labUnidade.setText(p.getUnidade_medida().getIdentificador() + ": " + p.getUnidade_medida().getSigla());
             labTaxa.setText(p.getTaxa_imposto().getNomeImposto() + ": " + (p.getTaxa_imposto().getPercentagemImposto() * 100) + "%");
-
+            
             txtIDCategoria.setText(String.valueOf(p.getCategoria().getId()));
             txtIDUnidade.setText(String.valueOf(p.getUnidade_medida().getId()));
             txtIDTaxa.setText(String.valueOf(p.getTaxa_imposto().getId()));
-
+            txtNivelStock.setText(String.valueOf(p.getNivelstock()));
             txtIDProduto.setText(String.valueOf(p.getId()));
             txtNomeProduto.setText(p.getNomeProduto());
             txtcodigobarrasProduto.setText(p.getCodigo_barra());
@@ -440,17 +452,20 @@ public class ProdutoController implements Initializable {
             ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         }
     }
-
+    
     public void addProduto() throws SQLException {
         ProdutoDAO xDAO = new ProdutoDAO();
         Serviceproduto sp = new Serviceproduto(xDAO);
         sp.registraProduto(Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
-                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(), txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), checkControle.isSelected());
-
+                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
+                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
+                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
+        
         addPrecoVenda();
         resetCampos();
+//        stockControlChecked();
     }
-
+    
     public void addPrecoVenda() throws SQLException {
         PrecoVendaDAO pvDAO = new PrecoVendaDAO();
         ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
@@ -461,7 +476,7 @@ public class ProdutoController implements Initializable {
         showProduto();
         resetCampos();
     }
-
+    
     public void addPrecoVendaONSelected() throws SQLException {
         PrecoVendaDAO pvDAO = new PrecoVendaDAO();
         ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
@@ -473,16 +488,18 @@ public class ProdutoController implements Initializable {
         showProduto();
         resetCampos();
     }
-
+    
     public void updateProduto() throws SQLException {
         ProdutoDAO xDAO = new ProdutoDAO();
         Serviceproduto sp = new Serviceproduto(xDAO);
-        sp.actualizaProduto(Integer.parseInt(txtIDProduto.getText()), Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
-                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(), txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText());
-
+        sp.actualizaProduto(Integer.parseInt(txtIDProduto.getText()),Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
+                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
+                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
+                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
+        
         showProduto();
     }
-
+    
     public void updatePrecoVenda() throws SQLException {
         PrecoVendaDAO pvDAO = new PrecoVendaDAO();
         ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
@@ -492,24 +509,26 @@ public class ProdutoController implements Initializable {
                 userData);
         showProduto();
         resetCampos();
-
+        
     }
-
+    
     public void resetCampos() throws SQLException {
         labIDPreco.setText("");
         txtPreco.setText("");
         dataInicio.setValue(LocalDate.now());
         dataFim.setValue(LocalDate.now());
         checkControle.setSelected(false);
-
+        stockControlChecked();
+        txtNivelStock.setText("");
+        
         labCategoria.setText("");
         labUnidade.setText("");
         labTaxa.setText("");
-
+        
         txtIDCategoria.setText("");
         txtIDUnidade.setText("");
         txtIDTaxa.setText("");
-
+        
         txtIDProduto.setText("");
         txtNomeProduto.setText("");
         txtcodigobarrasProduto.setText("");
@@ -518,5 +537,5 @@ public class ProdutoController implements Initializable {
         ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         showProduto();
     }
-
+    
 }

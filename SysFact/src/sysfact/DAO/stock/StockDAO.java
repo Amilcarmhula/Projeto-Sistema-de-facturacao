@@ -74,7 +74,37 @@ public class StockDAO implements StockDAOImpl<Stock> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            AlertUtilities.showDialog(FontAwesomeIcon.COG, "Erro", "Erro ao Buscar Produto: " + ex);
+            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
+        }
+        return lista;
+    }
+
+    @Override
+    public ObservableList<Stock> loadLowStock() {
+        ObservableList<Stock> lista = FXCollections.observableArrayList();
+        try {
+            sql = "select p.nome as Produto, a.nome as Armazem, s.saldo "
+                    + "from stock s "
+                    + "LEFT JOIN produto p ON p.id=s.fk_id_produto "
+                    + "LEFT JOIN armazem a ON a.id=s.fk_id_armazem "
+                    + "where s.saldo<=p.nivelstock";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                Stock s = new Stock();
+                Produto p = new Produto();
+                p.setNomeProduto(result.getString("Produto"));
+                s.setProduto(p);
+                Armazem a = new Armazem();
+                a.setNome_arm(result.getString("Armazem"));
+                s.setArmazem(a);
+                s.setSaldo(result.getInt("saldo"));
+                lista.add(s);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -97,7 +127,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 ps.setInt(1, arm);
                 ps.setInt(2, arm);
             }
-            
+
             if (cat == null) {
                 ps.setNull(3, java.sql.Types.INTEGER);
                 ps.setNull(4, java.sql.Types.INTEGER);

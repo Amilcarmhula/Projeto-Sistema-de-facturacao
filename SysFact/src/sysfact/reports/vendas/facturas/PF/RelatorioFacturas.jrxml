@@ -191,7 +191,7 @@
 				<textElement>
 					<font fontName="Berlin Sans FB" size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{avenida_cli}+", "+$F{rua_cli}+", "+$F{numero_cli}+"; "+$F{bairro_cli}+", "+$F{cidade_cli}+", "+$F{provincia_cli}+" - "+$F{codigoPostal_cli}+"."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Av. "+$F{avenida_cli}+", Rua "+$F{rua_cli}+", Nr. "+$F{numero_cli}+"; Bairro "+$F{bairro_cli}+", "+$F{cidade_cli}+", "+$F{provincia_cli}+" - "+$F{codigoPostal_cli}+"."]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="399" y="192" width="151" height="23" forecolor="#4F4A4A" uuid="64a228c1-8535-472d-b6ed-e522591c874f">

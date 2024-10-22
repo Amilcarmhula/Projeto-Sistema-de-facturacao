@@ -8,8 +8,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -17,7 +15,7 @@
    <children>
       <AnchorPane layoutX="31.0" prefHeight="117.0" prefWidth="1370.0" stylesheets="@../../style/dashboard.css" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane minWidth="-Infinity" prefHeight="117.0" prefWidth="300.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0">
+            <AnchorPane minWidth="-Infinity" prefHeight="117.0" prefWidth="370.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0">
                <children>
                   <AnchorPane layoutX="31.0" layoutY="14.0" prefHeight="35.0" prefWidth="200.0" styleClass="secondary-color" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
@@ -28,33 +26,34 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <Label alignment="CENTER" layoutY="24.0" prefHeight="28.0" prefWidth="150.0" text="Entradas" textFill="WHITE" AnchorPane.leftAnchor="0.0">
+                  <Label alignment="CENTER_RIGHT" layoutY="28.0" prefHeight="28.0" prefWidth="272.0" text="Entradas" textFill="WHITE" AnchorPane.leftAnchor="0.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" layoutX="150.0" layoutY="24.0" prefHeight="28.0" prefWidth="150.0" text="Saídas" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+                  <Label alignment="CENTER_RIGHT" layoutX="45.0" layoutY="52.0" prefHeight="28.0" prefWidth="272.0" text="Saídas" textFill="WHITE" AnchorPane.leftAnchor="0.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labEntrada" alignment="CENTER" layoutY="49.0" prefHeight="28.0" prefWidth="134.0" text="0" textFill="WHITE" AnchorPane.leftAnchor="0.0">
+                  <Label fx:id="labEntrada" layoutX="153.0" layoutY="28.0" prefHeight="28.0" prefWidth="89.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labSaida" alignment="CENTER" layoutX="166.0" layoutY="49.0" prefHeight="28.0" prefWidth="134.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+                  <Label fx:id="labSaida" layoutX="236.0" layoutY="52.0" prefHeight="28.0" prefWidth="89.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
                      </font>
                   </Label>
+                  <FontAwesomeIconView fill="WHITE" glyphName="ARROWS_H" layoutX="14.0" layoutY="59.0" size="60" />
                </children>
                <styleClass>
                   <String fx:value="primary-color" />
                   <String fx:value="shadow" />
                </styleClass>
             </AnchorPane>
-            <AnchorPane layoutX="356.6" minWidth="-Infinity" prefHeight="117.0" prefWidth="305.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0">
+            <AnchorPane layoutX="500.0" minWidth="-Infinity" prefHeight="117.0" prefWidth="370.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0">
                <children>
                   <Label alignment="CENTER_RIGHT" layoutY="54.0" prefHeight="28.0" prefWidth="337.0" text="Total de Facturas" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="54.0">
                      <font>
@@ -73,8 +72,8 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <FontAwesomeIconView fill="WHITE" glyphName="DASHBOARD" layoutX="14.0" layoutY="66.0" size="60" />
-                  <Label fx:id="labTotalFacturas" layoutX="105.0" layoutY="28.0" prefHeight="28.0" prefWidth="200.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
+                  <FontAwesomeIconView fill="WHITE" glyphName="BOOKMARK" layoutX="14.0" layoutY="66.0" size="70" />
+                  <Label fx:id="labTotalFacturas" layoutX="105.0" layoutY="28.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -85,7 +84,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </AnchorPane>
-            <AnchorPane minWidth="-Infinity" prefHeight="117.0" prefWidth="305.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <AnchorPane minWidth="-Infinity" prefHeight="117.0" prefWidth="370.0" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <AnchorPane layoutX="71.0" layoutY="22.0" prefHeight="35.0" prefWidth="305.0" styleClass="secondary-color" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
@@ -104,47 +103,12 @@
                         <Insets right="10.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="labFornecedor" layoutX="98.0" layoutY="28.0" prefHeight="28.0" prefWidth="200.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+                  <Label fx:id="labFornecedor" layoutX="98.0" layoutY="28.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
                      </font>
                   </Label>
                   <FontAwesomeIconView fill="WHITE" glyphName="USERS" layoutX="15.0" layoutY="60.0" size="60" />
-               </children>
-               <styleClass>
-                  <String fx:value="primary-color" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </AnchorPane>
-            <AnchorPane layoutX="713.2" minWidth="-Infinity" prefHeight="117.0" prefWidth="300.0" stylesheets="@../../style/dashboard.css">
-               <children>
-                  <AnchorPane layoutX="27.0" layoutY="50.0" prefHeight="35.0" prefWidth="200.0" styleClass="secondary-color" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                     <children>
-                        <Label alignment="CENTER" layoutX="104.0" text="Clientes" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font name="Berlin Sans FB" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
-                  <Label fx:id="labCliente4" layoutX="184.0" layoutY="28.0" prefHeight="28.0" prefWidth="200.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
-                     <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER_RIGHT" layoutY="60.0" prefHeight="28.0" prefWidth="300.0" text="Total de Clientes" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="54.0">
-                     <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
-                     </font>
-                     <padding>
-                        <Insets right="10.0" />
-                     </padding>
-                  </Label>
-                  <ImageView fitHeight="50.0" fitWidth="75.0" layoutX="14.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../image/icons/Vector.png" />
-                     </image>
-                  </ImageView>
                </children>
                <styleClass>
                   <String fx:value="primary-color" />
@@ -209,7 +173,7 @@
       </AnchorPane>
       <AnchorPane layoutX="31.0" layoutY="137.0" prefHeight="117.0" prefWidth="1370.0" stylesheets="@../../style/dashboard.css">
          <children>
-            <AnchorPane layoutX="1062.0" minWidth="-Infinity" prefHeight="117.0" prefWidth="305.0" stylesheets="@../../style/dashboard.css" AnchorPane.rightAnchor="0.0">
+            <AnchorPane layoutX="1062.0" minWidth="-Infinity" prefHeight="117.0" prefWidth="370.0" stylesheets="@../../style/dashboard.css" AnchorPane.rightAnchor="0.0">
                <children>
                   <AnchorPane layoutX="27.0" layoutY="50.0" prefHeight="35.0" prefWidth="200.0" styleClass="secondary-color" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
@@ -220,7 +184,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="labCliente" layoutX="184.0" layoutY="28.0" prefHeight="28.0" prefWidth="200.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+                  <Label fx:id="labCliente" layoutX="184.0" layoutY="28.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -240,7 +204,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </AnchorPane>
-            <AnchorPane minWidth="-Infinity" prefHeight="117.0" prefWidth="300.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0">
+            <AnchorPane minWidth="-Infinity" prefHeight="117.0" prefWidth="370.0" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0">
                <children>
                   <AnchorPane layoutX="27.0" layoutY="50.0" prefHeight="35.0" prefWidth="200.0" styleClass="secondary-color" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
@@ -260,7 +224,7 @@
                      </padding>
                   </Label>
                   <FontAwesomeIconView fill="WHITE" glyphName="CART_PLUS" layoutX="15.0" layoutY="55.0" size="60" AnchorPane.topAnchor="3.571430206298828" />
-                  <Label fx:id="labProdutoStock" alignment="CENTER_RIGHT" layoutY="35.0" prefHeight="28.0" prefWidth="300.0" text="Nome do produto" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <Label fx:id="labProdutoStock" alignment="CENTER_RIGHT" layoutY="34.0" prefHeight="28.0" prefWidth="300.0" text="Nome do produto" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
                      </font>
@@ -268,7 +232,7 @@
                         <Insets right="10.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="labSaldo" layoutX="80.0" layoutY="20.0" prefHeight="28.0" prefWidth="220.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+                  <Label fx:id="labSaldo" layoutX="80.0" layoutY="20.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
                      </font>
@@ -282,7 +246,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </AnchorPane>
-            <AnchorPane layoutX="356.6" minWidth="-Infinity" prefHeight="117.0" prefWidth="305.0" stylesheets="@../../style/dashboard.css">
+            <AnchorPane layoutX="500.0" minWidth="-Infinity" prefHeight="117.0" prefWidth="370.0" stylesheets="@../../style/dashboard.css">
                <children>
                   <AnchorPane layoutX="27.0" layoutY="50.0" prefHeight="35.0" prefWidth="200.0" styleClass="secondary-color" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
@@ -293,7 +257,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="labTotalPaidFacturas" layoutX="184.0" layoutY="28.0" prefHeight="28.0" prefWidth="200.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
+                  <Label fx:id="labTotalPaidFacturas" layoutX="184.0" layoutY="28.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -307,41 +271,6 @@
                      </padding>
                   </Label>
                   <FontAwesomeIconView fill="WHITE" glyphName="MONEY" layoutX="15.0" layoutY="60.0" size="60" />
-               </children>
-               <styleClass>
-                  <String fx:value="primary-color" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </AnchorPane>
-            <AnchorPane layoutX="713.2" minWidth="-Infinity" prefHeight="117.0" prefWidth="300.0" stylesheets="@../../style/dashboard.css">
-               <children>
-                  <AnchorPane layoutX="27.0" layoutY="50.0" prefHeight="35.0" prefWidth="200.0" styleClass="secondary-color" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                     <children>
-                        <Label alignment="CENTER" layoutX="104.0" text="Clientes" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font name="Berlin Sans FB" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
-                  <Label fx:id="labCliente3" layoutX="184.0" layoutY="28.0" prefHeight="28.0" prefWidth="200.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Total de Clientes" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="54.0">
-                     <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
-                     </font>
-                     <padding>
-                        <Insets right="10.0" />
-                     </padding>
-                  </Label>
-                  <ImageView fitHeight="50.0" fitWidth="75.0" layoutX="14.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../image/icons/Vector.png" />
-                     </image>
-                  </ImageView>
                </children>
                <styleClass>
                   <String fx:value="primary-color" />

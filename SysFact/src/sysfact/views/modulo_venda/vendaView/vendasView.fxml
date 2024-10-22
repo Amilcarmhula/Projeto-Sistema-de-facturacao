@@ -45,16 +45,16 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <TextField fx:id="txtEnderecoCliente" alignment="CENTER" disable="true" layoutX="207.0" layoutY="125.0" prefHeight="25.0" prefWidth="451.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtEnderecoCliente" disable="true" layoutX="207.0" layoutY="125.0" prefHeight="25.0" prefWidth="451.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
             <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="1130.0" layoutY="105.0" prefHeight="27.0" prefWidth="99.0" text="Valido Ate:" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="txtNomeCLiente" alignment="CENTER" disable="true" layoutX="207.0" layoutY="91.0" prefHeight="25.0" prefWidth="285.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TextField fx:id="txtNuitCLiente" alignment="CENTER" disable="true" layoutX="498.0" layoutY="91.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TextField fx:id="txtEmailCLiente" alignment="CENTER" disable="true" layoutX="666.0" layoutY="125.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TextField fx:id="txtContactoCLiente" alignment="CENTER" disable="true" layoutX="634.0" layoutY="91.0" prefHeight="25.0" prefWidth="265.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtNomeCLiente" disable="true" layoutX="207.0" layoutY="91.0" prefHeight="25.0" prefWidth="285.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtNuitCLiente" disable="true" layoutX="498.0" layoutY="91.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtEmailCLiente" disable="true" layoutX="666.0" layoutY="125.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtContactoCLiente" disable="true" layoutX="634.0" layoutY="91.0" prefHeight="25.0" prefWidth="265.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
             <Label layoutX="942.0" layoutY="65.0" text="FACTURA N°" textFill="WHITE">
                <font>
                   <Font size="26.0" />

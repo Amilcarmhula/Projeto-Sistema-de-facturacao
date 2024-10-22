@@ -126,7 +126,7 @@ public class DashboardController implements Initializable {
     private Label labSaldo;
     @FXML
     private Label labProdutoStock;
-    
+
     @FXML
     private Label labTotalFacturas;
     @FXML
@@ -165,23 +165,26 @@ public class DashboardController implements Initializable {
         Thread x = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (Stock stock : listaLowStock) {
+                for (int i = 0; i < 5; i++) {
+                    for (Stock stock : listaLowStock) {
 
-                    try {
-                        Platform.runLater(() -> {
+                        try {
+                            Platform.runLater(() -> {
 
-                            labArmazemStock.setText(stock.getArmazem().getNome_arm());
-                            labProdutoStock.setText(stock.getProduto().getNomeProduto());
-                            labSaldo.setText(stock.getSaldo() + "");
-                        });
-                        // A thread dorme por 5 segundo
-                        Thread.sleep(5000);
-                    } catch (InterruptedException ex) {
-                        // Trata uma possível interrupção da thread
-                        System.out.println("Erro: " + ex);
+                                labArmazemStock.setText(stock.getArmazem().getNome_arm());
+                                labProdutoStock.setText(stock.getProduto().getNomeProduto());
+                                labSaldo.setText(stock.getSaldo() + "");
+                            });
+                            // A thread dorme por 5 segundo
+                            Thread.sleep(5000);
+                        } catch (InterruptedException ex) {
+                            // Trata uma possível interrupção da thread
+                            System.out.println("Erro: " + ex);
+                        }
                     }
                 }
-                updadeLowStock();
+//                System.out.println("\nFim");
+//                updadeLowStock();
             }
         });
         // Inicia a execução da thread
@@ -374,13 +377,15 @@ public class DashboardController implements Initializable {
         }
 
     }
-    public void showCountInvoice() throws SQLException{
+
+    public void showCountInvoice() throws SQLException {
         ServiceFactura sf = new ServiceFactura();
-        labTotalFacturas.setText(sf.contaFacturas()+"");
+        labTotalFacturas.setText(sf.contaFacturas() + "");
     }
-    public void showTotalInvoicePaid() throws SQLException{
+
+    public void showTotalInvoicePaid() throws SQLException {
         ServiceFactura sf = new ServiceFactura();
-        labTotalPaidFacturas.setText(String.format("%.2f",sf.somaTotalFacturas())+" Mt");
+        labTotalPaidFacturas.setText(String.format("%.2f", sf.somaTotalFacturas()) + " Mt");
     }
 
     public void selectedComboBox() throws SQLException {
@@ -436,6 +441,7 @@ public class DashboardController implements Initializable {
         Thread x = new Thread(new Runnable() {
             @Override
             public void run() {
+                for (int i = 0; i < 5; i++) {
                 try {
                     // Actualiza os dados a cada 10 segundos
                     Platform.runLater(() -> { //To update UI elements from a background thread
@@ -459,10 +465,10 @@ public class DashboardController implements Initializable {
                     // Trata uma possível interrupção da thread
                     System.out.println("Erro: " + ex);
                 }
-//                }
-                autoUpdade();
+                }
+//                autoUpdade();
                 // Imprime a mensagem "Fim" após o término do loop
-                System.out.println("\nFim");
+//                System.out.println("\nFim");
             }
         });
 

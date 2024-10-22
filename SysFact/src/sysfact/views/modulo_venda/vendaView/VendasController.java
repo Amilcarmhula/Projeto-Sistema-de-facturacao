@@ -37,9 +37,7 @@ import javafx.stage.Modality;
 import sysfact.SysFact;
 import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.desconto.DescontoDAO;
-import sysfact.dao.produto.ProdutoDAO;
 import sysfact.dao.vendas.documentos.DocumentosComerciaisDAO;
-import sysfact.dao.vendas.factura.FacturaDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.desconto.Desconto;
 import sysfact.model.empresa.Empresa;
@@ -308,17 +306,20 @@ public class VendasController implements Initializable {
     }
 
     public void populateTableItems() {
+        int qtd;
         if (txtID.getText() == null || txtID.getText().isEmpty()) {
             showErroNotification("Erro", "Produto/Servico nao selecionado!");
             return;
         }
 
         if (txtQuantidade.getText() == null || txtQuantidade.getText().isEmpty()) {
-            showErroNotification("Erro", "Quantidade nao informada!");
-            return;
+//            showErroNotification("Erro", "Quantidade nao informada!");
+            qtd = 1;
+        }else{
+            qtd = Integer.parseInt(txtQuantidade.getText());
         }
         int id = Integer.parseInt(txtID.getText());
-        int qtd = Integer.parseInt(txtQuantidade.getText());
+        
 
         Produto x = mapaProdutos.get(id);
         Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());

@@ -46,7 +46,7 @@ public class ReportUtilities {
             // Configurando o botão View/Save
             ButtonType btnVisualizar = new ButtonType("Visualizar", ButtonType.OK.getButtonData());
             ButtonType btnClose = new ButtonType("Close", ButtonType.CANCEL.getButtonData());
-            ButtonType btnSaveView = new ButtonType("Salvar&Visualizar", ButtonType.YES.getButtonData());
+            ButtonType btnSaveView = new ButtonType("Salvar", ButtonType.YES.getButtonData());
             dialog.getDialogPane().getButtonTypes().addAll(btnVisualizar, btnSaveView, btnClose);
 
             Optional<ButtonType> result = dialog.showAndWait();

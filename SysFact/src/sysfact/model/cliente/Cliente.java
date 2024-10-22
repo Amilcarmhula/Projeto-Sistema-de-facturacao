@@ -142,8 +142,8 @@ public class Cliente {
     public String printEnderecos(){
         String endereco = "";
         if(enderecoCliente != null){
-            endereco = enderecoCliente.getAvenida_cli()+", "+enderecoCliente.getRua_cli()+
-                    ", "+enderecoCliente.getNumero_cli()+"; "+enderecoCliente.getBairro_cli()
+            endereco = "Av. "+enderecoCliente.getAvenida_cli()+", Rua "+enderecoCliente.getRua_cli()+
+                    ", Nr."+enderecoCliente.getNumero_cli()+"; Bairro "+enderecoCliente.getBairro_cli()
                     +", "+enderecoCliente.getCidade_cli()+", "+enderecoCliente.getProvincia_cli()
                     +"-"+enderecoCliente.getCodigoPostal_cli();
         }

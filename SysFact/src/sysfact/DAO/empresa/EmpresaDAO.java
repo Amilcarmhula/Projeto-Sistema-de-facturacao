@@ -75,7 +75,7 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
                     + "en.provincia, en.cidade, en.bairro, en.avenida, en.rua, en.codigo_postal, en.numero, en.tipo,"
                     + "GROUP_CONCAT(DISTINCT c.contacto SEPARATOR ' ') AS contatos, "
                     + "c.email, c.website,"
-                    + "a.nome_banco, a.numero as numeroConta, a.nib, a.nuib "
+                    + "a.id as id_conta, a.nome_banco, a.numero as numeroConta, a.nib, a.nuib "
                     + "FROM empresa e "
                     + "LEFT JOIN endereco_empresa en ON e.id = en.fk_id_empresa "
                     + "LEFT JOIN contacto_empresa c ON e.id = c.fk_id_empresa "
@@ -115,6 +115,7 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
                 empresa.setContactosEmpresa(listaContactos);
                 
                 ContaBancaria conta = new ContaBancaria();
+                conta.setId(result.getInt("id_conta"));
                 conta.setNome_banco(result.getString("nome_banco"));
                 conta.setNib(result.getString("nib"));
                 conta.setNuib(result.getString("nuib"));

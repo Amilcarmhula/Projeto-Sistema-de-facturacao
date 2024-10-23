@@ -1,0 +1,33 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sysfact.service.contacorrente;
+
+import java.sql.SQLException;
+import sysfact.dao.contacorrente.ContaCorrenteDAO;
+import sysfact.model.contacorrente.ContaCorrente;
+
+/**
+ *
+ * @author JM-Tecnologias
+ */
+public class ServiceContaCorrente {
+    private final ContaCorrenteDAO contaCorrenteDao;
+    private boolean opsSuccess;
+
+    public ServiceContaCorrente() throws SQLException {
+        this.contaCorrenteDao = new ContaCorrenteDAO();
+    }
+
+    public boolean isOpsSuccess() {
+        return opsSuccess;
+    }
+
+    public void setOpsSuccess(boolean opsSuccess) {
+        this.opsSuccess = opsSuccess;
+    }
+    public ContaCorrente consultaContaCorrente(){
+        return contaCorrenteDao.getLastEntity();
+    }
+}

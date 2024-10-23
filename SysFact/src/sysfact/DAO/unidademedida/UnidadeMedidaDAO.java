@@ -113,24 +113,24 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
         return u;
     }
 
-    @Override
-    public Map<String, Integer> mapUnidadeMedida() {
-        Map<String, Integer> mapa = new HashMap<>();
-        try {
-            sql = "select * from unidade_medida";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                UnidadeMedida u = new UnidadeMedida();
-                mapa.put(result.getString("sigla"), result.getInt("id"));
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao mapear unidade de medida: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-        return mapa;
-    }
+//    @Override
+//    public Map<String, Integer> mapUnidadeMedida() {
+//        Map<String, Integer> mapa = new HashMap<>();
+//        try {
+//            sql = "select * from unidade_medida";
+//            ps = con.prepareStatement(sql);
+//            ResultSet result = ps.executeQuery();
+//            while (result.next()) {
+//                UnidadeMedida u = new UnidadeMedida();
+//                mapa.put(result.getString("sigla"), result.getInt("id"));
+//            }
+//            result.close();
+//            ps.close();
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Erro ao mapear unidade de medida: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//        }
+//        return mapa;
+//    }
 
     @Override
     public void deleteEntity(int x) {

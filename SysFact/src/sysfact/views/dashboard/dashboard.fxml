@@ -38,12 +38,12 @@
                   </Label>
                   <Label fx:id="labEntrada" layoutX="153.0" layoutY="28.0" prefHeight="28.0" prefWidth="89.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
                      <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
+                        <Font name="Berlin Sans FB" size="18.0" />
                      </font>
                   </Label>
                   <Label fx:id="labSaida" layoutX="236.0" layoutY="52.0" prefHeight="28.0" prefWidth="89.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
+                        <Font name="Berlin Sans FB" size="18.0" />
                      </font>
                   </Label>
                   <FontAwesomeIconView fill="WHITE" glyphName="ARROWS_H" layoutX="14.0" layoutY="59.0" size="60" />
@@ -75,7 +75,7 @@
                   <FontAwesomeIconView fill="WHITE" glyphName="BOOKMARK" layoutX="14.0" layoutY="66.0" size="70" />
                   <Label fx:id="labTotalFacturas" layoutX="105.0" layoutY="28.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
                      <font>
-                        <Font size="20.0" />
+                        <Font name="Berlin Sans FB" size="18.0" />
                      </font>
                   </Label>
                </children>
@@ -105,7 +105,7 @@
                   </Label>
                   <Label fx:id="labFornecedor" layoutX="98.0" layoutY="28.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
+                        <Font name="Berlin Sans FB" size="18.0" />
                      </font>
                   </Label>
                   <FontAwesomeIconView fill="WHITE" glyphName="USERS" layoutX="15.0" layoutY="60.0" size="60" />
@@ -186,7 +186,7 @@
                   </AnchorPane>
                   <Label fx:id="labCliente" layoutX="184.0" layoutY="28.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font size="20.0" />
+                        <Font name="Berlin Sans FB" size="18.0" />
                      </font>
                   </Label>
                   <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Total de Clientes" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="54.0">
@@ -234,7 +234,7 @@
                   </Label>
                   <Label fx:id="labSaldo" layoutX="80.0" layoutY="20.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
+                        <Font name="Berlin Sans FB" size="18.0" />
                      </font>
                      <padding>
                         <Insets left="10.0" />
@@ -257,12 +257,12 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="labTotalPaidFacturas" layoutX="184.0" layoutY="28.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
+                  <Label fx:id="labTotalCaixa" layoutX="90.0" layoutY="12.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="12.0">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" layoutY="57.0" prefHeight="28.0" prefWidth="300.0" text="Total em Caixa" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="54.0">
+                  <Label alignment="CENTER_RIGHT" layoutY="12.0" prefHeight="28.0" prefWidth="300.0" text="Caixa" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="12.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
                      </font>
@@ -271,6 +271,19 @@
                      </padding>
                   </Label>
                   <FontAwesomeIconView fill="WHITE" glyphName="MONEY" layoutX="15.0" layoutY="60.0" size="60" />
+                  <Label alignment="CENTER_RIGHT" layoutY="40.0" prefHeight="28.0" prefWidth="300.0" text="Conta Corrente" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+                     <font>
+                        <Font name="Berlin Sans FB" size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="labTotalContaCorrente" layoutX="90.0" layoutY="40.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                </children>
                <styleClass>
                   <String fx:value="primary-color" />

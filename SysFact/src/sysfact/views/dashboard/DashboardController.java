@@ -41,6 +41,8 @@ import sysfact.model.armazem.Armazem;
 import sysfact.model.categoria.Categoria;
 import sysfact.model.stock.Stock;
 import sysfact.model.vendas.factura.Factura;
+import sysfact.service.caixa.ServiceCaixa;
+import sysfact.service.contacorrente.ServiceContaCorrente;
 import sysfact.service.vendas.factura.ServiceFactura;
 import sysfact.util.AlertUtilities;
 
@@ -130,7 +132,9 @@ public class DashboardController implements Initializable {
     @FXML
     private Label labTotalFacturas;
     @FXML
-    private Label labTotalPaidFacturas;
+    private Label labTotalContaCorrente;
+    @FXML
+    private Label labTotalCaixa;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -384,8 +388,10 @@ public class DashboardController implements Initializable {
     }
 
     public void showTotalInvoicePaid() throws SQLException {
-        ServiceFactura sf = new ServiceFactura();
-        labTotalPaidFacturas.setText(String.format("%.2f", sf.somaTotalFacturas()) + " Mt");
+        ServiceCaixa sc = new ServiceCaixa();
+        ServiceContaCorrente scc = new ServiceContaCorrente();
+        labTotalCaixa.setText(String.format("%.2f", sc.consultaCaixa().getSaldo_actual()) + " Mt");
+        labTotalContaCorrente.setText(String.format("%.2f", scc.consultaContaCorrente().getSaldo_actual()) + " Mt");
     }
 
     public void selectedComboBox() throws SQLException {

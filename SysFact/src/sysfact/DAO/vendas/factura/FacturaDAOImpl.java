@@ -16,7 +16,8 @@ public interface FacturaDAOImpl<T> {
     void addEntity(T x);
     T getFacturaData(String factura);
     ObservableList<T> getFacturaToDashboard();
+    ObservableList<T> getFacturaToPagamentos(int id);
     int countFactura();
-    double totalPaidInvoice();
+//    double totalPaidInvoice();
     
 }

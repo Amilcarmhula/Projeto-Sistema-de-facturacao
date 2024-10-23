@@ -413,8 +413,8 @@ create table documentocomercial(
 INSERT INTO documentocomercial (sigla, nome, diasuteis, descricao) VALUES
 ('FA','Fatura', 5, 'Fatura: Documento comercial que representa a venda de produtos ou serviços, devendo ser emitida no ato da venda ou até 5 dias úteis após a transação.'),
 ('FP','Fatura Proforma', 30, 'Fatura Proforma: Documento preliminar usado para cotações e propostas comerciais. Não possui validade fiscal, com uma validade aproximada de 30 dias.'),
-('FR','Fatura Recibo', 1, 'Fatura Recibo: Documento que combina a fatura e o recibo, emitido simultaneamente à venda e ao pagamento.'),
-('FS','Fatura Simplificada', 1, 'Fatura Simplificada: Utilizada para vendas de baixo valor ou operações simples, devendo ser emitida no momento da venda.'),
+('FR','Fatura Recibo', 1, 'Fatura Recibo: Documento que combina a fatura e o recibo, emitido simultaneamente à venda e ao pagamento.'), -- tem pagamento imediato
+('FS','Fatura Simplificada', 1, 'Fatura Simplificada: Utilizada para vendas de baixo valor ou operações simples, devendo ser emitida no momento da venda.'), -- tem pagamento imediato
 ('GT','Guia de Transporte', 1, 'Guia de Transporte: Documento que deve acompanhar o transporte de mercadorias, emitido antes da movimentação dos produtos.'),
 ('NC','Nota de Crédito', 30, 'Nota de Crédito: Documento emitido para corrigir ou anular uma fatura anterior, geralmente emitida até 30 dias após a transação original.'),
 ('ND','Nota de Débito', 30, 'Nota de Débito: Documento emitido para cobrar valores adicionais de um cliente, emitido até 30 dias após a identificação do valor a ser cobrado.');
@@ -487,14 +487,20 @@ delimiter ;
 
 
 
-
-
 create table metodo_pagamento(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+insert into metodo_pagamento(nome, descricao) values ('Pagamento a vista','Metodo de pagamento presencial a dinheiro'),
+('Carteira E-mola','Metodo de pagamento presencial E-mola'),
+('Carteira Mpesa','Metodo de pagamento presencial Mpesa'),
+('Carteira mkesh','Metodo de pagamento presencial mkesh'),
+('Visa','Metodo de pagamento presencial Visa'),
+('Cheque','Metodo de pagamento por deposito CHEQUE'),
+('Transferencia Bancaria','Metodo de pagamento por transferencia bancaria');
+
 
 -- transacoes 
 create table transacoes(
@@ -502,7 +508,7 @@ create table transacoes(
     data_pagamento date,
     valor decimal(10,2) not null,
     tipo_transacao VARCHAR(50) NOT NULL, -- Ex: Entrada, Saída
-    tipo_pagamento varchar(20) not null, -- caixa, conta corrente
+    -- tipo_pagamento varchar(20) not null, -- caixa, conta corrente
     descricao text,
     fk_id_contabancaria integer,
     fk_id_metodo_pagamento integer not null,
@@ -515,8 +521,6 @@ create table transacoes(
     foreign key (fk_numero) references factura(numero)
 );
 
-					-- As tabelas abaixo serao populadas atravez de trigger's
-
 -- esta tabela sera actualizada com uma trigger
 CREATE TABLE caixa (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -525,6 +529,36 @@ CREATE TABLE caixa (
     fk_id_transacoes integer not null,
     foreign key (fk_id_transacoes) references transacoes(id)
 );
+delimiter //
+create trigger _updateCaixa
+	after insert on transacoes
+    for each row
+    begin
+		DECLARE saldo_anterior DECIMAL(10, 2) DEFAULT 0;
+
+    -- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
+    IF NEW.fk_id_metodo_pagamento = 1 THEN
+        -- Tenta buscar o saldo atual da última linha da tabela caixa
+        SELECT saldo_atual INTO saldo_anterior
+        FROM caixa
+        ORDER BY id DESC LIMIT 1;
+
+        -- Se não encontrar saldo anterior, assume que o saldo inicial é 0
+        IF saldo_anterior IS NULL THEN
+            SET saldo_anterior = 0;
+        END IF;
+
+        -- Insere os valores na tabela caixa
+        INSERT INTO caixa (saldo_inicial, saldo_atual, fk_id_transacoes)
+        VALUES (
+            saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
+            saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
+            NEW.id                         -- FK da transação inserida
+        );
+    END IF;
+	end//
+delimiter ;
+
 -- conta corrente
  create table contacorrente(
 	id integer primary key auto_increment,
@@ -533,4 +567,34 @@ CREATE TABLE caixa (
     fk_id_transacoes integer not null,
     foreign key (fk_id_transacoes) references transacoes(id)
 );
+delimiter //
+create trigger _updateContacorrente
+	after insert on transacoes
+    for each row
+    begin
+		DECLARE saldo_anterior DECIMAL(10, 2) DEFAULT 0;
+
+    -- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
+    IF NEW.fk_id_metodo_pagamento <> 1 THEN
+        -- Tenta buscar o saldo atual da última linha da tabela caixa
+        SELECT saldo_atual INTO saldo_anterior
+        FROM contacorrente
+        ORDER BY id DESC LIMIT 1;
+
+        -- Se não encontrar saldo anterior, assume que o saldo inicial é 0
+        IF saldo_anterior IS NULL THEN
+            SET saldo_anterior = 0;
+        END IF;
+
+        -- Insere os valores na tabela caixa
+        INSERT INTO contacorrente (saldo_inicial, saldo_atual, fk_id_transacoes)
+        VALUES (
+            saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
+            saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
+            NEW.id                         -- FK da transação inserida
+        );
+    END IF;
+	end//
+delimiter ;
+
 

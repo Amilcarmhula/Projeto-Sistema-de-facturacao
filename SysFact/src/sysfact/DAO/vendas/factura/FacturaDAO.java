@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
@@ -21,6 +19,7 @@ import sysfact.model.empresa.Empresa;
 import sysfact.model.empresa.conta.ContaBancaria;
 import sysfact.model.empresa.contacto.ContactoEmpresa;
 import sysfact.model.empresa.endereco.EnderecoEmpresa;
+import sysfact.model.transacao.Transacao;
 import sysfact.model.vendas.documetos.DocumentosComerciais;
 import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
@@ -194,6 +193,51 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
         return lista;
     }
 
+    public ObservableList<Factura> getFacturaToPagamentos(int id) {
+        ObservableList<Factura> lista = FXCollections.observableArrayList();
+        try {
+            sql = "SELECT f.numero AS numero_factura, f.data_criacao, f.data_vencimento, f.estado, "
+                    + "       CONCAT(doc.sigla, ' - ', doc.nome) AS Documento, "
+                    
+                    + "       (SELECT SUM(i.subtotal) FROM itemfactura i "
+                    + "        WHERE i.fk_numero = f.numero) AS total_fatura, "
+                    
+                    + "       (SELECT SUM(t.valor) FROM transacoes t "
+                    + "        WHERE t.fk_numero = f.numero) AS valor_transacoes "
+                    + "FROM factura f "
+                    + "LEFT JOIN documentocomercial doc ON f.fk_id_doc = doc.id "
+                    + "LEFT JOIN cliente cli ON cli.id = f.fk_id_cliente "
+                    + "WHERE cli.id = ? "
+                    + "GROUP BY f.numero, f.data_criacao, f.data_vencimento, f.estado, doc.sigla, doc.nome "
+                    + "ORDER BY f.numero";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                Factura f = new Factura();
+                f.setNumero_fac(result.getString("numero_factura"));
+                f.setData_criacao(result.getString("data_criacao"));
+                f.setData_vencimento(result.getString("data_vencimento"));
+                f.setEstado(result.getBoolean("estado"));
+                DocumentosComerciais d = new DocumentosComerciais();
+                d.setNome_doc(result.getString("Documento"));
+                f.setDocComerciais(d);
+                Item i = new Item();
+                i.setSubtotal(result.getDouble("total_fatura"));
+                f.setItem(i);
+                Transacao t = new Transacao();
+                t.setValor(result.getDouble("valor_transacoes"));
+                f.setTransacoes(t);
+                lista.add(f);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + e);
+        }
+        return lista;
+    }
+
     @Override
     public int countFactura() {
         int total = 0;
@@ -213,26 +257,26 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
         return total;
     }
 
-    @Override
-    public double totalPaidInvoice() {
-        double total = 0;
-        try {
-            sql = "SELECT SUM(i.subtotal) AS total_fatura FROM factura f "
-                    + "LEFT JOIN itemfactura i ON i.fk_numero = f.numero "
-                    + "where f.estado=1";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            if (result.next()) { // Verifica se há resultados
-                total = result.getInt("total_fatura");
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException ex) {
-            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de somatorio de facturas", "Detalhes: " + ex);
-        }
-
-        return total;
-    }
+//    @Override
+//    public double totalPaidInvoice() {
+//        double total = 0;
+//        try {
+//            sql = "SELECT SUM(i.subtotal) AS total_fatura FROM factura f "
+//                    + "LEFT JOIN itemfactura i ON i.fk_numero = f.numero "
+//                    + "where f.estado=1";
+//            ps = con.prepareStatement(sql);
+//            ResultSet result = ps.executeQuery();
+//            if (result.next()) { // Verifica se há resultados
+//                total = result.getInt("total_fatura");
+//            }
+//            result.close();
+//            ps.close();
+//        } catch (SQLException ex) {
+//            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de somatorio de facturas", "Detalhes: " + ex);
+//        }
+//
+//        return total;
+//    }
     /*
     Metodo abaixo obsoleto
      */

@@ -67,7 +67,7 @@
                                  <children>
                                     <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css">
                                        <children>
-                                          <Button fx:id="btn_dashboard11" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Pagamentos" textFill="WHITE">
+                                          <Button fx:id="btn_pagamento" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Pagamentos" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>

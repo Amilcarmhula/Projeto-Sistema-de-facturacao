@@ -92,13 +92,17 @@ public class ServiceFactura {
         return facturaDao.getFacturaToDashboard();
     }
     
+    public ObservableList<Factura> exibeFacturaPorCliente(int id) {
+        return facturaDao.getFacturaToPagamentos(id);
+    }
+    
     public int contaFacturas(){
         int total = facturaDao.countFactura();
         return total;
     }
     
-    public double somaTotalFacturas(){
-        double total = facturaDao.totalPaidInvoice();
-        return total;
-    }
+//    public double somaTotalFacturas(){
+//        double total = facturaDao.totalPaidInvoice();
+//        return total;
+//    }
 }

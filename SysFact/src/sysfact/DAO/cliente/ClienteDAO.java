@@ -243,7 +243,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     }
 
     @Override
-    public Cliente getLastEntity() {
+    public Cliente getLastEntity() { 
         Cliente c = null;
         try {
             sql = "SELECT id,tipo,nome,razaosocial,nuit FROM cliente ORDER BY id DESC LIMIT 1;";

@@ -75,7 +75,7 @@ public class MainController implements Initializable {
     @FXML
     private Button btn_categorias;
     @FXML
-    private Button btn_dashboard11;
+    private Button btn_pagamento;
     @FXML
     private Button btn_cliente11;
     @FXML
@@ -144,8 +144,11 @@ public class MainController implements Initializable {
         } else if (e.getSource() == btn_vendas) {
             pane = FXMLLoader.load(getClass().getResource("../modulo_venda/vendaView/vendasView.fxml"));
             anchorMain.getChildren().setAll(pane);
+        }else if (e.getSource() == btn_pagamento) {
+            pane = FXMLLoader.load(getClass().getResource("../modulo_contabilidade/pagamentosView/pagamentoView.fxml"));
+            anchorMain.getChildren().setAll(pane);
         }
-    }
+    }//
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

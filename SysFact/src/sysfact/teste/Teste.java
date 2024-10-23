@@ -8,6 +8,10 @@ package sysfact.teste;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -59,12 +63,8 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        Random rand = new Random();
-        int x = rand.nextInt(300);
-        System.out.println(rand.nextInt(30));
         
-
-    
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         
 //        UnidadeMedida x = new UnidadeMedida();
 //        UnidadeMedidaDAO z = new UnidadeMedidaDAO();

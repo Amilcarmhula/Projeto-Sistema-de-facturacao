@@ -15,6 +15,7 @@ import sysfact.dao.vendas.factura.FacturaDAO;
 import sysfact.dao.vendas.itens.ItemDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.empresa.Empresa;
+import sysfact.model.transacao.Transacao;
 import sysfact.model.usuario.Usuario;
 import sysfact.model.vendas.documetos.DocumentosComerciais;
 import sysfact.model.vendas.factura.itens.Item;
@@ -33,6 +34,7 @@ public class Factura {
     private DocumentosComerciais docComerciais;
     private List<Item> itens;
     private Item item;
+    private Transacao transacoes;
     private boolean estado;
     private Empresa empresa;
     private Cliente cliente;
@@ -43,7 +45,7 @@ public class Factura {
     }
 
     public Factura(String numero, String data_vencimento, List<Item> itens,
-            boolean estado, Empresa empresa, Cliente cliente, DocumentosComerciais docComerciais) {
+            boolean estado, Empresa empresa, Cliente cliente, DocumentosComerciais docComerciais, Transacao transacoes) {
         super();
         this.numero_fac = numero;
         this.data_vencimento = data_vencimento;
@@ -52,6 +54,7 @@ public class Factura {
         this.empresa = empresa;
         this.cliente = cliente;
         this.docComerciais = docComerciais;
+        this.transacoes = transacoes;
     }
 
     public void criaRelatorio(String numeroFactura) throws SQLException {
@@ -131,6 +134,14 @@ public class Factura {
 
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
+    }
+
+    public Transacao getTransacoes() {
+        return transacoes;
+    }
+
+    public void setTransacoes(Transacao transacoes) {
+        this.transacoes = transacoes;
     }
 
     public Cliente getCliente() {

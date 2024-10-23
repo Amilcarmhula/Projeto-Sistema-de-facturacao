@@ -493,13 +493,13 @@ create table metodo_pagamento(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-insert into metodo_pagamento(nome, descricao) values ('Pagamento a vista','Metodo de pagamento presencial a dinheiro'),
-('Carteira E-mola','Metodo de pagamento presencial E-mola'),
-('Carteira Mpesa','Metodo de pagamento presencial Mpesa'),
-('Carteira mkesh','Metodo de pagamento presencial mkesh'),
-('Visa','Metodo de pagamento presencial Visa'),
-('Cheque','Metodo de pagamento por deposito CHEQUE'),
-('Transferencia Bancaria','Metodo de pagamento por transferencia bancaria');
+insert into metodo_pagamento(nome, descricao) values 
+('Dinheiro (Espécie)','O método mais tradicional de pagamento, usando moedas e cédulas físicas.'),
+('Pagamento Terminal POS','Utilizado em estabelecimentos comerciais para processar pagamentos feitos com cartões de crédito, débito e, em alguns casos, carteiras móveis via NFC ou QR Code'),
+('Transferências Bancárias','Movimentação direta entre contas da mesma ou diferentes instituição financeira.'),
+('Carteiras Móveis','Plataformas que armazenam informações de pagamento e permitem a realização de transações por meio de dispositivos móveis.'),
+('Pagamentos com Cheques','Um método de pagamento em que o emissor autoriza o banco a pagar um valor específico ao beneficiário');
+
 
 
 -- transacoes 
@@ -529,35 +529,35 @@ CREATE TABLE caixa (
     fk_id_transacoes integer not null,
     foreign key (fk_id_transacoes) references transacoes(id)
 );
-delimiter //
-create trigger _updateCaixa
-	after insert on transacoes
-    for each row
-    begin
-		DECLARE saldo_anterior DECIMAL(10, 2) DEFAULT 0;
+-- delimiter //
+-- create trigger _updateCaixa
+-- 	after insert on transacoes
+--     for each row
+--     begin
+-- 		DECLARE saldo_anterior DECIMAL(10, 2) DEFAULT 0;
 
-    -- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
-    IF NEW.fk_id_metodo_pagamento = 1 THEN
-        -- Tenta buscar o saldo atual da última linha da tabela caixa
-        SELECT saldo_atual INTO saldo_anterior
-        FROM caixa
-        ORDER BY id DESC LIMIT 1;
+--     -- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
+--     IF NEW.fk_id_metodo_pagamento = 1 THEN
+--         -- Tenta buscar o saldo atual da última linha da tabela caixa
+--         SELECT saldo_atual INTO saldo_anterior
+--         FROM caixa
+--         ORDER BY id DESC LIMIT 1;
 
-        -- Se não encontrar saldo anterior, assume que o saldo inicial é 0
-        IF saldo_anterior IS NULL THEN
-            SET saldo_anterior = 0;
-        END IF;
+--         -- Se não encontrar saldo anterior, assume que o saldo inicial é 0
+--         IF saldo_anterior IS NULL THEN
+--             SET saldo_anterior = 0;
+--         END IF;
 
-        -- Insere os valores na tabela caixa
-        INSERT INTO caixa (saldo_inicial, saldo_atual, fk_id_transacoes)
-        VALUES (
-            saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
-            saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
-            NEW.id                         -- FK da transação inserida
-        );
-    END IF;
-	end//
-delimiter ;
+--         -- Insere os valores na tabela caixa
+--         INSERT INTO caixa (saldo_inicial, saldo_atual, fk_id_transacoes)
+--         VALUES (
+--             saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
+--             saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
+--             NEW.id                         -- FK da transação inserida
+--         );
+--     END IF;
+-- 	end//
+-- delimiter ;
 
 -- conta corrente
  create table contacorrente(
@@ -567,34 +567,97 @@ delimiter ;
     fk_id_transacoes integer not null,
     foreign key (fk_id_transacoes) references transacoes(id)
 );
+-- delimiter //
+-- create trigger _updateContacorrente
+-- 	after insert on transacoes
+--     for each row
+--     begin
+-- 		DECLARE saldo_anterior DECIMAL(10, 2) DEFAULT 0;
+
+--     -- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
+--     IF NEW.fk_id_metodo_pagamento <> 1 THEN
+--         -- Tenta buscar o saldo atual da última linha da tabela caixa
+--         SELECT saldo_atual INTO saldo_anterior
+--         FROM contacorrente
+--         ORDER BY id DESC LIMIT 1;
+
+--         -- Se não encontrar saldo anterior, assume que o saldo inicial é 0
+--         IF saldo_anterior IS NULL THEN
+--             SET saldo_anterior = 0;
+--         END IF;
+
+--         -- Insere os valores na tabela caixa
+--         INSERT INTO contacorrente (saldo_inicial, saldo_atual, fk_id_transacoes)
+--         VALUES (
+--             saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
+--             saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
+--             NEW.id                         -- FK da transação inserida
+--         );
+--     END IF;
+-- 	end//
+-- delimiter ;
+
 delimiter //
-create trigger _updateContacorrente
+create trigger _updateCaixa_ContaCorrente_Factura
 	after insert on transacoes
     for each row
     begin
 		DECLARE saldo_anterior DECIMAL(10, 2) DEFAULT 0;
+        declare total_factura decimal(10,2);
+        declare total_pago decimal(10,2);
+        
+        SELECT (SELECT SUM(i.subtotal) FROM itemfactura i WHERE i.fk_numero = f.numero) INTO total_factura
+		FROM factura f 
+        where f.numero = NEW.fk_numero;
+        
+        SELECT (SELECT SUM(t.valor) FROM transacoes t WHERE t.fk_numero = f.numero) INTO total_pago 
+		FROM factura f 
+        where f.numero = NEW.fk_numero;
+        
+        IF total_factura <> total_pago THEN
+			-- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
+            IF NEW.fk_id_metodo_pagamento = 1 THEN
+				-- Tenta buscar o saldo atual da última linha da tabela caixa
+				SELECT saldo_atual INTO saldo_anterior
+					FROM caixa
+					ORDER BY id DESC LIMIT 1;
 
-    -- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
-    IF NEW.fk_id_metodo_pagamento <> 1 THEN
-        -- Tenta buscar o saldo atual da última linha da tabela caixa
-        SELECT saldo_atual INTO saldo_anterior
-        FROM contacorrente
-        ORDER BY id DESC LIMIT 1;
+				-- Se não encontrar saldo anterior, assume que o saldo inicial é 0
+				IF saldo_anterior IS NULL THEN
+					SET saldo_anterior = 0;
+				END IF;
 
-        -- Se não encontrar saldo anterior, assume que o saldo inicial é 0
-        IF saldo_anterior IS NULL THEN
-            SET saldo_anterior = 0;
+				-- Insere os valores na tabela caixa
+				INSERT INTO caixa (saldo_inicial, saldo_atual, fk_id_transacoes)
+					VALUES (
+					saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
+					saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
+					NEW.id                         -- FK da transação inserida
+					);
+			ELSE
+				-- Tenta buscar o saldo atual da última linha da tabela caixa
+				SELECT saldo_atual INTO saldo_anterior
+					FROM contacorrente
+					ORDER BY id DESC LIMIT 1;
+
+				-- Se não encontrar saldo anterior, assume que o saldo inicial é 0
+				IF saldo_anterior IS NULL THEN
+					SET saldo_anterior = 0;
+				END IF;
+
+				-- Insere os valores na tabela caixa
+				INSERT INTO contacorrente (saldo_inicial, saldo_atual, fk_id_transacoes)
+					VALUES (
+					saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
+					saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
+					NEW.id                         -- FK da transação inserida
+					);				
+            END IF;
+		ELSE 
+			IF total_factura = total_pago THEN
+				update factura set estado=1 where numero=NEW.fk_numero;
+			END IF;
         END IF;
-
-        -- Insere os valores na tabela caixa
-        INSERT INTO contacorrente (saldo_inicial, saldo_atual, fk_id_transacoes)
-        VALUES (
-            saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
-            saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
-            NEW.id                         -- FK da transação inserida
-        );
-    END IF;
 	end//
 delimiter ;
-
 

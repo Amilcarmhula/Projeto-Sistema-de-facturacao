@@ -22,6 +22,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -104,6 +105,8 @@ public class PagamentoController implements Initializable {
     private DatePicker dataPagamento;
     @FXML
     private TextField txtValorRecebido;
+    @FXML
+    private Button btnFinalizar;
     @FXML
     private TextField txtDescricao;
     private double valorporPagar;
@@ -229,6 +232,19 @@ public class PagamentoController implements Initializable {
         valorporPagar = f.getItem().getSubtotal() - f.getTransacoes().getValor();
         if (f != null) {
             labNumeroFactura.setText(f.getNumero_fac());
+            if(f.isEstado()){
+                dataPagamento.setDisable(true);
+                combmetodoPagamento.setDisable(true);
+                txtValorRecebido.setDisable(true);
+                txtDescricao.setDisable(true);
+                btnFinalizar.setDisable(true);
+            }else{
+                dataPagamento.setDisable(false);
+                combmetodoPagamento.setDisable(false);
+                txtValorRecebido.setDisable(false);
+                txtDescricao.setDisable(false);
+                btnFinalizar.setDisable(false);
+            }
             /*Abaixo vem a logica para pesquisar as transacoes da factura*/
             showTransacoes();
         }

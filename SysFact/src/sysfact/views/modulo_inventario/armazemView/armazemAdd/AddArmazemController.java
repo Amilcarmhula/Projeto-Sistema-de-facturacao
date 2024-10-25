@@ -69,8 +69,6 @@ public class AddArmazemController implements Initializable {
     private ComboBox<String> combProvincia;
     @FXML
     private ComboBox<String> combTipoCliente;
-    @FXML
-    private ComboBox<String> combTipoEndereco;
 
     @FXML
     private TableView<ContactoArmazem> tabelaContacto;
@@ -200,7 +198,6 @@ public class AddArmazemController implements Initializable {
         this.userData = SysFact.getUserData();
 //        txtDescricao.setWrapText(true);
         combTipoCliente.setItems(FXCollections.observableArrayList("Central", "Regional", "Loga", "..."));
-        combTipoEndereco.setItems(FXCollections.observableArrayList("Facturação", "Envio"));
         combProvincia.setItems(FXCollections.observableArrayList(
                 "Maputo(Cidade)",
                 "Maputo(Provincia)",
@@ -419,7 +416,7 @@ public class AddArmazemController implements Initializable {
         Integer id = Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
         service.registaEndereco(txtAvenida.getText(), txtBairro.getText(), 
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(), combTipoEndereco.getValue(),id, userData);
+                txtRua.getText(),id, userData);
         if (service.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
@@ -457,7 +454,7 @@ public class AddArmazemController implements Initializable {
         Integer id = Integer.valueOf(txtIDEndereco.getText().equals("") ? "0" : txtIDEndereco.getText());
         service.actualizaEndereco(txtAvenida.getText(), txtBairro.getText(), 
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(), combTipoEndereco.getValue(),id, userData);
+                txtRua.getText(),id, userData);
         if (service.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
@@ -490,7 +487,6 @@ public class AddArmazemController implements Initializable {
             txtNumeroEndereco.setText(String.valueOf(x.getNumero_arm()));
             combProvincia.setValue(x.getProvincia_arm());
             txtRua.setText(x.getRua_arm());
-            combTipoEndereco.setValue(x.getTipo_arm());
             ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
         }
     }
@@ -527,7 +523,6 @@ public class AddArmazemController implements Initializable {
         txtNumeroEndereco.setText("");
         combProvincia.setPromptText("Provincia");
         txtRua.setText("");
-        combTipoEndereco.setPromptText("Tipo de endereco");
         ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
     }
 

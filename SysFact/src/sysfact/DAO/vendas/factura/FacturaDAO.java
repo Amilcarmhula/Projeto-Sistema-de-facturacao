@@ -20,6 +20,7 @@ import sysfact.model.empresa.conta.ContaBancaria;
 import sysfact.model.empresa.contacto.ContactoEmpresa;
 import sysfact.model.empresa.endereco.EnderecoEmpresa;
 import sysfact.model.transacao.Transacao;
+import sysfact.model.usuario.Usuario;
 import sysfact.model.vendas.documetos.DocumentosComerciais;
 import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
@@ -44,8 +45,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     public void addEntity(Factura t) {
         try {
             sql = "insert into factura (numero,data_vencimento,"
-                    + "fk_id_empresa,fk_id_cliente,fk_id_usuario,fk_id_doc,data_criacao)"
-                    + " value (?,?,?,?,?,?,?)";
+                    + "fk_id_empresa,fk_id_cliente,fk_id_usuario,fk_id_doc,data_criacao, total)"
+                    + " value (?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, t.getNumero_fac());
             ps.setString(2, t.getData_vencimento());
@@ -54,6 +55,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             ps.setInt(5, t.getUsuario().getId());
             ps.setInt(6, t.getDocComerciais().getId());
             ps.setString(7, t.getData_criacao());
+            ps.setDouble(8, t.getTotal());
 
             ps.execute();
             ps.close();
@@ -62,10 +64,51 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
         }
     }
 
+    public Factura getFactura(String numero) {
+        Factura factura = null;
+        try {
+            sql = "SELECT f.numero, f.data_criacao, f.data_vencimento, f.total, "
+                    + "f.estado, f.fk_id_empresa, f.fk_id_cliente, f.fk_id_usuario, f.fk_id_doc,"
+                    + "(SELECT SUM(t.valor) FROM transacoes t WHERE t.fk_numero = f.numero)  AS totalPago "
+                    + "FROM factura f WHERE f.numero = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, numero);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                factura = new Factura();
+                factura.setNumero_fac(result.getString("numero"));
+                factura.setData_criacao(result.getString("data_criacao"));
+                factura.setData_vencimento(result.getString("data_vencimento"));
+                factura.setTotal(result.getDouble("total"));
+                factura.setEstado(result.getBoolean("estado"));
+                DocumentosComerciais d = new DocumentosComerciais();
+                d.setId(result.getInt("fk_id_doc"));
+                factura.setDocComerciais(d);
+                Cliente c = new Cliente();
+                c.setId(result.getInt("fk_id_cliente"));
+                factura.setCliente(c);
+                Empresa e = new Empresa();
+                e.setId(result.getInt("fk_id_empresa"));
+                factura.setEmpresa(e);
+                Usuario u = new Usuario();
+                u.setId(result.getInt("fk_id_usuario"));
+                factura.setUsuario(u);
+                Transacao t = new Transacao();
+                t.setValor(result.getDouble("totalPago"));
+                factura.setTransacoes(t);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + e);
+        }
+        return factura;
+    }
+
     public Factura getFacturaData(String factura) {
         Factura f = null;
         try {
-            sql = "SELECT f.numero as numero_factura, f.data_criacao, f.data_vencimento,"
+            sql = "SELECT f.numero as numero_factura, f.data_criacao, f.data_vencimento, f.total,"
                     + "doc.sigla, doc.nome as documento,"
                     + "cli.razaosocial, cli.nuit as nuit_cliente,"
                     + "ec.avenida,ec.rua,ec.numero,ec.bairro,ec.cidade,ec.provincia,ec.codigo_postal,"
@@ -94,6 +137,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 f.setNumero_fac(result.getString("numero_factura"));
                 f.setData_criacao(result.getString("data_criacao"));
                 f.setData_vencimento(result.getString("data_vencimento"));
+                f.setTotal(result.getDouble("total"));
                 DocumentosComerciais d = new DocumentosComerciais();
                 d.setNome_doc(result.getString("documento"));
                 d.setSigla_doc(result.getString("sigla"));
@@ -154,7 +198,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
         ObservableList<Factura> lista = FXCollections.observableArrayList();
         try {
             sql = "SELECT f.numero AS numero_factura, f.data_criacao, f.data_vencimento, "
-                    + "f.estado,"
+                    + "f.estado, f.total, "
                     + "concat(doc.sigla,' - ', doc.nome) as Documento, "
                     + "concat(cli.id,' - ', cli.razaosocial,'/ ', cli.nuit) as cliente, "
                     + "SUM(i.subtotal) AS total_fatura "
@@ -173,6 +217,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 f.setData_criacao(result.getString("data_criacao"));
                 f.setData_vencimento(result.getString("data_vencimento"));
                 f.setEstado(result.getBoolean("estado"));
+                f.setTotal(result.getDouble("total"));
                 DocumentosComerciais d = new DocumentosComerciais();
                 d.setNome_doc(result.getString("Documento"));
                 f.setDocComerciais(d);
@@ -196,12 +241,10 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     public ObservableList<Factura> getFacturaToPagamentos(int id) {
         ObservableList<Factura> lista = FXCollections.observableArrayList();
         try {
-            sql = "SELECT f.numero AS numero_factura, f.data_criacao, f.data_vencimento, f.estado, "
+            sql = "SELECT f.numero AS numero_factura, f.data_criacao, f.data_vencimento, f.estado, f.total,"
                     + "       CONCAT(doc.sigla, ' - ', doc.nome) AS Documento, "
-                    
                     + "       (SELECT SUM(i.subtotal) FROM itemfactura i "
                     + "        WHERE i.fk_numero = f.numero) AS total_fatura, "
-                    
                     + "       (SELECT SUM(t.valor) FROM transacoes t "
                     + "        WHERE t.fk_numero = f.numero) AS valor_transacoes "
                     + "FROM factura f "
@@ -219,6 +262,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 f.setData_criacao(result.getString("data_criacao"));
                 f.setData_vencimento(result.getString("data_vencimento"));
                 f.setEstado(result.getBoolean("estado"));
+                f.setTotal(result.getDouble("total"));
                 DocumentosComerciais d = new DocumentosComerciais();
                 d.setNome_doc(result.getString("Documento"));
                 f.setDocComerciais(d);

@@ -208,8 +208,9 @@ public class PagamentoController implements Initializable {
                 -> new SimpleStringProperty(cellData.getValue().getDocComerciais().getNome_doc()));
         dataemissao.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
         datavencimento.setCellValueFactory(new PropertyValueFactory<>("data_vencimento"));
-        total.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getItem().getSubtotal()) + " Mt"));
+        total.setCellValueFactory(new PropertyValueFactory<>("total"));
+//        total.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getItem().getSubtotal()) + " Mt"));
         valorpago.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getTransacoes().getValor()) + " Mt"));
         valorporpagar.setCellValueFactory(cellData

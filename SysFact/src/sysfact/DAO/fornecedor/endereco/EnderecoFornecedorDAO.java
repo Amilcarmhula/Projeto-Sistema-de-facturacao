@@ -34,8 +34,8 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
     public void addEntity(EnderecoFornecedor t) {
         try {
             sql = "insert into endereco_fornecedor (provincia,cidade,bairro,avenida,"
-                    + "rua,codigo_postal,numero, tipo, fk_id_fornecedor, fk_id_usuario)"
-                    + " value (?,?,?,?,?,?,?,?,?,?)";
+                    + "rua,codigo_postal,numero, fk_id_fornecedor, fk_id_usuario)"
+                    + " value (?,?,?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -46,9 +46,8 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
             ps.setString(5, t.getRua_forn());
             ps.setInt(6, t.getCodigoPostal_forn());
             ps.setInt(7, t.getNumero_forn());
-            ps.setString(8, t.getTipo_forn());
-            ps.setInt(9, t.getFornecedor().getId());
-            ps.setInt(10, t.getUsuario().getId());
+            ps.setInt(8, t.getFornecedor().getId());
+            ps.setInt(9, t.getUsuario().getId());
 
             ps.execute();
             ps.close();
@@ -62,7 +61,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
     public void updateEntityByID(EnderecoFornecedor t, int id) {
         try {
             sql = "update endereco_fornecedor set provincia=?,cidade=?,bairro=?,avenida=?,"
-                    + "rua=?,codigo_postal=?,numero=?, tipo=?,fk_id_usuario=? where id=?";
+                    + "rua=?,codigo_postal=?,numero=?,fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getProvincia_forn());
@@ -72,9 +71,8 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
             ps.setString(5, t.getRua_forn());
             ps.setInt(6, t.getCodigoPostal_forn());
             ps.setInt(7, t.getNumero_forn());
-            ps.setString(8, t.getTipo_forn());
-            ps.setInt(9, t.getUsuario().getId());
-            ps.setInt(10, id);
+            ps.setInt(8, t.getUsuario().getId());
+            ps.setInt(9, id);
 
             ps.execute();
             ps.close();
@@ -101,7 +99,6 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
                 c.setRua_forn(result.getString("rua"));
                 c.setCodigoPostal_forn(result.getInt("codigo_postal"));
                 c.setNumero_forn(result.getInt("numero"));
-                c.setTipo_forn(result.getString("tipo"));
                 lista.add(c);
             }
             result.close();
@@ -129,7 +126,6 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
                 c.setRua_forn(result.getString("rua"));
                 c.setCodigoPostal_forn(result.getInt("codigo_postal"));
                 c.setNumero_forn(result.getInt("numero"));
-                c.setTipo_forn(result.getString("tipo"));
                 lista.add(c);
             }
             result.close();

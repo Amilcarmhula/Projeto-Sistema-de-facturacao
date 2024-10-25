@@ -3,12 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/model/contacorrente/ContaCorrente.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/service/contacorrente/ServiceContaCorrente.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/views/dashboard/DashboardController.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/dao/transacoes/TransacaoDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/dao/contacorrente/ContaCorrenteDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/service/caixa/ServiceCaixa.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/dao/caixa/CaixaDAO.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/SysFact/src/sysfact/service/cliente/ServiceCliente.java</file>
         </group>
     </open-files>
 </project-private>

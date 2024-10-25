@@ -14,6 +14,7 @@ import sysfact.model.vendas.factura.Factura;
 public interface FacturaDAOImpl<T> {
     
     void addEntity(T x);
+    T getFactura(String numero);
     T getFacturaData(String factura);
     ObservableList<T> getFacturaToDashboard();
     ObservableList<T> getFacturaToPagamentos(int id);

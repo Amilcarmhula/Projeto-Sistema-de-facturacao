@@ -35,7 +35,7 @@ public class ServiceEndereco {
 
     public void registaEndereco(String avenida, String bairro, String cidade,
             Integer postalCode, Integer numero, String provincia, String rua,
-            String tipo, Integer id_arm, Usuario user) {
+            Integer id_arm, Usuario user) {
         setOpsSuccess(false);
         if (avenida == null || avenida.isEmpty()) {
             showErroNotification("Erro", "Avenida nao pode ser nulo! sera introduzida uma avenida padrao.");
@@ -64,10 +64,6 @@ public class ServiceEndereco {
         if (rua == null || rua.isEmpty()) {
             showErroNotification("Erro", "Rua nao pode ser nula. Sere criada uma rua padrao!");
             rua = "Dos Mocambicanos";
-        }
-        if (tipo == null || tipo.isEmpty()) {
-            showErroNotification("Erro", "Tipo de endereco nao pode ser nulo. selecione um tipo.");
-            return;
         }
         if (id_arm == null || id_arm == 0) {
             showErroNotification("Erro", "Armazem nao selecionado!");
@@ -84,7 +80,6 @@ public class ServiceEndereco {
         x.setNumero_arm(numero);
         x.setProvincia_arm(provincia);
         x.setRua_arm(rua);
-        x.setTipo_arm(tipo);
         x.setUsuario(user);
         x.setArmazem(a);
 
@@ -96,7 +91,7 @@ public class ServiceEndereco {
 
     public void actualizaEndereco(String avenida, String bairro, String cidade,
             Integer postalCode, Integer numero, String provincia, String rua,
-            String tipo, Integer id, Usuario user) {
+            Integer id, Usuario user) {
         setOpsSuccess(false);
         if (avenida == null || avenida.isEmpty()) {
             showErroNotification("Erro", "Avenida nao pode ser nulo! sera introduzida uma avenida padrao.");
@@ -126,10 +121,6 @@ public class ServiceEndereco {
             showErroNotification("Erro", "Rua nao pode ser nula. Sere criada uma rua padrao!");
             rua = "Dos Mocambicanos";
         }
-        if (tipo == null || tipo.isEmpty()) {
-            showErroNotification("Erro", "Tipo de endereco nao pode ser nulo. selecione um tipo.");
-            return;
-        }
         if (id == null || id == 0) {
             showErroNotification("Erro", "Armazem nao selecionado!");
             return;
@@ -143,7 +134,6 @@ public class ServiceEndereco {
         x.setNumero_arm(numero);
         x.setProvincia_arm(provincia);
         x.setRua_arm(rua);
-        x.setTipo_arm(tipo);
         x.setUsuario(user);
 
         if (enderecoArmazemDao.updateEntityByID(x, id)) {

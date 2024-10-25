@@ -63,8 +63,9 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        
-        System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        Factura f =  new FacturaDAO().getFactura("2024-830/2");
+        System.out.println(f.getTotal());
+        System.out.println(f.getTransacoes().getValor());
         
 //        UnidadeMedida x = new UnidadeMedida();
 //        UnidadeMedidaDAO z = new UnidadeMedidaDAO();

@@ -8,6 +8,8 @@ insert into transacoes(data_pagamento,valor,tipo_transacao,
 
 select * from transacoes;
 select * from factura;
+select * from caixa;
+select * from contacorrente;
 
 -- Primeiro metodo pronto
 SELECT 
@@ -16,15 +18,14 @@ SELECT
 	LEFT JOIN itemfactura i ON i.fk_numero = f.numero 
 	where f.numero = '2024-615/2';
     
-SELECT f.numero, f.estado,
-	 	(SELECT SUM(i.subtotal) FROM itemfactura i WHERE i.fk_numero = f.numero) AS total_fatura, 
+SELECT f.numero, f.data_criacao, f.data_vencimento, f.total, f.estado, f.fk_id_empresa, f.fk_id_cliente, f.fk_id_usuario, f.fk_id_doc,
 		(SELECT SUM(t.valor) FROM transacoes t WHERE t.fk_numero = f.numero) AS totalPago 
 		FROM factura f 
-        where f.numero = '2024-162/2';
+        where f.numero = '2024-830/2';
 
 SELECT (SELECT SUM(i.subtotal) FROM itemfactura i WHERE i.fk_numero = f.numero) AS total_fatura
 		FROM factura f 
-        where f.numero = '2024-162/2';
+        where f.numero = '2024-315/2';
 
 SELECT (SELECT SUM(t.valor) FROM transacoes t WHERE t.fk_numero = f.numero) AS totalPago 
 		FROM factura f 

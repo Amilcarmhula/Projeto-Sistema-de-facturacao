@@ -31,6 +31,7 @@ public class Factura {
     private String numero_fac;
     private String data_criacao;
     private String data_vencimento;
+    private double total;
     private DocumentosComerciais docComerciais;
     private List<Item> itens;
     private Item item;
@@ -45,7 +46,7 @@ public class Factura {
     }
 
     public Factura(String numero, String data_vencimento, List<Item> itens,
-            boolean estado, Empresa empresa, Cliente cliente, DocumentosComerciais docComerciais, Transacao transacoes) {
+            boolean estado, Empresa empresa, Cliente cliente, DocumentosComerciais docComerciais, Transacao transacoes, double total) {
         super();
         this.numero_fac = numero;
         this.data_vencimento = data_vencimento;
@@ -55,6 +56,7 @@ public class Factura {
         this.cliente = cliente;
         this.docComerciais = docComerciais;
         this.transacoes = transacoes;
+        this.total = total;
     }
 
     public void criaRelatorio(String numeroFactura) throws SQLException {
@@ -142,6 +144,14 @@ public class Factura {
 
     public void setTransacoes(Transacao transacoes) {
         this.transacoes = transacoes;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     public Cliente getCliente() {

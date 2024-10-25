@@ -32,11 +32,13 @@ public class ServiceFactura {
     private final ItemDAO itemDao;
     private final ClienteDAO clienteDao;
     private boolean estado = false;
+    private Factura factura;
 
     public ServiceFactura() throws SQLException {
         this.facturaDao = new FacturaDAO();
         this.itemDao = new ItemDAO();
         this.clienteDao = new ClienteDAO();
+        this.factura = new Factura();
     }
 
     public boolean isEstado() {
@@ -47,7 +49,7 @@ public class ServiceFactura {
         this.estado = estado;
     }
 
-    public void criaFactura(String numero, String dataCriacao, String dataVencimento,
+    public void criaFactura(String numero, String dataCriacao, String dataVencimento, Double total,
             DocumentosComerciais doc, Integer cli, Empresa emp, Usuario user, List<Item> itens) throws SQLException {
         Cliente cliente;
         if (numero == null || numero.isEmpty()) {
@@ -72,20 +74,25 @@ public class ServiceFactura {
         f.setNumero_fac(numero);
         f.setData_criacao(dataCriacao);
         f.setData_vencimento(dataVencimento);
+        f.setTotal(total);
         f.setDocComerciais(doc);
         f.setCliente(cliente);
         f.setEmpresa(emp);
         f.setUsuario(user);
         ServiceItem serviceItem = new ServiceItem(itemDao);
-        try {
+        
             facturaDao.addEntity(f);
             serviceItem.registaItens(itens);
-            f.criaRelatorio(numero);
+            
             setEstado(true);
-        } catch (SQLException e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao emitir factura!");
-        }
-
+    }
+    
+    public void geraRelatorio(String numero) throws SQLException{
+        factura.criaRelatorio(numero);
+    }
+    
+    public Factura consultaFactura(String numero) {
+        return facturaDao.getFactura(numero);
     }
     
     public ObservableList<Factura> exibeFactura() {

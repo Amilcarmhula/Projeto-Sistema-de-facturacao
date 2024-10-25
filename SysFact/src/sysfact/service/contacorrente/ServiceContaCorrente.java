@@ -27,7 +27,10 @@ public class ServiceContaCorrente {
     public void setOpsSuccess(boolean opsSuccess) {
         this.opsSuccess = opsSuccess;
     }
-    public ContaCorrente consultaContaCorrente(){
-        return contaCorrenteDao.getLastEntity();
+    public double consultaContaCorrente(){
+        if(contaCorrenteDao.getLastEntity() != null){
+           return contaCorrenteDao.getLastEntity().getSaldo_actual();
+        }
+        return 0;
     }
 }

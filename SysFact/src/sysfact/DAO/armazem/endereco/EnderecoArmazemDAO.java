@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 import sysfact.model.armazem.endereco.EnderecoArmazem;
 import static sysfact.util.AlertUtilities.showDialog;
 
@@ -36,8 +35,8 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
         boolean isSuccess = false;
         try {
             sql = "insert into endereco_armazem (provincia,cidade,bairro,avenida,"
-                    + "rua,codigo_postal,numero, tipo, fk_id_armazem, fk_id_usuario)"
-                    + " value (?,?,?,?,?,?,?,?,?,?)";
+                    + "rua,codigo_postal,numero, fk_id_armazem, fk_id_usuario)"
+                    + " value (?,?,?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -48,9 +47,8 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             ps.setString(5, t.getRua_arm());
             ps.setInt(6, t.getCodigoPostal_arm());
             ps.setInt(7, t.getNumero_arm());
-            ps.setString(8, t.getTipo_arm());
-            ps.setInt(9, t.getArmazem().getId());
-            ps.setInt(10, t.getUsuario().getId());
+            ps.setInt(8, t.getArmazem().getId());
+            ps.setInt(9, t.getUsuario().getId());
 
             // Usando executeUpdate para verificar se uma linha foi inserida
             int rowsAffected = ps.executeUpdate();
@@ -79,7 +77,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
         boolean isSuccess = false;
         try {
             sql = "update endereco_armazem set provincia=?,cidade=?,bairro=?,avenida=?,"
-                    + "rua=?,codigo_postal=?,numero=?, tipo=?,fk_id_usuario=? where id=?";
+                    + "rua=?,codigo_postal=?,numero=?, fk_id_usuario=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getProvincia_arm());
@@ -89,9 +87,8 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             ps.setString(5, t.getRua_arm());
             ps.setInt(6, t.getCodigoPostal_arm());
             ps.setInt(7, t.getNumero_arm());
-            ps.setString(8, t.getTipo_arm());
-            ps.setInt(9, t.getUsuario().getId());
-            ps.setInt(10, id);
+            ps.setInt(8, t.getUsuario().getId());
+            ps.setInt(9, id);
 
             // Usando executeUpdate para verificar se uma linha foi inserida
             int rowsAffected = ps.executeUpdate();
@@ -131,7 +128,6 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
                 c.setRua_arm(result.getString("rua"));
                 c.setCodigoPostal_arm(result.getInt("codigo_postal"));
                 c.setNumero_arm(result.getInt("numero"));
-                c.setTipo_arm(result.getString("tipo"));
                 lista.add(c);
             }
             result.close();
@@ -160,7 +156,6 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
                 c.setRua_arm(result.getString("rua"));
                 c.setCodigoPostal_arm(result.getInt("codigo_postal"));
                 c.setNumero_arm(result.getInt("numero"));
-                c.setTipo_arm(result.getString("tipo"));
                 lista.add(c);
             }
             result.close();

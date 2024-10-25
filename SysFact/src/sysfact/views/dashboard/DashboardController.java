@@ -390,8 +390,8 @@ public class DashboardController implements Initializable {
     public void showTotalInvoicePaid() throws SQLException {
         ServiceCaixa sc = new ServiceCaixa();
         ServiceContaCorrente scc = new ServiceContaCorrente();
-        labTotalCaixa.setText(String.format("%.2f", sc.consultaCaixa().getSaldo_actual()) + " Mt");
-        labTotalContaCorrente.setText(String.format("%.2f", scc.consultaContaCorrente().getSaldo_actual()) + " Mt");
+        labTotalCaixa.setText(String.format("%.2f", sc.consultaCaixa()) + " Mt");
+        labTotalContaCorrente.setText(String.format("%.2f", scc.consultaContaCorrente()) + " Mt");
     }
 
     public void selectedComboBox() throws SQLException {

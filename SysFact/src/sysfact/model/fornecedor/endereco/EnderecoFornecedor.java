@@ -25,12 +25,11 @@ public class EnderecoFornecedor{
     private String rua_forn;
     private int codigoPostal_forn;
     private int numero_forn;
-    private String tipo_forn;
 
     public EnderecoFornecedor() {
     }
 
-    public EnderecoFornecedor(Fornecedor fornecedor, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
+    public EnderecoFornecedor(Fornecedor fornecedor, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero) {
         this.fornecedor = fornecedor;
         this.provincia_forn = provincia;
         this.cidade_forn = cidade;
@@ -39,7 +38,6 @@ public class EnderecoFornecedor{
         this.rua_forn = rua;
         this.codigoPostal_forn = codigoPostal;
         this.numero_forn = numero;
-        this.tipo_forn = tipo;
     }
 
     public int getId() {
@@ -128,16 +126,6 @@ public class EnderecoFornecedor{
 
     public void setNumero_forn(int numero_forn) {
         this.numero_forn = numero_forn;
-    }
-
-    public String getTipo_forn() {
-        return tipo_forn;
-    }
-
-    public void setTipo_forn(String tipo_forn) {
-        this.tipo_forn = tipo_forn;
-    }
-
-   
+    } 
     
 }

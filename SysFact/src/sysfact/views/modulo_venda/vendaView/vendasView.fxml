@@ -10,6 +10,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -163,7 +164,7 @@
                   </Label>
                </children>
             </AnchorPane>
-            <Button fx:id="btnCancelaFactura" layoutX="235.0" layoutY="282.0" mnemonicParsing="false" onAction="#resetFactura" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="52.0">
+            <Button fx:id="btnCancelaFactura" layoutX="235.0" layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="52.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -193,54 +194,82 @@
             </Button>
             <AnchorPane layoutX="35.0" layoutY="123.0">
                <children>
-                  <VBox prefHeight="154.0" prefWidth="122.0">
+                  <HBox>
                      <children>
-                        <Label text="Sub-Total:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label text="Taxas:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label text="Desconto:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label text="Total Geral:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
+                        <VBox prefHeight="154.0" prefWidth="122.0">
+                           <children>
+                              <Label text="Sub-Total:" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Taxas:" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Desconto:" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Total Geral:" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="154.0" prefWidth="155.0">
+                           <children>
+                              <Label fx:id="labSubtotal" text="0.0" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="labTaxas" text="0.0" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="labDesconto" text="0.0" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="labTotalGeral" text="0.0" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="154.0" prefWidth="51.0">
+                           <children>
+                              <Label text="Mt" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Mt" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Mt" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Mt" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
                      </children>
-                  </VBox>
-                  <VBox layoutX="142.0" prefHeight="154.0" prefWidth="190.0">
-                     <children>
-                        <Label fx:id="labSubtotal" text="0.0" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labTaxas" text="0.0" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labDesconto" text="0.0" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labTotalGeral" text="0.0" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
+                  </HBox>
                </children>
             </AnchorPane>
             <ComboBox fx:id="combTipoDoc" layoutX="235.0" layoutY="84.0" onAction="#selecionaFactura" prefHeight="25.0" prefWidth="180.0" />

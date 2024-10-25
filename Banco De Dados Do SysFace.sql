@@ -4,6 +4,58 @@
 
 use _sysface;
 
+--  Banco de dados da empresa no sistema Sysface
+ create table empresa(
+	id integer primary key auto_increment,
+    nome varchar(100) not null,
+    razaosocial varchar(100),
+    nuit integer,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+create table endereco_empresa(
+	id integer primary key auto_increment,
+    provincia varchar(100),
+    cidade varchar(100),
+    bairro varchar(100),
+    avenida varchar(100),
+    rua varchar(50),
+    codigo_postal integer,
+    numero integer not null,
+    tipo varchar(10),
+    fk_id_empresa integer not null,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_empresa) references empresa(id)
+);
+create table contacto_empresa(
+	id integer primary key auto_increment,
+    contacto varchar(20) not null,
+	email varchar(50) unique,
+    website varchar(50) unique,
+    fk_id_empresa integer not null,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_empresa) references empresa(id)
+);
+ create table contabancaria(
+	id integer primary key auto_increment,
+    nome_banco varchar(50) not null,
+    numero varchar(100),
+    nib varchar(100),
+    nuib varchar(100),
+    fk_id_empresa integer not null,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_empresa) references empresa(id)
+);
+    -- Informacao bases de uma empresa
+INSERT INTO empresa (nome, razaosocial, nuit) VALUES
+('JM-Tecnologias', 'JM-Tecnologias Sociedade Unipessoal, E.I', 122564800);
+INSERT INTO endereco_empresa (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_empresa) VALUES
+('Maputo', 'Matola', 'Patrice Lumumba', '24 de Julho', '21376', 1112, 211, 'Facturação', 1);
+INSERT INTO contacto_empresa (contacto, email, website, fk_id_empresa)
+VALUES 
+    ('+258879201993', 'infol@jm-tecnologias.co.mz', 'www.jm-tecnologias.co.mz', 1);
+INSERT INTO contabancaria (nome_banco, numero, nib, nuib, fk_id_empresa) VALUES
+('Banco Comercial e de Investimentos', '13945108110001', '000800003945108110195', '123456789', 1);
+
 create table nivel_acesso(
 	id integer primary key auto_increment,
     descricao varchar(50) not null
@@ -51,10 +103,10 @@ INSERT INTO permissao (tipo, descricao) VALUES
 ('1110', 'Create, Read, Update'),
 ('1111', 'Todas as permissões (CRUD completo)');
 INSERT INTO usuario (nome, email, usuario, senha, estado, fk_nivel_acesso, fk_permissao)
-VALUES
-('Amilcar Mula', 'amilcar.mula@example.com', 'root', 'senha123', 1, 1, 15),  -- Permissão: Create, Read, Update
-('Maria Oliveira', 'maria.oliveira@example.com', 'mariao', 'senha123', 1, 2, 1),  -- Permissão: Create
-('Carlos Santos', 'carlos.santos@example.com', 'carloss', 'senha123', 1, 3, 1);  -- Permissão: Read, Update, Delete
+VALUE
+('Amilcar Mula', 'amilcar.mula@example.com', 'root', 'senha123', 1, 1, 15);  -- Permissão: Create, Read, Update
+-- ('Maria Oliveira', 'maria.oliveira@example.com', 'mariao', 'senha123', 1, 2, 1),  -- Permissão: Create
+-- ('Carlos Santos', 'carlos.santos@example.com', 'carloss', 'senha123', 1, 3, 1);  -- Permissão: Read, Update, Delete
  
  
  create table cliente(
@@ -107,6 +159,8 @@ create table fornecedor(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_usuario) references usuario(id)
 );
+INSERT INTO fornecedor (tipo, razaosocial, nuit, fk_id_usuario) VALUE
+('Pessoa Jurídica', 'Fornecedor Padrao.LDA', 100000001, (Select id from usuario order by id DESC LIMIT 1));
 create table endereco_fornecedor(
 	id integer primary key auto_increment,
     provincia varchar(50),
@@ -116,13 +170,14 @@ create table endereco_fornecedor(
     rua varchar(30),
     codigo_postal integer,
     numero integer not null,
-    tipo varchar(10),
 	fk_id_fornecedor integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_fornecedor) references fornecedor(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
+INSERT INTO endereco_fornecedor (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, fk_id_fornecedor,fk_id_usuario) 
+SELECT provincia, cidade, bairro, avenida, rua, codigo_postal, numero,(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM endereco_empresa order by id DESC LIMIT 1;
 create table contacto_fornecedor(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
@@ -135,6 +190,8 @@ create table contacto_fornecedor(
     foreign key (fk_id_fornecedor) references fornecedor(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
+INSERT INTO contacto_fornecedor (pessoa_de_contacto, contacto, email, website, fk_id_fornecedor,fk_id_usuario) 
+SELECT 'Fornecedor Padrao',contacto, email,website,(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM contacto_empresa order by id DESC LIMIT 1;
 
 create table armazem(
 	id integer primary key auto_increment,
@@ -144,6 +201,9 @@ create table armazem(
     estado boolean default 1 not null, -- Ativo/Inativo.
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+INSERT INTO armazem (nome, tipo, descricao, estado) VALUE
+('Armazém Central', 'Central', 'Armazem Principalo', 1);
+
 create table endereco_armazem(
 	id integer primary key auto_increment,
     provincia varchar(50),
@@ -153,13 +213,16 @@ create table endereco_armazem(
     rua varchar(30),
     codigo_postal integer,
     numero integer not null,
-    tipo varchar(10),
 	fk_id_armazem integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
+INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, fk_id_armazem,fk_id_usuario) 
+SELECT provincia, cidade, bairro, avenida, rua, codigo_postal, numero,(Select id from armazem order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM endereco_empresa order by id DESC LIMIT 1;
+
+
 create table contacto_armazem(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
@@ -171,6 +234,8 @@ create table contacto_armazem(
     foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
+INSERT INTO contacto_armazem (pessoa_de_contacto, contacto, email, fk_id_armazem,fk_id_usuario) 
+SELECT 'Gerente de Armazam',contacto, email,(Select id from armazem order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM contacto_empresa order by id DESC LIMIT 1;
 
 create table categoria(
 	id integer primary key auto_increment,
@@ -182,6 +247,8 @@ create table categoria(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     check(tipo in('Produtos','Serviços'))
 );
+INSERT INTO categoria (tipo, grupo, subgrupo, familia, descricao) VALUE
+('Produtos', 'Padrao', 'SubPadrao', 'Categoria Padrao', 'Categoria padrao para qualquer produto');
 create table unidade_medida(
 	id integer primary key auto_increment,
     identificador varchar(50) not null,
@@ -189,6 +256,9 @@ create table unidade_medida(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ); 
+INSERT INTO unidade_medida (identificador, sigla, descricao)
+VALUE 
+('Unidade', 'Un', 'Unidade padrao');
 create table taxa_imposto(
 	id integer primary key auto_increment,
     identificador varchar(50) not null,
@@ -196,6 +266,8 @@ create table taxa_imposto(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUE
+('Isento', 0.00, 'Produtos isentos de imposto');
 create table desconto(
 	id integer primary key auto_increment,
     identificador varchar(100) not null,
@@ -203,16 +275,8 @@ create table desconto(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-INSERT INTO desconto (identificador, percentagem, descricao) VALUES
-('Isento', 0.0, 'Desconto aplicado em produtos sem desconto'),
-('Desconto de Lançamento', 0.1, 'Desconto aplicado em novos produtos no lançamento'),
-('Desconto de Fim de Ano', 0.155, 'Desconto especial para vendas de final de ano'),
-('Desconto por Quantidade', 0.575, 'Desconto aplicado para compras em grandes quantidades'),
-('Desconto Promocional', 0.2, 'Desconto aplicado em promoções especiais por tempo limitado'),
-('Desconto Fidelidade', 0.8, 'Desconto para clientes fiéis com mais de 1 ano de compras'),
-('Desconto Black Friday', 0.3, 'Desconto massivo durante a Black Friday'),
-('Desconto de Parceria', 0.125, 'Desconto exclusivo para parceiros comerciais'),
-('Desconto de Natal', 0.1825, 'Desconto sazonal para o período de Natal');
+INSERT INTO desconto (identificador, percentagem, descricao) VALUE
+('Isento', 0.0, 'Desconto aplicado em produtos sem desconto');
 
 
 create table produto(
@@ -230,7 +294,8 @@ create table produto(
     foreign key (fk_id_categoria) references categoria(id),
     foreign key (fk_id_unidade_medida) references unidade_medida(id)
 );
-
+INSERT INTO produto (nome, codigo_barra, descricao, contole_stock,fk_id_categoria,fk_id_unidade_medida,fk_id_taxa_imposto) 
+SELECT 'Produto Padrao','1000000000001', 'Produto Padrao',1,(Select id from categoria order by id DESC LIMIT 1),(Select id from unidade_medida order by id DESC LIMIT 1),(Select id from taxa_imposto order by id DESC LIMIT 1);
 
 
 CREATE TABLE precovenda (
@@ -314,6 +379,8 @@ create table stock(
     foreign key(fk_id_armazem) references armazem(id)
 );
 
+
+
 DELIMITER //
 
 CREATE TRIGGER trigger_update_saldostock
@@ -347,59 +414,10 @@ BEGIN
 END//
 
 DELIMITER ;
+INSERT INTO produto_fornecido (quantidade, data_fornecida, custo, fk_id_armazem,fk_id_produto,fk_id_fornecedor,fk_id_usuario) 
+SELECT 0,current_date(), 0.00, (Select id from armazem order by id DESC LIMIT 1),(Select id from produto order by id DESC LIMIT 1),(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1);
 
 
---  Banco de dados da empresa no sistema Sysface
- create table empresa(
-	id integer primary key auto_increment,
-    nome varchar(100) not null,
-    razaosocial varchar(100),
-    nuit integer,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-create table endereco_empresa(
-	id integer primary key auto_increment,
-    provincia varchar(100),
-    cidade varchar(100),
-    bairro varchar(100),
-    avenida varchar(100),
-    rua varchar(50),
-    codigo_postal integer,
-    numero integer not null,
-    tipo varchar(10),
-    fk_id_empresa integer not null,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_empresa) references empresa(id)
-);
-create table contacto_empresa(
-	id integer primary key auto_increment,
-    contacto varchar(20) not null,
-	email varchar(50) unique,
-    website varchar(50) unique,
-    fk_id_empresa integer not null,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_empresa) references empresa(id)
-);
- create table contabancaria(
-	id integer primary key auto_increment,
-    nome_banco varchar(50) not null,
-    numero varchar(100),
-    nib varchar(100),
-    nuib varchar(100),
-    fk_id_empresa integer not null,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_empresa) references empresa(id)
-);
-    -- Informacao bases de uma empresa
-INSERT INTO empresa (nome, razaosocial, nuit) VALUES
-('JM-Tecnologias', 'JM-Tecnologias Sociedade Unipessoal, E.I', 122564800);
-INSERT INTO endereco_empresa (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_empresa) VALUES
-('Maputo', 'Matola', 'Patrice Lumumba', '24 de Julho', '21376', 1112, 211, 'Facturação', 1);
-INSERT INTO contacto_empresa (contacto, email, website, fk_id_empresa)
-VALUES 
-    ('+258879201993', 'infol@jm-tecnologias.co.mz', 'www.jm-tecnologias.co.mz', 1);
-INSERT INTO contabancaria (nome_banco, numero, nib, nuib, fk_id_empresa) VALUES
-('Banco Comercial e de Investimentos', '13945108110001', '000800003945108110195', '123456789', 1);
 
 
 -- Armazena as siglas das facturas e o numero de dias uteis
@@ -426,6 +444,7 @@ CREATE TABLE factura (
     numero VARCHAR(20) PRIMARY KEY,
     data_criacao DATE,
     data_vencimento DATE NOT NULL,
+    total decimal(10,2) NOT NULL,
     estado BOOLEAN DEFAULT 0 NOT NULL,
     fk_id_empresa INTEGER NOT NULL,
     fk_id_cliente INTEGER NOT NULL,
@@ -436,7 +455,6 @@ CREATE TABLE factura (
     FOREIGN KEY (fk_id_usuario) REFERENCES usuario(id),
     FOREIGN KEY (fk_id_cliente) REFERENCES cliente(id)
 );
-
 
 create table itemfactura(
 	id integer primary key auto_increment,
@@ -464,28 +482,6 @@ create trigger trigger_registra_saida
         value ('Saída',new.data_adicao,new.quantidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
     end//
 delimiter ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 create table metodo_pagamento(
 	id integer primary key auto_increment,
@@ -529,35 +525,6 @@ CREATE TABLE caixa (
     fk_id_transacoes integer not null,
     foreign key (fk_id_transacoes) references transacoes(id)
 );
--- delimiter //
--- create trigger _updateCaixa
--- 	after insert on transacoes
---     for each row
---     begin
--- 		DECLARE saldo_anterior DECIMAL(10, 2) DEFAULT 0;
-
---     -- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
---     IF NEW.fk_id_metodo_pagamento = 1 THEN
---         -- Tenta buscar o saldo atual da última linha da tabela caixa
---         SELECT saldo_atual INTO saldo_anterior
---         FROM caixa
---         ORDER BY id DESC LIMIT 1;
-
---         -- Se não encontrar saldo anterior, assume que o saldo inicial é 0
---         IF saldo_anterior IS NULL THEN
---             SET saldo_anterior = 0;
---         END IF;
-
---         -- Insere os valores na tabela caixa
---         INSERT INTO caixa (saldo_inicial, saldo_atual, fk_id_transacoes)
---         VALUES (
---             saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
---             saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
---             NEW.id                         -- FK da transação inserida
---         );
---     END IF;
--- 	end//
--- delimiter ;
 
 -- conta corrente
  create table contacorrente(
@@ -567,36 +534,7 @@ CREATE TABLE caixa (
     fk_id_transacoes integer not null,
     foreign key (fk_id_transacoes) references transacoes(id)
 );
--- delimiter //
--- create trigger _updateContacorrente
--- 	after insert on transacoes
---     for each row
---     begin
--- 		DECLARE saldo_anterior DECIMAL(10, 2) DEFAULT 0;
-
---     -- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
---     IF NEW.fk_id_metodo_pagamento <> 1 THEN
---         -- Tenta buscar o saldo atual da última linha da tabela caixa
---         SELECT saldo_atual INTO saldo_anterior
---         FROM contacorrente
---         ORDER BY id DESC LIMIT 1;
-
---         -- Se não encontrar saldo anterior, assume que o saldo inicial é 0
---         IF saldo_anterior IS NULL THEN
---             SET saldo_anterior = 0;
---         END IF;
-
---         -- Insere os valores na tabela caixa
---         INSERT INTO contacorrente (saldo_inicial, saldo_atual, fk_id_transacoes)
---         VALUES (
---             saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
---             saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
---             NEW.id                         -- FK da transação inserida
---         );
---     END IF;
--- 	end//
--- delimiter ;
-
+-- drop trigger _updateCaixa_ContaCorrente_Factura;
 delimiter //
 create trigger _updateCaixa_ContaCorrente_Factura
 	after insert on transacoes
@@ -614,7 +552,7 @@ create trigger _updateCaixa_ContaCorrente_Factura
 		FROM factura f 
         where f.numero = NEW.fk_numero;
         
-        IF total_factura <> total_pago THEN
+     --   IF total_factura <> total_pago THEN
 			-- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
             IF NEW.fk_id_metodo_pagamento = 1 THEN
 				-- Tenta buscar o saldo atual da última linha da tabela caixa
@@ -653,11 +591,11 @@ create trigger _updateCaixa_ContaCorrente_Factura
 					NEW.id                         -- FK da transação inserida
 					);				
             END IF;
-		ELSE 
+	-- 	ELSE 
 			IF total_factura = total_pago THEN
 				update factura set estado=1 where numero=NEW.fk_numero;
 			END IF;
-        END IF;
+  --      END IF;
 	end//
 delimiter ;
 

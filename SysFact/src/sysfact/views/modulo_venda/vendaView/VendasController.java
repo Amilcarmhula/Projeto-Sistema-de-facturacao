@@ -20,6 +20,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -154,7 +155,7 @@ public class VendasController implements Initializable {
     private ComboBox<String> combTipoDoc;
 
     private Map<Integer, Produto> mapaProdutos;
-    
+
     private Random randNum;
 
     public void getSearchCliente(MouseEvent mouseEvt) {
@@ -315,11 +316,10 @@ public class VendasController implements Initializable {
         if (txtQuantidade.getText() == null || txtQuantidade.getText().isEmpty()) {
 //            showErroNotification("Erro", "Quantidade nao informada!");
             qtd = 1;
-        }else{
+        } else {
             qtd = Integer.parseInt(txtQuantidade.getText());
         }
         int id = Integer.parseInt(txtID.getText());
-        
 
         Produto x = mapaProdutos.get(id);
         Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());
@@ -342,15 +342,24 @@ public class VendasController implements Initializable {
 
     }
 
-    public void criarFactura() throws SQLException {
+    public void criarFactura(ActionEvent evt) throws SQLException {
         int cli = Integer.parseInt(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
         DocumentosComerciais doc = mapaDocComercial.get(combTipoDoc.getValue());
 
         ServiceFactura service = new ServiceFactura();
         service.criaFactura(labNumeroFactura.getText(), labDataInicial.getText(),
-                labValidade.getText(), doc, cli, empresaData, userData, collectItens());
+                labValidade.getText(), Double.valueOf(labTotalGeral.getText()), doc, cli, empresaData, userData, collectItens());
+        //Se a factura for criada com sucesso, sereta os campos
         if (service.isEstado()) {
-            resetFactura();
+            //Armazena o numero da factura para usar na janela de pagamentos
+            if ("Fatura".equals(combTipoDoc.getValue()) || "Fatura Recibo".equals(combTipoDoc.getValue()) || "Fatura Simplificada".equals(combTipoDoc.getValue())) {
+                SysFact.setData(labNumeroFactura.getText());
+                geMiniPagamentoView(evt);
+                resetFactura();
+            }else{
+                service.geraRelatorio(labNumeroFactura.getText());
+                resetFactura();
+            }
         }
     }
 
@@ -390,10 +399,10 @@ public class VendasController implements Initializable {
             desc += item.getQuantidade() * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
             total = subtotal + taxa - desc;
         }
-        labSubtotal.setText(String.format("%.2f", subtotal) + " MZN");
-        labDesconto.setText(String.format("%.2f", desc) + " MZN");
-        labTaxas.setText(String.format("%.2f", taxa) + " MZN");
-        labTotalGeral.setText(String.format("%.2f", total) + " MZN");
+        labSubtotal.setText(String.format("%.2f", subtotal));
+        labDesconto.setText(String.format("%.2f", desc));
+        labTaxas.setText(String.format("%.2f", taxa));
+        labTotalGeral.setText(String.format("%.2f", total));
     }
 
     public void removeItens() {
@@ -425,6 +434,15 @@ public class VendasController implements Initializable {
         labTotalGeral.setText("");
         labNumeroFactura.setText("");
         labValidade.setText("");
+    }
+
+    public void geMiniPagamentoView(ActionEvent evt) {
+//        SysFact.setData("2024-1022/3");
+//        if (evt.getClickCount() == 1) {
+        String path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "MiniPagamentoView.fxml");
+        LoadAndMoveUtilities.showAsPopUP(evt, null);
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
+//        }
     }
 
 }

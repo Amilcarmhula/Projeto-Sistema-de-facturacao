@@ -25,12 +25,11 @@ public class EnderecoArmazem{
     private String rua_arm;
     private int codigoPostal_arm;
     private int numero_arm;
-    private String tipo_arm;
 
     public EnderecoArmazem() {
     }
 
-    public EnderecoArmazem(Armazem armazem, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero, String tipo) {
+    public EnderecoArmazem(Armazem armazem, String provincia, String cidade, String bairro, String avenida, String rua, int codigoPostal, int numero) {
         this.armazem = armazem;
         this.provincia_arm = provincia;
         this.cidade_arm = cidade;
@@ -39,7 +38,6 @@ public class EnderecoArmazem{
         this.rua_arm = rua;
         this.codigoPostal_arm = codigoPostal;
         this.numero_arm = numero;
-        this.tipo_arm = tipo;
     }
 
     public int getId() {
@@ -128,14 +126,6 @@ public class EnderecoArmazem{
 
     public void setNumero_arm(int numero_arm) {
         this.numero_arm = numero_arm;
-    }
-
-    public String getTipo_arm() {
-        return tipo_arm;
-    }
-
-    public void setTipo_arm(String tipo_arm) {
-        this.tipo_arm = tipo_arm;
     }
 
     

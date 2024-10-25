@@ -62,8 +62,7 @@ public class AddFornecedorController implements Initializable {
     private ComboBox<String> combProvincia;
     @FXML
     private ComboBox<String> combTipoCliente;
-    @FXML
-    private ComboBox<String> combTipoEndereco;
+    
 
     @FXML
     private TableView<ContactoFornecedor> tabelaContacto;
@@ -82,8 +81,7 @@ public class AddFornecedorController implements Initializable {
 
     @FXML
     private TableView<EnderecoFornecedor> tabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoFornecedor, String> tipotabelaEndereco;
+    
     @FXML
     private TableColumn<EnderecoFornecedor, Integer> numerotabelaEndereco;
     @FXML
@@ -187,7 +185,6 @@ public class AddFornecedorController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.userData = SysFact.getUserData();
         combTipoCliente.setItems(FXCollections.observableArrayList("Pessoa Física", "Jurídica"));
-        combTipoEndereco.setItems(FXCollections.observableArrayList("Facturação", "Envio"));
         combProvincia.setItems(FXCollections.observableArrayList(
                 "Maputo(Cidade)",
                 "Maputo(Provincia)",
@@ -262,7 +259,6 @@ public class AddFornecedorController implements Initializable {
         }
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo_forn"));
         provinciatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("provincia_forn"));
         cidadetabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("cidade_forn"));
         bairrotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("bairro_forn"));
@@ -417,7 +413,6 @@ public class AddFornecedorController implements Initializable {
         x.setNumero_forn(Integer.parseInt(txtNumeroEndereco.getText()));
         x.setProvincia_forn(combProvincia.getValue());
         x.setRua_forn(txtRua.getText());
-        x.setTipo_forn(combTipoEndereco.getValue());
         x.setUsuario(userData);
         try {
             EnderecoFornecedorDAO xDAO = new EnderecoFornecedorDAO();
@@ -481,7 +476,6 @@ public class AddFornecedorController implements Initializable {
         x.setNumero_forn(Integer.parseInt(txtNumeroEndereco.getText()));
         x.setProvincia_forn(combProvincia.getValue());
         x.setRua_forn(txtRua.getText());
-        x.setTipo_forn(combTipoEndereco.getValue());
         x.setUsuario(userData);
         try {
             EnderecoFornecedorDAO xDAO = new EnderecoFornecedorDAO();
@@ -523,7 +517,6 @@ public class AddFornecedorController implements Initializable {
             txtNumeroEndereco.setText(String.valueOf(x.getNumero_forn()));
             combProvincia.setValue(x.getProvincia_forn());
             txtRua.setText(x.getRua_forn());
-            combTipoEndereco.setValue(x.getTipo_forn());
             ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
         }
     }
@@ -562,7 +555,6 @@ public class AddFornecedorController implements Initializable {
         txtNumeroEndereco.setText("");
         combProvincia.setPromptText("Provincia");
         txtRua.setText("");
-        combTipoEndereco.setPromptText("Tipo de endereco");
         ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
 
     }

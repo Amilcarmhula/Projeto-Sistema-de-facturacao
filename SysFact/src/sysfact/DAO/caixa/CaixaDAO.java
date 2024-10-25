@@ -31,7 +31,7 @@ public class CaixaDAO implements CaixaDAOImpl<Caixa>{
     public Caixa getLastEntity() { 
         Caixa c = null;
         try {
-            sql = "SELECT id,saldo_inicial, saldo_atual,fk_id_transacoes FROM caixa ORDER BY id DESC LIMIT 1;";
+            sql = "SELECT id,saldo_inicial, saldo_atual,fk_id_transacoes FROM caixa ORDER BY id DESC LIMIT 1";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {

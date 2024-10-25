@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="523.0" prefWidth="470.0" styleClass="base-color" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sysfact.views.modulo_contabilidade.miniPagamentoView.MiniPagamentoViewController">
+   <children>
+      <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label alignment="CENTER" layoutX="247.0" layoutY="17.0" text="Processamento de pagamento" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="96.0" prefWidth="600.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <Label fx:id="labNumeroFactura" layoutX="198.0" layoutY="10.0" prefHeight="33.0" prefWidth="262.0" textFill="WHITE" AnchorPane.rightAnchor="37.0">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="combmetodoPagamento" layoutX="189.0" layoutY="52.0" prefHeight="25.0" prefWidth="277.0" promptText="Selecione o metodo de pagamento" styleClass="hand-efect" />
+            <Label fx:id="labTotal" alignment="CENTER_RIGHT" layoutY="48.0" prefHeight="33.0" prefWidth="140.0" textFill="WHITE">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Label>
+            <Label layoutX="144.0" layoutY="48.0" prefHeight="33.0" prefWidth="41.0" text="MT" textFill="WHITE">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Label>
+            <Label layoutX="19.0" layoutY="10.0" prefHeight="33.0" prefWidth="159.0" text="Factura Nr.:" textFill="WHITE" AnchorPane.leftAnchor="10.0">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="10.0" layoutY="146.0" prefHeight="355.0" prefWidth="466.0" style="-fx-border-color: #17b5c3; -fx-border-width: 0px 5px 5px 5px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="146.0">
+         <children>
+            <TextField fx:id="txtValorRecebido" layoutX="151.0" layoutY="14.0" prefHeight="70.0" prefWidth="305.0" style="-fx-font-size: 40;" styleClass="hand-efect" AnchorPane.rightAnchor="10.0" />
+            <Label layoutX="120.0" layoutY="94.0" prefHeight="44.0" prefWidth="115.0" text="Trocos:">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <Label fx:id="labTrocos" alignment="CENTER_RIGHT" layoutX="213.0" layoutY="94.0" prefHeight="44.0" prefWidth="239.0">
+               <font>
+                  <Font size="30.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="txtDescricao" layoutX="15.0" layoutY="146.0" prefHeight="26.0" prefWidth="447.0" promptText="Descricao" style="-fx-font-size: 20;" styleClass="hand-efect" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+            <Button layoutX="186.0" layoutY="231.0" mnemonicParsing="false" onAction="#processaPagamento" text="OK">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="primary-color" />
+                  <String fx:value="shadow-efect" />
+                  <String fx:value="hand-efect" />
+               </styleClass>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

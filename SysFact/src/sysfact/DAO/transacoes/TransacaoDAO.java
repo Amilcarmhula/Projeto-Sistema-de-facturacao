@@ -11,8 +11,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import sysfact.model.cliente.Cliente;
+import sysfact.model.cliente.contacto.ContactoCliente;
+import sysfact.model.cliente.endereco.EnderecoCliente;
+import sysfact.model.empresa.Empresa;
+import sysfact.model.empresa.conta.ContaBancaria;
+import sysfact.model.empresa.contacto.ContactoEmpresa;
+import sysfact.model.empresa.endereco.EnderecoEmpresa;
 import sysfact.model.metodo_pagamento.MetodoPagamento;
 import sysfact.model.transacao.Transacao;
+import sysfact.model.usuario.Usuario;
+import sysfact.model.vendas.documetos.DocumentosComerciais;
+import sysfact.model.vendas.factura.Factura;
 import sysfact.util.AlertUtilities;
 import static sysfact.util.AlertUtilities.showDialog;
 import sysfact.util.Conexao;
@@ -98,7 +108,6 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
             AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + e);
         }
         return lista;
-
     }
 
 }

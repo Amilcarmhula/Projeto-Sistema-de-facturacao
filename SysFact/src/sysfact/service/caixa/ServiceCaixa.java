@@ -27,7 +27,10 @@ public class ServiceCaixa {
     public void setOpsSuccess(boolean opsSuccess) {
         this.opsSuccess = opsSuccess;
     }
-    public Caixa consultaCaixa(){
-        return caixaDao.getLastEntity();
+    public double consultaCaixa(){
+        if(caixaDao.getLastEntity() != null){
+            return caixaDao.getLastEntity().getSaldo_actual();
+        }
+        return 0;
     }
 }

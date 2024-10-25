@@ -28,9 +28,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.util.Callback;
 import sysfact.SysFact;
-import sysfact.dao.cliente.ClienteDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.service.cliente.ServiceCliente;
 import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
@@ -42,6 +42,7 @@ import sysfact.util.LoadAndMoveUtilities;
 public class ClienteViewController implements Initializable {
 
     private Usuario userData;
+    private ServiceCliente serviceCliente;
 
     @FXML
     private TableColumn<Cliente, Integer> IDtabelaCliente;
@@ -91,6 +92,7 @@ public class ClienteViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.userData = SysFact.getUserData();
         try {
+            serviceCliente = new ServiceCliente();
             showClientes();
         } catch (SQLException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,9 +110,7 @@ public class ClienteViewController implements Initializable {
     private ObservableList<Cliente> listaClientes;
 
     public void showClientes() throws SQLException {
-
-        ClienteDAO aDAO = new ClienteDAO();
-        listaClientes = aDAO.listAllEntities();
+        listaClientes = serviceCliente.listaClienteView();
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -141,10 +141,8 @@ public class ClienteViewController implements Initializable {
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             Cliente x = tabelaCliente.getSelectionModel().getSelectedItem();
                             try {
-                                ClienteDAO xDAO = new ClienteDAO();
-                                xDAO.deleteEntity(x.getId());
+                                serviceCliente.excluirCliente(x.getId());
                                 showClientes();
-
                             } catch (SQLException ex) {
                                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -167,11 +165,11 @@ public class ClienteViewController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome_cli().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNome_cli().toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
-                } else if (x.getRazao_cli().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (x.getRazao_cli().toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
-                } else if (String.valueOf(x.getNuit_cli()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (String.valueOf(x.getNuit_cli()).toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
                 } else {
                     return false;

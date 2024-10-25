@@ -63,9 +63,10 @@ public class Teste {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        Factura f =  new FacturaDAO().getFactura("2024-830/2");
-        System.out.println(f.getTotal());
-        System.out.println(f.getTransacoes().getValor());
+        String numero = "";
+        Integer num;
+        num = Integer.parseInt(numero.equals("")?"0":numero);
+        System.out.println(num);
         
 //        UnidadeMedida x = new UnidadeMedida();
 //        UnidadeMedidaDAO z = new UnidadeMedidaDAO();

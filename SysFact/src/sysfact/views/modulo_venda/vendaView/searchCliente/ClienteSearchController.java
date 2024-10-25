@@ -114,7 +114,7 @@ public class ClienteSearchController implements Initializable {
     public void showClientes() throws SQLException {
 
         ClienteDAO aDAO = new ClienteDAO();
-        listaClientes = aDAO.listAllForSearch();
+        listaClientes = aDAO.listClientesForSearch();
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
 //        tipotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("tipo"));

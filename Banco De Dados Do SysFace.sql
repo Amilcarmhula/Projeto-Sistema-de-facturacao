@@ -140,7 +140,7 @@ create table contacto_cliente(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
     contacto varchar(20) not null,
-	email varchar(100) unique,
+	email varchar(100),
     website varchar(100),
     fk_id_cliente integer,
     fk_id_usuario integer not null,

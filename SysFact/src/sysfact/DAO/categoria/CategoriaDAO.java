@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 import sysfact.model.categoria.Categoria;
 import static sysfact.util.AlertUtilities.showDialog;
 import sysfact.util.Conexao;
@@ -121,7 +120,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar categoria: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }

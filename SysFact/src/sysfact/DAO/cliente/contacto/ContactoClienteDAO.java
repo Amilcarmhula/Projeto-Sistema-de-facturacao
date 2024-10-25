@@ -4,6 +4,7 @@
  */
 package sysfact.dao.cliente.contacto;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import sysfact.model.cliente.contacto.ContactoCliente;
+import static sysfact.util.AlertUtilities.showDialog;
 import sysfact.util.Conexao;
 
 /**
@@ -29,7 +31,8 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     }
 
     @Override
-    public void addEntity(ContactoCliente t) {
+    public boolean addEntity(ContactoCliente t) {
+        boolean isSuccess = false;
         try {
             sql = "insert into contacto_cliente (contacto, email,website,pessoa_de_contacto, "
                     + "fk_id_cliente, fk_id_usuario) value (?,?,?,?,?,?)";
@@ -43,16 +46,29 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             ps.setInt(5, t.getCliente().getId());
             ps.setInt(6, t.getUsuario().getId());
 
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Contacto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
+            int rowsAffected = ps.executeUpdate();
 
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(ContactoCliente t, int id) {
+    public boolean updateEntityByID(ContactoCliente t, int id) {
+        boolean isSuccess = false;
         try {
             sql = "update contacto_cliente set contacto=?, email=? ,website=? ,"
                     + "pessoa_de_contacto=?, fk_id_usuario=? where id=?";
@@ -65,12 +81,24 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             ps.setInt(5, t.getUsuario().getId());
             ps.setInt(6, id);
 
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Contacto: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -124,17 +152,30 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     }
 
     @Override
-    public void deleteEntity(ContactoCliente x) {
+    public boolean deleteEntity(ContactoCliente x) {
+        boolean isSuccess = false;
         try {
             sql = "delete from contacto_cliente where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x.getId());
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Contacto: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 }

@@ -13,21 +13,21 @@ import sysfact.model.cliente.Cliente;
  */
 public interface ClienteDAOImpl<T> {
 
-    void addEntity(T t);
+    boolean addEntity(T t);
 
-    void updateEntityByID(T t, int id);
+    boolean updateEntityByID(T t, int id);
 
     T getLastEntity();
 
     T getEntityByID(int id);
 
-    ObservableList<T> listAllEntities();
-    ObservableList<T> listAllForSearch();
-    T getClieneByID(int id);
+    ObservableList<T> listAllEntitiesToClienteView();
+    ObservableList<T> listClientesForSearch();
+    T getFullClieneByID(int id);
 //     getClinteFacturaData(String x);
 
 //    ObservableList<T> listAllEntitiesTypeFornecedor();
 //    void deleteEntityByROOT(int id);
-    void deleteEntity(int x);
+    boolean deleteEntity(int x);
     int CountClientes();
 }

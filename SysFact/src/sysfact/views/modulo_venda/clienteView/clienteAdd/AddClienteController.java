@@ -30,17 +30,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import sysfact.SysFact;
-import sysfact.dao.cliente.ClienteDAO;
 import sysfact.dao.cliente.contacto.ContactoClienteDAO;
 import sysfact.dao.cliente.endereco.EnderecoClienteDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
 import sysfact.model.usuario.Usuario;
+import sysfact.service.cliente.ServiceCliente;
+import sysfact.service.cliente.contacto.ServiceContacto;
 import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
-import sysfact.views.modulo_venda.clienteView.ClienteViewController;
-import sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController;
 
 /**
  * FXML Controller class
@@ -50,6 +49,8 @@ import sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchControlle
 public class AddClienteController implements Initializable {
 
     private Usuario userData;
+    private ServiceCliente serviceCliente;
+    private ServiceContacto serviceContacto;
 
     @FXML
     private Button btnAddCliente;
@@ -151,17 +152,16 @@ public class AddClienteController implements Initializable {
     @FXML
     private TextField txtSite;
 
-    
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
             LoadAndMoveUtilities.setEstadoStage(false);
-            LoadAndMoveUtilities.showStage(null,null);
+            LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } 
+        }
     }
 
     public void addORupdateContacto() throws SQLException {
@@ -193,7 +193,7 @@ public class AddClienteController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("Directorio: "+System.getProperty("user.dir"));
+
         this.userData = SysFact.getUserData();
         combTipoCliente.setItems(FXCollections.observableArrayList("Pessoa Física", "Jurídica"));
         combTipoEndereco.setItems(FXCollections.observableArrayList("Facturação", "Envio"));
@@ -219,6 +219,8 @@ public class AddClienteController implements Initializable {
         }
 
         try {
+            serviceCliente = new ServiceCliente();
+            serviceContacto = new ServiceContacto();
             showContactos();
             showClienteByID();
             showEndereco();
@@ -234,8 +236,7 @@ public class AddClienteController implements Initializable {
     Funcoes de Consultas
      */
     public void showCliente() throws SQLException {
-        ClienteDAO xDAO = new ClienteDAO();
-        Cliente c = xDAO.getLastEntity();
+        Cliente c = serviceCliente.getUtimoCliente();
         txtIDCliente.setText(String.valueOf(c.getId()));
         combTipoCliente.setValue(c.getTipo());
         txtNome.setText(c.getNome_cli());
@@ -245,9 +246,8 @@ public class AddClienteController implements Initializable {
     }
 
     public void showClienteByID() throws SQLException {
-        ClienteDAO xDAO = new ClienteDAO();
         if (!"".equals(txtIDCliente.getText())) {
-            Cliente c = xDAO.getEntityByID(Integer.parseInt(txtIDCliente.getText()));
+            Cliente c = serviceCliente.consultaClienteByID(Integer.valueOf(txtIDCliente.getText()));
             combTipoCliente.setValue(c.getTipo());
             txtNome.setText(c.getNome_cli());
             txtRazao.setText(c.getRazao_cli());
@@ -389,31 +389,25 @@ public class AddClienteController implements Initializable {
     Funcoes de Adicao de registros
      */
     public void addCliente() throws SQLException {
-        Cliente x = new Cliente();
-        x.setTipo(combTipoCliente.getValue());
-        x.setNome_cli(txtNome.getText());
-        x.setRazao_cli(txtRazao.getText());
-        x.setNuit_cli(Integer.parseInt(txtNuit.getText()));
-        x.setUsuario(userData);
-        ClienteDAO xDAO = new ClienteDAO();
-        xDAO.addEntity(x);
-        showCliente();
+        serviceCliente.registaCliente(txtNome.getText(), txtRazao.getText(),
+                combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText().equals("") ? "0" : txtNuit.getText()),
+                userData);
+        if (serviceCliente.isOpsSuccess()) {
+            showCliente();
+        }
+
     }
 
     public void addContacto() throws SQLException {
-        ContactoCliente x = new ContactoCliente();
-        x.setContacto_cli(txtContacto.getText());
-        x.setEmail_cli(txtEmail.getText());
-        x.setResponsavel(txtResponsavel.getText());
-        x.setWebsite_cli(txtSite.getText());
-        Cliente c = new Cliente();
-        c.setId(Integer.parseInt(txtIDCliente.getText()));
-        x.setCliente(c);
-        x.setUsuario(userData);
-        ContactoClienteDAO xDAO = new ContactoClienteDAO();
-        xDAO.addEntity(x);
-        showContactos();
-        restContacto();
+        Cliente c = serviceCliente.consultaClienteByID(Integer.parseInt(txtIDCliente.getText()));
+        serviceContacto.registaContacto(txtEmail.getText(), txtContacto.getText(),
+                txtSite.getText(), txtResponsavel.getText(), c, userData);
+
+        if (serviceContacto.isOpsSuccess()) {
+            serviceContacto.setOpsSuccess(false);
+            showContactos();
+            restContacto();
+        }
     }
 
     public void addEndereco() {
@@ -448,40 +442,24 @@ public class AddClienteController implements Initializable {
     /*
     Funcoes para Actualizar registros
      */
-    public void updateCliente() {
-        Alert alert;
-        Cliente x = new Cliente();
-        x.setTipo(combTipoCliente.getValue());
-        x.setNome_cli(txtNome.getText());
-        x.setRazao_cli(txtRazao.getText());
-        x.setNuit_cli(Integer.parseInt(txtNuit.getText()));
-        x.setUsuario(userData);
-        ClienteDAO xDAO;
-        try {
-            xDAO = new ClienteDAO();
-            xDAO.updateEntityByID(x, Integer.parseInt(txtIDCliente.getText()));
-            showContactos();
-        } catch (SQLException ex) {
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Mensagem de Erro.");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao actualizar cliente" + ex);
-            alert.showAndWait();
+    public void updateCliente() throws SQLException {
+        serviceCliente.actualizaCliente(Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText()), txtNome.getText(), txtRazao.getText(),
+                combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText().equals("") ? "0" : txtNuit.getText()),
+                userData);
+        if (serviceCliente.isOpsSuccess()) {
+            showCliente();
         }
-
     }
 
     public void updateContacto() throws SQLException {
-        ContactoCliente x = new ContactoCliente();
-        x.setContacto_cli(txtContacto.getText());
-        x.setEmail_cli(txtEmail.getText());
-        x.setResponsavel(txtResponsavel.getText());
-        x.setWebsite_cli(txtSite.getText());
-        x.setUsuario(userData);
-        ContactoClienteDAO xDAO = new ContactoClienteDAO();
-        xDAO.updateEntityByID(x, Integer.parseInt(txtIDContacto.getText()));
-        showContactos();
-        restContacto();
+        serviceContacto.actualizaContacto(Integer.valueOf(txtIDContacto.getText()),txtEmail.getText(), txtContacto.getText(),
+                txtSite.getText(), txtResponsavel.getText(), userData);
+
+        if (serviceContacto.isOpsSuccess()) {
+            serviceContacto.setOpsSuccess(false);
+            showContactos();
+            restContacto();
+        }
     }
 
     public void updateEndereco() {

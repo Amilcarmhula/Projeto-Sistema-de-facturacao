@@ -4,6 +4,7 @@
  */
 package sysfact.dao.cliente;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +19,7 @@ import javax.swing.JOptionPane;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
+import static sysfact.util.AlertUtilities.showDialog;
 import sysfact.util.Conexao;
 
 /**
@@ -35,7 +37,8 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     }
 
     @Override
-    public void addEntity(Cliente c) {
+    public boolean addEntity(Cliente c) {
+        boolean isSuccess = false;
         try {
             sql = "insert into cliente (tipo,nome,razaosocial,nuit,fk_id_usuario) value (?,?,?,?,?)";
             ps = con.prepareStatement(sql);
@@ -44,16 +47,29 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
             ps.setString(3, c.getRazao_cli());
             ps.setInt(4, c.getNuit_cli());
             ps.setInt(5, c.getUsuario().getId());
+            int rowsAffected = ps.executeUpdate();
 
-            ps.execute();
-            ps.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(Cliente c, int id) {
+    public boolean updateEntityByID(Cliente c, int id) {
+        boolean isSuccess = false;
         try {
             sql = "update cliente set tipo=?, nome=? ,razaosocial=? ,nuit=?, fk_id_usuario=?"
                     + " where id=?";
@@ -65,17 +81,28 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
             ps.setInt(4, c.getNuit_cli());
             ps.setInt(5, c.getUsuario().getId());
             ps.setInt(6, id);
+            int rowsAffected = ps.executeUpdate();
 
-            ps.execute();
-            ps.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao actualizar cliente: "
-                    + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
-    public ObservableList<Cliente> listAllEntities() {
+    public ObservableList<Cliente> listAllEntitiesToClienteView() {
         ObservableList<Cliente> lista = FXCollections.observableArrayList();
         try {
             sql = "SELECT c.id,c.tipo,c.nome,c.razaosocial ,c.nuit, "
@@ -115,7 +142,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     }
 
     @Override
-    public ObservableList<Cliente> listAllForSearch() {
+    public ObservableList<Cliente> listClientesForSearch() {
         ObservableList<Cliente> lista = FXCollections.observableArrayList();
         try {
             sql = "SELECT c.id,c.tipo,c.nome,c.razaosocial,c.nuit,"
@@ -178,7 +205,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     }
 
     @Override
-    public Cliente getClieneByID(int id) {
+    public Cliente getFullClieneByID(int id) {
         Cliente c = null;
         try {
             sql = "SELECT c.id,c.tipo,c.nome,c.razaosocial,c.nuit,"
@@ -243,7 +270,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     }
 
     @Override
-    public Cliente getLastEntity() { 
+    public Cliente getLastEntity() {
         Cliente c = null;
         try {
             sql = "SELECT id,tipo,nome,razaosocial,nuit FROM cliente ORDER BY id DESC LIMIT 1;";
@@ -291,56 +318,32 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         return c;
     }
 
-//    public ClienteData getClinteFacturaData(String factura) {
-//        ClienteData c = null;
-//        try {
-//            sql = "SELECT f.numero, f.data_criacao, f.data_vencimento,"
-//                    + "dc.nome as tipo,"
-//                    + "c.razaosocial, c.nuit,"
-//                    + "CONCAT(e.avenida,', ',e.rua,', ',e.numero,'; ',e.bairro,', ',e.cidade,', ',e.provincia,'- ',e.codigo_postal ) as endereco,"
-//                    + "GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR '; ') AS contatos,ct.email "
-//                    + "FROM factura f "
-//                    + "LEFT JOIN documentocomercial dc ON f.fk_id_doc = dc.id "
-//                    + "LEFT JOIN cliente c ON c.id = f.fk_id_cliente "
-//                    + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id "
-//                    + "LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id "
-//                    + "WHERE f.numero = ?";
-//            ps = con.prepareStatement(sql);
-//            ps.setString(1, factura);
-//            ResultSet result = ps.executeQuery();
-//            while (result.next()) {
-//                c = new ClienteData();
-//                c.setApelido(result.getString("razaosocial"));
-//                c.setNuit(result.getInt("nuit"));
-//                c.setContacto(result.getString("contatos"));
-//                c.setEndereco(result.getString("endereco"));
-//                c.setEmail(result.getString("email"));
-//                c.setNumero(result.getString("numero"));
-//                c.setData_criacao(result.getString("data_criacao"));
-//                c.setData_vencimento(result.getString("data_vencimento"));
-//                c.setTipo(result.getString("tipo"));
-//            }
-//            result.close();
-//            ps.close();
-//        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
-//
-//        }
-//        return c;
-//    }
     @Override
-    public void deleteEntity(int x) {
+    public boolean deleteEntity(int x) {
+        boolean isSuccess = false;
         try {
             sql = "delete from cliente WHERE id = ?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x);
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar cliente: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override

@@ -195,7 +195,6 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             }
 
         } catch (SQLException ex) {
-            System.out.println("Erro: " + ex);
             showDialog(FontAwesomeIcon.TIMES, "Erro de exclusao", "Detalhes: " + ex);
         } finally {
             try {

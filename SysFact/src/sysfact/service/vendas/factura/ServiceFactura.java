@@ -4,7 +4,6 @@
  */
 package sysfact.service.vendas.factura;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.SQLException;
 import java.util.List;
 import javafx.collections.ObservableList;
@@ -19,7 +18,6 @@ import sysfact.model.vendas.factura.Factura;
 import sysfact.model.vendas.factura.itens.Item;
 import sysfact.service.cliente.ServiceCliente;
 import sysfact.service.vendas.factura.itens.ServiceItem;
-import static sysfact.util.AlertUtilities.showDialog;
 import static sysfact.util.AlertUtilities.showErroNotification;
 
 /**
@@ -61,8 +59,8 @@ public class ServiceFactura {
             showErroNotification("Erro", "Cliente nao pode ser nulo!");
             return;
         } else {
-            ServiceCliente serviceCliente = new ServiceCliente(clienteDao);
-            cliente = serviceCliente.getClienteByID(cli);
+            ServiceCliente serviceCliente = new ServiceCliente();
+            cliente = serviceCliente.consultaClienteByID(cli);
         }
 
         if (itens == null || itens.isEmpty()) {

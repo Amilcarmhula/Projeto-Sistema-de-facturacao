@@ -177,7 +177,7 @@ public class VendasController implements Initializable {
     public void getSearchClienteKEY(KeyEvent keyEvt) throws SQLException {
         if (keyEvt.getCode().equals(KeyCode.ENTER)) {
             ClienteDAO xDAO = new ClienteDAO();
-            Cliente x = xDAO.getClieneByID(Integer.parseInt(txtIDCliente.getText()));
+            Cliente x = xDAO.getFullClieneByID(Integer.parseInt(txtIDCliente.getText()));
             if (x != null) {
                 txtIDCliente.setText(x.getId() + "");
                 txtEnderecoCliente.setText(x.printEnderecos());
@@ -207,7 +207,7 @@ public class VendasController implements Initializable {
                         try {
                             Cliente c = (Cliente) SysFact.getData();
                             ClienteDAO xDAO = new ClienteDAO();
-                            Cliente x = xDAO.getClieneByID(c.getId());
+                            Cliente x = xDAO.getFullClieneByID(c.getId());
                             if (x != null) {
                                 txtIDCliente.setText(x.getId() + "");
                                 txtEnderecoCliente.setText(x.printEnderecos());

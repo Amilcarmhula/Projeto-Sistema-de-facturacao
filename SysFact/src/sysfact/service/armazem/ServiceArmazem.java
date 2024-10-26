@@ -5,6 +5,7 @@
 package sysfact.service.armazem;
 
 import java.sql.SQLException;
+import javafx.collections.ObservableList;
 import sysfact.dao.armazem.ArmazemDAO;
 import sysfact.model.armazem.Armazem;
 import static sysfact.util.AlertUtilities.showErroNotification;
@@ -31,7 +32,7 @@ public class ServiceArmazem {
         this.opsSuccess = opsSuccess;
     }
 
-    public void registaArmazem(String tipo, String nome, String descricao) {
+    public void registar(String tipo, String nome, String descricao) {
         setOpsSuccess(false);
         if (tipo == null || tipo.isEmpty()) {
             showErroNotification("Erro", "Tipo nao definido!");
@@ -56,7 +57,7 @@ public class ServiceArmazem {
         }
     }
 
-    public void actualizaArmazem(Integer id, String tipo, String nome, String descricao) {
+    public void actualizar(Integer id, String tipo, String nome, String descricao) {
         setOpsSuccess(false);
         if (id == null) {
             showErroNotification("Erro", "Armazem nao selecionado!");
@@ -83,6 +84,17 @@ public class ServiceArmazem {
             setOpsSuccess(true);
             showSuccessNotification("Sucesso", "Armazem actualizado com sucesso!");
         }
+    }
+    public ObservableList<Armazem> listaArmazens(){
+        return armazemDao.listAllEntities();
+    }
+    
+    public Armazem getUltimoArmazem(){
+        return armazemDao.getLastEntity();
+    }
+    
+    public Armazem consultaArmazem(int id){
+        return armazemDao.getEntityByID(id);
     }
 
     public void excluir(int id) {

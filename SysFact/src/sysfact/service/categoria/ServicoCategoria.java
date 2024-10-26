@@ -4,13 +4,10 @@
  */
 package sysfact.service.categoria;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import sysfact.dao.categoria.CategoriaDAO;
 import sysfact.model.categoria.Categoria;
-
-import static sysfact.util.AlertUtilities.showDialog;
 import static sysfact.util.AlertUtilities.showErroNotification;
 import static sysfact.util.AlertUtilities.showSuccessNotification;
 
@@ -35,7 +32,7 @@ public class ServicoCategoria {
         this.opsSuccess = opsSuccess;
     }
 
-    public void registaCategoria(String tipo, String grupo, String subgrupo,
+    public void registar(String tipo, String grupo, String subgrupo,
             String familia, String descricao) {
         setOpsSuccess(false);
 
@@ -74,7 +71,7 @@ public class ServicoCategoria {
         }
     }
 
-    public void actualizarCaregoria(int id, String tipo, String grupo, String subgrupo,
+    public void actualizar(int id, String tipo, String grupo, String subgrupo,
             String familia, String descricao) {
         setOpsSuccess(false);
 
@@ -116,7 +113,7 @@ public class ServicoCategoria {
 
     
 
-    public ObservableList<Categoria> consultaCategorias() {
+    public ObservableList<Categoria> listaCategorias() {
         return categoriaDAO.listAllEntities();
     }
     

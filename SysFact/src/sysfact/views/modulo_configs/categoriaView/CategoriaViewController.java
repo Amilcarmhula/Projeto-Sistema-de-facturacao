@@ -130,7 +130,7 @@ public class CategoriaViewController implements Initializable {
 
     public void showCategoria() throws SQLException {
         ServicoCategoria sc = new ServicoCategoria();
-        listaCategorias = sc.consultaCategorias();
+        listaCategorias = sc.listaCategorias();
 
         IDtabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -235,7 +235,7 @@ public class CategoriaViewController implements Initializable {
      */
     public void addCategoria() throws SQLException {
         ServicoCategoria sc = new ServicoCategoria();
-        sc.registaCategoria(ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
+        sc.registar(ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
                 ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
                 ps_txtdescricaoCategoria.getText());
         if (sc.isOpsSuccess()) {
@@ -250,7 +250,7 @@ public class CategoriaViewController implements Initializable {
      */
     public void updateCategoria() throws SQLException {
         ServicoCategoria sc = new ServicoCategoria();
-        sc.actualizarCaregoria(Integer.parseInt(ps_txtIDCategoria.getText()),
+        sc.actualizar(Integer.parseInt(ps_txtIDCategoria.getText()),
                 ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
                 ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
                 ps_txtdescricaoCategoria.getText());

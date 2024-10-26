@@ -5,6 +5,7 @@
 package sysfact.service.cliente.contacto;
 
 import java.sql.SQLException;
+import javafx.collections.ObservableList;
 import sysfact.dao.cliente.contacto.ContactoClienteDAO;
 import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.contacto.ContactoCliente;
@@ -17,6 +18,7 @@ import static sysfact.util.AlertUtilities.showSuccessNotification;
  * @author JM-Tecnologias
  */
 public class ServiceContacto {
+
     private final ContactoClienteDAO contactoDao;
     private boolean opsSuccess;
 
@@ -31,8 +33,8 @@ public class ServiceContacto {
     public void setOpsSuccess(boolean opsSuccess) {
         this.opsSuccess = opsSuccess;
     }
-    
-    public void registaContacto(String email, String numero, String website, String responsavel, Cliente cli, Usuario user) {
+
+    public void registar(String email, String numero, String website, String responsavel, Cliente cli, Usuario user) {
         setOpsSuccess(false);
         if (email == null || email.isEmpty()) {
             showErroNotification("Erro", "E-mail padrao criado!");
@@ -53,14 +55,14 @@ public class ServiceContacto {
         contacto.setResponsavel(responsavel);
         contacto.setUsuario(user);
         contacto.setCliente(cli);
-        
+
         if (contactoDao.addEntity(contacto)) {
             setOpsSuccess(true);
             showSuccessNotification("Sucesso", "Registo adicionado com sucesso.");
         }
     }
-    
-    public void actualizaContacto(Integer id, String email, String numero, String website, String responsavel, Usuario user) {
+
+    public void actualizar(Integer id, String email, String numero, String website, String responsavel, Usuario user) {
         setOpsSuccess(false);
         if (email == null || email.isEmpty()) {
             showErroNotification("Erro", "E-mail padrao criado!");
@@ -77,10 +79,25 @@ public class ServiceContacto {
         contacto.setContacto_cli(numero);
         contacto.setResponsavel(responsavel);
         contacto.setUsuario(user);
-        
+
         if (contactoDao.updateEntityByID(contacto, id)) {
             setOpsSuccess(true);
             showSuccessNotification("Sucesso", "Registo actualizado com sucesso.");
+        }
+    }
+    public ObservableList<ContactoCliente> listaContactos(){
+        return contactoDao.listAllEntities();
+    }
+    
+    public ObservableList<ContactoCliente> consultaContactoPorCLiente(int idCliente){
+        return contactoDao.searchEntityByCLiente(idCliente);
+    }
+
+    public void excluir(int id) {
+        setOpsSuccess(false);
+        if (contactoDao.deleteEntity(id)) {
+            setOpsSuccess(true);
+            showSuccessNotification("Sucesso", "Registo excluido com sucesso.");
         }
     }
 }

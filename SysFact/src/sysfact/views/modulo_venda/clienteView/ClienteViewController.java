@@ -141,7 +141,7 @@ public class ClienteViewController implements Initializable {
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             Cliente x = tabelaCliente.getSelectionModel().getSelectedItem();
                             try {
-                                serviceCliente.excluirCliente(x.getId());
+                                serviceCliente.excluir(x.getId());
                                 showClientes();
                             } catch (SQLException ex) {
                                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);

@@ -4,16 +4,15 @@
  */
 package sysfact.dao.cliente.endereco;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
-import sysfact.model.cliente.Cliente;
 import sysfact.model.cliente.endereco.EnderecoCliente;
-import sysfact.model.usuario.Usuario;
+import static sysfact.util.AlertUtilities.showDialog;
 import sysfact.util.Conexao;
 
 
@@ -32,7 +31,8 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
     }
 
     @Override
-    public void addEntity(EnderecoCliente t) {
+    public boolean addEntity(EnderecoCliente t) {
+        boolean isSuccess = false;
         try {
             sql = "insert into endereco_cliente (provincia,cidade,bairro,avenida,"
                     + "rua,codigo_postal,numero, tipo, fk_id_cliente, fk_id_usuario)"
@@ -51,16 +51,29 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             ps.setInt(9, t.getCliente().getId());
             ps.setInt(10, t.getUsuario().getId());
 
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Endereco: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
+            int rowsAffected = ps.executeUpdate();
 
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(EnderecoCliente t, int id) {
+    public boolean updateEntityByID(EnderecoCliente t, int id) {
+        boolean isSuccess = false;
         try {
             sql = "update endereco_cliente set provincia=?,cidade=?,bairro=?,avenida=?,"
                     + "rua=?,codigo_postal=?,numero=?, tipo=?,fk_id_usuario=? where id=?";
@@ -77,12 +90,24 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             ps.setInt(9, t.getUsuario().getId());
             ps.setInt(10, id);
 
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Endereco: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -108,17 +133,17 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Endereco: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
     @Override
-    public ObservableList<EnderecoCliente> searchEntityByCLiente(EnderecoCliente agentID) {
+    public ObservableList<EnderecoCliente> searchEntityByCLiente(int idCliente) {
         ObservableList<EnderecoCliente> lista = FXCollections.observableArrayList();
         try {
             sql = "select * from endereco_cliente where fk_id_cliente=?";
             ps = con.prepareStatement(sql);
-            ps.setInt(1,agentID.getCliente().getId());
+            ps.setInt(1,idCliente);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 EnderecoCliente c = new EnderecoCliente();
@@ -136,23 +161,36 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Endereco: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
     
      @Override
-    public void deleteEntity(EnderecoCliente id) {
+    public boolean deleteEntity(int id) {
+        boolean isSuccess = false;
         try {
             sql = "delete from endereco_cliente where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setInt(1, id.getId());
-            ps.execute();
-            ps.close();
+            ps.setInt(1, id);
+        int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog(FontAwesomeIcon.TIMES, "Erro de exclusao", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 }

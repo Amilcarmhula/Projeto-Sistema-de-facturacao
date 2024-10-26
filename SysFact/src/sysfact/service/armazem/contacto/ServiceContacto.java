@@ -5,9 +5,11 @@
 package sysfact.service.armazem.contacto;
 
 import java.sql.SQLException;
+import javafx.collections.ObservableList;
 import sysfact.dao.armazem.contacto.ContactoArmazemDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.armazem.contacto.ContactoArmazem;
+import sysfact.model.cliente.contacto.ContactoCliente;
 import sysfact.model.usuario.Usuario;
 import static sysfact.util.AlertUtilities.showErroNotification;
 import static sysfact.util.AlertUtilities.showSuccessNotification;
@@ -32,7 +34,7 @@ public class ServiceContacto {
         this.opsSuccess = opsSuccess;
     }
     
-    public void registaContacto(String responsavel, String contacto, String email, Integer id_arm, Usuario user) {
+    public void registar(String responsavel, String contacto, String email, Integer id_arm, Usuario user) {
         setOpsSuccess(false);
         if (responsavel == null || responsavel.isEmpty()) {
             showErroNotification("Erro", "Responsavel nao pode ser nulo!");
@@ -66,7 +68,7 @@ public class ServiceContacto {
         }
     }
     
-    public void actualizaContacto(String responsavel, String contacto, String email, Integer id_contacto, Usuario user) {
+    public void actualizar(String responsavel, String contacto, String email, Integer id_contacto, Usuario user) {
         setOpsSuccess(false);
         if (responsavel == null || responsavel.isEmpty()) {
             showErroNotification("Erro", "Responsavel nao pode ser nulo!");
@@ -95,6 +97,14 @@ public class ServiceContacto {
             setOpsSuccess(true);
             showSuccessNotification("Sucesso", "Contacto actualizado com sucesso!");
         }
+    }
+    
+    public ObservableList<ContactoArmazem> listaContactos(){
+        return contatoArmazemDao.listAllEntities();
+    }
+    
+    public ObservableList<ContactoArmazem> consultaContactoPorArmazem(int id){
+        return contatoArmazemDao.searchEntityByCLiente(id);
     }
     
     public void excluir(int id) {

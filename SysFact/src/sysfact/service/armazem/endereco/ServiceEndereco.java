@@ -5,6 +5,7 @@
 package sysfact.service.armazem.endereco;
 
 import java.sql.SQLException;
+import javafx.collections.ObservableList;
 import sysfact.dao.armazem.endereco.EnderecoArmazemDAO;
 import sysfact.model.armazem.Armazem;
 import sysfact.model.armazem.endereco.EnderecoArmazem;
@@ -33,7 +34,7 @@ public class ServiceEndereco {
         this.opsSuccess = opsSuccess;
     }
 
-    public void registaEndereco(String avenida, String bairro, String cidade,
+    public void registar(String avenida, String bairro, String cidade,
             Integer postalCode, Integer numero, String provincia, String rua,
             Integer id_arm, Usuario user) {
         setOpsSuccess(false);
@@ -89,7 +90,7 @@ public class ServiceEndereco {
         }
     }
 
-    public void actualizaEndereco(String avenida, String bairro, String cidade,
+    public void actualizar(String avenida, String bairro, String cidade,
             Integer postalCode, Integer numero, String provincia, String rua,
             Integer id, Usuario user) {
         setOpsSuccess(false);
@@ -140,6 +141,14 @@ public class ServiceEndereco {
             setOpsSuccess(true);
             showSuccessNotification("Sucesso", "Endereco registado com sucesso!");
         }
+    }
+    
+    public ObservableList<EnderecoArmazem> listaEnderecos() {
+        return enderecoArmazemDao.listAllEntities();
+    }
+    
+    public ObservableList<EnderecoArmazem> consultaEnderecosPorArmazem(int idCliente) {
+        return enderecoArmazemDao.searchEntityByCLiente(idCliente);
     }
     
     public void excluir(int id) {

@@ -14,7 +14,7 @@ public interface ContactoArmazemDAOImpl<T> {
     boolean  addEntity(T t);
     boolean updateEntityByID(T t,int id);
     ObservableList<T> listAllEntities();
-    ObservableList<T> searchEntityByCLiente(T t) ;
+    ObservableList<T> searchEntityByCLiente(int t) ;
 //    T searchEntityByName(String name);
 //    void deleteEntityByROOT(int id);
     boolean deleteEntity(int x);

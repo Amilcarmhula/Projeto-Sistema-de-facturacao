@@ -125,12 +125,12 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
     }
 
     @Override
-    public ObservableList<ContactoArmazem> searchEntityByCLiente(ContactoArmazem agentID) {
+    public ObservableList<ContactoArmazem> searchEntityByCLiente(int idArmazem) {
         ObservableList<ContactoArmazem> lista = FXCollections.observableArrayList();
         try {
             sql = "select * from contacto_armazem where fk_id_armazem=?";
             ps = con.prepareStatement(sql);
-            ps.setInt(1, agentID.getArmazem().getId());
+            ps.setInt(1, idArmazem);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 ContactoArmazem c = new ContactoArmazem();

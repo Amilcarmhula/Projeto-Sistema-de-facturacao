@@ -15,6 +15,6 @@ public interface EnderecoArmazemDAOImpl<T> {
     boolean addEntity(T t);
     boolean updateEntityByID(T t, int id);
     ObservableList<T> listAllEntities();
-    ObservableList<T> searchEntityByCLiente(T t);
+    ObservableList<T> searchEntityByCLiente(int t);
     boolean deleteEntity(int x);
 }

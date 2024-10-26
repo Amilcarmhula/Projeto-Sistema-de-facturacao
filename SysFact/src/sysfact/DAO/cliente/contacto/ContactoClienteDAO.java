@@ -126,12 +126,12 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     }
 
     @Override
-    public ObservableList<ContactoCliente> searchEntityByCLiente(ContactoCliente agentID) {
+    public ObservableList<ContactoCliente> searchEntityByCLiente(int idCliente) {
         ObservableList<ContactoCliente> lista = FXCollections.observableArrayList();
         try {
             sql = "select * from contacto_cliente where fk_id_cliente=?";
             ps = con.prepareStatement(sql);
-            ps.setInt(1, agentID.getCliente().getId());
+            ps.setInt(1, idCliente);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 ContactoCliente c = new ContactoCliente();
@@ -152,13 +152,13 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     }
 
     @Override
-    public boolean deleteEntity(ContactoCliente x) {
+    public boolean deleteEntity(int x) {
         boolean isSuccess = false;
         try {
             sql = "delete from contacto_cliente where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setInt(1, x.getId());
+            ps.setInt(1, x);
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {

@@ -33,7 +33,7 @@ public class ServiceCliente {
         this.opsSuccess = opsSuccess;
     }
 
-    public void registaCliente(String nome, String razaosocial, String tipo, Integer nuit, Usuario user) {
+    public void registar(String nome, String razaosocial, String tipo, Integer nuit, Usuario user) {
         setOpsSuccess(false);
         if (nome == null || nome.isEmpty()) {
             showErroNotification("Erro", "nome nao pode ser nulo!");
@@ -63,7 +63,7 @@ public class ServiceCliente {
         }
     }
 
-    public void actualizaCliente(Integer id, String nome, String razaosocial, String tipo, Integer nuit, Usuario user) {
+    public void actualizar(Integer id, String nome, String razaosocial, String tipo, Integer nuit, Usuario user) {
         setOpsSuccess(false);
         if (id == null || id <= 0) {
             showErroNotification("Erro", "Cliente nao selecionado!");
@@ -97,7 +97,7 @@ public class ServiceCliente {
         }
     }
     
-    public ObservableList<Cliente> listaClientePesquisa() {
+    public ObservableList<Cliente> listaClientes() {
         return clienteDao.listClientesForSearch();
     }
     public ObservableList<Cliente> listaClienteView() {
@@ -123,7 +123,7 @@ public class ServiceCliente {
         return clienteDao.CountClientes();
     }
 
-    public void excluirCliente(int id) {
+    public void excluir(int id) {
         setOpsSuccess(false);
         if (clienteDao.deleteEntity(id)) {
             setOpsSuccess(true);

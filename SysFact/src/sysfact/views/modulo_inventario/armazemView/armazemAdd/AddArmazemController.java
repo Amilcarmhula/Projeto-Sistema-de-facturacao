@@ -17,14 +17,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -42,8 +39,6 @@ import sysfact.service.armazem.ServiceArmazem;
 import sysfact.service.armazem.contacto.ServiceContacto;
 import sysfact.service.armazem.endereco.ServiceEndereco;
 import sysfact.util.AlertUtilities;
-import static sysfact.util.AlertUtilities.showErroNotification;
-import static sysfact.util.AlertUtilities.showSuccessNotification;
 import sysfact.util.ButtonUtilities;
 import sysfact.util.LoadAndMoveUtilities;
 
@@ -55,6 +50,9 @@ import sysfact.util.LoadAndMoveUtilities;
 public class AddArmazemController implements Initializable {
 
     private Usuario userData;
+    private ServiceArmazem serviceArmazem;
+    private ServiceContacto serviceContacto;
+    private ServiceEndereco serviceEndereco;
 
     @FXML
     private Button btnAddArmazem;
@@ -85,8 +83,6 @@ public class AddArmazemController implements Initializable {
 
     @FXML
     private TableView<EnderecoArmazem> tabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoArmazem, String> tipotabelaEndereco;
     @FXML
     private TableColumn<EnderecoArmazem, Integer> numerotabelaEndereco;
     @FXML
@@ -219,6 +215,9 @@ public class AddArmazemController implements Initializable {
         }
 
         try {
+            serviceArmazem = new ServiceArmazem();
+            serviceContacto = new ServiceContacto();
+            serviceEndereco = new ServiceEndereco();
             showContactos();
             showClienteByID();
             showEndereco();
@@ -236,8 +235,7 @@ public class AddArmazemController implements Initializable {
     Funcoes de Consultas
      */
     public void showLastStoreAdded() throws SQLException {
-        ArmazemDAO xDAO = new ArmazemDAO();
-        Armazem c = xDAO.getLastEntity();
+        Armazem c = serviceArmazem.getUltimoArmazem();
         txtIDCliente.setText(String.valueOf(c.getId()));
         combTipoCliente.setValue(c.getTipo());
         txtNome.setText(c.getNome_arm());
@@ -246,9 +244,8 @@ public class AddArmazemController implements Initializable {
     }
 
     public void showClienteByID() throws SQLException {
-        ArmazemDAO xDAO = new ArmazemDAO();
         if (!"".equals(txtIDCliente.getText())) {
-            Armazem c = xDAO.getEntityByID(Integer.parseInt(txtIDCliente.getText()));
+            Armazem c = serviceArmazem.consultaArmazem(Integer.parseInt(txtIDCliente.getText()));
             combTipoCliente.setValue(c.getTipo());
             txtNome.setText(c.getNome_arm());
             txtDescricao.setText(c.getDescricao_arm());
@@ -260,20 +257,13 @@ public class AddArmazemController implements Initializable {
     private ObservableList<EnderecoArmazem> listaEndereco;
 
     public void showEndereco() throws SQLException {
-        EnderecoArmazemDAO xDAO = new EnderecoArmazemDAO();
-        EnderecoArmazem z = new EnderecoArmazem();
-        Armazem c = new Armazem();
-
         if ("".equals(txtIDCliente.getText())) {
-            listaEndereco = xDAO.listAllEntities();
+            listaEndereco = serviceEndereco.listaEnderecos();
         } else {
-            c.setId(Integer.parseInt(txtIDCliente.getText()));
-            z.setArmazem(c);
-            listaEndereco = xDAO.searchEntityByCLiente(z);
+            listaEndereco = serviceEndereco.consultaEnderecosPorArmazem(Integer.parseInt(txtIDCliente.getText()));
         }
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo_arm"));
         provinciatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("provincia_arm"));
         cidadetabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("cidade_arm"));
         bairrotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("bairro_arm"));
@@ -326,16 +316,10 @@ public class AddArmazemController implements Initializable {
     private ObservableList<ContactoArmazem> listaContactos;
 
     public void showContactos() throws SQLException {
-        ContactoArmazemDAO xDAO = new ContactoArmazemDAO();
-        ContactoArmazem z = new ContactoArmazem();
-        Armazem c = new Armazem();
-
         if ("".equals(txtIDCliente.getText())) {
-            listaContactos = xDAO.listAllEntities();
+            listaContactos = serviceContacto.listaContactos();
         } else {
-            c.setId(Integer.parseInt(txtIDCliente.getText()));
-            z.setArmazem(c);
-            listaContactos = xDAO.searchEntityByCLiente(z);
+            listaContactos = serviceContacto.consultaContactoPorArmazem(Integer.parseInt(txtIDCliente.getText()));
         }
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -391,7 +375,7 @@ public class AddArmazemController implements Initializable {
      */
     public void addArmazem() throws SQLException {
         ServiceArmazem servicee = new ServiceArmazem();
-        servicee.registaArmazem(combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
+        servicee.registar(combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
         if (servicee.isOpsSuccess()) {
             showLastStoreAdded();
             servicee.setOpsSuccess(false);
@@ -402,7 +386,7 @@ public class AddArmazemController implements Initializable {
     public void addContacto() throws SQLException {
         ServiceContacto service = new ServiceContacto();
         Integer id = Integer.valueOf(txtIDCliente.getText());
-        service.registaContacto(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
+        service.registar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
         if (service.isOpsSuccess()) {
             showContactos();
             restContacto();
@@ -414,7 +398,7 @@ public class AddArmazemController implements Initializable {
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         Integer id = Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
-        service.registaEndereco(txtAvenida.getText(), txtBairro.getText(), 
+        service.registar(txtAvenida.getText(), txtBairro.getText(), 
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
                 txtRua.getText(),id, userData);
         if (service.isOpsSuccess()) {
@@ -429,7 +413,7 @@ public class AddArmazemController implements Initializable {
     public void updateArmazem() throws SQLException {
         ServiceArmazem servicee = new ServiceArmazem();
         Integer id = Integer.valueOf(txtIDCliente.getText());
-        servicee.actualizaArmazem(id, combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
+        servicee.actualizar(id, combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
 
         if (servicee.isOpsSuccess()) {
             showContactos();
@@ -440,7 +424,7 @@ public class AddArmazemController implements Initializable {
     public void updateContacto() throws SQLException {
         ServiceContacto service = new ServiceContacto();
         Integer id = Integer.valueOf(txtIDContacto.getText());
-        service.actualizaContacto(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
+        service.actualizar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
         if (service.isOpsSuccess()) {
             showContactos();
             restContacto();
@@ -452,7 +436,7 @@ public class AddArmazemController implements Initializable {
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         Integer id = Integer.valueOf(txtIDEndereco.getText().equals("") ? "0" : txtIDEndereco.getText());
-        service.actualizaEndereco(txtAvenida.getText(), txtBairro.getText(), 
+        service.actualizar(txtAvenida.getText(), txtBairro.getText(), 
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
                 txtRua.getText(),id, userData);
         if (service.isOpsSuccess()) {

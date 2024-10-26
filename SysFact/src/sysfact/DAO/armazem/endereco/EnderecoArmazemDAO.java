@@ -139,12 +139,12 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
     }
 
     @Override
-    public ObservableList<EnderecoArmazem> searchEntityByCLiente(EnderecoArmazem agentID) {
+    public ObservableList<EnderecoArmazem> searchEntityByCLiente(int idCliente) {
         ObservableList<EnderecoArmazem> lista = FXCollections.observableArrayList();
         try {
             sql = "select * from endereco_armazem where fk_id_armazem=?";
             ps = con.prepareStatement(sql);
-            ps.setInt(1, agentID.getArmazem().getId());
+            ps.setInt(1, idCliente);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 EnderecoArmazem c = new EnderecoArmazem();

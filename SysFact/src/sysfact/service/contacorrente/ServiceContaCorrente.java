@@ -6,7 +6,6 @@ package sysfact.service.contacorrente;
 
 import java.sql.SQLException;
 import sysfact.dao.contacorrente.ContaCorrenteDAO;
-import sysfact.model.contacorrente.ContaCorrente;
 
 /**
  *

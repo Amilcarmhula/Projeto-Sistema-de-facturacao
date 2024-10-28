@@ -69,14 +69,16 @@
             </Label>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaTransacoes" layoutY="344.0" prefHeight="223.0" prefWidth="925.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="344.0">
+      <TableView fx:id="tabelaTransacoes" layoutY="344.0" onMouseClicked="#selecionaTransacao" prefHeight="223.0" prefWidth="925.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="344.0">
         <columns>
             <TableColumn fx:id="idTrans" prefWidth="44.0" resizable="false" text="ID" />
-          <TableColumn fx:id="valorTrans" prefWidth="100.0" resizable="false" text="Valor" />
-          <TableColumn fx:id="metodoPagamentoTrans" prefWidth="155.0" resizable="false" text="Metodo de pagamento" />
-            <TableColumn fx:id="dataPagamentoTrans" prefWidth="143.0" resizable="false" text="Data de pagamento" />
-            <TableColumn fx:id="dataRegistoTrans" prefWidth="175.0" resizable="false" text="Data de registo" />
-            <TableColumn fx:id="descricaoTrans" prefWidth="301.0" resizable="false" text="Descricao" />
+            <TableColumn fx:id="valorTransRecebido" prefWidth="100.0" resizable="false" text="Valor Recebido" />
+          <TableColumn fx:id="valorTransPago" prefWidth="100.0" resizable="false" text="Valor Pago" />
+            <TableColumn fx:id="valorTransTrocos" prefWidth="100.0" resizable="false" text="Trocos" />
+          <TableColumn fx:id="metodoPagamentoTrans" prefWidth="170.0" resizable="false" text="Metodo de pagamento" />
+            <TableColumn fx:id="dataPagamentoTrans" prefWidth="120.0" resizable="false" text="Data de pagamento" />
+            <TableColumn fx:id="dataRegistoTrans" prefWidth="120.0" resizable="false" text="Data de registo" />
+            <TableColumn fx:id="descricaoTrans" prefWidth="176.0" resizable="false" text="Descricao" />
         </columns>
       </TableView>
       <ComboBox fx:id="combmetodoPagamento" layoutX="1159.0" layoutY="413.0" prefHeight="25.0" prefWidth="233.0" promptText="Selecione o metodo de pagamento" />

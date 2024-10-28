@@ -96,7 +96,11 @@ public class PagamentoController implements Initializable {
     @FXML
     private TableColumn<Transacao, Integer> idTrans;
     @FXML
-    private TableColumn<Transacao, Double> valorTrans;
+    private TableColumn<Transacao, Double> valorTransRecebido;
+    @FXML
+    private TableColumn<Transacao, Double> valorTransPago;
+    @FXML
+    private TableColumn<Transacao, Double> valorTransTrocos;
     @FXML
     private TableColumn<Transacao, String> metodoPagamentoTrans;
     @FXML
@@ -299,7 +303,9 @@ public class PagamentoController implements Initializable {
         ServiceTransacoes st = new ServiceTransacoes();
         listaTransacoes = st.consultaTransacoes(labNumeroFactura.getText());
         idTrans.setCellValueFactory(new PropertyValueFactory<>("id"));
-        valorTrans.setCellValueFactory(new PropertyValueFactory<>("valorPago"));
+        valorTransRecebido.setCellValueFactory(new PropertyValueFactory<>("valorRecebido"));
+        valorTransPago.setCellValueFactory(new PropertyValueFactory<>("valorPago"));
+        valorTransTrocos.setCellValueFactory(new PropertyValueFactory<>("trocos"));
         metodoPagamentoTrans.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getMetodo().getNome())));
         dataPagamentoTrans.setCellValueFactory(new PropertyValueFactory<>("data_pagamento"));
@@ -307,6 +313,17 @@ public class PagamentoController implements Initializable {
         descricaoTrans.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
         tabelaTransacoes.setItems(listaTransacoes);
+    }
+    public void selecionaTransacao(){
+        Transacao t = tabelaTransacoes.getSelectionModel().getSelectedItem();
+        if(t!=null){
+            dataPagamento.setValue(LocalDate.parse(t.getData_pagamento()));
+            combmetodoPagamento.setValue(t.getMetodo().getNome());
+            txtValorRecebido.setText(t.getValorRecebido()+"");
+            txtDescricao.setText(t.getDescricao());
+            labTrocos.setText(t.getTrocos()+"");
+            labValorPorPagar.setText(t.getValorPago()+"");
+        }
     }
 
 }

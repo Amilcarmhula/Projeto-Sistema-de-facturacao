@@ -1,0 +1,121 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package jminvsm.service.vendas.factura;
+
+import java.sql.SQLException;
+import java.util.List;
+import javafx.collections.ObservableList;
+import jminvsm.dao.cliente.ClienteDAO;
+import jminvsm.dao.vendas.factura.FacturaDAO;
+import jminvsm.dao.vendas.itens.ItemDAO;
+import jminvsm.model.cliente.Cliente;
+import jminvsm.model.empresa.Empresa;
+import jminvsm.model.usuario.Usuario;
+import jminvsm.model.vendas.documetos.DocumentosComerciais;
+import jminvsm.model.vendas.factura.Factura;
+import jminvsm.model.vendas.factura.itens.Item;
+import jminvsm.service.cliente.ServiceCliente;
+import jminvsm.service.vendas.factura.itens.ServiceItem;
+import static jminvsm.util.AlertUtilities.showErroNotification;
+import static jminvsm.util.AlertUtilities.showSuccessNotification;
+
+/**
+ *
+ * @author JM-Tecnologias
+ */
+public class ServiceFactura {
+
+    private final FacturaDAO facturaDao;
+    private final ItemDAO itemDao;
+    private final ClienteDAO clienteDao;
+    private boolean estado = false;
+    private Factura factura;
+
+    public ServiceFactura() throws SQLException {
+        this.facturaDao = new FacturaDAO();
+        this.itemDao = new ItemDAO();
+        this.clienteDao = new ClienteDAO();
+        this.factura = new Factura();
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public void criaFactura(String numero, String dataEmissao, String dataVencimento, Double total,
+            DocumentosComerciais doc, Integer cli, Empresa emp, Usuario user, List<Item> itens) throws SQLException {
+        Cliente cliente;
+        setEstado(false);
+        if (numero == null || numero.isEmpty()) {
+            showErroNotification("Erro", "Tipo de factura nao selecionada!");
+            return;
+        }
+
+        if (cli == null) {
+            showErroNotification("Erro", "Cliente nao pode ser nulo!");
+            return;
+        } else {
+            ServiceCliente serviceCliente = new ServiceCliente();
+            cliente = serviceCliente.consultaClienteByID(cli);
+        }
+
+        if (itens == null || itens.isEmpty()) {
+            showErroNotification("Erro", "Nao existem itens na factura!");
+            return;
+        }
+
+        Factura f = new Factura();
+        f.setNumero_fac(numero);
+        f.setData_emissao(dataEmissao);
+        f.setData_vencimento(dataVencimento);
+        f.setTotal(total);
+//        f.setTotalPago(0);
+        f.setSaldoPendente(total);
+//        f.setEstado("Pendente");
+//        f.setCondicaoPagamento("");
+        f.setDocComerciais(doc);
+        f.setCliente(cliente);
+        f.setEmpresa(emp);
+        f.setUsuario(user);
+        ServiceItem serviceItem = new ServiceItem(itemDao);
+
+        if (facturaDao.addEntity(f)) {
+            serviceItem.registaItens(itens);
+            setEstado(true);
+            showSuccessNotification("Sucesso", "Factura adicionado com sucesso!");
+        }
+
+    }
+
+    public void geraRelatorio(String numero) throws SQLException {
+        factura.criaRelatorio(numero);
+    }
+
+    public Factura consultaFactura(String numero) {
+        return facturaDao.getFactura(numero);
+    }
+
+    public ObservableList<Factura> exibeFactura() {
+        return facturaDao.getFacturaToDashboard();
+    }
+
+    public ObservableList<Factura> exibeFacturaPorCliente(int id) {
+        return facturaDao.getFacturaToPagamentos(id);
+    }
+
+    public int contaFacturas() {
+        int total = facturaDao.countFactura();
+        return total;
+    }
+
+//    public double somaTotalFacturas(){
+//        double total = facturaDao.totalPaidInvoice();
+//        return total;
+//    }
+}

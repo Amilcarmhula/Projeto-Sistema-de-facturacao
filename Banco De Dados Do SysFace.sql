@@ -300,7 +300,7 @@ SELECT 'Produto Padrao','1000000000001', 'Produto Padrao',1,(Select id from cate
 
 CREATE TABLE precovenda (
     id integer PRIMARY KEY AUTO_INCREMENT,
-    preco DECIMAL(10, 2) NOT NULL,
+    preco DECIMAL(10, 2) default 0.01 NULL,
     data_inicio DATE,
     data_fim DATE,
     estado boolean default 1 not null,
@@ -310,6 +310,7 @@ CREATE TABLE precovenda (
     FOREIGN KEY (fk_id_produto) REFERENCES produto(id),
     foreign key (fk_id_usuario) references usuario(id)
 );
+select * from precovenda;
 
 DELIMITER //
 CREATE PROCEDURE atualizar_estado_precovenda()
@@ -438,14 +439,17 @@ INSERT INTO documentocomercial (sigla, nome, diasuteis, descricao) VALUES
 ('ND','Nota de Débito', 30, 'Nota de Débito: Documento emitido para cobrar valores adicionais de um cliente, emitido até 30 dias após a identificação do valor a ser cobrado.');
 
 
-
 -- Tabelas para armazenar dados das facturacoes
 CREATE TABLE factura (
     numero VARCHAR(20) PRIMARY KEY,
-    data_criacao DATE,
+    data_emissao DATE,
     data_vencimento DATE NOT NULL,
     total decimal(10,2) NOT NULL,
-    estado BOOLEAN DEFAULT 0 NOT NULL,
+    totalPago decimal(10,2) default 0.0,
+    saldoPendente decimal(10,2) default 0.0, -- Devido ainda por pagar
+    estado varchar(30) default 'Pendente', -- Pago/ Pendente/ Cancelado
+    condicaoPagemento varchar(30) default 'A vista', -- A vista/Parcelado
+    numeroParcelas integer default 1 not null,
     fk_id_empresa INTEGER NOT NULL,
     fk_id_cliente INTEGER NOT NULL,
     fk_id_usuario INTEGER NOT NULL,
@@ -497,14 +501,15 @@ insert into metodo_pagamento(nome, descricao) values
 ('Pagamentos com Cheques','Um método de pagamento em que o emissor autoriza o banco a pagar um valor específico ao beneficiário');
 
 
-
+drop table caixa,contacorrente,transacoes;
 -- transacoes 
 create table transacoes(
 	id integer primary key auto_increment,
     data_pagamento date,
-    valor decimal(10,2) not null,
+    valorRecebido decimal(10,2) not null,
+    valorPago decimal(10,2) not null,
+    trocos decimal(10,2) not null,
     tipo_transacao VARCHAR(50) NOT NULL, -- Ex: Entrada, Saída
-    -- tipo_pagamento varchar(20) not null, -- caixa, conta corrente
     descricao text,
     fk_id_contabancaria integer,
     fk_id_metodo_pagamento integer not null,
@@ -534,25 +539,13 @@ CREATE TABLE caixa (
     fk_id_transacoes integer not null,
     foreign key (fk_id_transacoes) references transacoes(id)
 );
--- drop trigger _updateCaixa_ContaCorrente_Factura;
+-- drop trigger _updateCaixa_ContaCorrente;
 delimiter //
-create trigger _updateCaixa_ContaCorrente_Factura
+create trigger _updateCaixa_ContaCorrente
 	after insert on transacoes
     for each row
     begin
 		DECLARE saldo_anterior DECIMAL(10, 2) DEFAULT 0;
-        declare total_factura decimal(10,2);
-        declare total_pago decimal(10,2);
-        
-        SELECT (SELECT SUM(i.subtotal) FROM itemfactura i WHERE i.fk_numero = f.numero) INTO total_factura
-		FROM factura f 
-        where f.numero = NEW.fk_numero;
-        
-        SELECT (SELECT SUM(t.valor) FROM transacoes t WHERE t.fk_numero = f.numero) INTO total_pago 
-		FROM factura f 
-        where f.numero = NEW.fk_numero;
-        
-     --   IF total_factura <> total_pago THEN
 			-- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
             IF NEW.fk_id_metodo_pagamento = 1 THEN
 				-- Tenta buscar o saldo atual da última linha da tabela caixa
@@ -569,7 +562,7 @@ create trigger _updateCaixa_ContaCorrente_Factura
 				INSERT INTO caixa (saldo_inicial, saldo_atual, fk_id_transacoes)
 					VALUES (
 					saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
-					saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
+					saldo_anterior + NEW.valorPago,     -- Novo saldo é o saldo anterior somado ao valor da transação
 					NEW.id                         -- FK da transação inserida
 					);
 			ELSE
@@ -587,15 +580,48 @@ create trigger _updateCaixa_ContaCorrente_Factura
 				INSERT INTO contacorrente (saldo_inicial, saldo_atual, fk_id_transacoes)
 					VALUES (
 					saldo_anterior,                 -- Saldo inicial é o saldo atual anterior ou 0 se não houver
-					saldo_anterior + NEW.valor,     -- Novo saldo é o saldo anterior somado ao valor da transação
+					saldo_anterior + NEW.valorPago,     -- Novo saldo é o saldo anterior somado ao valor da transação
 					NEW.id                         -- FK da transação inserida
 					);				
             END IF;
+	end//
+delimiter ;
+
+-- drop  trigger _updateFactura;
+delimiter //
+create trigger _updateFactura
+	after insert on transacoes
+    for each row
+    begin
+        declare total_factura decimal(10,2);
+        declare total_pago decimal(10,2);
+        declare saldo_pendente decimal(10,2);
+        declare estado_factura varchar(30);
+        declare transacoes_pagas decimal(10,2);
+        
+        SELECT f.total INTO total_factura FROM factura f where f.numero = NEW.fk_numero;
+		SELECT f.totalPago INTO total_pago FROM factura f where f.numero =  NEW.fk_numero;
+		SELECT f.saldoPendente INTO saldo_pendente FROM factura f where f.numero =  NEW.fk_numero;
+		SELECT f.estado INTO estado_factura FROM factura f where f.numero =  NEW.fk_numero;
+        
+        SELECT (SELECT SUM(t.valorPago) FROM transacoes t WHERE t.fk_numero = f.numero) INTO transacoes_pagas 
+		FROM factura f 
+		where f.numero = NEW.fk_numero;
+        
+        IF total_factura > total_pago THEN
+			update factura set totalPago=transacoes_pagas, saldoPendente=(total_factura-transacoes_pagas) where numero=NEW.fk_numero; 
+			-- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
+            
 	-- 	ELSE 
-			IF total_factura = total_pago THEN
-				update factura set estado=1 where numero=NEW.fk_numero;
-			END IF;
-  --      END IF;
+			-- IF total_factura = total_pago THEN
+-- 				update factura set estado=1 where numero=NEW.fk_numero;
+-- 			END IF;
+        END IF;
+        
+        SELECT f.totalPago INTO total_pago FROM factura f where f.numero =  NEW.fk_numero;
+        IF total_factura = total_pago THEN
+			update factura set estado = 'Paga' where numero = NEW.fk_numero; 
+        END IF;
 	end//
 delimiter ;
 

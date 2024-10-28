@@ -1,0 +1,754 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Waves" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="e9bb1a27-f975-4aa4-98f9-75524c5daafa">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DATA_ADAPTER_DB-CONNECTION"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="137"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="858"/>
+	<style name="Table_TH" mode="Opaque" backcolor="rgba(240, 248, 255, 0.0)">
+		<box>
+			<topPen lineWidth="0.5" lineColor="rgba(209, 209, 209, 0.49803922)"/>
+			<bottomPen lineWidth="0.5" lineColor="rgba(209, 209, 209, 0.49803922)"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="rgba(191, 225, 255, 0.0)">
+		<box>
+			<topPen lineWidth="0.5" lineColor="rgba(209, 209, 209, 0.49803922)"/>
+			<bottomPen lineWidth="0.5" lineColor="rgba(209, 209, 209, 0.49803922)"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="rgba(255, 255, 255, 0.0)">
+		<box>
+			<topPen lineWidth="0.5" lineColor="rgba(209, 209, 209, 0.49803922)"/>
+			<bottomPen lineWidth="0.5" lineColor="rgba(209, 209, 209, 0.49803922)"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="rgba(251, 253, 255, 0.0)"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="TABLE_DATASET" uuid="2f3122e2-4dde-4490-ac85-22a26be6e943">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="BEAN_DATA_ADAPTER"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="nomeProduto" class="java.lang.String"/>
+		<field name="descricao" class="java.lang.String"/>
+		<field name="preco" class="java.lang.Double"/>
+		<field name="percentagemImposto" class="java.lang.Double"/>
+		<field name="percentagemDesconto" class="java.lang.Double"/>
+		<field name="quantidade" class="java.lang.Integer"/>
+		<field name="subtotal" class="java.lang.Double"/>
+		<variable name="sum_subtotal" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{preco})))]]></variableExpression>
+		</variable>
+		<variable name="sum_taxas" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{preco}*$F{percentagemImposto})))]]></variableExpression>
+		</variable>
+		<variable name="sum_descontos" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{preco}*$F{percentagemDesconto})))]]></variableExpression>
+		</variable>
+		<variable name="sum_total" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{subtotal})))]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="TABLE_DATA_SOURCE" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="nome_doc" class="java.lang.String"/>
+	<field name="razao_emp" class="java.lang.String"/>
+	<field name="nuit_emp" class="java.lang.Integer"/>
+	<field name="provincia_emp" class="java.lang.String"/>
+	<field name="cidade_emp" class="java.lang.String"/>
+	<field name="bairro_emp" class="java.lang.String"/>
+	<field name="avenida_emp" class="java.lang.String"/>
+	<field name="rua_emp" class="java.lang.String"/>
+	<field name="codigoPostal_emp" class="java.lang.Integer"/>
+	<field name="numero_emp" class="java.lang.Integer"/>
+	<field name="contacto_emp" class="java.lang.String"/>
+	<field name="email_emp" class="java.lang.String"/>
+	<field name="website_emp" class="java.lang.String"/>
+	<field name="numero_fac" class="java.lang.String"/>
+	<field name="data_emissao" class="java.lang.String"/>
+	<field name="data_vencimento" class="java.lang.String"/>
+	<field name="provincia_cli" class="java.lang.String"/>
+	<field name="cidade_cli" class="java.lang.String"/>
+	<field name="bairro_cli" class="java.lang.String"/>
+	<field name="avenida_cli" class="java.lang.String"/>
+	<field name="rua_cli" class="java.lang.String"/>
+	<field name="numero_cli" class="java.lang.Integer"/>
+	<field name="codigoPostal_cli" class="java.lang.Integer"/>
+	<field name="razao_cli" class="java.lang.String"/>
+	<field name="nuit_cli" class="java.lang.Integer"/>
+	<field name="contacto_cli" class="java.lang.String"/>
+	<field name="email_cli" class="java.lang.String"/>
+	<field name="nome_banco" class="java.lang.String"/>
+	<field name="numero_conta" class="java.lang.String"/>
+	<field name="nib" class="java.lang.String"/>
+	<field name="nuib" class="java.lang.String"/>
+	<background>
+		<band height="822" splitType="Stretch">
+			<image>
+				<reportElement stretchType="ContainerBottom" x="-22" y="-50" width="621" height="872" uuid="cbd89554-e2dc-4fab-abaf-be96caa09b5d">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/JM-InvSM/src/jminvsm/image/bg.png"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="236" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<image>
+				<reportElement x="-61" y="-29" width="262" height="198" uuid="a4ba868b-fcd2-45da-94ca-a5731d9d8f51"/>
+				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/JM-InvSM/src/jminvsm/image/LOGOTIPO.png"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="231" width="555" height="1" forecolor="#386340" uuid="d0d8dd39-4572-4ac5-8ed6-187c4c071faf">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="0" y="163" width="555" height="1" forecolor="#386340" uuid="626d4688-9136-40b7-8759-b1e3dd94225c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+			</line>
+			<textField>
+				<reportElement x="0" y="166" width="555" height="30" forecolor="#4F4A4A" uuid="d4a23ed3-ad7d-4196-9002-6b745b695f59">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{razao_cli}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="192" width="41" height="20" uuid="a09e7703-6199-44ed-bf8b-571b069e8fda">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[NUIT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="211" width="60" height="20" uuid="b6d4a90f-7f68-4435-a319-c7b231a4aeaf">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Endereco:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="349" y="192" width="50" height="20" uuid="2363b25f-5b2a-4647-b7c9-7d1f0c695b10">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Contacto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="349" y="211" width="50" height="20" uuid="a1879ff5-e084-4b6a-83f9-8040dac2c33a">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[E-mail:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="35" y="192" width="100" height="23" forecolor="#4F4A4A" uuid="33442251-584c-41d6-b693-e243c615a797"/>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nuit_cli}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="51" y="212" width="298" height="19" forecolor="#4F4A4A" uuid="e74cd1fb-d251-433e-8549-40b2ab337f53">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Av. "+$F{avenida_cli}+", Rua "+$F{rua_cli}+", Nr. "+$F{numero_cli}+"; Bairro "+$F{bairro_cli}+", "+$F{cidade_cli}+", "+$F{provincia_cli}+" - "+$F{codigoPostal_cli}+"."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="399" y="192" width="151" height="23" forecolor="#4F4A4A" uuid="64a228c1-8535-472d-b6ed-e522591c874f">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contacto_cli}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="211" width="176" height="23" forecolor="#4F4A4A" uuid="f097c316-e81c-4ff7-8d2e-4e1ee66488fc">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{email_cli}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="37" width="386" height="25" uuid="8eac9221-48d3-4b49-885c-70f8c9b8fe7e">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="16"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{razao_emp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="55" width="386" height="20" uuid="474f21d7-f7a0-4f77-b0ae-d63bb173ad89">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="8"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NUIT: "+$F{nuit_emp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="66" width="386" height="20" uuid="bd8ca267-7a7c-41eb-823b-5924de9a3509">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="8" isItalic="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Av. "+$F{avenida_emp}+", Rua "+$F{rua_emp}+", Nr. "+$F{numero_emp}+"; Bairro "+$F{bairro_emp}+", "+$F{cidade_emp}+", "+$F{provincia_emp}+" - "+$F{codigoPostal_emp}+"."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="78" width="386" height="20" uuid="76045767-91a0-4de7-8d95-0bc24af8c575">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="8"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Telefone: "+$F{contacto_emp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="87" width="386" height="20" uuid="d84f8bcd-6b6c-4ca2-9d61-5a2bf297980a">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="8"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["E-mail: "+$F{email_emp}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="283" y="144" width="30" height="14" uuid="becebedc-2ce8-42cf-8132-2f05df2d97e1"/>
+				<textElement>
+					<font fontName="Berlin Sans FB" isBold="false"/>
+				</textElement>
+				<text><![CDATA[De:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="144" width="68" height="14" uuid="858b4cca-2a58-43c6-8e7f-e051c2769b3c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Válido  até:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="463" y="139" width="86" height="20" forecolor="#4F4A4A" uuid="281c2896-f0e8-4858-a928-5801583f8671">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="11"/>
+					<paragraph rightIndent="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data_vencimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="303" y="139" width="74" height="20" forecolor="#4F4A4A" uuid="68f78c22-c729-482b-8c25-b8a9c911a19b">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="11"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data_emissao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="110" y="144" width="20" height="14" uuid="068e0e1a-f6a1-4035-bfc8-1fe43d340fe0"/>
+				<textElement>
+					<font fontName="Berlin Sans FB" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[N.º]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="130" y="139" width="80" height="20" forecolor="#4F4A4A" uuid="29799b69-52a6-48e0-8dd8-913d41910ea0">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="11"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_fac}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="140" width="100" height="20" uuid="005012b3-c5b8-477a-8657-87a2a5786d20">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="10"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_doc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="97" width="386" height="20" uuid="522f95ae-267b-4a0b-841b-a24df1fc31d2">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="8"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Site: "+$F{website_emp}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="39" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="20" forecolor="rgba(0, 0, 0, 0.0)" backcolor="rgba(209, 209, 209, 0.49803922)" uuid="019a89d1-0c11-4866-a0e0-55e98a8408c6">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+			</rectangle>
+			<componentElement>
+				<reportElement x="0" y="0" width="555" height="39" uuid="c4e7d8a3-a6d5-438a-8196-361a83c75984">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="TABLE_DATASET" uuid="d69c0a84-e151-480b-a542-9a968411e8b7">
+						<dataSourceExpression><![CDATA[$P{TABLE_DATA_SOURCE}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="120" uuid="d5f3635e-1589-4ade-8810-f232f23c97c3">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:columnHeader style="Table_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="120" height="20" uuid="f5954cfb-f3a4-400c-ba6a-58df8edc5774">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8" isBold="false"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<text><![CDATA[Produto/Servico]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="90" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="120" height="20" uuid="418e5a87-dc2e-4c11-9e3c-528dad140453">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{nomeProduto}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="190" uuid="9a18139b-2c4f-4876-9637-519551fff288">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:columnHeader style="Table_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="190" height="20" uuid="0840ba0b-eefe-405f-b941-222292a79ff8">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8" isBold="false"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<text><![CDATA[Descricao]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="90" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="190" height="20" uuid="759d4974-03fe-404e-aefa-8e857197edb5">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="30" uuid="3dc41e27-c956-43cc-b9ce-c90fc1fa78a2">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:columnHeader style="Table_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="30" height="20" uuid="e3de45c6-3615-49b6-b123-7b5748bdd763">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8" isBold="false"/>
+									<paragraph leftIndent="0"/>
+								</textElement>
+								<text><![CDATA[QTD]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="90" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="30" height="20" uuid="2b80103c-1acc-4750-8ef6-622028e4af1c">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph leftIndent="0"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="58887977-ceac-4541-ad25-9c21f08b8589">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:columnHeader style="Table_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="20" uuid="020cc2a9-1405-46eb-accc-68150d23a43b">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8" isBold="false"/>
+									<paragraph leftIndent="0"/>
+								</textElement>
+								<text><![CDATA[Preco UN.]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="90" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="60" height="20" uuid="c9904266-9954-46b0-bc77-34e2a8d76f6b">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph leftIndent="0"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{preco}+" mt"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="50" uuid="703f72ca-f00c-4e12-bc31-87158e4c2aed">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:columnHeader style="Table_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="50" height="20" uuid="8f4f5e99-96df-4b0a-a245-17996ceeba4c">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8" isBold="false"/>
+									<paragraph leftIndent="0"/>
+								</textElement>
+								<text><![CDATA[Taxa]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="90" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="50" height="20" uuid="790db31b-1f62-4dfb-ae5a-0ba61b7e1ad3">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph leftIndent="0"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{percentagemImposto}*100+" %"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="40" uuid="24290980-5046-40ae-83a7-a7721163c4db">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:columnHeader style="Table_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="40" height="20" uuid="d7af25ba-0c9c-4888-bd36-64316586aeba">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8" isBold="false"/>
+									<paragraph leftIndent="0"/>
+								</textElement>
+								<text><![CDATA[Desc.]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="90" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="40" height="24" uuid="6c7fbf80-06f6-43aa-a0a7-17d2f51a1d29"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+								</textElement>
+								<text><![CDATA[Sub-total:]]></text>
+							</staticText>
+							<staticText>
+								<reportElement x="0" y="24" width="40" height="22" uuid="d40e521b-d6cb-4646-93fb-efae098dec42"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+								</textElement>
+								<text><![CDATA[Impostos:]]></text>
+							</staticText>
+							<staticText>
+								<reportElement x="0" y="46" width="40" height="22" uuid="b3769dc1-4d2c-4f63-ac16-cb7d21b62ce8"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+								</textElement>
+								<text><![CDATA[Descontos:]]></text>
+							</staticText>
+							<staticText>
+								<reportElement x="0" y="68" width="40" height="22" uuid="2975de45-a96e-49af-9e27-5a2b2ab956b3"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+								</textElement>
+								<text><![CDATA[Total:]]></text>
+							</staticText>
+						</jr:columnFooter>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="40" height="20" uuid="35ae8ccf-5326-42b3-b1d0-80bd7597ee5e">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph leftIndent="0"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{percentagemDesconto}*100+" %"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="63" uuid="04c95ef1-83ed-4bc7-8c8f-11e6e76295f4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+						<jr:columnHeader style="Table_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="63" height="20" uuid="83fa8b0d-1cc7-4b88-8e74-5a7c13b27cbb">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8" isBold="false"/>
+									<paragraph leftIndent="0" rightIndent="2"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="90" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="63" height="24" uuid="5b8526ae-4b9a-4d6d-9b0b-8edeeb2a1fa6">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph rightIndent="2"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sum_subtotal}+" mt"]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="0" y="24" width="63" height="22" uuid="0bb45dd4-b752-42b7-a6d8-b2bf67676b59">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph rightIndent="2"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sum_taxas}+" mt"]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="0" y="46" width="63" height="22" uuid="3693b0ac-7f46-4779-afba-67242ac3333d">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph rightIndent="2"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sum_descontos}+" mt"]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="0" y="68" width="63" height="22" uuid="d158bda4-907d-4a48-8262-38e5f683d8ec">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph rightIndent="2"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sum_total}+" mt"]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="63" height="20" uuid="e43b3550-6359-4ec4-9c5f-8d938b4a6df0">
+									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Berlin Sans FB" size="8"/>
+									<paragraph leftIndent="0" rightIndent="2"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{subtotal}+" mt"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="17">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="17" forecolor="rgba(0, 0, 0, 0.27450982)" uuid="568b8c19-fa8b-497b-8c3d-688cf9a0d1eb">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="8"/>
+				</textElement>
+				<text><![CDATA[Documento Processado Por Computador, Software: JM-InvSM; NUIT:123456789; Tel:(+258) 84 710 0793; website: www.jm-tecnologias.co.mz]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="109" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="13" y="0" width="300" height="16" forecolor="#4F4A4A" uuid="c80804d8-f643-41e9-a837-f1ca7babffd6"/>
+				<textElement>
+					<font fontName="Berlin Sans FB" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Pagamento 50% na Adjudicação, e 50% no acto de entrega.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="17" width="191" height="14" forecolor="#4F4A4A" uuid="a222f1be-9f98-46c0-ad2f-0df7d02ae179"/>
+				<textElement>
+					<font fontName="Berlin Sans FB" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Tempo de produção: 7 dias  úteis.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="37" width="100" height="14" uuid="b0fa7123-ab89-4bab-93ce-ef4ad1fce9a5"/>
+				<textElement>
+					<font fontName="Berlin Sans FB" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Dados bancários]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="81" width="20" height="14" forecolor="#4F4A4A" uuid="64a007f2-3a9d-4b00-9700-f87402d3d659">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB" isBold="false"/>
+				</textElement>
+				<text><![CDATA[NIB:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="13" y="53" width="172" height="14" forecolor="#030303" uuid="4aa4110f-42c5-4ca3-99c5-b2d441d47319">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_banco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="33" y="81" width="280" height="14" uuid="8a333bc2-0bd3-4bf2-b190-08f0d0414f38">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nib}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="95" width="295" height="14" uuid="4a2ba835-be6b-45c3-951b-0d68caedd231">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nuib}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="95" width="27" height="14" forecolor="#4F4A4A" uuid="d93fe188-9313-44cb-b347-74550000e7b3">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB" isBold="false"/>
+				</textElement>
+				<text><![CDATA[NUIB:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="95" y="67" width="209" height="14" uuid="e86118f7-5c6d-4ea0-93c1-9b1605fb6ed1">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_conta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="67" width="82" height="14" forecolor="#4F4A4A" uuid="a0623325-9ec3-4df7-ab74-2bb89bc2e7af">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Berlin Sans FB" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Numero de conta:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="13" y="50" width="80" height="1" forecolor="#386340" uuid="0f79421c-cd44-4c8d-8766-63bb0e7418e0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

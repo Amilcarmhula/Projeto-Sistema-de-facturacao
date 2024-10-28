@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1750.0" styleClass="base-color" stylesheets="@../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.main.MainController">
+   <children>
+      <ImageView fitHeight="1000.0" fitWidth="1321.0" layoutX="220.0" opacity="0.29" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.970703125" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../../image/LOGOTIPO.png" />
+         </image>
+      </ImageView>
+      <AnchorPane prefHeight="50.0" prefWidth="1700.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="81.0" layoutY="14.0" text="JM-Invoice Stock Master" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="Berlin Sans FB" size="22.0" />
+               </font>
+            </Label>
+            <Button layoutX="1660.0" mnemonicParsing="false" onAction="#close" prefHeight="35.0" prefWidth="40.0" styleClass="close" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="30" />
+               </graphic>
+            </Button>
+            <Button layoutX="1620.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="40.0" styleClass="minimize" stylesheets="@../../style/dashboard.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="0.0">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="EXPAND" size="30" />
+               </graphic>
+            </Button>
+            <Button layoutX="1630.0" layoutY="10.0" mnemonicParsing="false" onAction="#minimize" prefHeight="35.0" prefWidth="40.0" styleClass="minimize" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="0.0">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="MINUS" size="30" />
+               </graphic>
+            </Button>
+            <Label fx:id="labEmail" alignment="CENTER_RIGHT" layoutX="945.0" layoutY="17.0" prefHeight="50.0" prefWidth="577.0" text="E-mail" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <AnchorPane layoutX="1530.0" layoutY="5.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 50%;" styleClass="base-color" stylesheets="@../../style/dashboard.css">
+               <children>
+                  <FontAwesomeIconView glyphName="USER" layoutX="12.0" layoutY="27.0" size="20" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="904.0" prefWidth="258.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0">
+         <children>
+            <Accordion layoutY="250.0" prefHeight="392.0" prefWidth="258.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <panes>
+                  <TitledPane animated="false" stylesheets="@../../style/dashboard.css" text="Contabilidade" textFill="WHITE">
+                     <content>
+                        <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css">
+                           <content>
+                              <AnchorPane prefHeight="306.0" prefWidth="234.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css">
+                                 <children>
+                                    <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css">
+                                       <children>
+                                          <Button fx:id="btn_pagamento" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Pagamentos" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                          </Button>
+                                          <Button fx:id="btn_cliente11" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Fluxo de Caixa" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                          </Button>
+                                          <Button fx:id="btn_produtos11" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Documentos Comercias" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                          </Button>
+                                       </children>
+                                       <padding>
+                                          <Insets top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                     </content>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Vendas" textFill="WHITE">
+                     <content>
+                        <ScrollPane prefHeight="200.0" prefWidth="84.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css">
+                           <content>
+                              <AnchorPane prefHeight="306.0" prefWidth="234.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css">
+                                 <children>
+                                    <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0">
+                                       <children>
+                                          <Button fx:id="btn_cliente" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Clientes" textFill="WHITE">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="btn_vendas" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Vendas" textFill="WHITE">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="btn_facturas111" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Encomendas" textFill="WHITE">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                       <padding>
+                                          <Insets top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                     </content>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Compras" textFill="WHITE">
+                     <content>
+                        <ScrollPane prefHeight="200.0" prefWidth="84.0" stylesheets="@../../style/dashboard.css">
+                           <content>
+                              <AnchorPane prefHeight="306.0" prefWidth="234.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css">
+                                 <children>
+                                    <VBox layoutX="3.0" prefHeight="306.0" prefWidth="216.0">
+                                       <children>
+                                          <Button fx:id="btn_produtos112" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Encomendas" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                          </Button>
+                                          <Button fx:id="btn_fornecedor" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Fornecedores" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                          </Button>
+                                       </children>
+                                       <padding>
+                                          <Insets top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                     </content>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Inventário" textFill="WHITE">
+                     <content>
+                        <ScrollPane prefHeight="200.0" prefWidth="84.0" stylesheets="@../../style/dashboard.css">
+                           <content>
+                              <AnchorPane prefHeight="306.0" prefWidth="234.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css">
+                                 <children>
+                                    <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0">
+                                       <children>
+                                          <Button fx:id="btn_armazem" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Armazens" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                          </Button>
+                                          <Button fx:id="btn_artigos" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Artigos" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                          </Button>
+                                          <Button fx:id="btn_stock" alignment="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Stock" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                          </Button>
+                                       </children>
+                                       <padding>
+                                          <Insets top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                     </content>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Config." textFill="WHITE">
+                     <content>
+                        <ScrollPane prefHeight="200.0" prefWidth="84.0" stylesheets="@../../style/dashboard.css">
+                           <content>
+                              <AnchorPane prefHeight="306.0" prefWidth="234.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css">
+                                 <children>
+                                    <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0">
+                                       <children>
+                                          <Button fx:id="btn_taxas" alignment="CENTER" mnemonicParsing="false" onAction="#getViews" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Taxas/Impostos" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                          </Button>
+                                          <Button fx:id="btn_unidades" alignment="CENTER" mnemonicParsing="false" onAction="#getViews" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Unidades de Medida" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                          </Button>
+                                          <Button fx:id="btn_categorias" alignment="CENTER" mnemonicParsing="false" onAction="#getViews" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Categorias" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                          </Button>
+                                       </children>
+                                       <padding>
+                                          <Insets top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                     </content>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </TitledPane>
+               </panes>
+            </Accordion>
+            <Label fx:id="labUserName" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutY="67.0" prefHeight="29.0" prefWidth="250.0" text="Nome do Usuario" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
+            <AnchorPane layoutX="10.0" layoutY="56.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="64.0" style="-fx-background-radius: 50%;" styleClass="secondary-color" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="184.0">
+               <children>
+                  <FontAwesomeIconView fill="WHITE" glyphName="USER" layoutX="18.0" layoutY="48.0" size="40" />
+               </children>
+            </AnchorPane>
+            <Label fx:id="labNivel" alignment="CENTER_RIGHT" layoutY="90.0" prefWidth="250.0" text="Bem-vindo" textFill="#ebeaea" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button fx:id="btn_dashboard" alignment="CENTER" layoutX="20.0" layoutY="199.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="50.0" prefWidth="229.0" stylesheets="@../../style/dashboard.css" text="Dashboard" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="secondary-color" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+            </Button>
+            <FontAwesomeIconView fill="WHITE" glyphName="HOME" layoutX="42.0" layoutY="234.0" size="30" />
+            <AnchorPane layoutY="133.0" prefHeight="39.0" prefWidth="258.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="anchorMain" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1432.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="298.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+   </children>
+</AnchorPane>

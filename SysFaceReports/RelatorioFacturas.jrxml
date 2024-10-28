@@ -70,7 +70,7 @@
 	<field name="email_emp" class="java.lang.String"/>
 	<field name="website_emp" class="java.lang.String"/>
 	<field name="numero_fac" class="java.lang.String"/>
-	<field name="data_criacao" class="java.lang.String"/>
+	<field name="data_emissao" class="java.lang.String"/>
 	<field name="data_vencimento" class="java.lang.String"/>
 	<field name="provincia_cli" class="java.lang.String"/>
 	<field name="cidade_cli" class="java.lang.String"/>
@@ -94,7 +94,7 @@
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/SysFact/src/sysfact/image/bg.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/JM-InvSM/src/jminvsm/image/bg.png"]]></imageExpression>
 			</image>
 		</band>
 	</background>
@@ -103,7 +103,7 @@
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image>
 				<reportElement x="-61" y="-29" width="262" height="198" uuid="a4ba868b-fcd2-45da-94ca-a5731d9d8f51"/>
-				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/SysFact/src/sysfact/image/LOGOTIPO.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/JM-InvSM/src/jminvsm/image/LOGOTIPO.png"]]></imageExpression>
 			</image>
 			<line>
 				<reportElement x="0" y="231" width="555" height="1" forecolor="#386340" uuid="d0d8dd39-4572-4ac5-8ed6-187c4c071faf">
@@ -301,7 +301,7 @@
 					<font fontName="Berlin Sans FB" size="11"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{data_criacao}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{data_emissao}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="110" y="144" width="20" height="14" uuid="068e0e1a-f6a1-4035-bfc8-1fe43d340fe0"/>

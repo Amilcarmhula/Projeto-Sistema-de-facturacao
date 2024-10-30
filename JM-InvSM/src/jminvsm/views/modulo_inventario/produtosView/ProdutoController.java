@@ -163,41 +163,41 @@ public class ProdutoController implements Initializable {
 //            btnAddProduto.setText("Adicionar");
 //        }
 //    }
-    public void priceFormaterProduto() {
-        // Define the Locale for currency formatting (Mozambique)
-        Locale locale = new Locale("pt", "MZ");
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(locale);
-
-        // Create a TextFormatter to format the input as currency
-        TextFormatter<String> textFormatter = new TextFormatter<>(change -> {
-            if (!change.isContentChange()) {
-                return change;
-            }
-
-            // Remove all non-numeric characters
-            String newText = change.getControlNewText().replaceAll("[^\\d]", "");
-            
-            if (newText.isEmpty()) {
-                newText = "0";
-            }
-            
-            try {
-                // Convert to a number and format as currency
-                double value = Double.parseDouble(newText) / 100.0;
-                change.setText(currencyFormat.format(value));
-                change.setRange(0, change.getControlText().length()); // Replace the whole text
-            } catch (NumberFormatException e) {
-                return null; // Invalid input
-            }
-            
-            return change;
-        });
-
-        // Attach the TextFormatter to the TextField
-        txtPreco.setTextFormatter(textFormatter);
-        txtPreco.setText(currencyFormat.format(0)); // Set initial value
-
-    }
+//    public void priceFormaterProduto() {
+//        // Define the Locale for currency formatting (Mozambique)
+//        Locale locale = new Locale("pt", "MZ");
+//        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(locale);
+//
+//        // Create a TextFormatter to format the input as currency
+//        TextFormatter<String> textFormatter = new TextFormatter<>(change -> {
+//            if (!change.isContentChange()) {
+//                return change;
+//            }
+//
+//            // Remove all non-numeric characters
+//            String newText = change.getControlNewText().replaceAll("[^\\d]", "");
+//            
+//            if (newText.isEmpty()) {
+//                newText = "0";
+//            }
+//            
+//            try {
+//                // Convert to a number and format as currency
+//                double value = Double.parseDouble(newText) / 100.0;
+//                change.setText(currencyFormat.format(value));
+//                change.setRange(0, change.getControlText().length()); // Replace the whole text
+//            } catch (NumberFormatException e) {
+//                return null; // Invalid input
+//            }
+//            
+//            return change;
+//        });
+//
+//        // Attach the TextFormatter to the TextField
+//        txtPreco.setTextFormatter(textFormatter);
+//        txtPreco.setText(currencyFormat.format(0)); // Set initial value
+//
+//    }
     
     public void getFamiliaView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
@@ -273,7 +273,7 @@ public class ProdutoController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        priceFormaterProduto();
+//        priceFormaterProduto();
         try {
             this.userData = SysFact.getUserData();
             getData();

@@ -449,7 +449,7 @@ CREATE TABLE factura (
     saldoPendente decimal(10,2) default 0.0, -- Devido ainda por pagar
     estado varchar(30) default 'Pendente', -- Pago/ Pendente/ Cancelado
     condicaoPagemento varchar(30) default 'A vista', -- A vista/Parcelado
-    numeroParcelas integer default 1 not null,
+    numeroParcelas integer default 0 not null,
     fk_id_empresa INTEGER NOT NULL,
     fk_id_cliente INTEGER NOT NULL,
     fk_id_usuario INTEGER NOT NULL,
@@ -500,8 +500,36 @@ insert into metodo_pagamento(nome, descricao) values
 ('Carteiras Móveis','Plataformas que armazenam informações de pagamento e permitem a realização de transações por meio de dispositivos móveis.'),
 ('Pagamentos com Cheques','Um método de pagamento em que o emissor autoriza o banco a pagar um valor específico ao beneficiário');
 
+create table parcelas(
+	id integer primary key auto_increment,
+    parcelaNumero integer not null,
+    taxaJuros decimal(4,3) not null,
+    taxaDeAtraso decimal(4,3) not null, -- 50% da taxa de juro normal
+    valorParcela decimal(10,2) not null,
+    valorPagoParcela decimal(10,2) default 0.0,
+    dataVencimento date,
+    dataPagamento date,
+    estado varchar(30) default 'Pendente', -- Pago/ Pendente/ Atrasada
+    fk_factura VARCHAR(20) not null,
+    fk_usuario integer not null,
+    foreign key (fk_usuario) references usuario(id),
+    FOREIGN KEY (fk_factura) REFERENCES factura(numero)
+);
 
-drop table caixa,contacorrente,transacoes;
+delimiter //
+create trigger _updateParcelasFactura
+	after insert on parcelas
+    for each row
+    begin
+		declare numero_de_parcelas int default 0;
+        declare saldo decimal(10,2);
+        
+        select count(*) into numero_de_parcelas from parcelas where fk_factura = NEW.fk_factura;
+        select SUM(valorParcela) into saldo from parcelas where fk_factura = NEW.fk_factura;
+		update factura set numeroParcelas = numero_de_parcelas, condicaoPagemento = 'Parcelado', saldoPendente = saldo  where numero = new.fk_factura;
+    end//
+delimiter ;
+
 -- transacoes 
 create table transacoes(
 	id integer primary key auto_increment,
@@ -512,15 +540,78 @@ create table transacoes(
     tipo_transacao VARCHAR(50) NOT NULL, -- Ex: Entrada, Saída
     descricao text,
     fk_id_contabancaria integer,
-    fk_id_metodo_pagamento integer not null,
+    fk_id_metodo_pagamento integer,
     fk_numero varchar(20),
+    fk_parcela integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_contabancaria) references contabancaria(id),
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_metodo_pagamento) references metodo_pagamento(id),
-    foreign key (fk_numero) references factura(numero)
+    foreign key (fk_numero) references factura(numero),
+    foreign key (fk_parcela) references parcelas(id)
 );
+
+-- drop trigger _updateParcela;
+delimiter //
+create trigger _updateParcela
+	after insert on transacoes
+    for each row
+    begin
+        declare total_parcela decimal(10,2);
+        declare total_pago decimal(10,2);
+        declare condicao_pagemento varchar(30);
+        declare transacoes_pagas decimal(10,2);
+        declare saldo decimal(10,2);
+        
+        select f.saldoPendente into saldo from factura f where f.numero = NEW.fk_numero;
+        SELECT p.valorParcela INTO total_parcela FROM parcelas p where p.id = NEW.fk_parcela;
+        SELECT p.valorPagoParcela INTO total_pago FROM parcelas p where p.id = NEW.fk_parcela;
+        SELECT f.condicaoPagemento INTO condicao_pagemento from factura f where f.numero = NEW.fk_numero;
+        
+        SELECT (SELECT SUM(t.valorPago) FROM transacoes t WHERE t.fk_parcela = p.id AND p.fk_factura =NEW.fk_numero  ) INTO transacoes_pagas 
+		FROM parcelas p where p.id = NEW.fk_parcela;
+
+        IF condicao_pagemento = 'Parcelado' THEN
+			update parcelas set valorPagoParcela = transacoes_pagas  where id = new.fk_parcela;
+        END IF;
+        
+        SELECT p.valorPagoParcela INTO total_pago FROM parcelas p where p.id = NEW.fk_parcela;
+        IF total_parcela <= total_pago and condicao_pagemento = 'Parcelado' THEN
+			update parcelas set estado = 'Paga', dataPagamento = NEW.data_pagamento where id = NEW.fk_parcela;
+            update factura set saldoPendente = saldo - total_pago where numero = NEW.fk_numero;
+        END IF;
+        
+	end//
+delimiter ;
+
+-- drop trigger _updateSaldoPendente_TotalPago_Factura;
+-- criar logica para actualizar o saldo pendente da e o total pago da factura sempre que as parcelas sofrerem um update(usar trigger)
+delimiter //
+create trigger _updateSaldoPendente_TotalPago_Factura
+	after update on parcelas
+    for each row
+	begin
+		declare total_pago decimal(10,2);
+        declare total_factura decimal(10,2);
+        declare condicao_pagemento varchar(30); 
+        
+        SELECT f.condicaoPagemento INTO condicao_pagemento from factura f where f.numero = NEW.fk_factura;
+        SELECT f.total INTO total_factura from factura f where f.numero = NEW.fk_factura;
+        SELECT SUM(p.valorPagoParcela) INTO total_pago FROM parcelas p where p.estado = 'Paga' AND p.fk_factura = NEW.fk_factura;
+        
+        IF condicao_pagemento = 'Parcelado'  THEN 
+			update factura set totalPago = total_pago where numero = new.fk_factura;
+        END IF;
+        
+        SELECT f.total INTO total_factura from factura f where f.numero = NEW.fk_factura;
+        IF total_factura <= total_pago AND condicao_pagemento = 'Parcelado'  THEN 
+			update factura set estado = 'Paga' where numero = new.fk_factura;
+        END IF;
+        -- logica para actualizar o saldo pendente conforme as parcelas sao pagas
+		
+    end//
+delimiter ;
 
 -- esta tabela sera actualizada com uma trigger
 CREATE TABLE caixa (
@@ -539,6 +630,7 @@ CREATE TABLE caixa (
     fk_id_transacoes integer not null,
     foreign key (fk_id_transacoes) references transacoes(id)
 );
+
 -- drop trigger _updateCaixa_ContaCorrente;
 delimiter //
 create trigger _updateCaixa_ContaCorrente
@@ -587,7 +679,8 @@ create trigger _updateCaixa_ContaCorrente
 	end//
 delimiter ;
 
--- drop  trigger _updateFactura;
+
+-- Este trigger actualiza os dados da factura quando a condicao de pagamento e a vista
 delimiter //
 create trigger _updateFactura
 	after insert on transacoes
@@ -595,33 +688,25 @@ create trigger _updateFactura
     begin
         declare total_factura decimal(10,2);
         declare total_pago decimal(10,2);
-        declare saldo_pendente decimal(10,2);
-        declare estado_factura varchar(30);
         declare transacoes_pagas decimal(10,2);
+        declare condicao_pagemento varchar(30); 
         
         SELECT f.total INTO total_factura FROM factura f where f.numero = NEW.fk_numero;
 		SELECT f.totalPago INTO total_pago FROM factura f where f.numero =  NEW.fk_numero;
-		SELECT f.saldoPendente INTO saldo_pendente FROM factura f where f.numero =  NEW.fk_numero;
-		SELECT f.estado INTO estado_factura FROM factura f where f.numero =  NEW.fk_numero;
+        SELECT f.condicaoPagemento INTO condicao_pagemento from factura f where f.numero = NEW.fk_numero;
         
         SELECT (SELECT SUM(t.valorPago) FROM transacoes t WHERE t.fk_numero = f.numero) INTO transacoes_pagas 
 		FROM factura f 
 		where f.numero = NEW.fk_numero;
         
-        IF total_factura > total_pago THEN
+        IF total_factura > total_pago and condicao_pagemento = 'A vista' THEN
 			update factura set totalPago=transacoes_pagas, saldoPendente=(total_factura-transacoes_pagas) where numero=NEW.fk_numero; 
-			-- Verifica se o método de pagamento é igual a 1 (ajuste conforme necessário)
-            
-	-- 	ELSE 
-			-- IF total_factura = total_pago THEN
--- 				update factura set estado=1 where numero=NEW.fk_numero;
--- 			END IF;
         END IF;
         
         SELECT f.totalPago INTO total_pago FROM factura f where f.numero =  NEW.fk_numero;
-        IF total_factura = total_pago THEN
+        IF total_factura = total_pago and condicao_pagemento = 'A vista' THEN
 			update factura set estado = 'Paga' where numero = NEW.fk_numero; 
-        END IF;
+        END IF;        
 	end//
 delimiter ;
 

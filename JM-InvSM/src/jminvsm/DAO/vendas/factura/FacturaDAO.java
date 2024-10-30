@@ -43,23 +43,23 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     public boolean addEntity(Factura t) {
         boolean isSuccess = false;
         try {
-            sql = "insert into factura (numero,data_emissao,data_vencimento,total,"
+            sql = "insert into factura (numero,data_emissao,data_vencimento,total,condicaoPagemento,"
                     + "fk_id_empresa,fk_id_cliente,fk_id_usuario,fk_id_doc,saldoPendente)"
-                    + " value (?,?,?,?,?,?,?,?,?)";
+                    + " value (?,?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, t.getNumero_fac());
             ps.setString(2, t.getData_emissao());
             ps.setString(3, t.getData_vencimento());
             ps.setDouble(4, t.getTotal());
 //            ps.setDouble(5, t.getTotalPago());
-//            ps.setString(7, t.getCondicaoPagamento());
+            ps.setString(5, t.getCondicaoPagamento());
 //            ps.setInt(8, t.getNumeroParcelas());
 //            ps.setString(9, t.getEstado());
-            ps.setInt(5, t.getEmpresa().getId());
-            ps.setInt(6, t.getCliente().getId());
-            ps.setInt(7, t.getUsuario().getId());
-            ps.setInt(8, t.getDocComerciais().getId());
-            ps.setDouble(9, t.getSaldoPendente());
+            ps.setInt(6, t.getEmpresa().getId());
+            ps.setInt(7, t.getCliente().getId());
+            ps.setInt(8, t.getUsuario().getId());
+            ps.setInt(9, t.getDocComerciais().getId());
+            ps.setDouble(10, t.getSaldoPendente());
 
             int rowsAffected = ps.executeUpdate();
 
@@ -258,7 +258,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
         ObservableList<Factura> lista = FXCollections.observableArrayList();
         try {
             sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, "
-                    + "f.estado, f.total, f.totalPago, f.saldoPendente, f.numeroParcelas, "
+                    + "f.estado, f.total, f.totalPago, f.saldoPendente, f.numeroParcelas, f.condicaoPagemento, "
                     + "CONCAT(doc.sigla, ' - ', doc.nome) AS Documento "
                     + "FROM factura f "
                     + "LEFT JOIN documentocomercial doc ON f.fk_id_doc = doc.id "
@@ -280,6 +280,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 f.setTotalPago(result.getDouble("totalPago"));
                 f.setSaldoPendente(result.getDouble("saldoPendente"));
                 f.setNumeroParcelas(result.getInt("numeroParcelas"));
+                f.setCondicaoPagamento(result.getString("condicaoPagemento"));
                 DocumentosComerciais d = new DocumentosComerciais();
                 d.setNome_doc(result.getString("Documento"));
                 f.setDocComerciais(d);

@@ -187,7 +187,7 @@ public class MiniPagamentoViewController implements Initializable {
         }else{
             valorPago = valorRecebido;
         }
-        st.registapagamentoFactura(dataPagamento, valorRecebido, valorPago, getTroco(),
+        st.registapagamentoFacturaAvista(dataPagamento, valorRecebido, valorPago, getTroco(),
                 txtDescricao.getText(), empresaData.getContaBancaria().getId(),
                 metodo.getId(), labNumeroFactura.getText(), userData);
         if (st.isOpsSuccess()) {

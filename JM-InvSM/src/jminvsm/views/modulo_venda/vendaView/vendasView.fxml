@@ -2,9 +2,11 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -89,7 +91,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaItens" layoutY="170.0" prefHeight="673.0" prefWidth="970.0" AnchorPane.leftAnchor="0.0">
+      <TableView fx:id="tabelaItens" layoutY="170.0" prefHeight="673.0" prefWidth="970.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0">
          <columns>
             <TableColumn fx:id="idtabelaItens" prefWidth="29.0" text="#" />
             <TableColumn fx:id="nometabelaItens" prefWidth="420.0" text="Descrição" />
@@ -153,7 +155,7 @@
             <ComboBox fx:id="combDesconto" layoutX="242.0" layoutY="86.0" prefHeight="25.0" prefWidth="197.0" promptText="Desconto" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="974.0" layoutY="501.0" prefHeight="340.0" prefWidth="451.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.rightAnchor="0.0">
+      <AnchorPane layoutX="974.0" layoutY="501.0" prefHeight="440.0" prefWidth="450.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <AnchorPane layoutX="8.0" layoutY="39.0" prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -164,7 +166,7 @@
                   </Label>
                </children>
             </AnchorPane>
-            <Button fx:id="btnCancelaFactura" layoutX="235.0" layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="52.0">
+            <Button fx:id="btnCancelaFactura" layoutX="235.0" layoutY="368.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="52.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -178,7 +180,7 @@
                   <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="30" />
                </graphic>
             </Button>
-            <Button fx:id="btnFinalizaFactura" layoutX="54.0" layoutY="282.0" mnemonicParsing="false" onAction="#criarFactura" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Finalizar" textFill="WHITE">
+            <Button fx:id="btnFinalizaFactura" layoutX="54.0" layoutY="368.0" mnemonicParsing="false" onAction="#criarFactura" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Finalizar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -192,9 +194,9 @@
                   <FontAwesomeIconView fill="WHITE" glyphName="CHECK" size="30" />
                </graphic>
             </Button>
-            <AnchorPane layoutX="35.0" layoutY="123.0">
+            <AnchorPane layoutY="84.0" prefWidth="330.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0">
                <children>
-                  <HBox>
+                  <HBox prefHeight="105.0" prefWidth="328.0">
                      <children>
                         <VBox prefHeight="154.0" prefWidth="122.0">
                            <children>
@@ -220,31 +222,43 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox prefHeight="154.0" prefWidth="155.0">
+                        <VBox prefHeight="108.0" prefWidth="178.0">
                            <children>
-                              <Label fx:id="labSubtotal" text="0.0" textFill="WHITE">
+                              <Label fx:id="labSubtotal" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="170.0" text="0.0" textFill="WHITE">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
                               </Label>
-                              <Label fx:id="labTaxas" text="0.0" textFill="WHITE">
+                              <Label fx:id="labTaxas" alignment="CENTER_RIGHT" prefWidth="170.0" text="0.0" textFill="WHITE">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
                               </Label>
-                              <Label fx:id="labDesconto" text="0.0" textFill="WHITE">
+                              <Label fx:id="labDesconto" alignment="CENTER_RIGHT" prefWidth="170.0" text="0.0" textFill="WHITE">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
                               </Label>
-                              <Label fx:id="labTotalGeral" text="0.0" textFill="WHITE">
+                              <Label fx:id="labTotalGeral" alignment="CENTER_RIGHT" prefWidth="170.0" text="0.0" textFill="WHITE">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
                               </Label>
                            </children>
                         </VBox>
-                        <VBox prefHeight="154.0" prefWidth="51.0">
+                        <VBox prefHeight="108.0" prefWidth="38.0">
                            <children>
                               <Label text="Mt" textFill="WHITE">
                                  <font>
@@ -272,12 +286,27 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <ComboBox fx:id="combTipoDoc" layoutX="235.0" layoutY="84.0" onAction="#selecionaFactura" prefHeight="25.0" prefWidth="180.0" />
-            <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutX="24.0" layoutY="79.0" prefHeight="35.0" prefWidth="197.0" text="Tipo de Factura:" textFill="WHITE">
+            <ComboBox fx:id="combTipoDoc" layoutX="182.0" layoutY="211.0" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="265.0" promptText="Selecione o tipo de factura a emitir" />
+            <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutY="206.0" prefHeight="35.0" prefWidth="171.0" text="Tipo de Factura:" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
+            <Label fx:id="labTotalFactura11" alignment="CENTER_RIGHT" layoutY="255.0" prefHeight="35.0" prefWidth="265.0" text="Condicoes de pagamento" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <RadioButton fx:id="rdPagamentoVista" layoutX="28.0" layoutY="300.0" mnemonicParsing="false" onAction="#radioVista" text="Pagamento A Vista" textFill="#fcfcfc">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="rdPagamentoParcelado" layoutX="221.0" layoutY="300.0" mnemonicParsing="false" onAction="#radioParcelado" text="Pagamento Parcelado" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </RadioButton>
          </children>
       </AnchorPane>
    </children>

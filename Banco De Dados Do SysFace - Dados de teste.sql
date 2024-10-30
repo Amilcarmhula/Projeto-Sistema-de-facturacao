@@ -8,7 +8,6 @@ VALUES
 ('Pessoa Jurídica', 'Transporte Rápido', 'TransRápido Ltda', 963852741, 1),
 ('Pessoa Física', 'Roberto Souza', 'Beto', 369258147, 1);
 
-
 -- Dados de endereços
 INSERT INTO endereco_cliente (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_cliente, fk_id_usuario)
 VALUES
@@ -27,53 +26,41 @@ VALUES
 ('Maria Xavier', '844567890', 'maria.xavier@exemplo.com', 'www.mariaxavier.com', 4, 1),
 ('Joaquim Sambo', '845678901', 'joaquim.sambo@exemplo.com', 'www.joaquimsambo.com', 5, 1);
 
+-- INSERT INTO fornecedor (tipo, razaosocial, nuit, fk_id_usuario) VALUES
+-- ('Pessoa Jurídica', 'Alpha Distribuidora LTDA', 123456789, 1),
+-- ('Pessoa Jurídica', 'Beta Comércio e Serviços', 987654321, 1),
+-- ('Pessoa Física', 'Carlos Eduardo Silva', 789456123, 1);
 
 
--- Inserir mais 10 contatos fictícios na tabela contacto_cliente
-INSERT INTO contacto_cliente (pessoa_de_contacto, contacto, email, website, fk_id_cliente, fk_id_usuario)
-VALUES
-('José Chongo', '841234568', 'jose.chongo@exemplo.com', 'www.josechongo.com', 1, 1),
-('Patrícia Domingos', '842345679', 'patricia.domingos@exemplo.com', 'www.patriciadomingos.com', 2, 1),
-('Manuel Macamo', '843456780', 'manuel.macamo@exemplo.com', 'www.manuelmacamo.com', 3, 1),
-('Carla Magalhães', '844567891', 'carla.magalhaes@exemplo.com', 'www.carlamagalhaes.com', 4, 1),
-('Paulo Samito', '845678902', 'paulo.samito@exemplo.com', 'www.paulosamito.com', 5, 1);
+-- INSERT INTO endereco_fornecedor (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_fornecedor, fk_id_usuario) VALUES
+-- ('Maputo', 'Maputo', ' Central', ' 25 de Setembro', ' das Acácias', 1101, 23, 'Comercial', 1, 1),
+-- ('Maputo', 'Matola', ' Liberdade', ' da Liberdade', ' das Flores', 1102, 45, 'Comercial', 2, 1),
+-- ('Gaza', 'Xai-Xai', ' Patrice Lumumba', ' Eduardo Mondlane', ' do Comércio', 1201, 12, 'Comercial', 3, 1);
 
 
-INSERT INTO fornecedor (tipo, razaosocial, nuit, fk_id_usuario) VALUES
-('Pessoa Jurídica', 'Alpha Distribuidora LTDA', 123456789, 1),
-('Pessoa Jurídica', 'Beta Comércio e Serviços', 987654321, 1),
-('Pessoa Física', 'Carlos Eduardo Silva', 789456123, 1);
-
-
-INSERT INTO endereco_fornecedor (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_fornecedor, fk_id_usuario) VALUES
-('Maputo', 'Maputo', ' Central', ' 25 de Setembro', ' das Acácias', 1101, 23, 'Comercial', 1, 1),
-('Maputo', 'Matola', ' Liberdade', ' da Liberdade', ' das Flores', 1102, 45, 'Comercial', 2, 1),
-('Gaza', 'Xai-Xai', ' Patrice Lumumba', ' Eduardo Mondlane', ' do Comércio', 1201, 12, 'Comercial', 3, 1);
-
-
-INSERT INTO contacto_fornecedor (pessoa_de_contacto, contacto, email, website, fk_id_fornecedor, fk_id_usuario) VALUES
-('João Almeida', '823456789', 'joao.almeida@alphadistribuidora.com', 'www.alphadistribuidora.com', 1, 1),
-('Ana Costa', '823987654', 'ana.costa@betacomercio.com', 'www.betacomercio.com', 2, 1),
-('Fernanda Lopes', '825643987', 'fernanda.lopes@deltaengenharia.com', 'www.deltaengenharia.com', 3, 1);
+-- INSERT INTO contacto_fornecedor (pessoa_de_contacto, contacto, email, website, fk_id_fornecedor, fk_id_usuario) VALUES
+-- ('João Almeida', '823456789', 'joao.almeida@alphadistribuidora.com', 'www.alphadistribuidora.com', 1, 1),
+-- ('Ana Costa', '823987654', 'ana.costa@betacomercio.com', 'www.betacomercio.com', 2, 1),
+-- ('Fernanda Lopes', '825643987', 'fernanda.lopes@deltaengenharia.com', 'www.deltaengenharia.com', 3, 1);
 
 
 
-INSERT INTO armazem (nome, tipo, descricao, estado) VALUES
-('Armazém Central Maputo', 'Central', 'Principal em Maputo', 1),
-('Armazém Regional Beira', 'Regional', 'Operações Sofala', 1),
-('Armazém Loja Matola', 'Loja', 'Suporte Matola', 1);
+-- INSERT INTO armazem (nome, tipo, descricao, estado) VALUES
+-- ('Armazém Central Maputo', 'Central', 'Principal em Maputo', 1),
+-- ('Armazém Regional Beira', 'Regional', 'Operações Sofala', 1),
+-- ('Armazém Loja Matola', 'Loja', 'Suporte Matola', 1);
 
 
-INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, fk_id_armazem, fk_id_usuario) VALUES
-('Maputo', 'Maputo', ' Central', ' 25 de Setembro', ' das Acácias', 1101, 23,  1, 1),
-('Sofala', 'Beira', ' Ponta-Gêa', ' Samora Machel', ' da Beira', 1401, 10,  2, 1),
-('Maputo', 'Matola', ' Liberdade', ' da Liberdade', ' das Flores', 1102, 45,  3, 1);
+-- INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, fk_id_armazem, fk_id_usuario) VALUES
+-- ('Maputo', 'Maputo', ' Central', ' 25 de Setembro', ' das Acácias', 1101, 23,  1, 1),
+-- ('Sofala', 'Beira', ' Ponta-Gêa', ' Samora Machel', ' da Beira', 1401, 10,  2, 1),
+-- ('Maputo', 'Matola', ' Liberdade', ' da Liberdade', ' das Flores', 1102, 45,  3, 1);
 
 
-INSERT INTO contacto_armazem (pessoa_de_contacto, contacto, email, fk_id_armazem, fk_id_usuario) VALUES
-('João Pereira', '823456789', 'joao.pereira@centralmaputo.com', 1, 1),
-('Ana Martins', '843456789', 'ana.martins@regionalbeira.com', 2, 1),
-('Carlos Silva', '823987654', 'carlos.silva@loja.matola.com', 3, 1);
+-- INSERT INTO contacto_armazem (pessoa_de_contacto, contacto, email, fk_id_armazem, fk_id_usuario) VALUES
+-- ('João Pereira', '823456789', 'joao.pereira@centralmaputo.com', 1, 1),
+-- ('Ana Martins', '843456789', 'ana.martins@regionalbeira.com', 2, 1),
+-- ('Carlos Silva', '823987654', 'carlos.silva@loja.matola.com', 3, 1);
 
 
 INSERT INTO categoria (tipo, grupo, subgrupo, familia, descricao) VALUES

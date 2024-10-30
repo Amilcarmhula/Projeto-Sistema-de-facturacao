@@ -37,10 +37,12 @@ import jminvsm.SysFact;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.empresa.Empresa;
 import jminvsm.model.metodo_pagamento.MetodoPagamento;
+import jminvsm.model.parcelas.Parcela;
 import jminvsm.model.transacao.Transacao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.service.metodoPagamento.ServiceMetodoPagamento;
+import jminvsm.service.parcela.ServiceParcelas;
 import jminvsm.service.transacoes.ServiceTransacoes;
 import jminvsm.service.vendas.factura.ServiceFactura;
 import static jminvsm.util.AlertUtilities.showErroNotification;
@@ -54,8 +56,10 @@ import jminvsm.views.modulo_venda.vendaView.VendasController;
  * @author JM-Tecnologias
  */
 public class PagamentoController implements Initializable {
+
     private Empresa empresaData;
     private Usuario userData;
+    private ServiceParcelas serviceParcela;
 
     @FXML
     private TextField txtIDCliente;
@@ -111,6 +115,35 @@ public class PagamentoController implements Initializable {
     private TableColumn<Transacao, String> descricaoTrans;
 
     @FXML
+    private TableView<Parcela> tabelaParcelas;
+    @FXML
+    private TableColumn<Parcela, Integer> IDParcela;
+    @FXML
+    private TableColumn<Parcela, Integer> refParcela;
+    @FXML
+    private TableColumn<Parcela, Double> jurosParcela;
+    @FXML
+    private TableColumn<Parcela, Double> jurosAtrasoParcela;
+    @FXML
+    private TableColumn<Parcela, Double> valorParcela;
+    @FXML
+    private TableColumn<Parcela, Double> valorParcelaPago;
+
+    @FXML
+    private TableColumn<Parcela, String> dataVencimentoParcela;
+    @FXML
+    private TableColumn<Parcela, String> dataPagamentoParcela;
+    @FXML
+    private TableColumn<Parcela, String> estadoParcela;
+
+    @FXML
+    private TextField txtnumeroDeParcelas;
+    @FXML
+    private TextField txtjurosParcela;
+    @FXML
+    private ComboBox<String> combIntervaloParcelas;
+
+    @FXML
     private ComboBox<String> combmetodoPagamento;
     @FXML
     private DatePicker dataPagamento;
@@ -119,9 +152,77 @@ public class PagamentoController implements Initializable {
     @FXML
     private Button btnFinalizar;
     @FXML
+    private Button btnParcelas;
+    @FXML
     private TextField txtDescricao;
+    private int id_parcela;
 
-    
+    private final Map<String, Integer> mapaIntervaloParcelas = new HashMap<>();
+
+    public void initIntervalMap() {
+        mapaIntervaloParcelas.put("Cada semana", 7);
+        mapaIntervaloParcelas.put("Cada duas semanas", 14);
+        mapaIntervaloParcelas.put("Mensal", 30);
+        List<String> lista = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : mapaIntervaloParcelas.entrySet()) {
+            lista.add(entry.getKey());
+        }
+        combIntervaloParcelas.setItems(FXCollections.observableArrayList(lista));
+    }
+
+    public void geraParcelas() throws SQLException {
+        int intervalo;
+        if (combIntervaloParcelas.getValue() == null) {
+            intervalo = 30;
+        } else {
+            intervalo = mapaIntervaloParcelas.get(combIntervaloParcelas.getValue());
+        }
+        int numParcelas = Integer.parseInt(txtnumeroDeParcelas.getText().equals("") ? "0" : txtnumeroDeParcelas.getText());
+        double taxaJuros = Double.parseDouble(txtjurosParcela.getText().equals("") ? "0" : txtjurosParcela.getText());
+        double saldo = Double.parseDouble(labValorPorPagar.getText().equals("") ? "0" : labValorPorPagar.getText());
+        serviceParcela.regista(numParcelas, intervalo, taxaJuros,
+                saldo, labNumeroFactura.getText(), userData);
+        if (serviceParcela.isOpsSuccess()) {
+            showParcelas();
+            showFacturas();
+
+        }
+    }
+
+    private ObservableList<Parcela> listaParcelas;
+
+    public void showParcelas() {
+        listaParcelas = serviceParcela.consultaParcelas(labNumeroFactura.getText());
+
+        IDParcela.setCellValueFactory(new PropertyValueFactory<>("id"));
+        refParcela.setCellValueFactory(new PropertyValueFactory<>("parcelaNumero"));
+        jurosParcela.setCellValueFactory(new PropertyValueFactory<>("taxaJuros"));
+        jurosAtrasoParcela.setCellValueFactory(new PropertyValueFactory<>("taxaDeAtraso"));
+        valorParcela.setCellValueFactory(new PropertyValueFactory<>("valorParcela"));
+        valorParcelaPago.setCellValueFactory(new PropertyValueFactory<>("valorPagoParcela"));
+        dataVencimentoParcela.setCellValueFactory(new PropertyValueFactory<>("dataVencimento"));
+        dataPagamentoParcela.setCellValueFactory(new PropertyValueFactory<>("dataPagamento"));
+        estadoParcela.setCellValueFactory(new PropertyValueFactory<>("estado"));
+
+        tabelaParcelas.setItems(listaParcelas);
+    }
+
+    public void selecionaParcela() {
+        Parcela p = tabelaParcelas.getSelectionModel().getSelectedItem();
+        if (p != null) {
+            id_parcela = p.getId();
+            if (p.getEstado().equals("Pendente") || p.getEstado().equals("Atrasada")) {
+                labValorPorPagar.setText((p.getValorParcela() - p.getValorPagoParcela()) + "");
+                labValorPorPagar_Aux.setText("Mt em Saldo");
+                btnFinalizar.setDisable(false);
+            } else {
+                labValorPorPagar.setText("");
+                labValorPorPagar_Aux.setText("");
+                btnFinalizar.setDisable(true);
+            }
+
+        }
+    }
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
@@ -171,24 +272,27 @@ public class PagamentoController implements Initializable {
         this.userData = SysFact.getUserData();
         this.empresaData = SysFact.getEmpresaData();
         valorRecebidoListener();
+        initIntervalMap();
         try {
+            this.serviceParcela = new ServiceParcelas();
             getDataOnFocus();
             populateComboMetodoPagamento();
         } catch (SQLException ex) {
             Logger.getLogger(PagamentoController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private double troco;
 
     public double getTroco() {
         return troco;
     }
+
     public double valorRecebidoListener() {
         txtValorRecebido.textProperty().addListener(((observable, oldVal, newVal) -> {
             MetodoPagamento metodo = mapaMetodos.get(combmetodoPagamento.getValue());
 
-            double total = Double.parseDouble(labValorPorPagar.getText());
+            double total = Double.parseDouble(labValorPorPagar.getText().equals("") ? "0" : labValorPorPagar.getText());
             double valorRecebido = 0;
             if (!newVal.isEmpty()) {
                 valorRecebido = Double.parseDouble(newVal);
@@ -204,15 +308,15 @@ public class PagamentoController implements Initializable {
         }));
         return troco;
     }
-    
+
     public void addTransacao() throws SQLException {
         ServiceTransacoes st = new ServiceTransacoes();
-        if(combmetodoPagamento.getValue()==null){
+        if (combmetodoPagamento.getValue() == null) {
             showErroNotification("Erro", "Metodo de pagamento nao selecionado!");
             return;
         }
         MetodoPagamento metodo = mapaMetodos.get(combmetodoPagamento.getValue());
-        if(dataPagamento.getValue() == null){
+        if (dataPagamento.getValue() == null) {
             dataPagamento.setValue(LocalDate.now());
         }
         double total = Double.parseDouble(labValorPorPagar.getText());
@@ -220,31 +324,32 @@ public class PagamentoController implements Initializable {
         double valorPago;
         if (metodo.getId() == 1 && total < valorRecebido) {
             valorPago = valorRecebido - getTroco();
-        }else{
+        } else {
             valorPago = valorRecebido;
         }
 
-        st.registapagamentoFactura(String.valueOf(dataPagamento.getValue()), valorRecebido, valorPago, getTroco(),
+        st.registapagamentoFacturaParcelada(id_parcela, String.valueOf(dataPagamento.getValue()), valorRecebido, valorPago, getTroco(),
                 txtDescricao.getText(), empresaData.getContaBancaria().getId(),
                 metodo.getId(), labNumeroFactura.getText(), userData);
-        if(st.isOpsSuccess()){
+        if (st.isOpsSuccess()) {
             showTransacoes();
+            showParcelas();
             showFacturas();
-            actualizaLabelSaldo();
+//            actualizaLabelSaldo();
             txtDescricao.setText("");
             txtValorRecebido.setText("");
             dataPagamento.setValue(null);
         }
     }
-    public void actualizaLabelSaldo(){
-        ObservableList<Factura> dadosTabela = tabelaFactura.getItems();
-        for (Factura factura : dadosTabela) {
-            if(factura.getNumero_fac().equals(labNumeroFactura.getText())){
-                labValorPorPagar.setText(factura.getSaldoPendente()+"");
-            }
-        }
-    }
 
+//    public void actualizaLabelSaldo() {
+//        ObservableList<Factura> dadosTabela = tabelaFactura.getItems();
+//        for (Factura factura : dadosTabela) {
+//            if (factura.getNumero_fac().equals(labNumeroFactura.getText())) {
+//                labValorPorPagar.setText(factura.getSaldoPendente() + "");
+//            }
+//        }
+//    }
     private ObservableList<Factura> listaFacturasCliente;
 
     public void showFacturas() throws SQLException {
@@ -260,7 +365,7 @@ public class PagamentoController implements Initializable {
         total.setCellValueFactory(new PropertyValueFactory<>("total"));
         totalPago.setCellValueFactory(new PropertyValueFactory<>("totalPago"));
         saldoPendente.setCellValueFactory(new PropertyValueFactory<>("saldoPendente"));
-                
+
         estado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         tabelaFactura.setItems(listaFacturasCliente);
@@ -276,25 +381,24 @@ public class PagamentoController implements Initializable {
 
     public void selecionaFactura() throws SQLException {
         Factura f = tabelaFactura.getSelectionModel().getSelectedItem();
-        labValorPorPagar.setText(f.getSaldoPendente()+"");
-        labValorPorPagar_Aux.setText("Mt de Saldo");
+
         if (f != null) {
             labNumeroFactura.setText(f.getNumero_fac());
-            if(f.getEstado().equals("Paga") || f.getEstado().equals("Cancelada")){
-                dataPagamento.setDisable(true);
-                combmetodoPagamento.setDisable(true);
-                txtValorRecebido.setDisable(true);
-                txtDescricao.setDisable(true);
+            labValorPorPagar.setText(f.getSaldoPendente() + "");
+            if (f.getEstado().equals("Paga") || f.getEstado().equals("Cancelada")) {
                 btnFinalizar.setDisable(true);
-            }else{
-                dataPagamento.setDisable(false);
-                combmetodoPagamento.setDisable(false);
-                txtValorRecebido.setDisable(false);
-                txtDescricao.setDisable(false);
+                btnParcelas.setDisable(true);
+            } else {
                 btnFinalizar.setDisable(false);
+            }
+            if (f.getNumeroParcelas() >= 1) {
+                btnParcelas.setDisable(true);
+            } else {
+                btnParcelas.setDisable(false);
             }
             /*Abaixo vem a logica para pesquisar as transacoes da factura*/
             showTransacoes();
+            showParcelas();
         }
     }
     private ObservableList<Transacao> listaTransacoes;
@@ -314,15 +418,15 @@ public class PagamentoController implements Initializable {
 
         tabelaTransacoes.setItems(listaTransacoes);
     }
-    public void selecionaTransacao(){
+
+    public void selecionaTransacao() {
         Transacao t = tabelaTransacoes.getSelectionModel().getSelectedItem();
-        if(t!=null){
+        if (t != null) {
             dataPagamento.setValue(LocalDate.parse(t.getData_pagamento()));
             combmetodoPagamento.setValue(t.getMetodo().getNome());
-            txtValorRecebido.setText(t.getValorRecebido()+"");
+            txtValorRecebido.setText(t.getValorRecebido() + "");
             txtDescricao.setText(t.getDescricao());
-            labTrocos.setText(t.getTrocos()+"");
-            labValorPorPagar.setText(t.getValorPago()+"");
+            labTrocos.setText(t.getTrocos() + "");
         }
     }
 

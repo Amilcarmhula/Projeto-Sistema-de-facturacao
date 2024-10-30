@@ -6,6 +6,7 @@ package jminvsm.model.transacao;
 
 import jminvsm.model.empresa.conta.ContaBancaria;
 import jminvsm.model.metodo_pagamento.MetodoPagamento;
+import jminvsm.model.parcelas.Parcela;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
 
@@ -21,6 +22,7 @@ public class Transacao {
     private double trocos;
     private String tipo_transacao;
     private String descricao;
+    private Parcela parcela;
     private ContaBancaria contabancaria;
     private Factura factura;
     private Usuario usuario; 
@@ -30,7 +32,7 @@ public class Transacao {
     public Transacao() {
     }
 
-    public Transacao(String data_pagamento, double valorRecebido, double valorPago, double trocos, String tipo_transacao, String descricao, ContaBancaria contabancaria, Factura factura, Usuario usuario, String data_criacao, MetodoPagamento metodo) {
+    public Transacao(String data_pagamento, double valorRecebido, double valorPago, double trocos, String tipo_transacao, String descricao, ContaBancaria contabancaria, Factura factura, Usuario usuario, String data_criacao, MetodoPagamento metodo, Parcela parcela) {
         this.data_pagamento = data_pagamento;
         this.valorRecebido = valorRecebido;
         this.valorPago = valorPago;
@@ -42,6 +44,7 @@ public class Transacao {
         this.usuario = usuario;
         this.data_criacao = data_criacao;
         this.metodo = metodo;
+        this.parcela = parcela;
     }
 
     
@@ -140,6 +143,14 @@ public class Transacao {
 
     public void setMetodo(MetodoPagamento metodo) {
         this.metodo = metodo;
+    }
+
+    public Parcela getParcela() {
+        return parcela;
+    }
+
+    public void setParcela(Parcela parcela) {
+        this.parcela = parcela;
     }
     
 }

@@ -48,12 +48,16 @@ public class ServiceFactura {
         this.estado = estado;
     }
 
-    public void criaFactura(String numero, String dataEmissao, String dataVencimento, Double total,
+    public void criaFactura(String numero, String dataEmissao, String dataVencimento, Double total, String condicaoPagamento,
             DocumentosComerciais doc, Integer cli, Empresa emp, Usuario user, List<Item> itens) throws SQLException {
         Cliente cliente;
         setEstado(false);
         if (numero == null || numero.isEmpty()) {
             showErroNotification("Erro", "Tipo de factura nao selecionada!");
+            return;
+        }
+        if (condicaoPagamento == null || condicaoPagamento.isEmpty()) {
+            showErroNotification("Erro", "Condicao de pagamento nao selecionada!");
             return;
         }
 
@@ -78,7 +82,7 @@ public class ServiceFactura {
 //        f.setTotalPago(0);
         f.setSaldoPendente(total);
 //        f.setEstado("Pendente");
-//        f.setCondicaoPagamento("");
+        f.setCondicaoPagamento(condicaoPagamento);
         f.setDocComerciais(doc);
         f.setCliente(cliente);
         f.setEmpresa(emp);

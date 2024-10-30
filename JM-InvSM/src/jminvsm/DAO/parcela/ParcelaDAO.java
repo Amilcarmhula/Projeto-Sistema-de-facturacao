@@ -22,7 +22,8 @@ import jminvsm.util.Conexao;
  *
  * @author JM-Tecnologias
  */
-public class ParcelaDAO implements ParcelaDAOImpl<Parcela>{
+public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
+
     private Connection con;
     private PreparedStatement ps;
     private String sql;
@@ -33,11 +34,11 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela>{
 
     @Override
     public boolean addEntity(Parcela t) {
-         boolean isSuccess = false;
+        boolean isSuccess = false;
         try {
             sql = "insert into parcelas (parcelaNumero,taxaJuros,valorParcela,"
-                    + "dataVencimento,fk_factura,fk_usuario,taxaDeAtraso)"
-                    + " value (?,?,?,?,?,?,?)";
+                    + "dataVencimento,fk_factura,fk_usuario)"
+                    + " value (?,?,?,?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setInt(1, t.getParcelaNumero());
             ps.setDouble(2, t.getTaxaJuros());
@@ -45,7 +46,7 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela>{
             ps.setString(4, t.getDataVencimento());
             ps.setString(5, t.getFactura().getNumero_fac());
             ps.setInt(6, t.getUsuario().getId());
-            ps.setDouble(7, t.getTaxaDeAtraso());
+//            ps.setDouble(7, t.getTaxaDeAtraso());
 
             int rowsAffected = ps.executeUpdate();
 
@@ -71,7 +72,11 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela>{
     public ObservableList<Parcela> getEntities(String fk_numero) {
         ObservableList<Parcela> lista = FXCollections.observableArrayList();
         try {
-            sql = "select * from parcelas where fk_factura=?";
+            sql = "select p.id, p.parcelaNumero, p.taxaJuros, p.taxaDeAtraso, "
+                    + "(p.valorParcela*p.taxaDeAtraso)+p.valorParcela as valorParcela, "
+                    + "p.valorPagoParcela, p.dataVencimento, p.dataPagamento, p.estado, "
+                    + "p.fk_factura, p.fk_usuario "
+                    + "from parcelas p where fk_factura=?";
             ps = con.prepareStatement(sql);
             ps.setString(1, fk_numero);
             ResultSet result = ps.executeQuery();
@@ -95,7 +100,5 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela>{
         }
         return lista;
     }
-    
-    
-   
+
 }

@@ -1,4 +1,4 @@
-use _sysface;
+-- use _sysface;
 
 INSERT INTO cliente (tipo, nome, razaosocial, nuit, fk_id_usuario)
 VALUES

@@ -118,7 +118,7 @@ public class ServiceTransacoes {
             return;
         }
         
-        if (id_parcela == null) {
+        if (id_parcela == null || id_parcela <= 0) {
             showErroNotification("Erro", "Parcela nao selecionada!");
             return;
         }

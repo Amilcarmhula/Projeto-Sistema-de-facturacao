@@ -155,7 +155,7 @@ public class PagamentoController implements Initializable {
     private Button btnParcelas;
     @FXML
     private TextField txtDescricao;
-    private int id_parcela;
+    private int id_parcela = 0;
 
     private final Map<String, Integer> mapaIntervaloParcelas = new HashMap<>();
 

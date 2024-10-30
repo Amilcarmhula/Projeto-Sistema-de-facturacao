@@ -329,7 +329,7 @@ DELIMITER ;
 CREATE EVENT evento_atualizar_precovenda
 ON SCHEDULE EVERY 1 DAY
 DO
-	-- CALL atualizar_estado_precovenda();
+	CALL atualizar_estado_precovenda();
 
 create table produto_fornecido(
 	id integer primary key auto_increment,
@@ -504,7 +504,7 @@ create table parcelas(
 	id integer primary key auto_increment,
     parcelaNumero integer not null,
     taxaJuros decimal(4,3) not null,
-    taxaDeAtraso decimal(4,3) not null, -- 50% da taxa de juro normal
+    taxaDeAtraso decimal(4,3) default 0.00, -- 50% da taxa de juro normal
     valorParcela decimal(10,2) not null,
     valorPagoParcela decimal(10,2) default 0.0,
     dataVencimento date,
@@ -515,7 +515,42 @@ create table parcelas(
     foreign key (fk_usuario) references usuario(id),
     FOREIGN KEY (fk_factura) REFERENCES factura(numero)
 );
+-- Procedimento armazenado que e chamado atraves de uma EVENT para controlar o estado das parcelas se estao atrasadas ou nao
+DELIMITER //
+CREATE PROCEDURE _updateEstadoParcela()
+BEGIN
+    UPDATE parcelas
+    SET estado = 'Atrasada'
+    WHERE dataVencimento <= CURDATE() AND estado <> 'Pago';
+END//
+DELIMITER ;
+-- # Automatizando com um Evento
+-- Para evitar a execução manual, você pode criar um evento que execute o procedimento periodicamente 
+-- (por exemplo, diariamente). Veja como fazer isso:
+CREATE EVENT evento_updateEstadoParcela
+ON SCHEDULE EVERY 1 DAY
+DO
+	CALL _updateEstadoParcela();
+    
 
+
+DELIMITER //
+CREATE PROCEDURE _updateTaxaAtrasoParcela()
+BEGIN
+    UPDATE parcelas
+    SET taxaDeAtraso = taxaJuros / 2
+    WHERE estado = 'Atrasada';
+END //
+DELIMITER ;
+
+CREATE EVENT evento_updateTaxaAtrasoParcela
+ON SCHEDULE EVERY 1 DAY
+DO
+	CALL _updateTaxaAtrasoParcela();
+
+drop PROCEDURE _updateTaxaAtrasoParcela;
+
+-- Trigger para actualizar o numero de parcelas nas facturas quando elas vao ser pagas por parcelamento
 delimiter //
 create trigger _updateParcelasFactura
 	after insert on parcelas
@@ -529,6 +564,27 @@ create trigger _updateParcelasFactura
 		update factura set numeroParcelas = numero_de_parcelas, condicaoPagemento = 'Parcelado', saldoPendente = saldo  where numero = new.fk_factura;
     end//
 delimiter ;
+
+
+
+delimiter //
+create procedure _updateSaldoFactura_com_Atraso_de_Parcela()
+    begin
+    UPDATE factura f
+    SET f.saldoPendente = (
+        SELECT COALESCE(SUM((p.valorParcela * p.taxaDeAtraso) + p.valorParcela), 0)
+        FROM parcelas p
+        WHERE p.fk_factura = f.numero
+    );
+    end//
+delimiter ;
+-- # Automatizando com um Evento
+-- Para evitar a execução manual, você pode criar um evento que execute o procedimento periodicamente 
+-- (por exemplo, diariamente). Veja como fazer isso:
+CREATE EVENT evento_updateSaldoFactura_com_Atraso_de_Parcela
+ON SCHEDULE EVERY 1 DAY
+DO
+	CALL _updateSaldoFactura_com_Atraso_de_Parcela();
 
 -- transacoes 
 create table transacoes(

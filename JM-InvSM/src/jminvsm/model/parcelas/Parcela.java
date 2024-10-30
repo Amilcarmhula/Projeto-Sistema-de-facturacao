@@ -12,6 +12,7 @@ import jminvsm.model.vendas.factura.Factura;
  * @author JM-Tecnologias
  */
 public class Parcela {
+
     private int id;
     private int parcelaNumero;
     private double taxaJuros;
@@ -127,6 +128,5 @@ public class Parcela {
     public void setValorPagoParcela(double valorPagoParcela) {
         this.valorPagoParcela = valorPagoParcela;
     }
-    
-    
+
 }

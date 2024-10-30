@@ -58,7 +58,7 @@ public class ServiceParcelas {
 
         Parcela p = new Parcela();
         p.setTaxaJuros(juros/100);
-        p.setTaxaDeAtraso((juros/100)/2);
+//        p.setTaxaDeAtraso((juros/100)/2);
         p.setValorParcela((valorParcela/numeroDeParcelas)*p.getTaxaJuros()+(valorParcela/numeroDeParcelas));// O valor da parcela ainda deve ser calculada com base na taxa de juros
         Factura f = new Factura();
         f.setNumero_fac(numeroFactura);

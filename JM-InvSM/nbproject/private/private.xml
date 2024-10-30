@@ -3,12 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/service/transacoes/ServiceTransacoes.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/model/parcelas/Parcela.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/transacoes/TransacaoDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_contabilidade/pagamentosView/PagamentoController.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/parcela/ParcelaDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/service/parcela/ServiceParcelas.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_venda/vendaView/searchProduto/ProdutoSearchController.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_inventario/produtosView/calculaPreco/CalculaPrecoController.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_inventario/produtosView/ProdutoController.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_inventario/stockView/AddStockController.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/SysFact.java</file>
         </group>
     </open-files>
 </project-private>

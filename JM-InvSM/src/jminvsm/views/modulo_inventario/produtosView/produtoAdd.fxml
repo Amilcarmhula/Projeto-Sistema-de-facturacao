@@ -82,7 +82,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="txtPreco" layoutX="884.0" layoutY="32.0" prefHeight="25.0" prefWidth="126.0" promptText="Preco" stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtPreco" layoutX="884.0" layoutY="32.0" onMouseClicked="#getCalculaPreco" prefHeight="25.0" prefWidth="126.0" promptText="Preco" stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />

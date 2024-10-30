@@ -6,12 +6,11 @@ package jminvsm.views.modulo_inventario.produtosView;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -25,7 +24,6 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -34,11 +32,9 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import jminvsm.SysFact;
 import jminvsm.dao.preco.PrecoVendaDAO;
@@ -51,6 +47,7 @@ import jminvsm.model.usuario.Usuario;
 import jminvsm.service.precovenda.ServicePrecoVenda;
 import jminvsm.service.produto.Serviceproduto;
 import jminvsm.util.ButtonUtilities;
+import jminvsm.util.FilePathFinderUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
 /**
@@ -225,16 +222,33 @@ public class ProdutoController implements Initializable {
         }
     }
     
+    public void getCalculaPreco(MouseEvent evt) {
+        if (evt.getClickCount() == 1) {
+            LoadAndMoveUtilities.showAsPopUP(null, evt);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "calculaPreco.fxml"));
+        }
+    }
+    
     public void getData() {
+        txtPreco.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!oldValue && newValue) {
+                    if (SysFact.getData() instanceof Double) {
+                        txtPreco.setText(SysFact.getData()+"");
+                    }
+                }
+            }
+        });
         txtIDTaxa.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
                     if (SysFact.getData() instanceof TaxaImposto) {
-                        TaxaImposto x = (TaxaImposto) SysFact.getData();
-                        if (x != null) {
-                            txtIDTaxa.setText(String.valueOf(x.getId()));
-                            labTaxa.setText(String.valueOf(x.getNomeImposto() + ": " + (x.getPercentagemImposto() * 100) + "%"));
+                        TaxaImposto imposto = (TaxaImposto) SysFact.getData();
+                        if (imposto != null) {
+                            txtIDTaxa.setText(String.valueOf(imposto.getId()));
+                            labTaxa.setText(String.valueOf(imposto.getNomeImposto() + ": " + (imposto.getPercentagemImposto() * 100) + "%"));
                         }
                     }
                 }
@@ -470,7 +484,7 @@ public class ProdutoController implements Initializable {
         PrecoVendaDAO pvDAO = new PrecoVendaDAO();
         ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
         ProdutoDAO xDAO = new ProdutoDAO();
-        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
+        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText()),
                 String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
                 userData, xDAO.getLastEntity());
         showProduto();

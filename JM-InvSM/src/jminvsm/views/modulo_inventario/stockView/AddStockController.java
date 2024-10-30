@@ -267,6 +267,6 @@ public class AddStockController implements Initializable {
                 Integer.valueOf(txtIDFornecedor.getText().equals("") ? "0" : txtIDFornecedor.getText()), userData, 
                 Integer.valueOf(txtQuantidade.getText().equals("") ? "0" : txtQuantidade.getText()), 
                 String.valueOf(dataAquisicao.getValue() == null ? "" : dataAquisicao.getValue()), 
-                Double.valueOf(txtCustoAquisicao.getText().equals("") ? "0" : txtCustoAquisicao.getText().split(" ")[1].replace(".", "").replace(",", ".")));
+                Double.valueOf(txtCustoAquisicao.getText().equals("") ? "0" : txtCustoAquisicao.getText()));
     }
 }

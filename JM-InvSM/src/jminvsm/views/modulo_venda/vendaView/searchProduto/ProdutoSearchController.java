@@ -6,6 +6,7 @@ package jminvsm.views.modulo_venda.vendaView.searchProduto;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -51,6 +52,7 @@ import jminvsm.model.usuario.Usuario;
 import jminvsm.service.precovenda.ServicePrecoVenda;
 import jminvsm.service.produto.Serviceproduto;
 import jminvsm.util.ButtonUtilities;
+import jminvsm.util.FilePathFinderUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
 /**
@@ -229,8 +231,25 @@ public class ProdutoSearchController implements Initializable {
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_configs/taxasView/taxaView.fxml");
         }
     }
+    
+    public void getCalculaPreco(MouseEvent evt) {
+        if (evt.getClickCount() == 1) {
+            LoadAndMoveUtilities.showStage(null, evt);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "calculaPreco.fxml"));
+        }
+    }
 
     public void getData() {
+        txtPreco.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!oldValue && newValue) {
+                    if (SysFact.getData() instanceof Double) {
+                        txtPreco.setText(SysFact.getData()+"");
+                    }
+                }
+            }
+        });
         txtIDTaxa.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {

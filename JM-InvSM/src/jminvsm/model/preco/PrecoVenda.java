@@ -19,7 +19,7 @@ public class PrecoVenda {
     private double precoExclTaxa;
     private String data_inicio;
     private String data_fim;
-    private boolean estado;
+    private String estado;
     private Produto produto;
     private Usuario usuario;
     private String data_criacao;
@@ -109,11 +109,11 @@ public class PrecoVenda {
         this.data_criacao = data_criacao;
     }
 
-    public boolean isEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
     

@@ -5,8 +5,10 @@
 package jminvsm.service.precovenda;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import javafx.collections.ObservableList;
 import jminvsm.dao.preco.PrecoVendaDAO;
 import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
@@ -26,11 +28,11 @@ public class ServicePrecoVenda {
 
     private PrecoVendaDAO precoVendaDao;
 
-    public ServicePrecoVenda(PrecoVendaDAO precoVendaDao) {
-        this.precoVendaDao = precoVendaDao;
+    public ServicePrecoVenda() throws SQLException {
+        this.precoVendaDao = new PrecoVendaDAO();
     }
 
-    public void registraPrecoVenda(double preco, String data_inicio, 
+    public void registraPrecoVenda(double preco, double precoComTaxa, double precoSemTaxa, String data_inicio, 
             String data_fim, Usuario user, Produto pro) {
         
         preco = validarPreco(preco);
@@ -48,6 +50,8 @@ public class ServicePrecoVenda {
         }
         PrecoVenda pv = new PrecoVenda();
         pv.setPreco(preco);
+        pv.setPrecoExclTaxa(precoSemTaxa);
+        pv.setPrecoInclTaxa(precoComTaxa);
         pv.setData_inicio(data_inicio);
         pv.setData_fim(data_fim);
         pv.setUsuario(user);
@@ -62,7 +66,7 @@ public class ServicePrecoVenda {
         }
     }
     
-    public void actualizaPrecoVenda(int id, double preco, String data_inicio, 
+    public void actualizaPrecoVenda(int id, double preco,double precoComTaxa, double precoSemTaxa, String data_inicio, 
             String data_fim, Usuario user) {
         
         preco = validarPreco(preco);
@@ -74,8 +78,11 @@ public class ServicePrecoVenda {
             showErroNotification("Erro", "Usuário não definido!");
             return;
         }
+        
         PrecoVenda pv = new PrecoVenda();
         pv.setPreco(preco);
+        pv.setPrecoExclTaxa(precoSemTaxa);
+        pv.setPrecoInclTaxa(precoComTaxa);
         pv.setData_inicio(data_inicio);
         pv.setData_fim(data_fim);
         pv.setUsuario(user);
@@ -124,4 +131,9 @@ public class ServicePrecoVenda {
         }
         return data_fim;
     }
+    
+    public ObservableList<PrecoVenda> consultaPrecos(int idProduto){
+        return precoVendaDao.getEntityByProdutoID(idProduto);
+    }
+    
 }

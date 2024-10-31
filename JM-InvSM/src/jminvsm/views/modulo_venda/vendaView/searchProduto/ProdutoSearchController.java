@@ -50,7 +50,7 @@ import jminvsm.model.taxa_imposto.TaxaImposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.precovenda.ServicePrecoVenda;
-import jminvsm.service.produto.Serviceproduto;
+import jminvsm.service.produto.ServiceProduto;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.FilePathFinderUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
@@ -471,7 +471,7 @@ public class ProdutoSearchController implements Initializable {
 
     public void addProduto() throws SQLException {
         ProdutoDAO xDAO = new ProdutoDAO();
-        Serviceproduto sp = new Serviceproduto(xDAO);
+        ServiceProduto sp = new ServiceProduto();
         sp.registraProduto(Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
                 Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
                 txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
@@ -482,31 +482,29 @@ public class ProdutoSearchController implements Initializable {
     }
 
     public void addPrecoVenda() throws SQLException {
-        PrecoVendaDAO pvDAO = new PrecoVendaDAO();
-        ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
+        ServicePrecoVenda spv = new ServicePrecoVenda();
         ProdutoDAO xDAO = new ProdutoDAO();
-        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
-                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData, xDAO.getLastEntity());
+//        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
+//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+//                userData, xDAO.getLastEntity());
         showProduto();
         resetCampos();
     }
 
     public void addPrecoVendaONSelected() throws SQLException {
-        PrecoVendaDAO pvDAO = new PrecoVendaDAO();
-        ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
+        ServicePrecoVenda spv = new ServicePrecoVenda();
         Produto p = new Produto();
         p.setId(Integer.parseInt(txtIDProduto.getText()));
-        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
-                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData, p);
+//        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
+//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+//                userData, p);
         showProduto();
         resetCampos();
     }
 
     public void updateProduto() throws SQLException {
         ProdutoDAO xDAO = new ProdutoDAO();
-        Serviceproduto sp = new Serviceproduto(xDAO);
+        ServiceProduto sp = new ServiceProduto();
         sp.actualizaProduto(Integer.parseInt(txtIDProduto.getText()),Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
                 Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
                 txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
@@ -516,12 +514,11 @@ public class ProdutoSearchController implements Initializable {
     }
 
     public void updatePrecoVenda() throws SQLException {
-        PrecoVendaDAO pvDAO = new PrecoVendaDAO();
-        ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
+        ServicePrecoVenda spv = new ServicePrecoVenda();
         ProdutoDAO xDAO = new ProdutoDAO();
-        spv.actualizaPrecoVenda(Integer.parseInt(labIDPreco.getText()), Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
-                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData);
+//        spv.actualizaPrecoVenda(Integer.parseInt(labIDPreco.getText()), Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
+//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+//                userData);
         showProduto();
         resetCampos();
 

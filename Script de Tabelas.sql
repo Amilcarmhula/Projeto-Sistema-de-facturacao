@@ -243,12 +243,12 @@ create table produto(
 
 CREATE TABLE precovenda (
     id integer PRIMARY KEY AUTO_INCREMENT,
-    preco DECIMAL(10, 2) default 0.01 NULL,
+    precoNormal DECIMAL(10, 2) default 0.01 NULL,
     precoInclTaxa DECIMAL(10, 2) default 0.01 NULL,
     precoExclTaxa DECIMAL(10, 2) default 0.01 NULL,
     data_inicio DATE,
     data_fim DATE,
-    estado boolean default 1 not null,
+    estado varchar(20) default 'activo' not null,
     fk_id_produto integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

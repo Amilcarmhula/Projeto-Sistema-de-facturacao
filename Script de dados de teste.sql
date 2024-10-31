@@ -96,68 +96,68 @@ insert into metodo_pagamento(nome, descricao) values
 
 
 -- 									Dados de teste secundarios
--- INSERT INTO cliente (tipo, nome, razaosocial, nuit, fk_id_usuario)
--- VALUES
--- ('Pessoa Jurídica', 'Tech Solutions', 'Tech Soluções Ltda', 987654321, 1),
--- ('Pessoa Jurídica', 'Construtora Ideal', 'Ideal Construtora Ltda', 147258369, 1),
--- ('Pessoa Física', 'João Silva', 'Marcos', 852963741, 1),
--- ('Pessoa Jurídica', 'Transporte Rápido', 'TransRápido Ltda', 963852741, 1),
--- ('Pessoa Física', 'Roberto Souza', 'Beto', 369258147, 1);
+INSERT INTO cliente (tipo, nome, razaosocial, nuit, fk_id_usuario)
+VALUES
+('Pessoa Jurídica', 'Tech Solutions', 'Tech Soluções Ltda', 987654321, 1),
+('Pessoa Jurídica', 'Construtora Ideal', 'Ideal Construtora Ltda', 147258369, 1),
+('Pessoa Física', 'João Silva', 'Marcos', 852963741, 1),
+('Pessoa Jurídica', 'Transporte Rápido', 'TransRápido Ltda', 963852741, 1),
+('Pessoa Física', 'Roberto Souza', 'Beto', 369258147, 1);
 
--- -- Dados de endereços
--- INSERT INTO endereco_cliente (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_cliente, fk_id_usuario)
--- VALUES
--- ('Maputo', 'Maputo', 'Alto Maé', '25 de Setembro', ' 1', 1100, 123, 'Facturação', 1, 1),
--- ('Maputo', 'Maputo', 'Polana', 'Julius Nyerere', ' 2', 1200, 456, 'Facturação', 2, 1),
--- ('Inhambane', 'Inhambane', 'Chilwane', 'Patrice Lumumba', ' 6', 5500, 303, 'Facturação', 3, 1),
--- ('Gaza', 'Xai-Xai', 'Chongoene', 'dos Heróis', ' 7', 6600, 404, 'Facturação', 4, 1),
--- ('Cabo Delgado', 'Pemba', 'Paquitequete', '25 de Junho', ' 8', 7700, 505, 'Facturação', 5, 1);
+-- Dados de endereços
+INSERT INTO endereco_cliente (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_cliente, fk_id_usuario)
+VALUES
+('Maputo', 'Maputo', 'Alto Maé', '25 de Setembro', ' 1', 1100, 123, 'Facturação', 1, 1),
+('Maputo', 'Maputo', 'Polana', 'Julius Nyerere', ' 2', 1200, 456, 'Facturação', 2, 1),
+('Inhambane', 'Inhambane', 'Chilwane', 'Patrice Lumumba', ' 6', 5500, 303, 'Facturação', 3, 1),
+('Gaza', 'Xai-Xai', 'Chongoene', 'dos Heróis', ' 7', 6600, 404, 'Facturação', 4, 1),
+('Cabo Delgado', 'Pemba', 'Paquitequete', '25 de Junho', ' 8', 7700, 505, 'Facturação', 5, 1);
 
--- -- Inserir dados fictícios na tabela contacto_cliente
--- INSERT INTO contacto_cliente (pessoa_de_contacto, contacto, email, website, fk_id_cliente, fk_id_usuario)
--- VALUES
--- ('Carlos Mendes', '841234567', 'carlos.mendes@exemplo.com', 'www.carlosmendes.com', 1, 1),
--- ('Ana Joaquim', '842345678', 'ana.joaquim@exemplo.com', 'www.anajoaquim.com', 2, 1),
--- ('Pedro Langa', '843456789', 'pedro.langa@exemplo.com', 'www.pedrolanga.com', 3, 1),
--- ('Maria Xavier', '844567890', 'maria.xavier@exemplo.com', 'www.mariaxavier.com', 4, 1),
--- ('Joaquim Sambo', '845678901', 'joaquim.sambo@exemplo.com', 'www.joaquimsambo.com', 5, 1);
+-- Inserir dados fictícios na tabela contacto_cliente
+INSERT INTO contacto_cliente (pessoa_de_contacto, contacto, email, website, fk_id_cliente, fk_id_usuario)
+VALUES
+('Carlos Mendes', '841234567', 'carlos.mendes@exemplo.com', 'www.carlosmendes.com', 1, 1),
+('Ana Joaquim', '842345678', 'ana.joaquim@exemplo.com', 'www.anajoaquim.com', 2, 1),
+('Pedro Langa', '843456789', 'pedro.langa@exemplo.com', 'www.pedrolanga.com', 3, 1),
+('Maria Xavier', '844567890', 'maria.xavier@exemplo.com', 'www.mariaxavier.com', 4, 1),
+('Joaquim Sambo', '845678901', 'joaquim.sambo@exemplo.com', 'www.joaquimsambo.com', 5, 1);
 
--- INSERT INTO categoria (tipo, grupo, subgrupo, familia, descricao) VALUES
--- ('Produtos', 'Alimentares', 'Bebidas', 'Refrigerantes', 'Categoria de bebidas não alcoólicas'),
--- ('Produtos', 'Alimentares', 'Congelados', 'Carnes', 'Categoria de carnes congeladas'),
--- ('Produtos', 'Eletrônicos', 'Computadores', 'Laptops', 'Categoria de laptops e notebooks'),
--- ('Serviços', 'Manutenção', 'Equipamentos', 'Computadores', 'Serviços de manutenção de computadores'),
--- ('Serviços', 'Consultoria', 'TI', 'Infraestruturas', 'Consultoria em infraestrutura de TI');
-
-
--- INSERT INTO unidade_medida (identificador, sigla, descricao)
--- VALUES 
--- ('Quilograma', 'kg', 'Unidade de massa usada no sistema métrico'),
--- ('Litro', 'L', 'Unidade de volume usada para medir líquidos'),
--- ('Metro', 'm', 'Unidade de comprimento usada no sistema métrico'),
--- ('Centímetro', 'cm', 'Unidade menor de comprimento no sistema métrico'),
--- ('Mililitro', 'ml', 'Unidade de volume usada para pequenas quantidades de líquidos'),
--- ('Grama', 'g', 'Unidade de massa usada para pequenas quantidades'),
--- ('Tonelada', 't', 'Unidade de massa usada para grandes quantidades'),
--- ('Polegada', 'in', 'Unidade de comprimento usada no sistema imperial'),
--- ('Galão', 'gal', 'Unidade de volume usada no sistema imperial'),
--- ('Onça', 'oz', 'Unidade de peso usada no sistema imperial');
+INSERT INTO categoria (tipo, grupo, subgrupo, familia, descricao) VALUES
+('Produtos', 'Alimentares', 'Bebidas', 'Refrigerantes', 'Categoria de bebidas não alcoólicas'),
+('Produtos', 'Alimentares', 'Congelados', 'Carnes', 'Categoria de carnes congeladas'),
+('Produtos', 'Eletrônicos', 'Computadores', 'Laptops', 'Categoria de laptops e notebooks'),
+('Serviços', 'Manutenção', 'Equipamentos', 'Computadores', 'Serviços de manutenção de computadores'),
+('Serviços', 'Consultoria', 'TI', 'Infraestruturas', 'Consultoria em infraestrutura de TI');
 
 
--- INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUES
--- ('IVA', 0.17, 'Imposto sobre o valor acrescentado (IVA)'),
--- ('ISPC', 0.5, 'Imposto Simplificado para Pequenos Contribuintes (ISPC)'),
--- ('Taxa Reduzida', 0.075, 'Taxa de imposto reduzida para produtos essenciais');
+INSERT INTO unidade_medida (identificador, sigla, descricao)
+VALUES 
+('Quilograma', 'kg', 'Unidade de massa usada no sistema métrico'),
+('Litro', 'L', 'Unidade de volume usada para medir líquidos'),
+('Metro', 'm', 'Unidade de comprimento usada no sistema métrico'),
+('Centímetro', 'cm', 'Unidade menor de comprimento no sistema métrico'),
+('Mililitro', 'ml', 'Unidade de volume usada para pequenas quantidades de líquidos'),
+('Grama', 'g', 'Unidade de massa usada para pequenas quantidades'),
+('Tonelada', 't', 'Unidade de massa usada para grandes quantidades'),
+('Polegada', 'in', 'Unidade de comprimento usada no sistema imperial'),
+('Galão', 'gal', 'Unidade de volume usada no sistema imperial'),
+('Onça', 'oz', 'Unidade de peso usada no sistema imperial');
 
--- INSERT INTO desconto (identificador, percentagem, descricao) VALUES
--- ('Desconto de Lançamento', 0.1, 'Desconto aplicado em novos produtos no lançamento'),
--- ('Desconto de Fim de Ano', 0.155, 'Desconto especial para vendas de final de ano'),
--- ('Desconto por Quantidade', 0.575, 'Desconto aplicado para compras em grandes quantidades'),
--- ('Desconto Promocional', 0.2, 'Desconto aplicado em promoções especiais por tempo limitado'),
--- ('Desconto Fidelidade', 0.8, 'Desconto para clientes fiéis com mais de 1 ano de compras'),
--- ('Desconto Black Friday', 0.3, 'Desconto massivo durante a Black Friday'),
--- ('Desconto de Parceria', 0.125, 'Desconto exclusivo para parceiros comerciais'),
--- ('Desconto de Natal', 0.1825, 'Desconto sazonal para o período de Natal');
+
+INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUES
+('IVA', 0.17, 'Imposto sobre o valor acrescentado (IVA)'),
+('ISPC', 0.5, 'Imposto Simplificado para Pequenos Contribuintes (ISPC)'),
+('Taxa Reduzida', 0.075, 'Taxa de imposto reduzida para produtos essenciais');
+
+INSERT INTO desconto (identificador, percentagem, descricao) VALUES
+('Desconto de Lançamento', 0.1, 'Desconto aplicado em novos produtos no lançamento'),
+('Desconto de Fim de Ano', 0.155, 'Desconto especial para vendas de final de ano'),
+('Desconto por Quantidade', 0.575, 'Desconto aplicado para compras em grandes quantidades'),
+('Desconto Promocional', 0.2, 'Desconto aplicado em promoções especiais por tempo limitado'),
+('Desconto Fidelidade', 0.8, 'Desconto para clientes fiéis com mais de 1 ano de compras'),
+('Desconto Black Friday', 0.3, 'Desconto massivo durante a Black Friday'),
+('Desconto de Parceria', 0.125, 'Desconto exclusivo para parceiros comerciais'),
+('Desconto de Natal', 0.1825, 'Desconto sazonal para o período de Natal');
 
 
     

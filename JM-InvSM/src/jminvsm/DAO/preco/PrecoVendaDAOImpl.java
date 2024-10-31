@@ -11,10 +11,10 @@ import javafx.collections.ObservableList;
  * @author JM-Tecnologias
  */
 public interface PrecoVendaDAOImpl<T> {
-    void  addEntity(T x);
-    void updateEntityByID(T x, int id);
+    boolean  addEntity(T x);
+    boolean updateEntityByID(T x, int id);
     
-     T getEntityByProdutoID(T x);
+    ObservableList<T> getEntityByProdutoID(int x);
     void deleteEntityByUSER(T x);
 
 }

@@ -94,14 +94,12 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + "		c.id as id_categoria, c.familia as categoria,"
                     + "         u.id as id_unidade, u.identificador, u.sigla,"
                     + "         t.id as id_taxa, t.identificador as taxa, t.percentagem,"
-                    + "         pv.id as id_preco, pv.preco, pv.data_inicio, pv.data_fim,"
                     + "         s.saldo, s.fk_id_armazem, "
                     + "         a.nome AS nome_armazem, a.estado AS estado_armazem "
                     + "FROM produto p "
                     + "LEFT JOIN categoria c ON c.id = p.fk_id_categoria "
                     + "LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida "
                     + "LEFT JOIN taxa_imposto t ON t.id = p.fk_id_taxa_imposto "
-                    + "LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id AND pv.estado=true "
                     + "LEFT JOIN stock s ON s.fk_id_produto=p.id "
                     + "LEFT JOIN armazem a ON a.id = s.fk_id_armazem";
             ps = con.prepareStatement(sql);
@@ -127,12 +125,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 t.setNomeImposto(result.getString("taxa"));
                 t.setPercentagemImposto(result.getDouble("percentagem"));
                 c.setTaxa_imposto(t);
-                PrecoVenda p = new PrecoVenda();
-                p.setId(result.getInt("id_preco"));
-                p.setPreco(result.getDouble("preco"));
-                p.setData_inicio(result.getString("data_inicio"));
-                p.setData_fim(result.getString("data_fim"));
-                c.setPrecovenda(p);
                 Stock s = new Stock();
                 s.setSaldo(result.getInt("saldo"));
                 c.setStock(s);

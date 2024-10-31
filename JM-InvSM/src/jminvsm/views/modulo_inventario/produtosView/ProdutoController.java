@@ -31,6 +31,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -104,22 +105,12 @@ public class ProdutoController implements Initializable {
     private DatePicker dataFim;
     @FXML
     private DatePicker dataInicio;
-    @FXML
-    private Label labCategoria;
-    @FXML
-    private Label labTaxa;
-    @FXML
-    private Label labUnidade;
+
     @FXML
     private Label labIDPreco;
     @FXML
-    private TextField txtIDCategoria;
-    @FXML
     private TextField txtIDProduto;
-    @FXML
-    private TextField txtIDTaxa;
-    @FXML
-    private TextField txtIDUnidade;
+
     @FXML
     private TextField txtNomeProduto;
     @FXML
@@ -127,7 +118,7 @@ public class ProdutoController implements Initializable {
     @FXML
     private TextField txtcodigobarrasProduto;
     @FXML
-    private TextField txtdescricaoProduto;
+    private TextArea txtdescricaoProduto;
     @FXML
     private TextField txtPesquisar;
     @FXML
@@ -203,11 +194,6 @@ public class ProdutoController implements Initializable {
         }
     }
     
-    public void getStockView(ActionEvent evt) {
-        LoadAndMoveUtilities.showAsPopUP(evt, null);
-        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
-    }
-    
     public void getUnidadeView(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             LoadAndMoveUtilities.showAsPopUP(null, evt);
@@ -240,49 +226,49 @@ public class ProdutoController implements Initializable {
                 }
             }
         });
-        txtIDTaxa.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!oldValue && newValue) {
-                    if (SysFact.getData() instanceof TaxaImposto) {
-                        TaxaImposto imposto = (TaxaImposto) SysFact.getData();
-                        if (imposto != null) {
-                            txtIDTaxa.setText(String.valueOf(imposto.getId()));
-                            labTaxa.setText(String.valueOf(imposto.getNomeImposto() + ": " + (imposto.getPercentagemImposto() * 100) + "%"));
-                        }
-                    }
-                }
-            }
-        });
-        txtIDUnidade.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!oldValue && newValue) {
-                    if (SysFact.getData() instanceof UnidadeMedida) {
-                        UnidadeMedida x = (UnidadeMedida) SysFact.getData();
-                        if (x != null) {
-                            txtIDUnidade.setText(String.valueOf(x.getId()));
-                            labUnidade.setText(x.getIdentificador() + ": " + x.getSigla());
-                            
-                        }
-                    }
-                }
-            }
-        });
-        txtIDCategoria.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!oldValue && newValue) {
-                    if (SysFact.getData() instanceof Categoria) {
-                        Categoria x = (Categoria) SysFact.getData();
-                        if (x != null) {
-                            txtIDCategoria.setText(String.valueOf(x.getId()));
-                            labCategoria.setText(x.getFamilia());
-                        }
-                    }
-                }
-            }
-        });
+//        txtIDTaxa.focusedProperty().addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+//                if (!oldValue && newValue) {
+//                    if (SysFact.getData() instanceof TaxaImposto) {
+//                        TaxaImposto imposto = (TaxaImposto) SysFact.getData();
+//                        if (imposto != null) {
+//                            txtIDTaxa.setText(String.valueOf(imposto.getId()));
+//                            labTaxa.setText(String.valueOf(imposto.getNomeImposto() + ": " + (imposto.getPercentagemImposto() * 100) + "%"));
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//        txtIDUnidade.focusedProperty().addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+//                if (!oldValue && newValue) {
+//                    if (SysFact.getData() instanceof UnidadeMedida) {
+//                        UnidadeMedida x = (UnidadeMedida) SysFact.getData();
+//                        if (x != null) {
+//                            txtIDUnidade.setText(String.valueOf(x.getId()));
+//                            labUnidade.setText(x.getIdentificador() + ": " + x.getSigla());
+//                            
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//        txtIDCategoria.focusedProperty().addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+//                if (!oldValue && newValue) {
+//                    if (SysFact.getData() instanceof Categoria) {
+//                        Categoria x = (Categoria) SysFact.getData();
+//                        if (x != null) {
+//                            txtIDCategoria.setText(String.valueOf(x.getId()));
+//                            labCategoria.setText(x.getFamilia());
+//                        }
+//                    }
+//                }
+//            }
+//        });
     }
     
     @Override
@@ -322,12 +308,12 @@ public class ProdutoController implements Initializable {
                 -> new SimpleStringProperty(cellData.getValue().getCategoria().getFamilia()));
         taxa.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getTaxa_imposto().getNomeImposto()));
-        preco.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrecovenda().getPreco()) + "MZN"));
-        datainicio.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getPrecovenda().getData_inicio()));
-        datafim.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getPrecovenda().getData_fim()));
+//        preco.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrecovenda().getPreco()/(1 - cellData.getValue().getTaxa_imposto().getPercentagemImposto())) + "MZN"));
+//        datainicio.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(cellData.getValue().getPrecovenda().getData_inicio()));
+//        datafim.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(cellData.getValue().getPrecovenda().getData_fim()));
         quantidade.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getSaldo())));
         nivelStock.setCellValueFactory(new PropertyValueFactory<>("nivelstock"));
@@ -426,10 +412,11 @@ public class ProdutoController implements Initializable {
         tabelaProduto.setItems(sortedData);
     }
     
-    public void selectedRow() {
+    public void selectedRow( MouseEvent event) {
         Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
             Produto p = mapaProdutos.get(x.getId());
+            SysFact.setData(p);
             
             labIDPreco.setText(String.valueOf(p.getPrecovenda().getId()));
             txtPreco.setText(String.valueOf(p.getPrecovenda().getPreco() + "0"));
@@ -449,31 +436,39 @@ public class ProdutoController implements Initializable {
             checkControle.setSelected(p.isContole_stock());
             stockControlChecked();
             
-            labCategoria.setText(p.getCategoria().getFamilia());
-            labUnidade.setText(p.getUnidade_medida().getIdentificador() + ": " + p.getUnidade_medida().getSigla());
-            labTaxa.setText(p.getTaxa_imposto().getNomeImposto() + ": " + (p.getTaxa_imposto().getPercentagemImposto() * 100) + "%");
+//            labCategoria.setText(p.getCategoria().getFamilia());
+//            labUnidade.setText(p.getUnidade_medida().getIdentificador() + ": " + p.getUnidade_medida().getSigla());
+//            labTaxa.setText(p.getTaxa_imposto().getNomeImposto() + ": " + (p.getTaxa_imposto().getPercentagemImposto() * 100) + "%");
             
-            txtIDCategoria.setText(String.valueOf(p.getCategoria().getId()));
-            txtIDUnidade.setText(String.valueOf(p.getUnidade_medida().getId()));
-            txtIDTaxa.setText(String.valueOf(p.getTaxa_imposto().getId()));
+//            txtIDCategoria.setText(String.valueOf(p.getCategoria().getId()));
+//            txtIDUnidade.setText(String.valueOf(p.getUnidade_medida().getId()));
+//            txtIDTaxa.setText(String.valueOf(p.getTaxa_imposto().getId()));
             txtNivelStock.setText(String.valueOf(p.getNivelstock()));
             txtIDProduto.setText(String.valueOf(p.getId()));
             txtNomeProduto.setText(p.getNomeProduto());
             txtcodigobarrasProduto.setText(p.getCodigo_barra());
             txtdescricaoProduto.setText(p.getDescricao());
-            SysFact.setData(p);
-            btn_controleStock.setDisable(false);
+            
+//            btn_controleStock.setDisable(false);
             ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         }
+        if(event.getClickCount() == 2){
+            getStockView(event);
+        }
+    }
+    public void getStockView(MouseEvent evt) {
+//        LoadAndMoveUtilities.showStage(null, evt);
+        LoadAndMoveUtilities.showAsPopUP(null, evt);
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
     }
     
     public void addProduto() throws SQLException {
         ProdutoDAO xDAO = new ProdutoDAO();
         Serviceproduto sp = new Serviceproduto(xDAO);
-        sp.registraProduto(Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
-                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
-                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
-                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
+//        sp.registraProduto(Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
+//                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
+//                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
+//                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("")?"0":txtNivelStock.getText()));
         
         addPrecoVenda();
         resetCampos();
@@ -496,7 +491,7 @@ public class ProdutoController implements Initializable {
         ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
         Produto p = new Produto();
         p.setId(Integer.parseInt(txtIDProduto.getText()));
-        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
+        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText()),
                 String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
                 userData, p);
         showProduto();
@@ -506,10 +501,10 @@ public class ProdutoController implements Initializable {
     public void updateProduto() throws SQLException {
         ProdutoDAO xDAO = new ProdutoDAO();
         Serviceproduto sp = new Serviceproduto(xDAO);
-        sp.actualizaProduto(Integer.parseInt(txtIDProduto.getText()),Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
-                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
-                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
-                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
+//        sp.actualizaProduto(Integer.parseInt(txtIDProduto.getText()),Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
+//                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
+//                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
+//                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
         
         showProduto();
     }
@@ -518,7 +513,7 @@ public class ProdutoController implements Initializable {
         PrecoVendaDAO pvDAO = new PrecoVendaDAO();
         ServicePrecoVenda spv = new ServicePrecoVenda(pvDAO);
         ProdutoDAO xDAO = new ProdutoDAO();
-        spv.actualizaPrecoVenda(Integer.parseInt(labIDPreco.getText()), Double.valueOf(txtPreco.getText().split(" ")[1].replace(".", "").replace(",", ".")),
+        spv.actualizaPrecoVenda(Integer.parseInt(labIDPreco.getText()), Double.valueOf(txtPreco.getText()),
                 String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
                 userData);
         showProduto();
@@ -534,14 +529,6 @@ public class ProdutoController implements Initializable {
         checkControle.setSelected(false);
         stockControlChecked();
         txtNivelStock.setText("");
-        
-        labCategoria.setText("");
-        labUnidade.setText("");
-        labTaxa.setText("");
-        
-        txtIDCategoria.setText("");
-        txtIDUnidade.setText("");
-        txtIDTaxa.setText("");
         
         txtIDProduto.setText("");
         txtNomeProduto.setText("");

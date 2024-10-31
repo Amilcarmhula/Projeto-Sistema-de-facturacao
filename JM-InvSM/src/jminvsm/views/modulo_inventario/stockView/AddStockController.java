@@ -6,8 +6,6 @@ package jminvsm.views.modulo_inventario.stockView;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +22,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
@@ -174,9 +171,9 @@ public class AddStockController implements Initializable {
 
         IDtabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("id"));
         razaotabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("razaosocial_forn"));
-        nuittabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("nuit_forn"));
-        contactotabelaFornecedor.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
+//        nuittabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("nuit_forn"));
+//        contactotabelaFornecedor.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
 
         FilteredList<Fornecedor> dadosFiltrados = new FilteredList<>(listaFornecedoress, b -> true);
         txtPesquisafrnecedor.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -220,7 +217,7 @@ public class AddStockController implements Initializable {
         tipotabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         nometabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("nome_arm"));
         descricaotabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("descricao_arm"));
-        estadotabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("estado"));
+//        estadotabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
 
         FilteredList<Armazem> dadosFiltrados = new FilteredList<>(listaArmazens, b -> true);

@@ -15,6 +15,8 @@ public class PrecoVenda {
 
     private int id;
     private double preco;
+    private double precoInclTaxa;
+    private double precoExclTaxa;
     private String data_inicio;
     private String data_fim;
     private boolean estado;
@@ -24,8 +26,10 @@ public class PrecoVenda {
 
     public PrecoVenda(){
     }
-    public PrecoVenda(double preco, String data_inicio, String data_fim, 
+    public PrecoVenda(double preco, double precoInclTaxa, double precoExclTaxa, String data_inicio, String data_fim, 
             Produto produto,Usuario usuario) {
+        this.precoInclTaxa = precoInclTaxa;
+        this.precoExclTaxa = precoExclTaxa;
         this.preco = preco;
         this.data_inicio = data_inicio;
         this.data_fim = data_fim;
@@ -47,6 +51,22 @@ public class PrecoVenda {
 
     public void setPreco(double preco) {
         this.preco = preco;
+    }
+
+    public double getPrecoInclTaxa() {
+        return precoInclTaxa;
+    }
+
+    public void setPrecoInclTaxa(double precoInclTaxa) {
+        this.precoInclTaxa = precoInclTaxa;
+    }
+
+    public double getPrecoExclTaxa() {
+        return precoExclTaxa;
+    }
+
+    public void setPrecoExclTaxa(double precoExclTaxa) {
+        this.precoExclTaxa = precoExclTaxa;
     }
 
     public String getData_inicio() {

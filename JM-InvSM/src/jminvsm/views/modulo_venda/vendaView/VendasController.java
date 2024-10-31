@@ -253,7 +253,7 @@ public class VendasController implements Initializable {
         idtabelaItens.setCellValueFactory(new PropertyValueFactory<>("id"));
         nometabelaItens.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
         precotabelaItens.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPrecovenda().getPreco()) + " MT"));
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPrecovenda().getPreco() / (1 - cellData.getValue().getProduto().getTaxa_imposto().getPercentagemImposto())) + " MT"));
         unidadetabelaItens.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidade_medida().getSigla())));
         quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
@@ -333,18 +333,27 @@ public class VendasController implements Initializable {
         i.setProduto(x);
         i.setDesconto(desconto);
         i.setQuantidade(qtd);
-        double taxa = qtd * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
-        double desc = qtd * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
+        double precoVenda = x.getPrecovenda().getPreco() / (1 - x.getTaxa_imposto().getPercentagemImposto());
+//        double taxa = qtd * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
+        double taxa = qtd * precoVenda * x.getTaxa_imposto().getPercentagemImposto();
+//        double desc = qtd * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
+        double desc = qtd * precoVenda * desconto.getPercentagemDesconto();
         double subtotal = qtd * x.getPrecovenda().getPreco() + taxa - desc;
+//        double subtotal = qtd * precoVenda + taxa - desc;
         i.setSubtotal(subtotal);
-        if (x.getStock().getSaldo() > qtd) {
+        if (x.isContole_stock() == true) {
+            if (x.getStock().getSaldo() > qtd) {
+                tabelaItens.getItems().add(i);
+                resetProduto();
+                displayPrice();
+            } else {
+                showErroNotification("Erro", "Stock baixo. Produto nao pode ser comercializado!");
+            }
+        }else{
             tabelaItens.getItems().add(i);
             resetProduto();
             displayPrice();
-        } else {
-            showErroNotification("Erro", "Stock baixo. Produto nao pode ser comercializado!");
         }
-
     }
 
     public void radioParcelado() {
@@ -434,10 +443,13 @@ public class VendasController implements Initializable {
         double total = 0;
         for (Item item : itens) {
             Produto x = mapaProdutos.get(item.getId());
+            double precoVenda = x.getPrecovenda().getPreco() / (1 - x.getTaxa_imposto().getPercentagemImposto());
             subtotal += item.getQuantidade() * x.getPrecovenda().getPreco();
-            taxa += item.getQuantidade() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
+//            taxa += item.getQuantidade() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
+            taxa += item.getQuantidade() * precoVenda * x.getTaxa_imposto().getPercentagemImposto();
             Desconto desconto = mapaDesconto.get(item.getDesconto().getNomeDesconto());
-            desc += item.getQuantidade() * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
+//            desc += item.getQuantidade() * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
+            desc += item.getQuantidade() * precoVenda * desconto.getPercentagemDesconto();
             total = subtotal + taxa - desc;
         }
         labSubtotal.setText(String.format("%.2f", subtotal));

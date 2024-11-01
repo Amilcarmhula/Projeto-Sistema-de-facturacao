@@ -63,7 +63,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
         List<Item> lista = new ArrayList<>();
         Item i = null;
         try {
-            sql = "SELECT p.nome, p.descricao, pv.preco, "
+            sql = "SELECT p.nome, p.descricao, pv.precoNormal, "
                     + "i.quantidade, i.subtotal, "
                     + "ip.identificador as descricao_imposto, ip.percentagem AS imposto, "
                     + "d.identificador AS descricao_desconto, d.percentagem AS desconto, "
@@ -92,7 +92,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 p.setNomeProduto(result.getString("nome"));
                 p.setDescricao(result.getString("descricao"));
                 PrecoVenda pv = new PrecoVenda();
-                pv.setPreco(result.getDouble("preco"));
+                pv.setPreco(result.getDouble("precoNormal"));
                 p.setPrecovenda(pv);
                 TaxaImposto t = new TaxaImposto();
                 t.setNomeImposto(result.getString("descricao_imposto"));

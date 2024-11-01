@@ -67,13 +67,10 @@
                               <String fx:value="shadow" />
                            </styleClass>
                         </TextField>
-                        <Button fx:id="btnAddContacto" layoutX="647.0" layoutY="49.0" mnemonicParsing="false" onAction="#addORupdateContacto" prefHeight="30.0" prefWidth="105.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE" AnchorPane.leftAnchor="647.0" AnchorPane.topAnchor="49.0">
+                        <Button fx:id="btnAddContacto" layoutX="623.0" layoutY="49.0" mnemonicParsing="false" onAction="#addORupdateContacto" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE" AnchorPane.leftAnchor="623.0" AnchorPane.topAnchor="49.0">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
-                           <graphic>
-                              <FontAwesomeIconView fill="WHITE" glyphName="PHONE" />
-                           </graphic>
                            <styleClass>
                               <String fx:value="hand-efect" />
                               <String fx:value="secondary-color" />
@@ -139,13 +136,10 @@
                               <TableColumn fx:id="btntabelaEndereco" minWidth="0.0" prefWidth="44.0" />
                            </columns>
                         </TableView>
-                        <Button fx:id="btnAddEndereco" layoutX="650.0" layoutY="56.0" mnemonicParsing="false" onAction="#addORupdateEndereco" prefHeight="30.0" prefWidth="105.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+                        <Button fx:id="btnAddEndereco" layoutX="626.0" layoutY="56.0" mnemonicParsing="false" onAction="#addORupdateEndereco" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
-                           <graphic>
-                              <FontAwesomeIconView fill="WHITE" glyphName="USER_PLUS" />
-                           </graphic>
                            <styleClass>
                               <String fx:value="secondary-color" />
                               <String fx:value="hand-efect" />
@@ -160,28 +154,25 @@
       </TabPane>
       <AnchorPane prefHeight="110.0" prefWidth="1003.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="96.0" layoutY="15.0" prefHeight="25.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" />
-            <TextField fx:id="txtNome" layoutX="364.0" layoutY="15.0" prefHeight="25.0" prefWidth="310.0" promptText="Nomde do armazem" stylesheets="@../../../../style/dashboard.css">
+            <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="96.0" layoutY="11.0" prefHeight="26.0" prefWidth="96.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" />
+            <TextField fx:id="txtNome" layoutX="364.0" layoutY="11.0" prefHeight="25.0" prefWidth="310.0" promptText="Nomde do armazem" stylesheets="@../../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <ComboBox fx:id="combTipoCliente" layoutX="223.0" layoutY="15.0" prefHeight="25.0" prefWidth="130.0" promptText="Tipo de Cliente" />
-            <Button fx:id="btnAddArmazem" layoutX="564.0" layoutY="75.0" mnemonicParsing="false" onAction="#addORupdateCliente" prefHeight="20.0" prefWidth="105.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+            <ComboBox fx:id="combTipoCliente" layoutX="203.0" layoutY="9.0" prefHeight="30.0" prefWidth="150.0" promptText="Tipo de Cliente" />
+            <Button fx:id="btnAddArmazem" layoutX="543.0" layoutY="75.0" mnemonicParsing="false" onAction="#addORupdateCliente" prefHeight="20.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="USER_PLUS" />
-               </graphic>
                <styleClass>
                   <String fx:value="secondary-color" />
                   <String fx:value="shadow-efect" />
                   <String fx:value="hand-efect" />
                </styleClass>
             </Button>
-            <Button layoutX="55.0" layoutY="15.0" mnemonicParsing="false" onAction="#resetCliente" stylesheets="@../../../../style/dashboard.css">
+            <Button layoutX="55.0" layoutY="11.0" mnemonicParsing="false" onAction="#resetCliente" stylesheets="@../../../../style/dashboard.css">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="20" />
                </graphic>

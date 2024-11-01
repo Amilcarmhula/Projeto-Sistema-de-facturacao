@@ -49,7 +49,7 @@
                </children>
             </AnchorPane>
             <TextField fx:id="txtEnderecoCliente" disable="true" layoutX="207.0" layoutY="125.0" prefHeight="25.0" prefWidth="451.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="1130.0" layoutY="105.0" prefHeight="27.0" prefWidth="99.0" text="Valido Ate:" textFill="WHITE">
+            <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="1190.0" layoutY="127.0" prefHeight="27.0" prefWidth="99.0" text="Valido Ate:" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
@@ -58,14 +58,14 @@
             <TextField fx:id="txtNuitCLiente" disable="true" layoutX="498.0" layoutY="91.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
             <TextField fx:id="txtEmailCLiente" disable="true" layoutX="666.0" layoutY="125.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
             <TextField fx:id="txtContactoCLiente" disable="true" layoutX="634.0" layoutY="91.0" prefHeight="25.0" prefWidth="265.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <Label layoutX="942.0" layoutY="65.0" text="FACTURA N°" textFill="WHITE">
+            <Label layoutX="1002.0" layoutY="93.0" text="FACTURA N°" textFill="WHITE">
                <font>
-                  <Font size="26.0" />
+                  <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labNumeroFactura" layoutX="1105.0" layoutY="62.0" prefHeight="38.0" prefWidth="180.0" textFill="WHITE">
+            <Label fx:id="labNumeroFactura" layoutX="1165.0" layoutY="93.0" prefHeight="27.0" prefWidth="180.0" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="26.0" />
+                  <Font size="24.0" />
                </font>
             </Label>
             <TextField fx:id="txtIDCliente" alignment="CENTER" layoutX="207.0" layoutY="57.0" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="25.0" prefWidth="84.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
@@ -74,19 +74,25 @@
                   <String fx:value="hand-efect" />
                </styleClass>
             </TextField>
-            <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1237.0" layoutY="105.0" prefHeight="27.0" prefWidth="113.0" textFill="WHITE">
+            <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1297.0" layoutY="127.0" prefHeight="27.0" prefWidth="113.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="labDataInicial" alignment="CENTER_RIGHT" layoutX="1001.0" layoutY="105.0" prefHeight="27.0" prefWidth="122.0" textFill="WHITE">
+            <Label fx:id="labDataInicial" alignment="CENTER_RIGHT" layoutX="1061.0" layoutY="127.0" prefHeight="27.0" prefWidth="122.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="labTotalFactura2" alignment="CENTER_RIGHT" layoutX="954.0" layoutY="105.0" prefHeight="27.0" prefWidth="38.0" text="De:" textFill="WHITE">
+            <Label fx:id="labTotalFactura2" alignment="CENTER_RIGHT" layoutX="1014.0" layoutY="127.0" prefHeight="27.0" prefWidth="38.0" text="De:" textFill="WHITE">
                <font>
                   <Font size="18.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="combTipoDoc" layoutX="1145.0" layoutY="57.0" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="265.0" promptText="Selecione o tipo de factura a emitir" />
+            <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutX="961.0" layoutY="56.0" prefHeight="35.0" prefWidth="171.0" text="Tipo de Factura:" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
                </font>
             </Label>
          </children>
@@ -166,7 +172,7 @@
                   </Label>
                </children>
             </AnchorPane>
-            <Button fx:id="btnCancelaFactura" layoutX="235.0" layoutY="368.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="52.0">
+            <Button fx:id="btnCancelaFactura" layoutX="235.0" layoutY="344.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="52.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -180,7 +186,7 @@
                   <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" size="30" />
                </graphic>
             </Button>
-            <Button fx:id="btnFinalizaFactura" layoutX="54.0" layoutY="368.0" mnemonicParsing="false" onAction="#criarFactura" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Finalizar" textFill="WHITE">
+            <Button fx:id="btnFinalizaFactura" layoutX="54.0" layoutY="344.0" mnemonicParsing="false" onAction="#criarFactura" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Finalizar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -194,7 +200,7 @@
                   <FontAwesomeIconView fill="WHITE" glyphName="CHECK" size="30" />
                </graphic>
             </Button>
-            <AnchorPane layoutY="84.0" prefWidth="330.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0">
+            <AnchorPane layoutY="103.0" prefWidth="330.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0">
                <children>
                   <HBox prefHeight="105.0" prefWidth="328.0">
                      <children>
@@ -286,23 +292,17 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <ComboBox fx:id="combTipoDoc" layoutX="182.0" layoutY="211.0" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="265.0" promptText="Selecione o tipo de factura a emitir" />
-            <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutY="206.0" prefHeight="35.0" prefWidth="171.0" text="Tipo de Factura:" textFill="WHITE">
+            <Label fx:id="labTotalFactura11" alignment="CENTER" layoutY="230.0" prefHeight="35.0" prefWidth="265.0" text="Condicoes de pagamento" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labTotalFactura11" alignment="CENTER_RIGHT" layoutY="255.0" prefHeight="35.0" prefWidth="265.0" text="Condicoes de pagamento" textFill="WHITE">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <RadioButton fx:id="rdPagamentoVista" layoutX="28.0" layoutY="300.0" mnemonicParsing="false" onAction="#radioVista" text="Pagamento A Vista" textFill="#fcfcfc">
+            <RadioButton fx:id="rdPagamentoVista" layoutX="28.0" layoutY="275.0" mnemonicParsing="false" onAction="#radioVista" text="Pagamento A Vista" textFill="#fcfcfc">
                <font>
                   <Font size="18.0" />
                </font>
             </RadioButton>
-            <RadioButton fx:id="rdPagamentoParcelado" layoutX="221.0" layoutY="300.0" mnemonicParsing="false" onAction="#radioParcelado" text="Pagamento Parcelado" textFill="WHITE">
+            <RadioButton fx:id="rdPagamentoParcelado" layoutX="221.0" layoutY="275.0" mnemonicParsing="false" onAction="#radioParcelado" text="Pagamento Parcelado" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>

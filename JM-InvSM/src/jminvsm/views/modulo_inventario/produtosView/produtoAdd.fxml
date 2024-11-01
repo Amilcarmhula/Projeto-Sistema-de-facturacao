@@ -143,7 +143,7 @@
                   <Insets />
                </opaqueInsets>
             </Button>
-            <TableView fx:id="tabelaPrecos" layoutX="764.0" layoutY="32.0" onMouseClicked="#selecionaPreco" prefHeight="161.0" prefWidth="650.0" style="-fx-border-color: transparent;">
+            <TableView fx:id="tabelaPrecos" layoutX="764.0" layoutY="32.0" onMouseClicked="#selecionaPreco" prefHeight="161.0" prefWidth="650.0" style="-fx-border-color: transparent; -fx-background-color: white;">
                <columns>
                   <TableColumn fx:id="idPreco" prefWidth="50.0" text="ID" />
                   <TableColumn fx:id="precoNormal" prefWidth="100.0" text="Preco Normal" />

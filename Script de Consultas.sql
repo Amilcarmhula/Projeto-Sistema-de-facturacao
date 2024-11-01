@@ -2,7 +2,6 @@ use _sysface;
 -- CALL atualizar_estado_precovenda();
 SET GLOBAL event_scheduler = ON;
 
-
 select curdate() + interval 65 day as Datas_de_parcelas;
 
 update parcelas set dataVencimento = '2024-10-29' where id = 6;

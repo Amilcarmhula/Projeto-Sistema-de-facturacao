@@ -173,7 +173,7 @@ public class VendasController implements Initializable {
 
     public void getSearchProduto(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
-            String path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "produtoSearch.fxml");
+            String path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "searchProduto.fxml");
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
         }
@@ -237,7 +237,6 @@ public class VendasController implements Initializable {
                         Produto x = (Produto) SysFact.getData();
                         int num = randNum.nextInt(50);
                         mapaProdutos.put(num, x);
-
                         txtID.setText(num + "");
                         txtStock.setText(String.valueOf(x.getStock().getSaldo()));
                         txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
@@ -253,7 +252,7 @@ public class VendasController implements Initializable {
         idtabelaItens.setCellValueFactory(new PropertyValueFactory<>("id"));
         nometabelaItens.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
         precotabelaItens.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPrecovenda().getPreco() / (1 - cellData.getValue().getProduto().getTaxa_imposto().getPercentagemImposto())) + " MT"));
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPrecovenda().getPreco()) + " MT"));
         unidadetabelaItens.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidade_medida().getSigla())));
         quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
@@ -333,13 +332,14 @@ public class VendasController implements Initializable {
         i.setProduto(x);
         i.setDesconto(desconto);
         i.setQuantidade(qtd);
-        double precoVenda = x.getPrecovenda().getPreco() / (1 - x.getTaxa_imposto().getPercentagemImposto());
-//        double taxa = qtd * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
-        double taxa = qtd * precoVenda * x.getTaxa_imposto().getPercentagemImposto();
-//        double desc = qtd * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
-        double desc = qtd * precoVenda * desconto.getPercentagemDesconto();
-        double subtotal = qtd * x.getPrecovenda().getPreco() + taxa - desc;
-//        double subtotal = qtd * precoVenda + taxa - desc;
+        double subtotal;
+        double desc;
+        desc = qtd * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
+        if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
+            subtotal = qtd * x.getPrecovenda().getPreco() - desc;
+        }else{
+            subtotal = qtd * x.getPrecovenda().getPrecoInclTaxa() - desc;
+        }
         i.setSubtotal(subtotal);
         if (x.isContole_stock() == true) {
             if (x.getStock().getSaldo() > qtd) {
@@ -349,7 +349,7 @@ public class VendasController implements Initializable {
             } else {
                 showErroNotification("Erro", "Stock baixo. Produto nao pode ser comercializado!");
             }
-        }else{
+        } else {
             tabelaItens.getItems().add(i);
             resetProduto();
             displayPrice();
@@ -360,28 +360,26 @@ public class VendasController implements Initializable {
         String condicao;
         rdPagamentoParcelado.setSelected(true);
         rdPagamentoVista.setSelected(false);
-
-        condicao = "A vista";
-        System.out.println("Condicao de pagamento: " + condicao);
     }
 
     public void radioVista() {
         String condicao;
         rdPagamentoVista.setSelected(true);
         rdPagamentoParcelado.setSelected(false);
-        condicao = "Parcelado";
-        System.out.println("Condicao de pagamento: " + condicao);
     }
 
     public String radioCondicaoPagamento() {
-        String condicao = null;
+        String condicao = "Aberta" ;
         if (rdPagamentoParcelado.isSelected()) {
             condicao = "Parcelado";
         }
         if (rdPagamentoVista.isSelected()) {
-            condicao = "A vista";
+            if (combTipoDoc.getValue().equals("Fatura Proforma")) {
+                condicao = "Parcelado";
+            }else{
+                condicao = "A vista";
+            }
         }
-        System.out.println("Condicao de pagamento: " + condicao);
         return condicao;
     }
 
@@ -394,7 +392,6 @@ public class VendasController implements Initializable {
                 labValidade.getText(), Double.valueOf(labTotalGeral.getText()), radioCondicaoPagamento(), doc, cli, empresaData, userData, collectItens());
         //Se a factura for criada com sucesso, sereta os campos
         if (service.isEstado()) {
-            //Armazena o numero da factura para usar na janela de pagamentos
             if ("Fatura".equals(combTipoDoc.getValue()) || "Fatura Recibo".equals(combTipoDoc.getValue()) || "Fatura Simplificada".equals(combTipoDoc.getValue())) {
                 if (rdPagamentoVista.isSelected()) {
                     SysFact.setData(labNumeroFactura.getText());
@@ -443,14 +440,20 @@ public class VendasController implements Initializable {
         double total = 0;
         for (Item item : itens) {
             Produto x = mapaProdutos.get(item.getId());
-            double precoVenda = x.getPrecovenda().getPreco() / (1 - x.getTaxa_imposto().getPercentagemImposto());
-            subtotal += item.getQuantidade() * x.getPrecovenda().getPreco();
-//            taxa += item.getQuantidade() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
-            taxa += item.getQuantidade() * precoVenda * x.getTaxa_imposto().getPercentagemImposto();
-            Desconto desconto = mapaDesconto.get(item.getDesconto().getNomeDesconto());
-//            desc += item.getQuantidade() * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
-            desc += item.getQuantidade() * precoVenda * desconto.getPercentagemDesconto();
-            total = subtotal + taxa - desc;
+            if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
+                subtotal += item.getQuantidade() * x.getPrecovenda().getPreco();
+                taxa += item.getQuantidade() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
+                Desconto desconto = mapaDesconto.get(item.getDesconto().getNomeDesconto());
+                desc += item.getQuantidade() * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
+                total = subtotal - desc;
+            } else {
+                subtotal += item.getQuantidade() * x.getPrecovenda().getPreco();
+                taxa += item.getQuantidade() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
+                Desconto desconto = mapaDesconto.get(item.getDesconto().getNomeDesconto());
+                desc += item.getQuantidade() * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
+                total = subtotal + taxa - desc;
+            }
+
         }
         labSubtotal.setText(String.format("%.2f", subtotal));
         labDesconto.setText(String.format("%.2f", desc));

@@ -166,7 +166,7 @@ public class ProdutoController implements Initializable {
     public void addORupdate() throws SQLException {
         if ("".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
             addProduto();
-        } else if (!"".equals(txtIDProduto.getText()) && "0".equals(labIDPreco.getText())) {
+        } else if (!"".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
             updateProduto();
             addPrecoVendaONSelected();
         } else if (!"".equals(txtIDProduto.getText()) && !"0".equals(labIDPreco.getText())) {
@@ -449,6 +449,7 @@ public class ProdutoController implements Initializable {
                 userData, p);
         showProduto();
         resetCampos();
+        labIDPreco.setText("");
     }
 
     public void updateProduto() throws SQLException {
@@ -544,7 +545,7 @@ public class ProdutoController implements Initializable {
         Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
             Produto p = mapaProdutos.get(x.getId());
-            SysFact.setData(p);
+            
 
             txtNivelStock.setText(String.valueOf(p.getNivelstock()));
             txtIDProduto.setText(String.valueOf(p.getId()));
@@ -557,7 +558,8 @@ public class ProdutoController implements Initializable {
             combTaxa.setValue(p.getTaxa_imposto().getNomeImposto());
             stockControlChecked();
             showPrecoVenda();
-            if (event.getClickCount() == 2) {
+            if (event.getClickCount() == 2 && p.isContole_stock()) {
+                SysFact.setData(p);
                 getStockView(event);
             }
             ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
@@ -568,13 +570,16 @@ public class ProdutoController implements Initializable {
 
     public void selecionaPreco() {
         PrecoVenda pv = tabelaPrecos.getSelectionModel().getSelectedItem();
-        if (pv != null) {
+        if (pv != null && !"desactivo".equals(pv.getEstado())) {
             labIDPreco.setText(pv.getId() + "");
             txtPreco.setText(pv.getPreco() + "");
             txtprecoExclTaxa.setText(pv.getPrecoExclTaxa() + "");
             txtprecoInclTaxa.setText(pv.getPrecoInclTaxa() + "");
             dataFim.setValue(LocalDate.parse(pv.getData_fim()));
             dataInicio.setValue(LocalDate.parse(pv.getData_inicio()));
+        }
+        if (pv != null && "desactivo".equals(pv.getEstado())) {
+            labIDPreco.setText("");
         }
     }
 //  ############################################################################

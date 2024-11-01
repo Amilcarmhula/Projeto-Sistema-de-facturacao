@@ -32,7 +32,6 @@ import jminvsm.dao.unidademedida.UnidadeMedidaDAO;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
-import jminvsm.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
  * FXML Controller class

@@ -32,7 +32,6 @@ import jminvsm.dao.taxaimposto.TaxaImpostoDAO;
 import jminvsm.model.taxa_imposto.TaxaImposto;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
-import jminvsm.views.modulo_venda.vendaView.searchProduto.ProdutoSearchController;
 
 /**
  * FXML Controller class

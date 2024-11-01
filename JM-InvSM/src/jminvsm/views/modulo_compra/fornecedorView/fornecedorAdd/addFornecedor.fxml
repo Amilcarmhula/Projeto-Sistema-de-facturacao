@@ -68,13 +68,10 @@
                               <String fx:value="shadow" />
                            </styleClass>
                         </TextField>
-                        <Button fx:id="btnAddContacto" layoutX="650.0" layoutY="45.0" mnemonicParsing="false" onAction="#addORupdateContacto" prefHeight="30.0" prefWidth="105.0" text="Adicionar" textFill="WHITE">
+                        <Button fx:id="btnAddContacto" layoutX="622.0" layoutY="45.0" mnemonicParsing="false" onAction="#addORupdateContacto" prefHeight="30.0" prefWidth="130.0" text="Adicionar" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
-                           <graphic>
-                              <FontAwesomeIconView fill="WHITE" glyphName="PHONE" />
-                           </graphic>
                            <styleClass>
                               <String fx:value="secondary-color" />
                               <String fx:value="hand-efect" />
@@ -146,13 +143,10 @@
                               <TableColumn fx:id="btntabelaEndereco" minWidth="0.0" prefWidth="44.0" />
                            </columns>
                         </TableView>
-                        <Button fx:id="btnAddEndereco" layoutX="650.0" layoutY="44.0" mnemonicParsing="false" onAction="#addORupdateEndereco" prefHeight="30.0" prefWidth="105.0" text="Adicionar" textFill="WHITE">
+                        <Button fx:id="btnAddEndereco" layoutX="625.0" layoutY="44.0" mnemonicParsing="false" onAction="#addORupdateEndereco" prefHeight="30.0" prefWidth="130.0" text="Adicionar" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
-                           <graphic>
-                              <FontAwesomeIconView fill="WHITE" glyphName="ADDRESS_CARD" />
-                           </graphic>
                            <styleClass>
                               <String fx:value="secondary-color" />
                               <String fx:value="hand-efect" />
@@ -167,7 +161,7 @@
       </TabPane>
       <AnchorPane prefHeight="110.0" prefWidth="1003.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="48.0" layoutY="15.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" />
+            <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="55.0" layoutY="15.0" prefHeight="26.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" />
             <TextField fx:id="txtRazao" layoutX="309.0" layoutY="15.0" prefHeight="20.0" prefWidth="310.0" promptText="Razao Social" stylesheets="@../../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
@@ -180,14 +174,11 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <ComboBox fx:id="combTipoCliente" layoutX="170.0" layoutY="15.0" prefHeight="30.0" prefWidth="130.0" promptText="Tipo de Cliente" />
-            <Button fx:id="btnAddCliente" layoutX="619.0" layoutY="55.0" mnemonicParsing="false" onAction="#addORupdateCliente" prefHeight="20.0" prefWidth="148.0" text="Adicionar" textFill="WHITE">
+            <ComboBox fx:id="combTipoCliente" layoutX="152.0" layoutY="12.0" prefHeight="30.0" prefWidth="148.0" promptText="Tipo de Cliente" />
+            <Button fx:id="btnAddCliente" layoutX="637.0" layoutY="55.0" mnemonicParsing="false" onAction="#addORupdateCliente" prefHeight="20.0" prefWidth="130.0" text="Adicionar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="USER_PLUS" />
-               </graphic>
                <styleClass>
                   <String fx:value="secondary-color" />
                   <String fx:value="hand-efect" />

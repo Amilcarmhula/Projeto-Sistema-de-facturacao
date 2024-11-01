@@ -145,7 +145,7 @@ VALUES
 
 
 INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUES
-('IVA', 0.17, 'Imposto sobre o valor acrescentado (IVA)'),
+('IVA', 0.16, 'Imposto sobre o valor acrescentado (IVA)'),
 ('ISPC', 0.5, 'Imposto Simplificado para Pequenos Contribuintes (ISPC)'),
 ('Taxa Reduzida', 0.075, 'Taxa de imposto reduzida para produtos essenciais');
 

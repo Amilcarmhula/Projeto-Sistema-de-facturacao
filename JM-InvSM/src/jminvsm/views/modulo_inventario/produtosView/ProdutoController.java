@@ -37,6 +37,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.util.Callback;
@@ -279,12 +281,8 @@ public class ProdutoController implements Initializable {
                         setText(null);
                     } else {
 
-                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                        deleteIcon.setStyle(
-                                " -fx-cursor: hand ;"
-                                + "-glyph-size:28px;"
-                                + "-fx-fill:#000000b3;"
-                        );
+                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
+                        ImageView deleteIcon = new ImageView(image);
                         deleteIcon.setOnMouseClicked((MouseEvent event) -> {
                             Produto a = tabelaProduto.getSelectionModel().getSelectedItem();
                             try {

@@ -8,6 +8,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,14 +21,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jminvsm.SysFact;
@@ -44,13 +50,13 @@ import jminvsm.util.LoadAndMoveUtilities;
  * @author JM-Tecnologias
  */
 public class CategoriaViewController implements Initializable {
-
+    
     @FXML
     private Button btnClose;
-
+    
     @FXML
     private Button btnAddCategoria;
-
+    
     @FXML
     private TableView<Categoria> tabelaCategoria;
     @FXML
@@ -67,7 +73,7 @@ public class CategoriaViewController implements Initializable {
     private TableColumn<Categoria, String> descricaotabelaCategoria;
     @FXML
     private TableColumn<Categoria, String> btntabelaCategoria;
-
+    
     @FXML
     private TextField ps_txtpesquisar;
     @FXML
@@ -82,7 +88,7 @@ public class CategoriaViewController implements Initializable {
     private ComboBox<String> ps_combTipoCategoria;
     @FXML
     private TextArea ps_txtdescricaoCategoria;
-
+    
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
             LoadAndMoveUtilities.setEstadoStage(false);
@@ -94,7 +100,7 @@ public class CategoriaViewController implements Initializable {
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
     }
-
+    
     public void addORupdateCategoria() throws SQLException {
         if ("".equals(ps_txtIDCategoria.getText())) {
             addCategoria();
@@ -102,7 +108,7 @@ public class CategoriaViewController implements Initializable {
             updateCategoria();
         }
     }
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Configura o TextArea para quebra automática de linha
@@ -127,61 +133,22 @@ public class CategoriaViewController implements Initializable {
         Funcoes para fazer pesquisas no banco de dados buscando todos dados
      */
     private ObservableList<Categoria> listaCategorias;
-
+    
     public void showCategoria() throws SQLException {
         ServicoCategoria sc = new ServicoCategoria();
         listaCategorias = sc.listaCategorias();
-
+        
         IDtabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         grupotabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("grupo"));
         subgrupotabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("subgrupo"));
         familiatabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("familia"));
         descricaotabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("descricao"));
-
-        //add cell of button edit 
-        Callback<TableColumn<Categoria, String>, TableCell<Categoria, String>> cellFoctory = (TableColumn<Categoria, String> param) -> {
-            // make cell containing buttons
-            final TableCell<Categoria, String> cell = new TableCell<Categoria, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                        deleteIcon.setStyle(
-                                " -fx-cursor: hand ;"
-                                + "-glyph-size:28px;"
-                                + "-fx-fill:#000000b3;"
-                        );
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            Categoria x = tabelaCategoria.getSelectionModel().getSelectedItem();
-                            try {
-                                ServicoCategoria service = new ServicoCategoria();
-                                service.excluir(x.getId());
-                                showCategoria();
-                                resetCategorias();
-                            } catch (SQLException ex) {
-                                AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro no processo de exclusao", "Detalhes: "+ex);
-                            }
-                        });
-                        setGraphic(deleteIcon);
-                        setText(null);
-                    }
-                }
-            };
-
-            return cell;
-        };
-        btntabelaCategoria.setCellFactory(cellFoctory);
-
+        
         FilteredList<Categoria> dadosFiltrados = new FilteredList<>(listaCategorias, b -> true);
         ps_txtpesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(x -> {
-
+                
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
@@ -199,7 +166,7 @@ public class CategoriaViewController implements Initializable {
                 } else {
                     return false;
                 }
-
+                
             });
         });
         SortedList<Categoria> sortedData = new SortedList<>(dadosFiltrados);
@@ -212,8 +179,9 @@ public class CategoriaViewController implements Initializable {
     /*
         Funcoes de linha selecionada
      */
-    public void selectedLineCategoria() throws SQLException {
+    public void selectedLineCategoria(MouseEvent event) throws SQLException {
         Categoria x = tabelaCategoria.getSelectionModel().getSelectedItem();
+        
         SysFact.setData(x);
         if (x != null) {
             ps_txtIDCategoria.setText(String.valueOf(x.getId()));
@@ -223,11 +191,34 @@ public class CategoriaViewController implements Initializable {
             ps_txtfamiliaCategoria.setText(x.getFamilia());
             ps_txtdescricaoCategoria.setText(x.getDescricao());
             ButtonUtilities.buttonChangeText(btnAddCategoria, ps_txtIDCategoria);
-//            resetCategorias();
+            deleteItem(event, x);
         } else {
             resetCategorias();
         }
-
+    }
+    
+    public void deleteItem(MouseEvent event, Categoria x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+            
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                ServicoCategoria service = new ServicoCategoria();
+                service.excluir(x.getId());
+                showCategoria();
+                resetCategorias();
+                
+            } else if (result.get() == btnCancel) {
+                resetCategorias();
+            }
+        }
     }
 
     /*
@@ -242,7 +233,7 @@ public class CategoriaViewController implements Initializable {
             resetCategorias();
             showCategoria();
         }
-
+        
     }
 
     /*
@@ -254,7 +245,7 @@ public class CategoriaViewController implements Initializable {
                 ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
                 ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
                 ps_txtdescricaoCategoria.getText());
-
+        
         resetCategorias();
         showCategoria();
     }
@@ -264,12 +255,13 @@ public class CategoriaViewController implements Initializable {
      */
     public void resetCategorias() {
 //        ps_combTipoCategoria.getValue();
+        ps_txtIDCategoria.setText("");
         ps_txtgrupoCategoria.setText("");
         ps_txtsubgrupoCategoria.setText("");
         ps_txtfamiliaCategoria.setText("");
         ps_txtdescricaoCategoria.setText("");
         ButtonUtilities.buttonChangeText(btnAddCategoria, ps_txtIDCategoria);
-
+        
     }
-
+    
 }

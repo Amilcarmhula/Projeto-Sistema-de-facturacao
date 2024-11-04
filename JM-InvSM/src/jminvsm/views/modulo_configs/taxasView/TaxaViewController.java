@@ -8,6 +8,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,17 +20,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jminvsm.SysFact;
 import jminvsm.dao.taxaimposto.TaxaImpostoDAO;
+import jminvsm.model.categoria.Categoria;
 import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.service.categoria.ServicoCategoria;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -79,16 +87,15 @@ public class TaxaViewController implements Initializable {
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
             LoadAndMoveUtilities.setEstadoStage(false);
-            LoadAndMoveUtilities.showStage(null,null);
+            LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        }
-        else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+        } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
     }
-    
+
     public void addORupdateTaxa() throws SQLException {
         if ("".equals(txtID.getText())) {
             addTaxa();
@@ -119,45 +126,6 @@ public class TaxaViewController implements Initializable {
         percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagemImposto"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
-        //add cell of button edit 
-        Callback<TableColumn<TaxaImposto, String>, TableCell<TaxaImposto, String>> cellFoctory = (TableColumn<TaxaImposto, String> param) -> {
-            // make cell containing buttons
-            final TableCell<TaxaImposto, String> cell = new TableCell<TaxaImposto, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                        deleteIcon.setStyle(
-                                " -fx-cursor: hand ;"
-                                + "-glyph-size:28px;"
-                                + "-fx-fill:#000000b3;"
-                        );
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            TaxaImposto a = tabelaTaxa.getSelectionModel().getSelectedItem();
-                            try {
-                                TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
-                                xDAO.deleteEntity(a.getId());
-                                resetCampos();
-                                showTaxas();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(TaxaViewController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        });
-                        setGraphic(deleteIcon);
-                        setText(null);
-                    }
-                }
-            };
-
-            return cell;
-        };
-        btnTabela.setCellFactory(cellFoctory);
-
         FilteredList<TaxaImposto> dadosFiltrados = new FilteredList<>(listaTaxas, b -> true);
         txtTaxa.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(x -> {
@@ -186,7 +154,7 @@ public class TaxaViewController implements Initializable {
         TaxaImposto x = new TaxaImposto();
         x.setDescricao(txtDescricao.getText());
         x.setNomeImposto(txtTaxa.getText());
-        x.setPercentagemImposto(Double.valueOf(txtPercentagem.getText())/100);
+        x.setPercentagemImposto(Double.valueOf(txtPercentagem.getText()) / 100);
         try {
             TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
             xDAO.addEntity(x);
@@ -202,7 +170,7 @@ public class TaxaViewController implements Initializable {
         TaxaImposto x = new TaxaImposto();
         x.setDescricao(txtDescricao.getText());
         x.setNomeImposto(txtTaxa.getText());
-        x.setPercentagemImposto(Double.valueOf(txtPercentagem.getText())/100);
+        x.setPercentagemImposto(Double.valueOf(txtPercentagem.getText()) / 100);
         try {
             TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
             xDAO.updateEntityByID(x, Integer.parseInt(txtID.getText()));
@@ -213,16 +181,41 @@ public class TaxaViewController implements Initializable {
         }
     }
 
-    public void linhaSelecionadaTaxa() {
+    public void linhaSelecionadaTaxa(MouseEvent event) throws SQLException {
         TaxaImposto x = tabelaTaxa.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
             txtDescricao.setText(x.getDescricao());
-            txtPercentagem.setText(String.valueOf(x.getPercentagemImposto()*100));
+            txtPercentagem.setText(String.valueOf(x.getPercentagemImposto() * 100));
             txtTaxa.setText(x.getNomeImposto());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
-
+            deleteItem(event, x);
             SysFact.setData(x);
+        }
+    }
+
+    public void deleteItem(MouseEvent event, TaxaImposto x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
+                xDAO.deleteEntity(x.getId());
+                resetCampos();
+                showTaxas();
+                resetCampos();
+
+            } else if (result.get() == btnCancel) {
+                resetCampos();
+            }
         }
     }
 
@@ -233,7 +226,7 @@ public class TaxaViewController implements Initializable {
         txtTaxa.setText("");
         ButtonUtilities.buttonChangeText(btnAdd, txtID);
         showTaxas();
-        
+
     }
 
 }

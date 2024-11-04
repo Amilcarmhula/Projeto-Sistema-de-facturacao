@@ -4,10 +4,9 @@
  */
 package jminvsm.views.modulo_configs.unidadeView;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,17 +18,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jminvsm.SysFact;
 import jminvsm.dao.unidademedida.UnidadeMedidaDAO;
+import jminvsm.model.categoria.Categoria;
 import jminvsm.model.unidade_medida.UnidadeMedida;
+import jminvsm.service.categoria.ServicoCategoria;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -79,14 +85,13 @@ public class UnidadeViewController implements Initializable {
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
             LoadAndMoveUtilities.setEstadoStage(false);
-            LoadAndMoveUtilities.showStage(null,null);
+            LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        }
-        else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+        } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-        } 
+        }
     }
 
     public void addORupdateTaxa() throws SQLException {
@@ -119,45 +124,6 @@ public class UnidadeViewController implements Initializable {
         unidade.setCellValueFactory(new PropertyValueFactory<>("identificador"));
         sigla.setCellValueFactory(new PropertyValueFactory<>("sigla"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
-
-        //add cell of button edit 
-        Callback<TableColumn<UnidadeMedida, String>, TableCell<UnidadeMedida, String>> cellFoctory = (TableColumn<UnidadeMedida, String> param) -> {
-            // make cell containing buttons
-            final TableCell<UnidadeMedida, String> cell = new TableCell<UnidadeMedida, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                        deleteIcon.setStyle(
-                                " -fx-cursor: hand ;"
-                                + "-glyph-size:28px;"
-                                + "-fx-fill:#000000b3;"
-                        );
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            UnidadeMedida a = tabelaUnidade.getSelectionModel().getSelectedItem();
-                            try {
-                                UnidadeMedidaDAO xDAO = new UnidadeMedidaDAO();
-                                xDAO.deleteEntity(a.getId());
-                                resetCampos();
-                                showUnidades();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(UnidadeViewController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        });
-                        setGraphic(deleteIcon);
-                        setText(null);
-                    }
-                }
-            };
-
-            return cell;
-        };
-        btnTabela.setCellFactory(cellFoctory);
 
         FilteredList<UnidadeMedida> dadosFiltrados = new FilteredList<>(listaUnidade, b -> true);
         txtUnidade.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -216,7 +182,7 @@ public class UnidadeViewController implements Initializable {
         }
     }
 
-    public void linhaSelecionadaUnidade() {
+    public void linhaSelecionadaUnidade(MouseEvent event) throws SQLException {
         UnidadeMedida x = tabelaUnidade.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
@@ -224,7 +190,32 @@ public class UnidadeViewController implements Initializable {
             txtSigla.setText(x.getSigla());
             txtDescricao.setText(x.getDescricao());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
+            deleteItem(event, x);
             SysFact.setData(x);
+        }
+    }
+
+    public void deleteItem(MouseEvent event, UnidadeMedida x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                UnidadeMedidaDAO xDAO = new UnidadeMedidaDAO();
+                xDAO.deleteEntity(x.getId());
+                showUnidades();
+                resetCampos();
+
+            } else if (result.get() == btnCancel) {
+                resetCampos();
+            }
         }
     }
 

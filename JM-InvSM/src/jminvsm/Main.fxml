@@ -36,12 +36,12 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <PasswordField fx:id="txtpassword" layoutX="70.0" layoutY="380.0" onKeyPressed="#callLog" prefHeight="35.0" prefWidth="260.0" promptText="Senha" style="-fx-background-color: transparent; -fx-border-color: #17b5c3; -fx-border-width: 0px 0px 2px 0px;">
+                  <PasswordField fx:id="txtpassword" layoutX="70.0" layoutY="380.0" onKeyPressed="#callLog" prefHeight="35.0" prefWidth="260.0" promptText="Senha" style="-fx-background-color: transparent; -fx-border-color: #17b5c3; -fx-border-width: 0px 0px 2px 0px;" text="senha123">
                      <font>
                         <Font name="Berlin Sans FB" size="16.0" />
                      </font>
                   </PasswordField>
-                  <TextField fx:id="txtusarname" layoutX="70.0" layoutY="327.0" onKeyPressed="#callLog" prefHeight="35.0" prefWidth="260.0" promptText="Usuário" style="-fx-background-color: transparent; -fx-border-color: #17b5c3; -fx-border-width: 0px 0px 2px 0px;">
+                  <TextField fx:id="txtusarname" layoutX="70.0" layoutY="327.0" onKeyPressed="#callLog" prefHeight="35.0" prefWidth="260.0" promptText="Usuário" style="-fx-background-color: transparent; -fx-border-color: #17b5c3; -fx-border-width: 0px 0px 2px 0px;" text="root">
                      <font>
                         <Font name="Berlin Sans FB" size="16.0" />
                      </font>

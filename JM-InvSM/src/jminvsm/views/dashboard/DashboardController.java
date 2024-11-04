@@ -4,7 +4,7 @@
  */
 package jminvsm.views.dashboard;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+//import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -282,7 +282,7 @@ public class DashboardController implements Initializable {
 
         // Verificar se a lista de estoque está vazia
         if (listaStock == null || listaStock.isEmpty()) {
-            AlertUtilities.showDialog(FontAwesomeIcon.INFO, "Aviso", "Nenhum produto encontrado.");
+//            AlertUtilities.showDialog(FontAwesomeIcon.INFO, "Aviso", "Nenhum produto encontrado.");
             return;
         }
         ObservableList<PieChart.Data> lista = FXCollections.observableArrayList();
@@ -302,10 +302,10 @@ public class DashboardController implements Initializable {
         // Aplicando efeito de hover para destacar fatias
         for (PieChart.Data data : pieChart.getData()) {
             data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
-                data.getNode().setStyle("-fx-scale-x: 1.1; -fx-scale-y: 1.1;");
+//                data.getNode().setStyle("-fx-scale-x: 1.1; -fx-scale-y: 1.1;");
             });
             data.getNode().addEventHandler(MouseEvent.MOUSE_EXITED, e -> {
-                data.getNode().setStyle("-fx-scale-x: 1; -fx-scale-y: 1;");
+//                data.getNode().setStyle("-fx-scale-x: 1; -fx-scale-y: 1;");
             });
         }
     }

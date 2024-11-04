@@ -7,6 +7,7 @@ package jminvsm.service.usuario;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import jminvsm.dao.usuario.UsuarioDAO;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.util.AlertUtilities;
 import static jminvsm.util.AlertUtilities.showDialog;
 import static jminvsm.util.AlertUtilities.showErroNotification;
 
@@ -25,7 +26,8 @@ public class ServiceUsuario {
     public Usuario authLogin(String user, String pwd) {
         Usuario usuario = null;
         if (user == null || user.isEmpty()) {
-            showErroNotification("Erro", "Usuario nao pode ser nula!");
+            AlertUtilities.showDialog2("/jminvsm/image/icons/red-erro.png", "Erro", "Usuario nao pode ser nula!");
+//            showErroNotification("Erro", "Usuario nao pode ser nula!");
             return null;
         }
         if (pwd == null || pwd.isEmpty()) {

@@ -7,3 +7,11 @@
             </fx:resources>
         </fx:deploy>
     </target>
+
+
+
+java --module-path "C:\Program Files\Java\javafx-sdk-23.0.1\lib" --add-modules javafx.controls,javafx.fxml,javafx.graphics -jar JM-InvSM.jar
+java --module-path "C:\Program Files\Java\javafx-sdk-23.0.1\lib" --add-modules javafx.controls,javafx.fxml -jar JM-InvSM.jar
+
+
+--module-path "C:\Program Files\Java\javafx-sdk-23.0.1\lib" --add-modules javafx.controls,javafx.fxml

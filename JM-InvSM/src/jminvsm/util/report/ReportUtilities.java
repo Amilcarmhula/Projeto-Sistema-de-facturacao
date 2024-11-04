@@ -5,6 +5,7 @@
 package jminvsm.util.report;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import java.io.File;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -21,20 +22,25 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import jminvsm.util.AlertUtilities;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 /**
  *
  * @author JM-Tecnologias
  */
 public class ReportUtilities {
-    
+
     public static void genarateJasperReport(String jasperPath, Map<String, Object> mapParams, JRBeanCollectionDataSource dataSOURCE) {
         try {
 //            String jasperPath = "C:\\Users\\JM-Tecnologias\\JaspersoftWorkspace\\SysFaceReports\\RelatorioFacturas.jrxml";
-            JasperReport compiledReport = JasperCompileManager.compileReport(jasperPath);
+//            JasperReport compiledReport = JasperCompileManager.compileReport("/jminvsm/reports/vendas/facturas/PF/RelatorioFacturas.jrxml");
+//            JasperReport compiledReport = JasperCompileManager.compileReport(jasperPath);
+            System.out.println("path:" +new File(System.getProperty("user.dir")));
+            JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile("C:\\JM-InvSM\\compiled\\RelatorioFacturas.jasper");
 
             // Preencher o relatório
-            JasperPrint printableReport = JasperFillManager.fillReport(compiledReport, mapParams, dataSOURCE);
+//            JasperPrint printableReport = JasperFillManager.fillReport(compiledReport, mapParams, dataSOURCE);
+            JasperPrint printableReport = JasperFillManager.fillReport(jReport, mapParams, dataSOURCE);
             /*
             Configura escolha decisao de escolha de visualizacao e impressao ou salvar documento
              */
@@ -58,7 +64,7 @@ public class ReportUtilities {
             } else if (result.get() == btnSaveView) {
                 //Salva o relatório NOMEFACTURA
                 String numero = (String) mapParams.get("NOMEFACTURA");
-                JasperExportManager.exportReportToPdfFile(printableReport, "C:/JM-InvSM/FACTURA-"+numero.replace("/", "-")+".pdf");
+                JasperExportManager.exportReportToPdfFile(printableReport, "C:/JM-InvSM/FACTURA-" + numero.replace("/", "-") + ".pdf");
                 // Exibir o relatório
                 JasperViewer viewer = new JasperViewer(printableReport, false);
                 viewer.setTitle("Factura");
@@ -67,7 +73,7 @@ public class ReportUtilities {
                 System.out.println("Aqui nao salva nem visualiza; esta associado ao botao close da tela!");
             }
         } catch (JRException ex) {
-            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Informacao", "Erro ao gerar relatorio de factura: "+ex);
+            AlertUtilities.showDialog2("/jminvsm/image/icons/red-erro.png", "Erro", "Erro ao gerar relatorio de factura: " + ex);
         }
     }
 }

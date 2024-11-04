@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -10,6 +9,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -22,14 +23,21 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnClose" layoutX="599.0" layoutY="13.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="ARROW_LEFT" size="35" />
-               </graphic>
+            <Button fx:id="btnClose" layoutX="599.0" layoutY="13.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="75.0" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <styleClass>
                   <String fx:value="gray-bg" />
                   <String fx:value="close-categoria" />
                </styleClass>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="28.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../image/icons/cross.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
          </children>
       </AnchorPane>
@@ -41,8 +49,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <FontAwesomeIconView fill="#4a56e1" glyphName="SEARCH" layoutX="718.0" layoutY="167.0" size="15" />
-            <TextField fx:id="ps_txtIDCategoria" alignment="CENTER" disable="true" layoutX="99.0" layoutY="6.0" prefHeight="25.0" prefWidth="114.0" promptText="ID">
+            <TextField fx:id="ps_txtIDCategoria" alignment="CENTER" disable="true" layoutX="99.0" layoutY="6.0" prefHeight="26.0" prefWidth="68.0" promptText="ID">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
@@ -67,8 +74,8 @@
                </styleClass>
             </TextField>
             <TextArea fx:id="ps_txtdescricaoCategoria" layoutX="387.0" layoutY="6.0" prefHeight="133.0" prefWidth="362.0" />
-            <ComboBox fx:id="ps_combTipoCategoria" layoutX="216.0" layoutY="6.0" prefHeight="30.0" prefWidth="160.0" promptText="Selecione a Categoria" />
-            <Button fx:id="btnAddCategoria" alignment="CENTER" layoutX="100.0" layoutY="143.0" mnemonicParsing="false" onAction="#addORupdateCategoria" prefHeight="30.0" prefWidth="267.0" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
+            <ComboBox fx:id="ps_combTipoCategoria" layoutX="176.0" layoutY="6.0" prefHeight="30.0" prefWidth="200.0" promptText="Selecione a Categoria" />
+            <Button fx:id="btnAddCategoria" alignment="CENTER" layoutX="244.0" layoutY="143.0" mnemonicParsing="false" onAction="#addORupdateCategoria" prefHeight="30.0" prefWidth="132.0" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -81,15 +88,15 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <Button layoutX="55.0" layoutY="4.0" mnemonicParsing="false" onAction="#resetCategorias" prefWidth="35.0">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="15" />
-               </graphic>
+            <Button layoutX="106.0" layoutY="143.0" mnemonicParsing="false" onAction="#resetCategorias" prefHeight="30.0" prefWidth="132.0" text="Limpar" textFill="WHITE">
                <styleClass>
                   <String fx:value="secondary-color" />
                   <String fx:value="shadow-efect" />
                   <String fx:value="hand-efect" />
                </styleClass>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
             </Button>
          </children>
       </AnchorPane>

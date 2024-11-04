@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -22,14 +21,14 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="ARROW_LEFT" size="35" />
-               </graphic>
+            <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" text="Voltar" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <styleClass>
                   <String fx:value="close-categoria" />
                   <String fx:value="gray-bg" />
                </styleClass>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
             </Button>
          </children>
       </AnchorPane>
@@ -172,14 +171,15 @@
                   <String fx:value="hand-efect" />
                </styleClass>
             </Button>
-            <Button layoutX="55.0" layoutY="11.0" mnemonicParsing="false" onAction="#resetCliente" stylesheets="@../../../../style/dashboard.css">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="20" />
-               </graphic>
+            <Button layoutX="403.0" layoutY="75.0" mnemonicParsing="false" onAction="#resetCliente" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Limpar" textFill="WHITE">
                <styleClass>
-                  <String fx:value="gray-bg" />
+                  <String fx:value="secondary-color" />
+                  <String fx:value="hand-efect" />
                   <String fx:value="shadow-efect" />
                </styleClass>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
             </Button>
             <TextField fx:id="txtDescricao" layoutX="96.0" layoutY="45.0" prefHeight="25.0" prefWidth="577.0" promptText="Descricao">
                <styleClass>

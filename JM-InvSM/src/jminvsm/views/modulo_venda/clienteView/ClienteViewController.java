@@ -24,6 +24,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.util.Callback;
@@ -80,12 +82,12 @@ public class ClienteViewController implements Initializable {
     public void getViewAddCliente(ActionEvent evt) {
         /*
         Metodo para mostrar a nova tela ocultando a anterior
-        */
+         */
         LoadAndMoveUtilities.showAsPopUP(evt, null);
         /* O caminho para o FXML a ser carregado deve considerar o pacote 
         onde se encontra o metodo estatico LoadAndMoveUtilities.loadFXML(path)
          */
-        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL,"../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
     }
 
     @Override
@@ -132,13 +134,9 @@ public class ClienteViewController implements Initializable {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                        deleteIcon.setStyle(
-                                " -fx-cursor: hand ;"
-                                + "-glyph-size:28px;"
-                                + "-fx-fill:#000000b3;"
-                        );
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
+                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
+                        ImageView imageView = new ImageView(image);
+                        imageView.setOnMouseClicked((MouseEvent event) -> {
                             Cliente x = tabelaCliente.getSelectionModel().getSelectedItem();
                             try {
                                 serviceCliente.excluir(x.getId());
@@ -147,7 +145,7 @@ public class ClienteViewController implements Initializable {
                                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         });
-                        setGraphic(deleteIcon);
+                        setGraphic(imageView);
                         setText(null);
                     }
                 }

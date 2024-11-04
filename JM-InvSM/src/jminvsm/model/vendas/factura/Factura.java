@@ -87,9 +87,11 @@ public class Factura {
         parametros.put("TABLE_DATA_SOURCE", itemDataSource);
         parametros.put("NOMEFACTURA", numeroFactura);
         
-        String path = FilePathFinderUtilities.absolutePathBuilder(new File(System.getProperty("user.dir")), "RelatorioFacturas.jrxml");
+//        String path = FilePathFinderUtilities.absolutePathBuilder(new File(System.getProperty("user.dir")), "RelatorioFacturas.jrxml");
+        String path = FilePathFinderUtilities.absolutePathBuilder(new File(System.getProperty("user.dir")), "RelatorioFacturas.jasper");
 
         ReportUtilities.genarateJasperReport(path, parametros, facturaDetalhesDATASOURCE);
+//        ReportUtilities.genarateJasperReport("/jminvsm/reports/vendas/facturas/PF/RelatorioFacturas.jrxml", parametros, facturaDetalhesDATASOURCE);
     }
 
     public String getNumero_fac() {

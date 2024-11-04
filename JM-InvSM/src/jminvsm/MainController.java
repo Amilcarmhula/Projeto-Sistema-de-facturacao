@@ -4,6 +4,7 @@
  */
 package jminvsm;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -26,6 +27,7 @@ import jminvsm.dao.empresa.EmpresaDAO;
 import jminvsm.dao.usuario.UsuarioDAO;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.usuario.ServiceUsuario;
+import jminvsm.util.FilePathFinderUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
 /**
@@ -66,7 +68,8 @@ public class MainController implements Initializable {
                 SysFact.setEmpresaData(empresaData.getEmpresaData());
                 btnlogin.getScene().getWindow().hide();
 
-                Parent root = FXMLLoader.load(getClass().getResource("../jminvsm/views/main/main.fxml"));
+//                Parent root = FXMLLoader.load(getClass().getResource("../jminvsm/views/main/main.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/jminvsm/views/main/main.fxml"));
                 Stage stage = new Stage();
                 LoadAndMoveUtilities.moveWindows(root, stage);
                 Scene scene = new Scene(root);

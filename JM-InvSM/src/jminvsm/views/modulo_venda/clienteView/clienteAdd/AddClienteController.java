@@ -24,6 +24,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -286,13 +288,9 @@ public class AddClienteController implements Initializable {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                        deleteIcon.setStyle(
-                                " -fx-cursor: hand ;"
-                                + "-glyph-size:28px;"
-                                + "-fx-fill:#000000b3;"
-                        );
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
+                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
+                        ImageView imageView = new ImageView(image);
+                        imageView.setOnMouseClicked((MouseEvent event) -> {
                             EnderecoCliente a = tabelaEndereco.getSelectionModel().getSelectedItem();
                             try {
                                 serviceEndereco.excluir(a.getId());
@@ -301,7 +299,7 @@ public class AddClienteController implements Initializable {
                                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         });
-                        setGraphic(deleteIcon);
+                        setGraphic(imageView);
                         setText(null);
                     }
                 }
@@ -340,13 +338,9 @@ public class AddClienteController implements Initializable {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                        deleteIcon.setStyle(
-                                " -fx-cursor: hand ;"
-                                + "-glyph-size:28px;"
-                                + "-fx-fill:#000000b3;"
-                        );
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
+                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
+                        ImageView imageView = new ImageView(image);
+                        imageView.setOnMouseClicked((MouseEvent event) -> {
                             ContactoCliente x = tabelaContacto.getSelectionModel().getSelectedItem();
                             try {
                                 serviceContacto.excluir(x.getId());
@@ -358,7 +352,7 @@ public class AddClienteController implements Initializable {
                                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         });
-                        setGraphic(deleteIcon);
+                        setGraphic(imageView);
                         setText(null);
                     }
                 }

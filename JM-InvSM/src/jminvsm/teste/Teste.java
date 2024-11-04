@@ -92,14 +92,14 @@ public class Teste {
         }
     }
 
-    public static void main(String[] args) {
-//        if(LocalDate.now().plusDays(3).getDayOfWeek() == LocalDate.now().getDayOfWeek().THURSDAY){
-//            System.out.println("SIM");
-//        }
-//        System.out.println(LocalDate.now().plusDays(3).getDayOfWeek());
-//        System.out.println();
-        criaParcelas(20,12);
-    }
+//    public static void main(String[] args) {
+////        if(LocalDate.now().plusDays(3).getDayOfWeek() == LocalDate.now().getDayOfWeek().THURSDAY){
+////            System.out.println("SIM");
+////        }
+////        System.out.println(LocalDate.now().plusDays(3).getDayOfWeek());
+////        System.out.println();
+//        criaParcelas(20,12);
+//    }
 
     /**
      * @param args the command line arguments

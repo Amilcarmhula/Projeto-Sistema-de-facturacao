@@ -59,6 +59,7 @@ public class FilePathFinderUtilities {
                         if (!file.getAbsolutePath().contains("build")) {
 //                            foundPath = file.getAbsolutePath().replace(System.getProperty("user.dir")+"\\src\\sysfact\\reports\\", "../");
                             foundPath = file.getAbsolutePath();
+                            System.out.println(foundPath);
 //                            return foundPath.replace("\\", "/"); // Retorna o caminho do arquivo encontrado
                             return foundPath;
                         }

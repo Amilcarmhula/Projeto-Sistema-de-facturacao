@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.PieChart?>
@@ -8,6 +7,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -46,7 +47,11 @@
                         <Font name="Berlin Sans FB" size="18.0" />
                      </font>
                   </Label>
-                  <FontAwesomeIconView fill="WHITE" glyphName="ARROWS_H" layoutX="14.0" layoutY="59.0" size="60" />
+                  <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="8.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../image/icons/rate.png" />
+                     </image>
+                  </ImageView>
                </children>
                <styleClass>
                   <String fx:value="primary-color" />
@@ -72,12 +77,16 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <FontAwesomeIconView fill="WHITE" glyphName="BOOKMARK" layoutX="14.0" layoutY="66.0" size="70" />
                   <Label fx:id="labTotalFacturas" layoutX="105.0" layoutY="28.0" prefHeight="28.0" prefWidth="280.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
                      <font>
                         <Font name="Berlin Sans FB" size="18.0" />
                      </font>
                   </Label>
+                  <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="8.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../image/icons/doc.png" />
+                     </image>
+                  </ImageView>
                </children>
                <styleClass>
                   <String fx:value="primary-color" />
@@ -108,7 +117,11 @@
                         <Font name="Berlin Sans FB" size="18.0" />
                      </font>
                   </Label>
-                  <FontAwesomeIconView fill="WHITE" glyphName="USERS" layoutX="15.0" layoutY="60.0" size="60" />
+                  <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="8.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../image/icons/supplier.png" />
+                     </image>
+                  </ImageView>
                </children>
                <styleClass>
                   <String fx:value="primary-color" />
@@ -197,7 +210,11 @@
                         <Insets right="10.0" />
                      </padding>
                   </Label>
-                  <FontAwesomeIconView fill="WHITE" glyphName="USERS" layoutX="15.0" layoutY="60.0" size="60" />
+                  <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="8.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../image/icons/male-customer.png" />
+                     </image>
+                  </ImageView>
                </children>
                <styleClass>
                   <String fx:value="primary-color" />
@@ -223,7 +240,6 @@
                         <Insets right="10.0" />
                      </padding>
                   </Label>
-                  <FontAwesomeIconView fill="WHITE" glyphName="CART_PLUS" layoutX="15.0" layoutY="55.0" size="60" AnchorPane.topAnchor="3.571430206298828" />
                   <Label fx:id="labProdutoStock" alignment="CENTER_RIGHT" layoutY="34.0" prefHeight="28.0" prefWidth="300.0" text="Nome do produto" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
@@ -240,6 +256,11 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
+                  <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="8.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../image/icons/cart-arrow-down.png" />
+                     </image>
+                  </ImageView>
                </children>
                <styleClass>
                   <String fx:value="primary-color" />
@@ -270,7 +291,6 @@
                         <Insets right="10.0" />
                      </padding>
                   </Label>
-                  <FontAwesomeIconView fill="WHITE" glyphName="MONEY" layoutX="15.0" layoutY="60.0" size="60" />
                   <Label alignment="CENTER_RIGHT" layoutY="40.0" prefHeight="28.0" prefWidth="300.0" text="Conta Corrente" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
@@ -284,6 +304,11 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
+                  <ImageView fitHeight="78.0" fitWidth="78.0" layoutX="8.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../image/icons/cash-register.png" />
+                     </image>
+                  </ImageView>
                </children>
                <styleClass>
                   <String fx:value="primary-color" />

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -15,21 +14,21 @@
 
 <AnchorPane prefHeight="554.0" prefWidth="788.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_compra.fornecedorView.fornecedorAdd.AddFornecedorController">
    <children>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Cadastro de fornecedores" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="ARROW_LEFT" size="35" />
-               </graphic>
+            <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" text="Voltar" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <styleClass>
                   <String fx:value="close-categoria" />
                   <String fx:value="gray-bg" />
                </styleClass>
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
             </Button>
          </children>
       </AnchorPane>
@@ -39,14 +38,14 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="341.0" prefWidth="760.0">
                      <children>
-                        <TextField fx:id="txtIDContacto" disable="true" layoutX="8.0" layoutY="10.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../style/dashboard.css" />
-                        <TextField fx:id="txtContacto" layoutX="309.0" layoutY="10.0" prefHeight="20.0" prefWidth="181.0" promptText="Numero de telefone" stylesheets="@../../style/dashboard.css">
+                        <TextField fx:id="txtIDContacto" disable="true" layoutX="8.0" layoutY="10.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" />
+                        <TextField fx:id="txtContacto" layoutX="309.0" layoutY="10.0" prefHeight="20.0" prefWidth="181.0" promptText="Numero de telefone">
                            <styleClass>
                               <String fx:value="text-squared-border" />
                               <String fx:value="shadow" />
                            </styleClass>
                         </TextField>
-                        <TextField fx:id="txtEmail" layoutX="495.0" layoutY="10.0" prefHeight="20.0" prefWidth="257.0" promptText="E-mail" stylesheets="@../../style/dashboard.css">
+                        <TextField fx:id="txtEmail" layoutX="495.0" layoutY="10.0" prefHeight="20.0" prefWidth="257.0" promptText="E-mail">
                            <styleClass>
                               <String fx:value="text-squared-border" />
                               <String fx:value="shadow" />
@@ -62,7 +61,7 @@
                               <TableColumn fx:id="btntabelaContacto" prefWidth="45.0" />
                            </columns>
                         </TableView>
-                        <TextField fx:id="txtResponsavel" layoutX="104.0" layoutY="10.0" prefHeight="20.0" prefWidth="197.0" promptText="Reponsavel" stylesheets="@../../style/dashboard.css">
+                        <TextField fx:id="txtResponsavel" layoutX="104.0" layoutY="10.0" prefHeight="20.0" prefWidth="197.0" promptText="Reponsavel">
                            <styleClass>
                               <String fx:value="text-squared-border" />
                               <String fx:value="shadow" />
@@ -78,7 +77,7 @@
                               <String fx:value="shadow-efect" />
                            </styleClass>
                         </Button>
-                        <TextField fx:id="txtSite" layoutX="8.0" layoutY="45.0" prefHeight="20.0" prefWidth="287.0" promptText="website" stylesheets="@../../style/dashboard.css">
+                        <TextField fx:id="txtSite" layoutX="8.0" layoutY="45.0" prefHeight="20.0" prefWidth="287.0" promptText="website">
                            <styleClass>
                               <String fx:value="text-squared-border" />
                               <String fx:value="shadow" />
@@ -185,14 +184,15 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <Button layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#resetCliente" prefHeight="18.0" prefWidth="27.0" stylesheets="@../../../../style/dashboard.css">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="20" />
-               </graphic>
+            <Button layoutX="499.0" layoutY="55.0" mnemonicParsing="false" onAction="#resetCliente" prefHeight="30.0" prefWidth="130.0" text="Limpar" textFill="WHITE">
                <styleClass>
-                  <String fx:value="gray-bg" />
+                  <String fx:value="secondary-color" />
+                  <String fx:value="hand-efect" />
                   <String fx:value="shadow-efect" />
                </styleClass>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
             </Button>
          </children>
       </AnchorPane>

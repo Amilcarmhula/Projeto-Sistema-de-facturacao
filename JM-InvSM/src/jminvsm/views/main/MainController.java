@@ -14,16 +14,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 import jminvsm.SysFact;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.util.FilePathFinderUtilities;
@@ -159,7 +154,7 @@ public class MainController implements Initializable {
 //        btn_dashboard.setStyle("-fx-background-color: rgba(55, 55, 179, 0.25)");
         AnchorPane pane;
         try {
-            pane = FXMLLoader.load(getClass().getResource("../dashboard/dashboard.fxml"));
+            pane = FXMLLoader.load(getClass().getResource("/jminvsm/views/dashboard/dashboard.fxml"));
             anchorMain.getChildren().setAll(pane);
         } catch (IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);

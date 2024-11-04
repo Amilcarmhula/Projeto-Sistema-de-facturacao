@@ -4,7 +4,6 @@
  */
 package jminvsm.views.main;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,7 +20,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
 import jminvsm.model.usuario.Usuario;
-import jminvsm.util.FilePathFinderUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
 /**
@@ -38,10 +36,10 @@ public class MainController implements Initializable {
 
     @FXML
     private Label labUserName;
-    
+
     @FXML
     private Label labNivel;
-    
+
     @FXML
     private Label labEmail;
 
@@ -104,12 +102,12 @@ public class MainController implements Initializable {
     public void getViews(ActionEvent e) {
         String path = "";
         if (e.getSource() == btn_taxas) {
-            path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "taxaView.fxml");
-//            path = "../views/modulo_configs/taxasView/taxaView.fxml";
+            path = "/jminvsm/views/modulo_configs/taxasView/taxaView.fxml";
+//            path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "taxaView.fxml");
         } else if (e.getSource() == btn_unidades) {
-            path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "unidadeView.fxml");
+            path = "/jminvsm/views/modulo_configs/unidadeView/unidadeView.fxml";
         } else if (e.getSource() == btn_categorias) {
-            path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "categoriaView.fxml");
+            path = "/jminvsm/views/modulo_configs/categoriaView/categoriaView.fxml";
         }
         LoadAndMoveUtilities.showAsPopUP(e, null);
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
@@ -119,31 +117,25 @@ public class MainController implements Initializable {
     // Carregar a primeira tela no centro
     @FXML
     public void switchForm(ActionEvent e) throws IOException {
-        AnchorPane pane;
+        String path = "";
         if (e.getSource() == btn_dashboard) {
-            pane = FXMLLoader.load(getClass().getResource("../dashboard/dashboard.fxml"));
-            anchorMain.getChildren().setAll(pane);
+            path = "/jminvsm/views/dashboard/dashboard.fxml";
         } else if (e.getSource() == btn_artigos) {
-            pane = FXMLLoader.load(getClass().getResource("../modulo_inventario/produtosView/produtoAdd.fxml"));
-//            System.out.println(anchorMain.getChildren().remove(0).getId());
-            anchorMain.getChildren().setAll(pane);
+            path = "/jminvsm/views/modulo_inventario/produtosView/produtoAdd.fxml";
         } else if (e.getSource() == btn_cliente) {
-            pane = FXMLLoader.load(getClass().getResource("../modulo_venda/clienteView/clienteView.fxml"));
-            anchorMain.getChildren().setAll(pane);
+            path = "/jminvsm/views/modulo_venda/clienteView/clienteView.fxml";
         } else if (e.getSource() == btn_fornecedor) {
-            pane = FXMLLoader.load(getClass().getResource("../modulo_compra/fornecedorView/fornecedorView.fxml"));
-            anchorMain.getChildren().setAll(pane);
+            path = "/jminvsm/views/modulo_compra/fornecedorView/fornecedorView.fxml";
         } else if (e.getSource() == btn_armazem) {
-            pane = FXMLLoader.load(getClass().getResource("../modulo_inventario/armazemView/armazemView.fxml"));
-            anchorMain.getChildren().setAll(pane);
+            path = "/jminvsm/views/modulo_inventario/armazemView/armazemView.fxml";
         } else if (e.getSource() == btn_vendas) {
-            pane = FXMLLoader.load(getClass().getResource("../modulo_venda/vendaView/vendasView.fxml"));
-            anchorMain.getChildren().setAll(pane);
-        }else if (e.getSource() == btn_pagamento) {
-            pane = FXMLLoader.load(getClass().getResource("../modulo_contabilidade/pagamentosView/pagamentoView.fxml"));
-            anchorMain.getChildren().setAll(pane);
+            path = "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
+        } else if (e.getSource() == btn_pagamento) {
+            path = "/jminvsm/views/modulo_contabilidade/pagamentosView/pagamentoView.fxml";
         }
-    }//
+        AnchorPane pane = FXMLLoader.load(getClass().getResource(path));
+        anchorMain.getChildren().setAll(pane);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

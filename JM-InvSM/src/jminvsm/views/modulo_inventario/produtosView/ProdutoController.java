@@ -362,7 +362,7 @@ public class ProdutoController implements Initializable {
     public void getStockView(MouseEvent evt) {
 //        LoadAndMoveUtilities.showStage(null, evt);
         LoadAndMoveUtilities.showAsPopUP(null, evt);
-        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_inventario/stockView/addStock.fxml");
     }
 
 //    public void addProduto() throws SQLException {

@@ -4,8 +4,6 @@
  */
 package jminvsm.views.modulo_venda.clienteView;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -87,7 +85,7 @@ public class ClienteViewController implements Initializable {
         /* O caminho para o FXML a ser carregado deve considerar o pacote 
         onde se encontra o metodo estatico LoadAndMoveUtilities.loadFXML(path)
          */
-        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
     }
 
     @Override

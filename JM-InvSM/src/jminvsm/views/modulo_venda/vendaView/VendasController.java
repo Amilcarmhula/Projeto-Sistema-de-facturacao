@@ -165,17 +165,15 @@ public class VendasController implements Initializable {
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
-            String path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "clienteSearch.fxml");
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
-            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
         }
     }
 
     public void getSearchProduto(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
-            String path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "searchProduto.fxml");
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
-            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/vendaView/searchProduto/searchProduto.fxml");
         }
     }
 
@@ -495,9 +493,8 @@ public class VendasController implements Initializable {
     public void geMiniPagamentoView(ActionEvent evt) {
 //        SysFact.setData("2024-1022/3");
 //        if (evt.getClickCount() == 1) {
-        String path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "MiniPagamentoView.fxml");
         LoadAndMoveUtilities.showAsPopUP(evt, null);
-        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_contabilidade/miniPagamentoView/MiniPagamentoView.fxml");
 //        }
     }
 

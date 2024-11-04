@@ -226,7 +226,7 @@ public class PagamentoController implements Initializable {
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
-            String path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "clienteSearch.fxml");
+            String path = "/jminvsm/views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml";
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
         }

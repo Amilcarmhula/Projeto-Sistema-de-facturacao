@@ -86,7 +86,7 @@ public class ArmazemViewController implements Initializable {
     
     public void getViewAddCliente(ActionEvent evt){
         LoadAndMoveUtilities.showAsPopUP(evt, null);
-            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/armazemView/armazemAdd/addArmazem.fxml");
+            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_inventario/armazemView/armazemAdd/addArmazem.fxml");
     }
 
     @Override

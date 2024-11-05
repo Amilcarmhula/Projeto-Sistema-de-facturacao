@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="942.0" prefWidth="1425.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.vendaView.VendasController">
+<AnchorPane prefHeight="909.0" prefWidth="1400.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.vendaView.VendasController">
    <children>
       <AnchorPane prefHeight="160.0" prefWidth="1431.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
@@ -47,68 +47,68 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <TextField fx:id="txtEnderecoCliente" disable="true" layoutX="207.0" layoutY="125.0" prefHeight="25.0" prefWidth="451.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="1190.0" layoutY="127.0" prefHeight="27.0" prefWidth="99.0" text="Valido Ate:" textFill="WHITE">
+            <TextField fx:id="txtEnderecoCliente" disable="true" layoutX="190.0" layoutY="125.0" prefHeight="25.0" prefWidth="451.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <Label fx:id="labTotalFactura" alignment="CENTER_RIGHT" layoutX="1173.0" layoutY="127.0" prefHeight="27.0" prefWidth="99.0" text="Valido Ate:" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="txtNomeCLiente" disable="true" layoutX="207.0" layoutY="91.0" prefHeight="25.0" prefWidth="285.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TextField fx:id="txtNuitCLiente" disable="true" layoutX="498.0" layoutY="91.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TextField fx:id="txtEmailCLiente" disable="true" layoutX="666.0" layoutY="125.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TextField fx:id="txtContactoCLiente" disable="true" layoutX="634.0" layoutY="91.0" prefHeight="25.0" prefWidth="265.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <Label layoutX="1002.0" layoutY="93.0" text="FACTURA N°" textFill="WHITE">
+            <TextField fx:id="txtNomeCLiente" disable="true" layoutX="190.0" layoutY="91.0" prefHeight="25.0" prefWidth="285.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtNuitCLiente" disable="true" layoutX="481.0" layoutY="91.0" prefHeight="25.0" prefWidth="130.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtEmailCLiente" disable="true" layoutX="649.0" layoutY="125.0" prefHeight="25.0" prefWidth="233.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtContactoCLiente" disable="true" layoutX="617.0" layoutY="91.0" prefHeight="25.0" prefWidth="265.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <Label layoutX="985.0" layoutY="93.0" text="FACTURA N°" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labNumeroFactura" layoutX="1165.0" layoutY="93.0" prefHeight="27.0" prefWidth="180.0" textFill="WHITE">
+            <Label fx:id="labNumeroFactura" layoutX="1148.0" layoutY="93.0" prefHeight="27.0" prefWidth="180.0" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="txtIDCliente" alignment="CENTER" layoutX="207.0" layoutY="57.0" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="25.0" prefWidth="84.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtIDCliente" alignment="CENTER" layoutX="190.0" layoutY="57.0" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="25.0" prefWidth="84.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="hand-efect" />
                </styleClass>
             </TextField>
-            <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1297.0" layoutY="127.0" prefHeight="27.0" prefWidth="113.0" textFill="WHITE">
+            <Label fx:id="labValidade" alignment="CENTER_RIGHT" layoutX="1280.0" layoutY="127.0" prefHeight="27.0" prefWidth="113.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="labDataInicial" alignment="CENTER_RIGHT" layoutX="1061.0" layoutY="127.0" prefHeight="27.0" prefWidth="122.0" textFill="WHITE">
+            <Label fx:id="labDataInicial" alignment="CENTER_RIGHT" layoutX="1044.0" layoutY="127.0" prefHeight="27.0" prefWidth="122.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="labTotalFactura2" alignment="CENTER_RIGHT" layoutX="1014.0" layoutY="127.0" prefHeight="27.0" prefWidth="38.0" text="De:" textFill="WHITE">
+            <Label fx:id="labTotalFactura2" alignment="CENTER_RIGHT" layoutX="997.0" layoutY="127.0" prefHeight="27.0" prefWidth="38.0" text="De:" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <ComboBox fx:id="combTipoDoc" layoutX="1145.0" layoutY="57.0" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="265.0" promptText="Selecione o tipo de factura a emitir" />
-            <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutX="961.0" layoutY="56.0" prefHeight="35.0" prefWidth="171.0" text="Tipo de Factura:" textFill="WHITE">
+            <ComboBox fx:id="combTipoDoc" layoutX="1128.0" layoutY="57.0" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="265.0" promptText="Selecione o tipo de factura a emitir" />
+            <Label fx:id="labTotalFactura1" alignment="CENTER_RIGHT" layoutX="944.0" layoutY="56.0" prefHeight="35.0" prefWidth="171.0" text="Tipo de Factura:" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaItens" layoutY="170.0" prefHeight="673.0" prefWidth="970.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0">
+      <TableView fx:id="tabelaItens" layoutY="167.0" prefHeight="673.0" prefWidth="944.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0">
          <columns>
             <TableColumn fx:id="idtabelaItens" prefWidth="29.0" text="#" />
-            <TableColumn fx:id="nometabelaItens" prefWidth="420.0" text="Descrição" />
-            <TableColumn fx:id="precotabelaItens" prefWidth="120.0" text="Preço unitário" />
+            <TableColumn fx:id="nometabelaItens" prefWidth="408.0" text="Descrição" />
+            <TableColumn fx:id="precotabelaItens" prefWidth="132.0" text="Preço unitário" />
             <TableColumn fx:id="unidadetabelaItens" prefWidth="65.0" text="Uni." />
             <TableColumn fx:id="quantidadetabelaItens" prefWidth="65.0" text="Qtd." />
             <TableColumn fx:id="descontotabelaItens" prefWidth="70.0" text="Desc." />
             <TableColumn fx:id="taxatabelaItens" prefWidth="70.0" text="Taxa" />
-            <TableColumn fx:id="subTotaltabelaItens" prefWidth="123.0" text="Total" />
+            <TableColumn fx:id="subTotaltabelaItens" prefWidth="101.0" text="Total" />
          </columns>
       </TableView>
-      <Button fx:id="btnRemoveItem" layoutX="988.0" layoutY="424.0" mnemonicParsing="false" onAction="#removeItens" prefHeight="72.0" prefWidth="421.0" stylesheets="@../../../style/dashboard.css" text="Remover Item" textFill="WHITE">
+      <Button fx:id="btnRemoveItem" layoutX="966.0" layoutY="424.0" mnemonicParsing="false" onAction="#removeItens" prefHeight="72.0" prefWidth="421.0" stylesheets="@../../../style/dashboard.css" text="Remover Item" textFill="WHITE">
          <font>
             <Font name="System Bold" size="34.0" />
          </font>
@@ -160,7 +160,7 @@
             <ComboBox fx:id="combDesconto" layoutX="242.0" layoutY="86.0" prefHeight="25.0" prefWidth="197.0" promptText="Desconto" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="974.0" layoutY="501.0" prefHeight="440.0" prefWidth="450.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane layoutX="974.0" layoutY="501.0" prefHeight="400.0" prefWidth="450.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.rightAnchor="0.0">
          <children>
             <AnchorPane layoutX="8.0" layoutY="39.0" prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -171,7 +171,7 @@
                   </Label>
                </children>
             </AnchorPane>
-            <Button fx:id="btnCancelaFactura" layoutX="235.0" layoutY="344.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="52.0">
+            <Button fx:id="btnCancelaFactura" layoutX="235.0" layoutY="327.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="52.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -182,7 +182,7 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <Button fx:id="btnFinalizaFactura" layoutX="54.0" layoutY="344.0" mnemonicParsing="false" onAction="#criarFactura" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Finalizar" textFill="WHITE">
+            <Button fx:id="btnFinalizaFactura" layoutX="54.0" layoutY="327.0" mnemonicParsing="false" onAction="#criarFactura" prefHeight="30.0" prefWidth="162.0" stylesheets="@../../../style/dashboard.css" text="Finalizar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>

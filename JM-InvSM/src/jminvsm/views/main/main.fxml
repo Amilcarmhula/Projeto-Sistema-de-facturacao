@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1750.0" styleClass="base-color" stylesheets="@../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.main.MainController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1029.0" prefWidth="1720.0" styleClass="base-color" stylesheets="@../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.main.MainController">
    <children>
       <ImageView fitHeight="1000.0" fitWidth="1321.0" layoutX="220.0" opacity="0.29" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.970703125" AnchorPane.topAnchor="0.0">
          <image>
@@ -61,7 +61,7 @@
                </children></AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="904.0" prefWidth="258.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0">
+      <AnchorPane prefHeight="909.0" prefWidth="258.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0">
          <children>
             <Accordion layoutY="250.0" prefHeight="392.0" prefWidth="258.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <panes>
@@ -388,6 +388,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorMain" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1432.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="298.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+      <AnchorPane fx:id="anchorMain" layoutX="300.0" minHeight="-Infinity" prefHeight="909.0" prefWidth="1400.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+      <AnchorPane prefHeight="40.0" prefWidth="200.0" styleClass="primary-color" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
    </children>
 </AnchorPane>

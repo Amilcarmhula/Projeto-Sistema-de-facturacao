@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="910.0" prefWidth="1432.0" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_contabilidade.pagamentosView.PagamentoController">
+<AnchorPane prefHeight="909.0" prefWidth="1400.0" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_contabilidade.pagamentosView.PagamentoController">
    <children>
       <TableView fx:id="tabelaFactura" layoutY="130.0" onMouseClicked="#showInvoice" prefHeight="250.0" prefWidth="1432.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
         <columns>
@@ -81,13 +81,13 @@
             <TableColumn fx:id="dataRegistoTrans" prefWidth="201.0" resizable="false" text="Data de registo" />
         </columns>
       </TableView>
-      <AnchorPane layoutX="977.0" layoutY="384.0" prefHeight="271.0" prefWidth="554.0" styleClass="secondary-color" AnchorPane.rightAnchor="0.0">
+      <AnchorPane layoutX="879.0" layoutY="384.0" prefHeight="271.0" prefWidth="517.0" styleClass="secondary-color">
          <children>
-            <ComboBox fx:id="combmetodoPagamento" layoutX="312.0" layoutY="68.0" prefHeight="25.0" prefWidth="233.0" promptText="Metodo de pagamento" />
-            <DatePicker fx:id="dataPagamento" layoutX="108.0" layoutY="68.0" />
-            <TextField fx:id="txtValorRecebido" alignment="CENTER_RIGHT" layoutX="245.0" layoutY="113.0" prefHeight="36.0" prefWidth="303.0" promptText="Valor Recebido" style="-fx-font-size: 20;" />
-            <TextField fx:id="txtDescricao" layoutX="4.0" layoutY="161.0" prefHeight="36.0" prefWidth="546.0" promptText="Descricao do pagamento" style="-fx-font-size: 20;" />
-            <Button fx:id="btnFinalizar" layoutX="362.0" layoutY="210.0" mnemonicParsing="false" onAction="#addTransacao" prefHeight="30.0" prefWidth="186.0" stylesheets="@../../../style/dashboard.css" text="Finalizar" textFill="WHITE">
+            <ComboBox fx:id="combmetodoPagamento" layoutX="273.0" layoutY="68.0" prefHeight="25.0" prefWidth="233.0" promptText="Metodo de pagamento" />
+            <DatePicker fx:id="dataPagamento" layoutX="69.0" layoutY="68.0" />
+            <TextField fx:id="txtValorRecebido" alignment="CENTER_RIGHT" layoutX="206.0" layoutY="113.0" prefHeight="36.0" prefWidth="303.0" promptText="Valor Recebido" style="-fx-font-size: 20;" />
+            <TextField fx:id="txtDescricao" layoutX="4.0" layoutY="161.0" prefHeight="36.0" prefWidth="508.0" promptText="Descricao do pagamento" style="-fx-font-size: 20;" />
+            <Button fx:id="btnFinalizar" layoutX="323.0" layoutY="210.0" mnemonicParsing="false" onAction="#addTransacao" prefHeight="30.0" prefWidth="186.0" stylesheets="@../../../style/dashboard.css" text="Finalizar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -102,12 +102,12 @@
                   <Font size="36.0" />
                </font>
             </Label>
-            <Label fx:id="labValorPorPagar" alignment="CENTER_RIGHT" layoutX="46.0" layoutY="18.0" prefHeight="41.0" prefWidth="206.0" textFill="WHITE">
+            <Label fx:id="labValorPorPagar" alignment="CENTER_RIGHT" layoutX="71.0" layoutY="18.0" prefHeight="41.0" prefWidth="206.0" textFill="WHITE">
                <font>
                   <Font size="36.0" />
                </font>
             </Label>
-            <Label fx:id="labValorPorPagar_Aux" layoutX="257.0" layoutY="18.0" prefHeight="41.0" prefWidth="218.0" textFill="WHITE">
+            <Label fx:id="labValorPorPagar_Aux" layoutX="282.0" layoutY="18.0" prefHeight="41.0" prefWidth="218.0" textFill="WHITE">
                <font>
                   <Font size="36.0" />
                </font>

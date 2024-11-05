@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.stock;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +14,6 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.stock.Stock;
 import jminvsm.util.Conexao;
-import jminvsm.util.LoadAndMoveUtilities;
 import jminvsm.util.AlertUtilities;
 import static jminvsm.util.AlertUtilities.showDialog;
 
@@ -74,7 +72,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
+            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -104,7 +102,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
+            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -142,7 +140,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de contagem", "Detalhes: " + ex);
+            showDialog("Erro de contagem", "Detalhes: " + ex);
         }
 
         return total;

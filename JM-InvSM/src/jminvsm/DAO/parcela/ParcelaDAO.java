@@ -4,14 +4,10 @@
  */
 package jminvsm.dao.parcela;
 
-import com.mysql.cj.xdevapi.Result;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.parcelas.Parcela;
@@ -55,7 +51,7 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -96,7 +92,7 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulra", "Detalhes: " + ex);
+            showDialog("Erro de consulra", "Detalhes: " + ex);
         }
         return lista;
     }

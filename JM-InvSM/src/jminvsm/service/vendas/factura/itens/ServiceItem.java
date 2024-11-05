@@ -4,12 +4,9 @@
  */
 package jminvsm.service.vendas.factura.itens;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import java.sql.SQLException;
 import java.util.List;
 import jminvsm.dao.vendas.itens.ItemDAO;
 import jminvsm.model.vendas.factura.itens.Item;
-import jminvsm.util.AlertUtilities;
 import static jminvsm.util.AlertUtilities.showDialog;
 import static jminvsm.util.AlertUtilities.showErroNotification;
 import static jminvsm.util.AlertUtilities.showSuccessNotification;
@@ -34,7 +31,7 @@ public class ServiceItem {
             itemDao.addEntity(itens);
             showSuccessNotification("Sucesso", "Itens adicionados a factura com sucesso!");
         } catch (Exception e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao emitir factura!");
+            showDialog( "Erro", "Erro ao emitir factura!");
         }
     }
 }

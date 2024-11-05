@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.cliente.contacto;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,7 +52,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -88,7 +87,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog( "Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -166,7 +165,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {

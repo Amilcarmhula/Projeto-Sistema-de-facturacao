@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.vendas.itens;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -109,7 +108,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Informação", "Erro ao carregar itens da Factura: " + e);
+            AlertUtilities.showDialog( "Erro", "Detalhes: " + e);
         }
         return lista;
     }

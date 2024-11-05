@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.cliente.endereco;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,7 +57,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -97,7 +96,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -133,7 +132,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
+            showDialog( "Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -161,7 +160,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
+            showDialog( "Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -181,7 +180,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de exclusao", "Detalhes: " + ex);
+            showDialog("Erro de exclusao", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {

@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.cliente;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,7 +53,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog( "Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -88,7 +87,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -333,7 +332,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {

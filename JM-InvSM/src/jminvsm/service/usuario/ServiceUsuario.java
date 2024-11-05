@@ -4,7 +4,6 @@
  */
 package jminvsm.service.usuario;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import jminvsm.dao.usuario.UsuarioDAO;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.util.AlertUtilities;
@@ -39,7 +38,7 @@ public class ServiceUsuario {
             usuario = usuarioDAO.login(user, pwd);
             
         } catch (Exception e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro", "Detalhes: "+e);
+            showDialog( "Erro", "Detalhes: "+e);
         }
 
         return usuario;

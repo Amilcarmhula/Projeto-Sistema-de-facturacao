@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.caixa;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,7 +45,7 @@ public class CaixaDAO implements CaixaDAOImpl<Caixa>{
             result.close();
             ps.close();
         } catch (SQLException e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro consulta", "Detalhes: " + e);
+            showDialog("Erro consulta", "Detalhes: " + e);
         }
         return c;
     }

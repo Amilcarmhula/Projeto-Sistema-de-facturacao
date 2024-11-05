@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.vendas.factura;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -68,7 +67,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog( "Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -116,7 +115,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             ps.close();
         } catch (SQLException e) {
             System.out.println("Erro: "+e);
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + e);
+            showDialog( "Erro de consulta", "Detalhes: " + e);
         }
         return factura;
     }
@@ -207,7 +206,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog( "Erro persistencia", "Detalhes: " + ex);
         }
         return f;
     }
@@ -249,7 +248,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + e);
+            showDialog( "Erro de consulta", "Detalhes: " + e);
         }
         return lista;
     }
@@ -289,7 +288,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + e);
+            AlertUtilities.showDialog( "Erro de consulta", "Detalhes: " + e);
         }
         return lista;
     }
@@ -307,7 +306,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de contagem", "Detalhes: " + ex);
+            AlertUtilities.showDialog( "Erro de contagem", "Detalhes: " + ex);
         }
 
         return total;

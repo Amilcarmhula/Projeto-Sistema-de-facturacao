@@ -25,29 +25,30 @@ public class AlertUtilities {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
-
         // Carrega a imagem a partir do caminho fornecido
         Image image = new Image(imagePath);
         ImageView imageView = new ImageView(image);
-
         // Ajusta o tamanho da imagem
-//        imageView.setFitWidth(50); // Largura da imagem
-//        imageView.setFitHeight(50); // Altura da imagem
-
+        imageView.setFitWidth(50); // Largura da imagem
+        imageView.setFitHeight(50); // Altura da imagem
         // Define a imagem como o ícone gráfico do alerta
         alert.setGraphic(imageView);
-
         alert.showAndWait();
     }
 
-    public static void showDialog(FontAwesomeIcon icon, String title, String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
+    public static void showDialog(String title, String message) {
+        Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
-        FontAwesomeIconView erroIcon = new FontAwesomeIconView(icon);
-        erroIcon.setStyle("-fx-fill: #000000b3; -fx-font-size: 25px;");
-        alert.setGraphic(erroIcon);
+        // Carrega a imagem a partir do caminho fornecido
+        Image image = new Image("/jminvsm/image/icons/alert.png");
+        ImageView imageView = new ImageView(image);
+        // Ajusta o tamanho da imagem
+        imageView.setFitWidth(50); // Largura da imagem
+        imageView.setFitHeight(50); // Altura da imagem
+        // Define a imagem como o ícone gráfico do alerta
+        alert.setGraphic(imageView);
         alert.showAndWait();
     }
 

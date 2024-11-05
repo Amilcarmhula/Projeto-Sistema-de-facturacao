@@ -4,7 +4,6 @@
  */
 package jminvsm.service.produto;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.SQLException;
 import jminvsm.dao.produto.ProdutoDAO;
 import jminvsm.model.categoria.Categoria;
@@ -83,7 +82,7 @@ public class ServiceProduto {
             produtoDao.addEntity(p);
             showSuccessNotification("Sucesso", "Produto registado com sucesso!");
         } catch (Exception e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro", "Detalhes: " + e.getMessage());
+            showDialog( "Erro", "Detalhes: " + e.getMessage());
         }
     }
     
@@ -144,7 +143,7 @@ public class ServiceProduto {
             produtoDao.updateEntityByID(p, id);
             showSuccessNotification("Sucesso", "Produto actualizado com sucesso!");
         } catch (Exception e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro", "Detalhes: " + e.getMessage());
+            showDialog( "Erro", "Detalhes: " + e.getMessage());
         }
     }
     

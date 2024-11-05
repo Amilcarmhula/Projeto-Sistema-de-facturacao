@@ -4,7 +4,6 @@
  */
 package jminvsm.service.produto.fornecido;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import jminvsm.dao.produto.fornecido.ProdutoFornecidoDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
@@ -70,7 +69,7 @@ public class ServiceProdutoFornecido {
             produtoFornecidoDao.addEntity(pf);
             showSuccessNotification("Sucesso", "Stock actualizado com sucesso!");
         }catch(Exception e){
-            showDialog(FontAwesomeIcon.TIMES,"Erro", "Erro ao adicionar/actualizar sock!");
+            showDialog("Erro", "Erro ao adicionar/actualizar sock!");
         }
         
         

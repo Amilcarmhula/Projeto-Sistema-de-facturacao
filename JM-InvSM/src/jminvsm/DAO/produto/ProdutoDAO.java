@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.produto;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +14,6 @@ import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
-import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.taxa_imposto.TaxaImposto;
@@ -187,7 +185,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de contagem", "Detalhes: " + ex);
+            showDialog( "Erro de contagem", "Detalhes: " + ex);
         }
 
         return total;

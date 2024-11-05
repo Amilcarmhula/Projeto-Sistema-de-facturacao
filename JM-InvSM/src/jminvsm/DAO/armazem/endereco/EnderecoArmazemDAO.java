@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.armazem.endereco;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,7 +56,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de persistencia!", "Detalhes: " + ex);
+            showDialog("Erro de persistencia!", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -97,7 +96,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de persistencia!", "Detalhes: " + ex);
+            showDialog("Erro de persistencia!", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -132,7 +131,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + ex);
+            showDialog("Erro de consulta!", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -160,7 +159,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + ex);
+            showDialog("Erro de consulta!", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -181,7 +180,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
 
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
-            showDialog(FontAwesomeIcon.TIMES, "Erro de exclusao", "Detalhes: " + ex);
+            showDialog("Erro de exclusao", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {

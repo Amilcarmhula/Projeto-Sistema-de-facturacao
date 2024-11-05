@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.armazem;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,7 +48,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog( "Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -82,7 +81,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de persistencia", "Detalhes: " + ex);
+            showDialog("Erro de persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -129,7 +128,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + e);
+            showDialog( "Erro de consulta!", "Detalhes: " + e);
 
         }
         return lista;
@@ -152,7 +151,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + e);
+            showDialog("Erro de consulta!", "Detalhes: " + e);
         }
         return c;
     }
@@ -175,7 +174,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + e);
+            showDialog("Erro de consulta!", "Detalhes: " + e);
         }
         return c;
     }
@@ -195,7 +194,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de exclusao", "Detalhes: " + ex);
+            showDialog("Erro de exclusao", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -226,7 +225,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta!", "Detalhes: " + e);
+            showDialog("Erro de consulta!", "Detalhes: " + e);
 
         }
         return lista;

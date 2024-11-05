@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.metodoPagamento;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,7 +44,7 @@ public class MetodoPagamentoDAO implements MetodoImpl<MetodoPagamento>{
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
+            showDialog("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }

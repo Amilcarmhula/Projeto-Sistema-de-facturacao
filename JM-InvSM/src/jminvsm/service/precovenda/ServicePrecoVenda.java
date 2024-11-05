@@ -4,7 +4,6 @@
  */
 package jminvsm.service.precovenda;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -71,7 +70,7 @@ public class ServicePrecoVenda {
             precoVendaDao.addEntity(pv);
             showSuccessNotification("Sucesso", "Preço registado com sucesso!");
         } catch (Exception e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao registrar preço de venda: " + e.getMessage());
+            showDialog("Erro", "Erro ao registrar preço de venda: " + e.getMessage());
             System.out.println("Erro: " + e);
         }
     }
@@ -101,7 +100,7 @@ public class ServicePrecoVenda {
             precoVendaDao.updateEntityByID(pv, id);
             showSuccessNotification("Sucesso", "Preço actualizado com sucesso!");
         } catch (Exception e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro", "Erro ao actualizar preço de venda: " + e.getMessage());
+            showDialog("Erro", "Erro ao actualizar preço de venda: " + e.getMessage());
             System.out.println("Erro: " + e);
         }
     }

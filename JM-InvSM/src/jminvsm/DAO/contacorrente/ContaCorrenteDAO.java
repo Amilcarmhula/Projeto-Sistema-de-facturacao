@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.contacorrente;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,7 +45,7 @@ public class ContaCorrenteDAO implements ContaCorrenteDAOImpl<ContaCorrente>{
             result.close();
             ps.close();
         } catch (SQLException e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro consulta", "Detalhes: " + e);
+            showDialog( "Erro consulta", "Detalhes: " + e);
         }
         return c;
     }

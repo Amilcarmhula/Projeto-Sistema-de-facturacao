@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.transacoes;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,7 +56,7 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
 
         } catch (SQLException ex) {
             System.out.println("Erro: "+ex+" Data: "+t.getData_pagamento());
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog( "Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -97,7 +96,7 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
 
         } catch (SQLException ex) {
             System.out.println("Erro: "+ex+" Data: "+t.getData_pagamento());
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog( "Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -139,7 +138,7 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
             result.close();
             ps.close();
         } catch (SQLException e) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + e);
+            showDialog("Erro de consulta", "Detalhes: " + e);
         }
         return lista;
     }

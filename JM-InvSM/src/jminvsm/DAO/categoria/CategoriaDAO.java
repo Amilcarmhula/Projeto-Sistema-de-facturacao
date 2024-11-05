@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.categoria;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -52,7 +51,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -87,7 +86,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {
@@ -120,7 +119,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de consulta", "Detalhes: " + ex);
+            showDialog("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -140,7 +139,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             }
 
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro de exclusao", "Detalhes: " + ex);
+            showDialog("Erro de exclusao", "Detalhes: " + ex);
         } finally {
             try {
                 if (ps != null) {

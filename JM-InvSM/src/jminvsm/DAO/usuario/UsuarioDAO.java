@@ -4,29 +4,16 @@
  */
 package jminvsm.dao.usuario;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javax.swing.JOptionPane;
-import jminvsm.SysFact;
-import jminvsm.dao.empresa.EmpresaDAO;
 import jminvsm.model.usuario.NivelAcesso;
 import jminvsm.model.usuario.Permissao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.util.Conexao;
 import jminvsm.util.LoadAndMoveUtilities;
 import static jminvsm.util.AlertUtilities.showDialog;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
 
 /**
  *
@@ -70,12 +57,12 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
                 p.setTipo(result.getString("tipo"));
                 user.setPermissao(p);
             } else {
-                showDialog(FontAwesomeIcon.TIMES, "Info", "Usuario nao existe!!");
+                showDialog("Info", "Usuario nao existe!!");
             }
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog(FontAwesomeIcon.TIMES, "Erro", "Detalhes: " + ex);
+            showDialog( "Erro", "Detalhes: " + ex);
         }
         return user;
     }

@@ -4,8 +4,6 @@
  */
 package jminvsm.views.modulo_inventario.produtosView;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
@@ -14,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,9 +26,11 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -43,15 +44,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.util.Callback;
 import jminvsm.SysFact;
-import jminvsm.dao.preco.PrecoVendaDAO;
 import jminvsm.dao.produto.ProdutoDAO;
+import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
-import jminvsm.model.metodo_pagamento.MetodoPagamento;
 import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.taxa_imposto.TaxaImposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.categoria.ServicoCategoria;
 import jminvsm.service.precovenda.ServicePrecoVenda;
 import jminvsm.service.produto.ServiceProduto;
@@ -269,41 +270,6 @@ public class ProdutoController implements Initializable {
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getSaldo())));
         nivelStock.setCellValueFactory(new PropertyValueFactory<>("nivelstock"));
 
-        Callback<TableColumn<Produto, String>, TableCell<Produto, String>> cellFoctory = (TableColumn<Produto, String> param) -> {
-            // make cell containing buttons
-            final TableCell<Produto, String> cell = new TableCell<Produto, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-
-                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
-                        ImageView deleteIcon = new ImageView(image);
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            Produto a = tabelaProduto.getSelectionModel().getSelectedItem();
-                            try {
-                                ProdutoDAO xDAO = new ProdutoDAO();
-//                                xDAO.deleteEntityByUSER(a);
-//                                resetProduto();
-                                showProduto();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        });
-                        setGraphic(deleteIcon);
-                        setText(null);
-                    }
-                }
-            };
-
-            return cell;
-        };
-        btntabelaProduto.setCellFactory(cellFoctory);
-
         //add cell of checkBox edit 
         Callback<TableColumn<Produto, String>, TableCell<Produto, String>> cellFoctory2 = (TableColumn<Produto, String> param) -> {
             // make cell containing buttons
@@ -419,7 +385,7 @@ public class ProdutoController implements Initializable {
                 id_tax, txtNomeProduto.getText(),
                 txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("") ? "0" : txtNivelStock.getText()));
-
+        showProduto();
         addPrecoVenda();
         resetCampos();
         stockControlChecked();
@@ -465,10 +431,10 @@ public class ProdutoController implements Initializable {
     }
 
     public void updatePrecoVenda() throws SQLException {
-        double precoNorm = Double.parseDouble(txtPreco.getText().equals("")?"0":txtPreco.getText());
-        double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText().equals("")?"0":txtprecoInclTaxa.getText());
-        double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText().equals("")?"0":txtprecoExclTaxa.getText());
-        int id_preco = Integer.parseInt(labIDPreco.getText().equals("")?"0":labIDPreco.getText());
+        double precoNorm = Double.parseDouble(txtPreco.getText().equals("") ? "0" : txtPreco.getText());
+        double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText().equals("") ? "0" : txtprecoInclTaxa.getText());
+        double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText().equals("") ? "0" : txtprecoExclTaxa.getText());
+        int id_preco = Integer.parseInt(labIDPreco.getText().equals("") ? "0" : labIDPreco.getText());
         servPreco.actualizaPrecoVenda(id_preco, precoNorm, precoComTax, precoSemTax,
                 String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
                 userData);
@@ -539,11 +505,10 @@ public class ProdutoController implements Initializable {
     }
 //  ############################################################################
 
-    public void selecionaProduto(MouseEvent event) {
+    public void selecionaProduto(MouseEvent event) throws SQLException {
         Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
             Produto p = mapaProdutos.get(x.getId());
-            
 
             txtNivelStock.setText(String.valueOf(p.getNivelstock()));
             txtIDProduto.setText(String.valueOf(p.getId()));
@@ -560,13 +525,37 @@ public class ProdutoController implements Initializable {
                 SysFact.setData(p);
                 getStockView(event);
             }
+            deleteProduto(event, x);
             ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         }
 
     }
+
+    public void deleteProduto(MouseEvent event, Produto x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                ProdutoDAO xDAO = new ProdutoDAO();
+                xDAO.deleteEntityByUSER(x);
+                showProduto();
+                resetCampos();
+            } else if (result.get() == btnCancel) {
+                resetCampos();
+            }
+        }
+    }
 //  ############################################################################
 
-    public void selecionaPreco() {
+    public void selecionaPreco(MouseEvent event) throws SQLException {
         PrecoVenda pv = tabelaPrecos.getSelectionModel().getSelectedItem();
         if (pv != null && !"desactivo".equals(pv.getEstado())) {
             labIDPreco.setText(pv.getId() + "");
@@ -576,8 +565,34 @@ public class ProdutoController implements Initializable {
             dataFim.setValue(LocalDate.parse(pv.getData_fim()));
             dataInicio.setValue(LocalDate.parse(pv.getData_inicio()));
         }
+        deletePreco(event, pv);
         if (pv != null && "desactivo".equals(pv.getEstado())) {
             labIDPreco.setText("");
+        }
+    }
+
+    public void deletePreco(MouseEvent event, PrecoVenda x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja desactivar o preco?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                servicePrecos.deletePreco(x.getId());
+                if (servicePrecos.isOpsSuccess()) {
+                    showProduto();
+                    showPrecoVenda();
+                    resetCampos();
+                }
+            } else if (result.get() == btnCancel) {
+                resetCampos();
+            }
         }
     }
 //  ############################################################################

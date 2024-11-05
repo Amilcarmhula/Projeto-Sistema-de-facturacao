@@ -11,11 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
-import jminvsm.model.armazem.Armazem;
 import jminvsm.model.preco.PrecoVenda;
-import jminvsm.model.produto.Produto;
-import jminvsm.model.usuario.Usuario;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
@@ -160,9 +156,33 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
 //    }
 
     @Override
-    public void deleteEntityByUSER(PrecoVenda x) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean deleteEntityByUSER(int id) {
+        boolean isSuccess = false;
+        try {
+            sql = "update precovenda set estado='desactivo' where id=?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog(FontAwesomeIcon.TIMES, "Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isSuccess;
     }
+   
 
     
 

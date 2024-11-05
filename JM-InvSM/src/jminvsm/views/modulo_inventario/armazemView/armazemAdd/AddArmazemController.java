@@ -8,6 +8,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +19,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -27,6 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jminvsm.SysFact;
@@ -273,41 +277,7 @@ public class AddArmazemController implements Initializable {
         ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua_arm"));
         codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal_arm"));
         numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero_arm"));
-        //add cell of button edit 
-        Callback<TableColumn<EnderecoArmazem, String>, TableCell<EnderecoArmazem, String>> cellFoctory = (TableColumn<EnderecoArmazem, String> param) -> {
-            // make cell containing buttons
-            final TableCell<EnderecoArmazem, String> cell = new TableCell<EnderecoArmazem, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
-                        ImageView deleteIcon = new ImageView(image);
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            EnderecoArmazem a = tabelaEndereco.getSelectionModel().getSelectedItem();
-                            try {
-                                ServiceEndereco service = new ServiceEndereco();
-                                service.excluir(a.getId());
-                                if (service.isOpsSuccess()) {
-                                    showEndereco();
-                                }
-                            } catch (SQLException ex) {
-                                AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro no processo de exclusao", "Detalhes: "+ex);
-                            }
-                        });
-                        setGraphic(deleteIcon);
-                        setText(null);
-                    }
-                }
-            };
 
-            return cell;
-        };
-        btntabelaEndereco.setCellFactory(cellFoctory);
         tabelaEndereco.setItems(listaEndereco);
     }
 
@@ -324,43 +294,6 @@ public class AddArmazemController implements Initializable {
         contactotabelaContacto.setCellValueFactory(new PropertyValueFactory<>("contacto_arm"));
         emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email_arm"));
         responsaveltabelaContacto.setCellValueFactory(new PropertyValueFactory<>("responsavel_arm"));
-
-        //add cell of button edit 
-        Callback<TableColumn<ContactoArmazem, String>, TableCell<ContactoArmazem, String>> cellFoctory = (TableColumn<ContactoArmazem, String> param) -> {
-            // make cell containing buttons
-            final TableCell<ContactoArmazem, String> cell = new TableCell<ContactoArmazem, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
-                        ImageView deleteIcon = new ImageView(image);
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            ContactoArmazem x = tabelaContacto.getSelectionModel().getSelectedItem();
-                            try {
-                                ServiceContacto service = new ServiceContacto();
-                                service.excluir(x.getId());
-                                if (service.isOpsSuccess()) {
-                                    showContactos();
-                                }
-                            } catch (SQLException ex) {
-                                AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro no processo de exclusao", "Detalhes: "+ex);
-                            }
-                        });
-                        setGraphic(deleteIcon);
-                        setText(null);
-                    }
-                }
-            };
-
-            return cell;
-        };
-        btntabelaContacto.setCellFactory(cellFoctory);
-
         tabelaContacto.setItems(listaContactos);
     }
 
@@ -392,9 +325,9 @@ public class AddArmazemController implements Initializable {
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         Integer id = Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
-        service.registar(txtAvenida.getText(), txtBairro.getText(), 
+        service.registar(txtAvenida.getText(), txtBairro.getText(),
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(),id, userData);
+                txtRua.getText(), id, userData);
         if (service.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
@@ -430,31 +363,57 @@ public class AddArmazemController implements Initializable {
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         Integer id = Integer.valueOf(txtIDEndereco.getText().equals("") ? "0" : txtIDEndereco.getText());
-        service.actualizar(txtAvenida.getText(), txtBairro.getText(), 
+        service.actualizar(txtAvenida.getText(), txtBairro.getText(),
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(),id, userData);
+                txtRua.getText(), id, userData);
         if (service.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
         }
-        
+
     }
 
     /*
     Funcoes de Linha selecionada
      */
-    public void selecionaContacto() {
+    public void selecionaContacto(MouseEvent event) throws SQLException {
         ContactoArmazem x = tabelaContacto.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDContacto.setText(String.valueOf(x.getId()));
             txtResponsavel.setText(x.getResponsavel_arm());
             txtContacto.setText(x.getContacto_arm());
             txtEmail.setText(x.getEmail_arm());
+            deleteContacto(event, x);
             ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
         }
     }
 
-    public void selecionaEndereco() {
+    public void deleteContacto(MouseEvent event, ContactoArmazem x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                ServiceContacto service = new ServiceContacto();
+                service.excluir(x.getId());
+                if (service.isOpsSuccess()) {
+                    showContactos();
+                    restContacto();
+                }
+            } else if (result.get() == btnCancel) {
+                restContacto();
+            }
+        }
+    }
+
+    public void selecionaEndereco(MouseEvent event) throws SQLException {
         EnderecoArmazem x = tabelaEndereco.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDEndereco.setText(String.valueOf(x.getId()));
@@ -465,7 +424,33 @@ public class AddArmazemController implements Initializable {
             txtNumeroEndereco.setText(String.valueOf(x.getNumero_arm()));
             combProvincia.setValue(x.getProvincia_arm());
             txtRua.setText(x.getRua_arm());
+            deleteEndereco(event, x);
             ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
+        }
+    }
+
+    public void deleteEndereco(MouseEvent event, EnderecoArmazem x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                ServiceEndereco service = new ServiceEndereco();
+                service.excluir(x.getId());
+                if (service.isOpsSuccess()) {
+                    showEndereco();
+                    resetEndereco();
+                }
+            } else if (result.get() == btnCancel) {
+                resetEndereco();
+            }
         }
     }
 

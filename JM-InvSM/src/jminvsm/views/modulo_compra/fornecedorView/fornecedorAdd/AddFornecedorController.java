@@ -4,10 +4,9 @@
  */
 package jminvsm.views.modulo_compra.fornecedorView.fornecedorAdd;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +19,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -29,6 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jminvsm.SysFact;
@@ -64,7 +66,6 @@ public class AddFornecedorController implements Initializable {
     private ComboBox<String> combProvincia;
     @FXML
     private ComboBox<String> combTipoCliente;
-    
 
     @FXML
     private TableView<ContactoFornecedor> tabelaContacto;
@@ -83,7 +84,7 @@ public class AddFornecedorController implements Initializable {
 
     @FXML
     private TableView<EnderecoFornecedor> tabelaEndereco;
-    
+
     @FXML
     private TableColumn<EnderecoFornecedor, Integer> numerotabelaEndereco;
     @FXML
@@ -268,40 +269,7 @@ public class AddFornecedorController implements Initializable {
         ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua_forn"));
         codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal_forn"));
         numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero_forn"));
-        //add cell of button edit 
-        Callback<TableColumn<EnderecoFornecedor, String>, TableCell<EnderecoFornecedor, String>> cellFoctory = (TableColumn<EnderecoFornecedor, String> param) -> {
-            // make cell containing buttons
-            final TableCell<EnderecoFornecedor, String> cell = new TableCell<EnderecoFornecedor, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
-                        ImageView deleteIcon = new ImageView(image);
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            EnderecoFornecedor a = tabelaEndereco.getSelectionModel().getSelectedItem();
-                            System.out.println(a.getId());
-                            try {
-                                EnderecoFornecedorDAO xDAO = new EnderecoFornecedorDAO();
-                                xDAO.deleteEntity(a);
-                                showEndereco();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        });
-                        setGraphic(deleteIcon);
-                        setText(null);
-                    }
-                }
-            };
 
-            return cell;
-        };
-        btntabelaEndereco.setCellFactory(cellFoctory);
         tabelaEndereco.setItems(listaEndereco);
     }
 
@@ -325,41 +293,6 @@ public class AddFornecedorController implements Initializable {
         emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email_forn"));
         responsaveltabelaContacto.setCellValueFactory(new PropertyValueFactory<>("responsavel_forn"));
         websitetabelaContacto.setCellValueFactory(new PropertyValueFactory<>("website_forn"));
-
-        //add cell of button edit 
-        Callback<TableColumn<ContactoFornecedor, String>, TableCell<ContactoFornecedor, String>> cellFoctory = (TableColumn<ContactoFornecedor, String> param) -> {
-            // make cell containing buttons
-            final TableCell<ContactoFornecedor, String> cell = new TableCell<ContactoFornecedor, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
-                        ImageView deleteIcon = new ImageView(image);
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            ContactoFornecedor x = tabelaContacto.getSelectionModel().getSelectedItem();
-                            System.out.println(x.getId());
-                            try {
-                                ContactoFornecedorDAO xDAO = new ContactoFornecedorDAO();
-                                xDAO.deleteEntity(x);
-                                showContactos();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        });
-                        setGraphic(deleteIcon);
-                        setText(null);
-                    }
-                }
-            };
-
-            return cell;
-        };
-        btntabelaContacto.setCellFactory(cellFoctory);
 
         tabelaContacto.setItems(listaContactos);
     }
@@ -488,7 +421,7 @@ public class AddFornecedorController implements Initializable {
     /*
     Funcoes de Linha selecionada
      */
-    public void selecionaContacto() {
+    public void selecionaContacto(MouseEvent event) throws SQLException {
         ContactoFornecedor x = tabelaContacto.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDContacto.setText(String.valueOf(x.getId()));
@@ -496,11 +429,36 @@ public class AddFornecedorController implements Initializable {
             txtContacto.setText(x.getContacto_forn());
             txtEmail.setText(x.getEmail_forn());
             txtSite.setText(x.getWebsite_forn());
+            deleteContacto(event, x);
             ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
         }
     }
 
-    public void selecionaEndereco() {
+    public void deleteContacto(MouseEvent event, ContactoFornecedor x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                ContactoFornecedorDAO xDAO = new ContactoFornecedorDAO();
+                xDAO.deleteEntity(x);
+                showContactos();
+                restContacto();
+
+            } else if (result.get() == btnCancel) {
+                restContacto();
+            }
+        }
+    }
+
+    public void selecionaEndereco(MouseEvent event) throws SQLException {
         EnderecoFornecedor x = tabelaEndereco.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDEndereco.setText(String.valueOf(x.getId()));
@@ -511,7 +469,31 @@ public class AddFornecedorController implements Initializable {
             txtNumeroEndereco.setText(String.valueOf(x.getNumero_forn()));
             combProvincia.setValue(x.getProvincia_forn());
             txtRua.setText(x.getRua_forn());
+            deleteEndereco(event, x);
             ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
+        }
+    }
+
+    public void deleteEndereco(MouseEvent event, EnderecoFornecedor x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                EnderecoFornecedorDAO xDAO = new EnderecoFornecedorDAO();
+                xDAO.deleteEntity(x);
+                showEndereco();
+                resetEndereco();
+            } else if (result.get() == btnCancel) {
+                resetEndereco();
+            }
         }
     }
 

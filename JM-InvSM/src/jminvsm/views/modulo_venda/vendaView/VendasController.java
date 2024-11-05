@@ -233,13 +233,15 @@ public class VendasController implements Initializable {
                 if (!oldValue && newValue) {
                     if (SysFact.getData() instanceof Produto && SysFact.getData() != null) {
                         Produto x = (Produto) SysFact.getData();
-                        int num = randNum.nextInt(50);
-                        mapaProdutos.put(num, x);
-                        txtID.setText(num + "");
-                        txtStock.setText(String.valueOf(x.getStock().getSaldo()));
-                        txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
-                        txtNome.setText(x.getNomeProduto());
-                        txtDescricao.setText(x.getDescricao());
+                        if (x.getPrecovenda() != null) {
+                            int num = randNum.nextInt(50);
+                            mapaProdutos.put(num, x);
+                            txtID.setText(num + "");
+                            txtStock.setText(String.valueOf(x.getStock().getSaldo()));
+                            txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
+                            txtNome.setText(x.getNomeProduto());
+                            txtDescricao.setText(x.getDescricao());
+                        }
                     }
                 }
             }
@@ -335,7 +337,7 @@ public class VendasController implements Initializable {
         desc = qtd * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
         if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
             subtotal = qtd * x.getPrecovenda().getPreco() - desc;
-        }else{
+        } else {
             subtotal = qtd * x.getPrecovenda().getPrecoInclTaxa() - desc;
         }
         i.setSubtotal(subtotal);
@@ -367,14 +369,14 @@ public class VendasController implements Initializable {
     }
 
     public String radioCondicaoPagamento() {
-        String condicao = "Aberta" ;
+        String condicao = "Aberta";
         if (rdPagamentoParcelado.isSelected()) {
             condicao = "Parcelado";
         }
         if (rdPagamentoVista.isSelected()) {
             if (combTipoDoc.getValue().equals("Fatura Proforma")) {
                 condicao = "Parcelado";
-            }else{
+            } else {
                 condicao = "A vista";
             }
         }

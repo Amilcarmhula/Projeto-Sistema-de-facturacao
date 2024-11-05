@@ -25,12 +25,22 @@ public class ServicePrecoVenda {
 
     private static final double PRECO_PADRAO = 0.01;
     private static final String DATA_FIM_PADRAO = "2099-12-31";
+    private boolean OpsSuccess = false;
 
     private PrecoVendaDAO precoVendaDao;
 
     public ServicePrecoVenda() throws SQLException {
         this.precoVendaDao = new PrecoVendaDAO();
     }
+
+    public boolean isOpsSuccess() {
+        return OpsSuccess;
+    }
+
+    public void setOpsSuccess(boolean OpsSuccess) {
+        this.OpsSuccess = OpsSuccess;
+    }
+    
 
     public void registraPrecoVenda(double preco, double precoComTaxa, double precoSemTaxa, String data_inicio, 
             String data_fim, Usuario user, Produto pro) {
@@ -134,6 +144,13 @@ public class ServicePrecoVenda {
     
     public ObservableList<PrecoVenda> consultaPrecos(int idProduto){
         return precoVendaDao.getEntityByProdutoID(idProduto);
+    }
+    
+    public void deletePreco(int id){
+        setOpsSuccess(false);
+        if(precoVendaDao.deleteEntityByUSER(id)){
+            setOpsSuccess(true);
+        }
     }
     
 }

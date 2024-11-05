@@ -340,13 +340,14 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     @Override
     public void deleteEntityByUSER(Produto x) {
         try {
-            sql = "update produto set active_or_not=false where id=?";
+            sql = "delete from produto where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x.getId());
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
+            System.out.println("Erro: "+ex);
             JOptionPane.showMessageDialog(null, "Erro ao deletar produto: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }

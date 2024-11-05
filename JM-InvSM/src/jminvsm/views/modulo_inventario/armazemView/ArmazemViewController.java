@@ -5,9 +5,9 @@
 package jminvsm.views.modulo_inventario.armazemView;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +19,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -31,11 +33,11 @@ import javafx.stage.Modality;
 import javafx.util.Callback;
 import jminvsm.SysFact;
 import jminvsm.dao.armazem.ArmazemDAO;
-import jminvsm.dao.armazem.contacto.ContactoArmazemDAO;
+import jminvsm.dao.fornecedor.FornecedorDAO;
 import jminvsm.model.armazem.Armazem;
+import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
-import jminvsm.service.armazem.contacto.ServiceContacto;
 import jminvsm.util.AlertUtilities;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
@@ -64,16 +66,14 @@ public class ArmazemViewController implements Initializable {
     @FXML
     private TableColumn<Armazem, String> contactotabelaCliente;
 
-
     @FXML
     private TableColumn<Armazem, String> descricaotabelaCliente;
 
     @FXML
     private TableColumn<Armazem, String> nometabelaCliente;
-    
+
     @FXML
     private TableColumn<Armazem, Boolean> estadotabelaCliente;
-    
 
     @FXML
     private TableView<Armazem> tabelaCliente;
@@ -83,10 +83,10 @@ public class ArmazemViewController implements Initializable {
 
     @FXML
     private TextField txtPesquisa;
-    
-    public void getViewAddCliente(ActionEvent evt){
+
+    public void getViewAddCliente(ActionEvent evt) {
         LoadAndMoveUtilities.showAsPopUP(evt, null);
-            LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_inventario/armazemView/armazemAdd/addArmazem.fxml");
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_inventario/armazemView/armazemAdd/addArmazem.fxml");
     }
 
     @Override
@@ -122,42 +122,6 @@ public class ArmazemViewController implements Initializable {
         contactotabelaCliente.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
 
-        //add cell of button edit 
-        Callback<TableColumn<Armazem, String>, TableCell<Armazem, String>> cellFoctory = (TableColumn<Armazem, String> param) -> {
-            // make cell containing buttons
-            final TableCell<Armazem, String> cell = new TableCell<Armazem, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
-                        ImageView deleteIcon = new ImageView(image);
-                        deleteIcon.setOnMouseClicked((MouseEvent event) -> {
-                            Armazem x = tabelaCliente.getSelectionModel().getSelectedItem();
-                            try {
-                                ServiceArmazem service = new ServiceArmazem();
-                                service.excluir(x.getId());
-                                if (service.isOpsSuccess()) {
-                                    showClientes();
-                                }
-                            } catch (SQLException ex) {
-                                AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro no processo de exclusao", "Detalhes: "+ex);
-                            }
-                        });
-                        setGraphic(deleteIcon);
-                        setText(null);
-                    }
-                }
-            };
-
-            return cell;
-        };
-        btntabelaCliente.setCellFactory(cellFoctory);
-
         FilteredList<Armazem> dadosFiltrados = new FilteredList<>(listaClientes, b -> true);
         txtPesquisa.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(x -> {
@@ -187,13 +151,36 @@ public class ArmazemViewController implements Initializable {
     /*
         Funcoes de linha selecionada
      */
-    public void selectedLineCliente() throws SQLException {
+    public void selectedLineCliente(MouseEvent event) throws SQLException {
         Armazem c = tabelaCliente.getSelectionModel().getSelectedItem();
         if (c != null) {
             SysFact.setData(String.valueOf(c.getId()));
             txtIDCliente.setText(String.valueOf(c.getId()));
+            deleteItem(event, c);
             ButtonUtilities.buttonChangeText(btnAdd, txtIDCliente);
         }
+    }
 
+    public void deleteItem(MouseEvent event, Armazem x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                ServiceArmazem service = new ServiceArmazem();
+                service.excluir(x.getId());
+                if (service.isOpsSuccess()) {
+                    showClientes();
+                }
+            } else if (result.get() == btnCancel) {
+            }
+        }
     }
 }

@@ -6,6 +6,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -18,7 +20,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Button layoutX="22.0" layoutY="10.0" mnemonicParsing="false" onAction="#close" prefHeight="50.0" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" text="Voltar" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Button layoutX="22.0" layoutY="10.0" mnemonicParsing="false" onAction="#close" prefHeight="50.0" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <styleClass>
                   <String fx:value="gray-bg" />
                   <String fx:value="close-categoria" />
@@ -26,6 +28,13 @@
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../image/icons/left-arrow.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
          </children>
       </AnchorPane>

@@ -4,10 +4,9 @@
  */
 package jminvsm.views.modulo_venda.clienteView.clienteAdd;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,17 +17,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableCell;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import jminvsm.SysFact;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.contacto.ContactoCliente;
@@ -276,38 +274,7 @@ public class AddClienteController implements Initializable {
         ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua_cli"));
         codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal_cli"));
         numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero_cli"));
-        //add cell of button edit 
-        Callback<TableColumn<EnderecoCliente, String>, TableCell<EnderecoCliente, String>> cellFoctory = (TableColumn<EnderecoCliente, String> param) -> {
-            // make cell containing buttons
-            final TableCell<EnderecoCliente, String> cell = new TableCell<EnderecoCliente, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
-                        ImageView imageView = new ImageView(image);
-                        imageView.setOnMouseClicked((MouseEvent event) -> {
-                            EnderecoCliente a = tabelaEndereco.getSelectionModel().getSelectedItem();
-                            try {
-                                serviceEndereco.excluir(a.getId());
-                                showEndereco();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        });
-                        setGraphic(imageView);
-                        setText(null);
-                    }
-                }
-            };
 
-            return cell;
-        };
-        btntabelaEndereco.setCellFactory(cellFoctory);
         tabelaEndereco.setItems(listaEndereco);
     }
 
@@ -325,42 +292,6 @@ public class AddClienteController implements Initializable {
         emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email_cli"));
         responsaveltabelaContacto.setCellValueFactory(new PropertyValueFactory<>("responsavel"));
         websitetabelaContacto.setCellValueFactory(new PropertyValueFactory<>("website_cli"));
-
-        //add cell of button edit 
-        Callback<TableColumn<ContactoCliente, String>, TableCell<ContactoCliente, String>> cellFoctory = (TableColumn<ContactoCliente, String> param) -> {
-            // make cell containing buttons
-            final TableCell<ContactoCliente, String> cell = new TableCell<ContactoCliente, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
-                        ImageView imageView = new ImageView(image);
-                        imageView.setOnMouseClicked((MouseEvent event) -> {
-                            ContactoCliente x = tabelaContacto.getSelectionModel().getSelectedItem();
-                            try {
-                                serviceContacto.excluir(x.getId());
-                                if(serviceContacto.isOpsSuccess()){
-                                    showContactos();
-                                    serviceContacto.setOpsSuccess(false);
-                                }
-                            } catch (SQLException ex) {
-                                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        });
-                        setGraphic(imageView);
-                        setText(null);
-                    }
-                }
-            };
-
-            return cell;
-        };
-        btntabelaContacto.setCellFactory(cellFoctory);
 
         tabelaContacto.setItems(listaContactos);
     }
@@ -394,9 +325,9 @@ public class AddClienteController implements Initializable {
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         Integer id = Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
-        serviceEndereco.registar(combTipoEndereco.getValue(), txtAvenida.getText(), txtBairro.getText(), 
+        serviceEndereco.registar(combTipoEndereco.getValue(), txtAvenida.getText(), txtBairro.getText(),
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(),id, userData);
+                txtRua.getText(), id, userData);
         if (serviceEndereco.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
@@ -416,7 +347,7 @@ public class AddClienteController implements Initializable {
     }
 
     public void updateContacto() throws SQLException {
-        serviceContacto.actualizar(Integer.valueOf(txtIDContacto.getText()),txtEmail.getText(), txtContacto.getText(),
+        serviceContacto.actualizar(Integer.valueOf(txtIDContacto.getText()), txtEmail.getText(), txtContacto.getText(),
                 txtSite.getText(), txtResponsavel.getText(), userData);
 
         if (serviceContacto.isOpsSuccess()) {
@@ -429,7 +360,7 @@ public class AddClienteController implements Initializable {
     public void updateEndereco() throws SQLException {
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
-        serviceEndereco.actualizar(Integer.valueOf(txtIDEndereco.getText()),combTipoEndereco.getValue(),txtAvenida.getText(), txtBairro.getText(), 
+        serviceEndereco.actualizar(Integer.valueOf(txtIDEndereco.getText()), combTipoEndereco.getValue(), txtAvenida.getText(), txtBairro.getText(),
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
                 txtRua.getText(), userData);
         if (serviceEndereco.isOpsSuccess()) {
@@ -441,7 +372,7 @@ public class AddClienteController implements Initializable {
     /*
     Funcoes de Linha selecionada
      */
-    public void selecionaContacto() {
+    public void selecionaContacto(MouseEvent event) throws SQLException {
         ContactoCliente x = tabelaContacto.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDContacto.setText(String.valueOf(x.getId()));
@@ -449,11 +380,37 @@ public class AddClienteController implements Initializable {
             txtContacto.setText(x.getContacto_cli());
             txtEmail.setText(x.getEmail_cli());
             txtSite.setText(x.getWebsite_cli());
+            deleteContacto(event, x);
             ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
         }
     }
 
-    public void selecionaEndereco() {
+    public void deleteContacto(MouseEvent event, ContactoCliente x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                serviceContacto.excluir(x.getId());
+                if (serviceContacto.isOpsSuccess()) {
+                    showContactos();
+                    restContacto();
+                    serviceContacto.setOpsSuccess(false);
+                }
+            } else if (result.get() == btnCancel) {
+                restContacto();
+            }
+        }
+    }
+
+    public void selecionaEndereco(MouseEvent event) throws SQLException {
         EnderecoCliente x = tabelaEndereco.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDEndereco.setText(String.valueOf(x.getId()));
@@ -465,7 +422,30 @@ public class AddClienteController implements Initializable {
             combProvincia.setValue(x.getProvincia_cli());
             txtRua.setText(x.getRua_cli());
             combTipoEndereco.setValue(x.getTipo_cli());
+            deleteEndereco(event, x);
             ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
+        }
+    }
+
+    public void deleteEndereco(MouseEvent event, EnderecoCliente x) throws SQLException {
+        if (event.getButton().name().equals("SECONDARY")) {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Aviso.");
+            dialog.setContentText("Deseja excluir o item?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnDelete) {
+                serviceEndereco.excluir(x.getId());
+                showEndereco();
+                resetEndereco();
+            } else if (result.get() == btnCancel) {
+                resetEndereco();
+            }
         }
     }
 

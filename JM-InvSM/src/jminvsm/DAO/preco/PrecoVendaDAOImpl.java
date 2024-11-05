@@ -15,6 +15,6 @@ public interface PrecoVendaDAOImpl<T> {
     boolean updateEntityByID(T x, int id);
     
     ObservableList<T> getEntityByProdutoID(int x);
-    void deleteEntityByUSER(T x);
+    boolean deleteEntityByUSER(int x);
 
 }

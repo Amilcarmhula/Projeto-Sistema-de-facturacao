@@ -104,7 +104,7 @@ public class ServiceParcelas {
             }
         }
         if (isOpsSuccess()) {
-            showSuccessAlert("Sucesso", "Parcelas Geradas com sucesso!");
+            showSuccessAlert("Parcelas Geradas com sucesso!");
         }
     }
     

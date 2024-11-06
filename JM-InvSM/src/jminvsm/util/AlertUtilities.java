@@ -60,9 +60,9 @@ public class AlertUtilities {
         alert.setGraphic(imageView);
         alert.showAndWait();
     }
-    public static void showSuccessAlert(String titulo, String mensagem){
+    public static void showSuccessAlert( String mensagem){
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(titulo);
+        alert.setTitle("Sucesso");
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
         // Carrega a imagem a partir do caminho fornecido

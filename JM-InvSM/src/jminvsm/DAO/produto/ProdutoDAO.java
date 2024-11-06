@@ -36,7 +36,8 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     }
 
     @Override
-    public void addEntity(Produto t) {
+    public boolean addEntity(Produto t) {
+        boolean isSuccess = false;
         try {
             sql = "insert into produto (nome,codigo_barra, descricao,fk_id_categoria, "
                     + "fk_id_unidade_medida,fk_id_taxa_imposto,contole_stock,nivelstock) value (?,?,?,?,?,?,?,?)";
@@ -51,17 +52,29 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setInt(6, t.getTaxa_imposto().getId());
             ps.setBoolean(7, t.isContole_stock());
             ps.setInt(8, t.getNivelstock());
+            int rowsAffected = ps.executeUpdate();
 
-            ps.execute();
-            ps.close();
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(Produto t, int id) {
+    public boolean updateEntityByID(Produto t, int id) {
+        boolean isSuccess = false;
         try {
             sql = "update produto set nome=?,codigo_barra=?, descricao=?,fk_id_categoria=?, "
                     + "fk_id_unidade_medida=?,fk_id_taxa_imposto=?, nivelstock=? where id=?";
@@ -75,13 +88,24 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setInt(6, t.getTaxa_imposto().getId());
             ps.setInt(7, t.getNivelstock());
             ps.setInt(8, id);
+            int rowsAffected = ps.executeUpdate();
 
-            ps.execute();
-            ps.close();
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Produto: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -185,7 +209,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            showDialog( "Erro de contagem", "Detalhes: " + ex);
+            showDialog("Erro de contagem", "Detalhes: " + ex);
         }
 
         return total;
@@ -218,7 +242,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
 //        }
 //        return lista;
 //    }
-
 //    @Override
 //    public ObservableList<Produto> listAllEntities2() {
 //        ObservableList<Produto> lista = FXCollections.observableArrayList();
@@ -255,7 +278,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
 //        }
 //        return lista;
 //    }
-
 //    public ObservableList<Produto> searchEntityByCategoria(Produto prodID) {
 //        ObservableList<Produto> lista = FXCollections.observableArrayList();
 //
@@ -289,7 +311,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
 //        }
 //        return lista;
 //    }
-
 //    @Override
 //    public Produto searchEntityByName(String name) {
 //        Produto c = null;
@@ -345,7 +366,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            System.out.println("Erro: "+ex);
+            System.out.println("Erro: " + ex);
             JOptionPane.showMessageDialog(null, "Erro ao deletar produto: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }

@@ -42,6 +42,7 @@ import jminvsm.util.LoadAndMoveUtilities;
  * @author JM-Tecnologias
  */
 public class AddStockController implements Initializable {
+    private ServiceProdutoFornecido service;
 
     private Usuario userData;
     @FXML
@@ -152,6 +153,7 @@ public class AddStockController implements Initializable {
         Produto p = (Produto) SysFact.getData();
         txtIDProduto.setText(String.valueOf(p.getId()));
         try {
+            service = new ServiceProdutoFornecido();
             this.userData = SysFact.getUserData();
             showFornecedores();
             showArmazens();
@@ -256,9 +258,7 @@ public class AddStockController implements Initializable {
 
     }
     public void addProdutoFornecido(ActionEvent e) throws SQLException{
-        ProdutoFornecidoDAO xDAO = new ProdutoFornecidoDAO();
-        ServiceProdutoFornecido spf = new ServiceProdutoFornecido(xDAO);
-        spf.registraProdutoFornecido(Integer.valueOf(txtIDArmazem.getText().equals("") ? "0" : txtIDArmazem.getText()), 
+        service.registraProdutoFornecido(Integer.valueOf(txtIDArmazem.getText().equals("") ? "0" : txtIDArmazem.getText()), 
                 Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText()), 
                 Integer.valueOf(txtIDFornecedor.getText().equals("") ? "0" : txtIDFornecedor.getText()), userData, 
                 Integer.valueOf(txtQuantidade.getText().equals("") ? "0" : txtQuantidade.getText()), 

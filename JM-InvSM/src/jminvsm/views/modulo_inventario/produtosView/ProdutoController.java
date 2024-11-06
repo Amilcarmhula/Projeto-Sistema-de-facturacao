@@ -172,7 +172,7 @@ public class ProdutoController implements Initializable {
             addProduto(e);
         } else if (!"".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
             updateProduto(e);
-            addPrecoVendaONSelected(e);
+            addPrecoVendaONSelected();
         } else if (!"".equals(txtIDProduto.getText()) && !"0".equals(labIDPreco.getText())) {
             updateProduto(e);
             updatePrecoVenda(e);
@@ -415,18 +415,21 @@ public class ProdutoController implements Initializable {
         resetCampos();
     }
 
-    public void addPrecoVendaONSelected(ActionEvent e) throws SQLException {
-        double precoNorm = Double.parseDouble(txtPreco.getText());
-        double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText());
-        double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
+    public void addPrecoVendaONSelected() throws SQLException {
+        if(txtPreco.getText().equals("")){
+            return;
+        }
+        double precoNorm = Double.parseDouble(txtPreco.getText()/*.equals("")?"0":txtPreco.getText()*/);
+        double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText()/*.equals("")?"0":txtprecoInclTaxa.getText()*/);
+        double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText()/*.equals("")?"0":txtprecoExclTaxa.getText()*/);
         Produto p = new Produto();
         p.setId(Integer.parseInt(txtIDProduto.getText()));
         servPreco.registraPrecoVenda(precoNorm, precoComTax, precoSemTax,
                 String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
                 userData, p);
         showProduto();
+        showPrecoVenda();
         resetCampos();
-        labIDPreco.setText("");
     }
 
     public void updateProduto(ActionEvent e) throws SQLException {
@@ -440,6 +443,7 @@ public class ProdutoController implements Initializable {
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
 
         showProduto();
+//        resetCampos();
 
     }
 
@@ -626,7 +630,7 @@ public class ProdutoController implements Initializable {
 
 //  ############################################################################
     public void resetCampos() throws SQLException {
-//        labIDPreco.setText("");
+        labIDPreco.setText("");
         txtPreco.setText("");
         txtprecoExclTaxa.setText("");
         txtprecoInclTaxa.setText("");

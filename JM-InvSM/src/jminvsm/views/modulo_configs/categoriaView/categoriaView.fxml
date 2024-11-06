@@ -14,14 +14,20 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancharVendas1" prefHeight="484.0" prefWidth="800.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_configs.categoriaView.CategoriaViewController">
+<AnchorPane fx:id="ancharVendas1" prefHeight="484.0" prefWidth="800.0" style="-fx-border-width: 5px; -fx-border-color: #17b5c3;" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_configs.categoriaView.CategoriaViewController">
    <children>
       <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="686.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label contentDisplay="CENTER" layoutX="75.0" layoutY="10.0" prefHeight="7.0" prefWidth="362.0" text="Cadastro de Categorias" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label contentDisplay="CENTER" layoutX="75.0" layoutY="10.0" prefHeight="50.0" prefWidth="431.0" text="Registo de Categorias" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
-                  <Font size="20.0" />
+                  <Font size="40.0" />
                </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
             </Label>
             <Button fx:id="btnClose" layoutX="599.0" layoutY="13.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="75.0" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <styleClass>
@@ -100,15 +106,14 @@
             </Button>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaCategoria" onMouseClicked="#selectedLineCategoria" prefHeight="248.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <TableView fx:id="tabelaCategoria" layoutX="10.0" onMouseClicked="#selectedLineCategoria" prefHeight="236.0" prefWidth="790.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <columns>
             <TableColumn fx:id="IDtabelaCategoria" prefWidth="29.0" text="ID" />
             <TableColumn fx:id="tipotabelaCategoria" prefWidth="85.0" text="Tipo" />
             <TableColumn fx:id="grupotabelaCategoria" prefWidth="96.0" text="Grupo" />
             <TableColumn fx:id="subgrupotabelaCategoria" prefWidth="104.0" text="Subgrupo" />
             <TableColumn fx:id="familiatabelaCategoria" prefWidth="94.0" text="Família" />
-            <TableColumn fx:id="descricaotabelaCategoria" prefWidth="341.0" text="Descrição" />
-            <TableColumn fx:id="btntabelaCategoria" prefWidth="45.0" />
+            <TableColumn fx:id="descricaotabelaCategoria" prefWidth="384.0" text="Descrição" />
          </columns>
       </TableView>
    </children>

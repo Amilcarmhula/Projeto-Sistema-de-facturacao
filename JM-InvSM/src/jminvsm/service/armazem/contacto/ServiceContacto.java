@@ -62,7 +62,7 @@ public class ServiceContacto {
 
         if (contatoArmazemDao.addEntity(x)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Contacto adicionado com sucesso!");
+            showSuccessAlert("Contacto adicionado com sucesso!");
         }
     }
     
@@ -92,7 +92,7 @@ public class ServiceContacto {
 
         if (contatoArmazemDao.updateEntityByID(x, id_contacto)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Contacto actualizado com sucesso!");
+            showSuccessAlert("Contacto actualizado com sucesso!");
         }
     }
     
@@ -109,7 +109,7 @@ public class ServiceContacto {
         
         if (contatoArmazemDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Registo excluido com sucesso!");
+            showSuccessAlert( "Registo excluido com sucesso!");
         }
     }
 }

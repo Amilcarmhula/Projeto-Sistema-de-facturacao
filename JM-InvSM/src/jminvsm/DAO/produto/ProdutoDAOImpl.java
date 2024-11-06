@@ -12,8 +12,8 @@ import jminvsm.model.produto.Produto;
  * @author JM-Tecnologias
  */
 public interface ProdutoDAOImpl<T> {
-    void  addEntity(T t);
-    void updateEntityByID(T t, int id);
+    boolean  addEntity(T t);
+    boolean updateEntityByID(T t, int id);
     ObservableList<T> getCombinedEntities();
     T getLastEntity();
     int countProdutos(Integer cat);

@@ -4,14 +4,13 @@
  */
 package jminvsm.service.produto.fornecido;
 
-import javafx.event.ActionEvent;
+import java.sql.SQLException;
 import jminvsm.dao.produto.fornecido.ProdutoFornecidoDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
 import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showDialog;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
@@ -20,36 +19,45 @@ import static jminvsm.util.AlertUtilities.showSuccessAlert;
  * @author JM-Tecnologias
  */
 public class ServiceProdutoFornecido {
-    private final ProdutoFornecidoDAO produtoFornecidoDao;
 
-    public ServiceProdutoFornecido(ProdutoFornecidoDAO produtoFornecidoDao) {
-        this.produtoFornecidoDao = produtoFornecidoDao;
+    private final ProdutoFornecidoDAO produtoFornecidoDao;
+    private boolean OpsSuccess = false;
+
+    public ServiceProdutoFornecido( ) throws SQLException {
+        this.produtoFornecidoDao = new ProdutoFornecidoDAO();
     }
-    
+
+    public boolean isOpsSuccess() {
+        return OpsSuccess;
+    }
+
+    public void setOpsSuccess(boolean OpsSuccess) {
+        this.OpsSuccess = OpsSuccess;
+    }
+
     public void registraProdutoFornecido(Integer id_arm, Integer id_pro, Integer id_for,
-            Usuario user, Integer qtd,String data_fornecida, Double  custo){
-        
+            Usuario user, Integer qtd, String data_fornecida, Double custo) {
+        setOpsSuccess(false);
+
         // Validações básicas antes de registrar a categoria
         if (id_arm <= 0) {
-            showErroAlert( "Armazem não definido!");
-            return;
+            id_arm = 1;
         }
-        
+
         if (id_for <= 0) {
-            showErroAlert( "Fornecedor não definido!");
-            return;
+            id_for = 1;
         }
-        if ( qtd <= 0) {
-            showErroAlert( "Quantidade não definida!");
+        if (qtd <= 0) {
+            showErroAlert("Quantidade não definida!");
             return;
         }
         if (custo <= 0) {
-            showErroAlert( "Preco não pode ser nulo!");
+            showErroAlert("Preco não pode ser nulo!");
             return;
         }
-        
-        if ( data_fornecida.isEmpty()) {
-            showErroAlert( "Data de fornecimento não pode ser nula!");
+
+        if (data_fornecida.isEmpty()) {
+            showErroAlert("Data de fornecimento não pode ser nula!");
             return;
         }
         ProdutoFornecido pf = new ProdutoFornecido();
@@ -66,17 +74,11 @@ public class ServiceProdutoFornecido {
         pf.setQuantidade(qtd);
         pf.setData_fornecida(data_fornecida);
         pf.setCusto(custo);
-        try{
-            produtoFornecidoDao.addEntity(pf);
-            showSuccessAlert("Sucesso", "Stock actualizado com sucesso!");
-        }catch(Exception ex){
-            showDialog("Erro", "Erro ao adicionar/actualizar sock!");
+
+        if (produtoFornecidoDao.addEntity(pf)) {
+            setOpsSuccess(true);
+            showSuccessAlert("Stock actualizado com sucesso!");
         }
-        
-        
-        
     }
-    
-    
 
 }

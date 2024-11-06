@@ -5,13 +5,11 @@
 package jminvsm.service.produto;
 
 import java.sql.SQLException;
-import javafx.event.ActionEvent;
 import jminvsm.dao.produto.ProdutoDAO;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.taxa_imposto.TaxaImposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
-import static jminvsm.util.AlertUtilities.showDialog;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
@@ -20,59 +18,65 @@ import static jminvsm.util.AlertUtilities.showSuccessAlert;
  * @author JM-Tecnologias
  */
 public class ServiceProduto {
+
     private ProdutoDAO produtoDao;
+    private boolean OpsSuccess = false;
 
     public ServiceProduto() throws SQLException {
         this.produtoDao = new ProdutoDAO();
     }
-    
+
+    public boolean isOpsSuccess() {
+        return OpsSuccess;
+    }
+
+    public void setOpsSuccess(boolean OpsSuccess) {
+        this.OpsSuccess = OpsSuccess;
+    }
+
     public void registraProduto(Integer id_cat, Integer id_uni, Integer id_tax,
-            String nome,String codBarras, String descricao, Boolean  controleStock, Integer nivelstock){
-        
+            String nome, String codBarras, String descricao, Boolean controleStock, Integer nivelstock) {
+        setOpsSuccess(false);
         // Validações básicas antes de registrar a categoria
         if (id_cat == null || id_cat <= 0) {
-            showErroAlert( "Categoria não definida!");
+            showErroAlert("Categoria não definida!");
             return;
         }
 
         if (id_uni == null || id_uni <= 0) {
-            showErroAlert( "Unidade de medida não definida!");
+            showErroAlert("Unidade de medida não definida!");
             return;
         }
-        
+
         if (id_tax == null || id_tax <= 0) {
-            showErroAlert( "Taxa/Imposto não definida!");
+            showErroAlert("Taxa/Imposto não definida!");
             return;
         }
-        
+
         if (nome == null || nome.isEmpty()) {
-            showErroAlert( "Nome do produto não pode ser null!");
+            showErroAlert("Nome do produto não pode ser null!");
             return;
         }
-        
+
         if (codBarras == null || codBarras.isEmpty()) {
-            showErroAlert( "Codigo de Barras nao definido. Sera definido codigo padrao");
             codBarras = "1000000000001";
         }
-        
+
         if (controleStock == true && nivelstock < 0) {
-            showErroAlert( "Nivel de stock minimo nao informado!");
+            showErroAlert("Nivel de stock minimo nao informado!");
             return;
         }
-        
+
         if (descricao == null || descricao.isEmpty()) {
-            showErroAlert( "Sera definida uma descricao padrao!");
             descricao = "Descricao Padrao!";
         }
 
-        
-        
         Produto p = new Produto();
         p.setNomeProduto(nome);
         p.setCodigo_barra(codBarras);
         p.setContole_stock(controleStock);
         p.setNivelstock(nivelstock);
-        p.setDescricao(descricao); 
+        p.setDescricao(descricao);
         Categoria c = new Categoria();
         c.setId(id_cat);
         p.setCategoria(c);
@@ -82,58 +86,53 @@ public class ServiceProduto {
         TaxaImposto t = new TaxaImposto();
         t.setId(id_tax);
         p.setTaxa_imposto(t);
-        
-        
-        try {
-            produtoDao.addEntity(p);
-            showSuccessAlert("Sucesso", "Produto registado com sucesso!");
-        } catch (Exception ex) {
-            showDialog( "Erro", "Detalhes: " + ex.getMessage());
+
+        if (produtoDao.addEntity(p)) {
+            setOpsSuccess(true);
+            showSuccessAlert("Produto registado com sucesso!");
         }
     }
-    
-    public void actualizaProduto(int id,Integer id_cat, Integer id_uni, Integer id_tax,
-            String nome,String codBarras, String descricao, Boolean  controleStock, Integer nivelstock){
-        
+
+    public void actualizaProduto(int id, Integer id_cat, Integer id_uni, Integer id_tax,
+            String nome, String codBarras, String descricao, Boolean controleStock, Integer nivelstock) {
+        setOpsSuccess(false);
+
         // Validações básicas antes de registrar a categoria
         if (id_cat == null || id_cat <= 0) {
-            showErroAlert( "Categoria não definida!");
+            showErroAlert("Categoria não definida!");
             return;
         }
 
         if (id_uni == null || id_uni <= 0) {
-            showErroAlert( "Unidade de medida não definida!");
-            return;
-        }
-        
-        if (id_tax == null || id_tax <= 0) {
-            showErroAlert( "Taxa/Imposto não definida!");
-            return;
-        }
-        
-        if (nome == null || nome.isEmpty()) {
-            showErroAlert( "Nome do produto não pode ser null!");
-            return;
-        }
-        
-        if (codBarras == null || codBarras.isEmpty()) {
-            showErroAlert( "Codigo de Barras nao definido. Sera definido codigo padrao");
-            codBarras = "1000000000001";
-        }
-        
-        if (controleStock == true && nivelstock < 0) {
-            showErroAlert( "Nivel de stock minimo nao informado!");
+            showErroAlert("Unidade de medida não definida!");
             return;
         }
 
-        
-        
+        if (id_tax == null || id_tax <= 0) {
+            showErroAlert("Taxa/Imposto não definida!");
+            return;
+        }
+
+        if (nome == null || nome.isEmpty()) {
+            showErroAlert("Nome do produto não pode ser null!");
+            return;
+        }
+
+        if (codBarras == null || codBarras.isEmpty()) {
+            codBarras = "1000000000001";
+        }
+
+        if (controleStock == true && nivelstock < 0) {
+            showErroAlert("Nivel de stock minimo nao informado!");
+            return;
+        }
+
         Produto p = new Produto();
         p.setNomeProduto(nome);
         p.setCodigo_barra(codBarras);
         p.setContole_stock(controleStock);
         p.setNivelstock(nivelstock);
-        p.setDescricao(descricao); 
+        p.setDescricao(descricao);
         Categoria c = new Categoria();
         c.setId(id_cat);
         p.setCategoria(c);
@@ -143,19 +142,15 @@ public class ServiceProduto {
         TaxaImposto t = new TaxaImposto();
         t.setId(id_tax);
         p.setTaxa_imposto(t);
-        
-        
-        try {
-            produtoDao.updateEntityByID(p, id);
-            showSuccessAlert("Sucesso", "Produto actualizado com sucesso!");
-        } catch (Exception ex) {
-            showDialog( "Erro", "Detalhes: " + ex.getMessage());
+
+        if (produtoDao.updateEntityByID(p, id)) {
+            setOpsSuccess(true);
+            showSuccessAlert("Produto actualizado com sucesso!");
         }
     }
-    
-    public Produto consultaUltimo(){
+
+    public Produto consultaUltimo() {
         return produtoDao.getLastEntity();
     }
-    
-    
+
 }

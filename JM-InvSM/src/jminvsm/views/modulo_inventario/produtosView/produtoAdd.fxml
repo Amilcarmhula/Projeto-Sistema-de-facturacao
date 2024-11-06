@@ -111,7 +111,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <Label fx:id="labIDPreco" layoutX="468.0" layoutY="19.0" prefHeight="30.0" prefWidth="82.0" textFill="WHITE" visible="false">
+            <Label fx:id="labIDPreco" layoutX="468.0" layoutY="19.0" prefHeight="30.0" prefWidth="82.0" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>

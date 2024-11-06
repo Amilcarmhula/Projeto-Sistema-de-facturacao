@@ -68,7 +68,7 @@ public class ServicoCategoria {
 
         if (categoriaDAO.addEntity(c)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Categoria registada com sucesso!");
+            showSuccessAlert( "Categoria registada com sucesso!");
         }
     }
 
@@ -106,7 +106,7 @@ public class ServicoCategoria {
         c.setDescricao(descricao);
 
         if (categoriaDAO.updateEntityByID(c)) {
-            showSuccessAlert("Sucesso", "Categoria actualizada com sucesso!");
+            showSuccessAlert( "Categoria actualizada com sucesso!");
             setOpsSuccess(true);
         }
     }
@@ -123,7 +123,7 @@ public class ServicoCategoria {
         
         if (categoriaDAO.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Registo excluido com sucesso!");
+            showSuccessAlert( "Registo excluido com sucesso!");
         }
     }
 }

@@ -6,7 +6,6 @@ package jminvsm.service.cliente.endereco;
 
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import jminvsm.dao.cliente.endereco.EnderecoClienteDAO;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.endereco.EnderecoCliente;
@@ -40,7 +39,6 @@ public class ServiceEndereco {
             Integer id_cli, Usuario user) {
         setOpsSuccess(false);
         if (avenida == null || avenida.isEmpty()) {
-            showErroAlert( "Avenida nao pode ser nulo! sera introduzida uma avenida padrao.");
             avenida = "de Mocambique";
         }
         if (bairro == null || bairro.isEmpty()) {
@@ -64,7 +62,6 @@ public class ServiceEndereco {
             return;
         }
         if (rua == null || rua.isEmpty()) {
-            showErroAlert( "Rua nao pode ser nula. Sere criada uma rua padrao!");
             rua = "Dos Mocambicanos";
         }
         if (id_cli == null || id_cli == 0) {
@@ -72,7 +69,6 @@ public class ServiceEndereco {
             return;
         }
         if (tipo == null || tipo.isEmpty()) {
-            showErroAlert( "Rua nao pode ser nula. Sere criada uma rua padrao!");
             tipo = "Facturação";
         }
 
@@ -92,7 +88,7 @@ public class ServiceEndereco {
 
         if (enderecoDao.addEntity(endereco)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Registo adicionado com sucesso.");
+            showSuccessAlert( "Registo adicionado com sucesso.");
         }
     }
 
@@ -106,7 +102,6 @@ public class ServiceEndereco {
         }
 
         if (avenida == null || avenida.isEmpty()) {
-            showErroAlert( "Avenida nao pode ser nulo! sera introduzida uma avenida padrao.");
             avenida = "de Mocambique";
         }
         if (bairro == null || bairro.isEmpty()) {
@@ -118,7 +113,6 @@ public class ServiceEndereco {
             return;
         }
         if (postalCode == null || postalCode == 0) {
-            showErroAlert( "Codigo postal nao informado. Sera criado um codigo postal padrao!");
             postalCode = 1111;
         }
         if (numero == null || numero == 0) {
@@ -130,11 +124,9 @@ public class ServiceEndereco {
             return;
         }
         if (rua == null || rua.isEmpty()) {
-            showErroAlert( "Rua nao pode ser nula. Sere criada uma rua padrao!");
             rua = "Dos Mocambicanos";
         }
         if (tipo == null || tipo.isEmpty()) {
-            showErroAlert( "Rua nao pode ser nula. Sere criada uma rua padrao!");
             tipo = "Facturação";
         }
 
@@ -151,7 +143,7 @@ public class ServiceEndereco {
 
         if (enderecoDao.updateEntityByID(endereco, id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Registo adicionado com sucesso.");
+            showSuccessAlert("Registo adicionado com sucesso.");
         }
     }
 
@@ -167,7 +159,7 @@ public class ServiceEndereco {
         setOpsSuccess(false);
         if (enderecoDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Registo excluido com sucesso.");
+            showSuccessAlert( "Registo excluido com sucesso.");
         }
     }
 }

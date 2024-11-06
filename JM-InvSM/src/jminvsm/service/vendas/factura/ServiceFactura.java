@@ -7,7 +7,6 @@ package jminvsm.service.vendas.factura;
 import java.sql.SQLException;
 import java.util.List;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import jminvsm.dao.cliente.ClienteDAO;
 import jminvsm.dao.vendas.factura.FacturaDAO;
 import jminvsm.dao.vendas.itens.ItemDAO;
@@ -93,7 +92,7 @@ public class ServiceFactura {
         if (facturaDao.addEntity(f)) {
             serviceItem.registaItens(itens);
             setEstado(true);
-            showSuccessAlert("Sucesso", "Factura adicionado com sucesso!");
+            showSuccessAlert( "Factura adicionado com sucesso!");
         }
 
     }

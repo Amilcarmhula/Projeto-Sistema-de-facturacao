@@ -6,11 +6,8 @@ package jminvsm.service.transacoes;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.Date;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import jminvsm.dao.transacoes.TransacaoDAO;
 import jminvsm.model.empresa.conta.ContaBancaria;
 import jminvsm.model.metodo_pagamento.MetodoPagamento;
@@ -91,7 +88,7 @@ public class ServiceTransacoes {
 
         if (transDao.addTansacaoAvista(t)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Pagamento Registado com sucesso!");
+            showSuccessAlert( "Pagamento Registado com sucesso!");
         }
     }
     
@@ -100,7 +97,6 @@ public class ServiceTransacoes {
         Integer id_metodoPagamento, String numeroFactura, Usuario user) {
         setOpsSuccess(false);
         if (data_pagamento == null || data_pagamento.isEmpty() || "null".equalsIgnoreCase(data_pagamento)) {
-            showErroAlert( "Data de pagamento nao pode ser nula. Será usada a data atual!");
             data_pagamento = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         }
         
@@ -110,7 +106,6 @@ public class ServiceTransacoes {
         }
         
         if (descricao == null || descricao.isEmpty()) {
-            showErroAlert( "Pagamento sem descricao. Sera gerada uma descricao padrao!");
             descricao = "Pagamento de factura";
         }
         
@@ -152,7 +147,7 @@ public class ServiceTransacoes {
 
         if (transDao.addTansacaoParcelada(t)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Pagamento Registado com sucesso!");
+            showSuccessAlert( "Pagamento Registado com sucesso!");
         }
     }
 

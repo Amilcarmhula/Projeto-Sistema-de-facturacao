@@ -60,7 +60,7 @@ public class ServiceCliente {
         cliente.setUsuario(user);
         if (clienteDao.addEntity(cliente)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Registo adicionado com sucesso.");
+            showSuccessAlert( "Registo adicionado com sucesso.");
         }
     }
 
@@ -94,7 +94,7 @@ public class ServiceCliente {
         cliente.setUsuario(user);
         if (clienteDao.updateEntityByID(cliente, id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Registo actualizado com sucesso.");
+            showSuccessAlert( "Registo actualizado com sucesso.");
         }
     }
     
@@ -128,7 +128,7 @@ public class ServiceCliente {
         setOpsSuccess(false);
         if (clienteDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Exclusao de registo com sucesso.");
+            showSuccessAlert( "Exclusao de registo com sucesso.");
         }
 
     }

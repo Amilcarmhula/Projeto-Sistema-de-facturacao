@@ -7,12 +7,10 @@ package jminvsm.service.precovenda;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import jminvsm.dao.preco.PrecoVendaDAO;
 import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showDialog;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
@@ -38,28 +36,26 @@ public class ServicePrecoVenda {
         this.OpsSuccess = OpsSuccess;
     }
 
-    public void registraPrecoVenda( Double preco, Double precoComTaxa, Double precoSemTaxa, String data_inicio,
+    public void registraPrecoVenda(Double preco, Double precoComTaxa, Double precoSemTaxa, String data_inicio,
             String data_fim, Usuario user, Produto pro) {
-
+        setOpsSuccess(false);
         if (preco == null || preco <= 0) {
-            showErroAlert( "Preço nao pode ser nulo, Será definido um preço padrão.");
+            showErroAlert("Preço nao pode ser nulo, Será definido um preço padrão.");
         }
         if (data_inicio == null || data_inicio.isEmpty()) {
-            showErroAlert( "Data inicial do preco não pode ser nula. Será usada a data atual!");
             data_inicio = LocalDate.now().toString();
         }
         if (data_fim == null || data_fim.isEmpty()) {
-            showErroAlert( "Data final do preco não pode ser nula. Será usada uma data padrão!");
             data_fim = "2099-12-31";
         }
 
         if (pro == null) {
-            showErroAlert( "Produto não definido!");
+            showErroAlert("Produto não definido!");
             return;
         }
 
         if (user == null) {
-            showErroAlert( "Usuário não definido!");
+            showErroAlert("Usuário não definido!");
             return;
         }
         PrecoVenda pv = new PrecoVenda();
@@ -70,33 +66,30 @@ public class ServicePrecoVenda {
         pv.setData_fim(data_fim);
         pv.setUsuario(user);
         pv.setProduto(pro);
-
-        try {
-            precoVendaDao.addEntity(pv);
-            showSuccessAlert("Sucesso", "Preço registado com sucesso!");
-        } catch (Exception ex) {
-            showDialog("Erro", "Erro ao registrar preço de venda: " + ex.getMessage());
-            System.out.println("Erro: " + ex);
+        if (precoVendaDao.addEntity(pv)) {
+            showSuccessAlert("Preço registado com sucesso!");
+            setOpsSuccess(true);
         }
     }
 
-    public void actualizaPrecoVenda( int id, Double preco, Double precoComTaxa, Double precoSemTaxa, String data_inicio,
+    public void actualizaPrecoVenda(int id, Double preco, Double precoComTaxa, Double precoSemTaxa, String data_inicio,
             String data_fim, Usuario user) {
+        setOpsSuccess(false);
 
         if (preco == null || preco <= 0) {
-            showErroAlert( "Preço nao pode ser nulo, Será definido um preço padrão.");
+            showErroAlert("Preço nao pode ser nulo, Será definido um preço padrão.");
         }
         if (data_inicio == null || data_inicio.isEmpty()) {
-            showErroAlert( "Data inicial do preco não pode ser nula. Será usada a data atual!");
+            showErroAlert("Data inicial do preco não pode ser nula. Será usada a data atual!");
             data_inicio = LocalDate.now().toString();
         }
         if (data_fim == null || data_fim.isEmpty()) {
-            showErroAlert( "Data final do preco não pode ser nula. Será usada uma data padrão!");
+            showErroAlert("Data final do preco não pode ser nula. Será usada uma data padrão!");
             data_fim = "2099-12-31";
         }
 
         if (user == null) {
-            showErroAlert( "Usuário não definido!");
+            showErroAlert("Usuário não definido!");
             return;
         }
 
@@ -108,12 +101,9 @@ public class ServicePrecoVenda {
         pv.setData_fim(data_fim);
         pv.setUsuario(user);
 
-        try {
-            precoVendaDao.updateEntityByID(pv, id);
-            showSuccessAlert("Sucesso", "Preço actualizado com sucesso!");
-        } catch (Exception ex) {
-            showDialog("Erro", "Erro ao actualizar preço de venda: " + ex.getMessage());
-            System.out.println("Erro: " + ex);
+        if (precoVendaDao.updateEntityByID(pv, id)) {
+            showSuccessAlert("Preço actualizado com sucesso!");
+            setOpsSuccess(true);
         }
     }
 

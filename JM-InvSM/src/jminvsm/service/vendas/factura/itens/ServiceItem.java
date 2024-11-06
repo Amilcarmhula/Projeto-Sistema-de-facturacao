@@ -5,7 +5,6 @@
 package jminvsm.service.vendas.factura.itens;
 
 import java.util.List;
-import javafx.event.ActionEvent;
 import jminvsm.dao.vendas.itens.ItemDAO;
 import jminvsm.model.vendas.factura.itens.Item;
 import static jminvsm.util.AlertUtilities.showDialog;
@@ -30,7 +29,7 @@ public class ServiceItem {
         
         try {
             itemDao.addEntity(itens);
-            showSuccessAlert("Sucesso", "Itens adicionados a factura com sucesso!");
+            showSuccessAlert( "Itens adicionados a factura com sucesso!");
         } catch (Exception ex) {
             showDialog( "Erro", "Erro ao emitir factura!");
         }

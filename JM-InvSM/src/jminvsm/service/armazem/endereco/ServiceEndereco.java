@@ -83,7 +83,7 @@ public class ServiceEndereco {
 
         if (enderecoArmazemDao.addEntity(x)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Endereco registado com sucesso!");
+            showSuccessAlert( "Endereco registado com sucesso!");
         }
     }
 
@@ -133,7 +133,7 @@ public class ServiceEndereco {
 
         if (enderecoArmazemDao.updateEntityByID(x, id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Endereco registado com sucesso!");
+            showSuccessAlert( "Endereco registado com sucesso!");
         }
     }
     
@@ -150,7 +150,7 @@ public class ServiceEndereco {
         
         if (enderecoArmazemDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Registo excluido com sucesso!");
+            showSuccessAlert("Registo excluido com sucesso!");
         }
     }
 }

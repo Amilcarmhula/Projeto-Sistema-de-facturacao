@@ -4,7 +4,7 @@
  */
 package jminvsm.dao.produto.fornecido;
 
-import java.util.List;
+
 import javafx.collections.ObservableList;
 
 /**
@@ -12,8 +12,8 @@ import javafx.collections.ObservableList;
  * @author JM-Tecnologias
  */
 public interface ProdutoFornecidoDAOImpl<T> {
-    void  addEntity(T x);
-    void updateEntityByID(T t, int id);
+    boolean  addEntity(T x);
+    boolean updateEntityByID(T t, int id);
     
     
     ObservableList<T> listAllEntities();

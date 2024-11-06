@@ -17,6 +17,7 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
+import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
 /**
@@ -34,7 +35,8 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
     }
 
     @Override
-    public void addEntity(ProdutoFornecido t) {
+    public boolean addEntity(ProdutoFornecido t) {
+        boolean isSuccess = false;
         try {
             sql = "insert into produto_fornecido (quantidade,data_fornecida,custo, fk_id_armazem,fk_id_produto, "
                     + "fk_id_fornecedor,fk_id_usuario) value (?,?,?,?,?,?,?)";
@@ -48,17 +50,29 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             ps.setInt(5, t.getProduto().getId());
             ps.setInt(6, t.getFornecedor().getId());
             ps.setInt(7, t.getUsuario().getId());
+            int rowsAffected = ps.executeUpdate();
 
-            ps.execute();
-            ps.close();
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Produto fornecido: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(ProdutoFornecido t, int id) {
+    public boolean updateEntityByID(ProdutoFornecido t, int id) {
+        boolean isSuccess = false;
         try {
             sql = "update produto_fornecido set quantidade=?,data_fornecida=?,custo=?, fk_id_armazem=?, "
                     + "fk_id_fornecedor=?,fk_id_usuario=? where id=?";
@@ -70,15 +84,24 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             ps.setInt(4, t.getArmazem().getId());
             ps.setInt(5, t.getFornecedor().getId());
             ps.setInt(6, t.getUsuario().getId());
+            int rowsAffected = ps.executeUpdate();
 
-            ps.setInt(7, id);
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
 
-            ps.execute();
-            ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Produto Fornecido: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -203,7 +226,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            System.out.println("Erro: "+ex);
+            System.out.println("Erro: " + ex);
 //            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro Dados", "Erro ao carregar movimentos de produto: " + ex);
         }
         return mapa;

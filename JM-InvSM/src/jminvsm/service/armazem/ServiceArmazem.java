@@ -52,7 +52,7 @@ public class ServiceArmazem {
         a.setDescricao_arm(descricao);
         if (armazemDao.addEntity(a)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Armazem adicionado com sucesso!");
+            showSuccessAlert( "Armazem adicionado com sucesso!");
         }
     }
 
@@ -81,7 +81,7 @@ public class ServiceArmazem {
         a.setDescricao_arm(descricao);
         if (armazemDao.updateEntityByID(a, id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Armazem actualizado com sucesso!");
+            showSuccessAlert("Armazem actualizado com sucesso!");
         }
     }
     public ObservableList<Armazem> listaArmazens(){
@@ -101,7 +101,7 @@ public class ServiceArmazem {
         
         if (armazemDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Sucesso", "Registo excluido com sucesso!");
+            showSuccessAlert( "Registo excluido com sucesso!");
         }
     }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -12,16 +13,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="560.0" prefWidth="554.0" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.stockView.AddStockController">
+<AnchorPane prefHeight="560.0" prefWidth="554.0" style="-fx-border-width: 5px; -fx-border-color: #17b5c3;" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.stockView.AddStockController">
    <children>
       <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Registro de Stock" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Registo de Stock" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
-                  <Font size="20.0" />
+                  <Font size="40.0" />
                </font>
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
             </Label>
-            <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <styleClass>
                   <String fx:value="close-categoria" />
                   <String fx:value="gray-bg" />
@@ -39,16 +43,16 @@
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="130.0" prefWidth="837.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <AnchorPane layoutX="10.0" layoutY="55.0" prefHeight="116.0" prefWidth="544.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="104.0" layoutY="14.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TextField fx:id="txtQuantidade" alignment="CENTER" layoutX="229.0" layoutY="14.0" prefHeight="26.0" prefWidth="120.0" promptText="Qtd." stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="75.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtQuantidade" alignment="CENTER" layoutX="99.0" layoutY="14.0" prefHeight="26.0" prefWidth="75.0" promptText="Qtd." stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <Button fx:id="btnAdd" layoutX="337.0" layoutY="90.0" mnemonicParsing="false" onAction="#addProdutoFornecido" prefHeight="20.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+            <Button fx:id="btnAdd" layoutX="337.0" layoutY="83.0" mnemonicParsing="false" onAction="#addProdutoFornecido" prefHeight="20.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -58,7 +62,7 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <Button layoutX="180.0" layoutY="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Limpar" textFill="WHITE">
+            <Button layoutX="180.0" layoutY="83.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Limpar" textFill="WHITE">
                <styleClass>
                   <String fx:value="secondary-color" />
                   <String fx:value="hand-efect" />
@@ -68,26 +72,26 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <TextField fx:id="txtCustoAquisicao" layoutX="362.0" layoutY="54.0" prefHeight="26.0" prefWidth="120.0" stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtCustoAquisicao" alignment="CENTER_RIGHT" layoutX="321.0" layoutY="14.0" prefHeight="26.0" prefWidth="120.0" promptText="0.00" stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <Label layoutX="358.0" layoutY="16.0" text="Custo de aquisicao:" textFill="WHITE">
+            <Label layoutX="185.0" layoutY="16.0" text="Custo de aquisicao:" textFill="WHITE">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <DatePicker fx:id="dataAquisicao" layoutX="231.0" layoutY="55.0" prefHeight="25.0" prefWidth="115.0" />
-            <Label layoutX="104.0" layoutY="58.0" text="Data de aquisicao:" textFill="WHITE">
+            <DatePicker fx:id="dataAquisicao" layoutX="146.0" layoutY="47.0" prefHeight="25.0" prefWidth="115.0" />
+            <Label layoutX="17.0" layoutY="50.0" text="Data de aquisicao:" textFill="WHITE">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutY="177.0" prefHeight="382.0" prefWidth="554.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="180.0">
+      <AnchorPane layoutY="177.0" prefHeight="382.0" prefWidth="554.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <TextField fx:id="txtIDArmazem" disable="true" layoutX="173.0" layoutY="194.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
             <TextField fx:id="txtPesquisaArmazem" layoutX="272.0" layoutY="194.0" prefHeight="26.0" prefWidth="270.0" promptText="Pesquisar armazem" stylesheets="@../../../style/dashboard.css">
@@ -96,16 +100,16 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TableView fx:id="tabelaArmazem" layoutX="6.0" layoutY="225.0" onMouseClicked="#selectedRowArmazem" prefHeight="155.0" prefWidth="540.0">
+            <TableView fx:id="tabelaArmazem" layoutY="225.0" onMouseClicked="#selectedRowArmazem" prefHeight="155.0" prefWidth="540.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <columns>
                   <TableColumn fx:id="IDtabelaArmazem" prefWidth="48.0" text="ID" />
                   <TableColumn fx:id="tipotabelaArmazem" prefWidth="141.0" text="Tipo" />
                   <TableColumn fx:id="nometabelaArmazem" prefWidth="147.0" text="Localizacao" />
-                  <TableColumn fx:id="descricaotabelaArmazem" prefWidth="192.0" text="Descricao" />
+                  <TableColumn fx:id="descricaotabelaArmazem" prefWidth="200.0" text="Descricao" />
                </columns>
             </TableView>
             <TextField fx:id="txtIDFornecedor" disable="true" layoutX="173.0" layoutY="5.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TableView fx:id="tabelaFornecedor" layoutX="6.0" layoutY="36.0" onMouseClicked="#selectedRowFornecedor" prefHeight="155.0" prefWidth="540.0">
+            <TableView fx:id="tabelaFornecedor" layoutY="36.0" onMouseClicked="#selectedRowFornecedor" prefHeight="155.0" prefWidth="540.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <columns>
                   <TableColumn fx:id="IDtabelaFornecedor" prefWidth="50.0" text="ID" />
                   <TableColumn fx:id="razaotabelaFornecedor" prefWidth="482.0" text="Razao Social" />

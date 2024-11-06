@@ -92,7 +92,7 @@ create table endereco_cliente(
 	fk_id_cliente integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_cliente) references cliente(id),
+    foreign key (fk_id_cliente) references cliente(id) on delete cascade,
     foreign key (fk_id_usuario) references usuario(id),
     check(tipo in('Facturação','Envio'))
 );
@@ -105,7 +105,7 @@ create table contacto_cliente(
     fk_id_cliente integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_cliente) references cliente(id),
+    foreign key (fk_id_cliente) references cliente(id) on delete cascade,
     foreign key (fk_id_usuario) references usuario(id)
 );
 
@@ -132,7 +132,7 @@ create table endereco_fornecedor(
 	fk_id_fornecedor integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_fornecedor) references fornecedor(id),
+    foreign key (fk_id_fornecedor) references fornecedor(id) on delete cascade,
     foreign key (fk_id_usuario) references usuario(id)
 );
 
@@ -145,7 +145,7 @@ create table contacto_fornecedor(
     fk_id_fornecedor integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_fornecedor) references fornecedor(id),
+    foreign key (fk_id_fornecedor) references fornecedor(id) on delete cascade,
     foreign key (fk_id_usuario) references usuario(id)
 );
 
@@ -169,7 +169,7 @@ create table endereco_armazem(
 	fk_id_armazem integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_armazem) references armazem(id),
+    foreign key (fk_id_armazem) references armazem(id) on delete cascade,
     foreign key (fk_id_usuario) references usuario(id)
 );
 
@@ -182,7 +182,7 @@ create table contacto_armazem(
     fk_id_armazem integer,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    foreign key (fk_id_armazem) references armazem(id),
+    foreign key (fk_id_armazem) references armazem(id) on delete cascade,
     foreign key (fk_id_usuario) references usuario(id)
 );
 
@@ -252,7 +252,7 @@ CREATE TABLE precovenda (
     fk_id_produto integer not null,
     fk_id_usuario integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (fk_id_produto) REFERENCES produto(id),
+    FOREIGN KEY (fk_id_produto) REFERENCES produto(id) on delete cascade,
     foreign key (fk_id_usuario) references usuario(id)
 );
 

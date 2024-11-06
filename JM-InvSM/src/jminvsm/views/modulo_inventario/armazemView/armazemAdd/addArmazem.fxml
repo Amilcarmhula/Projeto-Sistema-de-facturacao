@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -14,20 +13,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="608.0" prefWidth="788.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.armazemView.armazemAdd.AddArmazemController">
+<AnchorPane prefHeight="623.0" prefWidth="788.0" style="-fx-border-width: 5px; -fx-border-color: #17b5c3;" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.armazemView.armazemAdd.AddArmazemController">
    <children>
       <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Cadastro de Armazens" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Registo de Armazens" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
-                  <Font size="20.0" />
+                  <Font size="40.0" />
                </font>
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
             </Label>
-            <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <styleClass>
-                  <String fx:value="close-categoria" />
-                  <String fx:value="gray-bg" />
-               </styleClass>
+            <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" styleClass="close-categoria" stylesheets="@../../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -41,125 +39,6 @@
             </Button>
          </children>
       </AnchorPane>
-      <TabPane layoutY="160.0" prefHeight="448.0" prefWidth="788.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <tabs>
-            <Tab text="Contactos">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <TextField fx:id="txtIDContacto" disable="true" minHeight="-Infinity" prefHeight="25.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-                        <TextField fx:id="txtContacto" layoutX="309.0" layoutY="10.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="181.0" promptText="Numero de telefone" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="309.0" AnchorPane.topAnchor="10.0">
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                        <TextField fx:id="txtEmail" layoutX="495.0" layoutY="10.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="257.0" promptText="E-mail" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="495.0" AnchorPane.topAnchor="10.0">
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                        <TableView fx:id="tabelaContacto" layoutX="14.0" layoutY="93.0" onMouseClicked="#selecionaContacto" prefHeight="270.0" prefWidth="740.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
-                           <columns>
-                              <TableColumn fx:id="IDtabelaContacto" prefWidth="50.0" text="ID" />
-                              <TableColumn fx:id="responsaveltabelaContacto" prefWidth="205.0" text="Pessoa de Contacto" />
-                              <TableColumn fx:id="contactotabelaContacto" prefWidth="128.0" text="Numero" />
-                              <TableColumn fx:id="emailtabelaContacto" prefWidth="341.0" text="Email" />
-                              <TableColumn fx:id="btntabelaContacto" prefWidth="45.0" />
-                           </columns>
-                        </TableView>
-                        <TextField fx:id="txtResponsavel" minHeight="-Infinity" prefHeight="25.0" prefWidth="197.0" promptText="Reponsavel" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="10.0">
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                        <Button fx:id="btnAddContacto" layoutX="623.0" layoutY="49.0" mnemonicParsing="false" onAction="#addORupdateContacto" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE" AnchorPane.leftAnchor="623.0" AnchorPane.topAnchor="49.0">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                           <styleClass>
-                              <String fx:value="hand-efect" />
-                              <String fx:value="secondary-color" />
-                              <String fx:value="shadow-efect" />
-                           </styleClass>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-            <Tab text="Enderecos">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <TextField fx:id="txtIDEndereco" disable="true" layoutY="11.0" prefHeight="25.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" AnchorPane.leftAnchor="10.0" />
-                        <TextField fx:id="txtCidade" layoutX="246.0" layoutY="11.0" prefHeight="25.0" prefWidth="122.0" promptText="Cidade" stylesheets="@../../../../style/dashboard.css">
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                        <ComboBox fx:id="combProvincia" layoutX="101.0" layoutY="11.0" prefHeight="27.0" prefWidth="137.0" promptText="Provincia" />
-                        <TextField fx:id="txtBairro" layoutX="375.0" layoutY="11.0" prefHeight="25.0" prefWidth="241.0" promptText="Bairro" stylesheets="@../../../../style/dashboard.css">
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                        <TextField fx:id="txtAvenida" layoutX="14.0" layoutY="54.0" prefHeight="25.0" prefWidth="261.0" promptText="Avenida" stylesheets="@../../../../style/dashboard.css">
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                        <TextField fx:id="txtCodigooPostal" layoutX="279.0" layoutY="54.0" prefHeight="25.0" prefWidth="122.0" promptText="Codigo postal" stylesheets="@../../../../style/dashboard.css">
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                        <TextField fx:id="txtRua" layoutX="625.0" layoutY="11.0" prefHeight="25.0" prefWidth="130.0" promptText="Rua" stylesheets="@../../../../style/dashboard.css">
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                        <TextField fx:id="txtNumeroEndereco" layoutX="411.0" layoutY="54.0" prefHeight="25.0" prefWidth="103.0" promptText="Numero" stylesheets="@../../../../style/dashboard.css">
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </TextField>
-                        <TableView fx:id="tabelaEndereco" layoutY="96.0" onMouseClicked="#selecionaEndereco" prefHeight="270.0" prefWidth="778.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
-                           <columns>
-                              <TableColumn fx:id="IDtabelaEndereco" prefWidth="48.0" text="ID" />
-                              <TableColumn fx:id="provinciatabelaEndereco" prefWidth="118.0" text="Provincia" />
-                              <TableColumn fx:id="cidadetabelaEndereco" prefWidth="113.0" text="Cidade" />
-                              <TableColumn fx:id="bairrotabelaEndereco" prefWidth="115.0" text="Bairro" />
-                              <TableColumn fx:id="avenidatabelaEndereco" prefWidth="127.0" text="Avenida" />
-                              <TableColumn fx:id="codigopostaltabelaEndereco" prefWidth="82.0" text="C.Postal" />
-                              <TableColumn fx:id="ruatabelaEndereco" prefWidth="72.0" text="Rua" />
-                              <TableColumn fx:id="numerotabelaEndereco" prefWidth="51.0" text="Nr" />
-                              <TableColumn fx:id="btntabelaEndereco" minWidth="0.0" prefWidth="44.0" />
-                           </columns>
-                        </TableView>
-                        <Button fx:id="btnAddEndereco" layoutX="626.0" layoutY="56.0" mnemonicParsing="false" onAction="#addORupdateEndereco" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                           <styleClass>
-                              <String fx:value="secondary-color" />
-                              <String fx:value="hand-efect" />
-                              <String fx:value="shadow-efect" />
-                           </styleClass>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-         </tabs>
-      </TabPane>
       <AnchorPane prefHeight="110.0" prefWidth="1003.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
             <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="96.0" layoutY="11.0" prefHeight="26.0" prefWidth="96.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" />
@@ -169,8 +48,8 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <ComboBox fx:id="combTipoCliente" layoutX="203.0" layoutY="9.0" prefHeight="30.0" prefWidth="150.0" promptText="Tipo de Cliente" />
-            <Button fx:id="btnAddArmazem" layoutX="543.0" layoutY="75.0" mnemonicParsing="false" onAction="#addORupdateCliente" prefHeight="20.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+            <ComboBox fx:id="combTipoCliente" layoutX="198.0" layoutY="9.0" prefHeight="30.0" prefWidth="159.0" promptText="Tipo de armazem" />
+            <Button fx:id="btnAddArmazem" layoutX="543.0" layoutY="77.0" mnemonicParsing="false" onAction="#addORupdateCliente" prefHeight="20.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -180,7 +59,7 @@
                   <String fx:value="hand-efect" />
                </styleClass>
             </Button>
-            <Button layoutX="403.0" layoutY="75.0" mnemonicParsing="false" onAction="#resetCliente" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Limpar" textFill="WHITE">
+            <Button layoutX="403.0" layoutY="77.0" mnemonicParsing="false" onAction="#resetCliente" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Limpar" textFill="WHITE">
                <styleClass>
                   <String fx:value="secondary-color" />
                   <String fx:value="hand-efect" />
@@ -196,6 +75,115 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="161.0" minHeight="0.0" minWidth="0.0" prefHeight="456.0" prefWidth="788.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <AnchorPane layoutY="8.0" prefHeight="209.0" prefWidth="782.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <TextField fx:id="txtIDContacto" disable="true" layoutX="10.0" layoutY="2.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" />
+                  <TextField fx:id="txtContacto" layoutX="309.0" layoutY="2.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="181.0" promptText="Numero de telefone" stylesheets="@../../../../style/dashboard.css">
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </TextField>
+                  <TextField fx:id="txtEmail" layoutX="495.0" layoutY="2.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="257.0" promptText="E-mail" stylesheets="@../../../../style/dashboard.css">
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </TextField>
+                  <TableView fx:id="tabelaContacto" layoutY="70.0" onMouseClicked="#selecionaContacto" prefHeight="141.0" prefWidth="782.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <columns>
+                        <TableColumn fx:id="IDtabelaContacto" prefWidth="50.0" text="ID" />
+                        <TableColumn fx:id="responsaveltabelaContacto" prefWidth="205.0" text="Pessoa de Contacto" />
+                        <TableColumn fx:id="contactotabelaContacto" prefWidth="170.0" text="Numero" />
+                        <TableColumn fx:id="emailtabelaContacto" prefWidth="351.0" text="Email" />
+                     </columns>
+                  </TableView>
+                  <TextField fx:id="txtResponsavel" layoutX="105.0" layoutY="2.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="197.0" promptText="Reponsavel" stylesheets="@../../../../style/dashboard.css">
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </TextField>
+                  <Button fx:id="btnAddContacto" layoutX="623.0" layoutY="36.0" mnemonicParsing="false" onAction="#addORupdateContacto" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="hand-efect" />
+                        <String fx:value="secondary-color" />
+                        <String fx:value="shadow-efect" />
+                     </styleClass>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutY="226.0" prefHeight="230.0" prefWidth="788.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <TextField fx:id="txtIDEndereco" disable="true" layoutX="10.0" layoutY="2.0" prefHeight="25.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" />
+                  <TextField fx:id="txtCidade" layoutX="246.0" layoutY="2.0" prefHeight="25.0" prefWidth="122.0" promptText="Cidade" stylesheets="@../../../../style/dashboard.css">
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </TextField>
+                  <ComboBox fx:id="combProvincia" layoutX="101.0" layoutY="2.0" prefHeight="27.0" prefWidth="137.0" promptText="Provincia" />
+                  <TextField fx:id="txtBairro" layoutX="375.0" layoutY="2.0" prefHeight="25.0" prefWidth="241.0" promptText="Bairro" stylesheets="@../../../../style/dashboard.css">
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </TextField>
+                  <TextField fx:id="txtAvenida" layoutX="14.0" layoutY="38.0" prefHeight="25.0" prefWidth="261.0" promptText="Avenida" stylesheets="@../../../../style/dashboard.css">
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </TextField>
+                  <TextField fx:id="txtCodigooPostal" layoutX="279.0" layoutY="38.0" prefHeight="25.0" prefWidth="122.0" promptText="Codigo postal" stylesheets="@../../../../style/dashboard.css">
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </TextField>
+                  <TextField fx:id="txtRua" layoutX="625.0" layoutY="2.0" prefHeight="25.0" prefWidth="130.0" promptText="Rua" stylesheets="@../../../../style/dashboard.css">
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </TextField>
+                  <TextField fx:id="txtNumeroEndereco" layoutX="411.0" layoutY="38.0" prefHeight="25.0" prefWidth="103.0" promptText="Numero" stylesheets="@../../../../style/dashboard.css">
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </TextField>
+                  <TableView fx:id="tabelaEndereco" layoutY="76.0" onMouseClicked="#selecionaEndereco" prefHeight="151.0" prefWidth="788.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <columns>
+                        <TableColumn fx:id="IDtabelaEndereco" prefWidth="48.0" text="ID" />
+                        <TableColumn fx:id="provinciatabelaEndereco" prefWidth="118.0" text="Provincia" />
+                        <TableColumn fx:id="cidadetabelaEndereco" prefWidth="113.0" text="Cidade" />
+                        <TableColumn fx:id="bairrotabelaEndereco" prefWidth="115.0" text="Bairro" />
+                        <TableColumn fx:id="avenidatabelaEndereco" prefWidth="127.0" text="Avenida" />
+                        <TableColumn fx:id="codigopostaltabelaEndereco" prefWidth="111.0" text="Codigo Postal" />
+                        <TableColumn fx:id="ruatabelaEndereco" prefWidth="83.0" text="Rua" />
+                        <TableColumn fx:id="numerotabelaEndereco" prefWidth="61.0" text="Nr" />
+                     </columns>
+                  </TableView>
+                  <Button fx:id="btnAddEndereco" layoutX="626.0" layoutY="40.0" mnemonicParsing="false" onAction="#addORupdateEndereco" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="secondary-color" />
+                        <String fx:value="hand-efect" />
+                        <String fx:value="shadow-efect" />
+                     </styleClass>
+                  </Button>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

@@ -6,11 +6,12 @@ package jminvsm.service.cliente;
 
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import jminvsm.dao.cliente.ClienteDAO;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showErroNotification;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -36,19 +37,19 @@ public class ServiceCliente {
     public void registar(String nome, String razaosocial, String tipo, Integer nuit, Usuario user) {
         setOpsSuccess(false);
         if (nome == null || nome.isEmpty()) {
-            showErroNotification("Erro", "nome nao pode ser nulo!");
+            showErroAlert( "nome nao pode ser nulo!");
             return;
         }
         if (razaosocial == null || razaosocial.isEmpty()) {
-            showErroNotification("Erro", "Razao Social denifida por padrao!");
+            showErroAlert( "Razao Social denifida por padrao!");
             razaosocial = nome + ", E.I";
         }
         if (tipo == null || tipo.isEmpty()) {
-            showErroNotification("Erro", "Tipo de cliente nao defindo. Tipo de Cliente padrao criado!");
+            showErroAlert( "Tipo de cliente nao defindo. Tipo de Cliente padrao criado!");
             tipo = "Pessoa Física";
         }
         if (nuit == null || nuit <= 0) {
-            showErroNotification("Erro", "NUIT nulo. NUIT padrao criado!");
+            showErroAlert( "NUIT nulo. NUIT padrao criado!");
             nuit = 100000001;
         }
         Cliente cliente = new Cliente();
@@ -59,30 +60,30 @@ public class ServiceCliente {
         cliente.setUsuario(user);
         if (clienteDao.addEntity(cliente)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Registo adicionado com sucesso.");
+            showSuccessAlert("Sucesso", "Registo adicionado com sucesso.");
         }
     }
 
     public void actualizar(Integer id, String nome, String razaosocial, String tipo, Integer nuit, Usuario user) {
         setOpsSuccess(false);
         if (id == null || id <= 0) {
-            showErroNotification("Erro", "Cliente nao selecionado!");
+            showErroAlert( "Cliente nao selecionado!");
             return;
         }
         if (nome == null || nome.isEmpty()) {
-            showErroNotification("Erro", "nome nao pode ser nulo!");
+            showErroAlert( "nome nao pode ser nulo!");
             return;
         }
         if (razaosocial == null || razaosocial.isEmpty()) {
-            showErroNotification("Erro", "Razao Social denifida por padrao!");
+            showErroAlert( "Razao Social denifida por padrao!");
             razaosocial = nome + ", E.I";
         }
         if (tipo == null || tipo.isEmpty()) {
-            showErroNotification("Erro", "Tipo de cliente nao defindo. Tipo de Cliente padrao criado!");
+            showErroAlert( "Tipo de cliente nao defindo. Tipo de Cliente padrao criado!");
             tipo = "Pessoa Física";
         }
         if (nuit == null || nuit <= 0) {
-            showErroNotification("Erro", "NUIT nulo. NUIT padrao criado!");
+            showErroAlert( "NUIT nulo. NUIT padrao criado!");
             nuit = 100000001;
         }
         Cliente cliente = new Cliente();
@@ -93,7 +94,7 @@ public class ServiceCliente {
         cliente.setUsuario(user);
         if (clienteDao.updateEntityByID(cliente, id)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Registo actualizado com sucesso.");
+            showSuccessAlert("Sucesso", "Registo actualizado com sucesso.");
         }
     }
     
@@ -127,7 +128,7 @@ public class ServiceCliente {
         setOpsSuccess(false);
         if (clienteDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Exclusao de registo com sucesso.");
+            showSuccessAlert("Sucesso", "Exclusao de registo com sucesso.");
         }
 
     }

@@ -93,11 +93,11 @@ public class CategoriaViewController implements Initializable {
         }
     }
     
-    public void addORupdateCategoria() throws SQLException {
+    public void addORupdateCategoria(ActionEvent e) throws SQLException {
         if ("".equals(ps_txtIDCategoria.getText())) {
-            addCategoria();
+            addCategoria(e);
         } else {
-            updateCategoria();
+            updateCategoria(e);
         }
     }
     
@@ -216,7 +216,7 @@ public class CategoriaViewController implements Initializable {
     /*
         Funcoes para Adicionar informacoes ao banco de dados
      */
-    public void addCategoria() throws SQLException {
+    public void addCategoria(ActionEvent e) throws SQLException {
         ServicoCategoria sc = new ServicoCategoria();
         sc.registar(ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
                 ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
@@ -231,7 +231,7 @@ public class CategoriaViewController implements Initializable {
     /*
         Funcoes para Actualizar informacoes ao banco de dados
      */
-    public void updateCategoria() throws SQLException {
+    public void updateCategoria(ActionEvent e) throws SQLException {
         ServicoCategoria sc = new ServicoCategoria();
         sc.actualizar(Integer.parseInt(ps_txtIDCategoria.getText()),
                 ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),

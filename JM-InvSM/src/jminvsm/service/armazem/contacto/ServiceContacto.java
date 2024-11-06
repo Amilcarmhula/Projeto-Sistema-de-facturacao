@@ -9,10 +9,9 @@ import javafx.collections.ObservableList;
 import jminvsm.dao.armazem.contacto.ContactoArmazemDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.armazem.contacto.ContactoArmazem;
-import jminvsm.model.cliente.contacto.ContactoCliente;
 import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showErroNotification;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -37,19 +36,18 @@ public class ServiceContacto {
     public void registar(String responsavel, String contacto, String email, Integer id_arm, Usuario user) {
         setOpsSuccess(false);
         if (responsavel == null || responsavel.isEmpty()) {
-            showErroNotification("Erro", "Responsavel nao pode ser nulo!");
+            showErroAlert("Responsavel nao pode ser nulo!");
             return;
         }
         if (contacto == null || contacto.isEmpty()) {
-            showErroNotification("Erro", "Numero de contacto nao introduzido!");
+            showErroAlert( "Numero de contacto nao introduzido!");
             return;
         }
         if (email == null || email.isEmpty()) {
-            showErroNotification("Erro", "E-mail nulo, sera definida um E-mail padrao!");
             email = "armazem.sem.email@sememail.com";
         }
         if (id_arm == null) {
-            showErroNotification("Erro", "Armazem nao selecionado!");
+            showErroAlert( "Armazem nao selecionado!");
             return;
         }
 
@@ -64,26 +62,25 @@ public class ServiceContacto {
 
         if (contatoArmazemDao.addEntity(x)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Contacto adicionado com sucesso!");
+            showSuccessAlert("Sucesso", "Contacto adicionado com sucesso!");
         }
     }
     
     public void actualizar(String responsavel, String contacto, String email, Integer id_contacto, Usuario user) {
         setOpsSuccess(false);
         if (responsavel == null || responsavel.isEmpty()) {
-            showErroNotification("Erro", "Responsavel nao pode ser nulo!");
+            showErroAlert( "Responsavel nao pode ser nulo!");
             return;
         }
         if (contacto == null || contacto.isEmpty()) {
-            showErroNotification("Erro", "Numero de contacto nao introduzido!");
+            showErroAlert( "Numero de contacto nao introduzido!");
             return;
         }
         if (email == null || email.isEmpty()) {
-            showErroNotification("Erro", "E-mail nulo, sera definida um E-mail padrao!");
             email = "armazem.sem.email@sememail.com";
         }
         if (id_contacto == null) {
-            showErroNotification("Erro", "Armazem nao selecionado!");
+            showErroAlert( "Armazem nao selecionado!");
             return;
         }
 
@@ -95,7 +92,7 @@ public class ServiceContacto {
 
         if (contatoArmazemDao.updateEntityByID(x, id_contacto)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Contacto actualizado com sucesso!");
+            showSuccessAlert("Sucesso", "Contacto actualizado com sucesso!");
         }
     }
     
@@ -112,7 +109,7 @@ public class ServiceContacto {
         
         if (contatoArmazemDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Registo excluido com sucesso!");
+            showSuccessAlert("Sucesso", "Registo excluido com sucesso!");
         }
     }
 }

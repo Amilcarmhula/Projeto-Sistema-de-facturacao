@@ -5,11 +5,12 @@
 package jminvsm.service.vendas.factura.itens;
 
 import java.util.List;
+import javafx.event.ActionEvent;
 import jminvsm.dao.vendas.itens.ItemDAO;
 import jminvsm.model.vendas.factura.itens.Item;
 import static jminvsm.util.AlertUtilities.showDialog;
-import static jminvsm.util.AlertUtilities.showErroNotification;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -23,14 +24,14 @@ public class ServiceItem {
     }
     public void registaItens(List<Item> itens){
         if(itens == null || itens.isEmpty()){
-            showErroNotification("Erro", "Nao pode ser emitida factura sem itens!");
+            showErroAlert( "Nao pode ser emitida factura sem itens!");
             return;
         }
         
         try {
             itemDao.addEntity(itens);
-            showSuccessNotification("Sucesso", "Itens adicionados a factura com sucesso!");
-        } catch (Exception e) {
+            showSuccessAlert("Sucesso", "Itens adicionados a factura com sucesso!");
+        } catch (Exception ex) {
             showDialog( "Erro", "Erro ao emitir factura!");
         }
     }

@@ -33,8 +33,8 @@ import jminvsm.model.vendas.factura.Factura;
 import jminvsm.service.metodoPagamento.ServiceMetodoPagamento;
 import jminvsm.service.transacoes.ServiceTransacoes;
 import jminvsm.service.vendas.factura.ServiceFactura;
-import static jminvsm.util.AlertUtilities.showErroNotification;
 import jminvsm.util.LoadAndMoveUtilities;
+import static jminvsm.util.AlertUtilities.showErroAlert;
 
 /**
  * FXML Controller class
@@ -65,11 +65,13 @@ public class MiniPagamentoViewController implements Initializable {
      */
     /**
      * Metodo para processar pagamento da factura
+     * @param event
+     * @throws java.sql.SQLException
      */
     public void processaPagamento(ActionEvent event) throws SQLException {
         Factura f = service.consultaFactura(labNumeroFactura.getText());
         if (!f.getEstado().equals("Paga") || !f.getEstado().equals("Cancelada")) {
-            addTransacao();
+            addTransacao(event);
             f = service.consultaFactura(labNumeroFactura.getText());
         }
         if (f.getEstado().equals("Paga") || f.getEstado().equals("Cancelada")) {
@@ -170,10 +172,10 @@ public class MiniPagamentoViewController implements Initializable {
         return troco;
     }
 
-    public void addTransacao() throws SQLException {
+    public void addTransacao(ActionEvent e) throws SQLException {
         ServiceTransacoes st = new ServiceTransacoes();
         if (combmetodoPagamento.getValue() == null) {
-            showErroNotification("Erro", "Metodo de pagamento nao selecionado!");
+            showErroAlert( "Metodo de pagamento nao selecionado!");
             return;
         }
         MetodoPagamento metodo = mapaMetodos.get(combmetodoPagamento.getValue());

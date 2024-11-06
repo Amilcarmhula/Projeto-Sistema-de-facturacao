@@ -79,6 +79,8 @@ public class MainController implements Initializable {
     private Button btn_produtos112;
     @FXML
     private Button btn_stock;
+    @FXML
+    private Label labNotification;
 
     @FXML
     public void close() {

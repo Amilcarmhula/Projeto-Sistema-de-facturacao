@@ -4,8 +4,6 @@
  */
 package jminvsm.views.modulo_inventario.armazemView.armazemAdd;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -22,21 +20,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import jminvsm.SysFact;
-import jminvsm.dao.armazem.ArmazemDAO;
-import jminvsm.dao.armazem.contacto.ContactoArmazemDAO;
-import jminvsm.dao.armazem.endereco.EnderecoArmazemDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.armazem.contacto.ContactoArmazem;
 import jminvsm.model.armazem.endereco.EnderecoArmazem;
@@ -44,7 +35,6 @@ import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.armazem.contacto.ServiceContacto;
 import jminvsm.service.armazem.endereco.ServiceEndereco;
-import jminvsm.util.AlertUtilities;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -168,27 +158,27 @@ public class AddArmazemController implements Initializable {
         }
     }
 
-    public void addORupdateContacto() throws SQLException {
+    public void addORupdateContacto(ActionEvent e) throws SQLException {
         if ("".equals(txtIDContacto.getText())) {
-            addContacto();
+            addContacto(e);
         } else {
-            updateContacto();
+            updateContacto(e);
         }
     }
 
-    public void addORupdateCliente() throws SQLException {
+    public void addORupdateCliente(ActionEvent e) throws SQLException {
         if ("".equals(txtIDCliente.getText())) {
-            addArmazem();
+            addArmazem(e);
         } else {
-            updateArmazem();
+            updateArmazem(e);
         }
     }
 
-    public void addORupdateEndereco() throws SQLException {
+    public void addORupdateEndereco(ActionEvent e) throws SQLException {
         if ("".equals(txtIDEndereco.getText())) {
-            addEndereco();
+            addEndereco(e);
         } else {
-            updateEndereco();
+            updateEndereco(e);
         }
     }
 
@@ -247,6 +237,7 @@ public class AddArmazemController implements Initializable {
         txtNome.setText(c.getNome_arm());
         txtDescricao.setText(c.getDescricao_arm());
         showContactos();
+        showEndereco();
     }
 
     public void showClienteByID() throws SQLException {
@@ -300,7 +291,7 @@ public class AddArmazemController implements Initializable {
     /*
     Funcoes de Adicao de registros
      */
-    public void addArmazem() throws SQLException {
+    public void addArmazem(ActionEvent e) throws SQLException {
         ServiceArmazem servicee = new ServiceArmazem();
         servicee.registar(combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
         if (servicee.isOpsSuccess()) {
@@ -310,7 +301,7 @@ public class AddArmazemController implements Initializable {
 
     }
 
-    public void addContacto() throws SQLException {
+    public void addContacto(ActionEvent e) throws SQLException {
         ServiceContacto service = new ServiceContacto();
         Integer id = Integer.valueOf(txtIDCliente.getText());
         service.registar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
@@ -320,7 +311,7 @@ public class AddArmazemController implements Initializable {
         }
     }
 
-    public void addEndereco() throws SQLException {
+    public void addEndereco(ActionEvent e) throws SQLException {
         ServiceEndereco service = new ServiceEndereco();
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
@@ -337,7 +328,7 @@ public class AddArmazemController implements Initializable {
     /*
     Funcoes para Actualizar registros
      */
-    public void updateArmazem() throws SQLException {
+    public void updateArmazem(ActionEvent e) throws SQLException {
         ServiceArmazem servicee = new ServiceArmazem();
         Integer id = Integer.valueOf(txtIDCliente.getText());
         servicee.actualizar(id, combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
@@ -348,7 +339,7 @@ public class AddArmazemController implements Initializable {
         }
     }
 
-    public void updateContacto() throws SQLException {
+    public void updateContacto(ActionEvent e) throws SQLException {
         ServiceContacto service = new ServiceContacto();
         Integer id = Integer.valueOf(txtIDContacto.getText());
         service.actualizar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
@@ -358,7 +349,7 @@ public class AddArmazemController implements Initializable {
         }
     }
 
-    public void updateEndereco() throws SQLException {
+    public void updateEndereco(ActionEvent e) throws SQLException {
         ServiceEndereco service = new ServiceEndereco();
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());

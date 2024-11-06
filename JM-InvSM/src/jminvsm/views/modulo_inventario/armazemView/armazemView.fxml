@@ -61,7 +61,7 @@
       </AnchorPane>
       <AnchorPane layoutY="160.0" prefHeight="670.0" prefWidth="1432.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <TableView fx:id="tabelaCliente" onMouseClicked="#selectedLineCliente" prefHeight="110.0" prefWidth="727.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+            <TableView fx:id="tabelaCliente" onMouseClicked="#selectedLineCliente" prefHeight="110.0" prefWidth="727.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                <columns>
                   <TableColumn fx:id="IDtabelaCliente" prefWidth="29.0" text="ID" />
                   <TableColumn fx:id="tipotabelaCliente" prefWidth="174.0" text="Tipo" />

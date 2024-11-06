@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import jminvsm.dao.armazem.ArmazemDAO;
 import jminvsm.model.armazem.Armazem;
-import static jminvsm.util.AlertUtilities.showErroNotification;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -35,15 +35,14 @@ public class ServiceArmazem {
     public void registar(String tipo, String nome, String descricao) {
         setOpsSuccess(false);
         if (tipo == null || tipo.isEmpty()) {
-            showErroNotification("Erro", "Tipo nao definido!");
+            showErroAlert( "Tipo nao definido!");
             return;
         }
         if (nome == null || nome.isEmpty()) {
-            showErroNotification("Erro", "nome nao pode ser nulo!");
+            showErroAlert( "nome nao pode ser nulo!");
             return;
         }
         if (descricao == null || descricao.isEmpty()) {
-            showErroNotification("Erro", "Descricao nula, sera definida uma descricao padrao!");
             descricao = "Descricao de armazem padrao";
         }
 
@@ -53,26 +52,26 @@ public class ServiceArmazem {
         a.setDescricao_arm(descricao);
         if (armazemDao.addEntity(a)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Armazem adicionado com sucesso!");
+            showSuccessAlert("Sucesso", "Armazem adicionado com sucesso!");
         }
     }
 
     public void actualizar(Integer id, String tipo, String nome, String descricao) {
         setOpsSuccess(false);
         if (id == null) {
-            showErroNotification("Erro", "Armazem nao selecionado!");
+            showErroAlert("Armazem nao selecionado!");
             return;
         }
         if (tipo == null || tipo.isEmpty()) {
-            showErroNotification("Erro", "Tipo nao definido!");
+            showErroAlert( "Tipo nao definido!");
             return;
         }
         if (nome == null || nome.isEmpty()) {
-            showErroNotification("Erro", "nome nao pode ser nulo!");
+            showErroAlert( "nome nao pode ser nulo!");
             return;
         }
         if (descricao == null || descricao.isEmpty()) {
-            showErroNotification("Erro", "Descricao nula, sera definida uma descricao padrao!");
+            showErroAlert( "Descricao nula, sera definida uma descricao padrao!");
             descricao = "Descricao de armazem padrao";
         }
 
@@ -82,7 +81,7 @@ public class ServiceArmazem {
         a.setDescricao_arm(descricao);
         if (armazemDao.updateEntityByID(a, id)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Armazem actualizado com sucesso!");
+            showSuccessAlert("Sucesso", "Armazem actualizado com sucesso!");
         }
     }
     public ObservableList<Armazem> listaArmazens(){
@@ -102,7 +101,7 @@ public class ServiceArmazem {
         
         if (armazemDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Registo excluido com sucesso!");
+            showSuccessAlert("Sucesso", "Registo excluido com sucesso!");
         }
     }
 

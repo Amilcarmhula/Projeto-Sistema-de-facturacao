@@ -10,8 +10,8 @@ import jminvsm.dao.armazem.endereco.EnderecoArmazemDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.armazem.endereco.EnderecoArmazem;
 import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showErroNotification;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -39,35 +39,32 @@ public class ServiceEndereco {
             Integer id_arm, Usuario user) {
         setOpsSuccess(false);
         if (avenida == null || avenida.isEmpty()) {
-            showErroNotification("Erro", "Avenida nao pode ser nulo! sera introduzida uma avenida padrao.");
             avenida = "de Mocambique";
         }
         if (bairro == null || bairro.isEmpty()) {
-            showErroNotification("Erro", "Bairro nao pode ser nulo! Informe o bairro");
+            showErroAlert( "Bairro nao pode ser nulo! Informe o bairro");
             return;
         }
         if (cidade == null || cidade.isEmpty()) {
-            showErroNotification("Erro", "Cidade nao pode ser nula! Informe uma cidade.");
+            showErroAlert( "Cidade nao pode ser nula! Informe uma cidade.");
             return;
         }
         if (postalCode == null || postalCode == 0) {
-            showErroNotification("Erro", "Codigo postal nao informado. Sera criado um codigo postal padrao!");
             postalCode = 1111;
         }
         if (numero == null || numero == 0) {
-            showErroNotification("Erro", "Numero do endereco nao pode ser nulo!");
+            showErroAlert( "Numero do endereco nao pode ser nulo!");
             return;
         }
         if (provincia == null || provincia.isEmpty()) {
-            showErroNotification("Erro", "Provincia nao pode ser nula!");
+            showErroAlert( "Provincia nao pode ser nula!");
             return;
         }
         if (rua == null || rua.isEmpty()) {
-            showErroNotification("Erro", "Rua nao pode ser nula. Sere criada uma rua padrao!");
             rua = "Dos Mocambicanos";
         }
         if (id_arm == null || id_arm == 0) {
-            showErroNotification("Erro", "Armazem nao selecionado!");
+            showErroAlert( "Armazem nao selecionado!");
             return;
         }
 
@@ -86,7 +83,7 @@ public class ServiceEndereco {
 
         if (enderecoArmazemDao.addEntity(x)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Endereco registado com sucesso!");
+            showSuccessAlert("Sucesso", "Endereco registado com sucesso!");
         }
     }
 
@@ -95,35 +92,32 @@ public class ServiceEndereco {
             Integer id, Usuario user) {
         setOpsSuccess(false);
         if (avenida == null || avenida.isEmpty()) {
-            showErroNotification("Erro", "Avenida nao pode ser nulo! sera introduzida uma avenida padrao.");
             avenida = "de Mocambique";
         }
         if (bairro == null || bairro.isEmpty()) {
-            showErroNotification("Erro", "Bairro nao pode ser nulo! Informe o bairro");
+            showErroAlert( "Bairro nao pode ser nulo! Informe o bairro");
             return;
         }
         if (cidade == null || cidade.isEmpty()) {
-            showErroNotification("Erro", "Cidade nao pode ser nula! Informe uma cidade.");
+            showErroAlert( "Cidade nao pode ser nula! Informe uma cidade.");
             return;
         }
         if (postalCode == null || postalCode == 0) {
-            showErroNotification("Erro", "Codigo postal nao informado. Sera criado um codigo postal padrao!");
             postalCode = 1111;
         }
         if (numero == null || numero == 0) {
-            showErroNotification("Erro", "Numero do endereco nao pode ser nulo!");
+            showErroAlert( "Numero do endereco nao pode ser nulo!");
             return;
         }
         if (provincia == null || provincia.isEmpty()) {
-            showErroNotification("Erro", "Provincia nao pode ser nula!");
+            showErroAlert( "Provincia nao pode ser nula!");
             return;
         }
         if (rua == null || rua.isEmpty()) {
-            showErroNotification("Erro", "Rua nao pode ser nula. Sere criada uma rua padrao!");
             rua = "Dos Mocambicanos";
         }
         if (id == null || id == 0) {
-            showErroNotification("Erro", "Armazem nao selecionado!");
+            showErroAlert( "Armazem nao selecionado!");
             return;
         }
 
@@ -139,7 +133,7 @@ public class ServiceEndereco {
 
         if (enderecoArmazemDao.updateEntityByID(x, id)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Endereco registado com sucesso!");
+            showSuccessAlert("Sucesso", "Endereco registado com sucesso!");
         }
     }
     
@@ -156,7 +150,7 @@ public class ServiceEndereco {
         
         if (enderecoArmazemDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Registo excluido com sucesso!");
+            showSuccessAlert("Sucesso", "Registo excluido com sucesso!");
         }
     }
 }

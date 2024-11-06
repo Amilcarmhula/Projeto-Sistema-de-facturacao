@@ -7,13 +7,13 @@ package jminvsm.service.parcela;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import jminvsm.dao.parcela.ParcelaDAO;
 import jminvsm.model.parcelas.Parcela;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
-import jminvsm.util.AlertUtilities;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
-import static jminvsm.util.AlertUtilities.showErroNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -39,19 +39,19 @@ public class ServiceParcelas {
     public void regista(Integer numeroDeParcelas, Integer intervaloDePagamentos, Double juros, Double valorParcela,
             String numeroFactura, Usuario user) {
         if (numeroDeParcelas == null || numeroDeParcelas <= 0) {
-            showErroNotification("Erro", "Numero de parcelas nao informado!");
+            showErroAlert( "Numero de parcelas nao informado!");
             return;
         }
 //        if (intervaloDePagamentos == null || intervaloDePagamentos <= 0) {
-//            showErroNotification("Erro", "Intervalo de pagamento das parcelas nao informado!");
+//            showErroAlert("Erro", "Intervalo de pagamento das parcelas nao informado!");
 //            return;
 //        }
         if (juros == null) {
-            showErroNotification("Erro", "Taxa de juros nao informado!");
+            showErroAlert( "Taxa de juros nao informado!");
             return;
         }
         if (numeroFactura == null || numeroFactura.isEmpty()) {
-            showErroNotification("Erro", "Factura nao definida!");
+            showErroAlert( "Factura nao definida!");
             return;
         }
 
@@ -104,7 +104,7 @@ public class ServiceParcelas {
             }
         }
         if (isOpsSuccess()) {
-            showSuccessNotification("Sucesso", "Parcelas Geradas com sucesso!");
+            showSuccessAlert("Sucesso", "Parcelas Geradas com sucesso!");
         }
     }
     

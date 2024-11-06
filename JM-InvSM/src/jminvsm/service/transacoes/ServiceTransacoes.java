@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import jminvsm.dao.transacoes.TransacaoDAO;
 import jminvsm.model.empresa.conta.ContaBancaria;
 import jminvsm.model.metodo_pagamento.MetodoPagamento;
@@ -17,8 +18,8 @@ import jminvsm.model.parcelas.Parcela;
 import jminvsm.model.transacao.Transacao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
-import static jminvsm.util.AlertUtilities.showErroNotification;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -46,27 +47,27 @@ public class ServiceTransacoes {
         Integer id_metodoPagamento, String numeroFactura, Usuario user) {
         setOpsSuccess(false);
         if (data_pagamento == null || data_pagamento.isEmpty() || "null".equalsIgnoreCase(data_pagamento)) {
-            showErroNotification("Erro", "Data de pagamento nao pode ser nula. Será usada a data atual!");
+            showErroAlert( "Data de pagamento nao pode ser nula. Será usada a data atual!");
             data_pagamento = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         }
         
         if (valorRecebido == null || valorRecebido <= 0) {
-            showErroNotification("Erro", "Valor de pagamento nao informado!");
+            showErroAlert( "Valor de pagamento nao informado!");
             return;
         }
         
         if (descricao == null || descricao.isEmpty()) {
-            showErroNotification("Erro", "Pagamento sem descricao. Sera gerada uma descricao padrao!");
+            showErroAlert( "Pagamento sem descricao. Sera gerada uma descricao padrao!");
             descricao = "Pagamento de factura";
         }
         
         if (id_metodoPagamento == null) {
-            showErroNotification("Erro", "Metodo de pagamento nao selecionado. Por favor, selecione um metodo de pagamento!");
+            showErroAlert( "Metodo de pagamento nao selecionado. Por favor, selecione um metodo de pagamento!");
             return;
         }
         
         if (numeroFactura == null || numeroFactura.isEmpty()) {
-            showErroNotification("Erro", "Factura nao selecionada!");
+            showErroAlert( "Factura nao selecionada!");
             return;
         }
 
@@ -90,7 +91,7 @@ public class ServiceTransacoes {
 
         if (transDao.addTansacaoAvista(t)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Pagamento Registado com sucesso!");
+            showSuccessAlert("Sucesso", "Pagamento Registado com sucesso!");
         }
     }
     
@@ -99,32 +100,32 @@ public class ServiceTransacoes {
         Integer id_metodoPagamento, String numeroFactura, Usuario user) {
         setOpsSuccess(false);
         if (data_pagamento == null || data_pagamento.isEmpty() || "null".equalsIgnoreCase(data_pagamento)) {
-            showErroNotification("Erro", "Data de pagamento nao pode ser nula. Será usada a data atual!");
+            showErroAlert( "Data de pagamento nao pode ser nula. Será usada a data atual!");
             data_pagamento = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         }
         
         if (valorRecebido == null || valorRecebido <= 0) {
-            showErroNotification("Erro", "Valor de pagamento nao informado!");
+            showErroAlert( "Valor de pagamento nao informado!");
             return;
         }
         
         if (descricao == null || descricao.isEmpty()) {
-            showErroNotification("Erro", "Pagamento sem descricao. Sera gerada uma descricao padrao!");
+            showErroAlert( "Pagamento sem descricao. Sera gerada uma descricao padrao!");
             descricao = "Pagamento de factura";
         }
         
         if (id_metodoPagamento == null) {
-            showErroNotification("Erro", "Metodo de pagamento nao selecionado. Por favor, selecione um metodo de pagamento!");
+            showErroAlert( "Metodo de pagamento nao selecionado. Por favor, selecione um metodo de pagamento!");
             return;
         }
         
         if (id_parcela == null || id_parcela <= 0) {
-            showErroNotification("Erro", "Parcela nao selecionada!");
+            showErroAlert( "Parcela nao selecionada!");
             return;
         }
         
         if (numeroFactura == null || numeroFactura.isEmpty()) {
-            showErroNotification("Erro", "Factura nao selecionada!");
+            showErroAlert( "Factura nao selecionada!");
             return;
         }
 
@@ -151,7 +152,7 @@ public class ServiceTransacoes {
 
         if (transDao.addTansacaoParcelada(t)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Pagamento Registado com sucesso!");
+            showSuccessAlert("Sucesso", "Pagamento Registado com sucesso!");
         }
     }
 

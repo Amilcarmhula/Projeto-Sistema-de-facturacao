@@ -4,7 +4,6 @@
  */
 package jminvsm.views.modulo_contabilidade.pagamentosView;
 
-import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -20,6 +19,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -45,10 +45,11 @@ import jminvsm.service.metodoPagamento.ServiceMetodoPagamento;
 import jminvsm.service.parcela.ServiceParcelas;
 import jminvsm.service.transacoes.ServiceTransacoes;
 import jminvsm.service.vendas.factura.ServiceFactura;
-import static jminvsm.util.AlertUtilities.showErroNotification;
+import jminvsm.util.AlertUtilities;
 import jminvsm.util.FilePathFinderUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 import jminvsm.views.modulo_venda.vendaView.VendasController;
+import static jminvsm.util.AlertUtilities.showErroAlert;
 
 /**
  * FXML Controller class
@@ -170,7 +171,7 @@ public class PagamentoController implements Initializable {
         combIntervaloParcelas.setItems(FXCollections.observableArrayList(lista));
     }
 
-    public void geraParcelas() throws SQLException {
+    public void geraParcelas(ActionEvent e) throws SQLException {
         int intervalo;
         if (combIntervaloParcelas.getValue() == null) {
             intervalo = 30;
@@ -309,10 +310,10 @@ public class PagamentoController implements Initializable {
         return troco;
     }
 
-    public void addTransacao() throws SQLException {
+    public void addTransacao(ActionEvent event) throws SQLException {
         ServiceTransacoes st = new ServiceTransacoes();
         if (combmetodoPagamento.getValue() == null) {
-            showErroNotification("Erro", "Metodo de pagamento nao selecionado!");
+            AlertUtilities.showErroAlert("Metodo de pagamento nao selecionado!");
             return;
         }
         MetodoPagamento metodo = mapaMetodos.get(combmetodoPagamento.getValue());

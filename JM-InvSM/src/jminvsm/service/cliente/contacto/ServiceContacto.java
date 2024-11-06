@@ -6,12 +6,13 @@ package jminvsm.service.cliente.contacto;
 
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import jminvsm.dao.cliente.contacto.ContactoClienteDAO;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.contacto.ContactoCliente;
 import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showErroNotification;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -37,15 +38,15 @@ public class ServiceContacto {
     public void registar(String email, String numero, String website, String responsavel, Cliente cli, Usuario user) {
         setOpsSuccess(false);
         if (email == null || email.isEmpty()) {
-            showErroNotification("Erro", "E-mail padrao criado!");
+            showErroAlert( "E-mail padrao criado!");
             email = "email.padrao@mail.com";
         }
         if (responsavel == null || responsavel.isEmpty()) {
-            showErroNotification("Erro", "Pessoa de contacto padrao definida.");
+            showErroAlert( "Pessoa de contacto padrao definida.");
             responsavel = cli.getNome_cli();
         }
         if (numero == null || numero.isEmpty()) {
-            showErroNotification("Erro", "Numero nao pode ser nulo!");
+            showErroAlert( "Numero nao pode ser nulo!");
             return;
         }
         ContactoCliente contacto = new ContactoCliente();
@@ -58,19 +59,19 @@ public class ServiceContacto {
 
         if (contactoDao.addEntity(contacto)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Registo adicionado com sucesso.");
+            showSuccessAlert("Sucesso", "Registo adicionado com sucesso.");
         }
     }
 
     public void actualizar(Integer id, String email, String numero, String website, String responsavel, Usuario user) {
         setOpsSuccess(false);
         if (email == null || email.isEmpty()) {
-            showErroNotification("Erro", "E-mail padrao criado!");
+            showErroAlert( "E-mail padrao criado!");
             email = "email.padrao@mail.com";
         }
 
         if (numero == null || numero.isEmpty()) {
-            showErroNotification("Erro", "Numero nao pode ser nulo!");
+            showErroAlert( "Numero nao pode ser nulo!");
             return;
         }
         ContactoCliente contacto = new ContactoCliente();
@@ -82,7 +83,7 @@ public class ServiceContacto {
 
         if (contactoDao.updateEntityByID(contacto, id)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Registo actualizado com sucesso.");
+            showSuccessAlert("Sucesso", "Registo actualizado com sucesso.");
         }
     }
     public ObservableList<ContactoCliente> listaContactos(){
@@ -97,7 +98,7 @@ public class ServiceContacto {
         setOpsSuccess(false);
         if (contactoDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Registo excluido com sucesso.");
+            showSuccessAlert("Sucesso", "Registo excluido com sucesso.");
         }
     }
 }

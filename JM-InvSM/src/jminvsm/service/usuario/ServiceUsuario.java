@@ -8,7 +8,6 @@ import jminvsm.dao.usuario.UsuarioDAO;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.util.AlertUtilities;
 import static jminvsm.util.AlertUtilities.showDialog;
-import static jminvsm.util.AlertUtilities.showErroNotification;
 
 /**
  *
@@ -25,12 +24,11 @@ public class ServiceUsuario {
     public Usuario authLogin(String user, String pwd) {
         Usuario usuario = null;
         if (user == null || user.isEmpty()) {
-            AlertUtilities.showDialog2("/jminvsm/image/icons/red-erro.png", "Erro", "Usuario nao pode ser nula!");
-//            showErroNotification("Erro", "Usuario nao pode ser nula!");
+            AlertUtilities.showDialog("Erro", "Usuario nao pode ser nula!");
             return null;
         }
         if (pwd == null || pwd.isEmpty()) {
-            showErroNotification("Erro", "Senha nao pode ser nula!");
+            AlertUtilities.showDialog("Erro", "Senha nao pode ser nula!");
             return null;
         }
 

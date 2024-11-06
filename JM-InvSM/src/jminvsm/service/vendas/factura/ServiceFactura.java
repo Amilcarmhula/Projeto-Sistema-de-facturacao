@@ -7,6 +7,7 @@ package jminvsm.service.vendas.factura;
 import java.sql.SQLException;
 import java.util.List;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import jminvsm.dao.cliente.ClienteDAO;
 import jminvsm.dao.vendas.factura.FacturaDAO;
 import jminvsm.dao.vendas.itens.ItemDAO;
@@ -18,8 +19,8 @@ import jminvsm.model.vendas.factura.Factura;
 import jminvsm.model.vendas.factura.itens.Item;
 import jminvsm.service.cliente.ServiceCliente;
 import jminvsm.service.vendas.factura.itens.ServiceItem;
-import static jminvsm.util.AlertUtilities.showErroNotification;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -53,16 +54,16 @@ public class ServiceFactura {
         Cliente cliente;
         setEstado(false);
         if (numero == null || numero.isEmpty()) {
-            showErroNotification("Erro", "Tipo de factura nao selecionada!");
+            showErroAlert( "Tipo de factura nao selecionada!");
             return;
         }
         if (condicaoPagamento == null || condicaoPagamento.isEmpty()) {
-            showErroNotification("Erro", "Condicao de pagamento nao selecionada!");
+            showErroAlert( "Condicao de pagamento nao selecionada!");
             return;
         }
 
         if (cli == null) {
-            showErroNotification("Erro", "Cliente nao pode ser nulo!");
+            showErroAlert( "Cliente nao pode ser nulo!");
             return;
         } else {
             ServiceCliente serviceCliente = new ServiceCliente();
@@ -70,7 +71,7 @@ public class ServiceFactura {
         }
 
         if (itens == null || itens.isEmpty()) {
-            showErroNotification("Erro", "Nao existem itens na factura!");
+            showErroAlert( "Nao existem itens na factura!");
             return;
         }
 
@@ -92,7 +93,7 @@ public class ServiceFactura {
         if (facturaDao.addEntity(f)) {
             serviceItem.registaItens(itens);
             setEstado(true);
-            showSuccessNotification("Sucesso", "Factura adicionado com sucesso!");
+            showSuccessAlert("Sucesso", "Factura adicionado com sucesso!");
         }
 
     }

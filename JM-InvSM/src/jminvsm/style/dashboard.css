@@ -66,12 +66,12 @@
 }
 
 .close:hover{
-    -fx-background-color:#ff3547;
+    -fx-background-color:#000000b3;
     /*-fx-background-radius: 0px 0px 10px 0px;*/
 }
 
 .close-categoria:hover{
-    -fx-background-color:#ff3547;
+    -fx-background-color:#000000b3;
 }
 
 .minimize{

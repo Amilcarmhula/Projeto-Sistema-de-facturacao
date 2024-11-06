@@ -49,10 +49,11 @@ import jminvsm.model.vendas.documetos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.model.vendas.factura.itens.Item;
 import jminvsm.service.vendas.factura.ServiceFactura;
+import jminvsm.util.AlertUtilities;
 import jminvsm.util.InvoiceUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
-import static jminvsm.util.AlertUtilities.showErroNotification;
 import jminvsm.util.FilePathFinderUtilities;
+import static jminvsm.util.AlertUtilities.showErroAlert;
 
 /**
  * FXML Controller class
@@ -310,15 +311,15 @@ public class VendasController implements Initializable {
         combDesconto.setItems(FXCollections.observableArrayList(lista));
     }
 
-    public void populateTableItems() {
+    public void populateTableItems(ActionEvent e) {
         int qtd;
         if (txtID.getText() == null || txtID.getText().isEmpty()) {
-            showErroNotification("Erro", "Produto/Servico nao selecionado!");
+            showErroAlert("Produto/Servico nao selecionado!");
             return;
         }
 
         if (txtQuantidade.getText() == null || txtQuantidade.getText().isEmpty()) {
-//            showErroNotification("Erro", "Quantidade nao informada!");
+//            showErroAlert("Erro", "Quantidade nao informada!");
             qtd = 1;
         } else {
             qtd = Integer.parseInt(txtQuantidade.getText());
@@ -347,7 +348,7 @@ public class VendasController implements Initializable {
                 resetProduto();
                 displayPrice();
             } else {
-                showErroNotification("Erro", "Stock baixo. Produto nao pode ser comercializado!");
+                AlertUtilities.showDialog("Erro", "Stock baixo. Produto nao pode ser comercializado!");
             }
         } else {
             tabelaItens.getItems().add(i);

@@ -4,8 +4,6 @@
  */
 package jminvsm.views.modulo_venda.vendaView.searchProduto;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
@@ -46,10 +44,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jminvsm.SysFact;
-import jminvsm.dao.preco.PrecoVendaDAO;
 import jminvsm.dao.produto.ProdutoDAO;
 import jminvsm.model.categoria.Categoria;
-import jminvsm.model.metodo_pagamento.MetodoPagamento;
 import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.taxa_imposto.TaxaImposto;
@@ -181,15 +177,15 @@ public class SearchProdutoController implements Initializable {
         }
     }
 
-    public void addORupdate() throws SQLException {
+    public void addORupdate(ActionEvent e) throws SQLException {
         if ("".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
-            addProduto();
+            addProduto(e);
         } else if (!"".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
-            updateProduto();
-            addPrecoVendaONSelected();
+            updateProduto(e);
+            addPrecoVendaONSelected(e);
         } else if (!"".equals(txtIDProduto.getText()) && !"0".equals(labIDPreco.getText())) {
-            updateProduto();
-            updatePrecoVenda();
+            updateProduto(e);
+            updatePrecoVenda(e);
         }
     }
 
@@ -426,7 +422,7 @@ public class SearchProdutoController implements Initializable {
         Codigos corregidso. Nova versao
      */
 //  ############################################################################
-    public void addProduto() throws SQLException {
+    public void addProduto(ActionEvent e) throws SQLException {
         int id_cat = mapaCategorias.get(combCategoria.getValue().equals("") ? "0" : combCategoria.getValue()).getId();
         int id_uni = mapaUnidades.get(combUnidade.getValue().equals("") ? "0" : combUnidade.getValue()).getId();
         int id_tax = mapaTaxas.get(combTaxa.getValue().equals("") ? "0" : combTaxa.getValue()).getId();
@@ -436,12 +432,12 @@ public class SearchProdutoController implements Initializable {
                 txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("") ? "0" : txtNivelStock.getText()));
 
-        addPrecoVenda();
+        addPrecoVenda(e);
         resetCampos();
         stockControlChecked();
     }
 
-    public void addPrecoVenda() throws SQLException {
+    public void addPrecoVenda(ActionEvent e) throws SQLException {
         double precoNorm = Double.parseDouble(txtPreco.getText());
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
@@ -452,7 +448,7 @@ public class SearchProdutoController implements Initializable {
         resetCampos();
     }
 
-    public void addPrecoVendaONSelected() throws SQLException {
+    public void addPrecoVendaONSelected(ActionEvent e) throws SQLException {
         double precoNorm = Double.parseDouble(txtPreco.getText());
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
@@ -466,7 +462,7 @@ public class SearchProdutoController implements Initializable {
         labIDPreco.setText("");
     }
 
-    public void updateProduto() throws SQLException {
+    public void updateProduto(ActionEvent e) throws SQLException {
         int id_pro = Integer.parseInt(txtIDProduto.getText());
         int id_cat = mapaCategorias.get(combCategoria.getValue().equals("") ? "0" : combCategoria.getValue()).getId();
         int id_uni = mapaUnidades.get(combUnidade.getValue().equals("") ? "0" : combUnidade.getValue()).getId();
@@ -480,7 +476,7 @@ public class SearchProdutoController implements Initializable {
 
     }
 
-    public void updatePrecoVenda() throws SQLException {
+    public void updatePrecoVenda(ActionEvent e) throws SQLException {
         double precoNorm = Double.parseDouble(txtPreco.getText().equals("")?"0":txtPreco.getText());
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText().equals("")?"0":txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText().equals("")?"0":txtprecoExclTaxa.getText());
@@ -507,7 +503,7 @@ public class SearchProdutoController implements Initializable {
                     txtprecoExclTaxa.setText(precoSemTaxa + "");
                 } else {
                     txtPreco.setText("");
-                    AlertUtilities.showErroNotification("Erro", "Tipo de Taxa/Imposto nao selecionado!");
+                    AlertUtilities.showDialog("Erro", "Tipo de Taxa/Imposto nao selecionado!");
                 }
             }
         }));

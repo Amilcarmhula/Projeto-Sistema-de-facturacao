@@ -23,6 +23,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -166,15 +167,15 @@ public class ProdutoController implements Initializable {
         }
     }
 
-    public void addORupdate() throws SQLException {
+    public void addORupdate(ActionEvent e) throws SQLException {
         if ("".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
-            addProduto();
+            addProduto(e);
         } else if (!"".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
-            updateProduto();
-            addPrecoVendaONSelected();
+            updateProduto(e);
+            addPrecoVendaONSelected(e);
         } else if (!"".equals(txtIDProduto.getText()) && !"0".equals(labIDPreco.getText())) {
-            updateProduto();
-            updatePrecoVenda();
+            updateProduto(e);
+            updatePrecoVenda(e);
         }
     }
 
@@ -376,22 +377,34 @@ public class ProdutoController implements Initializable {
         Codigos corregidso. Nova versao
      */
 //  ############################################################################
-    public void addProduto() throws SQLException {
-        int id_cat = mapaCategorias.get(combCategoria.getValue().equals("") ? "0" : combCategoria.getValue()).getId();
-        int id_uni = mapaUnidades.get(combUnidade.getValue().equals("") ? "0" : combUnidade.getValue()).getId();
-        int id_tax = mapaTaxas.get(combTaxa.getValue().equals("") ? "0" : combTaxa.getValue()).getId();
+    public void addProduto(ActionEvent e) throws SQLException {
+        if(combCategoria.getValue() == null){
+            AlertUtilities.showErroAlert( "Categoria nao selecionada!");
+            return;
+        }
+        if(combUnidade.getValue() == null){
+            AlertUtilities.showErroAlert("Unidade de medida nao selecionada!");
+            return;
+        }
+        if(combTaxa.getValue() == null){
+            AlertUtilities.showErroAlert( "Taxa/Imposto nao selecionada!");
+            return;
+        }
+        int id_cat = mapaCategorias.get(combCategoria.getValue()).getId();
+        int id_uni = mapaUnidades.get(combUnidade.getValue()).getId();
+        int id_tax = mapaTaxas.get(combTaxa.getValue()).getId();
 
         serProduto.registraProduto(id_cat, id_uni,
                 id_tax, txtNomeProduto.getText(),
                 txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("") ? "0" : txtNivelStock.getText()));
         showProduto();
-        addPrecoVenda();
+        addPrecoVenda(e);
         resetCampos();
         stockControlChecked();
     }
 
-    public void addPrecoVenda() throws SQLException {
+    public void addPrecoVenda(ActionEvent e) throws SQLException {
         double precoNorm = Double.parseDouble(txtPreco.getText());
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
@@ -402,7 +415,7 @@ public class ProdutoController implements Initializable {
         resetCampos();
     }
 
-    public void addPrecoVendaONSelected() throws SQLException {
+    public void addPrecoVendaONSelected(ActionEvent e) throws SQLException {
         double precoNorm = Double.parseDouble(txtPreco.getText());
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
@@ -416,7 +429,7 @@ public class ProdutoController implements Initializable {
         labIDPreco.setText("");
     }
 
-    public void updateProduto() throws SQLException {
+    public void updateProduto(ActionEvent e) throws SQLException {
         int id_pro = Integer.parseInt(txtIDProduto.getText());
         int id_cat = mapaCategorias.get(combCategoria.getValue().equals("") ? "0" : combCategoria.getValue()).getId();
         int id_uni = mapaUnidades.get(combUnidade.getValue().equals("") ? "0" : combUnidade.getValue()).getId();
@@ -430,7 +443,7 @@ public class ProdutoController implements Initializable {
 
     }
 
-    public void updatePrecoVenda() throws SQLException {
+    public void updatePrecoVenda(ActionEvent e) throws SQLException {
         double precoNorm = Double.parseDouble(txtPreco.getText().equals("") ? "0" : txtPreco.getText());
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText().equals("") ? "0" : txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText().equals("") ? "0" : txtprecoExclTaxa.getText());
@@ -457,7 +470,7 @@ public class ProdutoController implements Initializable {
                     txtprecoExclTaxa.setText(precoSemTaxa + "");
                 } else {
                     txtPreco.setText("");
-                    AlertUtilities.showErroNotification("Erro", "Tipo de Taxa/Imposto nao selecionado!");
+                    AlertUtilities.showDialog("Erro", "Tipo de Taxa/Imposto nao selecionado!");
                 }
             }
         }));

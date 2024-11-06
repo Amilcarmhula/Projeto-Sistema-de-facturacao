@@ -4,6 +4,7 @@
  */
 package jminvsm.service.produto.fornecido;
 
+import javafx.event.ActionEvent;
 import jminvsm.dao.produto.fornecido.ProdutoFornecidoDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
@@ -11,8 +12,8 @@ import jminvsm.model.produto.Produto;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
 import jminvsm.model.usuario.Usuario;
 import static jminvsm.util.AlertUtilities.showDialog;
-import static jminvsm.util.AlertUtilities.showErroNotification;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -30,25 +31,25 @@ public class ServiceProdutoFornecido {
         
         // Validações básicas antes de registrar a categoria
         if (id_arm <= 0) {
-            showErroNotification("Erro", "Armazem não definido!");
+            showErroAlert( "Armazem não definido!");
             return;
         }
         
         if (id_for <= 0) {
-            showErroNotification("Erro", "Fornecedor não definido!");
+            showErroAlert( "Fornecedor não definido!");
             return;
         }
         if ( qtd <= 0) {
-            showErroNotification("Erro", "Quantidade não definida!");
+            showErroAlert( "Quantidade não definida!");
             return;
         }
         if (custo <= 0) {
-            showErroNotification("Erro", "Preco não pode ser nulo!");
+            showErroAlert( "Preco não pode ser nulo!");
             return;
         }
         
         if ( data_fornecida.isEmpty()) {
-            showErroNotification("Erro", "Data de fornecimento não pode ser nula!");
+            showErroAlert( "Data de fornecimento não pode ser nula!");
             return;
         }
         ProdutoFornecido pf = new ProdutoFornecido();
@@ -67,8 +68,8 @@ public class ServiceProdutoFornecido {
         pf.setCusto(custo);
         try{
             produtoFornecidoDao.addEntity(pf);
-            showSuccessNotification("Sucesso", "Stock actualizado com sucesso!");
-        }catch(Exception e){
+            showSuccessAlert("Sucesso", "Stock actualizado com sucesso!");
+        }catch(Exception ex){
             showDialog("Erro", "Erro ao adicionar/actualizar sock!");
         }
         

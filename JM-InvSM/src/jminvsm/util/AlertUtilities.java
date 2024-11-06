@@ -4,15 +4,11 @@
  */
 package jminvsm.util;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 
 /**
  *
@@ -20,21 +16,7 @@ import org.controlsfx.control.Notifications;
  */
 public class AlertUtilities {
 
-    public static void showDialog2(String imagePath, String title, String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        // Carrega a imagem a partir do caminho fornecido
-        Image image = new Image(imagePath);
-        ImageView imageView = new ImageView(image);
-        // Ajusta o tamanho da imagem
-        imageView.setFitWidth(50); // Largura da imagem
-        imageView.setFitHeight(50); // Altura da imagem
-        // Define a imagem como o ícone gráfico do alerta
-        alert.setGraphic(imageView);
-        alert.showAndWait();
-    }
+    private static Label labNotification;
 
     public static void showDialog(String title, String message) {
         Alert alert = new Alert(AlertType.WARNING);
@@ -52,33 +34,75 @@ public class AlertUtilities {
         alert.showAndWait();
     }
 
-    public static void showErroNotification(String titulo, String mensagem) {
+    /*
+    ActionEvent aevent, MouseEvent mevent) {
+        if (aevent != null) {
+            Node source = (Node) aevent.getSource();
+            LoadAndMoveUtilities.baseAnchorPane = (AnchorPane) source.getScene().lookup("#anchorMain");
+     */
+//    public static void showErroAlert(ActionEvent event, String mensagem) {
+//        Node source = (Node) event.getSource();
+//        AlertUtilities.labNotification = (Label) source.getScene().lookup("#labNotification");
+//        labNotification.setText("Erro: "+mensagem);
+//    }
+    public static void showErroAlert( String mensagem) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Erro");
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
         // Carrega a imagem a partir do caminho fornecido
-        Image image = new Image("/jminvsm/image/icons/red-erro.png");
+        Image image = new Image("/jminvsm/image/icons/alert.png");
         ImageView imageView = new ImageView(image);
-
         // Ajusta o tamanho da imagem
-//        imageView.setFitWidth(50); // Largura da imagem
-//        imageView.setFitHeight(50); // Altura da imagem
-        Notifications not = Notifications.create();
-        not.graphic(imageView);
-        not.title(titulo);
-        not.text(mensagem);
-        not.hideAfter(Duration.seconds(10));
-        not.darkStyle();
-        not.position(Pos.BOTTOM_RIGHT);
-        not.show();
+        imageView.setFitWidth(50); // Largura da imagem
+        imageView.setFitHeight(50); // Altura da imagem
+        // Define a imagem como o ícone gráfico do alerta
+        alert.setGraphic(imageView);
+        alert.showAndWait();
+    }
+    public static void showSuccessAlert(String titulo, String mensagem){
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        // Carrega a imagem a partir do caminho fornecido
+        Image image = new Image("/jminvsm/image/icons/alert.png");
+        ImageView imageView = new ImageView(image);
+        // Ajusta o tamanho da imagem
+        imageView.setFitWidth(50); // Largura da imagem
+        imageView.setFitHeight(50); // Altura da imagem
+        // Define a imagem como o ícone gráfico do alerta
+        alert.setGraphic(imageView);
+        alert.showAndWait();
     }
 
-    public static void showSuccessNotification(String titulo, String mensagem) {
-//        Image image = new Image("/image/danger.png");
-        Notifications not = Notifications.create();
-//        not.graphic(new ImageView(image));
-        not.title(titulo);
-        not.text(mensagem);
-        not.hideAfter(Duration.seconds(10));
+//    public static void showErroAlert(String titulo, String mensagem) {
+//        // Carrega a imagem a partir do caminho fornecido
+//        Image image = new Image("/jminvsm/image/icons/red-erro.png");
+//        ImageView imageView = new ImageView(image);
+//
+//        // Ajusta o tamanho da imagem
+////        imageView.setFitWidth(50); // Largura da imagem
+////        imageView.setFitHeight(50); // Altura da imagem
+//        Notifications not = Notifications.create();
+//        not.graphic(imageView);
+//        not.title(titulo);
+//        not.text(mensagem);
+//        not.hideAfter(Duration.seconds(10));
 //        not.darkStyle();
-        not.position(Pos.BOTTOM_RIGHT);
-        not.show();
-    }
+//        not.position(Pos.BOTTOM_RIGHT);
+//        not.show();
+//    }
+
+//    public static void showSuccessAlert(String titulo, String mensagem) {
+////        Image image = new Image("/image/danger.png");
+//        Notifications not = Notifications.create();
+////        not.graphic(new ImageView(image));
+//        not.title(titulo);
+//        not.text(mensagem);
+//        not.hideAfter(Duration.seconds(10));
+////        not.darkStyle();
+//        not.position(Pos.BOTTOM_RIGHT);
+//        not.show();
+//    }
 }

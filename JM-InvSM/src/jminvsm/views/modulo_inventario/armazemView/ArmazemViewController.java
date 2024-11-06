@@ -4,7 +4,6 @@
  */
 package jminvsm.views.modulo_inventario.armazemView;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Optional;

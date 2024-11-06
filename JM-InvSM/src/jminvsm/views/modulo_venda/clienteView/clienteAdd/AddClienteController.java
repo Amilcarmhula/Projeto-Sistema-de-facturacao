@@ -162,27 +162,27 @@ public class AddClienteController implements Initializable {
         }
     }
 
-    public void addORupdateContacto() throws SQLException {
+    public void addORupdateContacto(ActionEvent e) throws SQLException {
         if ("".equals(txtIDContacto.getText())) {
-            addContacto();
+            addContacto(e);
         } else {
-            updateContacto();
+            updateContacto(e);
         }
     }
 
-    public void addORupdateCliente() throws SQLException {
+    public void addORupdateCliente(ActionEvent e) throws SQLException {
         if ("".equals(txtIDCliente.getText())) {
-            addCliente();
+            addCliente(e);
         } else {
-            updateCliente();
+            updateCliente(e);
         }
     }
 
-    public void addORupdateEndereco() throws SQLException {
+    public void addORupdateEndereco(ActionEvent e) throws SQLException {
         if ("".equals(txtIDEndereco.getText())) {
-            addEndereco();
+            addEndereco(e);
         } else {
-            updateEndereco();
+            updateEndereco(e);
         }
     }
 
@@ -299,7 +299,7 @@ public class AddClienteController implements Initializable {
     /*
     Funcoes de Adicao de registros
      */
-    public void addCliente() throws SQLException {
+    public void addCliente(ActionEvent e) throws SQLException {
         serviceCliente.registar(txtNome.getText(), txtRazao.getText(),
                 combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText().equals("") ? "0" : txtNuit.getText()),
                 userData);
@@ -309,7 +309,7 @@ public class AddClienteController implements Initializable {
 
     }
 
-    public void addContacto() throws SQLException {
+    public void addContacto(ActionEvent e) throws SQLException {
         Cliente c = serviceCliente.consultaClienteByID(Integer.parseInt(txtIDCliente.getText()));
         serviceContacto.registar(txtEmail.getText(), txtContacto.getText(),
                 txtSite.getText(), txtResponsavel.getText(), c, userData);
@@ -321,7 +321,7 @@ public class AddClienteController implements Initializable {
         }
     }
 
-    public void addEndereco() throws SQLException {
+    public void addEndereco(ActionEvent e) throws SQLException {
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         Integer id = Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
@@ -337,7 +337,7 @@ public class AddClienteController implements Initializable {
     /*
     Funcoes para Actualizar registros
      */
-    public void updateCliente() throws SQLException {
+    public void updateCliente(ActionEvent e) throws SQLException {
         serviceCliente.actualizar(Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText()), txtNome.getText(), txtRazao.getText(),
                 combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText().equals("") ? "0" : txtNuit.getText()),
                 userData);
@@ -346,7 +346,7 @@ public class AddClienteController implements Initializable {
         }
     }
 
-    public void updateContacto() throws SQLException {
+    public void updateContacto(ActionEvent e) throws SQLException {
         serviceContacto.actualizar(Integer.valueOf(txtIDContacto.getText()), txtEmail.getText(), txtContacto.getText(),
                 txtSite.getText(), txtResponsavel.getText(), userData);
 
@@ -357,7 +357,7 @@ public class AddClienteController implements Initializable {
         }
     }
 
-    public void updateEndereco() throws SQLException {
+    public void updateEndereco(ActionEvent e) throws SQLException {
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         serviceEndereco.actualizar(Integer.valueOf(txtIDEndereco.getText()), combTipoEndereco.getValue(), txtAvenida.getText(), txtBairro.getText(),

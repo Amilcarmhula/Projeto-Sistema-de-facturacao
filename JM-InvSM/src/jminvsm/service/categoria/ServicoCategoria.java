@@ -6,10 +6,11 @@ package jminvsm.service.categoria;
 
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import jminvsm.dao.categoria.CategoriaDAO;
 import jminvsm.model.categoria.Categoria;
-import static jminvsm.util.AlertUtilities.showErroNotification;
-import static jminvsm.util.AlertUtilities.showSuccessNotification;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -38,23 +39,23 @@ public class ServicoCategoria {
 
         // Validações básicas antes de registrar a categoria
         if (tipo == null || tipo.isEmpty()) {
-            showErroNotification("Erro", "Tipo de categoria nao definido!");
+            showErroAlert("Tipo de categoria nao definido!");
             return;
         }
         if (grupo == null || grupo.isEmpty()) {
-            showErroNotification("Erro", "Grupo nao pode ser nulo!");
+            showErroAlert( "Grupo nao pode ser nulo!");
             return;
         }
         if (subgrupo == null || subgrupo.isEmpty()) {
-            showErroNotification("Erro", "Subgrupo nao pode ser nulo!");
+            showErroAlert( "Subgrupo nao pode ser nulo!");
             return;
         }
         if (familia == null || familia.isEmpty()) {
-            showErroNotification("Erro", "Familia nao pode ser nula!");
+            showErroAlert( "Familia nao pode ser nula!");
             return;
         }
         if (descricao == null || descricao.isEmpty()) {
-            showErroNotification("Erro", "Descricao nao pode ser nula. Sere criada uma descricao padrao.");
+            showErroAlert( "Descricao nao pode ser nula. Sere criada uma descricao padrao.");
             descricao = "Categoria sem padrao.";
         }
 
@@ -67,7 +68,7 @@ public class ServicoCategoria {
 
         if (categoriaDAO.addEntity(c)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Categoria registada com sucesso!");
+            showSuccessAlert("Sucesso", "Categoria registada com sucesso!");
         }
     }
 
@@ -77,23 +78,23 @@ public class ServicoCategoria {
 
         // Validações básicas antes de registrar a categoria
         if (tipo == null || tipo.isEmpty()) {
-            showErroNotification("Erro", "Tipo de categoria nao definido!");
+            showErroAlert( "Tipo de categoria nao definido!");
             return;
         }
         if (grupo == null || grupo.isEmpty()) {
-            showErroNotification("Erro", "Grupo nao pode ser nulo!");
+            showErroAlert( "Grupo nao pode ser nulo!");
             return;
         }
         if (subgrupo == null || subgrupo.isEmpty()) {
-            showErroNotification("Erro", "Subgrupo nao pode ser nulo!");
+            showErroAlert( "Subgrupo nao pode ser nulo!");
             return;
         }
         if (familia == null || familia.isEmpty()) {
-            showErroNotification("Erro", "Familia nao pode ser nula!");
+            showErroAlert( "Familia nao pode ser nula!");
             return;
         }
         if (descricao == null || descricao.isEmpty()) {
-            showErroNotification("Erro", "Descricao nao pode ser nula. Sere criada uma descricao padrao.");
+            showErroAlert( "Descricao nao pode ser nula. Sere criada uma descricao padrao.");
             descricao = "Categoria sem padrao.";
         }
         Categoria c = new Categoria();
@@ -105,7 +106,7 @@ public class ServicoCategoria {
         c.setDescricao(descricao);
 
         if (categoriaDAO.updateEntityByID(c)) {
-            showSuccessNotification("Sucesso", "Categoria actualizada com sucesso!");
+            showSuccessAlert("Sucesso", "Categoria actualizada com sucesso!");
             setOpsSuccess(true);
         }
     }
@@ -122,7 +123,7 @@ public class ServicoCategoria {
         
         if (categoriaDAO.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessNotification("Sucesso", "Registo excluido com sucesso!");
+            showSuccessAlert("Sucesso", "Registo excluido com sucesso!");
         }
     }
 }

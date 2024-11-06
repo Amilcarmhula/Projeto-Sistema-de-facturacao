@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.produto.fornecido;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +18,6 @@ import jminvsm.model.cliente.Cliente;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
 import jminvsm.util.Conexao;
-import jminvsm.util.AlertUtilities;
 
 /**
  *

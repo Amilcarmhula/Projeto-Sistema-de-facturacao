@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -256,7 +255,7 @@ public class AddStockController implements Initializable {
         }
 
     }
-    public void addProdutoFornecido() throws SQLException{
+    public void addProdutoFornecido(ActionEvent e) throws SQLException{
         ProdutoFornecidoDAO xDAO = new ProdutoFornecidoDAO();
         ServiceProdutoFornecido spf = new ServiceProdutoFornecido(xDAO);
         spf.registraProdutoFornecido(Integer.valueOf(txtIDArmazem.getText().equals("") ? "0" : txtIDArmazem.getText()), 

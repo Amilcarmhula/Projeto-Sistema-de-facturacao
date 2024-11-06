@@ -4,17 +4,13 @@
  */
 package jminvsm.util.report;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.io.File;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.stage.Modality;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -73,7 +69,7 @@ public class ReportUtilities {
                 System.out.println("Aqui nao salva nem visualiza; esta associado ao botao close da tela!");
             }
         } catch (JRException ex) {
-            AlertUtilities.showDialog2("/jminvsm/image/icons/red-erro.png", "Erro", "Erro ao gerar relatorio de factura: " + ex);
+            AlertUtilities.showDialog("Erro", "Erro ao gerar relatorio de factura: " + ex);
         }
     }
 }

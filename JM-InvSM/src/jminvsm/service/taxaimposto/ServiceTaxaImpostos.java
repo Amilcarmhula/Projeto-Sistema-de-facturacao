@@ -8,18 +8,93 @@ import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import jminvsm.dao.taxaimposto.TaxaImpostoDAO;
 import jminvsm.model.taxa_imposto.TaxaImposto;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
  * @author JM-Tecnologias
  */
 public class ServiceTaxaImpostos {
-    private TaxaImpostoDAO taxaDao;
+    private final TaxaImpostoDAO taxaDao;
+    private boolean opsSuccess;
     
     public ServiceTaxaImpostos() throws SQLException{
         this.taxaDao = new TaxaImpostoDAO();
     }
+    public void setOpsSuccess(boolean opsSuccess) {
+        this.opsSuccess = opsSuccess;
+    }
+
+    public boolean isOpsSuccess() {
+        return opsSuccess;
+    }
     
+    public void regista(String identificador, Double percentagem, String descricao){
+        setOpsSuccess(false);
+        if(identificador == null || identificador.isEmpty()){
+            showErroAlert("Sigla da unidade de medida nao pode ser nulo!");
+            return;
+        }
+        
+        if(percentagem == null || percentagem <=0){
+            showErroAlert("Percentagem nao pode ser nulo!");
+            return;
+        }
+        
+        if(descricao == null || descricao.isEmpty()){
+            descricao = "Taxa/Imposto sem descricao. Esta e uma descriao padrao!";
+        }
+        TaxaImposto t = new TaxaImposto();
+        t.setNomeImposto(identificador);
+        t.setPercentagemImposto(percentagem/100);
+        t.setDescricao(descricao);
+        
+        if(taxaDao.addEntity(t)){
+            setOpsSuccess(true);
+            showSuccessAlert("Registo adicionado com sucesso");
+        }
+    }
+    
+    public void actualizar(Integer id, String identificador, Double percentagem, String descricao){
+        setOpsSuccess(false);
+        if (id == null || id <= 0) {
+            showErroAlert("Taxa/Imposto nao selecionada!");
+            return;
+        }
+        
+        if(identificador == null || identificador.isEmpty()){
+            showErroAlert("Sigla da unidade de medida nao pode ser nulo!");
+            return;
+        }
+        
+        if(percentagem == null || percentagem <=0){
+            showErroAlert("Percentagem nao pode ser nulo!");
+            return;
+        }
+        
+        if(descricao == null || descricao.isEmpty()){
+            descricao = "Taxa/Imposto sem descricao. Esta e uma descriao padrao!";
+        }
+        TaxaImposto t = new TaxaImposto();
+        t.setNomeImposto(identificador);
+        t.setPercentagemImposto(percentagem/100);
+        t.setDescricao(descricao);
+        
+        if(taxaDao.updateEntityByID(t, id)){
+            setOpsSuccess(true);
+            showSuccessAlert("Registo adicionado com sucesso");
+        }
+    }
+    
+    public void excluir(int id){
+        setOpsSuccess(false);
+        
+        if(taxaDao.deleteEntity(id)){
+            setOpsSuccess(true);
+            showSuccessAlert("Registo excluido com sucesso");
+        }
+    }
     public ObservableList<TaxaImposto> getTaxas(){
         return taxaDao.listAllEntities();
     }

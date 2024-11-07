@@ -6,10 +6,13 @@ package jminvsm.views.modulo_configs.taxasView;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -30,6 +33,7 @@ import javafx.stage.Stage;
 import jminvsm.SysFact;
 import jminvsm.dao.taxaimposto.TaxaImpostoDAO;
 import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -40,6 +44,7 @@ import jminvsm.util.LoadAndMoveUtilities;
  */
 public class TaxaViewController implements Initializable {
 
+    private ServiceTaxaImpostos servicoTaxa;
     @FXML
     private TableColumn<TaxaImposto, Integer> ID;
 
@@ -102,6 +107,7 @@ public class TaxaViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            servicoTaxa = new ServiceTaxaImpostos();
             showTaxas();
         } catch (SQLException ex) {
             Logger.getLogger(TaxaViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,9 +115,17 @@ public class TaxaViewController implements Initializable {
     }
     private ObservableList<TaxaImposto> listaTaxas;
 
-    public void showTaxas() throws SQLException {
-        TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
-        listaTaxas = xDAO.listAllEntities();
+    public void showTaxas() {
+//        listaTaxas = servicoTaxa.getTaxas();
+        List<TaxaImposto> lista = new ArrayList<>();
+        for (TaxaImposto t : servicoTaxa.getTaxas()) {
+            t.setId(t.getId());
+            t.setDescricao(t.getDescricao());
+            t.setNomeImposto(t.getNomeImposto());
+            t.setPercentagemImposto(t.getPercentagemImposto()*100);
+            lista.add(t);
+        }
+        listaTaxas = FXCollections.observableArrayList(lista);
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipoTaxa.setCellValueFactory(new PropertyValueFactory<>("nomeImposto"));
@@ -143,33 +157,21 @@ public class TaxaViewController implements Initializable {
     }
 
     public void addTaxa() {
-        TaxaImposto x = new TaxaImposto();
-        x.setDescricao(txtDescricao.getText());
-        x.setNomeImposto(txtTaxa.getText());
-        x.setPercentagemImposto(Double.valueOf(txtPercentagem.getText()) / 100);
-        try {
-            TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
-            xDAO.addEntity(x);
+        double taxa = Double.parseDouble(txtPercentagem.getText().equals("") ? "0" : txtPercentagem.getText());
+        servicoTaxa.regista(txtTaxa.getText(), taxa, txtDescricao.getText());
+        if (servicoTaxa.isOpsSuccess()) {
             resetCampos();
             showTaxas();
-        } catch (SQLException ex) {
-            Logger.getLogger(TaxaViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public void updateTaxa() {
-        TaxaImposto x = new TaxaImposto();
-        x.setDescricao(txtDescricao.getText());
-        x.setNomeImposto(txtTaxa.getText());
-        x.setPercentagemImposto(Double.valueOf(txtPercentagem.getText()) / 100);
-        try {
-            TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
-            xDAO.updateEntityByID(x, Integer.parseInt(txtID.getText()));
+        int id = Integer.parseInt(txtID.getText().equals("") ? "0" : txtID.getText());
+        double taxa = Double.parseDouble(txtPercentagem.getText().equals("") ? "0" : txtPercentagem.getText());
+        servicoTaxa.actualizar(id, txtTaxa.getText(), taxa, txtDescricao.getText());
+        if (servicoTaxa.isOpsSuccess()) {
             resetCampos();
             showTaxas();
-        } catch (SQLException ex) {
-            Logger.getLogger(TaxaViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -178,7 +180,7 @@ public class TaxaViewController implements Initializable {
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
             txtDescricao.setText(x.getDescricao());
-            txtPercentagem.setText(String.valueOf(x.getPercentagemImposto() * 100));
+            txtPercentagem.setText(String.valueOf(x.getPercentagemImposto()));
             txtTaxa.setText(x.getNomeImposto());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
             deleteItem(event, x);
@@ -186,7 +188,7 @@ public class TaxaViewController implements Initializable {
         }
     }
 
-    public void deleteItem(MouseEvent event, TaxaImposto x) throws SQLException {
+    public void deleteItem(MouseEvent event, TaxaImposto x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -199,11 +201,11 @@ public class TaxaViewController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
-                xDAO.deleteEntity(x.getId());
-                resetCampos();
-                showTaxas();
-                resetCampos();
+                servicoTaxa.excluir(x.getId());
+                if (servicoTaxa.isOpsSuccess()) {
+                    showTaxas();
+                    resetCampos();
+                }
 
             } else if (result.get() == btnCancel) {
                 resetCampos();
@@ -211,7 +213,7 @@ public class TaxaViewController implements Initializable {
         }
     }
 
-    public void resetCampos() throws SQLException {
+    public void resetCampos() {
         txtID.setText("");
         txtDescricao.setText("");
         txtPercentagem.setText("");

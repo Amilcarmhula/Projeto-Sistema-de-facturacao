@@ -10,7 +10,7 @@ select * from factura;
 select * from transacoes;
 select * from parcelas;
 select * from itemfactura;
-select * from caixa;
+select * from taxa_imposto;
 select * from contacorrente;
 
 

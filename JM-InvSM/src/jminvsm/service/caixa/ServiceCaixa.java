@@ -6,7 +6,6 @@ package jminvsm.service.caixa;
 
 import java.sql.SQLException;
 import jminvsm.dao.caixa.CaixaDAO;
-import jminvsm.model.caixa.Caixa;
 
 /**
  *

@@ -20,22 +20,17 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import jminvsm.SysFact;
 import jminvsm.dao.unidademedida.UnidadeMedidaDAO;
-import jminvsm.model.categoria.Categoria;
 import jminvsm.model.unidade_medida.UnidadeMedida;
-import jminvsm.service.categoria.ServicoCategoria;
+import jminvsm.service.unidadeMedida.ServiceUnidadeMedida;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -45,6 +40,8 @@ import jminvsm.util.LoadAndMoveUtilities;
  * @author JM-Tecnologias
  */
 public class UnidadeViewController implements Initializable {
+
+    private ServiceUnidadeMedida serviceUnidade;
 
     @FXML
     private TableColumn<UnidadeMedida, Integer> ID;
@@ -108,6 +105,7 @@ public class UnidadeViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            serviceUnidade = new ServiceUnidadeMedida();
             showUnidades();
         } catch (SQLException ex) {
             Logger.getLogger(UnidadeViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,9 +114,8 @@ public class UnidadeViewController implements Initializable {
 
     private ObservableList<UnidadeMedida> listaUnidade;
 
-    public void showUnidades() throws SQLException {
-        UnidadeMedidaDAO xDAO = new UnidadeMedidaDAO();
-        listaUnidade = xDAO.listAllEntities();
+    public void showUnidades() {
+        listaUnidade = serviceUnidade.getUnidades();
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         unidade.setCellValueFactory(new PropertyValueFactory<>("identificador"));
@@ -152,33 +149,20 @@ public class UnidadeViewController implements Initializable {
     }
 
     public void addUnidade() {
-        UnidadeMedida x = new UnidadeMedida();
-        x.setDescricao(txtDescricao.getText());
-        x.setIdentificador(txtUnidade.getText());
-        x.setSigla(txtSigla.getText());
-        try {
-            UnidadeMedidaDAO xDAO = new UnidadeMedidaDAO();
-            xDAO.addEntity(x);
+        serviceUnidade.regista(txtUnidade.getText(), txtSigla.getText(), txtDescricao.getText());
+        if (serviceUnidade.isOpsSuccess()) {
             resetCampos();
             showUnidades();
-        } catch (SQLException ex) {
-            Logger.getLogger(UnidadeViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
     public void updateUnidade() {
-        UnidadeMedida x = new UnidadeMedida();
-        x.setDescricao(txtDescricao.getText());
-        x.setIdentificador(txtUnidade.getText());
-        x.setSigla(txtSigla.getText());
-        try {
-            UnidadeMedidaDAO xDAO = new UnidadeMedidaDAO();
-            xDAO.updateEntityByID(x, Integer.parseInt(txtID.getText()));
+        int id = Integer.parseInt(txtID.getText().equals("") ? "0" : txtID.getText());
+        serviceUnidade.actualizar(id, txtUnidade.getText(), txtSigla.getText(), txtDescricao.getText());
+        if (serviceUnidade.isOpsSuccess()) {
             resetCampos();
             showUnidades();
-        } catch (SQLException ex) {
-            Logger.getLogger(UnidadeViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -208,18 +192,18 @@ public class UnidadeViewController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                UnidadeMedidaDAO xDAO = new UnidadeMedidaDAO();
-                xDAO.deleteEntity(x.getId());
-                showUnidades();
-                resetCampos();
-
+                serviceUnidade.excluir(x.getId());
+                if (serviceUnidade.isOpsSuccess()) {
+                    showUnidades();
+                    resetCampos();
+                }
             } else if (result.get() == btnCancel) {
                 resetCampos();
             }
         }
     }
 
-    public void resetCampos() throws SQLException {
+    public void resetCampos() {
         txtID.setText("");
         txtDescricao.setText("");
         txtSigla.setText("");

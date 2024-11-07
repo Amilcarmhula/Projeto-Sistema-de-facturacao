@@ -4,7 +4,6 @@
  */
 package jminvsm.dao.taxaimposto;
 
-import java.util.Map;
 import javafx.collections.ObservableList;
 
 /**
@@ -12,10 +11,9 @@ import javafx.collections.ObservableList;
  * @author JM-Tecnologias
  */
 public interface TaxaImpostoDAOImpl<T> {
-    void  addEntity(T t);
-    void updateEntityByID(T t, int id);
+    boolean  addEntity(T t);
+    boolean updateEntityByID(T t, int id);
     ObservableList<T> listAllEntities();
     T getEntityByID(int id);
-    Map<String,Integer> mapTaxaImposto();
-    void deleteEntity(int x);
+    boolean deleteEntity(int x);
 }

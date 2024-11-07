@@ -8,12 +8,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import jminvsm.model.taxa_imposto.TaxaImposto;
+import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
 /**
@@ -30,7 +29,8 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
         this.con = Conexao.getConexao();
     }
    @Override
-    public void addEntity(TaxaImposto t) {
+    public boolean addEntity(TaxaImposto t) {
+        boolean isSuccess = false;
         try {
             sql = "insert into taxa_imposto (identificador, percentagem, descricao)"
                     + " value (?,?,?)";
@@ -39,15 +39,28 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
             ps.setDouble(2, t.getPercentagemImposto());
             ps.setString(3, t.getDescricao());
 
-            ps.execute();
-            ps.close();
+           int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true;
+            }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Taxa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(TaxaImposto  t, int id) {
+    public boolean updateEntityByID(TaxaImposto  t, int id) {
+                boolean isSuccess = false;
         try {
             sql = "update taxa_imposto set identificador=?, percentagem=?, descricao=?"
                     + " where id=?";
@@ -58,12 +71,23 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
             ps.setString(3, t.getDescricao());
             ps.setInt(4, id);
 
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true;
+            }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Taxa: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -112,42 +136,31 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
         }
         return ti;
     }
-    
-    
-    @Override
-    public Map<String, Integer> mapTaxaImposto() {
-        Map<String, Integer> mapa = new HashMap<>();
-        try {
-            sql = "select * from taxa_imposto";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                TaxaImposto u = new TaxaImposto();
-                    mapa.put(result.getString("identificador"), result.getInt("id"));
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao mapear Taxa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-        return mapa;
-    }
-
-   
-
 
     @Override
-    public void deleteEntity(int x) {
+    public boolean deleteEntity(int x) {
+                boolean isSuccess = false;
         try {
             sql =  "delete from taxa_imposto where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x);
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true;
+            }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Taxa: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 }

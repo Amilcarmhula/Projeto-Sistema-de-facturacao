@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import jminvsm.model.unidade_medida.UnidadeMedida;
+import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
 /**
@@ -31,7 +32,8 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
     }
 
     @Override
-    public void addEntity(UnidadeMedida t) {
+    public boolean addEntity(UnidadeMedida t) {
+        boolean isSuccess = false;
         try {
             sql = "insert into unidade_medida (identificador, sigla, descricao)"
                     + " value (?,?,?)";
@@ -40,15 +42,28 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
             ps.setString(2, t.getSigla());
             ps.setString(3, t.getDescricao());
 
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true;
+            }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Unidade de medida: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(UnidadeMedida t, int id) {
+    public boolean updateEntityByID(UnidadeMedida t, int id) {
+        boolean isSuccess = false;
         try {
             sql = "update unidade_medida set identificador=?, sigla=?, descricao=?"
                     + " where id=?";
@@ -59,12 +74,23 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
             ps.setString(3, t.getDescricao());
             ps.setInt(4, id);
 
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true;
+            }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar  unidade medida: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -131,19 +157,31 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
 //        }
 //        return mapa;
 //    }
-
     @Override
-    public void deleteEntity(int x) {
+    public boolean deleteEntity(int x) {
+        boolean isSuccess = false;
+
         try {
             sql = "delete from unidade_medida  where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x);
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true;
+            }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar unidade medida: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 }

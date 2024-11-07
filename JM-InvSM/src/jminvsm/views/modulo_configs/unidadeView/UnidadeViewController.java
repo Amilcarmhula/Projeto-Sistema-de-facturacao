@@ -80,11 +80,13 @@ public class UnidadeViewController implements Initializable {
     private TableColumn<UnidadeMedida, String> unidade;
 
     public void close(ActionEvent event) {
+        SysFact.setData("");
         if (LoadAndMoveUtilities.returnToStage()) {
             LoadAndMoveUtilities.setEstadoStage(false);
             LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+            SysFact.setData("");
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();

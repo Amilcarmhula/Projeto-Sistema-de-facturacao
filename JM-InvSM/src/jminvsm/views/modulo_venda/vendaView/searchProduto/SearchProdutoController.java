@@ -281,41 +281,6 @@ public class SearchProdutoController implements Initializable {
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getSaldo())));
         nivelStock.setCellValueFactory(new PropertyValueFactory<>("nivelstock"));
 
-        Callback<TableColumn<Produto, String>, TableCell<Produto, String>> cellFoctory = (TableColumn<Produto, String> param) -> {
-            // make cell containing buttons
-            final TableCell<Produto, String> cell = new TableCell<Produto, String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    //that cell created only on non-empty rows
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-
-                        Image image = new Image("/jminvsm/image/icons/close_17879231.png");
-                        ImageView imageView = new ImageView(image);
-                        imageView.setOnMouseClicked((MouseEvent event) -> {
-                            Produto a = tabelaProduto.getSelectionModel().getSelectedItem();
-                            try {
-                                ProdutoDAO xDAO = new ProdutoDAO();
-//                                xDAO.deleteEntityByUSER(a);
-//                                resetProduto();
-                                showProduto();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(SearchProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        });
-                        setGraphic(imageView);
-                        setText(null);
-                    }
-                }
-            };
-
-            return cell;
-        };
-        btntabelaProduto.setCellFactory(cellFoctory);
-
         //add cell of checkBox edit 
         Callback<TableColumn<Produto, String>, TableCell<Produto, String>> cellFoctory2 = (TableColumn<Produto, String> param) -> {
             // make cell containing buttons

@@ -48,6 +48,7 @@ import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.documetos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.model.vendas.factura.itens.Item;
+import jminvsm.service.cliente.ServiceCliente;
 import jminvsm.service.vendas.factura.ServiceFactura;
 import jminvsm.util.AlertUtilities;
 import jminvsm.util.InvoiceUtilities;
@@ -61,6 +62,7 @@ import static jminvsm.util.AlertUtilities.showErroAlert;
  * @author JM-Tecnologias
  */
 public class VendasController implements Initializable {
+    private ServiceCliente serviceCliente;
 
     private Empresa empresaData;
     private Usuario userData;
@@ -166,6 +168,7 @@ public class VendasController implements Initializable {
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
+            SysFact.setData(null);
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
         }
@@ -173,6 +176,7 @@ public class VendasController implements Initializable {
 
     public void getSearchProduto(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
+            SysFact.setData(null);
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/vendaView/searchProduto/searchProduto.fxml");
         }
@@ -181,7 +185,8 @@ public class VendasController implements Initializable {
     public void getSearchClienteKEY(KeyEvent keyEvt) throws SQLException {
         if (keyEvt.getCode().equals(KeyCode.ENTER)) {
             ClienteDAO xDAO = new ClienteDAO();
-            Cliente x = xDAO.getFullClieneByID(Integer.parseInt(txtIDCliente.getText()));
+            
+            Cliente x = serviceCliente.getClienteCompletoByID(Integer.valueOf(txtIDCliente.getText()));
             if (x != null) {
                 txtIDCliente.setText(x.getId() + "");
                 txtEnderecoCliente.setText(x.printEnderecos());
@@ -208,10 +213,8 @@ public class VendasController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
                     if (SysFact.getData() instanceof Cliente) {
-                        try {
                             Cliente c = (Cliente) SysFact.getData();
-                            ClienteDAO xDAO = new ClienteDAO();
-                            Cliente x = xDAO.getFullClieneByID(c.getId());
+                            Cliente x = serviceCliente.getClienteCompletoByID(c.getId());
                             if (x != null) {
                                 txtIDCliente.setText(x.getId() + "");
                                 txtEnderecoCliente.setText(x.printEnderecos());
@@ -220,9 +223,6 @@ public class VendasController implements Initializable {
                                 txtContactoCLiente.setText(x.printContatos());
                                 txtEmailCLiente.setText(x.getContactoCliente().getEmail_cli());
                             }
-                        } catch (SQLException ex) {
-                            Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
                     }
                 }
             }
@@ -258,9 +258,9 @@ public class VendasController implements Initializable {
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidade_medida().getSigla())));
         quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
         descontotabelaItens.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getDesconto().getPercentagemDesconto())));
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getDesconto().getPercentagemDesconto()*100)+"%"));
         taxatabelaItens.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getTaxa_imposto().getPercentagemImposto())));
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getTaxa_imposto().getPercentagemImposto()*100)+"%"));
         subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
         randNum = new Random();
         mapaProdutos = new HashMap<>();
@@ -273,6 +273,7 @@ public class VendasController implements Initializable {
         this.userData = SysFact.getUserData();
         this.empresaData = SysFact.getEmpresaData();
         try {
+            serviceCliente = new ServiceCliente();
             labDataInicial.setText(InvoiceUtilities.actualDate());
             populateComboFactura();
             populateComboDesconto();
@@ -333,13 +334,18 @@ public class VendasController implements Initializable {
         i.setProduto(x);
         i.setDesconto(desconto);
         i.setQuantidade(qtd);
-        double subtotal;
+        double subtotal = 0;
         double desc;
         desc = qtd * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
-        if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
-            subtotal = qtd * x.getPrecovenda().getPreco() - desc;
-        } else {
-            subtotal = qtd * x.getPrecovenda().getPrecoInclTaxa() - desc;
+        if (combTipoDoc.getValue() != null) {
+            if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
+                subtotal = qtd * x.getPrecovenda().getPreco() - desc;
+            } else {
+                subtotal = qtd * x.getPrecovenda().getPrecoInclTaxa() - desc;
+            }
+        }else{
+            AlertUtilities.showDialog("Erro", "Tipo de documento nao selecionado! Selecione o tipo de factura");
+            return;
         }
         i.setSubtotal(subtotal);
         if (x.isContole_stock() == true) {

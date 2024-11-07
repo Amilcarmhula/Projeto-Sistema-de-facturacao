@@ -38,16 +38,15 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane layoutY="160.0" prefHeight="670.0" prefWidth="1412.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane layoutY="160.0" prefHeight="610.0" prefWidth="1400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <TableView fx:id="tabelaCliente" onMouseClicked="#selectedLineCliente" prefHeight="110.0" prefWidth="727.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+            <TableView fx:id="tabelaCliente" onMouseClicked="#selectedLineCliente" prefHeight="617.0" prefWidth="1400.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                <columns>
-                  <TableColumn fx:id="IDtabelaCliente" prefWidth="29.0" text="ID" />
-                  <TableColumn fx:id="tipotabelaCliente" prefWidth="174.0" text="Tipo" />
-                  <TableColumn fx:id="razaotabelaCliente" prefWidth="473.0" text="Razao Social" />
+                  <TableColumn fx:id="IDtabelaCliente" prefWidth="53.0" text="ID" />
+                  <TableColumn fx:id="tipotabelaCliente" prefWidth="183.0" text="Tipo" />
+                  <TableColumn fx:id="razaotabelaCliente" prefWidth="440.0" text="Razao Social" />
                   <TableColumn fx:id="nuittabelaCliente" prefWidth="375.0" text="Nuit" />
-                  <TableColumn fx:id="contactotabelaCliente" minWidth="0.0" prefWidth="320.0" text="Contacto" />
-                  <TableColumn fx:id="btntabelaCliente" prefWidth="51.0" />
+                  <TableColumn fx:id="contactotabelaCliente" minWidth="0.0" prefWidth="342.0" text="Contacto" />
                </columns>
             </TableView>
          </children>

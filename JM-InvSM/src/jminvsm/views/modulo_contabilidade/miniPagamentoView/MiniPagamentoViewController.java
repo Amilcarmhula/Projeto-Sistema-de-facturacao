@@ -77,11 +77,13 @@ public class MiniPagamentoViewController implements Initializable {
         if (f.getEstado().equals("Paga") || f.getEstado().equals("Cancelada")) {
             
             if (LoadAndMoveUtilities.returnToStage()) {
+                SysFact.setData(null);
                 LoadAndMoveUtilities.setEstadoStage(false);
                 LoadAndMoveUtilities.showStage(null, null);
                 ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
             }
             if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+                SysFact.setData(null);
                 LoadAndMoveUtilities.setEstadoPopUP(false);
                 LoadAndMoveUtilities.showAsPopUP(null, null);
                 ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();

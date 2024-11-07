@@ -16,31 +16,25 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import jminvsm.SysFact;
-import jminvsm.dao.fornecedor.FornecedorDAO;
-import jminvsm.dao.fornecedor.contacto.ContactoFornecedorDAO;
-import jminvsm.dao.fornecedor.endereco.EnderecoFornecedorDAO;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.fornecedor.contacto.ContactoFornecedor;
 import jminvsm.model.fornecedor.endereco.EnderecoFornecedor;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.service.fornecedor.ServiceFornecedor;
+import jminvsm.service.fornecedor.contacto.ServiceContacto;
+import jminvsm.service.fornecedor.endereco.ServiceEndereco;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -52,6 +46,9 @@ import jminvsm.util.LoadAndMoveUtilities;
 public class AddFornecedorController implements Initializable {
 
     private Usuario userData;
+    private ServiceFornecedor serviceFornecedor;
+    private ServiceContacto serviceContacto;
+    private ServiceEndereco serviceEndereco;
 
     @FXML
     private Button btnAddCliente;
@@ -151,13 +148,14 @@ public class AddFornecedorController implements Initializable {
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+            SysFact.setData(null);
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
     }
 
-    public void addORupdateContacto() throws SQLException {
+    public void addORupdateContacto(){
         if ("".equals(txtIDContacto.getText())) {
             addContacto();
         } else {
@@ -165,15 +163,15 @@ public class AddFornecedorController implements Initializable {
         }
     }
 
-    public void addORupdateCliente() throws SQLException {
+    public void addORupdateCliente() {
         if ("".equals(txtIDCliente.getText())) {
-            addCliente();
+            addFornecedor();
         } else {
-            updateCliente();
+            updateFornecedor();
         }
     }
 
-    public void addORupdateEndereco() throws SQLException {
+    public void addORupdateEndereco() {
         if ("".equals(txtIDEndereco.getText())) {
             addEndereco();
         } else {
@@ -209,6 +207,9 @@ public class AddFornecedorController implements Initializable {
         }
 
         try {
+            serviceFornecedor = new ServiceFornecedor();
+            serviceContacto = new ServiceContacto();
+            serviceEndereco = new ServiceEndereco();
             showContactos();
             showClienteByID();
             showEndereco();
@@ -224,41 +225,35 @@ public class AddFornecedorController implements Initializable {
     /*
     Funcoes de Consultas
      */
-    public void showCliente() throws SQLException {
-        FornecedorDAO xDAO = new FornecedorDAO();
-        Fornecedor c = xDAO.getLastEntity();
+    public void showCliente() {
+        Fornecedor c = serviceFornecedor.ultimoFornecedor();
         txtIDCliente.setText(String.valueOf(c.getId()));
         combTipoCliente.setValue(c.getTipo_forn());
         txtRazao.setText(c.getRazaosocial_forn());
         txtNuit.setText(String.valueOf(c.getNuit_forn()));
         showContactos();
+        showEndereco();
     }
 
-    public void showClienteByID() throws SQLException {
-        FornecedorDAO xDAO = new FornecedorDAO();
+    public void showClienteByID() {
         if (!"".equals(txtIDCliente.getText())) {
-            Fornecedor c = xDAO.getEntityByID(Integer.parseInt(txtIDCliente.getText()));
+            Fornecedor c = serviceFornecedor.consultaFornecedor(Integer.parseInt(txtIDCliente.getText()));
             combTipoCliente.setValue(c.getTipo_forn());
             txtRazao.setText(c.getRazaosocial_forn());
             txtNuit.setText(String.valueOf(c.getNuit_forn()));
             showContactos();
+            showEndereco();
         }
 
     }
 
     private ObservableList<EnderecoFornecedor> listaEndereco;
 
-    public void showEndereco() throws SQLException {
-        EnderecoFornecedorDAO xDAO = new EnderecoFornecedorDAO();
-        EnderecoFornecedor z = new EnderecoFornecedor();
-        Fornecedor c = new Fornecedor();
-
+    public void showEndereco() {
         if ("".equals(txtIDCliente.getText())) {
-            listaEndereco = xDAO.listAllEntities();
+            listaEndereco = serviceEndereco.getEnderecos();
         } else {
-            c.setId(Integer.parseInt(txtIDCliente.getText()));
-            z.setFornecedor(c);
-            listaEndereco = xDAO.searchEntityByCLiente(z);
+            listaEndereco = serviceEndereco.consultaEnderecosPorFornecedor(Integer.parseInt(txtIDCliente.getText()));
         }
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -275,17 +270,11 @@ public class AddFornecedorController implements Initializable {
 
     private ObservableList<ContactoFornecedor> listaContactos;
 
-    public void showContactos() throws SQLException {
-        ContactoFornecedorDAO xDAO = new ContactoFornecedorDAO();
-        ContactoFornecedor z = new ContactoFornecedor();
-        Fornecedor c = new Fornecedor();
-
+    public void showContactos() {
         if ("".equals(txtIDCliente.getText())) {
-            listaContactos = xDAO.listAllEntities();
+            listaContactos = serviceContacto.getContactos();
         } else {
-            c.setId(Integer.parseInt(txtIDCliente.getText()));
-            z.setFornecedor(c);
-            listaContactos = xDAO.searchEntityByCLiente(z);
+            listaContactos = serviceContacto.consultaContactoPorFornecedor(Integer.parseInt(txtIDCliente.getText()));
         }
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -300,128 +289,67 @@ public class AddFornecedorController implements Initializable {
     /*
     Funcoes de Adicao de registros
      */
-    public void addCliente() throws SQLException {
-        Fornecedor x = new Fornecedor();
-        x.setTipo_forn(combTipoCliente.getValue());
-        x.setRazaosocial_forn(txtRazao.getText());
-        x.setNuit_forn(Integer.parseInt(txtNuit.getText()));
-        x.setUsuario(userData);
-        FornecedorDAO xDAO = new FornecedorDAO();
-        xDAO.addEntity(x);
-        showCliente();
+    public void addFornecedor() {
+        serviceFornecedor.registar(txtRazao.getText(), combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText().equals("")?"0":txtNuit.getText()), userData);
+        if (serviceFornecedor.isOpsSuccess()) {
+            showCliente();
+        }
     }
 
-    public void addContacto() throws SQLException {
-        ContactoFornecedor x = new ContactoFornecedor();
-        x.setContacto_forn(txtContacto.getText());
-        x.setEmail_forn(txtEmail.getText());
-        x.setResponsavel_forn(txtResponsavel.getText());
-        x.setWebsite_forn(txtSite.getText());
-        Fornecedor c = new Fornecedor();
-        c.setId(Integer.parseInt(txtIDCliente.getText()));
-        x.setFornecedor(c);
-        x.setUsuario(userData);
-        ContactoFornecedorDAO xDAO = new ContactoFornecedorDAO();
-        xDAO.addEntity(x);
-        showContactos();
-        restContacto();
+    public void addContacto() {
+        Fornecedor forn = serviceFornecedor.consultaFornecedor(Integer.parseInt(txtIDCliente.getText().equals("")?"0":txtIDCliente.getText()));
+        serviceContacto.registar(txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText(), forn, userData);
+        if (serviceContacto.isOpsSuccess()) {
+            showContactos();
+            restContacto();
+        }
     }
 
     public void addEndereco() {
-        Alert alert;
-        EnderecoFornecedor x = new EnderecoFornecedor();
-        x.setAvenida_forn(txtAvenida.getText());
-        x.setBairro_forn(txtBairro.getText());
-        x.setCidade_forn(txtCidade.getText());
-        Fornecedor c = new Fornecedor();
-        c.setId(Integer.parseInt(txtIDCliente.getText()));
-        x.setFornecedor(c);
-        x.setCodigoPostal_forn(Integer.parseInt(txtCodigooPostal.getText()));
-        x.setNumero_forn(Integer.parseInt(txtNumeroEndereco.getText()));
-        x.setProvincia_forn(combProvincia.getValue());
-        x.setRua_forn(txtRua.getText());
-        x.setUsuario(userData);
-        try {
-            EnderecoFornecedorDAO xDAO = new EnderecoFornecedorDAO();
-            xDAO.addEntity(x);
+        serviceEndereco.registar(txtAvenida.getText(), txtBairro.getText(),
+                txtCidade.getText(), Integer.valueOf(txtCodigooPostal.getText().equals("")?"0":txtCodigooPostal.getText()),
+                Integer.valueOf(txtNumeroEndereco.getText().equals("")?"0":txtNumeroEndereco.getText()),
+                combProvincia.getValue(), txtRua.getText(), Integer.valueOf(txtIDCliente.getText().equals("")?"0":txtIDCliente.getText()), userData);
+        if (serviceEndereco.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
-        } catch (SQLException ex) {
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Mensagem de Erro.");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao adicionar Endereco" + ex);
-            alert.showAndWait();
         }
     }
 
     /*
     Funcoes para Actualizar registros
      */
-    public void updateCliente() {
-        Alert alert;
-        Fornecedor x = new Fornecedor();
-        x.setTipo_forn(combTipoCliente.getValue());
-        x.setRazaosocial_forn(txtRazao.getText());
-        x.setNuit_forn(Integer.parseInt(txtNuit.getText()));
-        x.setUsuario(userData);
-        FornecedorDAO xDAO;
-        try {
-            xDAO = new FornecedorDAO();
-            xDAO.updateEntityByID(x, Integer.parseInt(txtIDCliente.getText()));
+    public void updateFornecedor() {
+        serviceFornecedor.actualizar(Integer.parseInt(txtIDCliente.getText()), txtRazao.getText(), combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText()), userData);
+        if (serviceFornecedor.isOpsSuccess()) {
+            showCliente();
             showContactos();
-        } catch (SQLException ex) {
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Mensagem de Erro.");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao actualizar cliente" + ex);
-            alert.showAndWait();
+            showEndereco();
         }
-
     }
 
-    public void updateContacto() throws SQLException {
-        ContactoFornecedor x = new ContactoFornecedor();
-        x.setContacto_forn(txtContacto.getText());
-        x.setEmail_forn(txtEmail.getText());
-        x.setResponsavel_forn(txtResponsavel.getText());
-        x.setWebsite_forn(txtSite.getText());
-        x.setUsuario(userData);
-        ContactoFornecedorDAO xDAO = new ContactoFornecedorDAO();
-        xDAO.updateEntityByID(x, Integer.parseInt(txtIDContacto.getText()));
-        showContactos();
-        restContacto();
+    public void updateContacto(){
+        serviceContacto.actualizar(Integer.parseInt(txtIDContacto.getText()), txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText(), userData);
+        if (serviceContacto.isOpsSuccess()) {
+            showContactos();
+            restContacto();
+        }
     }
 
     public void updateEndereco() {
-        Alert alert;
-        EnderecoFornecedor x = new EnderecoFornecedor();
-        x.setAvenida_forn(txtAvenida.getText());
-        x.setBairro_forn(txtBairro.getText());
-        x.setCidade_forn(txtCidade.getText());
-        x.setCodigoPostal_forn(Integer.parseInt(txtCodigooPostal.getText()));
-        x.setNumero_forn(Integer.parseInt(txtNumeroEndereco.getText()));
-        x.setProvincia_forn(combProvincia.getValue());
-        x.setRua_forn(txtRua.getText());
-        x.setUsuario(userData);
-        try {
-            EnderecoFornecedorDAO xDAO = new EnderecoFornecedorDAO();
-            xDAO.updateEntityByID(x, Integer.parseInt(txtIDEndereco.getText()));
+        serviceEndereco.actualizar(Integer.parseInt(txtIDEndereco.getText()), txtAvenida.getText(), txtBairro.getText(),
+                txtCidade.getText(), Integer.parseInt(txtCodigooPostal.getText()), Integer.parseInt(txtNumeroEndereco.getText()),
+                combProvincia.getValue(), txtRua.getText(), Integer.parseInt(txtIDCliente.getText()), userData);
+        if (serviceEndereco.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
-        } catch (SQLException ex) {
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Mensagem de Erro.");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao adicionar Endereco" + ex);
-            alert.showAndWait();
         }
     }
 
     /*
     Funcoes de Linha selecionada
      */
-    public void selecionaContacto(MouseEvent event) throws SQLException {
+    public void selecionaContacto(MouseEvent event) {
         ContactoFornecedor x = tabelaContacto.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDContacto.setText(String.valueOf(x.getId()));
@@ -434,7 +362,7 @@ public class AddFornecedorController implements Initializable {
         }
     }
 
-    public void deleteContacto(MouseEvent event, ContactoFornecedor x) throws SQLException {
+    public void deleteContacto(MouseEvent event, ContactoFornecedor x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -447,10 +375,11 @@ public class AddFornecedorController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                ContactoFornecedorDAO xDAO = new ContactoFornecedorDAO();
-                xDAO.deleteEntity(x);
-                showContactos();
-                restContacto();
+                serviceContacto.excluir(x.getId());
+                if (serviceContacto.isOpsSuccess()) {
+                    showContactos();
+                    restContacto();
+                }
 
             } else if (result.get() == btnCancel) {
                 restContacto();
@@ -458,7 +387,7 @@ public class AddFornecedorController implements Initializable {
         }
     }
 
-    public void selecionaEndereco(MouseEvent event) throws SQLException {
+    public void selecionaEndereco(MouseEvent event){
         EnderecoFornecedor x = tabelaEndereco.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDEndereco.setText(String.valueOf(x.getId()));
@@ -474,7 +403,7 @@ public class AddFornecedorController implements Initializable {
         }
     }
 
-    public void deleteEndereco(MouseEvent event, EnderecoFornecedor x) throws SQLException {
+    public void deleteEndereco(MouseEvent event, EnderecoFornecedor x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -487,10 +416,11 @@ public class AddFornecedorController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                EnderecoFornecedorDAO xDAO = new EnderecoFornecedorDAO();
-                xDAO.deleteEntity(x);
-                showEndereco();
-                resetEndereco();
+                serviceEndereco.excluir(x.getId());
+                if (serviceEndereco.isOpsSuccess()) {
+                    showEndereco();
+                    resetEndereco();
+                }
             } else if (result.get() == btnCancel) {
                 resetEndereco();
             }
@@ -500,7 +430,7 @@ public class AddFornecedorController implements Initializable {
     /*
     Funcoes de Reset Campos
      */
-    public void resetCliente() throws SQLException {
+    public void resetCliente() {
         txtIDCliente.setText("");
         combTipoCliente.setPromptText("Tipo de cliente");
         txtRazao.setText("");

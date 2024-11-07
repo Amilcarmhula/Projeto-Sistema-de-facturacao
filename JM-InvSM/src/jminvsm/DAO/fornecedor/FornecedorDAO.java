@@ -17,7 +17,7 @@ import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.fornecedor.contacto.ContactoFornecedor;
-import jminvsm.model.usuario.Usuario;
+import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
 /**
@@ -26,7 +26,7 @@ import jminvsm.util.Conexao;
  */
 public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
 
-    private Connection con;
+    private final Connection con;
     private PreparedStatement ps;
     private String sql;
 
@@ -35,7 +35,9 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
     }
 
     @Override
-    public void addEntity(Fornecedor c) {
+    public boolean addEntity(Fornecedor c) {
+        boolean isSuccess = false;
+
         try {
             sql = "insert into fornecedor (tipo,razaosocial,nuit,fk_id_usuario) value (?,?,?,?)";
             ps = con.prepareStatement(sql);
@@ -44,15 +46,30 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
             ps.setInt(3, c.getNuit_forn());
             ps.setInt(4, c.getUsuario().getId());
 
-            ps.execute();
-            ps.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar fornecedor: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(Fornecedor c, int id) {
+    public boolean updateEntityByID(Fornecedor c, int id) {
+        boolean isSuccess = false;
+
         try {
             sql = "update fornecedor set tipo=?, razaosocial=? ,nuit=?, fk_id_usuario=?"
                     + " where id=?";
@@ -64,12 +81,24 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
             ps.setInt(4, c.getUsuario().getId());
             ps.setInt(5, id);
 
-            ps.execute();
-            ps.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao actualizar fornecedor: "
-                    + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -159,45 +188,34 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
     }
 
     @Override
-    public void deleteEntity(int x) {
+    public boolean deleteEntity(int x) {
+        boolean isSuccess = false;
+
         try {
             sql = "delete from fornecedor WHERE id = ?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x);
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar fornecedor: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+            int rowsAffected = ps.executeUpdate();
 
-    @Override
-    public ObservableList<Fornecedor> listAllEntitiesTypeFornecedor() {
-        ObservableList<Fornecedor> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from fornecedor";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                Fornecedor c = new Fornecedor();
-                c.setId(result.getInt("id"));
-                c.setTipo_forn(result.getString("tipo"));
-                c.setRazaosocial_forn(result.getString("razaosocial"));
-                c.setNuit_forn(result.getInt("nuit"));
-                Usuario u = new Usuario();
-                u.setId(result.getInt("fk_id_usuario"));
-                c.setUsuario(u);
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
             }
-            result.close();
-            ps.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar fornecedor: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
 
+        } catch (SQLException ex) {
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return lista;
+        return isSuccess;
     }
+
     @Override
     public int CountFornecedor() {
         int total = 0;

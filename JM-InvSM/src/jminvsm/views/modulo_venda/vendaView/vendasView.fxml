@@ -103,8 +103,8 @@
             <TableColumn fx:id="precotabelaItens" prefWidth="132.0" text="Preço unitário" />
             <TableColumn fx:id="unidadetabelaItens" prefWidth="65.0" text="Uni." />
             <TableColumn fx:id="quantidadetabelaItens" prefWidth="65.0" text="Qtd." />
-            <TableColumn fx:id="descontotabelaItens" prefWidth="70.0" text="Desc." />
-            <TableColumn fx:id="taxatabelaItens" prefWidth="70.0" text="Taxa" />
+            <TableColumn fx:id="descontotabelaItens" prefWidth="70.0" text="Desc. %" />
+            <TableColumn fx:id="taxatabelaItens" prefWidth="70.0" text="Taxa %" />
             <TableColumn fx:id="subTotaltabelaItens" prefWidth="101.0" text="Total" />
          </columns>
       </TableView>

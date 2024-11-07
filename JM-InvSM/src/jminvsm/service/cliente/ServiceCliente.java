@@ -6,7 +6,6 @@ package jminvsm.service.cliente;
 
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import jminvsm.dao.cliente.ClienteDAO;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.usuario.Usuario;

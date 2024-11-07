@@ -16,11 +16,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorProduto" prefHeight="910.0" prefWidth="1432.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.vendaView.searchProduto.SearchProdutoController">
+<AnchorPane fx:id="anchorProduto" prefHeight="654.0" prefWidth="1432.0" style="-fx-border-color: #17b5c3; -fx-border-width: 5px;" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.vendaView.searchProduto.SearchProdutoController">
    <children>
       <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Button mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <styleClass>
                   <String fx:value="gray-bg" />
                   <String fx:value="close-categoria" />
@@ -37,25 +37,32 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Label layoutX="59.0" layoutY="17.0" text="Consulta de produtos" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="391.0" onMouseClicked="#selecionaProduto" prefHeight="609.0" prefWidth="1432.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+      <TableView fx:id="tabelaProduto" layoutX="10.0" layoutY="299.0" onMouseClicked="#selecionaProduto" prefHeight="344.0" prefWidth="1422.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="290.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
-            <TableColumn fx:id="armazem" prefWidth="209.0" text="Armazem" />
-            <TableColumn fx:id="artigo" prefWidth="209.0" text="Artigo" />
-            <TableColumn fx:id="codigobarras" prefWidth="135.0" text="Codigo de barras" />
-            <TableColumn fx:id="descricao" prefWidth="229.0" resizable="false" text="Descrição" />
-            <TableColumn fx:id="unidade" prefWidth="63.0" resizable="false" text="Unidade" />
-            <TableColumn fx:id="categoria" prefWidth="216.0" resizable="false" text="Categoria" />
+            <TableColumn fx:id="armazem" prefWidth="227.0" text="Armazem" />
+            <TableColumn fx:id="artigo" prefWidth="220.0" text="Artigo" />
+            <TableColumn fx:id="codigobarras" prefWidth="145.0" text="Codigo de barras" />
+            <TableColumn fx:id="descricao" prefWidth="221.0" resizable="false" text="Descrição" />
+            <TableColumn fx:id="unidade" prefWidth="85.0" resizable="false" text="Unidade" />
+            <TableColumn fx:id="categoria" prefWidth="163.0" resizable="false" text="Categoria" />
             <TableColumn fx:id="taxa" prefWidth="78.0" resizable="false" text="Taxa" />
-            <TableColumn fx:id="stock" prefWidth="57.0" resizable="false" text="Stock" />
-            <TableColumn fx:id="nivelStock" prefWidth="57.0" resizable="false" text="Nivel" />
+            <TableColumn fx:id="stock" prefWidth="94.0" resizable="false" text="Stock" />
+            <TableColumn fx:id="nivelStock" prefWidth="70.0" resizable="false" text="Nivel" />
             <TableColumn fx:id="quantidade" prefWidth="68.0" resizable="false" text="Qtd." />
-            <TableColumn fx:id="btntabelaProduto" prefWidth="48.0" resizable="false" />
          </columns>
       </TableView>
-      <AnchorPane prefHeight="243.0" prefWidth="1432.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <AnchorPane prefHeight="240.0" prefWidth="1432.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
             <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="30.0" layoutY="21.0" prefHeight="20.0" prefWidth="114.0" promptText="ID">
                <styleClass>

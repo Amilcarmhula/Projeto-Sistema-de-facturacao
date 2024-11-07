@@ -102,6 +102,7 @@ public class MainController implements Initializable {
 
     @FXML
     public void getViews(ActionEvent e) {
+        SysFact.setData(null);
         String path = "";
         if (e.getSource() == btn_taxas) {
             path = "/jminvsm/views/modulo_configs/taxasView/taxaView.fxml";
@@ -119,8 +120,10 @@ public class MainController implements Initializable {
     // Carregar a primeira tela no centro
     @FXML
     public void switchForm(ActionEvent e) throws IOException {
+        SysFact.setData(null);
         String path = "";
         if (e.getSource() == btn_dashboard) {
+            
             path = "/jminvsm/views/dashboard/dashboard.fxml";
         } else if (e.getSource() == btn_artigos) {
             path = "/jminvsm/views/modulo_inventario/produtosView/produtoAdd.fxml";

@@ -83,10 +83,12 @@ public class TaxaViewController implements Initializable {
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
+            SysFact.setData("");
             LoadAndMoveUtilities.setEstadoStage(false);
             LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
+            SysFact.setData("");
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();

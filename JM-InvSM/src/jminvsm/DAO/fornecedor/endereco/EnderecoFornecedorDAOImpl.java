@@ -12,9 +12,9 @@ import javafx.collections.ObservableList;
  */
 public interface EnderecoFornecedorDAOImpl<T> {
 
-    void addEntity(T t);
-    void updateEntityByID(T t, int id);
+    boolean addEntity(T t);
+    boolean updateEntityByID(T t, int id);
     ObservableList<T> listAllEntities();
-    ObservableList<T> searchEntityByCLiente(T t);
-    void deleteEntity(T x);
+    ObservableList<T> searchEntityByCLiente(int t);
+    boolean deleteEntity(int x);
 }

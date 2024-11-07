@@ -67,9 +67,8 @@
                   <TableColumn fx:id="tipotabelaCliente" prefWidth="174.0" text="Tipo" />
                   <TableColumn fx:id="nometabelaCliente" prefWidth="289.0" text="Nome" />
                   <TableColumn fx:id="contactotabelaCliente" minWidth="0.0" prefWidth="286.0" text="Contacto" />
-                  <TableColumn fx:id="descricaotabelaCliente" prefWidth="480.0" text="Descricao" />
-                  <TableColumn fx:id="estadotabelaCliente" prefWidth="115.0" text="Estado" />
-                  <TableColumn fx:id="btntabelaCliente" prefWidth="52.0" />
+                  <TableColumn fx:id="descricaotabelaCliente" prefWidth="483.0" text="Descricao" />
+                  <TableColumn fx:id="estadotabelaCliente" prefWidth="131.0" text="Estado" />
                </columns>
             </TableView>
          </children>

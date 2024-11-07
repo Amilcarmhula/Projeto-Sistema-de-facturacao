@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import jminvsm.model.fornecedor.contacto.ContactoFornecedor;
+import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
 /**
@@ -20,7 +21,7 @@ import jminvsm.util.Conexao;
  */
 public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<ContactoFornecedor> {
 
-    private Connection con;
+    private final Connection con;
     private PreparedStatement ps;
     private String sql;
 
@@ -29,7 +30,8 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
     }
 
     @Override
-    public void addEntity(ContactoFornecedor t) {
+    public boolean addEntity(ContactoFornecedor t) {
+        boolean isSuccess = false;
         try {
             sql = "insert into contacto_fornecedor (contacto, email,website,pessoa_de_contacto, "
                     + "fk_id_fornecedor, fk_id_usuario) value (?,?,?,?,?,?)";
@@ -42,17 +44,29 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
             ps.setString(4, t.getResponsavel_forn());
             ps.setInt(5, t.getFornecedor().getId());
             ps.setInt(6, t.getUsuario().getId());
+            int rowsAffected = ps.executeUpdate();
 
-            ps.execute();
-            ps.close();
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Contacto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(ContactoFornecedor t, int id) {
+    public boolean updateEntityByID(ContactoFornecedor t, int id) {
+        boolean isSuccess = false;
         try {
             sql = "update contacto_fornecedor set contacto=?, email=? ,website=? ,"
                     + "pessoa_de_contacto=?, fk_id_usuario=? where id=?";
@@ -65,12 +79,24 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
             ps.setInt(5, t.getUsuario().getId());
             ps.setInt(6, id);
 
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Contacto: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -98,12 +124,12 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
     }
 
     @Override
-    public ObservableList<ContactoFornecedor> searchEntityByCLiente(ContactoFornecedor agentID) {
+    public ObservableList<ContactoFornecedor> searchEntityByCLiente(int id) {
         ObservableList<ContactoFornecedor> lista = FXCollections.observableArrayList();
         try {
             sql = "select * from contacto_fornecedor where fk_id_fornecedor=?";
             ps = con.prepareStatement(sql);
-            ps.setInt(1, agentID.getFornecedor().getId());
+            ps.setInt(1, id);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 ContactoFornecedor c = new ContactoFornecedor();
@@ -124,17 +150,30 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
     }
 
     @Override
-    public void deleteEntity(ContactoFornecedor x) {
+    public boolean deleteEntity(int x) {
+        boolean isSuccess = false;
         try {
             sql = "delete from contacto_fornecedor where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setInt(1, x.getId());
-            ps.execute();
-            ps.close();
+            ps.setInt(1, x);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Contacto: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 }

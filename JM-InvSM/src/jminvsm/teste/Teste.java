@@ -58,48 +58,52 @@ public class Teste {
 
     public static void criaParcelas(int numeroDeParcelas, int intervalo) {
         LocalDate dataActual = LocalDate.now();
-        
+
         LocalDate dataFinalParcelas = null;
         for (int i = 1; i <= numeroDeParcelas; i++) {
-            
+
             if (i == 1) {
                 // a variavel X armazena os dias restantes ate a data de vencimento da primeira parcela
                 int x = LocalDate.now().lengthOfMonth() - LocalDate.now().getDayOfMonth();
                 //cria a data de vencimento da primeira parcela
-                dataFinalParcelas = dataActual.plusDays(i*x);
+                dataFinalParcelas = dataActual.plusDays(i * x);
                 // actualiza a data actual para a data de vencimento da primeira paracela para iniciar a contagem em funcao dos intervalos
-                dataActual = dataActual.plusDays(i*x);
+                dataActual = dataActual.plusDays(i * x);
                 //adiciona dias caso a data de vencimento conscida com uma sabado ou domingo
-                if(dataActual.getDayOfWeek() == LocalDate.now().getDayOfWeek().SATURDAY){
+                if (dataActual.getDayOfWeek() == LocalDate.now().getDayOfWeek().SATURDAY) {
                     dataFinalParcelas = dataActual.plusDays(2);
                 }
-                if(dataActual.getDayOfWeek() == LocalDate.now().getDayOfWeek().SUNDAY){
+                if (dataActual.getDayOfWeek() == LocalDate.now().getDayOfWeek().SUNDAY) {
                     dataFinalParcelas = dataActual.plusDays(1);
                 }
-                System.out.println("Data de vencimento: "+i+" " + dataFinalParcelas);
-            }else{
+                System.out.println("Data de vencimento: " + i + " " + dataFinalParcelas);
+            } else {
                 //adiciona o intervalo de dias de parcelamento para as parcelas subsequentes
-                dataFinalParcelas = dataActual.plusDays((i-1)*intervalo);
+                dataFinalParcelas = dataActual.plusDays((i - 1) * intervalo);
                 //adiciona dias caso a data de vencimento conscida com uma sabado ou domingo
-                if(dataFinalParcelas.getDayOfWeek() == LocalDate.now().getDayOfWeek().SATURDAY){
+                if (dataFinalParcelas.getDayOfWeek() == LocalDate.now().getDayOfWeek().SATURDAY) {
                     dataFinalParcelas = dataFinalParcelas.plusDays(2);
                 }
-                if(dataFinalParcelas.getDayOfWeek() == LocalDate.now().getDayOfWeek().SUNDAY){
+                if (dataFinalParcelas.getDayOfWeek() == LocalDate.now().getDayOfWeek().SUNDAY) {
                     dataFinalParcelas = dataFinalParcelas.plusDays(1);
                 }
-                System.out.println("Data de vencimento: "+i+" " + dataFinalParcelas);
+                System.out.println("Data de vencimento: " + i + " " + dataFinalParcelas);
             }
         }
     }
 
-//    public static void main(String[] args) {
-////        if(LocalDate.now().plusDays(3).getDayOfWeek() == LocalDate.now().getDayOfWeek().THURSDAY){
-////            System.out.println("SIM");
-////        }
-////        System.out.println(LocalDate.now().plusDays(3).getDayOfWeek());
-////        System.out.println();
-//        criaParcelas(20,12);
-//    }
+    public static void main(String[] args) {
+//        if(LocalDate.now().plusDays(3).getDayOfWeek() == LocalDate.now().getDayOfWeek().THURSDAY){
+//            System.out.println("SIM");
+//        }
+//        System.out.println(LocalDate.now().plusDays(3).getDayOfWeek());
+//        System.out.println();
+        String num = null;
+//        Integer num1 = ;
+//        System.out.println(Integer.parseInt(num));
+
+        System.out.println(Integer.valueOf(num));
+    }
 
     /**
      * @param args the command line arguments

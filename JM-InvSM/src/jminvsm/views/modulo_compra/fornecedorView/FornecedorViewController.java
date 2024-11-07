@@ -20,22 +20,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
-import javafx.util.Callback;
 import jminvsm.SysFact;
 import jminvsm.dao.fornecedor.FornecedorDAO;
-import jminvsm.model.categoria.Categoria;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.usuario.Usuario;
-import jminvsm.service.categoria.ServicoCategoria;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -178,8 +172,12 @@ public class FornecedorViewController implements Initializable {
                 FornecedorDAO xDAO = new FornecedorDAO();
                 xDAO.deleteEntity(x.getId());
                 showClientes();
+                txtIDCliente.setText("");
+                SysFact.setData("");
 
             } else if (result.get() == btnCancel) {
+                txtIDCliente.setText("");
+                SysFact.setData("");
             }
         }
     }

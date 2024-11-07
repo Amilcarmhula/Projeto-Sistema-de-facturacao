@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import jminvsm.model.fornecedor.endereco.EnderecoFornecedor;
+import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
 
@@ -21,7 +22,7 @@ import jminvsm.util.Conexao;
  */
 public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<EnderecoFornecedor> {
 
-    private Connection con;
+    private final Connection con;
     private PreparedStatement ps;
     private String sql;
 
@@ -30,7 +31,8 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
     }
 
     @Override
-    public void addEntity(EnderecoFornecedor t) {
+    public boolean addEntity(EnderecoFornecedor t) {
+        boolean isSuccess = false;
         try {
             sql = "insert into endereco_fornecedor (provincia,cidade,bairro,avenida,"
                     + "rua,codigo_postal,numero, fk_id_fornecedor, fk_id_usuario)"
@@ -48,16 +50,29 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
             ps.setInt(8, t.getFornecedor().getId());
             ps.setInt(9, t.getUsuario().getId());
 
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Endereco: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
-        }
+            int rowsAffected = ps.executeUpdate();
 
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
+        } catch (SQLException ex) {
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isSuccess;
     }
 
     @Override
-    public void updateEntityByID(EnderecoFornecedor t, int id) {
+    public boolean updateEntityByID(EnderecoFornecedor t, int id) {
+        boolean isSuccess = false;
         try {
             sql = "update endereco_fornecedor set provincia=?,cidade=?,bairro=?,avenida=?,"
                     + "rua=?,codigo_postal=?,numero=?,fk_id_usuario=? where id=?";
@@ -73,12 +88,24 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
             ps.setInt(8, t.getUsuario().getId());
             ps.setInt(9, id);
 
-            ps.execute();
-            ps.close();
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Endereco: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 
     @Override
@@ -108,12 +135,12 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
         return lista;
     }
     @Override
-    public ObservableList<EnderecoFornecedor> searchEntityByCLiente(EnderecoFornecedor agentID) {
+    public ObservableList<EnderecoFornecedor> searchEntityByCLiente(int id) {
         ObservableList<EnderecoFornecedor> lista = FXCollections.observableArrayList();
         try {
             sql = "select * from endereco_fornecedor where fk_id_fornecedor=?";
             ps = con.prepareStatement(sql);
-            ps.setInt(1,agentID.getFornecedor().getId());
+            ps.setInt(1,id);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 EnderecoFornecedor c = new EnderecoFornecedor();
@@ -136,17 +163,30 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
     }
     
      @Override
-    public void deleteEntity(EnderecoFornecedor id) {
+    public boolean deleteEntity(int id) {
+        boolean isSuccess = false;
         try {
             sql = "delete from endereco_fornecedor where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setInt(1, id.getId());
-            ps.execute();
-            ps.close();
+            ps.setInt(1, id);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+            }
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return isSuccess;
     }
 }

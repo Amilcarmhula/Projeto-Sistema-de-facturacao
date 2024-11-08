@@ -39,7 +39,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
         try {
             for (Item t : items) {
                 sql = "insert into itemfactura (quantidade, subtotal,fk_id_desconto,fk_id_produto,fk_numero,"
-                        + "fk_id_usuario, fk_id_armazem) value (?,?,?,?,?,?,?)";
+                        + "fk_id_usuario, fk_id_armazem,preco) value (?,?,?,?,?,?,?,?)";
                 ps = con.prepareStatement(sql);
                 ps.setInt(1, t.getQuantidade());// ***********
                 ps.setDouble(2, t.getSubtotal());// ***********
@@ -48,6 +48,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 ps.setString(5, t.getFactura().getNumero_fac());// ***********
                 ps.setInt(6, t.getUsuario().getId());// ***********
                 ps.setInt(7, t.getArmazem().getId());// ***********
+                ps.setDouble(8, t.getPreco());
 
                 ps.execute();
                 ps.close();
@@ -62,8 +63,8 @@ public class ItemDAO implements ItemDAOImpl<Item> {
         List<Item> lista = new ArrayList<>();
         Item i = null;
         try {
-            sql = "SELECT p.nome, p.descricao, pv.precoNormal, "
-                    + "i.quantidade, i.subtotal, "
+            sql = "SELECT p.nome, p.descricao,"
+                    + "i.quantidade,i.preco, i.subtotal, "
                     + "ip.identificador as descricao_imposto, ip.percentagem AS imposto, "
                     + "d.identificador AS descricao_desconto, d.percentagem AS desconto, "
                     + "f.numero "
@@ -71,7 +72,6 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                     + "LEFT JOIN factura f ON f.numero = i.fk_numero "
                     + "LEFT JOIN desconto d ON d.id = i.fk_id_desconto "
                     + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
-                    + "LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id and pv.estado='activo' "
                     + "LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto "
                     + "WHERE i.fk_numero = ?";
             ps = con.prepareStatement(sql);
@@ -85,14 +85,12 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 d.setNomeDesconto(result.getString("descricao_desconto"));
                 d.setPercentagemDesconto(result.getDouble("desconto"));
                 i.setDesconto(d);
+                i.setPreco(result.getDouble("preco"));
                 i.setQuantidade(result.getInt("quantidade"));
                 i.setSubtotal(result.getDouble("subtotal"));
                 Produto p = new Produto();
                 p.setNomeProduto(result.getString("nome"));
                 p.setDescricao(result.getString("descricao"));
-                PrecoVenda pv = new PrecoVenda();
-                pv.setPreco(result.getDouble("precoNormal"));
-                p.setPrecovenda(pv);
                 TaxaImposto t = new TaxaImposto();
                 t.setNomeImposto(result.getString("descricao_imposto"));
                 t.setPercentagemImposto(result.getDouble("imposto"));

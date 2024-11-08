@@ -14,7 +14,7 @@ select * from taxa_imposto;
 select * from contacorrente;
 
 update factura set numeroParcelas=0 where numero='2024-913/1';
-
+delete from parcelas where id=9;
 
 
 SELECT p.nome, p.descricao, pv.precoNormal, 

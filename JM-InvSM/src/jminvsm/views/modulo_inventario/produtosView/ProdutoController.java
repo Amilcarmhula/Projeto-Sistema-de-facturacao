@@ -595,7 +595,7 @@ public class ProdutoController implements Initializable {
             dialog.setContentText("Deseja desactivar o preco?");
             dialog.initModality(Modality.APPLICATION_MODAL);
 
-            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnDelete = new ButtonType("Desactivar", ButtonType.OK.getButtonData());
             ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
             dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
 

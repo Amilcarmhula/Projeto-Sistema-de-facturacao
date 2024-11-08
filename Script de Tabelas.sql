@@ -328,10 +328,10 @@ CREATE TABLE factura (
     FOREIGN KEY (fk_id_usuario) REFERENCES usuario(id),
     FOREIGN KEY (fk_id_cliente) REFERENCES cliente(id)
 );
-
+ 
 create table itemfactura(
 	id integer primary key auto_increment,
-    
+    preco decimal(10,2) not null,
     quantidade decimal(10,2) not null,
     subtotal decimal(10,2) not null,
     fk_id_desconto integer,

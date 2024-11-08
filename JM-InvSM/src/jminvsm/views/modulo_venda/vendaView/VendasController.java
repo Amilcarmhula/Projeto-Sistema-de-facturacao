@@ -333,6 +333,7 @@ public class VendasController implements Initializable {
         i.setId(id);
         i.setProduto(x);
         i.setDesconto(desconto);
+        i.setPreco(x.getPrecovenda().getPreco());
         i.setQuantidade(qtd);
         double subtotal = 0;
         double desc;
@@ -425,6 +426,7 @@ public class VendasController implements Initializable {
             i = new Item();
             Produto p = mapaProdutos.get(item.getId());
             i.setProduto(p);
+            i.setPreco(item.getPreco());
             i.setQuantidade(item.getQuantidade());
             i.setSubtotal(item.getSubtotal());
             Desconto desconto = mapaDesconto.get(item.getDesconto().getNomeDesconto());

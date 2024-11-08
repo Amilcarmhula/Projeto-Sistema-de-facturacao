@@ -29,7 +29,7 @@ public class ServiceItem {
         
         try {
             itemDao.addEntity(itens);
-            showSuccessAlert( "Itens adicionados a factura com sucesso!");
+//            showSuccessAlert( "Itens adicionados a factura com sucesso!");
         } catch (Exception ex) {
             showDialog( "Erro", "Erro ao emitir factura!");
         }

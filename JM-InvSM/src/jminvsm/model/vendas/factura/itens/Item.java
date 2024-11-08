@@ -18,6 +18,7 @@ import jminvsm.model.vendas.factura.Factura;
 public class Item {
 
     private int id;
+    private double preco;
     private int quantidade;
     private double subtotal;
     private Desconto desconto;
@@ -31,8 +32,9 @@ public class Item {
         super();
     }
 
-    public Item(int quantidade, double subtotal, Desconto desconto, Produto produto, Factura factura, Usuario usuario,Armazem armazem) {
+    public Item(int quantidade, double preco, double subtotal, Desconto desconto, Produto produto, Factura factura, Usuario usuario,Armazem armazem) {
         super();
+        this.preco = preco;
         this.quantidade = quantidade;
         this.subtotal = subtotal;
         this.desconto = desconto;
@@ -48,6 +50,14 @@ public class Item {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
     }
 
     public int getQuantidade() {
@@ -131,12 +141,7 @@ public class Item {
         return null;
     }
     
-    public Double getPreco(){
-        if(produto != null){
-            return produto.getPrecovenda().getPreco();
-        }
-        return null;
-    }
+    
     
     public Double getPercentagemImposto(){
         if(produto != null){

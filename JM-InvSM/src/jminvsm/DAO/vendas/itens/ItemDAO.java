@@ -71,7 +71,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                     + "LEFT JOIN factura f ON f.numero = i.fk_numero "
                     + "LEFT JOIN desconto d ON d.id = i.fk_id_desconto "
                     + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
-                    + "LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id "
+                    + "LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id and pv.estado='activo' "
                     + "LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto "
                     + "WHERE i.fk_numero = ?";
             ps = con.prepareStatement(sql);

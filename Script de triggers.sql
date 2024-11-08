@@ -134,7 +134,7 @@ create procedure procedure_updateSaldoFactura_com_Atraso_de_Parcela()
 delimiter ;
 
 CREATE EVENT evento_updateSaldoFactura_com_Atraso_de_Parcela
-	ON SCHEDULE EVERY 1 DAY
+	ON SCHEDULE EVERY 1 MINUTE
 	DO
 		CALL procedure_updateSaldoFactura_com_Atraso_de_Parcela();
 

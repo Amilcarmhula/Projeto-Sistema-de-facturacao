@@ -331,6 +331,7 @@ CREATE TABLE factura (
 
 create table itemfactura(
 	id integer primary key auto_increment,
+    
     quantidade decimal(10,2) not null,
     subtotal decimal(10,2) not null,
     fk_id_desconto integer,

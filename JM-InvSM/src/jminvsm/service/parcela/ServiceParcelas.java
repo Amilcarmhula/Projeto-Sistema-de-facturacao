@@ -73,12 +73,9 @@ public class ServiceParcelas {
             p.setParcelaNumero(i);
 
             if (i == 1) {
-                // a variavel X armazena os dias restantes ate a data de vencimento da primeira parcela
-                int x = LocalDate.now().lengthOfMonth() - LocalDate.now().getDayOfMonth();
-                //cria a data de vencimento da primeira parcela
-                dataFinalParcelas = dataActual.plusDays(i * x);
+                dataFinalParcelas = dataActual.plusDays(i * intervaloDePagamentos);
                 // actualiza a data actual para a data de vencimento da primeira paracela para iniciar a contagem em funcao dos intervalos
-                dataActual = dataActual.plusDays(i * x);
+                dataActual = dataActual.plusDays(i * intervaloDePagamentos);
                 //adiciona dias caso a data de vencimento conscida com uma sabado ou domingo
                 if (dataActual.getDayOfWeek() == LocalDate.now().getDayOfWeek().SATURDAY) {
                     dataFinalParcelas = dataActual.plusDays(2);

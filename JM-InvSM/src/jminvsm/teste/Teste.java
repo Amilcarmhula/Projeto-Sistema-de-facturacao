@@ -64,11 +64,12 @@ public class Teste {
 
             if (i == 1) {
                 // a variavel X armazena os dias restantes ate a data de vencimento da primeira parcela
-                int x = LocalDate.now().lengthOfMonth() - LocalDate.now().getDayOfMonth();
+//                int x = LocalDate.now().lengthOfMonth() - LocalDate.now().getDayOfMonth();
+//                int x = LocalDate.now().lengthOfMonth() - LocalDate.now().plusDays(intervalo);
                 //cria a data de vencimento da primeira parcela
-                dataFinalParcelas = dataActual.plusDays(i * x);
+                dataFinalParcelas = dataActual.plusDays(i * intervalo);
                 // actualiza a data actual para a data de vencimento da primeira paracela para iniciar a contagem em funcao dos intervalos
-                dataActual = dataActual.plusDays(i * x);
+                dataActual = dataActual.plusDays(i * intervalo);
                 //adiciona dias caso a data de vencimento conscida com uma sabado ou domingo
                 if (dataActual.getDayOfWeek() == LocalDate.now().getDayOfWeek().SATURDAY) {
                     dataFinalParcelas = dataActual.plusDays(2);
@@ -76,7 +77,7 @@ public class Teste {
                 if (dataActual.getDayOfWeek() == LocalDate.now().getDayOfWeek().SUNDAY) {
                     dataFinalParcelas = dataActual.plusDays(1);
                 }
-                System.out.println("Data de vencimento: " + i + " " + dataFinalParcelas);
+                System.out.println("1* Data de vencimento: " + i + " " + dataFinalParcelas);
             } else {
                 //adiciona o intervalo de dias de parcelamento para as parcelas subsequentes
                 dataFinalParcelas = dataActual.plusDays((i - 1) * intervalo);
@@ -93,16 +94,7 @@ public class Teste {
     }
 
     public static void main(String[] args) {
-//        if(LocalDate.now().plusDays(3).getDayOfWeek() == LocalDate.now().getDayOfWeek().THURSDAY){
-//            System.out.println("SIM");
-//        }
-//        System.out.println(LocalDate.now().plusDays(3).getDayOfWeek());
-//        System.out.println();
-        String num = null;
-//        Integer num1 = ;
-//        System.out.println(Integer.parseInt(num));
-
-        System.out.println(Integer.valueOf(num));
+        criaParcelas(4, 30);
     }
 
     /**

@@ -61,10 +61,11 @@ public class ServiceFactura {
             return;
         }
 
-        if (cli == null) {
+        if (cli == null || cli <= 0) {
             showErroAlert( "Cliente nao pode ser nulo!");
             return;
         } else {
+            System.out.println("id: "+cli);
             ServiceCliente serviceCliente = new ServiceCliente();
             cliente = serviceCliente.consultaClienteByID(cli);
         }

@@ -122,15 +122,26 @@ delimiter ;
 
 -- Procedimento armazenado que e chamado atraves de uma EVENT para controlar a taxa de juros em atraso das parcelas
 delimiter //
-create procedure procedure_updateSaldoFactura_com_Atraso_de_Parcela()
-    begin
+CREATE PROCEDURE procedure_updateSaldoFactura_com_Atraso_de_Parcela()
+BEGIN
+    -- Atualizar o saldo pendente de cada fatura com base nas parcelas
     UPDATE factura f
     SET f.saldoPendente = (
-        SELECT COALESCE(SUM((p.valorParcela * p.taxaDeAtraso) + p.valorParcela), 0)
+        SELECT COALESCE(SUM(
+            CASE 
+                WHEN p.estado = 'Atrasada' THEN (p.valorParcela * p.taxaDeAtraso) + (p.valorParcela - p.valorPagoParcela)
+                ELSE p.valorParcela - p.valorPagoParcela
+            END
+        ), 0)
+        FROM parcelas p
+        WHERE p.fk_factura = f.numero
+    )
+    WHERE EXISTS (
+        SELECT 1 
         FROM parcelas p
         WHERE p.fk_factura = f.numero
     );
-    end//
+END//
 delimiter ;
 
 CREATE EVENT evento_updateSaldoFactura_com_Atraso_de_Parcela

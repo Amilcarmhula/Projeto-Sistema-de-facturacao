@@ -1,5 +1,5 @@
--- drop database _sysface;
--- create database _sysface;
+drop database _sysface;
+create database _sysface;
 
 use _sysface;
 
@@ -273,7 +273,7 @@ create table produto_fornecido(
 );
 
 
-create table movimento_produto(
+create table movimento(
 	id integer primary key auto_increment,
     tipo_movimento varchar(8) not null,
     data_movimento date,
@@ -286,8 +286,6 @@ create table movimento_produto(
     foreign key (fk_id_armazem) references armazem(id),
     check (tipo_movimento in('Entrada','Saída'))
 );
-
-
 create table stock(
 	fk_id_produto integer,
     fk_id_armazem integer,

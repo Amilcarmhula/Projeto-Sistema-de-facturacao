@@ -74,6 +74,7 @@ public class Parcela {
     }
 
     public double getValorParcela() {
+        valorParcela = Double.parseDouble(String.format("%.2f", valorParcela));
         return valorParcela;
     }
 

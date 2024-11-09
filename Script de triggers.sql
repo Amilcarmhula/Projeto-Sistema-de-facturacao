@@ -23,14 +23,14 @@ create trigger trigger_registaEntrada
 	after insert on produto_fornecido
     for each row
     begin
-		insert into movimento_produto (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem) value ('Entrada',new.data_fornecida,new.quantidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
+		insert into movimento (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem) value ('Entrada',new.data_fornecida,new.quantidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
     end//
 delimiter ;
 
--- Trigger para controlar fluxo de stock(saldo de determinado produto em seu armazarm) quando um movimento de entrada ou saida e registado na tabela movimento_produto
+-- Trigger para controlar fluxo de stock(saldo de determinado produto em seu armazarm) quando um movimento de entrada ou saida e registado na tabela movimento
 DELIMITER //
 CREATE TRIGGER trigger_updateSaldoStock
-    AFTER INSERT ON movimento_produto
+    AFTER INSERT ON movimento
     FOR EACH ROW
 BEGIN
     -- Verifica se a combinação de fk_id_produto e fk_id_armazem já existe na tabela stock
@@ -51,7 +51,7 @@ BEGIN
         SELECT 
             (SUM(CASE WHEN tipo_movimento = 'Entrada' THEN quantidade ELSE 0 END) - 
              SUM(CASE WHEN tipo_movimento = 'Saída' THEN quantidade ELSE 0 END)) AS saldo_produto
-        FROM movimento_produto 
+        FROM movimento 
         WHERE fk_id_produto = NEW.fk_id_produto 
           AND fk_id_armazem = NEW.fk_id_armazem
     )
@@ -66,18 +66,19 @@ create trigger trigger_registra_saida
 	after insert on itemfactura
     for each row
     begin
-		insert into movimento_produto (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem)
+		insert into movimento (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem)
         value ('Saída',new.data_adicao,new.quantidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
     end//
 delimiter ;
 
 -- Procedimento armazenado que e chamado atraves de uma EVENT para controlar o estado das parcelas se estao atrasadas ou nao
+
 DELIMITER //
 CREATE PROCEDURE procedure_updateEstadoParcela()
 BEGIN
     UPDATE parcelas
     SET estado = 'Atrasada'
-    WHERE dataVencimento <= CURDATE() AND estado <> 'Pago';
+    WHERE dataVencimento <= CURDATE() AND estado <> 'Paga';
 END//
 DELIMITER ;
 
@@ -130,7 +131,10 @@ BEGIN
         SELECT COALESCE(SUM(
             CASE 
                 WHEN p.estado = 'Atrasada' THEN (p.valorParcela * p.taxaDeAtraso) + (p.valorParcela - p.valorPagoParcela)
-                ELSE p.valorParcela - p.valorPagoParcela
+                ELSE 
+					case when p.estado = 'Pendente' THEN
+						p.valorParcela - p.valorPagoParcela
+					end
             END
         ), 0)
         FROM parcelas p

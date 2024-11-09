@@ -191,7 +191,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                     + "SUM(CASE WHEN mp.tipo_movimento = 'Saída' THEN mp.quantidade ELSE 0 END) AS saidas,"
                     + "MONTH(mp.data_movimento) AS mes, "
                     + "YEAR(mp.data_movimento) AS ano "
-                    + "FROM movimento_produto mp "
+                    + "FROM movimento mp "
                     + "LEFT JOIN produto p ON p.id = mp.fk_id_produto "
                     + "LEFT JOIN categoria c ON c.id = p.fk_id_categoria "
                     + "LEFT JOIN armazem a ON a.id = mp.fk_id_armazem "

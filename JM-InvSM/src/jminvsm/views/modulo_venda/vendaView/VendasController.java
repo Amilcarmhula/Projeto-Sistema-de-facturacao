@@ -4,7 +4,6 @@
  */
 package jminvsm.views.modulo_venda.vendaView;
 
-import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -53,7 +52,6 @@ import jminvsm.service.vendas.factura.ServiceFactura;
 import jminvsm.util.AlertUtilities;
 import jminvsm.util.InvoiceUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
-import jminvsm.util.FilePathFinderUtilities;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 
 /**
@@ -165,6 +163,19 @@ public class VendasController implements Initializable {
     private Map<Integer, Produto> mapaProdutos;
 
     private Random randNum;
+    
+  
+    public void getTaxasView(ActionEvent e) {
+        SysFact.setData(null);
+        LoadAndMoveUtilities.showAsPopUP(e, null);
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_inventario/taxasView/taxaView.fxml");
+    }
+    
+    public void getDescontoView(ActionEvent e) {
+        SysFact.setData(null);
+        LoadAndMoveUtilities.showAsPopUP(e, null);
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/descontoView/descontoView.fxml");
+    }
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
@@ -292,7 +303,10 @@ public class VendasController implements Initializable {
         List<String> lista = new ArrayList<>();
         for (DocumentosComerciais doc : listaDocComercial) {
             mapaDocComercial.put(doc.getNome_doc(), doc);
-            lista.add(doc.getNome_doc());
+            if(doc.getNome_doc().startsWith("Fatura")){
+                lista.add(doc.getNome_doc());
+            }
+            
         }
         combTipoDoc.setItems(FXCollections.observableArrayList(lista));
     }
@@ -337,12 +351,14 @@ public class VendasController implements Initializable {
         i.setQuantidade(qtd);
         double subtotal = 0;
         double desc;
+        double taxa;
+        taxa = qtd * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
         desc = qtd * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
         if (combTipoDoc.getValue() != null) {
             if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
                 subtotal = qtd * x.getPrecovenda().getPreco() - desc;
             } else {
-                subtotal = qtd * x.getPrecovenda().getPrecoInclTaxa() - desc;
+                subtotal = qtd * x.getPrecovenda().getPreco() + taxa - desc;
             }
         }else{
             AlertUtilities.showDialog("Erro", "Tipo de documento nao selecionado! Selecione o tipo de factura");
@@ -505,7 +521,7 @@ public class VendasController implements Initializable {
 //        SysFact.setData("2024-1022/3");
 //        if (evt.getClickCount() == 1) {
         LoadAndMoveUtilities.showAsPopUP(evt, null);
-        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_contabilidade/miniPagamentoView/MiniPagamentoView.fxml");
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/miniPagamentoView/MiniPagamentoView.fxml");
 //        }
     }
 

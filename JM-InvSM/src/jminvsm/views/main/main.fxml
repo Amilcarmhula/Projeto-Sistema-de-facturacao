@@ -73,7 +73,7 @@
                                  <children>
                                     <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0" styleClass="tranp-bg" stylesheets="@../../style/dashboard.css">
                                        <children>
-                                          <Button fx:id="btn_pagamento" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Pagamentos" textFill="WHITE">
+                                          <Button fx:id="btn_cliente11" alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Fluxo de Caixa" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -85,19 +85,7 @@
                                                 <String fx:value="shadow-efect" />
                                              </styleClass>
                                           </Button>
-                                          <Button fx:id="btn_cliente11" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Fluxo de Caixa" textFill="WHITE">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                             <VBox.margin>
-                                                <Insets bottom="5.0" left="4.0" />
-                                             </VBox.margin>
-                                             <styleClass>
-                                                <String fx:value="secondary-color" />
-                                                <String fx:value="shadow-efect" />
-                                             </styleClass>
-                                          </Button>
-                                          <Button fx:id="btn_produtos11" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Documentos Comercias" textFill="WHITE">
+                                          <Button fx:id="btn_produtos11" alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Documentos Comercias" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -155,7 +143,7 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="btn_facturas111" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Encomendas" textFill="WHITE">
+                                          <Button fx:id="btn_facturas111" alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Encomendas" textFill="WHITE">
                                              <VBox.margin>
                                                 <Insets bottom="5.0" left="4.0" />
                                              </VBox.margin>
@@ -166,6 +154,18 @@
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
+                                          </Button>
+                                          <Button fx:id="btn_pagamento" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Pagamentos" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
                                           </Button>
                                        </children>
                                        <padding>
@@ -189,18 +189,6 @@
                                  <children>
                                     <VBox layoutX="3.0" prefHeight="306.0" prefWidth="216.0">
                                        <children>
-                                          <Button fx:id="btn_produtos112" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Encomendas" textFill="WHITE">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                             <VBox.margin>
-                                                <Insets bottom="5.0" left="4.0" />
-                                             </VBox.margin>
-                                             <styleClass>
-                                                <String fx:value="secondary-color" />
-                                                <String fx:value="shadow-efect" />
-                                             </styleClass>
-                                          </Button>
                                           <Button fx:id="btn_fornecedor" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="362.0" stylesheets="@../../style/dashboard.css" text="Fornecedores" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
@@ -212,6 +200,42 @@
                                                 <String fx:value="secondary-color" />
                                                 <String fx:value="shadow-efect" />
                                              </styleClass>
+                                          </Button>
+                                          <Button fx:id="btn_produtos112" alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Requisicoes" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                          </Button>
+                                          <Button fx:id="btn_produtos1121" alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Ordem de compra" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
+                                          </Button>
+                                          <Button fx:id="btn_produtos11211" alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Ordem de recebimento" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
                                           </Button>
                                        </children>
                                        <padding>
@@ -259,7 +283,7 @@
                                                 <String fx:value="shadow-efect" />
                                              </styleClass>
                                           </Button>
-                                          <Button fx:id="btn_stock" alignment="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Stock" textFill="WHITE">
+                                          <Button fx:id="btn_stock" alignment="CENTER" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="291.0" stylesheets="@../../style/dashboard.css" text="Stock" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -293,37 +317,7 @@
                                  <children>
                                     <VBox layoutX="3.0" prefHeight="306.0" prefWidth="215.0">
                                        <children>
-                                          <Button fx:id="btn_taxas" alignment="CENTER" mnemonicParsing="false" onAction="#getViews" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Taxas/Impostos" textFill="WHITE">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                             <VBox.margin>
-                                                <Insets bottom="5.0" left="4.0" />
-                                             </VBox.margin>
-                                             <styleClass>
-                                                <String fx:value="secondary-color" />
-                                                <String fx:value="shadow-efect" />
-                                             </styleClass>
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                          </Button>
-                                          <Button fx:id="btn_unidades" alignment="CENTER" mnemonicParsing="false" onAction="#getViews" prefHeight="46.0" prefWidth="339.0" stylesheets="@../../style/dashboard.css" text="Unidades de Medida" textFill="WHITE">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                             <VBox.margin>
-                                                <Insets bottom="5.0" left="4.0" />
-                                             </VBox.margin>
-                                             <styleClass>
-                                                <String fx:value="secondary-color" />
-                                                <String fx:value="shadow-efect" />
-                                             </styleClass>
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                          </Button>
-                                          <Button fx:id="btn_categorias" alignment="CENTER" mnemonicParsing="false" onAction="#getViews" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Categorias" textFill="WHITE">
+                                          <Button fx:id="btn_setup" alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="272.0" stylesheets="@../../style/dashboard.css" text="Setup" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>

@@ -4,22 +4,16 @@
  */
 package jminvsm.dao.desconto;
 
-import java.util.Map;
 import javafx.collections.ObservableList;
 
 /**
  *
  * @author JM-Tecnologias
+ * @param <T>
  */
 public interface DescontoDAOImpl<T> {
-    
-//    Map<String,Double> mapDesconto();
-    
-    
-//    void  addEntity(T t);
-//    void updateEntityByID(T t, int x);
+    boolean  addEntity(T t);
+    boolean updateEntity(T t, int x);
     ObservableList<T> listAllEntities();
-//    
-//    T getEntityByID(int x);
-//    void deleteEntity(int x);
+    boolean deleteEntity(int x);
 }

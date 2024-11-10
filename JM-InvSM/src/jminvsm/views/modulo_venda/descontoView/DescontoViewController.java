@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package jminvsm.views.modulo_configs.taxasView;
+package jminvsm.views.modulo_venda.descontoView;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -14,8 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,9 +29,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
-import jminvsm.dao.taxaimposto.TaxaImpostoDAO;
+import jminvsm.model.desconto.Desconto;
 import jminvsm.model.taxa_imposto.TaxaImposto;
-import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
+import jminvsm.service.desconto.ServiceDesconto;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -42,9 +40,9 @@ import jminvsm.util.LoadAndMoveUtilities;
  *
  * @author JM-Tecnologias
  */
-public class TaxaViewController implements Initializable {
+public class DescontoViewController implements Initializable {
 
-    private ServiceTaxaImpostos servicoTaxa;
+    private ServiceDesconto servicoDesconto;
     @FXML
     private TableColumn<TaxaImposto, Integer> ID;
 
@@ -52,19 +50,19 @@ public class TaxaViewController implements Initializable {
     private Button btnAdd;
 
     @FXML
-    private TableColumn<TaxaImposto, String> btnTabela;
+    private TableColumn<Desconto, String> btnTabela;
 
     @FXML
-    private TableColumn<TaxaImposto, String> descricao;
+    private TableColumn<Desconto, String> descricao;
 
     @FXML
-    private TableColumn<TaxaImposto, Double> percentagem;
+    private TableColumn<Desconto, Double> percentagem;
 
     @FXML
-    private TableView<TaxaImposto> tabelaTaxa;
+    private TableView<Desconto> tabelaDesconto;
 
     @FXML
-    private TableColumn<TaxaImposto, String> tipoTaxa;
+    private TableColumn<Desconto, String> tipoDesconto;
 
     @FXML
     private TextField txtDescricao;
@@ -76,19 +74,16 @@ public class TaxaViewController implements Initializable {
     private TextField txtPercentagem;
 
     @FXML
-    private TextField txtTaxa;
-
-    @FXML
-    private Button btnClose;
+    private TextField txtDesconto;
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
-            SysFact.setData("");
+            SysFact.setData(null);
             LoadAndMoveUtilities.setEstadoStage(false);
             LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
-            SysFact.setData("");
+            SysFact.setData(null);
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
@@ -97,9 +92,9 @@ public class TaxaViewController implements Initializable {
 
     public void addORupdateTaxa() throws SQLException {
         if ("".equals(txtID.getText())) {
-            addTaxa();
+            addDesconto();
         } else {
-            updateTaxa();
+            updateDesconto();
         }
     }
 
@@ -109,88 +104,67 @@ public class TaxaViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            servicoTaxa = new ServiceTaxaImpostos();
-            showTaxas();
+            servicoDesconto = new ServiceDesconto();
+            showDesconto();
         } catch (SQLException ex) {
-            Logger.getLogger(TaxaViewController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DescontoViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private ObservableList<TaxaImposto> listaTaxas;
+    private ObservableList<Desconto> listaDesconto;
 
-    public void showTaxas() {
+    public void showDesconto() {
 //        listaTaxas = servicoTaxa.getTaxas();
-        List<TaxaImposto> lista = new ArrayList<>();
-        for (TaxaImposto t : servicoTaxa.getTaxas()) {
+        List<Desconto> lista = new ArrayList<>();
+        for (Desconto t : servicoDesconto.getDescontos()) {
             t.setId(t.getId());
             t.setDescricao(t.getDescricao());
-            t.setNomeImposto(t.getNomeImposto());
-            t.setPercentagemImposto(t.getPercentagemImposto()*100);
+            t.setNomeDesconto(t.getNomeDesconto());
+            t.setPercentagemDesconto(Double.parseDouble(String.format("%.2f", t.getPercentagemDesconto() * 100)));
             lista.add(t);
         }
-        listaTaxas = FXCollections.observableArrayList(lista);
+        listaDesconto = FXCollections.observableArrayList(lista);
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipoTaxa.setCellValueFactory(new PropertyValueFactory<>("nomeImposto"));
-        percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagemImposto"));
+        tipoDesconto.setCellValueFactory(new PropertyValueFactory<>("nomeDesconto"));
+        percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagemDesconto"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
-        FilteredList<TaxaImposto> dadosFiltrados = new FilteredList<>(listaTaxas, b -> true);
-        txtTaxa.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
-
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNomeImposto().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else {
-                    return false;
-                }
-
-            });
-        });
-        SortedList<TaxaImposto> sortedData = new SortedList<>(dadosFiltrados);
-        sortedData.comparatorProperty().bind(tabelaTaxa.comparatorProperty());
-
-        tabelaTaxa.setItems(sortedData);
+        tabelaDesconto.setItems(listaDesconto);
     }
 
-    public void addTaxa() {
+    public void addDesconto() {
         double taxa = Double.parseDouble(txtPercentagem.getText().equals("") ? "0" : txtPercentagem.getText());
-        servicoTaxa.regista(txtTaxa.getText(), taxa, txtDescricao.getText());
-        if (servicoTaxa.isOpsSuccess()) {
+        servicoDesconto.regista(txtDesconto.getText(), taxa, txtDescricao.getText());
+        if (servicoDesconto.isOpsSuccess()) {
             resetCampos();
-            showTaxas();
+            showDesconto();
         }
     }
 
-    public void updateTaxa() {
-        int id = Integer.parseInt(txtID.getText().equals("") ? "0" : txtID.getText());
+    public void updateDesconto() {
         double taxa = Double.parseDouble(txtPercentagem.getText().equals("") ? "0" : txtPercentagem.getText());
-        servicoTaxa.actualizar(id, txtTaxa.getText(), taxa, txtDescricao.getText());
-        if (servicoTaxa.isOpsSuccess()) {
+        int id = Integer.parseInt(txtID.getText().equals("")?"0":txtID.getText());
+        servicoDesconto.actualizar(id, txtDesconto.getText(), taxa, txtDescricao.getText());
+        if (servicoDesconto.isOpsSuccess()) {
             resetCampos();
-            showTaxas();
+            showDesconto();
         }
     }
 
-    public void linhaSelecionadaTaxa(MouseEvent event) throws SQLException {
-        TaxaImposto x = tabelaTaxa.getSelectionModel().getSelectedItem();
+    public void linhaSelecionadaDesconto(MouseEvent event) throws SQLException {
+        Desconto x = tabelaDesconto.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
             txtDescricao.setText(x.getDescricao());
-            txtPercentagem.setText(String.valueOf(x.getPercentagemImposto()));
-            txtTaxa.setText(x.getNomeImposto());
+            txtPercentagem.setText(String.valueOf(x.getPercentagemDesconto()));
+            txtDesconto.setText(x.getNomeDesconto());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
             deleteItem(event, x);
             SysFact.setData(x);
         }
     }
 
-    public void deleteItem(MouseEvent event, TaxaImposto x) {
+    public void deleteItem(MouseEvent event, Desconto x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -203,9 +177,9 @@ public class TaxaViewController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                servicoTaxa.excluir(x.getId());
-                if (servicoTaxa.isOpsSuccess()) {
-                    showTaxas();
+                servicoDesconto.excluir(x.getId());
+                if (servicoDesconto.isOpsSuccess()) {
+                    showDesconto();
                     resetCampos();
                 }
 
@@ -219,9 +193,9 @@ public class TaxaViewController implements Initializable {
         txtID.setText("");
         txtDescricao.setText("");
         txtPercentagem.setText("");
-        txtTaxa.setText("");
+        txtDesconto.setText("");
         ButtonUtilities.buttonChangeText(btnAdd, txtID);
-        showTaxas();
+        showDesconto();
 
     }
 

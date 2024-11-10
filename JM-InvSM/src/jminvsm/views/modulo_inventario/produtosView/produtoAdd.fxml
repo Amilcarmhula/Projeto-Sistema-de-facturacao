@@ -12,6 +12,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anchorProduto" prefHeight="909.0" prefWidth="1400.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.produtosView.ProdutoController">
@@ -20,31 +21,51 @@
          <children>
             <AnchorPane layoutY="7.0" prefHeight="36.0" prefWidth="438.0">
                <children>
-                  <Button layoutX="11.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="191.0" stylesheets="@../../../style/dashboard.css" text="Detalhes de Cliente" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="secondary-color" />
-                        <String fx:value="shadow-efect" />
-                        <String fx:value="hand-efect" />
-                     </styleClass>
-                  </Button>
-                  <Button layoutX="213.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="212.0" stylesheets="@../../../style/dashboard.css" text="Relatorio de Clientes" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="secondary-color" />
-                        <String fx:value="shadow-efect" />
-                        <String fx:value="hand-efect" />
-                     </styleClass>
-                  </Button>
+                  <HBox layoutX="10.0">
+                     <children>
+                        <Button fx:id="btn_categorias" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="220.0" stylesheets="@../../../style/dashboard.css" text="Controle de categorias" textFill="WHITE">
+                           <font>
+                              <Font name="Berlin Sans FB" size="20.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="secondary-color" />
+                              <String fx:value="shadow-efect" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
+                        </Button>
+                        <Button fx:id="btn_taxas" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de taxas" textFill="WHITE">
+                           <font>
+                              <Font name="Berlin Sans FB" size="20.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="secondary-color" />
+                              <String fx:value="shadow-efect" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btn_unidades" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de unidades" textFill="WHITE">
+                           <font>
+                              <Font name="Berlin Sans FB" size="20.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="secondary-color" />
+                              <String fx:value="shadow-efect" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="391.0" onMouseClicked="#selecionaProduto" prefHeight="609.0" prefWidth="1432.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="295.0" onMouseClicked="#selecionaProduto" prefHeight="346.0" prefWidth="1400.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
             <TableColumn fx:id="armazem" prefWidth="209.0" text="Armazem" />

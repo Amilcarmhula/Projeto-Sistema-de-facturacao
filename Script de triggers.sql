@@ -1,22 +1,5 @@
 use _sysface;
 
--- Procedimento para ajustar e manter o controle dos precos de um produto. O procedimento e chamado atraves de um evento que e executado diariamente
-DELIMITER //
-CREATE PROCEDURE procedure_updatePrecoVenda()
-BEGIN
-    UPDATE precovenda
-    SET estado = 'desactivo'
-    WHERE data_fim <= CURDATE() AND estado = 'activo';
-END//
-DELIMITER ;
-
--- Eventro para chamar o procedimento procedure_updatePrecoVenda()
-CREATE EVENT evento_updatePrecoVenda
-	ON SCHEDULE EVERY 1 DAY
-	DO
-		CALL procedure_updatePrecoVenda();
-
-
 -- Trigger para registar movimento de entrada apos registo de fornecimento de produto na tabela pro produto_fornecido
 delimiter //
 create trigger trigger_registaEntrada
@@ -71,37 +54,7 @@ create trigger trigger_registra_saida
     end//
 delimiter ;
 
--- Procedimento armazenado que e chamado atraves de uma EVENT para controlar o estado das parcelas se estao atrasadas ou nao
 
-DELIMITER //
-CREATE PROCEDURE procedure_updateEstadoParcela()
-BEGIN
-    UPDATE parcelas
-    SET estado = 'Atrasada'
-    WHERE dataVencimento <= CURDATE() AND estado <> 'Paga';
-END//
-DELIMITER ;
-
-CREATE EVENT evento_updateEstadoParcela
-	ON SCHEDULE EVERY 1 MINUTE
-	DO
-		CALL procedure_updateEstadoParcela();
-    
-
--- Procedimento armazenado que e chamado atraves de uma EVENT para controlar a taxa de juros em atraso das parcelas
-DELIMITER //
-CREATE PROCEDURE procedure_updateTaxaAtrasoParcela()
-BEGIN
-    UPDATE parcelas
-    SET taxaDeAtraso = taxaJuros / 2
-    WHERE estado = 'Atrasada';
-END //
-DELIMITER ;
-
-CREATE EVENT evento_updateTaxaAtrasoParcela
-	ON SCHEDULE EVERY 1 MINUTE
-	DO
-		CALL procedure_updateTaxaAtrasoParcela();
 
 
 
@@ -121,37 +74,7 @@ create trigger _updateParcelasFactura
 delimiter ;
 
 
--- Procedimento armazenado que e chamado atraves de uma EVENT para controlar a taxa de juros em atraso das parcelas
-delimiter //
-CREATE PROCEDURE procedure_updateSaldoFactura_com_Atraso_de_Parcela()
-BEGIN
-    -- Atualizar o saldo pendente de cada fatura com base nas parcelas
-    UPDATE factura f
-    SET f.saldoPendente = (
-        SELECT COALESCE(SUM(
-            CASE 
-                WHEN p.estado = 'Atrasada' THEN (p.valorParcela * p.taxaDeAtraso) + (p.valorParcela - p.valorPagoParcela)
-                ELSE 
-					case when p.estado = 'Pendente' THEN
-						p.valorParcela - p.valorPagoParcela
-					end
-            END
-        ), 0)
-        FROM parcelas p
-        WHERE p.fk_factura = f.numero
-    )
-    WHERE EXISTS (
-        SELECT 1 
-        FROM parcelas p
-        WHERE p.fk_factura = f.numero
-    );
-END//
-delimiter ;
 
-CREATE EVENT evento_updateSaldoFactura_com_Atraso_de_Parcela
-	ON SCHEDULE EVERY 1 MINUTE
-	DO
-		CALL procedure_updateSaldoFactura_com_Atraso_de_Parcela();
 
 -- Trigger para actualizar dados da parcela como valorPagoParcela e o estado; e saldo pendente da factura
 delimiter //
@@ -291,4 +214,89 @@ create trigger _updateFacturaPagamento_Avista
         END IF;        
 	end//
 delimiter ;
+
+
+
+-- _______________________________________________________________________________________________________________PROCEDIMENTOS ARMACENADOS____________________________________________________________________________________________________________________
+
+-- Procedimento para ajustar e manter o controle dos precos de um produto. O procedimento e chamado atraves de um evento que e executado diariamente
+DELIMITER //
+CREATE PROCEDURE procedure_updatePrecoVenda()
+BEGIN
+    UPDATE precovenda
+    SET estado = 'desactivo'
+    WHERE data_fim <= CURDATE() AND estado = 'activo';
+END//
+DELIMITER ;
+
+-- Eventro para chamar o procedimento procedure_updatePrecoVenda()
+CREATE EVENT evento_updatePrecoVenda
+	ON SCHEDULE EVERY 1 DAY
+	DO
+		CALL procedure_updatePrecoVenda();
+        
+-- Procedimento armazenado que e chamado atraves de uma EVENT para controlar o estado das parcelas se estao atrasadas ou nao
+
+DELIMITER //
+CREATE PROCEDURE procedure_updateEstadoParcela()
+BEGIN
+    UPDATE parcelas
+    SET estado = 'Atrasada'
+    WHERE dataVencimento <= CURDATE() AND estado <> 'Paga';
+END//
+DELIMITER ;
+
+CREATE EVENT evento_updateEstadoParcela
+	ON SCHEDULE EVERY 1 MINUTE
+	DO
+		CALL procedure_updateEstadoParcela();
+    
+
+-- Procedimento armazenado que e chamado atraves de uma EVENT para controlar a taxa de juros em atraso das parcelas
+DELIMITER //
+CREATE PROCEDURE procedure_updateTaxaAtrasoParcela()
+BEGIN
+    UPDATE parcelas
+    SET taxaDeAtraso = taxaJuros / 2
+    WHERE estado = 'Atrasada';
+END //
+DELIMITER ;
+
+CREATE EVENT evento_updateTaxaAtrasoParcela
+	ON SCHEDULE EVERY 1 MINUTE
+	DO
+		CALL procedure_updateTaxaAtrasoParcela();        
+
+
+-- Procedimento armazenado que e chamado atraves de uma EVENT para controlar a taxa de juros em atraso das parcelas
+delimiter //
+CREATE PROCEDURE procedure_updateSaldoFactura_com_Atraso_de_Parcela()
+BEGIN
+    -- Atualizar o saldo pendente de cada fatura com base nas parcelas
+    UPDATE factura f
+    SET f.saldoPendente = (
+        SELECT COALESCE(SUM(
+            CASE 
+                WHEN p.estado = 'Atrasada' THEN (p.valorParcela * p.taxaDeAtraso) + (p.valorParcela - p.valorPagoParcela)
+                ELSE 
+					case when p.estado = 'Pendente' THEN
+						p.valorParcela - p.valorPagoParcela
+					end
+            END
+        ), 0)
+        FROM parcelas p
+        WHERE p.fk_factura = f.numero
+    )
+    WHERE EXISTS (
+        SELECT 1 
+        FROM parcelas p
+        WHERE p.fk_factura = f.numero
+    );
+END//
+delimiter ;
+
+CREATE EVENT evento_updateSaldoFactura_com_Atraso_de_Parcela
+	ON SCHEDULE EVERY 1 MINUTE
+	DO
+		CALL procedure_updateSaldoFactura_com_Atraso_de_Parcela();
 

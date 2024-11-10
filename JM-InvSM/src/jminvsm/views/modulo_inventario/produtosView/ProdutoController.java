@@ -158,6 +158,29 @@ public class ProdutoController implements Initializable {
     private TableColumn<Produto, String> estadoPreco;
     @FXML
     private Button btnAddProduto;
+    
+    @FXML
+    private Button btn_taxas;
+    @FXML
+    private Button btn_unidades;
+    @FXML
+    private Button btn_categorias;
+    
+    @FXML
+    public void getViews(ActionEvent e) {
+        SysFact.setData(null);
+        String path = "";
+        if (e.getSource() == btn_taxas) {
+            path = "/jminvsm/views/modulo_inventario/taxasView/taxaView.fxml";
+//            path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "taxaView.fxml");
+        } else if (e.getSource() == btn_unidades) {
+            path = "/jminvsm/views/modulo_inventario/unidadeView/unidadeView.fxml";
+        } else if (e.getSource() == btn_categorias) {
+            path = "/jminvsm/views/modulo_inventario/categoriaView/categoriaView.fxml";
+        }
+        LoadAndMoveUtilities.showAsPopUP(e, null);
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
+    }
 
     public void stockControlChecked() {
         if (checkControle.isSelected()) {

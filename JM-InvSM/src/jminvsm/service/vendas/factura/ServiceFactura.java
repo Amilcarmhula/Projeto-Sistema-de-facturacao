@@ -91,7 +91,11 @@ public class ServiceFactura {
         ServiceItem serviceItem = new ServiceItem(itemDao);
 
         if (facturaDao.addEntity(f)) {
-            serviceItem.registaItens(itens);
+            if(doc.getNome_doc().equals("Fatura Proforma")){
+                serviceItem.registaCotacao(itens);
+            }else{
+                serviceItem.registaItens(itens);
+            }
             setEstado(true);
             showSuccessAlert( "Factura adicionado com sucesso!");
         }

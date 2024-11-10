@@ -23,26 +23,33 @@
                <children>
                   <AnchorPane layoutY="7.0" prefHeight="36.0" prefWidth="438.0">
                      <children>
-                        <Button layoutX="11.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="191.0" stylesheets="@../../../style/dashboard.css" text="Detalhes de Cliente" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font name="Berlin Sans FB" size="20.0" />
-                           </font>
-                           <styleClass>
-                              <String fx:value="secondary-color" />
-                              <String fx:value="shadow-efect" />
-                              <String fx:value="hand-efect" />
-                           </styleClass>
-                        </Button>
-                        <Button layoutX="213.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="212.0" stylesheets="@../../../style/dashboard.css" text="Relatorio de Clientes" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font name="Berlin Sans FB" size="20.0" />
-                           </font>
-                           <styleClass>
-                              <String fx:value="secondary-color" />
-                              <String fx:value="shadow-efect" />
-                              <String fx:value="hand-efect" />
-                           </styleClass>
-                        </Button>
+                        <HBox layoutX="11.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#getDescontoView" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de descontos" textFill="WHITE">
+                                 <font>
+                                    <Font name="Berlin Sans FB" size="20.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="secondary-color" />
+                                    <String fx:value="shadow-efect" />
+                                    <String fx:value="hand-efect" />
+                                 </styleClass>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#getTaxasView" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de taxas" textFill="WHITE">
+                                 <font>
+                                    <Font name="Berlin Sans FB" size="20.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="secondary-color" />
+                                    <String fx:value="shadow-efect" />
+                                    <String fx:value="hand-efect" />
+                                 </styleClass>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                   </AnchorPane>
                </children>
@@ -157,7 +164,7 @@
                   <String fx:value="hand-efect" />
                </styleClass>
             </TextField>
-            <ComboBox fx:id="combDesconto" layoutX="242.0" layoutY="86.0" prefHeight="25.0" prefWidth="197.0" promptText="Desconto" />
+            <ComboBox fx:id="combDesconto" layoutX="242.0" layoutY="86.0" onMouseClicked="#populateComboDesconto" prefHeight="25.0" prefWidth="197.0" promptText="Desconto" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="974.0" layoutY="501.0" prefHeight="400.0" prefWidth="450.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.rightAnchor="0.0">

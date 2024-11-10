@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="909.0" prefWidth="1400.0" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_contabilidade.pagamentosView.PagamentoController">
+<AnchorPane prefHeight="909.0" prefWidth="1400.0" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.pagamentosView.PagamentoController">
    <children>
       <TableView fx:id="tabelaFactura" layoutY="130.0" onMouseClicked="#showInvoice" prefHeight="250.0" prefWidth="1432.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
         <columns>
@@ -69,7 +69,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaTransacoes" layoutY="656.0" onMouseClicked="#selecionaTransacao" prefHeight="223.0" prefWidth="1227.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <TableView fx:id="tabelaTransacoes" layoutY="656.0" prefHeight="223.0" prefWidth="1227.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <columns>
             <TableColumn fx:id="idTrans" prefWidth="44.0" resizable="false" text="ID" />
             <TableColumn fx:id="valorTransRecebido" prefWidth="100.0" resizable="false" text="Valor Recebido" />

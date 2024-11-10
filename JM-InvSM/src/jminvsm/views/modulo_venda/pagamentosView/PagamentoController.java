@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package jminvsm.views.modulo_contabilidade.pagamentosView;
+package jminvsm.views.modulo_venda.pagamentosView;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -420,15 +420,15 @@ public class PagamentoController implements Initializable {
         tabelaTransacoes.setItems(listaTransacoes);
     }
 
-    public void selecionaTransacao() {
-        Transacao t = tabelaTransacoes.getSelectionModel().getSelectedItem();
-        if (t != null) {
-            dataPagamento.setValue(LocalDate.parse(t.getData_pagamento()));
-            combmetodoPagamento.setValue(t.getMetodo().getNome());
-            txtValorRecebido.setText(t.getValorRecebido() + "");
-            txtDescricao.setText(t.getDescricao());
-            labTrocos.setText(t.getTrocos() + "");
-        }
-    }
+//    public void selecionaTransacao() {
+//        Transacao t = tabelaTransacoes.getSelectionModel().getSelectedItem();
+//        if (t != null) {
+//            dataPagamento.setValue(LocalDate.parse(t.getData_pagamento()));
+//            combmetodoPagamento.setValue(t.getMetodo().getNome());
+//            txtValorRecebido.setText(t.getValorRecebido() + "");
+//            txtDescricao.setText(t.getDescricao());
+//            labTrocos.setText(t.getTrocos() + "");
+//        }
+//    }
 
 }

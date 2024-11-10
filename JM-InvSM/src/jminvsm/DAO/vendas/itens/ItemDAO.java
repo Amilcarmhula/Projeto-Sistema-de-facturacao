@@ -58,12 +58,50 @@ public class ItemDAO implements ItemDAOImpl<Item> {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    @Override
+    public void addEntityQuotation(List<Item> items) {
+        try {
+            for (Item t : items) {
+                sql = "insert into itemcotacao (quantidade, subtotal,fk_id_desconto,fk_id_produto,fk_numero,"
+                        + "fk_id_usuario, fk_id_armazem,preco) value (?,?,?,?,?,?,?,?)";
+                ps = con.prepareStatement(sql);
+                ps.setInt(1, t.getQuantidade());// ***********
+                ps.setDouble(2, t.getSubtotal());// ***********
+                ps.setInt(3, t.getDesconto().getId());// ***********
+                ps.setInt(4, t.getProduto().getId());// ***********
+                ps.setString(5, t.getFactura().getNumero_fac());// ***********
+                ps.setInt(6, t.getUsuario().getId());// ***********
+                ps.setInt(7, t.getArmazem().getId());// ***********
+                ps.setDouble(8, t.getPreco());
+
+                ps.execute();
+                ps.close();
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     public List<Item> getItensData(String factura) {
         List<Item> lista = new ArrayList<>();
         Item i = null;
         try {
-            sql = "SELECT p.nome, p.descricao,"
+            if(factura.endsWith("/2")){
+                sql = "SELECT p.nome, p.descricao,"
+                    + "i.quantidade,i.preco, i.subtotal, "
+                    + "ip.identificador as descricao_imposto, ip.percentagem AS imposto, "
+                    + "d.identificador AS descricao_desconto, d.percentagem AS desconto, "
+                    + "f.numero "
+                    + "FROM itemcotacao i "
+                    + "LEFT JOIN factura f ON f.numero = i.fk_numero "
+                    + "LEFT JOIN desconto d ON d.id = i.fk_id_desconto "
+                    + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
+                    + "LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto "
+                    + "WHERE i.fk_numero = ?";
+            }else{
+                sql = "SELECT p.nome, p.descricao,"
                     + "i.quantidade,i.preco, i.subtotal, "
                     + "ip.identificador as descricao_imposto, ip.percentagem AS imposto, "
                     + "d.identificador AS descricao_desconto, d.percentagem AS desconto, "
@@ -74,6 +112,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                     + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
                     + "LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto "
                     + "WHERE i.fk_numero = ?";
+            }
             ps = con.prepareStatement(sql);
             ps.setString(1, factura);
             ResultSet result = ps.executeQuery();

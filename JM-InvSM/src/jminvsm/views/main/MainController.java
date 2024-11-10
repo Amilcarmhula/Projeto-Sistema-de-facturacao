@@ -62,21 +62,9 @@ public class MainController implements Initializable {
 
     /*Butoes do modulo de configuracao*/
     @FXML
-    private Button btn_taxas;
-    @FXML
-    private Button btn_unidades;
-    @FXML
-    private Button btn_categorias;
+    private Button btn_setup;
     @FXML
     private Button btn_pagamento;
-    @FXML
-    private Button btn_cliente11;
-    @FXML
-    private Button btn_produtos11;
-    @FXML
-    private Button btn_facturas111;
-    @FXML
-    private Button btn_produtos112;
     @FXML
     private Button btn_stock;
     @FXML
@@ -100,24 +88,8 @@ public class MainController implements Initializable {
         stage.setMaximized(!stage.isMaximized());
     }
 
-    @FXML
-    public void getViews(ActionEvent e) {
-        SysFact.setData(null);
-        String path = "";
-        if (e.getSource() == btn_taxas) {
-            path = "/jminvsm/views/modulo_configs/taxasView/taxaView.fxml";
-//            path = FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "taxaView.fxml");
-        } else if (e.getSource() == btn_unidades) {
-            path = "/jminvsm/views/modulo_configs/unidadeView/unidadeView.fxml";
-        } else if (e.getSource() == btn_categorias) {
-            path = "/jminvsm/views/modulo_configs/categoriaView/categoriaView.fxml";
-        }
-        LoadAndMoveUtilities.showAsPopUP(e, null);
-        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
+    
 
-    }
-
-    // Carregar a primeira tela no centro
     @FXML
     public void switchForm(ActionEvent e) throws IOException {
         SysFact.setData(null);
@@ -136,7 +108,7 @@ public class MainController implements Initializable {
         } else if (e.getSource() == btn_vendas) {
             path = "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
         } else if (e.getSource() == btn_pagamento) {
-            path = "/jminvsm/views/modulo_contabilidade/pagamentosView/pagamentoView.fxml";
+            path = "/jminvsm/views/modulo_venda/pagamentosView/pagamentoView.fxml";
         }
         AnchorPane pane = FXMLLoader.load(getClass().getResource(path));
         anchorMain.getChildren().setAll(pane);
@@ -148,7 +120,6 @@ public class MainController implements Initializable {
         labUserName.setText(user.getNome());
         labEmail.setText(user.getEmail());
         labNivel.setText(user.getNivelAcesso().getDescricao());
-//        btn_dashboard.setStyle("-fx-background-color: rgba(55, 55, 179, 0.25)");
         AnchorPane pane;
         try {
             pane = FXMLLoader.load(getClass().getResource("/jminvsm/views/dashboard/dashboard.fxml"));

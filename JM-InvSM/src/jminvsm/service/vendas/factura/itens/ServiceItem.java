@@ -34,4 +34,18 @@ public class ServiceItem {
             showDialog( "Erro", "Erro ao emitir factura!");
         }
     }
+    
+    public void registaCotacao(List<Item> itens){
+        if(itens == null || itens.isEmpty()){
+            showErroAlert( "Nao pode ser emitida factura sem itens!");
+            return;
+        }
+        
+        try {
+            itemDao.addEntityQuotation(itens);
+//            showSuccessAlert( "Itens adicionados a factura com sucesso!");
+        } catch (Exception ex) {
+            showDialog( "Erro", "Erro ao emitir factura!");
+        }
+    }
 }

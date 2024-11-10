@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="800.0" style="-fx-border-color: #17b5c3; -fx-border-width: 5px;" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.taxasView.TaxaViewController">
+   <children>
+      <AnchorPane layoutX="116.0" layoutY="14.0" prefHeight="50.0" prefWidth="600.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="75.0" layoutY="10.0" text="Registo de Taxas ou Impostos" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="40.0" />
+               </font>
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+            </Label>
+            <Button fx:id="btnClose" layoutX="509.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <styleClass>
+                  <String fx:value="gray-bg" />
+                  <String fx:value="close-categoria" />
+               </styleClass>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="28.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../image/icons/cross.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </AnchorPane>
+      <TableView fx:id="tabelaTaxa" layoutX="15.0" layoutY="174.0" onMouseClicked="#linhaSelecionadaTaxa" prefHeight="219.0" prefWidth="780.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <columns>
+          <TableColumn fx:id="ID" prefWidth="50.0" text="ID" />
+          <TableColumn fx:id="tipoTaxa" prefWidth="145.0" text="Taxa" />
+            <TableColumn fx:id="percentagem" prefWidth="92.0" text="Percentual" />
+            <TableColumn fx:id="descricao" prefWidth="493.0" text="Descricao" />
+        </columns>
+      </TableView>
+      <AnchorPane layoutY="49.0" prefHeight="110.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <Button layoutX="489.0" layoutY="55.0" mnemonicParsing="false" onAction="#resetCampos" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../style/dashboard.css" text="Limpar" textFill="WHITE">
+               <styleClass>
+                  <String fx:value="hand-efect" />
+                  <String fx:value="secondary-color" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <TextField fx:id="txtID" alignment="CENTER" disable="true" layoutX="59.0" layoutY="13.0" prefHeight="25.0" prefWidth="74.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtTaxa" layoutX="145.0" layoutY="13.0" prefHeight="25.0" prefWidth="163.0" promptText="Tipo de Taxa/Imposto" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtPercentagem" layoutX="313.0" layoutY="13.0" prefHeight="25.0" prefWidth="82.0" promptText="\%" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtDescricao" layoutX="399.0" layoutY="13.0" prefHeight="25.0" prefWidth="361.0" promptText="Descricao" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <Button fx:id="btnAdd" layoutX="630.0" layoutY="55.0" mnemonicParsing="false" onAction="#addORupdateTaxa" prefWidth="130.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+               <styleClass>
+                  <String fx:value="hand-efect" />
+                  <String fx:value="secondary-color" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

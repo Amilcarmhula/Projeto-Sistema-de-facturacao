@@ -1,5 +1,5 @@
-drop database _sysface;
-create database _sysface;
+-- drop database _sysface;
+-- create database _sysface;
 
 use _sysface;
 
@@ -328,6 +328,24 @@ CREATE TABLE factura (
 );
  
 create table itemfactura(
+	id integer primary key auto_increment,
+    preco decimal(10,2) not null,
+    quantidade decimal(10,2) not null,
+    subtotal decimal(10,2) not null,
+    fk_id_desconto integer,
+    fk_id_produto integer not null,
+    fk_numero varchar(20) not null,
+    fk_id_usuario integer not null,
+    fk_id_armazem integer not null,
+    data_adicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (fk_id_armazem) references armazem(id),
+    foreign key (fk_id_usuario) references usuario(id),
+    foreign key (fk_id_desconto) references desconto(id),
+    foreign key (fk_id_produto) references produto(id),
+    foreign key (fk_numero) references factura(numero)
+);
+
+create table itemcotacao(
 	id integer primary key auto_increment,
     preco decimal(10,2) not null,
     quantidade decimal(10,2) not null,

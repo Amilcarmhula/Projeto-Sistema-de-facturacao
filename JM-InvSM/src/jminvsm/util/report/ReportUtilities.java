@@ -32,7 +32,7 @@ public class ReportUtilities {
 //            JasperReport compiledReport = JasperCompileManager.compileReport("/jminvsm/reports/vendas/facturas/PF/RelatorioFacturas.jrxml");
 //            JasperReport compiledReport = JasperCompileManager.compileReport(jasperPath);
             System.out.println("path:" +new File(System.getProperty("user.dir")));
-            JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile("C:\\JM-InvSM\\compiled\\RelatorioFacturas.jasper");
+            JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile("C:\\JM-InvSM\\compiled\\Factura.jasper");
 
             // Preencher o relatório
 //            JasperPrint printableReport = JasperFillManager.fillReport(compiledReport, mapParams, dataSOURCE);

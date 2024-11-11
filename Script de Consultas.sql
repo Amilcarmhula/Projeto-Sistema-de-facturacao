@@ -11,6 +11,7 @@ select * from transacoes;
 select * from parcelas;
 select id from parcelas order by id desc limit 1;
 select * from itemfactura;
+select * from itemcotacao;
 select * from taxa_imposto;
 select * from contacorrente;
 select * from caixa;

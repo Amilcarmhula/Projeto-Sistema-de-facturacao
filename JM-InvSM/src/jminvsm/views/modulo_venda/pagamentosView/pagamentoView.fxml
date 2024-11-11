@@ -132,7 +132,7 @@
             <TableColumn fx:id="estadoParcela" prefWidth="142.0" resizable="false" text="Estado" />
          </columns>
       </TableView>
-      <TextField fx:id="txtnumeroDeParcelas" alignment="CENTER" layoutX="139.0" layoutY="388.0" prefHeight="26.0" prefWidth="43.0" text="1" />
+      <TextField fx:id="txtnumeroDeParcelas" alignment="CENTER" layoutX="139.0" layoutY="388.0" prefHeight="26.0" prefWidth="43.0" />
       <Label layoutX="10.0" layoutY="387.0" prefHeight="28.0" prefWidth="129.0" text="Nr. de parcelas">
          <font>
             <Font size="20.0" />
@@ -149,7 +149,7 @@
          </styleClass>
       </Button>
       <ComboBox fx:id="combIntervaloParcelas" layoutX="507.0" layoutY="384.0" prefHeight="35.0" prefWidth="176.0" promptText="Intevalos" />
-      <TextField fx:id="txtjurosParcela" alignment="CENTER" layoutX="243.0" layoutY="388.0" prefHeight="26.0" prefWidth="43.0" text="0" />
+      <TextField fx:id="txtjurosParcela" alignment="CENTER" layoutX="243.0" layoutY="388.0" prefHeight="26.0" prefWidth="43.0" promptText="\%" />
       <Label layoutX="297.0" layoutY="387.0" prefHeight="28.0" prefWidth="206.0" text="Intervalo de pagamento">
          <font>
             <Font size="20.0" />
@@ -160,7 +160,7 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Button fx:id="btnSimularParcelas" layoutX="693.0" layoutY="387.0" mnemonicParsing="false" onAction="#geraParcelas" prefHeight="30.0" prefWidth="79.0" text="Simular" textFill="WHITE">
+      <Button fx:id="btnSimularParcelas" layoutX="693.0" layoutY="387.0" mnemonicParsing="false" onAction="#simulaParcelas" prefHeight="30.0" prefWidth="79.0" text="Simular" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

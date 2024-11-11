@@ -155,6 +155,8 @@ public class PagamentoController implements Initializable {
     @FXML
     private Button btnParcelas;
     @FXML
+    private Button btnSimularParcelas;
+    @FXML
     private TextField txtDescricao;
     private int id_parcela = 0;
 
@@ -178,7 +180,7 @@ public class PagamentoController implements Initializable {
         } else {
             intervalo = mapaIntervaloParcelas.get(combIntervaloParcelas.getValue());
         }
-        int numParcelas = Integer.parseInt(txtnumeroDeParcelas.getText().equals("") ? "0" : txtnumeroDeParcelas.getText());
+        int numParcelas = Integer.parseInt(txtnumeroDeParcelas.getText().equals("") ? "1" : txtnumeroDeParcelas.getText());
         double taxaJuros = Double.parseDouble(txtjurosParcela.getText().equals("") ? "0" : txtjurosParcela.getText());
         double saldo = Double.parseDouble(labValorPorPagar.getText().equals("") ? "0" : labValorPorPagar.getText());
         serviceParcela.regista(numParcelas, intervalo, taxaJuros,
@@ -193,7 +195,19 @@ public class PagamentoController implements Initializable {
     private ObservableList<Parcela> listaParcelas;
 
     public void showParcelas() {
-        listaParcelas = serviceParcela.consultaParcelas(labNumeroFactura.getText());
+//        listaParcelas = serviceParcela.consultaParcelas(labNumeroFactura.getText());
+        listaParcelas = FXCollections.observableArrayList();
+        for (Parcela p : serviceParcela.consultaParcelas(labNumeroFactura.getText())) {
+            p.setId(p.getId());
+            p.setParcelaNumero(p.getParcelaNumero());
+            p.setDataPagamento(p.getDataPagamento());
+            p.setDataVencimento(p.getDataVencimento());
+            p.setEstado(p.getEstado());
+            p.setTaxaDeAtraso(p.getTaxaDeAtraso() * 100);
+            p.setTaxaJuros(p.getTaxaJuros() * 100);
+            p.setValorParcela(p.getValorParcela());
+            listaParcelas.add(p);
+        }
 
         IDParcela.setCellValueFactory(new PropertyValueFactory<>("id"));
         refParcela.setCellValueFactory(new PropertyValueFactory<>("parcelaNumero"));
@@ -206,6 +220,48 @@ public class PagamentoController implements Initializable {
         estadoParcela.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         tabelaParcelas.setItems(listaParcelas);
+    }
+
+    public void simulaParcelas(ActionEvent e) throws SQLException {
+        int intervalo;
+        if (combIntervaloParcelas.getValue() == null) {
+            intervalo = 30;
+        } else {
+            intervalo = mapaIntervaloParcelas.get(combIntervaloParcelas.getValue());
+        }
+        int numParcelas = Integer.parseInt(txtnumeroDeParcelas.getText().equals("") ? "1" : txtnumeroDeParcelas.getText());
+        double taxaJuros = Double.parseDouble(txtjurosParcela.getText().equals("") ? "0" : txtjurosParcela.getText());
+        double saldo = Double.parseDouble(labValorPorPagar.getText().equals("") ? "0" : labValorPorPagar.getText());
+        listaParcelas = serviceParcela.simulaParcelas(numParcelas, intervalo, taxaJuros,
+                saldo, labNumeroFactura.getText(), userData);
+        showParcelasSimuladas();
+
+    }
+
+    public void showParcelasSimuladas() {
+        ObservableList<Parcela> listaAux = FXCollections.observableArrayList();
+        for (Parcela p : listaParcelas) {
+            p.setParcelaNumero(p.getParcelaNumero());
+            p.setDataPagamento(p.getDataPagamento());
+            p.setDataVencimento(p.getDataVencimento());
+            p.setEstado(p.getEstado());
+            p.setTaxaDeAtraso(p.getTaxaDeAtraso() * 100);
+            p.setTaxaJuros(p.getTaxaJuros() * 100);
+            p.setValorParcela(p.getValorParcela());
+            listaAux.add(p);
+        }
+
+        IDParcela.setCellValueFactory(new PropertyValueFactory<>("id"));
+        refParcela.setCellValueFactory(new PropertyValueFactory<>("parcelaNumero"));
+        jurosParcela.setCellValueFactory(new PropertyValueFactory<>("taxaJuros"));
+        jurosAtrasoParcela.setCellValueFactory(new PropertyValueFactory<>("taxaDeAtraso"));
+        valorParcela.setCellValueFactory(new PropertyValueFactory<>("valorParcela"));
+        valorParcelaPago.setCellValueFactory(new PropertyValueFactory<>("valorPagoParcela"));
+        dataVencimentoParcela.setCellValueFactory(new PropertyValueFactory<>("dataVencimento"));
+        dataPagamentoParcela.setCellValueFactory(new PropertyValueFactory<>("dataPagamento"));
+        estadoParcela.setCellValueFactory(new PropertyValueFactory<>("estado"));
+
+        tabelaParcelas.setItems(listaAux);
     }
 
     public void selecionaParcela() {
@@ -389,13 +445,16 @@ public class PagamentoController implements Initializable {
             if (f.getEstado().equals("Paga") || f.getEstado().equals("Cancelada")) {
                 btnFinalizar.setDisable(true);
                 btnParcelas.setDisable(true);
+                btnSimularParcelas.setDisable(true);
             } else {
                 btnFinalizar.setDisable(false);
             }
             if (f.getNumeroParcelas() >= 1) {
                 btnParcelas.setDisable(true);
+                btnSimularParcelas.setDisable(true);
             } else {
                 btnParcelas.setDisable(false);
+                btnSimularParcelas.setDisable(false);
             }
             /*Abaixo vem a logica para pesquisar as transacoes da factura*/
             showTransacoes();
@@ -430,5 +489,4 @@ public class PagamentoController implements Initializable {
 //            labTrocos.setText(t.getTrocos() + "");
 //        }
 //    }
-
 }

@@ -17,6 +17,8 @@ import jminvsm.model.empresa.Empresa;
 import jminvsm.model.empresa.conta.ContaBancaria;
 import jminvsm.model.empresa.contacto.ContactoEmpresa;
 import jminvsm.model.empresa.endereco.EnderecoEmpresa;
+import jminvsm.model.metodo_pagamento.MetodoPagamento;
+import jminvsm.model.transacao.Transacao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.documetos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.Factura;
@@ -123,7 +125,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     public Factura getFacturaData(String factura) {
         Factura f = null;
         try {
-            sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, f.total, f.totalPago, f.saldoPendente, f.estado,"
+            sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, f.total, f.totalPago, f.saldoPendente, f.estado, f.condicaoPagemento,"
+                    + "GROUP_CONCAT(DISTINCT m.nome SEPARATOR '; ') AS metodoPagamento,"
                     + "doc.sigla, doc.nome as documento,"
                     + "cli.razaosocial, cli.nuit as nuit_cliente,"
                     + "ec.avenida,ec.rua,ec.numero,ec.bairro,ec.cidade,ec.provincia,ec.codigo_postal,"
@@ -135,6 +138,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                     + "ce.email as email_empresa, ce.website,"
                     + "a.nome_banco, a.numero as numeroConta, a.nib, a.nuib "
                     + "FROM factura f "
+                    + "LEFT JOIN transacoes t ON t.fk_numero = f.numero " 
+                    + "LEFT JOIN metodo_pagamento m ON m.id = t.fk_id_metodo_pagamento "
                     + "LEFT JOIN documentocomercial doc ON f.fk_id_doc = doc.id "
                     + "LEFT JOIN cliente cli ON cli.id = f.fk_id_cliente "
                     + "LEFT JOIN contacto_cliente cc ON cc.fk_id_cliente = cli.id "
@@ -156,6 +161,12 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 f.setTotalPago(result.getDouble("totalPago"));
                 f.setSaldoPendente(result.getDouble("saldoPendente"));
                 f.setEstado(result.getString("estado"));
+                f.setCondicaoPagamento(result.getString("condicaoPagemento"));
+                MetodoPagamento mt = new MetodoPagamento();
+                mt.setNomePagamento(result.getString("metodoPagamento"));
+                Transacao t = new Transacao();
+                t.setMetodo(mt);
+                f.setTransacoes(t);
                 DocumentosComerciais d = new DocumentosComerciais();
                 d.setNome_doc(result.getString("documento"));
                 d.setSigla_doc(result.getString("sigla"));

@@ -10,7 +10,7 @@ package jminvsm.model.metodo_pagamento;
  */
 public class MetodoPagamento {
     private int id;
-    private String nome;
+    private String nomePagamento;
     private String descricao;
     private String data_criacao;
 
@@ -20,7 +20,7 @@ public class MetodoPagamento {
     
 
     public MetodoPagamento(String nome, String descricao, String data_criacao) {
-        this.nome = nome;
+        this.nomePagamento = nome;
         this.descricao = descricao;
         this.data_criacao = data_criacao;
     }
@@ -33,12 +33,12 @@ public class MetodoPagamento {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomePagamento() {
+        return nomePagamento;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomePagamento(String nomePagamento) {
+        this.nomePagamento = nomePagamento;
     }
 
     public String getDescricao() {

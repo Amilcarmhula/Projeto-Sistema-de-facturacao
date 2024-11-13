@@ -94,7 +94,11 @@ public class Teste {
     }
 
     public static void main(String[] args) {
-        criaParcelas(4, 30);
+        System.out.println(System.getProperty("user.dir"));
+//        LocalDate currentDate = LocalDate.now(); // Get the current date +"\\src\\sysfact\\reports\\", "../"
+//        DateTimeFormatter df = DateTimeFormatter.ofPattern("+ dd - MMM - yyyy");
+//        System.out.println(currentDate.format(df).replace("+", "Maputo, aos ").replace("-", "de"));
+//        System.out.println(LocalDate.now().format(DateTimeFormatter.ofPattern("+ dd - MMM - yyyy")).replace("+", "Maputo, aos ").replace("-", "de"));
     }
 
     /**

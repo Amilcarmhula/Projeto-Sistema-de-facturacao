@@ -131,7 +131,7 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
                 t.setData_criacao(result.getString("data_criacao"));
                 t.setDescricao(result.getString("descricao"));
                 MetodoPagamento m = new MetodoPagamento();
-                m.setNome(result.getString("nome"));
+                m.setNomePagamento(result.getString("nome"));
                 t.setMetodo(m);
                 lista.add(t);
             }

@@ -103,7 +103,7 @@ public class ServiceFactura {
     }
 
     public void geraRelatorio(String numero) throws SQLException {
-        factura.criaRelatorio(numero);
+        factura.criarFactura(numero);
     }
 
     public Factura consultaFactura(String numero) {

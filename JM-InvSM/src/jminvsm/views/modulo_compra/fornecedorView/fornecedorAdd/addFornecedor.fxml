@@ -81,7 +81,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane layoutY="163.0" prefHeight="185.0" prefWidth="788.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane layoutY="170.0" prefHeight="185.0" prefWidth="788.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <TextField fx:id="txtIDContacto" disable="true" layoutX="6.0" layoutY="2.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" />
             <TextField fx:id="txtContacto" layoutX="307.0" layoutY="2.0" prefHeight="20.0" prefWidth="181.0" promptText="Numero de telefone">
@@ -129,41 +129,41 @@
             </TextField>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="10.0" layoutY="352.0" prefHeight="192.0" prefWidth="778.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane layoutX="10.0" layoutY="352.0" prefHeight="185.0" prefWidth="778.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
          <children>
-            <TextField fx:id="txtIDEndereco" disable="true" layoutX="8.0" layoutY="2.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" />
-            <TextField fx:id="txtCidade" layoutX="245.0" layoutY="2.0" prefHeight="20.0" prefWidth="122.0" promptText="Cidade">
+            <TextField fx:id="txtIDEndereco" disable="true" layoutX="8.0" layoutY="12.0" prefHeight="20.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" />
+            <TextField fx:id="txtCidade" layoutX="245.0" layoutY="12.0" prefHeight="20.0" prefWidth="122.0" promptText="Cidade">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <ComboBox fx:id="combProvincia" layoutX="100.0" layoutY="2.0" prefHeight="26.0" prefWidth="137.0" promptText="Provincia" />
-            <TextField fx:id="txtBairro" layoutX="374.0" layoutY="2.0" prefHeight="20.0" prefWidth="241.0" promptText="Bairro">
+            <ComboBox fx:id="combProvincia" layoutX="100.0" layoutY="12.0" prefHeight="26.0" prefWidth="137.0" promptText="Provincia" />
+            <TextField fx:id="txtBairro" layoutX="374.0" layoutY="12.0" prefHeight="20.0" prefWidth="241.0" promptText="Bairro">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="txtAvenida" layoutX="8.0" layoutY="37.0" prefHeight="20.0" prefWidth="261.0" promptText="Avenida">
+            <TextField fx:id="txtAvenida" layoutX="8.0" layoutY="47.0" prefHeight="20.0" prefWidth="261.0" promptText="Avenida">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="txtCodigooPostal" layoutX="277.0" layoutY="37.0" prefHeight="20.0" prefWidth="122.0" promptText="Codigo postal">
+            <TextField fx:id="txtCodigooPostal" layoutX="277.0" layoutY="47.0" prefHeight="20.0" prefWidth="122.0" promptText="Codigo postal">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="txtRua" layoutX="625.0" layoutY="2.0" prefHeight="20.0" prefWidth="130.0" promptText="Rua">
+            <TextField fx:id="txtRua" layoutX="625.0" layoutY="12.0" prefHeight="20.0" prefWidth="130.0" promptText="Rua">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <TextField fx:id="txtNumeroEndereco" layoutX="410.0" layoutY="37.0" prefHeight="20.0" prefWidth="103.0" promptText="Numero">
+            <TextField fx:id="txtNumeroEndereco" layoutX="410.0" layoutY="47.0" prefHeight="20.0" prefWidth="103.0" promptText="Numero">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
@@ -181,7 +181,7 @@
                   <TableColumn fx:id="numerotabelaEndereco" prefWidth="47.0" text="Nr" />
                </columns>
             </TableView>
-            <Button fx:id="btnAddEndereco" layoutX="625.0" layoutY="36.0" mnemonicParsing="false" onAction="#addORupdateEndereco" prefHeight="30.0" prefWidth="130.0" text="Adicionar" textFill="WHITE">
+            <Button fx:id="btnAddEndereco" layoutX="625.0" layoutY="46.0" mnemonicParsing="false" onAction="#addORupdateEndereco" prefHeight="30.0" prefWidth="130.0" text="Adicionar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

@@ -28,11 +28,9 @@ public class ReportUtilities {
 
     public static void genarateJasperReport(String jasperPath, Map<String, Object> mapParams, JRBeanCollectionDataSource dataSOURCE) {
         try {
-//            String jasperPath = "C:\\Users\\JM-Tecnologias\\JaspersoftWorkspace\\SysFaceReports\\RelatorioFacturas.jrxml";
-//            JasperReport compiledReport = JasperCompileManager.compileReport("/jminvsm/reports/vendas/facturas/PF/RelatorioFacturas.jrxml");
-//            JasperReport compiledReport = JasperCompileManager.compileReport(jasperPath);
-            System.out.println("path:" +new File(System.getProperty("user.dir")));
-            JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile("C:\\JM-InvSM\\compiled\\Factura.jasper");
+
+//            JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile("C:\\JM-InvSM\\compiled\\FacturaRecibo.jasper");
+            JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile(jasperPath);
 
             // Preencher o relatório
 //            JasperPrint printableReport = JasperFillManager.fillReport(compiledReport, mapParams, dataSOURCE);

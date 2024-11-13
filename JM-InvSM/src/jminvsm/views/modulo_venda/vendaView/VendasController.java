@@ -60,6 +60,7 @@ import static jminvsm.util.AlertUtilities.showErroAlert;
  * @author JM-Tecnologias
  */
 public class VendasController implements Initializable {
+
     private ServiceCliente serviceCliente;
 
     private Empresa empresaData;
@@ -163,14 +164,13 @@ public class VendasController implements Initializable {
     private Map<Integer, Produto> mapaProdutos;
 
     private Random randNum;
-    
-  
+
     public void getTaxasView(ActionEvent e) {
         SysFact.setData(null);
         LoadAndMoveUtilities.showAsPopUP(e, null);
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_inventario/taxasView/taxaView.fxml");
     }
-    
+
     public void getDescontoView(ActionEvent e) {
         SysFact.setData(null);
         LoadAndMoveUtilities.showAsPopUP(e, null);
@@ -196,7 +196,7 @@ public class VendasController implements Initializable {
     public void getSearchClienteKEY(KeyEvent keyEvt) throws SQLException {
         if (keyEvt.getCode().equals(KeyCode.ENTER)) {
             ClienteDAO xDAO = new ClienteDAO();
-            
+
             Cliente x = serviceCliente.getClienteCompletoByID(Integer.valueOf(txtIDCliente.getText()));
             if (x != null) {
                 txtIDCliente.setText(x.getId() + "");
@@ -224,16 +224,16 @@ public class VendasController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
                     if (SysFact.getData() instanceof Cliente) {
-                            Cliente c = (Cliente) SysFact.getData();
-                            Cliente x = serviceCliente.getClienteCompletoByID(c.getId());
-                            if (x != null) {
-                                txtIDCliente.setText(x.getId() + "");
-                                txtEnderecoCliente.setText(x.printEnderecos());
-                                txtNomeCLiente.setText(x.getRazao_cli());
-                                txtNuitCLiente.setText(x.getNuit_cli() + "");
-                                txtContactoCLiente.setText(x.printContatos());
-                                txtEmailCLiente.setText(x.getContactoCliente().getEmail_cli());
-                            }
+                        Cliente c = (Cliente) SysFact.getData();
+                        Cliente x = serviceCliente.getClienteCompletoByID(c.getId());
+                        if (x != null) {
+                            txtIDCliente.setText(x.getId() + "");
+                            txtEnderecoCliente.setText(x.printEnderecos());
+                            txtNomeCLiente.setText(x.getRazao_cli());
+                            txtNuitCLiente.setText(x.getNuit_cli() + "");
+                            txtContactoCLiente.setText(x.printContatos());
+                            txtEmailCLiente.setText(x.getContactoCliente().getEmail_cli());
+                        }
                     }
                 }
             }
@@ -269,9 +269,9 @@ public class VendasController implements Initializable {
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidade_medida().getSigla())));
         quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
         descontotabelaItens.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getDesconto().getPercentagemDesconto()*100)+"%"));
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getDesconto().getPercentagemDesconto() * 100) + "%"));
         taxatabelaItens.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getTaxa_imposto().getPercentagemImposto()*100)+"%"));
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getTaxa_imposto().getPercentagemImposto() * 100) + "%"));
         subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
         randNum = new Random();
         mapaProdutos = new HashMap<>();
@@ -303,10 +303,10 @@ public class VendasController implements Initializable {
         List<String> lista = new ArrayList<>();
         for (DocumentosComerciais doc : listaDocComercial) {
             mapaDocComercial.put(doc.getNome_doc(), doc);
-            if(doc.getNome_doc().startsWith("Fatura")){
+            if (doc.getNome_doc().startsWith("Fatura")) {
                 lista.add(doc.getNome_doc());
             }
-            
+
         }
         combTipoDoc.setItems(FXCollections.observableArrayList(lista));
     }
@@ -360,7 +360,7 @@ public class VendasController implements Initializable {
             } else {
                 subtotal = qtd * x.getPrecovenda().getPreco() + taxa - desc;
             }
-        }else{
+        } else {
             AlertUtilities.showDialog("Erro", "Tipo de documento nao selecionado! Selecione o tipo de factura");
             return;
         }
@@ -404,6 +404,9 @@ public class VendasController implements Initializable {
                 condicao = "A vista";
             }
         }
+        if (combTipoDoc.getValue().equals("Fatura Simplificada") && (!rdPagamentoVista.isSelected() || !rdPagamentoParcelado.isSelected())) {
+                condicao = "A vista";
+            }
         return condicao;
     }
 
@@ -416,7 +419,7 @@ public class VendasController implements Initializable {
                 labValidade.getText(), Double.valueOf(labTotalGeral.getText()), radioCondicaoPagamento(), doc, cli, empresaData, userData, collectItens());
         //Se a factura for criada com sucesso, sereta os campos
         if (service.isEstado()) {
-            if ("Fatura".equals(combTipoDoc.getValue()) || "Fatura Recibo".equals(combTipoDoc.getValue()) || "Fatura Simplificada".equals(combTipoDoc.getValue())) {
+            if ("Fatura".equals(combTipoDoc.getValue()) || "Fatura Recibo".equals(combTipoDoc.getValue())) {
                 if (rdPagamentoVista.isSelected()) {
                     SysFact.setData(labNumeroFactura.getText());
                     geMiniPagamentoView(evt);
@@ -425,6 +428,10 @@ public class VendasController implements Initializable {
                     service.geraRelatorio(labNumeroFactura.getText());
                     resetFactura();
                 }
+            } else if ("Fatura Simplificada".equals(combTipoDoc.getValue())) {
+                SysFact.setData(labNumeroFactura.getText());
+                geMiniPagamentoView(evt);
+                resetFactura();
             } else {
                 service.geraRelatorio(labNumeroFactura.getText());
                 resetFactura();

@@ -317,8 +317,8 @@ public class PagamentoController implements Initializable {
         mapaMetodos = new HashMap<>();
         List<String> lista = new ArrayList<>();
         for (MetodoPagamento metodoPagamento : listaMetodosPagamento) {
-            mapaMetodos.put(metodoPagamento.getNome(), metodoPagamento);
-            lista.add(metodoPagamento.getNome());
+            mapaMetodos.put(metodoPagamento.getNomePagamento(), metodoPagamento);
+            lista.add(metodoPagamento.getNomePagamento());
         }
         combmetodoPagamento.setItems(FXCollections.observableList(lista));
 
@@ -431,7 +431,7 @@ public class PagamentoController implements Initializable {
     public void showInvoice(MouseEvent evt) throws SQLException {
         if (evt.getClickCount() == 2) {
             Factura f = tabelaFactura.getSelectionModel().getSelectedItem();
-            f.criaRelatorio(f.getNumero_fac());
+            f.criarFactura(f.getNumero_fac());
         }
         selecionaFactura();
     }
@@ -471,7 +471,7 @@ public class PagamentoController implements Initializable {
         valorTransPago.setCellValueFactory(new PropertyValueFactory<>("valorPago"));
         valorTransTrocos.setCellValueFactory(new PropertyValueFactory<>("trocos"));
         metodoPagamentoTrans.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getMetodo().getNome())));
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getMetodo().getNomePagamento())));
         dataPagamentoTrans.setCellValueFactory(new PropertyValueFactory<>("data_pagamento"));
         dataRegistoTrans.setCellValueFactory(new PropertyValueFactory<>("data_criacao"));
         descricaoTrans.setCellValueFactory(new PropertyValueFactory<>("descricao"));

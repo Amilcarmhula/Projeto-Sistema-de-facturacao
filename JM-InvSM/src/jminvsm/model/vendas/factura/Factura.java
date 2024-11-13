@@ -69,7 +69,7 @@ public class Factura {
 
     
 
-    public void criaRelatorio(String numeroFactura) throws SQLException {
+    public void criarFactura(String numeroFactura) throws SQLException {
 
         List<Factura> detalhesFactura = new ArrayList<Factura>();
         Factura detalhes = new FacturaDAO().getFacturaData(numeroFactura);
@@ -87,8 +87,14 @@ public class Factura {
         parametros.put("TABLE_DATA_SOURCE", itemDataSource);
         parametros.put("NOMEFACTURA", numeroFactura);
         
-//        String path = FilePathFinderUtilities.absolutePathBuilder(new File(System.getProperty("user.dir")), "RelatorioFacturas.jrxml");
-        String path = FilePathFinderUtilities.absolutePathBuilder(new File(System.getProperty("user.dir")), "RelatorioFacturas.jasper");
+        String path = "";
+        if(numeroFactura.endsWith("/1") || numeroFactura.endsWith("/2")){
+            path = "C:\\JM-InvSM\\compiled\\Factura.jasper";
+        }else if(numeroFactura.endsWith("/3")){
+            path = "C:\\JM-InvSM\\compiled\\FacturaRecibo.jasper";
+        }else{
+            path = "C:\\JM-InvSM\\compiled\\FacturaRecibo.jasper";
+        }
 
         ReportUtilities.genarateJasperReport(path, parametros, facturaDetalhesDATASOURCE);
 //        ReportUtilities.genarateJasperReport("/jminvsm/reports/vendas/facturas/PF/RelatorioFacturas.jrxml", parametros, facturaDetalhesDATASOURCE);
@@ -220,6 +226,12 @@ public class Factura {
 
     public void setDocComerciais(DocumentosComerciais docComerciais) {
         this.docComerciais = docComerciais;
+    }
+    public String getNomePagamento(){
+        if(transacoes != null){
+            return transacoes.getMetodo().getNomePagamento();
+        }
+        return " ";
     }
 
     public String getNome_doc() {

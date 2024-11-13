@@ -116,8 +116,8 @@ public class MiniPagamentoViewController implements Initializable {
         mapaMetodos = new HashMap<>();
         List<String> lista = new ArrayList<>();
         for (MetodoPagamento metodoPagamento : listaMetodosPagamento) {
-            mapaMetodos.put(metodoPagamento.getNome(), metodoPagamento);
-            lista.add(metodoPagamento.getNome());
+            mapaMetodos.put(metodoPagamento.getNomePagamento(), metodoPagamento);
+            lista.add(metodoPagamento.getNomePagamento());
         }
         combmetodoPagamento.setItems(FXCollections.observableList(lista));
 

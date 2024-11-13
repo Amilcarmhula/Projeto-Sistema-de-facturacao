@@ -355,50 +355,6 @@ public class ProdutoController implements Initializable {
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_inventario/stockView/addStock.fxml");
     }
 
-//    public void addProduto() throws SQLException {
-//        ProdutoDAO xDAO = new ProdutoDAO();
-//        ServiceProduto sp = new ServiceProduto(xDAO);
-////        sp.registraProduto(Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
-////                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
-////                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
-////                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("")?"0":txtNivelStock.getText()));
-//
-//        addPrecoVenda();
-//        resetCampos();
-////        stockControlChecked();
-//    }
-//    public void addPrecoVenda() throws SQLException {
-//        ServicePrecoVenda spv = new ServicePrecoVenda();
-//        ProdutoDAO xDAO = new ProdutoDAO();
-////        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText()),
-////                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-////                userData, xDAO.getLastEntity());
-//        showProduto();
-//        resetCampos();
-//    }
-//    public void updateProduto() throws SQLException {
-//        ProdutoDAO xDAO = new ProdutoDAO();
-//        ServiceProduto sp = new ServiceProduto();
-////        sp.actualizaProduto(Integer.parseInt(txtIDProduto.getText()),Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
-////                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
-////                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
-////                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
-//
-//        showProduto();
-//    }
-//    public void updatePrecoVenda() throws SQLException {
-//        ServicePrecoVenda spv = new ServicePrecoVenda();
-//        ProdutoDAO xDAO = new ProdutoDAO();
-//        spv.actualizaPrecoVenda(Integer.parseInt(labIDPreco.getText()), Double.valueOf(txtPreco.getText()),
-//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-//                userData);
-//        showProduto();
-//        resetCampos();
-//
-//    }
-    /*
-        Codigos corregidso. Nova versao
-     */
 //  ############################################################################
     public void addProduto(ActionEvent e) throws SQLException {
         if(combCategoria.getValue() == null){

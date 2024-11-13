@@ -36,7 +36,7 @@ public class MetodoPagamentoDAO implements MetodoImpl<MetodoPagamento>{
             while (result.next()) {
                 MetodoPagamento m = new MetodoPagamento();
                 m.setId(result.getInt("id"));
-                m.setNome(result.getString("nome"));
+                m.setNomePagamento(result.getString("nome"));
                 m.setDescricao(result.getString("descricao"));
                 m.setData_criacao(result.getString("data_criacao"));
                 lista.add(m);

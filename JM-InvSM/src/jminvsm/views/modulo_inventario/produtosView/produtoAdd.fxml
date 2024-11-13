@@ -68,17 +68,15 @@
       <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="295.0" onMouseClicked="#selecionaProduto" prefHeight="346.0" prefWidth="1400.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
-            <TableColumn fx:id="armazem" prefWidth="209.0" text="Armazem" />
-            <TableColumn fx:id="artigo" prefWidth="209.0" text="Artigo" />
-            <TableColumn fx:id="codigobarras" prefWidth="135.0" text="Codigo de barras" />
-            <TableColumn fx:id="descricao" prefWidth="229.0" resizable="false" text="Descrição" />
+            <TableColumn fx:id="artigo" prefWidth="250.0" text="Artigo" />
+            <TableColumn fx:id="codigobarras" prefWidth="150.0" text="Codigo de barras" />
+            <TableColumn fx:id="descricao" prefWidth="400.0" resizable="false" text="Descrição" />
             <TableColumn fx:id="unidade" prefWidth="63.0" resizable="false" text="Unidade" />
             <TableColumn fx:id="categoria" prefWidth="216.0" resizable="false" text="Categoria" />
             <TableColumn fx:id="taxa" prefWidth="78.0" resizable="false" text="Taxa" />
             <TableColumn fx:id="stock" prefWidth="57.0" resizable="false" text="Stock" />
             <TableColumn fx:id="nivelStock" prefWidth="57.0" resizable="false" text="Nivel" />
             <TableColumn fx:id="quantidade" prefWidth="68.0" resizable="false" text="Qtd." />
-            <TableColumn fx:id="btntabelaProduto" prefWidth="48.0" resizable="false" />
          </columns>
       </TableView>
       <AnchorPane prefHeight="243.0" prefWidth="1432.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
@@ -175,7 +173,7 @@
                   <TableColumn fx:id="estadoPreco" prefWidth="100.0" text="Estado" />
                </columns>
             </TableView>
-            <TextField fx:id="txtPesquisar" layoutX="29.0" layoutY="202.0" prefHeight="25.0" prefWidth="396.0" promptText="Pesquisar produto" stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtPesquisar" layoutX="246.0" layoutY="202.0" prefHeight="26.0" prefWidth="321.0" promptText="Pesquisar produto" stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
@@ -209,6 +207,7 @@
                   <Insets />
                </opaqueInsets>
             </Button>
+            <ComboBox fx:id="combArmazem" layoutX="14.0" layoutY="200.0" onMouseClicked="#populateCombos" prefHeight="30.0" prefWidth="220.0" promptText="Armazem" visibleRowCount="5" />
          </children>
       </AnchorPane>
    </children>

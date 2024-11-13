@@ -293,6 +293,7 @@ public class AddFornecedorController implements Initializable {
         serviceFornecedor.registar(txtRazao.getText(), combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText().equals("")?"0":txtNuit.getText()), userData);
         if (serviceFornecedor.isOpsSuccess()) {
             showCliente();
+            ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
         }
     }
 

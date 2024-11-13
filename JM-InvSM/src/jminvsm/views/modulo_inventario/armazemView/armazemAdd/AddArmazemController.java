@@ -297,6 +297,7 @@ public class AddArmazemController implements Initializable {
         ServiceArmazem servicee = new ServiceArmazem();
         servicee.registar(combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
         if (servicee.isOpsSuccess()) {
+            ButtonUtilities.buttonChangeText(btnAddArmazem, txtIDCliente);
             showLastStoreAdded();
             servicee.setOpsSuccess(false);
         }
@@ -308,6 +309,7 @@ public class AddArmazemController implements Initializable {
         Integer id = Integer.valueOf(txtIDCliente.getText());
         service.registar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
         if (service.isOpsSuccess()) {
+            
             showContactos();
             restContacto();
         }

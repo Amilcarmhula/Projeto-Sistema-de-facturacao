@@ -93,7 +93,7 @@ public class Factura {
         }else if(numeroFactura.endsWith("/3")){
             path = "C:\\JM-InvSM\\compiled\\FacturaRecibo.jasper";
         }else{
-            path = "C:\\JM-InvSM\\compiled\\FacturaRecibo.jasper";
+            path = "C:\\JM-InvSM\\compiled\\FacturaSimplificada.jasper";
         }
 
         ReportUtilities.genarateJasperReport(path, parametros, facturaDetalhesDATASOURCE);
@@ -231,7 +231,21 @@ public class Factura {
         if(transacoes != null){
             return transacoes.getMetodo().getNomePagamento();
         }
-        return " ";
+        return "";
+    }
+    
+    public double getTrocos(){
+        if(transacoes != null){
+            return transacoes.getTrocos();
+        }
+        return -1;
+    }
+    
+    public double getValorRecebido(){
+        if(transacoes != null){
+            return transacoes.getValorRecebido();
+        }
+        return -1;
     }
 
     public String getNome_doc() {

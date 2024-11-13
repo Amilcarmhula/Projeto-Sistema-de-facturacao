@@ -77,7 +77,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         boolean isSuccess = false;
         try {
             sql = "update produto set nome=?,codigo_barra=?, descricao=?,fk_id_categoria=?, "
-                    + "fk_id_unidade_medida=?,fk_id_taxa_imposto=?, nivelstock=? where id=?";
+                    + "fk_id_unidade_medida=?,fk_id_taxa_imposto=?, nivelstock=?, contole_stock=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNomeProduto());
@@ -87,7 +87,8 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setInt(5, t.getUnidade_medida().getId());
             ps.setInt(6, t.getTaxa_imposto().getId());
             ps.setInt(7, t.getNivelstock());
-            ps.setInt(8, id);
+            ps.setBoolean(8, t.isContole_stock());
+            ps.setInt(9, id);
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {

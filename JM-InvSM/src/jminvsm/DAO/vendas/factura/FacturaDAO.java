@@ -125,7 +125,9 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     public Factura getFacturaData(String factura) {
         Factura f = null;
         try {
-            sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, f.total, f.totalPago, f.saldoPendente, f.estado, f.condicaoPagemento,"
+            sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, "
+                    + "f.total, f.totalPago, f.saldoPendente, f.estado, f.condicaoPagemento,"
+                    + "sum(t.trocos) as trocosTrans, sum(t.valorRecebido) as valorTrans, "
                     + "GROUP_CONCAT(DISTINCT m.nome SEPARATOR '; ') AS metodoPagamento,"
                     + "doc.sigla, doc.nome as documento,"
                     + "cli.razaosocial, cli.nuit as nuit_cliente,"
@@ -165,6 +167,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 MetodoPagamento mt = new MetodoPagamento();
                 mt.setNomePagamento(result.getString("metodoPagamento"));
                 Transacao t = new Transacao();
+                t.setValorRecebido(result.getDouble("valorTrans"));
+                t.setTrocos(result.getDouble("trocosTrans"));
                 t.setMetodo(mt);
                 f.setTransacoes(t);
                 DocumentosComerciais d = new DocumentosComerciais();

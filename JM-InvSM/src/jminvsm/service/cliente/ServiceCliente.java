@@ -40,15 +40,15 @@ public class ServiceCliente {
             return;
         }
         if (razaosocial == null || razaosocial.isEmpty()) {
-            showErroAlert( "Razao Social denifida por padrao!");
+//            showErroAlert( "Razao Social denifida por padrao!");
             razaosocial = nome + ", E.I";
         }
         if (tipo == null || tipo.isEmpty()) {
-            showErroAlert( "Tipo de cliente nao defindo. Tipo de Cliente padrao criado!");
+//            showErroAlert( "Tipo de cliente nao defindo. Tipo de Cliente padrao criado!");
             tipo = "Pessoa Física";
         }
         if (nuit == null || nuit <= 0) {
-            showErroAlert( "NUIT nulo. NUIT padrao criado!");
+//            showErroAlert( "NUIT nulo. NUIT padrao criado!");
             nuit = 100000001;
         }
         Cliente cliente = new Cliente();
@@ -74,15 +74,15 @@ public class ServiceCliente {
             return;
         }
         if (razaosocial == null || razaosocial.isEmpty()) {
-            showErroAlert( "Razao Social denifida por padrao!");
+//            showErroAlert( "Razao Social denifida por padrao!");
             razaosocial = nome + ", E.I";
         }
         if (tipo == null || tipo.isEmpty()) {
-            showErroAlert( "Tipo de cliente nao defindo. Tipo de Cliente padrao criado!");
+//            showErroAlert( "Tipo de cliente nao defindo. Tipo de Cliente padrao criado!");
             tipo = "Pessoa Física";
         }
         if (nuit == null || nuit <= 0) {
-            showErroAlert( "NUIT nulo. NUIT padrao criado!");
+//            showErroAlert( "NUIT nulo. NUIT padrao criado!");
             nuit = 100000001;
         }
         Cliente cliente = new Cliente();

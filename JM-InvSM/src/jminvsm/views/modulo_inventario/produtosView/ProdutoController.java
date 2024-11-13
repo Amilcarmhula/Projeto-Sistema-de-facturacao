@@ -39,8 +39,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.util.Callback;
@@ -78,6 +76,7 @@ public class ProdutoController implements Initializable {
     private ServiceUnidadeMedida serUnidade;
     private ServiceProduto serProduto;
     private ServicePrecoVenda servPreco;
+    private ServiceArmazem servArmazem;
 
     @FXML
     private TableView<Produto> tabelaProduto;
@@ -131,6 +130,8 @@ public class ProdutoController implements Initializable {
     private ComboBox<String> combUnidade;
     @FXML
     private ComboBox<String> combTaxa;
+    @FXML
+    private ComboBox<String> combArmazem;
 
     @FXML
     private Label labIDPreco;
@@ -158,14 +159,14 @@ public class ProdutoController implements Initializable {
     private TableColumn<Produto, String> estadoPreco;
     @FXML
     private Button btnAddProduto;
-    
+
     @FXML
     private Button btn_taxas;
     @FXML
     private Button btn_unidades;
     @FXML
     private Button btn_categorias;
-    
+
     @FXML
     public void getViews(ActionEvent e) {
         SysFact.setData(null);
@@ -243,6 +244,22 @@ public class ProdutoController implements Initializable {
         });
     }
 
+    public void getDataOnFocus() throws SQLException {
+        tabelaProduto.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!oldValue && newValue) {
+                    try {
+                        showProduto();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+            }
+        });
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 //        priceFormaterProduto();
@@ -255,8 +272,10 @@ public class ProdutoController implements Initializable {
             serUnidade = new ServiceUnidadeMedida();
             serProduto = new ServiceProduto();
             servPreco = new ServicePrecoVenda();
+            servArmazem = new ServiceArmazem();
 
             getData();
+            getDataOnFocus();
             showProduto();
         } catch (SQLException ex) {
             Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
@@ -264,6 +283,9 @@ public class ProdutoController implements Initializable {
         populateCombos();
         precoListener();
         ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
+        
+        combArmazem.getSelectionModel().select(1);
+        combArmazem.requestFocus();
     }
 
     private ObservableList<Produto> listaProduto;
@@ -279,8 +301,8 @@ public class ProdutoController implements Initializable {
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         artigo.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
-        armazem.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
+//        armazem.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
         codigobarras.setCellValueFactory(new PropertyValueFactory<>("codigo_barra"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
@@ -322,31 +344,157 @@ public class ProdutoController implements Initializable {
         stock.setCellFactory(cellFoctory2);
 
         FilteredList<Produto> dadosFiltrados = new FilteredList<>(listaProduto, b -> true);
-        txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
+        // Método auxiliar para atualizar o filtro com base nas duas ComboBox
+        Runnable atualizarFiltro = () -> {
             dadosFiltrados.setPredicate(x -> {
-
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
+                String armazemSelecionada = combArmazem.getValue();
+                String categoriaSelecionada = combCategoria.getValue();
+                String unidadeSelecionada = combUnidade.getValue();
+                String taxaSelecionada = combTaxa.getValue();
+                
+                if(armazemSelecionada == null || armazemSelecionada.equals("Todos...")){
+                    armazemSelecionada = "";
                 }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNomeProduto().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (x.getCodigo_barra().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (String.valueOf(x.getUnidade_medida()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (String.valueOf(x.getDescricao()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else {
-                    return false;
+                if(categoriaSelecionada == null || categoriaSelecionada.equals("Todas...")){
+                    categoriaSelecionada = "";
                 }
+                if(unidadeSelecionada == null || unidadeSelecionada.equals("Todas...")){
+                    unidadeSelecionada = "";
+                }
+                if(taxaSelecionada == null || taxaSelecionada.equals("Todas...")){
+                    taxaSelecionada = "";
+                }
+                
+                // Verifica o filtro de armazem
+                boolean armazemValida = ( armazemSelecionada.isEmpty())
+                        || x.getArmazem().getNome_arm().toLowerCase().contains(armazemSelecionada.toLowerCase());
 
+                // Verifica o filtro da categoria
+                boolean categoriaValida = ( categoriaSelecionada.isEmpty())
+                        || x.getCategoria().getFamilia().toLowerCase().contains(categoriaSelecionada.toLowerCase());
+
+                // Verifica o filtro da unidade
+                boolean unidadeValida = ( unidadeSelecionada.isEmpty())
+                        || x.getUnidade_medida().getIdentificador().toLowerCase().contains(unidadeSelecionada.toLowerCase());
+                
+                // Verifica o filtro da unidade
+                boolean taxaValida = ( taxaSelecionada.isEmpty())
+                        || x.getTaxa_imposto().getNomeImposto().toLowerCase().contains(taxaSelecionada.toLowerCase());
+
+                // Retorna verdadeiro somente se ambos os filtros forem válidos
+                return armazemValida && categoriaValida && unidadeValida && taxaValida;
             });
-        });
+        };
+
+        // Adiciona listeners para atualizar o filtro sempre que a seleção mudar
+        combCategoria.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
+        combArmazem.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
+        combUnidade.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
+        combTaxa.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
+
+//        txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
+//            dadosFiltrados.setPredicate(x -> {
+//
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//                String filtroCaixaBaixa = newValue.toLowerCase();
+//                if (x.getNomeProduto().toLowerCase().contains(filtroCaixaBaixa)) {
+//                    return true;
+//                } else if (x.getCodigo_barra().toLowerCase().contains(filtroCaixaBaixa)) {
+//                    return true;
+//                } else if (x.getUnidade_medida().getIdentificador().toLowerCase().contains(filtroCaixaBaixa)) {
+//                    return true;
+//                } else if (x.getDescricao().toLowerCase().contains(filtroCaixaBaixa)) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//
+//            });
+//        });
+//
+//        // Adiciona um listener à ComboBox para definir o filtro quando um item é selecionado
+//        combArmazem.valueProperty().addListener((observable, oldValue, newValue) -> {
+//            dadosFiltrados.setPredicate(x -> {
+//                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//                // Converte o filtro para caixa baixa para facilitar a busca
+//                String filtroCaixaBaixa = newValue.toLowerCase();
+//
+//                // Aplica o filtro com base na seleção da ComboBox
+//                if (x.getArmazem().getNome_arm().toLowerCase().contains(filtroCaixaBaixa)) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            });
+//
+//        });
+//        
+//        combCategoria.valueProperty().addListener((observable, oldValue, newValue) -> {
+//            dadosFiltrados.setPredicate(x -> {
+//                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//                // Converte o filtro para caixa baixa para facilitar a busca
+//                String filtroCaixaBaixa = newValue.toLowerCase();
+//
+//                // Aplica o filtro com base na seleção da ComboBox
+//                if (x.getCategoria().getFamilia().toLowerCase().contains(filtroCaixaBaixa)) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            });
+//
+//        });
+//
+//        // Adiciona um listener à ComboBox para definir o filtro quando um item é selecionado
+//        combUnidade.valueProperty().addListener((observable, oldValue, newValue) -> {
+//            dadosFiltrados.setPredicate(x -> {
+//                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//                // Converte o filtro para caixa baixa para facilitar a busca
+//                String filtroCaixaBaixa = newValue.toLowerCase();
+//                // Aplica o filtro com base na seleção da ComboBox
+//                if (x.getUnidade_medida().getIdentificador().toLowerCase().contains(filtroCaixaBaixa)) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            });
+//        });
+//
+//        // Adiciona um listener à ComboBox para definir o filtro quando um item é selecionado
+//        combTaxa.valueProperty().addListener((observable, oldValue, newValue) -> {
+//            dadosFiltrados.setPredicate(x -> {
+//                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//                // Converte o filtro para caixa baixa para facilitar a busca
+//                String filtroCaixaBaixa = newValue.toLowerCase();
+//
+//                // Aplica o filtro com base na seleção da ComboBox
+//                if (x.getTaxa_imposto().getNomeImposto().toLowerCase().contains(filtroCaixaBaixa)) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            });
+//        });
+//
         SortedList<Produto> sortedData = new SortedList<>(dadosFiltrados);
         sortedData.comparatorProperty().bind(tabelaProduto.comparatorProperty());
 
         tabelaProduto.setItems(sortedData);
+
     }
 
     public void getStockView(MouseEvent evt) {
@@ -357,16 +505,16 @@ public class ProdutoController implements Initializable {
 
 //  ############################################################################
     public void addProduto(ActionEvent e) throws SQLException {
-        if(combCategoria.getValue() == null){
-            AlertUtilities.showErroAlert( "Categoria nao selecionada!");
+        if (combCategoria.getValue() == null) {
+            AlertUtilities.showErroAlert("Categoria nao selecionada!");
             return;
         }
-        if(combUnidade.getValue() == null){
+        if (combUnidade.getValue() == null) {
             AlertUtilities.showErroAlert("Unidade de medida nao selecionada!");
             return;
         }
-        if(combTaxa.getValue() == null){
-            AlertUtilities.showErroAlert( "Taxa/Imposto nao selecionada!");
+        if (combTaxa.getValue() == null) {
+            AlertUtilities.showErroAlert("Taxa/Imposto nao selecionada!");
             return;
         }
         int id_cat = mapaCategorias.get(combCategoria.getValue()).getId();
@@ -395,7 +543,7 @@ public class ProdutoController implements Initializable {
     }
 
     public void addPrecoVendaONSelected() throws SQLException {
-        if(txtPreco.getText().equals("")){
+        if (txtPreco.getText().equals("")) {
             return;
         }
         double precoNorm = Double.parseDouble(txtPreco.getText()/*.equals("")?"0":txtPreco.getText()*/);
@@ -460,6 +608,9 @@ public class ProdutoController implements Initializable {
     }
 
 //  ############################################################################
+    private Map<String, Armazem> mapaArmazens;
+    private ObservableList<Armazem> listaArmazens;
+
     private Map<String, Categoria> mapaCategorias;
     private ObservableList<Categoria> listaCategorias;
 
@@ -473,8 +624,18 @@ public class ProdutoController implements Initializable {
         listaCategorias = serCategoria.listaCategorias();
         listaTaxa = serTaxa.getTaxas();
         listaUnidades = serUnidade.getUnidades();
+        listaArmazens = servArmazem.listaArmazens();
+
+        List<String> listaArm = new ArrayList<>();
+        listaArm.add("Todos...");
+        mapaArmazens = new HashMap<>();
+        for (Armazem a : listaArmazens) {
+            listaArm.add(a.getNome_arm());
+            mapaArmazens.put(a.getNome_arm(), a);
+        }
 
         List<String> listaCat = new ArrayList<>();
+        listaCat.add("Todas...");
         mapaCategorias = new HashMap<>();
         for (Categoria c : listaCategorias) {
             listaCat.add(c.getFamilia());
@@ -482,6 +643,7 @@ public class ProdutoController implements Initializable {
         }
 
         List<String> listaUni = new ArrayList<>();
+        listaUni.add("Todas...");
         mapaUnidades = new HashMap<>();
         for (UnidadeMedida u : listaUnidades) {
             listaUni.add(u.getIdentificador());
@@ -489,6 +651,7 @@ public class ProdutoController implements Initializable {
         }
 
         List<String> listaTax = new ArrayList<>();
+        listaTax.add("Todas...");
         mapaTaxas = new HashMap<>();
         for (TaxaImposto t : listaTaxa) {
             listaTax.add(t.getNomeImposto());
@@ -497,6 +660,7 @@ public class ProdutoController implements Initializable {
         combCategoria.setItems(FXCollections.observableArrayList(listaCat));
         combUnidade.setItems(FXCollections.observableArrayList(listaUni));
         combTaxa.setItems(FXCollections.observableArrayList(listaTax));
+        combArmazem.setItems(FXCollections.observableArrayList(listaArm));
 
     }
 //  ############################################################################

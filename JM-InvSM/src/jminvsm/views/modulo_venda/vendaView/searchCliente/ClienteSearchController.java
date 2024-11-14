@@ -25,9 +25,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
-import jminvsm.dao.cliente.ClienteDAO;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.service.cliente.ServiceCliente;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -39,6 +39,7 @@ import jminvsm.util.LoadAndMoveUtilities;
 public class ClienteSearchController implements Initializable {
 
     private Usuario userData;
+    private ServiceCliente servCliente;
 
     @FXML
     private TableColumn<Cliente, Integer> IDtabelaCliente;
@@ -95,6 +96,7 @@ public class ClienteSearchController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.userData = SysFact.getUserData();
         try {
+            servCliente = new ServiceCliente();
             showClientes();
         } catch (SQLException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,8 +115,7 @@ public class ClienteSearchController implements Initializable {
 
     public void showClientes() throws SQLException {
 
-        ClienteDAO aDAO = new ClienteDAO();
-        listaClientes = aDAO.listClientesForSearch();
+        listaClientes = servCliente.listaClientes();
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
 //        tipotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("tipo"));

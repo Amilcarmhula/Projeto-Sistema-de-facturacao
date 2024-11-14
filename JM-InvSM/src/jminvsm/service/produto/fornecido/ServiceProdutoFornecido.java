@@ -5,6 +5,7 @@
 package jminvsm.service.produto.fornecido;
 
 import java.sql.SQLException;
+import java.util.Map;
 import jminvsm.dao.produto.fornecido.ProdutoFornecidoDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
@@ -79,6 +80,10 @@ public class ServiceProdutoFornecido {
             setOpsSuccess(true);
             showSuccessAlert("Stock actualizado com sucesso!");
         }
+    }
+    
+    public Map<String, Integer> consultaMovimento(Integer cat, Integer arm){
+        return produtoFornecidoDao.getMovimentos(cat, arm);
     }
 
 }

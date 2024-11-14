@@ -43,7 +43,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.util.Callback;
 import jminvsm.SysFact;
-import jminvsm.dao.produto.ProdutoDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.preco.PrecoVenda;
@@ -130,8 +129,15 @@ public class ProdutoController implements Initializable {
     private ComboBox<String> combUnidade;
     @FXML
     private ComboBox<String> combTaxa;
+    
     @FXML
-    private ComboBox<String> combArmazem;
+    private ComboBox<String> combCategoriaPesq;
+    @FXML
+    private ComboBox<String> combUnidadePesq;
+    @FXML
+    private ComboBox<String> combTaxaPesq;
+    @FXML
+    private ComboBox<String> combArmazemPesq;
 
     @FXML
     private Label labIDPreco;
@@ -191,7 +197,7 @@ public class ProdutoController implements Initializable {
         }
     }
 
-    public void addORupdate(ActionEvent e) throws SQLException {
+    public void addORupdate(ActionEvent e){
         if ("".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
             addProduto(e);
         } else if (!"".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
@@ -244,17 +250,12 @@ public class ProdutoController implements Initializable {
         });
     }
 
-    public void getDataOnFocus() throws SQLException {
+    public void getDataOnFocus(){
         tabelaProduto.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
-                    try {
                         showProduto();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
                 }
             }
         });
@@ -262,8 +263,6 @@ public class ProdutoController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        priceFormaterProduto();
-
         this.userData = SysFact.getUserData();
         try {
             servicePrecos = new ServicePrecoVenda();
@@ -284,16 +283,15 @@ public class ProdutoController implements Initializable {
         precoListener();
         ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         
-        combArmazem.getSelectionModel().select(1);
-        combArmazem.requestFocus();
+        combArmazemPesq.getSelectionModel().select(1);
+        combArmazemPesq.requestFocus();
     }
 
     private ObservableList<Produto> listaProduto;
     private Map<Integer, Produto> mapaProdutos;
 
-    public void showProduto() throws SQLException {
-        ProdutoDAO aDAO = new ProdutoDAO();
-        listaProduto = aDAO.getCombinedEntities();
+    public void showProduto(){
+        listaProduto = serProduto.getProdutos();
         mapaProdutos = new HashMap<>();
         for (Produto p : listaProduto) {
             mapaProdutos.put(p.getId(), p);
@@ -347,10 +345,10 @@ public class ProdutoController implements Initializable {
         // Método auxiliar para atualizar o filtro com base nas duas ComboBox
         Runnable atualizarFiltro = () -> {
             dadosFiltrados.setPredicate(x -> {
-                String armazemSelecionada = combArmazem.getValue();
-                String categoriaSelecionada = combCategoria.getValue();
-                String unidadeSelecionada = combUnidade.getValue();
-                String taxaSelecionada = combTaxa.getValue();
+                String armazemSelecionada = combArmazemPesq.getValue();
+                String categoriaSelecionada = combCategoriaPesq.getValue();
+                String unidadeSelecionada = combUnidadePesq.getValue();
+                String taxaSelecionada = combTaxaPesq.getValue();
                 
                 if(armazemSelecionada == null || armazemSelecionada.equals("Todos...")){
                     armazemSelecionada = "";
@@ -387,10 +385,10 @@ public class ProdutoController implements Initializable {
         };
 
         // Adiciona listeners para atualizar o filtro sempre que a seleção mudar
-        combCategoria.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
-        combArmazem.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
-        combUnidade.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
-        combTaxa.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
+        combCategoriaPesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
+        combArmazemPesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
+        combUnidadePesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
+        combTaxaPesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
 
 //        txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
 //            dadosFiltrados.setPredicate(x -> {
@@ -504,7 +502,7 @@ public class ProdutoController implements Initializable {
     }
 
 //  ############################################################################
-    public void addProduto(ActionEvent e) throws SQLException {
+    public void addProduto(ActionEvent e){
         if (combCategoria.getValue() == null) {
             AlertUtilities.showErroAlert("Categoria nao selecionada!");
             return;
@@ -521,7 +519,7 @@ public class ProdutoController implements Initializable {
         int id_uni = mapaUnidades.get(combUnidade.getValue()).getId();
         int id_tax = mapaTaxas.get(combTaxa.getValue()).getId();
 
-        serProduto.registraProduto(id_cat, id_uni,
+        serProduto.regista(id_cat, id_uni,
                 id_tax, txtNomeProduto.getText(),
                 txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("") ? "0" : txtNivelStock.getText()));
@@ -531,18 +529,18 @@ public class ProdutoController implements Initializable {
         stockControlChecked();
     }
 
-    public void addPrecoVenda(ActionEvent e) throws SQLException {
+    public void addPrecoVenda(ActionEvent e){
         double precoNorm = Double.parseDouble(txtPreco.getText());
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
         servPreco.registraPrecoVenda(precoNorm, precoComTax, precoSemTax,
                 String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData, serProduto.consultaUltimo());
+                userData, serProduto.getUltimo());
         showProduto();
         resetCampos();
     }
 
-    public void addPrecoVendaONSelected() throws SQLException {
+    public void addPrecoVendaONSelected(){
         if (txtPreco.getText().equals("")) {
             return;
         }
@@ -559,13 +557,13 @@ public class ProdutoController implements Initializable {
         resetCampos();
     }
 
-    public void updateProduto(ActionEvent e) throws SQLException {
+    public void updateProduto(ActionEvent e) {
         int id_pro = Integer.parseInt(txtIDProduto.getText());
         int id_cat = mapaCategorias.get(combCategoria.getValue().equals("") ? "0" : combCategoria.getValue()).getId();
         int id_uni = mapaUnidades.get(combUnidade.getValue().equals("") ? "0" : combUnidade.getValue()).getId();
         int id_tax = mapaTaxas.get(combTaxa.getValue().equals("") ? "0" : combTaxa.getValue()).getId();
 
-        serProduto.actualizaProduto(id_pro, id_cat, id_uni, id_tax, txtNomeProduto.getText(),
+        serProduto.actualiza(id_pro, id_cat, id_uni, id_tax, txtNomeProduto.getText(),
                 txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
 
@@ -574,7 +572,7 @@ public class ProdutoController implements Initializable {
 
     }
 
-    public void updatePrecoVenda(ActionEvent e) throws SQLException {
+    public void updatePrecoVenda(ActionEvent e) {
         double precoNorm = Double.parseDouble(txtPreco.getText().equals("") ? "0" : txtPreco.getText());
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText().equals("") ? "0" : txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText().equals("") ? "0" : txtprecoExclTaxa.getText());
@@ -660,12 +658,16 @@ public class ProdutoController implements Initializable {
         combCategoria.setItems(FXCollections.observableArrayList(listaCat));
         combUnidade.setItems(FXCollections.observableArrayList(listaUni));
         combTaxa.setItems(FXCollections.observableArrayList(listaTax));
-        combArmazem.setItems(FXCollections.observableArrayList(listaArm));
+        
+        combCategoriaPesq.setItems(FXCollections.observableArrayList(listaCat));
+        combUnidadePesq.setItems(FXCollections.observableArrayList(listaUni));
+        combTaxaPesq.setItems(FXCollections.observableArrayList(listaTax));
+        combArmazemPesq.setItems(FXCollections.observableArrayList(listaArm));
 
     }
 //  ############################################################################
 
-    public void selecionaProduto(MouseEvent event) throws SQLException {
+    public void selecionaProduto(MouseEvent event) {
         Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
             Produto p = mapaProdutos.get(x.getId());
@@ -691,7 +693,7 @@ public class ProdutoController implements Initializable {
 
     }
 
-    public void deleteProduto(MouseEvent event, Produto x) throws SQLException {
+    public void deleteProduto(MouseEvent event, Produto x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -704,8 +706,7 @@ public class ProdutoController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                ProdutoDAO xDAO = new ProdutoDAO();
-                xDAO.deleteEntityByUSER(x);
+                serProduto.excluir(x.getId());
                 showProduto();
                 resetCampos();
             } else if (result.get() == btnCancel) {
@@ -715,7 +716,7 @@ public class ProdutoController implements Initializable {
     }
 //  ############################################################################
 
-    public void selecionaPreco(MouseEvent event) throws SQLException {
+    public void selecionaPreco(MouseEvent event) {
         PrecoVenda pv = tabelaPrecos.getSelectionModel().getSelectedItem();
         if (pv != null && !"desactivo".equals(pv.getEstado())) {
             labIDPreco.setText(pv.getId() + "");
@@ -731,7 +732,7 @@ public class ProdutoController implements Initializable {
         }
     }
 
-    public void deletePreco(MouseEvent event, PrecoVenda x) throws SQLException {
+    public void deletePreco(MouseEvent event, PrecoVenda x){
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -772,7 +773,7 @@ public class ProdutoController implements Initializable {
     }
 
 //  ############################################################################
-    public void resetCampos() throws SQLException {
+    public void resetCampos() {
         labIDPreco.setText("");
         txtPreco.setText("");
         txtprecoExclTaxa.setText("");
@@ -789,6 +790,7 @@ public class ProdutoController implements Initializable {
         txtdescricaoProduto.setText("");
         ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         showProduto();
+//        populateCombos();
     }
 
 }

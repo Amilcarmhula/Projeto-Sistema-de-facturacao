@@ -5,20 +5,22 @@
 package jminvsm.dao.produto.fornecido;
 
 
-import javafx.collections.ObservableList;
+import java.util.Map;
 
 /**
  *
  * @author JM-Tecnologias
+ * @param <T>
  */
 public interface ProdutoFornecidoDAOImpl<T> {
     boolean  addEntity(T x);
-    boolean updateEntityByID(T t, int id);
+    Map<String, Integer> getMovimentos(Integer cat, Integer arm);
+//    boolean updateEntityByID(T t, int id);
     
     
-    ObservableList<T> listAllEntities();
-    T searchEntityByName(String name);
-    void deleteEntityByUSER(T x);
+//    ObservableList<T> listAllEntities();
+//    T searchEntityByName(String name);
+//    void deleteEntityByUSER(T x);
 
 
 }

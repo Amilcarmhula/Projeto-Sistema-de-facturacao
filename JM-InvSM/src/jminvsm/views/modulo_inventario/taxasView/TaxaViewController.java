@@ -31,7 +31,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
-import jminvsm.dao.taxaimposto.TaxaImpostoDAO;
 import jminvsm.model.taxa_imposto.TaxaImposto;
 import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
 import jminvsm.util.ButtonUtilities;

@@ -36,9 +36,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import jminvsm.SysFact;
-import jminvsm.dao.cliente.ClienteDAO;
-import jminvsm.dao.desconto.DescontoDAO;
-import jminvsm.dao.vendas.documentos.DocumentosComerciaisDAO;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.desconto.Desconto;
 import jminvsm.model.empresa.Empresa;
@@ -48,6 +45,8 @@ import jminvsm.model.vendas.documetos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.model.vendas.factura.itens.Item;
 import jminvsm.service.cliente.ServiceCliente;
+import jminvsm.service.desconto.ServiceDesconto;
+import jminvsm.service.documentosComerciais.ServiceDocumentos;
 import jminvsm.service.vendas.factura.ServiceFactura;
 import jminvsm.util.AlertUtilities;
 import jminvsm.util.InvoiceUtilities;
@@ -62,6 +61,9 @@ import static jminvsm.util.AlertUtilities.showErroAlert;
 public class VendasController implements Initializable {
 
     private ServiceCliente serviceCliente;
+    private ServiceDesconto serDesconto;
+    private ServiceDocumentos serDocs;
+    
 
     private Empresa empresaData;
     private Usuario userData;
@@ -195,7 +197,6 @@ public class VendasController implements Initializable {
 
     public void getSearchClienteKEY(KeyEvent keyEvt) throws SQLException {
         if (keyEvt.getCode().equals(KeyCode.ENTER)) {
-            ClienteDAO xDAO = new ClienteDAO();
 
             Cliente x = serviceCliente.getClienteCompletoByID(Integer.valueOf(txtIDCliente.getText()));
             if (x != null) {
@@ -284,7 +285,9 @@ public class VendasController implements Initializable {
         this.userData = SysFact.getUserData();
         this.empresaData = SysFact.getEmpresaData();
         try {
+            serDesconto = new ServiceDesconto();
             serviceCliente = new ServiceCliente();
+            serDocs = new ServiceDocumentos();
             labDataInicial.setText(InvoiceUtilities.actualDate());
             populateComboFactura();
             populateComboDesconto();
@@ -297,8 +300,7 @@ public class VendasController implements Initializable {
     private Map<String, DocumentosComerciais> mapaDocComercial;
 
     public void populateComboFactura() throws SQLException {
-        DocumentosComerciaisDAO dc = new DocumentosComerciaisDAO();
-        listaDocComercial = dc.listAllEntities();
+        listaDocComercial = serDocs.getDocumentos();
         mapaDocComercial = new HashMap<>();
         List<String> lista = new ArrayList<>();
         for (DocumentosComerciais doc : listaDocComercial) {
@@ -315,9 +317,8 @@ public class VendasController implements Initializable {
     private Map<String, Desconto> mapaDesconto;
 
     public void populateComboDesconto() throws SQLException {
-        DescontoDAO xDAO = new DescontoDAO();
         mapaDesconto = new HashMap<>();
-        listaDescontos = xDAO.listAllEntities();
+        listaDescontos = serDesconto.getDescontos();
         List<String> lista = new ArrayList<>();
         for (Desconto d : listaDescontos) {
             mapaDesconto.put(d.getNomeDesconto(), d);
@@ -441,7 +442,7 @@ public class VendasController implements Initializable {
         }
     }
 
-    public List<Item> collectItens() {
+    public List<Item> collectItens() throws SQLException {
         Item i = null;
         ObservableList<Item> itens = tabelaItens.getItems();
         List<Item> listaItems = new ArrayList<>();

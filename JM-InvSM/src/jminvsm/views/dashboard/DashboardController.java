@@ -27,21 +27,20 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import jminvsm.dao.armazem.ArmazemDAO;
-import jminvsm.dao.categoria.CategoriaDAO;
-import jminvsm.dao.fornecedor.FornecedorDAO;
-import jminvsm.dao.produto.ProdutoDAO;
-import jminvsm.dao.produto.fornecido.ProdutoFornecidoDAO;
-import jminvsm.dao.stock.StockDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.vendas.factura.Factura;
+import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.caixa.ServiceCaixa;
+import jminvsm.service.categoria.ServicoCategoria;
 import jminvsm.service.cliente.ServiceCliente;
 import jminvsm.service.contacorrente.ServiceContaCorrente;
+import jminvsm.service.fornecedor.ServiceFornecedor;
+import jminvsm.service.produto.ServiceProduto;
+import jminvsm.service.produto.fornecido.ServiceProdutoFornecido;
+import jminvsm.service.stock.ServiceStock;
 import jminvsm.service.vendas.factura.ServiceFactura;
-import jminvsm.util.AlertUtilities;
 
 /**
  * FXML Controller class
@@ -51,6 +50,14 @@ import jminvsm.util.AlertUtilities;
 public class DashboardController implements Initializable {
     private ServiceFactura serviceFactura;
     private ServiceCliente serviceCliente;
+    private ServiceStock serviceStock;
+    private ServicoCategoria serviceCategoria;
+    private ServiceArmazem serviceArmazem;
+    private ServiceProduto serviceProduto;
+    private ServiceFornecedor serviceFornecedor;
+    private ServiceProdutoFornecido servProdFornecido;
+    private ServiceCaixa serviceCaixa;
+    private ServiceContaCorrente serviceContaCorrente;
     
 
     @FXML
@@ -150,6 +157,15 @@ public class DashboardController implements Initializable {
         try {
             serviceFactura = new ServiceFactura();
             serviceCliente = new ServiceCliente();
+            serviceStock = new ServiceStock();
+            serviceCategoria = new ServicoCategoria();
+            serviceArmazem = new ServiceArmazem();
+            serviceFornecedor = new ServiceFornecedor();
+            servProdFornecido = new ServiceProdutoFornecido();
+            serviceCaixa = new ServiceCaixa();
+            serviceContaCorrente = new ServiceContaCorrente();
+            serviceProduto = new ServiceProduto();
+            
             showStock();
             showMovimentos();
             showCountCliente();
@@ -170,9 +186,8 @@ public class DashboardController implements Initializable {
     }
     private ObservableList<Stock> listaLowStock;
 
-    public void loadLowStockBalance() throws SQLException {
-        StockDAO x = new StockDAO();
-        listaLowStock = x.loadLowStock();
+    public void loadLowStockBalance() {
+        listaLowStock = serviceStock.stockBaixo();
     }
 
     public void updadeLowStock() {
@@ -207,9 +222,8 @@ public class DashboardController implements Initializable {
     private ObservableList<Categoria> listaFamilias;
     private Map<String, Categoria> mapaCategorias;
 
-    public void mapCategorias() throws SQLException {
-        CategoriaDAO x = new CategoriaDAO();
-        listaFamilias = x.listAllEntities();
+    public void mapCategorias() {
+        listaFamilias = serviceCategoria.listaCategorias();
         mapaCategorias = new HashMap<>();
         List<String> lista = new ArrayList<>();
         lista.add("Todas...");
@@ -225,9 +239,8 @@ public class DashboardController implements Initializable {
     private ObservableList<Armazem> listaArmazens;
     private Map<String, Armazem> mapaArmazens;
 
-    public void mapArmazens() throws SQLException {
-        ArmazemDAO x = new ArmazemDAO();
-        listaArmazens = x.listAllEntities();
+    public void mapArmazens() {
+        listaArmazens = serviceArmazem.listaArmazens();
         mapaArmazens = new HashMap<>();
         List<String> lista = new ArrayList<>();
         lista.add("Todos...");
@@ -239,7 +252,7 @@ public class DashboardController implements Initializable {
     }
     private ObservableList<Factura> listaFacturas;
 
-    public void showFacturas() throws SQLException {
+    public void showFacturas() {
         listaFacturas = serviceFactura.exibeFactura();
 
         numero.setCellValueFactory(new PropertyValueFactory<>("numero_fac"));
@@ -259,8 +272,7 @@ public class DashboardController implements Initializable {
 
     private ObservableList<Stock> listaStock;
 
-    public void showStock() throws SQLException {
-        StockDAO x = new StockDAO();
+    public void showStock(){
         // Tratando valores nulos ou vazios nos combos
         Integer cat = null;
         Integer arm = null;
@@ -274,7 +286,7 @@ public class DashboardController implements Initializable {
             Armazem a = mapaArmazens.get(combArmazem.getValue());
             arm = a.getId();
         }
-        listaStock = x.getStock(cat, arm);
+        listaStock = serviceStock.consultaStock(cat, arm);
 
         // Limpar dados antigos do gráfico e da tabela
         pieChart.getData().clear();
@@ -311,7 +323,7 @@ public class DashboardController implements Initializable {
     }
     private Map<String, Integer> mapaMovimentos;
 
-    public void showMovimentos() throws SQLException {
+    public void showMovimentos(){
         // Tratando valores nulos ou vazios nos combos
         Integer cat = null;
         Integer arm = null;
@@ -325,7 +337,7 @@ public class DashboardController implements Initializable {
             Armazem a = mapaArmazens.get(combArmazem.getValue());
             arm = a.getId();
         }
-        mapaMovimentos = new ProdutoFornecidoDAO().getMovimentos(cat, arm);
+        mapaMovimentos = servProdFornecido.consultaMovimento(cat, arm);
         if (!mapaMovimentos.isEmpty()) {
             for (Map.Entry<String, Integer> entry : mapaMovimentos.entrySet()) {
                 if (entry.getKey().equals("entradas")) {
@@ -341,77 +353,75 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public void showCountCliente() throws SQLException {
+    public void showCountCliente(){
         labCliente.setText(serviceCliente.contaClientes() + "");
     }
 
-    public void showCountFornecedor() throws SQLException {
-        labFornecedor.setText(new FornecedorDAO().CountFornecedor() + "");
+    public void showCountFornecedor() {
+        labFornecedor.setText(serviceFornecedor.contaFornecedores()+ "");
     }
 
-    public void showCountProdutos() throws SQLException {
+    public void showCountProdutos(){
         Integer cat = null;
         if (combCategoria.getValue() == null || combCategoria.getValue().equals("Todas...")) {
             labCategoria.setText("Todas...");
             labDescricao.setText("A categoria inclui produtos de todas categorias existentes!");
-            labTotalProdutos.setText("Existem " + new ProdutoDAO().countProdutos(cat) + " produtos em todas categorias.");
+            labTotalProdutos.setText("Existem " + serviceProduto.contaProdutos(cat) + " produtos em todas categorias.");
         }
         if (combCategoria.getValue() != null && !combCategoria.getValue().isEmpty() && !combCategoria.getValue().equals("Todas...")) {
             Categoria c = mapaCategorias.get(combCategoria.getValue());
             cat = c.getId();
             labDescricao.setText(c.getDescricao());
             labCategoria.setText(combCategoria.getValue());
-            labTotalProdutos.setText("Existem " + new ProdutoDAO().countProdutos(cat) + " produtos na categoria " + combCategoria.getValue() + ".");
+            labTotalProdutos.setText("Existem " + serviceProduto.contaProdutos(cat) + " produtos na categoria " + combCategoria.getValue() + ".");
         }
     }
 
-    public void showCountStock() throws SQLException {
+    public void showCountStock(){
         Integer cat = null;
         Integer arm = null;
         if (combCategoria.getValue() == null || combCategoria.getValue().equals("Todas...")) {
             labCategoria.setText("Todas...");
-            labTotalStock.setText("Com " + new StockDAO().countStock(cat, arm) + " itens em stock no armazem selecionado");
+            labTotalStock.setText("Com " + serviceStock.contaSaldoStock(cat, arm) + " itens em stock no armazem selecionado");
         }
         if (combArmazem.getValue() == null || combArmazem.getValue().equals("Todos...")) {
             labArmazem.setText("Todos...");
-            labTotalStock.setText("Com " + new StockDAO().countStock(cat, arm) + " itens em stock no em todos armazens.");
+            labTotalStock.setText("Com " + serviceStock.contaSaldoStock(cat, arm)  + " itens em stock no em todos armazens.");
         }
         if (combCategoria.getValue() != null && !combCategoria.getValue().isEmpty() && !combCategoria.getValue().equals("Todas...")) {
             Categoria c = mapaCategorias.get(combCategoria.getValue());
             cat = c.getId();
             labCategoria.setText(combCategoria.getValue());
-            labTotalStock.setText("Com " + new StockDAO().countStock(cat, arm) + " itens em stock na categoria " + combCategoria.getValue() + " em todos armazens.");
+            labTotalStock.setText("Com " + serviceStock.contaSaldoStock(cat, arm)  + " itens em stock na categoria " + combCategoria.getValue() + " em todos armazens.");
         }
 
         if (combArmazem.getValue() != null && !combArmazem.getValue().isEmpty() && !combArmazem.getValue().equals("Todos...")) {
             Armazem a = mapaArmazens.get(combArmazem.getValue());
             arm = a.getId();
             labArmazem.setText(combArmazem.getValue());
-            labTotalStock.setText("Com " + new StockDAO().countStock(cat, arm) + " itens em stock no " + combArmazem.getValue() + ".");
+            labTotalStock.setText("Com " + serviceStock.contaSaldoStock(cat, arm)  + " itens em stock no " + combArmazem.getValue() + ".");
         }
 
     }
 
-    public void showCountInvoice() throws SQLException {
-        ServiceFactura sf = new ServiceFactura();
-        labTotalFacturas.setText(sf.contaFacturas() + "");
+    public void showCountInvoice() {
+        labTotalFacturas.setText(serviceFactura.contaFacturas() + "");
     }
 
-    public void showTotalInvoicePaid() throws SQLException {
-        ServiceCaixa sc = new ServiceCaixa();
-        ServiceContaCorrente scc = new ServiceContaCorrente();
-        labTotalCaixa.setText(String.format("%.2f", sc.consultaCaixa()) + " Mt");
-        labTotalContaCorrente.setText(String.format("%.2f", scc.consultaContaCorrente()) + " Mt");
+    public void showTotalInvoicePaid() {
+        
+        labTotalCaixa.setText(String.format("%.2f", serviceCaixa.consultaCaixa()) + " Mt");
+        labTotalContaCorrente.setText(String.format("%.2f", serviceContaCorrente.consultaContaCorrente()) + " Mt");
     }
 
-    public void selectedComboBox() throws SQLException {
+    public void selectedComboBox(){
         showMovimentos();
         showStock();
         showCountProdutos();
         showCountStock();
     }
 
-    public void showInvoice(MouseEvent evt) throws SQLException {
+    public void showInvoice(MouseEvent evt) throws SQLException{
         if (evt.getClickCount() == 2) {
             Factura f = tabelaFactura.getSelectionModel().getSelectedItem();
             f.criarFactura(f.getNumero_fac());
@@ -461,7 +471,6 @@ public class DashboardController implements Initializable {
                 try {
                     // Actualiza os dados a cada 10 segundos
                     Platform.runLater(() -> { //To update UI elements from a background thread
-                        try {
                             showStock(); // This as an UI component
                             showMovimentos();
                             showCountCliente();
@@ -470,9 +479,6 @@ public class DashboardController implements Initializable {
                             showTotalInvoicePaid();
                             mapCategorias();
                             mapArmazens();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
                     });
 
                     // A thread dorme por 1 minuto

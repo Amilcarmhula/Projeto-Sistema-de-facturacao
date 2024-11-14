@@ -37,14 +37,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jminvsm.SysFact;
-import jminvsm.dao.produto.ProdutoDAO;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
@@ -256,9 +253,8 @@ public class SearchProdutoController implements Initializable {
     private ObservableList<Produto> listaProduto;
     private Map<Integer, Produto> mapaProdutos;
 
-    public void showProduto() throws SQLException {
-        ProdutoDAO aDAO = new ProdutoDAO();
-        listaProduto = aDAO.getCombinedEntities();
+    public void showProduto() {
+        listaProduto = serProduto.getProdutos();
         mapaProdutos = new HashMap<>();
         for (Produto p : listaProduto) {
             mapaProdutos.put(p.getId(), p);
@@ -342,47 +338,6 @@ public class SearchProdutoController implements Initializable {
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "../views/modulo_inventario/stockView/addStock.fxml");
     }
 
-//    public void addProduto() throws SQLException {
-//        ProdutoDAO xDAO = new ProdutoDAO();
-//        ServiceProduto sp = new ServiceProduto(xDAO);
-////        sp.registraProduto(Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
-////                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
-////                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
-////                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("")?"0":txtNivelStock.getText()));
-//
-//        addPrecoVenda();
-//        resetCampos();
-////        stockControlChecked();
-//    }
-//    public void addPrecoVenda() throws SQLException {
-//        ServicePrecoVenda spv = new ServicePrecoVenda();
-//        ProdutoDAO xDAO = new ProdutoDAO();
-////        spv.registraPrecoVenda(Double.valueOf(txtPreco.getText()),
-////                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-////                userData, xDAO.getLastEntity());
-//        showProduto();
-//        resetCampos();
-//    }
-//    public void updateProduto() throws SQLException {
-//        ProdutoDAO xDAO = new ProdutoDAO();
-//        ServiceProduto sp = new ServiceProduto();
-////        sp.actualizaProduto(Integer.parseInt(txtIDProduto.getText()),Integer.valueOf(txtIDCategoria.getText()), Integer.valueOf(txtIDUnidade.getText()),
-////                Integer.valueOf(txtIDTaxa.getText()), txtNomeProduto.getText(),
-////                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
-////                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
-//
-//        showProduto();
-//    }
-//    public void updatePrecoVenda() throws SQLException {
-//        ServicePrecoVenda spv = new ServicePrecoVenda();
-//        ProdutoDAO xDAO = new ProdutoDAO();
-//        spv.actualizaPrecoVenda(Integer.parseInt(labIDPreco.getText()), Double.valueOf(txtPreco.getText()),
-//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-//                userData);
-//        showProduto();
-//        resetCampos();
-//
-//    }
     /*
         Codigos corregidso. Nova versao
      */
@@ -392,7 +347,7 @@ public class SearchProdutoController implements Initializable {
         int id_uni = mapaUnidades.get(combUnidade.getValue().equals("") ? "0" : combUnidade.getValue()).getId();
         int id_tax = mapaTaxas.get(combTaxa.getValue().equals("") ? "0" : combTaxa.getValue()).getId();
 
-        serProduto.registraProduto(id_cat, id_uni,
+        serProduto.regista(id_cat, id_uni,
                 id_tax, txtNomeProduto.getText(),
                 txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("") ? "0" : txtNivelStock.getText()));
@@ -408,7 +363,7 @@ public class SearchProdutoController implements Initializable {
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
         servPreco.registraPrecoVenda(precoNorm, precoComTax, precoSemTax,
                 String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData, serProduto.consultaUltimo());
+                userData, serProduto.getUltimo());
         showProduto();
         resetCampos();
     }
@@ -433,7 +388,7 @@ public class SearchProdutoController implements Initializable {
         int id_uni = mapaUnidades.get(combUnidade.getValue().equals("") ? "0" : combUnidade.getValue()).getId();
         int id_tax = mapaTaxas.get(combTaxa.getValue().equals("") ? "0" : combTaxa.getValue()).getId();
 
-        serProduto.actualizaProduto(id_pro, id_cat, id_uni, id_tax, txtNomeProduto.getText(),
+        serProduto.actualiza(id_pro, id_cat, id_uni, id_tax, txtNomeProduto.getText(),
                 txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
 

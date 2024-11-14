@@ -25,5 +25,5 @@ public interface ProdutoDAOImpl<T> {
 //    ObservableList<T> searchEntityByCategoria(T x);
 //    T searchEntityByName(String name);
 //    void deleteEntityByROOT(int id);
-    void deleteEntityByUSER(T x);
+    boolean deleteEntity(int x);
 }

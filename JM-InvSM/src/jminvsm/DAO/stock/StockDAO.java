@@ -31,6 +31,10 @@ public class StockDAO implements StockDAOImpl<Stock> {
         this.con = Conexao.getConexao();
     }
 
+    /**
+     *      Este metodo faz a listagem dos produtos e seu saldo remanescente no 
+     * estoque quando informados a categoria e o armazem que os contem
+     */
     @Override
     public ObservableList<Stock> getStock(Integer cat, Integer arm) {
         ObservableList<Stock> lista = FXCollections.observableArrayList();
@@ -76,7 +80,10 @@ public class StockDAO implements StockDAOImpl<Stock> {
         }
         return lista;
     }
-
+    /**
+     *      Este metodo faz a listagem dos produtos com estoque baixo em casa 
+     * armazem
+     */
     @Override
     public ObservableList<Stock> loadLowStock() {
         ObservableList<Stock> lista = FXCollections.observableArrayList();
@@ -106,7 +113,10 @@ public class StockDAO implements StockDAOImpl<Stock> {
         }
         return lista;
     }
-
+    /**
+     *      Este metodo faz a contagem dos produtos remanescente no estoque quando
+     * informados a categoria e o armazem que os contem
+     */
     public int countStock(Integer cat, Integer arm) {
         int total = 0;
         try {

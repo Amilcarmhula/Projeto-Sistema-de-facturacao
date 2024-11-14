@@ -427,3 +427,39 @@ CREATE TABLE caixa (
     foreign key (fk_id_transacoes) references transacoes(id)
 );
 
+-- __________________________________________________ Tabelas para suportar funcionalidades de requisicoes __________________________________________________
+-- A requisicao quando ela e criada tem o seu estado inicial como Pendente
+create table requisicao(
+	id integer primary key auto_increment,
+    dataRequisicao date default (current_date),
+    dataNecessidade date not null,
+    estado varchar(30) not null default 'Pendente', -- Pendente, Em processamento, Aprovada, Finalizada
+    motivo text not null,
+    fk_usuario integer not null,
+    foreign key(fk_usuario) references usuario(id)
+);
+
+create table item_requisicao(
+	id integer primary key auto_increment,
+    qtd integer not null,
+    estado varchar(30) not null default 'Pendente', -- Pendente, Aprovada
+    fk_requisicao integer not null,
+    fk_unidade integer not null,
+    fk_produto integer not null,
+    fk_armazem integer not null,
+    foreign key(fk_requisicao) references requisicao(id),
+    foreign key(fk_unidade) references unidade_medida(id),
+    foreign key(fk_produto) references produto(id),
+    foreign key(fk_armazem) references armazem(id)
+);
+
+create table historico_requisicao(
+	id integer auto_increment,
+    fk_requisicao integer,
+    estado varchar(30) not null, -- Pendente, Em processamento Aprovada, Finalizada
+    dataEstado datetime default current_timestamp,
+    observacao text,
+    primary key(id, fk_requisicao),
+    foreign key(fk_requisicao) references requisicao(id)
+);
+

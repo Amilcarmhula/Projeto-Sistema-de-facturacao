@@ -2,6 +2,9 @@ use _sysface;
 -- CALL atualizar_estado_precovenda();
 SET GLOBAL event_scheduler = ON;
 
+
+
+
 select curdate() + interval 65 day as Datas_de_parcelas;
 
 update parcelas set dataVencimento = '2024-11-8' where id = 2;
@@ -17,7 +20,7 @@ select * from contacorrente;
 select * from caixa;
 
 SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, f.total, f.totalPago, f.saldoPendente, f.estado, f.condicaoPagemento,
-					t.trocos,
+					sum(t.trocos) as trocosTrans, sum(t.valorRecebido) as valorTrans,
 					GROUP_CONCAT(DISTINCT m.nome SEPARATOR '; ') AS metodoPagamento,
                     doc.sigla, doc.nome as documento,
                     cli.razaosocial, cli.nuit as nuit_cliente,
@@ -40,7 +43,7 @@ SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, f.total, f
                     LEFT JOIN endereco_empresa en ON e.id = en.fk_id_empresa
                     LEFT JOIN contacto_empresa ce ON e.id = ce.fk_id_empresa 
                     LEFT JOIN contabancaria a ON e.id=a.fk_id_empresa 
-                    WHERE f.numero = '2024-272/4'
+                    WHERE f.numero = '2024-390/4'
 
 
 

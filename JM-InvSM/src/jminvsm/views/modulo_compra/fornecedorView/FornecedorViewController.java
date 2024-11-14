@@ -27,9 +27,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import jminvsm.SysFact;
-import jminvsm.dao.fornecedor.FornecedorDAO;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.service.fornecedor.ServiceFornecedor;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -39,6 +39,7 @@ import jminvsm.util.LoadAndMoveUtilities;
  * @author JM-Tecnologias
  */
 public class FornecedorViewController implements Initializable {
+    private ServiceFornecedor serFornecedor;
 
     private Usuario userData;
 
@@ -90,6 +91,7 @@ public class FornecedorViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.userData = SysFact.getUserData();
         try {
+            serFornecedor = new ServiceFornecedor();
             showClientes();
         } catch (SQLException ex) {
             Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,10 +108,9 @@ public class FornecedorViewController implements Initializable {
      */
     private ObservableList<Fornecedor> listaClientes;
 
-    public void showClientes() throws SQLException {
+    public void showClientes() {
 
-        FornecedorDAO aDAO = new FornecedorDAO();
-        listaClientes = aDAO.listAllEntities();
+        listaClientes = serFornecedor.getFornecedores();
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("tipo_forn"));
@@ -145,7 +146,7 @@ public class FornecedorViewController implements Initializable {
     /*
         Funcoes de linha selecionada
      */
-    public void selectedLineCliente(MouseEvent event) throws SQLException {
+    public void selectedLineCliente(MouseEvent event) {
         Fornecedor c = tabelaCliente.getSelectionModel().getSelectedItem();
         if (c != null) {
             SysFact.setData(String.valueOf(c.getId()));
@@ -156,7 +157,7 @@ public class FornecedorViewController implements Initializable {
 
     }
 
-    public void deleteItem(MouseEvent event, Fornecedor x) throws SQLException {
+    public void deleteItem(MouseEvent event, Fornecedor x){
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -169,8 +170,7 @@ public class FornecedorViewController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                FornecedorDAO xDAO = new FornecedorDAO();
-                xDAO.deleteEntity(x.getId());
+                serFornecedor.excluir(x.getId());
                 showClientes();
                 txtIDCliente.setText("");
                 SysFact.setData("");

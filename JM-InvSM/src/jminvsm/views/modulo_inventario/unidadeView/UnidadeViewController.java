@@ -28,7 +28,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
-import jminvsm.dao.unidademedida.UnidadeMedidaDAO;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.service.unidadeMedida.ServiceUnidadeMedida;
 import jminvsm.util.ButtonUtilities;

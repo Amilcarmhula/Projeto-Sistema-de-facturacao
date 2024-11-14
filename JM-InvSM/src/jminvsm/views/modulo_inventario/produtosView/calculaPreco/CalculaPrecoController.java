@@ -24,9 +24,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
-import jminvsm.dao.taxaimposto.TaxaImpostoDAO;
 import jminvsm.model.taxa_imposto.TaxaImposto;
-import jminvsm.util.ButtonUtilities;
+import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
 import jminvsm.util.LoadAndMoveUtilities;
 
 /**
@@ -35,6 +34,7 @@ import jminvsm.util.LoadAndMoveUtilities;
  * @author JM-Tecnologias
  */
 public class CalculaPrecoController implements Initializable {
+    private ServiceTaxaImpostos serTaxa;
 
     @FXML
     private TableView<TaxaImposto> tabelaTaxa;
@@ -79,6 +79,7 @@ public class CalculaPrecoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            serTaxa = new ServiceTaxaImpostos();
             showTaxas();
         } catch (SQLException ex) {
             Logger.getLogger(CalculaPrecoController.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,9 +87,8 @@ public class CalculaPrecoController implements Initializable {
     }
     private ObservableList<TaxaImposto> listaTaxas;
 
-    public void showTaxas() throws SQLException {
-        TaxaImpostoDAO xDAO = new TaxaImpostoDAO();
-        listaTaxas = xDAO.listAllEntities();
+    public void showTaxas(){
+        listaTaxas = serTaxa.getTaxas();
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipoTaxa.setCellValueFactory(new PropertyValueFactory<>("nomeImposto"));

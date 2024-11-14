@@ -20,24 +20,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
-import javafx.util.Callback;
 import jminvsm.SysFact;
-import jminvsm.dao.armazem.ArmazemDAO;
-import jminvsm.dao.fornecedor.FornecedorDAO;
 import jminvsm.model.armazem.Armazem;
-import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
-import jminvsm.util.AlertUtilities;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -49,6 +41,7 @@ import jminvsm.util.LoadAndMoveUtilities;
 public class ArmazemViewController implements Initializable {
 
     private Usuario userData;
+    private ServiceArmazem servArmazem;
 
     @FXML
     private TableColumn<Armazem, Integer> IDtabelaCliente;
@@ -92,10 +85,11 @@ public class ArmazemViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.userData = SysFact.getUserData();
         try {
-            showClientes();
+            servArmazem = new ServiceArmazem();
         } catch (SQLException ex) {
-            Logger.getLogger(Armazem.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ArmazemViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        showClientes();
     }
 
     /*
@@ -108,10 +102,9 @@ public class ArmazemViewController implements Initializable {
      */
     private ObservableList<Armazem> listaClientes;
 
-    public void showClientes() throws SQLException {
+    public void showClientes() {
 
-        ArmazemDAO aDAO = new ArmazemDAO();
-        listaClientes = aDAO.listAllEntities();
+        listaClientes = servArmazem.listaArmazens();
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -150,7 +143,7 @@ public class ArmazemViewController implements Initializable {
     /*
         Funcoes de linha selecionada
      */
-    public void selectedLineCliente(MouseEvent event) throws SQLException {
+    public void selectedLineCliente(MouseEvent event) {
         Armazem c = tabelaCliente.getSelectionModel().getSelectedItem();
         if (c != null) {
             SysFact.setData(String.valueOf(c.getId()));
@@ -160,7 +153,7 @@ public class ArmazemViewController implements Initializable {
         }
     }
 
-    public void deleteItem(MouseEvent event, Armazem x) throws SQLException {
+    public void deleteItem(MouseEvent event, Armazem x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -173,9 +166,8 @@ public class ArmazemViewController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                ServiceArmazem service = new ServiceArmazem();
-                service.excluir(x.getId());
-                if (service.isOpsSuccess()) {
+                servArmazem.excluir(x.getId());
+                if (servArmazem.isOpsSuccess()) {
                     showClientes();
                 }
             } else if (result.get() == btnCancel) {

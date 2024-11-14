@@ -4,22 +4,22 @@
  */
 package jminvsm.model.vendas.factura;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import jminvsm.dao.vendas.factura.FacturaDAO;
-import jminvsm.dao.vendas.itens.ItemDAO;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.empresa.Empresa;
 import jminvsm.model.transacao.Transacao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.documetos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.itens.Item;
-import jminvsm.util.FilePathFinderUtilities;
+import jminvsm.service.vendas.factura.ServiceFactura;
+import jminvsm.service.vendas.factura.itens.ServiceItem;
 import jminvsm.util.report.ReportUtilities;
 
 /**
@@ -44,11 +44,13 @@ public class Factura {
     private Empresa empresa;
     private Cliente cliente;
     private Usuario usuario;
+    private ServiceFactura serviceFactura;
+    private ServiceItem serviceItens;
 
     public Factura() {
     }
 
-    public Factura(String numero_fac, String data_emissao, String data_vencimento, double total, double totalPago, double saldoPendente, int numeroParcelas, String condicaoPagamento, String estado, DocumentosComerciais docComerciais, List<Item> itens, Item item, Transacao transacoes, Empresa empresa, Cliente cliente, Usuario usuario) {
+    public Factura(String numero_fac, String data_emissao, String data_vencimento, double total, double totalPago, double saldoPendente, int numeroParcelas, String condicaoPagamento, String estado, DocumentosComerciais docComerciais, List<Item> itens, Item item, Transacao transacoes, Empresa empresa, Cliente cliente, Usuario usuario) throws SQLException {
         this.numero_fac = numero_fac;
         this.data_emissao = data_emissao;
         this.data_vencimento = data_vencimento;
@@ -65,34 +67,32 @@ public class Factura {
         this.empresa = empresa;
         this.cliente = cliente;
         this.usuario = usuario;
+
     }
 
-    
-
-    public void criarFactura(String numeroFactura) throws SQLException {
-
+    public void criarFactura(String numeroFactura) throws SQLException{
+        serviceFactura = new ServiceFactura();
+        serviceItens = new ServiceItem();
         List<Factura> detalhesFactura = new ArrayList<Factura>();
-        Factura detalhes = new FacturaDAO().getFacturaData(numeroFactura);
+
+        Factura detalhes = serviceFactura.consultaDadosFactura(numeroFactura);
         detalhesFactura.add(detalhes);
         JRBeanCollectionDataSource facturaDetalhesDATASOURCE = new JRBeanCollectionDataSource(detalhesFactura);
 
-        ItemDAO x = new ItemDAO();
-        List<Item> detalhesItens = x.getItensData(numeroFactura);
-
         // Configurar o DataSource para os itens
-        JRBeanCollectionDataSource itemDataSource = new JRBeanCollectionDataSource(detalhesItens);
+        JRBeanCollectionDataSource itemDataSource = new JRBeanCollectionDataSource(serviceItens.consultaItensFactura(numeroFactura));
 
         // Passar parâmetros para o relatório
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("TABLE_DATA_SOURCE", itemDataSource);
         parametros.put("NOMEFACTURA", numeroFactura);
-        
+
         String path = "";
-        if(numeroFactura.endsWith("/1") || numeroFactura.endsWith("/2")){
+        if (numeroFactura.endsWith("/1") || numeroFactura.endsWith("/2")) {
             path = "C:\\JM-InvSM\\compiled\\Factura.jasper";
-        }else if(numeroFactura.endsWith("/3")){
+        } else if (numeroFactura.endsWith("/3")) {
             path = "C:\\JM-InvSM\\compiled\\FacturaRecibo.jasper";
-        }else{
+        } else {
             path = "C:\\JM-InvSM\\compiled\\FacturaSimplificada.jasper";
         }
 
@@ -227,22 +227,23 @@ public class Factura {
     public void setDocComerciais(DocumentosComerciais docComerciais) {
         this.docComerciais = docComerciais;
     }
-    public String getNomePagamento(){
-        if(transacoes != null){
+
+    public String getNomePagamento() {
+        if (transacoes != null) {
             return transacoes.getMetodo().getNomePagamento();
         }
         return "";
     }
-    
-    public double getTrocos(){
-        if(transacoes != null){
+
+    public double getTrocos() {
+        if (transacoes != null) {
             return transacoes.getTrocos();
         }
         return -1;
     }
-    
-    public double getValorRecebido(){
-        if(transacoes != null){
+
+    public double getValorRecebido() {
+        if (transacoes != null) {
             return transacoes.getValorRecebido();
         }
         return -1;

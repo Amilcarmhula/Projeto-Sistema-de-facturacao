@@ -160,7 +160,7 @@ public class AddArmazemController implements Initializable {
         }
     }
 
-    public void addORupdateContacto(ActionEvent e) throws SQLException {
+    public void addORupdateContacto(ActionEvent e){
         if ("".equals(txtIDContacto.getText())) {
             addContacto(e);
         } else {
@@ -168,7 +168,7 @@ public class AddArmazemController implements Initializable {
         }
     }
 
-    public void addORupdateCliente(ActionEvent e) throws SQLException {
+    public void addORupdateCliente(ActionEvent e){
         if ("".equals(txtIDCliente.getText())) {
             addArmazem(e);
         } else {
@@ -176,7 +176,7 @@ public class AddArmazemController implements Initializable {
         }
     }
 
-    public void addORupdateEndereco(ActionEvent e) throws SQLException {
+    public void addORupdateEndereco(ActionEvent e){
         if ("".equals(txtIDEndereco.getText())) {
             addEndereco(e);
         } else {
@@ -212,17 +212,19 @@ public class AddArmazemController implements Initializable {
             }
         }
 
+  
         try {
             serviceArmazem = new ServiceArmazem();
             serviceContacto = new ServiceContacto();
             serviceEndereco = new ServiceEndereco();
-            showContactos();
-            showClienteByID();
-            showEndereco();
-            // TODO
         } catch (SQLException ex) {
             Logger.getLogger(AddArmazemController.class.getName()).log(Level.SEVERE, null, ex);
         }
+            
+            showContactos();
+            showClienteByID();
+            showEndereco();
+            
         ButtonUtilities.buttonChangeText(btnAddArmazem, txtIDCliente);
         ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
     }
@@ -232,7 +234,7 @@ public class AddArmazemController implements Initializable {
     /*
     Funcoes de Consultas
      */
-    public void showLastStoreAdded() throws SQLException {
+    public void showLastStoreAdded(){
         Armazem c = serviceArmazem.getUltimoArmazem();
         txtIDCliente.setText(String.valueOf(c.getId()));
         combTipoCliente.setValue(c.getTipo());
@@ -242,7 +244,7 @@ public class AddArmazemController implements Initializable {
         showEndereco();
     }
 
-    public void showClienteByID() throws SQLException {
+    public void showClienteByID(){
         if (!"".equals(txtIDCliente.getText())) {
             Armazem c = serviceArmazem.consultaArmazem(Integer.parseInt(txtIDCliente.getText()));
             combTipoCliente.setValue(c.getTipo());
@@ -255,7 +257,7 @@ public class AddArmazemController implements Initializable {
 
     private ObservableList<EnderecoArmazem> listaEndereco;
 
-    public void showEndereco() throws SQLException {
+    public void showEndereco(){
         if ("".equals(txtIDCliente.getText())) {
             listaEndereco = serviceEndereco.listaEnderecos();
         } else {
@@ -276,7 +278,7 @@ public class AddArmazemController implements Initializable {
 
     private ObservableList<ContactoArmazem> listaContactos;
 
-    public void showContactos() throws SQLException {
+    public void showContactos() {
         if ("".equals(txtIDCliente.getText())) {
             listaContactos = serviceContacto.listaContactos();
         } else {
@@ -293,37 +295,34 @@ public class AddArmazemController implements Initializable {
     /*
     Funcoes de Adicao de registros
      */
-    public void addArmazem(ActionEvent e) throws SQLException {
-        ServiceArmazem servicee = new ServiceArmazem();
-        servicee.registar(combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
-        if (servicee.isOpsSuccess()) {
+    public void addArmazem(ActionEvent e) {
+        serviceArmazem.registar(combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
+        if (serviceArmazem.isOpsSuccess()) {
             ButtonUtilities.buttonChangeText(btnAddArmazem, txtIDCliente);
             showLastStoreAdded();
-            servicee.setOpsSuccess(false);
+            serviceArmazem.setOpsSuccess(false);
         }
 
     }
 
-    public void addContacto(ActionEvent e) throws SQLException {
-        ServiceContacto service = new ServiceContacto();
+    public void addContacto(ActionEvent e) {
         Integer id = Integer.valueOf(txtIDCliente.getText());
-        service.registar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
-        if (service.isOpsSuccess()) {
+        serviceContacto.registar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
+        if (serviceContacto.isOpsSuccess()) {
             
             showContactos();
             restContacto();
         }
     }
 
-    public void addEndereco(ActionEvent e) throws SQLException {
-        ServiceEndereco service = new ServiceEndereco();
+    public void addEndereco(ActionEvent e)  {
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         Integer id = Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
-        service.registar(txtAvenida.getText(), txtBairro.getText(),
+        serviceEndereco.registar(txtAvenida.getText(), txtBairro.getText(),
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
                 txtRua.getText(), id, userData);
-        if (service.isOpsSuccess()) {
+        if (serviceEndereco.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
         }
@@ -332,36 +331,33 @@ public class AddArmazemController implements Initializable {
     /*
     Funcoes para Actualizar registros
      */
-    public void updateArmazem(ActionEvent e) throws SQLException {
-        ServiceArmazem servicee = new ServiceArmazem();
+    public void updateArmazem(ActionEvent e) {
         Integer id = Integer.valueOf(txtIDCliente.getText());
-        servicee.actualizar(id, combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
+        serviceArmazem.actualizar(id, combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
 
-        if (servicee.isOpsSuccess()) {
+        if (serviceArmazem.isOpsSuccess()) {
             showContactos();
-            servicee.setOpsSuccess(false);
+            serviceArmazem.setOpsSuccess(false);
         }
     }
 
-    public void updateContacto(ActionEvent e) throws SQLException {
-        ServiceContacto service = new ServiceContacto();
+    public void updateContacto(ActionEvent e) {
         Integer id = Integer.valueOf(txtIDContacto.getText());
-        service.actualizar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
-        if (service.isOpsSuccess()) {
+        serviceContacto.actualizar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
+        if (serviceContacto.isOpsSuccess()) {
             showContactos();
             restContacto();
         }
     }
 
-    public void updateEndereco(ActionEvent e) throws SQLException {
-        ServiceEndereco service = new ServiceEndereco();
+    public void updateEndereco(ActionEvent e){
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         Integer id = Integer.valueOf(txtIDEndereco.getText().equals("") ? "0" : txtIDEndereco.getText());
-        service.actualizar(txtAvenida.getText(), txtBairro.getText(),
+        serviceEndereco.actualizar(txtAvenida.getText(), txtBairro.getText(),
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
                 txtRua.getText(), id, userData);
-        if (service.isOpsSuccess()) {
+        if (serviceEndereco.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
         }
@@ -371,7 +367,7 @@ public class AddArmazemController implements Initializable {
     /*
     Funcoes de Linha selecionada
      */
-    public void selecionaContacto(MouseEvent event) throws SQLException {
+    public void selecionaContacto(MouseEvent event){
         ContactoArmazem x = tabelaContacto.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDContacto.setText(String.valueOf(x.getId()));
@@ -383,7 +379,7 @@ public class AddArmazemController implements Initializable {
         }
     }
 
-    public void deleteContacto(MouseEvent event, ContactoArmazem x) throws SQLException {
+    public void deleteContacto(MouseEvent event, ContactoArmazem x){
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -396,9 +392,8 @@ public class AddArmazemController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                ServiceContacto service = new ServiceContacto();
-                service.excluir(x.getId());
-                if (service.isOpsSuccess()) {
+                serviceContacto.excluir(x.getId());
+                if (serviceContacto.isOpsSuccess()) {
                     showContactos();
                     restContacto();
                 }
@@ -408,7 +403,7 @@ public class AddArmazemController implements Initializable {
         }
     }
 
-    public void selecionaEndereco(MouseEvent event) throws SQLException {
+    public void selecionaEndereco(MouseEvent event) {
         EnderecoArmazem x = tabelaEndereco.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtIDEndereco.setText(String.valueOf(x.getId()));
@@ -424,7 +419,7 @@ public class AddArmazemController implements Initializable {
         }
     }
 
-    public void deleteEndereco(MouseEvent event, EnderecoArmazem x) throws SQLException {
+    public void deleteEndereco(MouseEvent event, EnderecoArmazem x){
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -437,9 +432,8 @@ public class AddArmazemController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                ServiceEndereco service = new ServiceEndereco();
-                service.excluir(x.getId());
-                if (service.isOpsSuccess()) {
+                serviceEndereco.excluir(x.getId());
+                if (serviceEndereco.isOpsSuccess()) {
                     showEndereco();
                     resetEndereco();
                 }
@@ -452,7 +446,7 @@ public class AddArmazemController implements Initializable {
     /*
     Funcoes de Reset Campos
      */
-    public void resetCliente() throws SQLException {
+    public void resetCliente() {
         txtIDCliente.setText("");
         combTipoCliente.setPromptText("Tipo de cliente");
         txtDescricao.setText("");

@@ -4,12 +4,12 @@
  */
 package jminvsm.service.vendas.factura.itens;
 
+import java.sql.SQLException;
 import java.util.List;
 import jminvsm.dao.vendas.itens.ItemDAO;
 import jminvsm.model.vendas.factura.itens.Item;
 import static jminvsm.util.AlertUtilities.showDialog;
 import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  *
@@ -18,8 +18,8 @@ import static jminvsm.util.AlertUtilities.showSuccessAlert;
 public class ServiceItem {
     private ItemDAO itemDao;
 
-    public ServiceItem(ItemDAO itemDao) {
-        this.itemDao = itemDao;
+    public ServiceItem() throws SQLException {
+        this.itemDao = new ItemDAO();
     }
     public void registaItens(List<Item> itens){
         if(itens == null || itens.isEmpty()){
@@ -47,5 +47,9 @@ public class ServiceItem {
         } catch (Exception ex) {
             showDialog( "Erro", "Erro ao emitir factura!");
         }
+    }
+    
+    public List<Item>  consultaItensFactura(String numero){
+        return itemDao.getItensData(numero);
     }
 }

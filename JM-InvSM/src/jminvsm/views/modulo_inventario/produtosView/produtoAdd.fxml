@@ -65,7 +65,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="295.0" onMouseClicked="#selecionaProduto" prefHeight="346.0" prefWidth="1400.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="340.0" onMouseClicked="#selecionaProduto" prefHeight="346.0" prefWidth="1400.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
             <TableColumn fx:id="artigo" prefWidth="250.0" text="Artigo" />
@@ -173,12 +173,6 @@
                   <TableColumn fx:id="estadoPreco" prefWidth="100.0" text="Estado" />
                </columns>
             </TableView>
-            <TextField fx:id="txtPesquisar" layoutX="246.0" layoutY="202.0" prefHeight="26.0" prefWidth="321.0" promptText="Pesquisar produto" stylesheets="@../../../style/dashboard.css">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </TextField>
             <Label layoutX="468.0" layoutY="51.0" prefHeight="30.0" prefWidth="126.0" text="Preco Normal" textFill="WHITE">
                <font>
                   <Font size="20.0" />
@@ -207,8 +201,36 @@
                   <Insets />
                </opaqueInsets>
             </Button>
-            <ComboBox fx:id="combArmazem" layoutX="14.0" layoutY="200.0" onMouseClicked="#populateCombos" prefHeight="30.0" prefWidth="220.0" promptText="Armazem" visibleRowCount="5" />
          </children>
       </AnchorPane>
+      <HBox layoutX="10.0" layoutY="302.0">
+         <children>
+            <ComboBox fx:id="combArmazemPesq" onMouseClicked="#populateCombos" prefHeight="30.0" prefWidth="220.0" promptText="Armazem" visibleRowCount="5" />
+            <ComboBox fx:id="combCategoriaPesq" prefHeight="30.0" prefWidth="191.0" promptText="Caregoria" visibleRowCount="5">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </ComboBox>
+            <ComboBox fx:id="combUnidadePesq" prefHeight="30.0" prefWidth="191.0" promptText="Unidade" visibleRowCount="5">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </ComboBox>
+            <ComboBox fx:id="combTaxaPesq" prefHeight="30.0" prefWidth="191.0" promptText="Taxas/Impostos" visibleRowCount="5">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </ComboBox>
+            <TextField fx:id="txtPesquisar" prefHeight="26.0" prefWidth="321.0" promptText="Pesquisar produto" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

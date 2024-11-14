@@ -88,7 +88,7 @@ public class ServiceFactura {
         f.setCliente(cliente);
         f.setEmpresa(emp);
         f.setUsuario(user);
-        ServiceItem serviceItem = new ServiceItem(itemDao);
+        ServiceItem serviceItem = new ServiceItem();
 
         if (facturaDao.addEntity(f)) {
             if(doc.getNome_doc().equals("Fatura Proforma")){
@@ -108,6 +108,10 @@ public class ServiceFactura {
 
     public Factura consultaFactura(String numero) {
         return facturaDao.getFactura(numero);
+    }
+    
+    public Factura consultaDadosFactura(String numero) {
+        return facturaDao.getFacturaData(numero);
     }
 
     public ObservableList<Factura> exibeFactura() {

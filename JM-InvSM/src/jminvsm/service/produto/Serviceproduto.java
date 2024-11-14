@@ -5,6 +5,7 @@
 package jminvsm.service.produto;
 
 import java.sql.SQLException;
+import javafx.collections.ObservableList;
 import jminvsm.dao.produto.ProdutoDAO;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.produto.Produto;
@@ -34,7 +35,7 @@ public class ServiceProduto {
         this.OpsSuccess = OpsSuccess;
     }
 
-    public void registraProduto(Integer id_cat, Integer id_uni, Integer id_tax,
+    public void regista(Integer id_cat, Integer id_uni, Integer id_tax,
             String nome, String codBarras, String descricao, Boolean controleStock, Integer nivelstock) {
         setOpsSuccess(false);
         // Validações básicas antes de registrar a categoria
@@ -93,7 +94,7 @@ public class ServiceProduto {
         }
     }
 
-    public void actualizaProduto(int id, Integer id_cat, Integer id_uni, Integer id_tax,
+    public void actualiza(int id, Integer id_cat, Integer id_uni, Integer id_tax,
             String nome, String codBarras, String descricao, Boolean controleStock, Integer nivelstock) {
         setOpsSuccess(false);
 
@@ -145,12 +146,28 @@ public class ServiceProduto {
 
         if (produtoDao.updateEntityByID(p, id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Produto actualizado com sucesso!");
+            showSuccessAlert("Produto actualizado com sucesso.");
         }
     }
+    //
 
-    public Produto consultaUltimo() {
+    public ObservableList<Produto> getProdutos() {
+        return produtoDao.getCombinedEntities();
+    }
+    public Produto getUltimo() {
         return produtoDao.getLastEntity();
+    }
+    
+    public int contaProdutos(Integer id_cat){
+        return produtoDao.countProdutos(id_cat);
+    }
+    
+    public void excluir(int id){
+        setOpsSuccess(false);
+        if(produtoDao.deleteEntity(id)){
+            setOpsSuccess(true);
+            showSuccessAlert("Produto excluido com sucesso.");
+        }
     }
 
 }

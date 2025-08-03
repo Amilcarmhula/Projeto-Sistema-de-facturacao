@@ -329,7 +329,7 @@ public class ProdutoController implements Initializable {
                         CheckBox check = new CheckBox();
                         check.setDisable(true);
                         Produto produto = getTableView().getItems().get(getIndex());
-                        check.setSelected(produto.isContole_stock());
+                        check.setSelected(produto.isControle_stock());
 
                         setGraphic(check);
                         setText(null);
@@ -677,13 +677,13 @@ public class ProdutoController implements Initializable {
             txtNomeProduto.setText(p.getNomeProduto());
             txtcodigobarrasProduto.setText(p.getCodigo_barra());
             txtdescricaoProduto.setText(p.getDescricao());
-            checkControle.setSelected(p.isContole_stock());
+            checkControle.setSelected(p.isControle_stock());
             combCategoria.setValue(p.getCategoria().getFamilia());
             combUnidade.setValue(p.getUnidade_medida().getIdentificador());
             combTaxa.setValue(p.getTaxa_imposto().getNomeImposto());
             stockControlChecked();
             showPrecoVenda();
-            if (event.getClickCount() == 2 && p.isContole_stock()) {
+            if (event.getClickCount() == 2 && p.isControle_stock()) {
                 SysFact.setData(p);
                 getStockView(event);
             }

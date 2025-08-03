@@ -126,7 +126,7 @@ public class ServiceTransacoes {
 
         Transacao t = new Transacao();
         Parcela p =new Parcela();
-        p.setId(id_parcela);
+        p.setId_parcela(id_parcela);
         t.setParcela(p);
         t.setData_pagamento(data_pagamento);
         t.setValorRecebido(valorRecebido);

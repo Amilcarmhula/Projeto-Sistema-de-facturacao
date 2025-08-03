@@ -40,7 +40,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         boolean isSuccess = false;
         try {
             sql = "insert into produto (nome,codigo_barra, descricao,fk_id_categoria, "
-                    + "fk_id_unidade_medida,fk_id_taxa_imposto,contole_stock,nivelstock) value (?,?,?,?,?,?,?,?)";
+                    + "fk_id_unidade_medida,fk_id_taxa_imposto,controle_stock,nivelstock) value (?,?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -50,7 +50,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setInt(4, t.getCategoria().getId());
             ps.setInt(5, t.getUnidade_medida().getId());
             ps.setInt(6, t.getTaxa_imposto().getId());
-            ps.setBoolean(7, t.isContole_stock());
+            ps.setBoolean(7, t.isControle_stock());
             ps.setInt(8, t.getNivelstock());
             int rowsAffected = ps.executeUpdate();
 
@@ -77,7 +77,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         boolean isSuccess = false;
         try {
             sql = "update produto set nome=?,codigo_barra=?, descricao=?,fk_id_categoria=?, "
-                    + "fk_id_unidade_medida=?,fk_id_taxa_imposto=?, nivelstock=?, contole_stock=? where id=?";
+                    + "fk_id_unidade_medida=?,fk_id_taxa_imposto=?, nivelstock=?, controle_stock=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNomeProduto());
@@ -87,7 +87,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setInt(5, t.getUnidade_medida().getId());
             ps.setInt(6, t.getTaxa_imposto().getId());
             ps.setInt(7, t.getNivelstock());
-            ps.setBoolean(8, t.isContole_stock());
+            ps.setBoolean(8, t.isControle_stock());
             ps.setInt(9, id);
             int rowsAffected = ps.executeUpdate();
 
@@ -113,7 +113,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     public ObservableList<Produto> getCombinedEntities() {
         ObservableList<Produto> lista = FXCollections.observableArrayList();
         try {
-            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.contole_stock, p.nivelstock, "
+            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
                     + "		c.id as id_categoria, c.familia as categoria,"
                     + "         u.id as id_unidade, u.identificador, u.sigla,"
                     + "         t.id as id_taxa, t.identificador as taxa, t.percentagem,"
@@ -151,7 +151,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 Stock s = new Stock();
                 s.setSaldo(result.getInt("saldo"));
                 c.setStock(s);
-                c.setContole_stock(result.getBoolean("contole_stock"));
+                c.setControle_stock(result.getBoolean("controle_stock"));
                 Armazem arm = new Armazem();
                 arm.setId(result.getInt("fk_id_armazem"));
                 arm.setNome_arm(result.getString("nome_armazem"));

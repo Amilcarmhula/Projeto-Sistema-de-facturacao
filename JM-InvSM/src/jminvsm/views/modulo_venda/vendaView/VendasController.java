@@ -366,7 +366,7 @@ public class VendasController implements Initializable {
             return;
         }
         i.setSubtotal(subtotal);
-        if (x.isContole_stock() == true) {
+        if (x.isControle_stock() == true) {
             if (x.getStock().getSaldo() > qtd) {
                 tabelaItens.getItems().add(i);
                 resetProduto();

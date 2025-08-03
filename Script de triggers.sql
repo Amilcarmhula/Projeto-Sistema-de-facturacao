@@ -1,47 +1,103 @@
 use _sysface;
-
--- Trigger para registar movimento de entrada apos registo de fornecimento de produto na tabela pro produto_fornecido
+-- Automatiza a preparação de stock para o novo produto em todos os armazéns existentes, evitando esquecimentos manuais
 delimiter //
-create trigger trigger_registaEntrada
-	after insert on produto_fornecido
-    for each row
-    begin
-		insert into movimento (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem) value ('Entrada',new.data_fornecida,new.quantidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
-    end//
+CREATE TRIGGER trigger_registra_stock
+	AFTER INSERT ON produto
+	FOR EACH ROW
+	BEGIN
+		IF NEW.controle_stock THEN
+			INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
+			SELECT NEW.id, id, 0 FROM armazem;
+		END IF;
+	END//
 delimiter ;
 
--- Trigger para controlar fluxo de stock(saldo de determinado produto em seu armazarm) quando um movimento de entrada ou saida e registado na tabela movimento
-DELIMITER //
-CREATE TRIGGER trigger_updateSaldoStock
-    AFTER INSERT ON movimento
-    FOR EACH ROW
-BEGIN
-    -- Verifica se a combinação de fk_id_produto e fk_id_armazem já existe na tabela stock
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM stock 
-        WHERE fk_id_produto = NEW.fk_id_produto 
-          AND fk_id_armazem = NEW.fk_id_armazem
-    ) THEN
-        -- Insere um novo registro com saldo inicial 0 caso a combinação não exista
-        INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
-        VALUES (NEW.fk_id_produto, NEW.fk_id_armazem, 0);
-    END IF;
+-- Quando um produto é fornecido, atualizar o stock automaticamente no armazém indicado
+-- Automatiza o registo de entrada de stock
+-- Mantém histórico de movimentação
+-- Garante consistência entre fornecimento e saldo de stock
+delimiter //
+CREATE TRIGGER trigger_actualiza_stock_fornecido
+	AFTER INSERT ON produto_fornecido
+	FOR EACH ROW
+	BEGIN
+		DECLARE total_unidades INT;
 
-    -- Atualiza o saldo com base nos movimentos registrados
-    UPDATE stock 
-    SET saldo = (
-        SELECT 
-            (SUM(CASE WHEN tipo_movimento = 'Entrada' THEN quantidade ELSE 0 END) - 
-             SUM(CASE WHEN tipo_movimento = 'Saída' THEN quantidade ELSE 0 END)) AS saldo_produto
-        FROM movimento 
-        WHERE fk_id_produto = NEW.fk_id_produto 
-          AND fk_id_armazem = NEW.fk_id_armazem
-    )
-    WHERE fk_id_produto = NEW.fk_id_produto 
-      AND fk_id_armazem = NEW.fk_id_armazem;
-END//
-DELIMITER ;
+		SET total_unidades = NEW.quantidade * NEW.qtd_por_unidade;
+
+		INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
+		VALUES (NEW.fk_id_produto, NEW.fk_id_armazem, total_unidades)
+		ON DUPLICATE KEY UPDATE saldo = saldo + total_unidades;
+
+		-- Inserir também na tabela movimento
+		INSERT INTO movimento (tipo_movimento, data_movimento, quantidade, fk_id_produto, fk_id_usuario, fk_id_armazem, unidade_movimentada, qtd_por_unidade)
+		VALUES ('Entrada', NEW.data_fornecida, NEW.quantidade, NEW.fk_id_produto, NEW.fk_id_usuario, NEW.fk_id_armazem, NEW.unidade_fornecida, NEW.qtd_por_unidade);
+	END//
+delimiter ;
+
+
+-- Quando um produto é vendido ou movimentado como "Saída", atualizar o stock.
+-- Automatiza a subtração do stock com base na movimentação
+-- Suporta múltiplas unidades (ex: caixas, pacotes)
+delimiter //
+CREATE TRIGGER trigger_actualiza_stock_saida
+	AFTER INSERT ON movimento
+	FOR EACH ROW
+	BEGIN
+		DECLARE total_unidades INT;
+
+		SET total_unidades = NEW.quantidade * NEW.qtd_por_unidade;
+
+		IF NEW.tipo_movimento = 'Saída' THEN
+			UPDATE stock
+			SET saldo = saldo - total_unidades
+			WHERE fk_id_produto = NEW.fk_id_produto AND fk_id_armazem = NEW.fk_id_armazem;
+		END IF;
+	END//
+delimiter ;
+
+-- Trigger para registar movimento de entrada apos registo de fornecimento de produto na tabela pro produto_fornecido
+-- delimiter //
+-- create trigger trigger_registaEntrada
+-- 	after insert on produto_fornecido
+--     for each row
+--     begin
+-- 		insert into movimento (tipo_movimento,data_movimento,quantidade,unidade_movimentada,qtd_por_unidade,fk_id_produto,fk_id_usuario,fk_id_armazem) value ('Entrada',new.data_fornecida,new.quantidade,new.unidade_fornecida,new.qtd_por_unidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
+--     end//
+-- delimiter ;
+
+-- Trigger para controlar fluxo de stock(saldo de determinado produto em seu armazarm) quando um movimento de entrada ou saida e registado na tabela movimento
+-- DELIMITER //
+-- CREATE TRIGGER trigger_updateSaldoStock
+--     AFTER INSERT ON movimento
+--     FOR EACH ROW
+-- BEGIN
+--     -- Verifica se a combinação de fk_id_produto e fk_id_armazem já existe na tabela stock
+--     IF NOT EXISTS (
+--         SELECT 1 
+--         FROM stock 
+--         WHERE fk_id_produto = NEW.fk_id_produto 
+--           AND fk_id_armazem = NEW.fk_id_armazem
+--     ) THEN
+--         -- Insere um novo registro com saldo inicial 0 caso a combinação não exista
+--         INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
+--         VALUES (NEW.fk_id_produto, NEW.fk_id_armazem, 0);
+--     END IF;
+
+--     -- Atualiza o saldo com base nos movimentos registrados
+--     UPDATE stock 
+--     SET saldo = (
+--         SELECT 
+--             (SUM(CASE WHEN tipo_movimento = 'Entrada' THEN (quantidade * qtd_por_unidade) ELSE 0 END) - 
+--              SUM(CASE WHEN tipo_movimento = 'Saída' THEN (quantidade * qtd_por_unidade) ELSE 0 END)) AS saldo_produto
+--         FROM movimento 
+--         WHERE fk_id_produto = NEW.fk_id_produto 
+--           AND fk_id_armazem = NEW.fk_id_armazem
+--     )
+--     WHERE fk_id_produto = NEW.fk_id_produto 
+--       AND fk_id_armazem = NEW.fk_id_armazem;
+-- END//
+-- DELIMITER ;
 
 -- Trigger para controlar fluxo de stock(saldo de determinado produto em seu armazarm) quando um movimento de saida e registado na tabela itemfactura
 delimiter //
@@ -49,8 +105,8 @@ create trigger trigger_registra_saida
 	after insert on itemfactura
     for each row
     begin
-		insert into movimento (tipo_movimento,data_movimento,quantidade,fk_id_produto,fk_id_usuario,fk_id_armazem)
-        value ('Saída',new.data_adicao,new.quantidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
+		insert into movimento (tipo_movimento,data_movimento,quantidade,unidade_movimentada,qtd_por_unidade,fk_id_produto,fk_id_usuario,fk_id_armazem)
+        value ('Saída',new.data_adicao,new.quantidade,new.unidade_vendida,new.qtd_por_unidade,new.fk_id_produto,new.fk_id_usuario,new.fk_id_armazem);
     end//
 delimiter ;
 

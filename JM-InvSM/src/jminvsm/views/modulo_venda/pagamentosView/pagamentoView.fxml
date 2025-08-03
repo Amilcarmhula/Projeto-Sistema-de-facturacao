@@ -13,7 +13,7 @@
 
 <AnchorPane prefHeight="909.0" prefWidth="1400.0" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.pagamentosView.PagamentoController">
    <children>
-      <TableView fx:id="tabelaFactura" layoutY="130.0" onMouseClicked="#showInvoice" prefHeight="250.0" prefWidth="1432.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
+      <TableView fx:id="tabelaFactura" layoutY="130.0" onMouseClicked="#selecionaFactura" prefHeight="250.0" prefWidth="1432.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
         <columns>
           <TableColumn fx:id="numero" prefWidth="145.0" resizable="false" text="Numero" />
           <TableColumn fx:id="tipo" prefWidth="204.0" resizable="false" text="Tipo" />
@@ -40,7 +40,7 @@
                         <String fx:value="hand-efect" />
                      </styleClass>
                   </Button>
-                  <Button layoutX="236.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="212.0" stylesheets="@../../../style/dashboard.css" text="Relatorio da Factura" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Button layoutX="236.0" mnemonicParsing="false" onAction="#genarateReport" prefHeight="36.0" prefWidth="212.0" stylesheets="@../../../style/dashboard.css" text="Relatorio da Factura" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
                      </font>

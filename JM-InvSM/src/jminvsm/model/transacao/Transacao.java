@@ -153,4 +153,17 @@ public class Transacao {
         this.parcela = parcela;
     }
     
+    public int getId_parcela() {
+        if (parcela != null) {
+            return parcela.getId_parcela();
+        }
+        return -1;
+    }
+    
+    public String getNomePagamento() {
+        if (metodo != null) {
+            return metodo.getNomePagamento();
+        }
+        return null;
+    }
 }

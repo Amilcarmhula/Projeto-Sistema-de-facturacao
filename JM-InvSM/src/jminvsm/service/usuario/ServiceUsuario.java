@@ -4,6 +4,7 @@
  */
 package jminvsm.service.usuario;
 
+import java.sql.SQLException;
 import jminvsm.dao.usuario.UsuarioDAO;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.util.AlertUtilities;
@@ -17,8 +18,8 @@ public class ServiceUsuario {
 
     private final UsuarioDAO usuarioDAO;
 
-    public ServiceUsuario(UsuarioDAO usuarioDAO) {
-        this.usuarioDAO = usuarioDAO;
+    public ServiceUsuario() throws SQLException {
+        this.usuarioDAO = new UsuarioDAO();
     }
 
     public Usuario authLogin(String user, String pwd) {

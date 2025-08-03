@@ -75,7 +75,7 @@ public class ServiceProduto {
         Produto p = new Produto();
         p.setNomeProduto(nome);
         p.setCodigo_barra(codBarras);
-        p.setContole_stock(controleStock);
+        p.setControle_stock(controleStock);
         p.setNivelstock(nivelstock);
         p.setDescricao(descricao);
         Categoria c = new Categoria();
@@ -131,7 +131,7 @@ public class ServiceProduto {
         Produto p = new Produto();
         p.setNomeProduto(nome);
         p.setCodigo_barra(codBarras);
-        p.setContole_stock(controleStock);
+        p.setControle_stock(controleStock);
         p.setNivelstock(nivelstock);
         p.setDescricao(descricao);
         Categoria c = new Categoria();

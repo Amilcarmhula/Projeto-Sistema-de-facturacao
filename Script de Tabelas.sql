@@ -1,5 +1,5 @@
--- drop database _sysface;
--- create database _sysface;
+drop database _sysface;
+create database _sysface;
 
 use _sysface;
 
@@ -221,14 +221,12 @@ create table desconto(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
-
 create table produto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
     codigo_barra varchar(50),
     descricao text,
-    contole_stock boolean not null, -- define condicao se sera armazenado no stock pelo trigger_registra_produto
+    controle_stock boolean not null, -- define condicao se sera armazenado no stock pelo trigger_registra_produto
     nivelstock integer default 0,
     fk_id_categoria integer not null,
     fk_id_unidade_medida integer,
@@ -238,8 +236,6 @@ create table produto(
     foreign key (fk_id_categoria) references categoria(id),
     foreign key (fk_id_unidade_medida) references unidade_medida(id)
 );
-
-
 
 CREATE TABLE precovenda (
     id integer PRIMARY KEY AUTO_INCREMENT,
@@ -256,6 +252,7 @@ CREATE TABLE precovenda (
     foreign key (fk_id_usuario) references usuario(id)
 );
 
+
 create table produto_fornecido(
 	id integer primary key auto_increment,
     quantidade integer,
@@ -271,6 +268,10 @@ create table produto_fornecido(
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_fornecedor) references fornecedor(id)
 );
+-- Nova tabela para controlo de vendas por unidades e lotes
+ALTER TABLE produto_fornecido
+ADD COLUMN unidade_fornecida VARCHAR(20) DEFAULT 'Unidade',
+ADD COLUMN qtd_por_unidade INT DEFAULT 1;
 
 
 create table movimento(
@@ -286,6 +287,12 @@ create table movimento(
     foreign key (fk_id_armazem) references armazem(id),
     check (tipo_movimento in('Entrada','Saída'))
 );
+-- Nova tabela para controlo de vendas por unidades e lotes
+ALTER TABLE movimento
+ADD COLUMN unidade_movimentada VARCHAR(20) DEFAULT 'Unidade',
+ADD COLUMN qtd_por_unidade INT DEFAULT 1;
+
+
 create table stock(
 	fk_id_produto integer,
     fk_id_armazem integer,
@@ -326,6 +333,10 @@ CREATE TABLE factura (
     FOREIGN KEY (fk_id_usuario) REFERENCES usuario(id),
     FOREIGN KEY (fk_id_cliente) REFERENCES cliente(id)
 );
+
+ALTER TABLE factura
+ADD COLUMN fk_id_armazem INT,
+ADD CONSTRAINT fk_factura_armazem FOREIGN KEY (fk_id_armazem) REFERENCES armazem(id);
  
 create table itemfactura(
 	id integer primary key auto_increment,
@@ -344,6 +355,10 @@ create table itemfactura(
     foreign key (fk_id_produto) references produto(id),
     foreign key (fk_numero) references factura(numero)
 );
+
+ALTER TABLE itemfactura
+ADD COLUMN unidade_vendida VARCHAR(20) DEFAULT 'Unidade',
+ADD COLUMN qtd_por_unidade INT DEFAULT 1;
 
 create table itemcotacao(
 	id integer primary key auto_increment,

@@ -2,7 +2,7 @@ use _sysface;
 
     -- Informacao bases de uma empresa
 INSERT INTO empresa (nome, razaosocial, nuit) VALUES
-('JM-Tecnologias', 'JM-Tecnologias Sociedade Unipessoal, E.I', 122564800);
+('JM-Tecnologias', 'JM-Tecnologia, E.I', 122564800);
 INSERT INTO endereco_empresa (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, tipo, fk_id_empresa) VALUES
 ('Maputo', 'Matola', 'Patrice Lumumba', '24 de Julho', '21376', 1112, 211, 'Facturação', 1);
 INSERT INTO contacto_empresa (contacto, email, website, fk_id_empresa)
@@ -70,11 +70,11 @@ INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUE
 INSERT INTO desconto (identificador, percentagem, descricao) VALUE
 ('Isento', 0.0, 'Desconto aplicado em produtos sem desconto');
 
-INSERT INTO produto (nome, codigo_barra, descricao, contole_stock,fk_id_categoria,fk_id_unidade_medida,fk_id_taxa_imposto) 
+INSERT INTO produto (nome, codigo_barra, descricao, controle_stock,fk_id_categoria,fk_id_unidade_medida,fk_id_taxa_imposto) 
 SELECT 'Produto Padrao','1000000000001', 'Produto Padrao',1,(Select id from categoria order by id DESC LIMIT 1),(Select id from unidade_medida order by id DESC LIMIT 1),(Select id from taxa_imposto order by id DESC LIMIT 1);
 
-INSERT INTO produto_fornecido (quantidade, data_fornecida, custo, fk_id_armazem,fk_id_produto,fk_id_fornecedor,fk_id_usuario) 
-SELECT 0,current_date(), 0.00, (Select id from armazem order by id DESC LIMIT 1),(Select id from produto order by id DESC LIMIT 1),(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1);
+INSERT INTO produto_fornecido (quantidade, data_fornecida,unidade_fornecida, qtd_por_unidade, custo, fk_id_armazem,fk_id_produto,fk_id_fornecedor,fk_id_usuario) 
+SELECT 0,current_date(),'unidade',0, 0.00, (Select id from armazem order by id DESC LIMIT 1),(Select id from produto order by id DESC LIMIT 1),(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1);
 
 INSERT INTO documentocomercial (sigla, nome, diasuteis, descricao) VALUES
 ('FA','Fatura', 5, 'Fatura: Documento comercial que representa a venda de produtos ou serviços, devendo ser emitida no ato da venda ou até 5 dias úteis após a transação.'),
@@ -130,34 +130,35 @@ insert into metodo_pagamento(nome, descricao) values
 -- ('Serviços', 'Consultoria', 'TI', 'Infraestruturas', 'Consultoria em infraestrutura de TI');
 
 
--- INSERT INTO unidade_medida (identificador, sigla, descricao)
--- VALUES 
--- ('Quilograma', 'kg', 'Unidade de massa usada no sistema métrico'),
--- ('Litro', 'L', 'Unidade de volume usada para medir líquidos'),
--- ('Metro', 'm', 'Unidade de comprimento usada no sistema métrico'),
--- ('Centímetro', 'cm', 'Unidade menor de comprimento no sistema métrico'),
--- ('Mililitro', 'ml', 'Unidade de volume usada para pequenas quantidades de líquidos'),
--- ('Grama', 'g', 'Unidade de massa usada para pequenas quantidades'),
--- ('Tonelada', 't', 'Unidade de massa usada para grandes quantidades'),
--- ('Polegada', 'in', 'Unidade de comprimento usada no sistema imperial'),
--- ('Galão', 'gal', 'Unidade de volume usada no sistema imperial'),
--- ('Onça', 'oz', 'Unidade de peso usada no sistema imperial');
+INSERT INTO unidade_medida (identificador, sigla, descricao)
+VALUES 
+('Quilograma', 'kg', 'Unidade de massa usada no sistema métrico'),
+('Litro', 'L', 'Unidade de volume usada para medir líquidos'),
+('Lote', 'Lt', 'Volume por unidades'),
+('Metro', 'm', 'Unidade de comprimento usada no sistema métrico'),
+('Centímetro', 'cm', 'Unidade menor de comprimento no sistema métrico'),
+('Mililitro', 'ml', 'Unidade de volume usada para pequenas quantidades de líquidos'),
+('Grama', 'g', 'Unidade de massa usada para pequenas quantidades'),
+('Tonelada', 't', 'Unidade de massa usada para grandes quantidades'),
+('Polegada', 'in', 'Unidade de comprimento usada no sistema imperial'),
+('Galão', 'gal', 'Unidade de volume usada no sistema imperial'),
+('Onça', 'oz', 'Unidade de peso usada no sistema imperial');
 
 
--- INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUES
--- ('IVA', 0.16, 'Imposto sobre o valor acrescentado (IVA)'),
--- ('ISPC', 0.5, 'Imposto Simplificado para Pequenos Contribuintes (ISPC)'),
--- ('Taxa Reduzida', 0.075, 'Taxa de imposto reduzida para produtos essenciais');
+INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUES
+('IVA', 0.16, 'Imposto sobre o valor acrescentado (IVA)'),
+('ISPC', 0.5, 'Imposto Simplificado para Pequenos Contribuintes (ISPC)'),
+('Taxa Reduzida', 0.075, 'Taxa de imposto reduzida para produtos essenciais');
 
--- INSERT INTO desconto (identificador, percentagem, descricao) VALUES
--- ('Desconto de Lançamento', 0.1, 'Desconto aplicado em novos produtos no lançamento'),
--- ('Desconto de Fim de Ano', 0.155, 'Desconto especial para vendas de final de ano'),
--- ('Desconto por Quantidade', 0.575, 'Desconto aplicado para compras em grandes quantidades'),
--- ('Desconto Promocional', 0.2, 'Desconto aplicado em promoções especiais por tempo limitado'),
--- ('Desconto Fidelidade', 0.8, 'Desconto para clientes fiéis com mais de 1 ano de compras'),
--- ('Desconto Black Friday', 0.3, 'Desconto massivo durante a Black Friday'),
--- ('Desconto de Parceria', 0.125, 'Desconto exclusivo para parceiros comerciais'),
--- ('Desconto de Natal', 0.1825, 'Desconto sazonal para o período de Natal');
+INSERT INTO desconto (identificador, percentagem, descricao) VALUES
+('Desconto de Lançamento', 0.1, 'Desconto aplicado em novos produtos no lançamento'),
+('Desconto de Fim de Ano', 0.155, 'Desconto especial para vendas de final de ano'),
+('Desconto por Quantidade', 0.575, 'Desconto aplicado para compras em grandes quantidades'),
+('Desconto Promocional', 0.2, 'Desconto aplicado em promoções especiais por tempo limitado'),
+('Desconto Fidelidade', 0.8, 'Desconto para clientes fiéis com mais de 1 ano de compras'),
+('Desconto Black Friday', 0.3, 'Desconto massivo durante a Black Friday'),
+('Desconto de Parceria', 0.125, 'Desconto exclusivo para parceiros comerciais'),
+('Desconto de Natal', 0.1825, 'Desconto sazonal para o período de Natal');
 
 
 --     

@@ -18,7 +18,9 @@ public class ProdutoFornecido {
 
     private int id;
     private int quantidade;
+    private int qtd_por_unidade;
     private String data_fornecida;
+    private String unidade_fornecida;
     private double custo;
     private Armazem armazem;
     private Produto produto;
@@ -28,15 +30,19 @@ public class ProdutoFornecido {
     
     public ProdutoFornecido(){}
 
-    public ProdutoFornecido(int quantidade, String data_fornecida, double custo, Armazem armazem, Produto produto, Fornecedor fornecedor, Usuario usuario) {
+    public ProdutoFornecido(int quantidade, int qtd_por_unidade, String data_fornecida, String unidade_fornecida, double custo, Armazem armazem, Produto produto, Fornecedor fornecedor, Usuario usuario) {
         this.quantidade = quantidade;
+        this.qtd_por_unidade = qtd_por_unidade;
         this.data_fornecida = data_fornecida;
+        this.unidade_fornecida = unidade_fornecida;
         this.custo = custo;
         this.armazem = armazem;
         this.produto = produto;
         this.fornecedor = fornecedor;
         this.usuario = usuario;
     }
+
+    
 
     public int getId() {
         return id;
@@ -54,6 +60,14 @@ public class ProdutoFornecido {
         this.quantidade = quantidade;
     }
 
+    public int getQtd_por_unidade() {
+        return qtd_por_unidade;
+    }
+
+    public void setQtd_por_unidade(int qtd_por_unidade) {
+        this.qtd_por_unidade = qtd_por_unidade;
+    }
+
     public String getData_fornecida() {
         return data_fornecida;
     }
@@ -61,6 +75,16 @@ public class ProdutoFornecido {
     public void setData_fornecida(String data_fornecida) {
         this.data_fornecida = data_fornecida;
     }
+
+    public String getUnidade_fornecida() {
+        return unidade_fornecida;
+    }
+
+    public void setUnidade_fornecida(String unidade_fornecida) {
+        this.unidade_fornecida = unidade_fornecida;
+    }
+    
+    
 
     public double getCusto() {
         return custo;

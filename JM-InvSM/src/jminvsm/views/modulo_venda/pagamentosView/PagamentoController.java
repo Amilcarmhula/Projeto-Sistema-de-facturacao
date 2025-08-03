@@ -198,7 +198,7 @@ public class PagamentoController implements Initializable {
 //        listaParcelas = serviceParcela.consultaParcelas(labNumeroFactura.getText());
         listaParcelas = FXCollections.observableArrayList();
         for (Parcela p : serviceParcela.consultaParcelas(labNumeroFactura.getText())) {
-            p.setId(p.getId());
+            p.setId_parcela(p.getId_parcela());
             p.setParcelaNumero(p.getParcelaNumero());
             p.setDataPagamento(p.getDataPagamento());
             p.setDataVencimento(p.getDataVencimento());
@@ -209,7 +209,7 @@ public class PagamentoController implements Initializable {
             listaParcelas.add(p);
         }
 
-        IDParcela.setCellValueFactory(new PropertyValueFactory<>("id"));
+        IDParcela.setCellValueFactory(new PropertyValueFactory<>("id_parcela"));
         refParcela.setCellValueFactory(new PropertyValueFactory<>("parcelaNumero"));
         jurosParcela.setCellValueFactory(new PropertyValueFactory<>("taxaJuros"));
         jurosAtrasoParcela.setCellValueFactory(new PropertyValueFactory<>("taxaDeAtraso"));
@@ -240,18 +240,20 @@ public class PagamentoController implements Initializable {
 
     public void showParcelasSimuladas() {
         ObservableList<Parcela> listaAux = FXCollections.observableArrayList();
-        for (Parcela p : listaParcelas) {
-            p.setParcelaNumero(p.getParcelaNumero());
-            p.setDataPagamento(p.getDataPagamento());
-            p.setDataVencimento(p.getDataVencimento());
-            p.setEstado(p.getEstado());
-            p.setTaxaDeAtraso(p.getTaxaDeAtraso() * 100);
-            p.setTaxaJuros(p.getTaxaJuros() * 100);
-            p.setValorParcela(p.getValorParcela());
-            listaAux.add(p);
+        if (listaParcelas != null) {
+            for (Parcela p : listaParcelas) {
+                p.setParcelaNumero(p.getParcelaNumero());
+                p.setDataPagamento(p.getDataPagamento());
+                p.setDataVencimento(p.getDataVencimento());
+                p.setEstado(p.getEstado());
+                p.setTaxaDeAtraso(p.getTaxaDeAtraso() * 100);
+                p.setTaxaJuros(p.getTaxaJuros() * 100);
+                p.setValorParcela(p.getValorParcela());
+                listaAux.add(p);
+            }
         }
 
-        IDParcela.setCellValueFactory(new PropertyValueFactory<>("id"));
+        IDParcela.setCellValueFactory(new PropertyValueFactory<>("id_parcela"));
         refParcela.setCellValueFactory(new PropertyValueFactory<>("parcelaNumero"));
         jurosParcela.setCellValueFactory(new PropertyValueFactory<>("taxaJuros"));
         jurosAtrasoParcela.setCellValueFactory(new PropertyValueFactory<>("taxaDeAtraso"));
@@ -267,7 +269,7 @@ public class PagamentoController implements Initializable {
     public void selecionaParcela() {
         Parcela p = tabelaParcelas.getSelectionModel().getSelectedItem();
         if (p != null) {
-            id_parcela = p.getId();
+            id_parcela = p.getId_parcela();
             if (p.getEstado().equals("Pendente") || p.getEstado().equals("Atrasada")) {
                 labValorPorPagar.setText((p.getValorParcela() - p.getValorPagoParcela()) + "");
                 labValorPorPagar_Aux.setText("Mt em Saldo");
@@ -428,12 +430,14 @@ public class PagamentoController implements Initializable {
         tabelaFactura.setItems(listaFacturasCliente);
     }
 
-    public void showInvoice(MouseEvent evt) throws SQLException {
-        if (evt.getClickCount() == 2) {
-            Factura f = tabelaFactura.getSelectionModel().getSelectedItem();
-            f.criarFactura(f.getNumero_fac());
+    public void genarateReport() throws SQLException {
+        Factura f = tabelaFactura.getSelectionModel().getSelectedItem();
+        if (f != null) {
+            serviceParcela.geraRelatorio(f.getNumero_fac());
+            selecionaFactura();
+        }else{
+            AlertUtilities.showErroAlert("Factura nao selecionada!");
         }
-        selecionaFactura();
     }
 
     public void selecionaFactura() throws SQLException {
@@ -441,21 +445,18 @@ public class PagamentoController implements Initializable {
 
         if (f != null) {
             labNumeroFactura.setText(f.getNumero_fac());
+            System.out.print(labNumeroFactura.getText());
             labValorPorPagar.setText(f.getSaldoPendente() + "");
-            if (f.getEstado().equals("Paga") || f.getEstado().equals("Cancelada")) {
+            if (f.getEstado().equals("Paga") || f.getEstado().equals("Cancelada") || f.getNumeroParcelas() >= 1) {
                 btnFinalizar.setDisable(true);
                 btnParcelas.setDisable(true);
                 btnSimularParcelas.setDisable(true);
             } else {
                 btnFinalizar.setDisable(false);
-            }
-            if (f.getNumeroParcelas() >= 1) {
-                btnParcelas.setDisable(true);
-                btnSimularParcelas.setDisable(true);
-            } else {
                 btnParcelas.setDisable(false);
                 btnSimularParcelas.setDisable(false);
             }
+
             /*Abaixo vem a logica para pesquisar as transacoes da factura*/
             showTransacoes();
             showParcelas();

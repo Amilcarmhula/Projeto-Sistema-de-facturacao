@@ -5,23 +5,15 @@
 package jminvsm.teste;
 
 //import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
+import java.io.Reader;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import jminvsm.dao.cliente.ClienteDAO;
-import jminvsm.dao.fornecedor.FornecedorDAO;
-import jminvsm.dao.produto.fornecido.ProdutoFornecidoDAO;
-import jminvsm.dao.stock.StockDAO;
-import jminvsm.dao.vendas.factura.FacturaDAO;
-import jminvsm.model.stock.Stock;
-import jminvsm.model.vendas.factura.Factura;
+import javax.imageio.ImageIO;
 
 //import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 //import java.io.File;
@@ -50,6 +42,15 @@ import jminvsm.model.vendas.factura.Factura;
 //import sysfact.model.vendas.factura.itens.Item;
 //import sysfact.reports.facturas.ClienteData;
 //import sysfact.util.ValidationUtilities;
+
+import com.google.zxing.*;
+//import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 /**
  *
  * @author JM-Tecnologias
@@ -93,8 +94,31 @@ public class Teste {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(System.getProperty("user.dir"));
+    public static void main(String[] args) throws IOException {
+//        try {
+//            // Caminho da imagem com o código de barras
+//            File file = new File("codigo_de_barras.png");
+//
+//            // Ler a imagem como BufferedImage
+//            BufferedImage bufferedImage = ImageIO.read(file);
+//
+//            // Preparar a fonte luminosa para a leitura
+//            LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
+//            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+//
+//            // Configuração para o decodificador
+//            MultiFormatReader reader = new MultiFormatReader();
+//            Result result = reader.decode(bitmap);
+//
+//            // Exibir o conteúdo do código de barras
+//            System.out.println("Código de barras lido: " + result.getText());
+//            System.out.println("Formato: " + result.getBarcodeFormat());
+//        } catch (NotFoundException e) {
+//            System.err.println("Nenhum código de barras foi encontrado na imagem.");
+//        } catch (IOException e) {
+//            System.err.println("Erro ao carregar a imagem: " + e.getMessage());
+//        }
+        
 //        LocalDate currentDate = LocalDate.now(); // Get the current date +"\\src\\sysfact\\reports\\", "../"
 //        DateTimeFormatter df = DateTimeFormatter.ofPattern("+ dd - MMM - yyyy");
 //        System.out.println(currentDate.format(df).replace("+", "Maputo, aos ").replace("-", "de"));

@@ -78,7 +78,7 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 Parcela p = new Parcela();
-                p.setId(result.getInt("id"));
+                p.setId_parcela(result.getInt("id"));
                 p.setParcelaNumero(result.getInt("parcelaNumero"));
                 p.setTaxaJuros(result.getDouble("taxaJuros"));
                 p.setTaxaDeAtraso(result.getDouble("taxaDeAtraso"));

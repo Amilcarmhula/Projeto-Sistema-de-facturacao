@@ -176,5 +176,9 @@ public class ServiceParcelas {
     public ObservableList<Parcela> consultaParcelas(String fk_numero) {
         return parcelaDao.getEntities(fk_numero);
     }
+    public void geraRelatorio(String numero) throws SQLException{
+        Parcela p = new Parcela();
+        p.criarRelatorioDeParcelas(numero);
+    }
 
 }

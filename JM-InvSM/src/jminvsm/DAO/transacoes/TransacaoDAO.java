@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.metodo_pagamento.MetodoPagamento;
+import jminvsm.model.parcelas.Parcela;
 import jminvsm.model.transacao.Transacao;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
@@ -86,7 +87,7 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
             ps.setInt(8, t.getUsuario().getId());
             ps.setDouble(9, t.getValorPago());
             ps.setDouble(10, t.getTrocos());
-            ps.setDouble(11, t.getParcela().getId());
+            ps.setDouble(11, t.getParcela().getId_parcela());
             // Usando executeUpdate para verificar se uma linha foi inserida
             int rowsAffected = ps.executeUpdate();
 
@@ -114,10 +115,10 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
     public ObservableList<Transacao> getTransacoes(String numero) {
         ObservableList<Transacao> lista = FXCollections.observableArrayList();
         try {
-            sql = "SELECT  t.id, t.valorRecebido, t.valorPago, t.trocos, t.data_pagamento, t.data_criacao, t.descricao, m.nome "
+            sql = "SELECT  t.fk_parcela as refParcela,  t.id, t.valorRecebido, t.valorPago, t.trocos, t.data_pagamento, t.data_criacao, t.descricao, m.nome "
                     + "	from transacoes t "
                     + "	LEFT JOIN metodo_pagamento m ON m.id=t.fk_id_metodo_pagamento "
-                    + " where fk_numero=?";
+                    + " where fk_numero=? order by fk_parcela";
             ps = con.prepareStatement(sql);
             ps.setString(1, numero);
             ResultSet result = ps.executeQuery();
@@ -133,6 +134,9 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
                 MetodoPagamento m = new MetodoPagamento();
                 m.setNomePagamento(result.getString("nome"));
                 t.setMetodo(m);
+                Parcela p = new Parcela();
+                p.setId_parcela(result.getInt("refParcela"));
+                t.setParcela(p);
                 lista.add(t);
             }
             result.close();

@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Optional;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.stage.Modality;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.empresa.Empresa;
@@ -20,7 +22,15 @@ import jminvsm.model.vendas.documetos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.itens.Item;
 import jminvsm.service.vendas.factura.ServiceFactura;
 import jminvsm.service.vendas.factura.itens.ServiceItem;
+import jminvsm.util.AlertUtilities;
 import jminvsm.util.report.ReportUtilities;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -70,7 +80,7 @@ public class Factura {
 
     }
 
-    public void criarFactura(String numeroFactura) throws SQLException{
+    public void criarFactura(String numeroFactura) throws SQLException {
         serviceFactura = new ServiceFactura();
         serviceItens = new ServiceItem();
         List<Factura> detalhesFactura = new ArrayList<Factura>();
@@ -80,11 +90,11 @@ public class Factura {
         JRBeanCollectionDataSource facturaDetalhesDATASOURCE = new JRBeanCollectionDataSource(detalhesFactura);
 
         // Configurar o DataSource para os itens
-        JRBeanCollectionDataSource itemDataSource = new JRBeanCollectionDataSource(serviceItens.consultaItensFactura(numeroFactura));
+        JRBeanCollectionDataSource itemDATASOURCE = new JRBeanCollectionDataSource(serviceItens.consultaItensFactura(numeroFactura));
 
         // Passar parâmetros para o relatório
         Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("TABLE_DATA_SOURCE", itemDataSource);
+        parametros.put("TABLE_DATA_SOURCE", itemDATASOURCE);
         parametros.put("NOMEFACTURA", numeroFactura);
 
         String path = "";
@@ -96,8 +106,46 @@ public class Factura {
             path = "C:\\JM-InvSM\\compiled\\FacturaSimplificada.jasper";
         }
 
-        ReportUtilities.genarateJasperReport(path, parametros, facturaDetalhesDATASOURCE);
-//        ReportUtilities.genarateJasperReport("/jminvsm/reports/vendas/facturas/PF/RelatorioFacturas.jrxml", parametros, facturaDetalhesDATASOURCE);
+        try {
+            JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile(path);
+
+            // Preencher o relatório
+            JasperPrint printableReport = JasperFillManager.fillReport(jReport, parametros, facturaDetalhesDATASOURCE);
+            /*
+            Configura escolha decisao de escolha de visualizacao e impressao ou salvar documento
+             */
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Opcoes de relatorio.");
+            dialog.setContentText("Deseja salvar ou visualizar a Factura?");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            // Configurando o botão View/Save
+            ButtonType btnVisualizar = new ButtonType("Visualizar", ButtonType.OK.getButtonData());
+            ButtonType btnClose = new ButtonType("Close", ButtonType.CANCEL.getButtonData());
+            ButtonType btnSaveView = new ButtonType("Salvar", ButtonType.YES.getButtonData());
+            dialog.getDialogPane().getButtonTypes().addAll(btnVisualizar, btnSaveView, btnClose);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.get() == btnVisualizar) {
+                // Apenas exibir o relatório
+                JasperViewer viewer = new JasperViewer(printableReport, false);
+                viewer.setTitle("Relatorio");
+                viewer.setVisible(true);
+            } else if (result.get() == btnSaveView) {
+                //Salva o relatório NOMEFACTURA
+                String numero = (String) parametros.get("NOMEFACTURA");
+                JasperExportManager.exportReportToPdfFile(printableReport, "C:/JM-InvSM/FACTURA-" + numero.replace("/", "-") + ".pdf");
+                // Exibir o relatório
+                JasperViewer viewer = new JasperViewer(printableReport, false);
+                viewer.setTitle("Factura");
+                viewer.setVisible(true);
+            } else if (result.get() == btnClose) {
+                System.out.println("Aqui nao salva nem visualiza; esta associado ao botao close da tela!");
+            }
+        } catch (JRException ex) {
+            AlertUtilities.showDialog("Erro", "Erro ao gerar relatorio de factura: " + ex);
+        }
+
     }
 
     public String getNumero_fac() {

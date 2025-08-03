@@ -89,6 +89,9 @@ public class AddStockController implements Initializable {
 
     @FXML
     private TextField txtIDProduto;
+    
+    @FXML
+    private TextField txtUnidade;
 
     @FXML
     private TextField txtPesquisaArmazem;
@@ -98,6 +101,9 @@ public class AddStockController implements Initializable {
 
     @FXML
     private TextField txtQuantidade;
+    
+    @FXML
+    private TextField txtQtd_por_unidade;
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
@@ -230,8 +236,10 @@ public class AddStockController implements Initializable {
         service.registraProdutoFornecido(Integer.valueOf(txtIDArmazem.getText().equals("") ? "0" : txtIDArmazem.getText()),
                 Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText()),
                 Integer.valueOf(txtIDFornecedor.getText().equals("") ? "0" : txtIDFornecedor.getText()), userData,
-                Integer.valueOf(txtQuantidade.getText().equals("") ? "0" : txtQuantidade.getText()),
+                Integer.valueOf(txtQuantidade.getText().equals("") ? "1" : txtQuantidade.getText()),
                 String.valueOf(dataAquisicao.getValue() == null ? "" : dataAquisicao.getValue()),
-                Double.valueOf(txtCustoAquisicao.getText().equals("") ? "0" : txtCustoAquisicao.getText()));
+                Double.valueOf(txtCustoAquisicao.getText().equals("") ? "0" : txtCustoAquisicao.getText()),
+                String.valueOf(txtUnidade.getText().equals("") ? "unidade" : txtUnidade.getText()),
+                Integer.valueOf(txtQtd_por_unidade.getText().equals("") ? "1" : txtQtd_por_unidade.getText()));
     }
 }

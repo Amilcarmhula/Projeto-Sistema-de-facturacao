@@ -45,8 +45,8 @@
       </AnchorPane>
       <AnchorPane layoutX="10.0" layoutY="55.0" prefHeight="116.0" prefWidth="544.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="75.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TextField fx:id="txtQuantidade" alignment="CENTER" layoutX="99.0" layoutY="14.0" prefHeight="26.0" prefWidth="75.0" promptText="Qtd." stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="44.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtQuantidade" alignment="CENTER" layoutX="293.0" layoutY="15.0" prefHeight="26.0" prefWidth="66.0" promptText="Qtd." stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
@@ -72,19 +72,46 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <TextField fx:id="txtCustoAquisicao" alignment="CENTER_RIGHT" layoutX="321.0" layoutY="14.0" prefHeight="26.0" prefWidth="120.0" promptText="0.00" stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtCustoAquisicao" alignment="CENTER_RIGHT" layoutX="408.0" layoutY="47.0" prefHeight="26.0" prefWidth="120.0" promptText="0.00" stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <Label layoutX="185.0" layoutY="16.0" text="Custo de aquisicao:" textFill="WHITE">
+            <Label layoutX="272.0" layoutY="50.0" text="Custo de aquisicao:" textFill="WHITE">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
             <DatePicker fx:id="dataAquisicao" layoutX="146.0" layoutY="47.0" prefHeight="25.0" prefWidth="115.0" />
             <Label layoutX="17.0" layoutY="50.0" text="Data de aquisicao:" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="68.0" layoutY="18.0" text="Lote:" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtUnidade" alignment="CENTER" layoutX="105.0" layoutY="15.0" prefHeight="26.0" prefWidth="86.0" promptText="lote" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <Label layoutX="198.0" layoutY="18.0" text="Qtd de Lotes:" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtQtd_por_unidade" alignment="CENTER" layoutX="462.0" layoutY="15.0" prefHeight="26.0" prefWidth="66.0" promptText="Qtd." stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <Label layoutX="364.0" layoutY="18.0" text="Qtd Por Lote:" textFill="WHITE">
                <font>
                   <Font size="16.0" />
                </font>

@@ -10,12 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
-import jminvsm.model.armazem.Armazem;
-import jminvsm.model.cliente.Cliente;
-import jminvsm.model.produto.Produto;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
@@ -39,7 +33,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
         boolean isSuccess = false;
         try {
             sql = "insert into produto_fornecido (quantidade,data_fornecida,custo, fk_id_armazem,fk_id_produto, "
-                    + "fk_id_fornecedor,fk_id_usuario) value (?,?,?,?,?,?,?)";
+                    + "fk_id_fornecedor,fk_id_usuario,unidade_fornecida,qtd_por_unidade) value (?,?,?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -50,6 +44,8 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             ps.setInt(5, t.getProduto().getId());
             ps.setInt(6, t.getFornecedor().getId());
             ps.setInt(7, t.getUsuario().getId());
+            ps.setString(8, t.getUnidade_fornecida());
+            ps.setInt(9, t.getQtd_por_unidade());
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -81,8 +77,8 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
         Map<String, Integer> mapa = new HashMap<>();
         try {
             sql = "SELECT "
-                    + "SUM(CASE WHEN mp.tipo_movimento = 'Entrada' THEN mp.quantidade ELSE 0 END) as entradas,"
-                    + "SUM(CASE WHEN mp.tipo_movimento = 'Saída' THEN mp.quantidade ELSE 0 END) AS saidas,"
+                    + "SUM(CASE WHEN mp.tipo_movimento = 'Entrada' THEN (mp.quantidade * mp.qtd_por_unidade) ELSE 0 END) as entradas,"
+                    + "SUM(CASE WHEN mp.tipo_movimento = 'Saída' THEN (mp.quantidade * mp.qtd_por_unidade) ELSE 0 END) AS saidas,"
                     + "MONTH(mp.data_movimento) AS mes, "
                     + "YEAR(mp.data_movimento) AS ano "
                     + "FROM movimento mp "

@@ -37,7 +37,7 @@ public class ServiceProdutoFornecido {
     }
 
     public void registraProdutoFornecido(Integer id_arm, Integer id_pro, Integer id_for,
-            Usuario user, Integer qtd, String data_fornecida, Double custo) {
+            Usuario user, Integer qtd, String data_fornecida, Double custo,String unidade_fornecida,Integer qtd_por_unidade) {
         setOpsSuccess(false);
 
         // Validações básicas antes de registrar a categoria
@@ -75,6 +75,8 @@ public class ServiceProdutoFornecido {
         pf.setQuantidade(qtd);
         pf.setData_fornecida(data_fornecida);
         pf.setCusto(custo);
+        pf.setUnidade_fornecida(unidade_fornecida);
+        pf.setQtd_por_unidade(qtd_por_unidade);
 
         if (produtoFornecidoDao.addEntity(pf)) {
             setOpsSuccess(true);

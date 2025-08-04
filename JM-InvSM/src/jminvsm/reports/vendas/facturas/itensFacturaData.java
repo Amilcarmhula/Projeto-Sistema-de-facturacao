@@ -20,11 +20,14 @@ public class itensFacturaData {
     private double desconto;
     private double taxas;
     private double total_geral;
+    private String unidade_vendida;
+    private int qtd_por_unidade;
+
 
     public itensFacturaData() {
     }
 
-    public itensFacturaData(String nomeProduto, String descricaoProduto, int quantidadeProduto, double precoProduto, double taxaProduto, double descontoProduto, double totaProduto, double subtotal, double desconto, double taxas, double total_geral) {
+    public itensFacturaData(String nomeProduto, String descricaoProduto, int quantidadeProduto, int qtd_por_unidade, double precoProduto, double taxaProduto, double descontoProduto, double totaProduto, double subtotal, double desconto, double taxas, double total_geral) {
         this.nomeProduto = nomeProduto;
         this.descricaoProduto = descricaoProduto;
         this.quantidadeProduto = quantidadeProduto;
@@ -60,6 +63,14 @@ public class itensFacturaData {
 
     public void setQuantidadeProduto(int quantidadeProduto) {
         this.quantidadeProduto = quantidadeProduto;
+    }
+
+    public int getQtd_por_unidade() {
+        return qtd_por_unidade;
+    }
+
+    public void setQtd_por_unidade(int qtd_por_unidade) {
+        this.qtd_por_unidade = qtd_por_unidade;
     }
 
     public double getPrecoProduto() {

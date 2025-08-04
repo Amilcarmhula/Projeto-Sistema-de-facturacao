@@ -39,14 +39,15 @@
 		<field name="percentagemDesconto" class="java.lang.Double"/>
 		<field name="quantidade" class="java.lang.Integer"/>
 		<field name="subtotal" class="java.lang.Double"/>
+		<field name="qtd_por_unidade" class="java.lang.Integer"/>
 		<variable name="sum_subtotal" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{preco})))]]></variableExpression>
+			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{qtd_por_unidade}*$F{preco})))]]></variableExpression>
 		</variable>
 		<variable name="sum_taxas" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{preco}*$F{percentagemImposto})))]]></variableExpression>
+			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{qtd_por_unidade}*$F{preco}*$F{percentagemImposto})))]]></variableExpression>
 		</variable>
 		<variable name="sum_descontos" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{preco}*$F{percentagemDesconto})))]]></variableExpression>
+			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{quantidade}*$F{qtd_por_unidade}*$F{preco}*$F{percentagemDesconto})))]]></variableExpression>
 		</variable>
 		<variable name="sum_total" class="java.lang.Double" calculation="Sum">
 			<variableExpression><![CDATA[Double.valueOf(String.format("%.2f",($F{subtotal})))]]></variableExpression>
@@ -94,7 +95,7 @@
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/JM-InvSM/src/jminvsm/image/bg.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/JM-InvSM/src/jminvsm/image/bg1.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</background>
@@ -449,7 +450,7 @@
 									<font fontName="Berlin Sans FB" size="8"/>
 									<paragraph leftIndent="0"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{quantidade}+" x "+$F{qtd_por_unidade}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

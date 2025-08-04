@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import jminvsm.model.desconto.Desconto;
-import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.taxa_imposto.TaxaImposto;
 import jminvsm.model.vendas.factura.Factura;
@@ -39,7 +38,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
         try {
             for (Item t : items) {
                 sql = "insert into itemfactura (quantidade, subtotal,fk_id_desconto,fk_id_produto,fk_numero,"
-                        + "fk_id_usuario, fk_id_armazem,preco) value (?,?,?,?,?,?,?,?)";
+                        + "fk_id_usuario, fk_id_armazem,preco,unidade_vendida,qtd_por_unidade) value (?,?,?,?,?,?,?,?,?,?)";
                 ps = con.prepareStatement(sql);
                 ps.setInt(1, t.getQuantidade());// ***********
                 ps.setDouble(2, t.getSubtotal());// ***********
@@ -49,6 +48,8 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 ps.setInt(6, t.getUsuario().getId());// ***********
                 ps.setInt(7, t.getArmazem().getId());// ***********
                 ps.setDouble(8, t.getPreco());
+                ps.setString(9, t.getUnidade_vendida());
+                ps.setInt(10, t.getQtd_por_unidade());
 
                 ps.execute();
                 ps.close();
@@ -64,7 +65,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
         try {
             for (Item t : items) {
                 sql = "insert into itemcotacao (quantidade, subtotal,fk_id_desconto,fk_id_produto,fk_numero,"
-                        + "fk_id_usuario, fk_id_armazem,preco) value (?,?,?,?,?,?,?,?)";
+                        + "fk_id_usuario, fk_id_armazem,preco,unidade_vendida,qtd_por_unidade) value (?,?,?,?,?,?,?,?,?,?)";
                 ps = con.prepareStatement(sql);
                 ps.setInt(1, t.getQuantidade());// ***********
                 ps.setDouble(2, t.getSubtotal());// ***********
@@ -74,6 +75,8 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 ps.setInt(6, t.getUsuario().getId());// ***********
                 ps.setInt(7, t.getArmazem().getId());// ***********
                 ps.setDouble(8, t.getPreco());
+                ps.setString(9, t.getUnidade_vendida());
+                ps.setInt(10, t.getQtd_por_unidade());
 
                 ps.execute();
                 ps.close();
@@ -91,6 +94,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
             if(factura.endsWith("/2")){
                 sql = "SELECT p.nome, p.descricao,"
                     + "i.quantidade,i.preco, i.subtotal, "
+                    + "i.unidade_vendida, i.qtd_por_unidade, "
                     + "ip.identificador as descricao_imposto, ip.percentagem AS imposto, "
                     + "d.identificador AS descricao_desconto, d.percentagem AS desconto, "
                     + "f.numero "
@@ -103,6 +107,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
             }else{
                 sql = "SELECT p.nome, p.descricao,"
                     + "i.quantidade,i.preco, i.subtotal, "
+                    + "i.unidade_vendida, i.qtd_por_unidade, "
                     + "ip.identificador as descricao_imposto, ip.percentagem AS imposto, "
                     + "d.identificador AS descricao_desconto, d.percentagem AS desconto, "
                     + "f.numero "
@@ -127,6 +132,8 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 i.setPreco(result.getDouble("preco"));
                 i.setQuantidade(result.getInt("quantidade"));
                 i.setSubtotal(result.getDouble("subtotal"));
+                i.setUnidade_vendida(result.getString("unidade_vendida"));
+                i.setQtd_por_unidade(result.getInt("qtd_por_unidade"));
                 Produto p = new Produto();
                 p.setNomeProduto(result.getString("nome"));
                 p.setDescricao(result.getString("descricao"));

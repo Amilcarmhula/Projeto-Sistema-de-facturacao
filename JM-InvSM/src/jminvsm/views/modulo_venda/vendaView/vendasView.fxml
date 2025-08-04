@@ -106,26 +106,17 @@
       <TableView fx:id="tabelaItens" layoutY="167.0" prefHeight="673.0" prefWidth="944.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0">
          <columns>
             <TableColumn fx:id="idtabelaItens" prefWidth="29.0" text="#" />
-            <TableColumn fx:id="nometabelaItens" prefWidth="408.0" text="Descrição" />
-            <TableColumn fx:id="precotabelaItens" prefWidth="132.0" text="Preço unitário" />
-            <TableColumn fx:id="unidadetabelaItens" prefWidth="65.0" text="Uni." />
-            <TableColumn fx:id="quantidadetabelaItens" prefWidth="65.0" text="Qtd." />
-            <TableColumn fx:id="descontotabelaItens" prefWidth="70.0" text="Desc. %" />
-            <TableColumn fx:id="taxatabelaItens" prefWidth="70.0" text="Taxa %" />
-            <TableColumn fx:id="subTotaltabelaItens" prefWidth="101.0" text="Total" />
+            <TableColumn fx:id="nometabelaItens" prefWidth="405.0" text="Descrição" />
+            <TableColumn fx:id="precotabelaItens" prefWidth="119.0" text="Preço unitário" />
+            <TableColumn fx:id="unidadetabelaItens" prefWidth="51.0" text="Uni." />
+            <TableColumn fx:id="lotetabelaItens" prefWidth="53.0" text="Lote" />
+            <TableColumn fx:id="quantidadetabelaItens" prefWidth="54.0" text="Qtd." />
+            <TableColumn fx:id="descontotabelaItens" prefWidth="74.0" text="Desc. %" />
+            <TableColumn fx:id="taxatabelaItens" prefWidth="64.0" text="Taxa %" />
+            <TableColumn fx:id="subTotaltabelaItens" prefWidth="91.0" text="Total" />
          </columns>
       </TableView>
-      <Button fx:id="btnRemoveItem" layoutX="966.0" layoutY="424.0" mnemonicParsing="false" onAction="#removeItens" prefHeight="72.0" prefWidth="421.0" stylesheets="@../../../style/dashboard.css" text="Remover Item" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="34.0" />
-         </font>
-         <styleClass>
-            <String fx:value="secondary-color" />
-            <String fx:value="hand-efect" />
-            <String fx:value="shadow-efect" />
-         </styleClass>
-      </Button>
-      <AnchorPane layoutX="961.0" layoutY="170.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="254.0" prefWidth="451.0" stylesheets="@../../../style/dashboard.css" AnchorPane.rightAnchor="0.0">
+      <AnchorPane layoutX="961.0" layoutY="170.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="328.0" prefWidth="451.0" stylesheets="@../../../style/dashboard.css" AnchorPane.rightAnchor="0.0">
          <children>
             <AnchorPane layoutX="8.0" layoutY="39.0" prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -136,18 +127,18 @@
                   </Label>
                </children>
             </AnchorPane>
-            <TextField fx:id="txtPrecovenda" alignment="CENTER" disable="true" layoutX="10.0" layoutY="87.0" prefHeight="25.0" prefWidth="139.0" promptText="Preço unitário" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="10.0" />
-            <TextField fx:id="txtQuantidade" alignment="CENTER" layoutX="154.0" layoutY="87.0" prefHeight="25.0" prefWidth="84.0" promptText="Qtd." stylesheets="@../../../style/dashboard.css" AnchorPane.rightAnchor="213.0">
+            <TextField fx:id="txtPrecovenda" alignment="CENTER" disable="true" layoutX="10.0" layoutY="89.0" prefHeight="26.0" prefWidth="175.0" promptText="Preço unitário" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="10.0" />
+            <TextField fx:id="txtQuantidade" alignment="CENTER" layoutX="160.0" layoutY="125.0" prefHeight="26.0" prefWidth="77.0" promptText="Qtd." stylesheets="@../../../style/dashboard.css" AnchorPane.rightAnchor="207.0">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
             <TextField fx:id="txtStock" alignment="CENTER" disable="true" layoutX="101.0" layoutY="55.0" prefHeight="20.0" prefWidth="84.0" promptText="Stock" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TextArea fx:id="txtDescricao" layoutX="10.0" layoutY="119.0" prefHeight="88.0" prefWidth="429.0" promptText="Descrição " styleClass="shadow" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-            <Button fx:id="btnAddItem" layoutX="15.0" layoutY="215.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="30.0" prefWidth="426.0" stylesheets="@../../../style/dashboard.css" text="Adicionar item" textFill="WHITE" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+            <TextArea fx:id="txtDescricao" layoutX="10.0" layoutY="161.0" prefHeight="88.0" prefWidth="429.0" promptText="Descrição " styleClass="shadow" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+            <Button fx:id="btnAddItem" layoutX="15.0" layoutY="272.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="30.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Adicionar item" textFill="WHITE" AnchorPane.leftAnchor="15.0">
                <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font name="System Bold" size="20.0" />
                </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
@@ -164,7 +155,24 @@
                   <String fx:value="hand-efect" />
                </styleClass>
             </TextField>
-            <ComboBox fx:id="combDesconto" layoutX="242.0" layoutY="86.0" onMouseClicked="#populateComboDesconto" prefHeight="25.0" prefWidth="197.0" promptText="Desconto" />
+            <ComboBox fx:id="combDesconto" layoutX="195.0" layoutY="86.0" onMouseClicked="#populateComboDesconto" prefHeight="30.0" prefWidth="244.0" promptText="Desconto" />
+            <Button fx:id="btnRemoveItem" layoutX="226.0" layoutY="272.0" mnemonicParsing="false" onAction="#removeItens" prefHeight="30.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Remover Item" textFill="WHITE" AnchorPane.rightAnchor="15.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="secondary-color" />
+                  <String fx:value="hand-efect" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+            </Button>
+            <ComboBox fx:id="combUnidadeVendida" layoutX="14.0" layoutY="125.0" onAction="#selecionaLote" onMouseClicked="#populateComboDesconto" prefHeight="30.0" prefWidth="149.0" promptText="Lote de venda" />
+            <TextField fx:id="txtQtd_por_unidade" alignment="CENTER" layoutX="249.0" layoutY="125.0" prefHeight="26.0" prefWidth="190.0" promptText="Quantidade por lote/unidade" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="974.0" layoutY="501.0" prefHeight="400.0" prefWidth="450.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.rightAnchor="0.0">

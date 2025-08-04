@@ -10,6 +10,7 @@ update parcelas set dataVencimento = '2024-11-8' where id = 3;
   
 select * from factura;
 select * from movimento;
+select * from stock;
 select * from parcelas;
 select id from parcelas order by id desc limit 1;
 select * from itemfactura;

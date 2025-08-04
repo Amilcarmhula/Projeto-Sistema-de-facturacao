@@ -47,7 +47,7 @@
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/JM-InvSM/src/jminvsm/image/bg.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto Sistema de facturacao/JM-InvSM/src/jminvsm/image/bg1.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</background>

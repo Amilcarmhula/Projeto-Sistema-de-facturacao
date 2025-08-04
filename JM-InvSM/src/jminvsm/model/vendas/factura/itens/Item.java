@@ -20,6 +20,7 @@ public class Item {
     private int id;
     private double preco;
     private int quantidade;
+    private int qtd_por_unidade;
     private double subtotal;
     private Desconto desconto;
     private Produto produto;
@@ -27,22 +28,27 @@ public class Item {
     private Usuario usuario;
     private Armazem armazem;
     private String data_criacao;
+    private String unidade_vendida;
 
     public Item() {
         super();
     }
 
-    public Item(int quantidade, double preco, double subtotal, Desconto desconto, Produto produto, Factura factura, Usuario usuario,Armazem armazem) {
+    public Item(double preco, int quantidade, int qtd_por_unidade, double subtotal, Desconto desconto, Produto produto, Factura factura, Usuario usuario, Armazem armazem, String unidade_vendida) {
         super();
         this.preco = preco;
         this.quantidade = quantidade;
+        this.qtd_por_unidade = qtd_por_unidade;
         this.subtotal = subtotal;
         this.desconto = desconto;
         this.produto = produto;
         this.factura = factura;
         this.usuario = usuario;
         this.armazem = armazem;
+        this.unidade_vendida = unidade_vendida;
     }
+
+    
 
     public int getId() {
         return id;
@@ -66,6 +72,22 @@ public class Item {
 
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public String getUnidade_vendida() {
+        return unidade_vendida;
+    }
+
+    public void setUnidade_vendida(String unidade_vendida) {
+        this.unidade_vendida = unidade_vendida;
+    }
+
+    public int getQtd_por_unidade() {
+        return qtd_por_unidade;
+    }
+
+    public void setQtd_por_unidade(int qtd_por_unidade) {
+        this.qtd_por_unidade = qtd_por_unidade;
     }
 
     public double getSubtotal() {

@@ -36,6 +36,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import jminvsm.SysFact;
+import jminvsm.model.armazem.Armazem;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.desconto.Desconto;
 import jminvsm.model.empresa.Empresa;
@@ -63,7 +64,6 @@ public class VendasController implements Initializable {
     private ServiceCliente serviceCliente;
     private ServiceDesconto serDesconto;
     private ServiceDocumentos serDocs;
-    
 
     private Empresa empresaData;
     private Usuario userData;
@@ -82,7 +82,7 @@ public class VendasController implements Initializable {
 
     @FXML
     private ComboBox<String> combDesconto;
-    
+
     @FXML
     private ComboBox<String> combUnidadeVendida;
 
@@ -112,7 +112,7 @@ public class VendasController implements Initializable {
 
     @FXML
     private TableColumn<Item, Integer> quantidadetabelaItens;
-    
+
     @FXML
     private TableColumn<Item, Integer> lotetabelaItens;
 
@@ -226,12 +226,13 @@ public class VendasController implements Initializable {
         labValidade.setText(InvoiceUtilities.datePlusXDays(doc.getDiasUteis()));
 
     }
+
     public void selecionaLote() {
         String tipoLote = combUnidadeVendida.getSelectionModel().getSelectedItem();
-        if("Unidade".equals(tipoLote)){
+        if ("Unidade".equals(tipoLote)) {
             txtQuantidade.setText("1");
             txtQuantidade.setDisable(true);
-        }else{
+        } else {
             txtQuantidade.setDisable(false);
             txtQuantidade.clear();
         }
@@ -295,7 +296,7 @@ public class VendasController implements Initializable {
         subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
         randNum = new Random();
         mapaProdutos = new HashMap<>();
-        
+
     }
 
     @Override
@@ -315,9 +316,9 @@ public class VendasController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        combUnidadeVendida.setItems(FXCollections.observableArrayList("Unidade","Caixa"));
+        combUnidadeVendida.setItems(FXCollections.observableArrayList("Unidade", "Caixa"));
     }
-    
+
     private ObservableList<DocumentosComerciais> listaDocComercial;
     private Map<String, DocumentosComerciais> mapaDocComercial;
 
@@ -363,25 +364,27 @@ public class VendasController implements Initializable {
         } else {
             qtd = Integer.parseInt(txtQuantidade.getText());
         }
-        
+
         if (combUnidadeVendida.getValue() == null) {
-            
+
             qtd_por_unidade = 1;
         } else {
             qtd_por_unidade = Integer.parseInt(txtQtd_por_unidade.getText());
         }
         int id = Integer.parseInt(txtID.getText());
-
-        Produto x = mapaProdutos.get(id);
+        Produto x = mapaProdutos.get(id);                                                      
         Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());
         Item i = new Item();
         i.setId(id);
         i.setProduto(x);
         i.setDesconto(desconto);
         i.setPreco(x.getPrecovenda().getPreco());
+        Armazem a = new Armazem();
+        a.setId(x.getArmazem().getId());
+        i.setArmazem(a);
         i.setQuantidade(qtd);
         i.setQtd_por_unidade(qtd_por_unidade);
-        i.setUnidade_vendida(combUnidadeVendida.getValue()==null ? "Unidade":combUnidadeVendida.getValue());
+        i.setUnidade_vendida(combUnidadeVendida.getValue() == null ? "Unidade" : combUnidadeVendida.getValue());
         double subtotal = 0;
         double desc;
         double taxa;
@@ -438,8 +441,8 @@ public class VendasController implements Initializable {
             }
         }
         if (combTipoDoc.getValue().equals("Fatura Simplificada") && (!rdPagamentoVista.isSelected() || !rdPagamentoParcelado.isSelected())) {
-                condicao = "A vista";
-            }
+            condicao = "A vista";
+        }
         return condicao;
     }
 
@@ -508,14 +511,14 @@ public class VendasController implements Initializable {
         for (Item item : itens) {
             Produto x = mapaProdutos.get(item.getId());
             if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
-                subtotal += item.getQuantidade() * item.getQtd_por_unidade()* x.getPrecovenda().getPreco();
-                taxa += item.getQuantidade() * item.getQtd_por_unidade()* x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
+                subtotal += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco();
+                taxa += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
                 Desconto desconto = mapaDesconto.get(item.getDesconto().getNomeDesconto());
                 desc += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
                 total = subtotal - desc;
             } else {
                 subtotal += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco();
-                taxa += item.getQuantidade() *item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
+                taxa += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * x.getTaxa_imposto().getPercentagemImposto();
                 Desconto desconto = mapaDesconto.get(item.getDesconto().getNomeDesconto());
                 desc += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * desconto.getPercentagemDesconto();
                 total = subtotal + taxa - desc;

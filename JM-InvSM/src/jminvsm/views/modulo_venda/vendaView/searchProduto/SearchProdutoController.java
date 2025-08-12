@@ -257,7 +257,7 @@ public class SearchProdutoController implements Initializable {
         listaProduto = serProduto.getProdutos();
         mapaProdutos = new HashMap<>();
         for (Produto p : listaProduto) {
-            mapaProdutos.put(p.getId(), p);
+            mapaProdutos.put((p.getId()+p.getArmazem().getId()), p);
         }
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -474,9 +474,8 @@ public class SearchProdutoController implements Initializable {
     public void selecionaProduto(MouseEvent event) {
         Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
-            Produto p = mapaProdutos.get(x.getId());
+            Produto p = mapaProdutos.get(x.getId()+x.getArmazem().getId());
             
-
             txtNivelStock.setText(String.valueOf(p.getNivelstock()));
             txtIDProduto.setText(String.valueOf(p.getId()));
             txtNomeProduto.setText(p.getNomeProduto());

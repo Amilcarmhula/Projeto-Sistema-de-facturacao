@@ -65,7 +65,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="340.0" onMouseClicked="#selecionaProduto" prefHeight="346.0" prefWidth="1400.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="340.0" onMouseClicked="#selecionaProduto" prefHeight="569.0" prefWidth="1400.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
             <TableColumn fx:id="artigo" prefWidth="250.0" text="Artigo" />

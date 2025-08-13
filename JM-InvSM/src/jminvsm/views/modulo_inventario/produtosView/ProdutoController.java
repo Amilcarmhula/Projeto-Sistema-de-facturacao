@@ -683,6 +683,7 @@ public class ProdutoController implements Initializable {
             combTaxa.setValue(p.getTaxa_imposto().getNomeImposto());
             stockControlChecked();
             showPrecoVenda();
+            
             if (event.getClickCount() == 2 && p.isControle_stock()) {
                 SysFact.setData(p);
                 getStockView(event);

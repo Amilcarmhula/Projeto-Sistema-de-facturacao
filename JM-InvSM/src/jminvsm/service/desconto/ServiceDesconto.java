@@ -45,8 +45,7 @@ public class ServiceDesconto {
         }
         
         Desconto d = new Desconto();
-        d.setNomeDesconto(nomeDesconto);
-        d.setPercentagemDesconto(percentagem/100);
+        d.setNome(nomeDesconto);
         d.setDescricao(descricao);
         if (descontoDao.addEntity(d)) {
             setOpsSuccess(true);
@@ -76,8 +75,7 @@ public class ServiceDesconto {
         }
         
         Desconto d = new Desconto();
-        d.setNomeDesconto(nomeDesconto);
-        d.setPercentagemDesconto(percentagem/100);
+        d.setNome(nomeDesconto);
         d.setDescricao(descricao);
         if (descontoDao.updateEntity(d,id)) {
             setOpsSuccess(true);

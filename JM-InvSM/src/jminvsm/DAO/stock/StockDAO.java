@@ -68,7 +68,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
             while (result.next()) {
                 Stock s = new Stock();
                 Produto p = new Produto();
-                p.setNomeProduto(result.getString("produto"));
+                p.setNome(result.getString("produto"));
                 s.setSaldo(result.getInt("saldo"));
                 s.setProduto(p);
                 lista.add(s);
@@ -98,7 +98,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
             while (result.next()) {
                 Stock s = new Stock();
                 Produto p = new Produto();
-                p.setNomeProduto(result.getString("Produto"));
+                p.setNome(result.getString("Produto"));
                 s.setProduto(p);
                 Armazem a = new Armazem();
                 a.setNome_arm(result.getString("Armazem"));

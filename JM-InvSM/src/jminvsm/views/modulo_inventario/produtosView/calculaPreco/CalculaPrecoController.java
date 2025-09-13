@@ -24,7 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
-import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.model.imposto.Imposto;
 import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -37,17 +37,17 @@ public class CalculaPrecoController implements Initializable {
     private ServiceTaxaImpostos serTaxa;
 
     @FXML
-    private TableView<TaxaImposto> tabelaTaxa;
+    private TableView<Imposto> tabelaTaxa;
     @FXML
-    private TableColumn<TaxaImposto, Integer> ID;
+    private TableColumn<Imposto, Integer> ID;
     @FXML
-    private TableColumn<TaxaImposto, String> tipoTaxa;
+    private TableColumn<Imposto, String> tipoTaxa;
     @FXML
-    private TableColumn<TaxaImposto, Double> percentagem;
+    private TableColumn<Imposto, Double> percentagem;
     @FXML
     private Button btnAdd;
     @FXML
-    private TableColumn<TaxaImposto, String> btnTabela;
+    private TableColumn<Imposto, String> btnTabela;
 
     @FXML
     private TextField txtID;
@@ -85,7 +85,7 @@ public class CalculaPrecoController implements Initializable {
             Logger.getLogger(CalculaPrecoController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private ObservableList<TaxaImposto> listaTaxas;
+    private ObservableList<Imposto> listaTaxas;
 
     public void showTaxas(){
         listaTaxas = serTaxa.getTaxas();
@@ -94,7 +94,7 @@ public class CalculaPrecoController implements Initializable {
         tipoTaxa.setCellValueFactory(new PropertyValueFactory<>("nomeImposto"));
         percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagemImposto"));
 
-        FilteredList<TaxaImposto> dadosFiltrados = new FilteredList<>(listaTaxas, b -> true);
+        FilteredList<Imposto> dadosFiltrados = new FilteredList<>(listaTaxas, b -> true);
         txtPesquisaTaxa.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(x -> {
 
@@ -102,7 +102,7 @@ public class CalculaPrecoController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNomeImposto().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
@@ -112,7 +112,7 @@ public class CalculaPrecoController implements Initializable {
 
             });
         });
-        SortedList<TaxaImposto> sortedData = new SortedList<>(dadosFiltrados);
+        SortedList<Imposto> sortedData = new SortedList<>(dadosFiltrados);
         sortedData.comparatorProperty().bind(tabelaTaxa.comparatorProperty());
 
         tabelaTaxa.setItems(sortedData);
@@ -121,10 +121,10 @@ public class CalculaPrecoController implements Initializable {
     private double percentagemImposto = 0;
 
     public void linhaSelecionadaTaxa() {
-        TaxaImposto x = tabelaTaxa.getSelectionModel().getSelectedItem();
+        Imposto x = tabelaTaxa.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
-            percentagemImposto = x.getPercentagemImposto();
+            percentagemImposto = x.getPercentagem();
             SysFact.setData(x);
         }
     }

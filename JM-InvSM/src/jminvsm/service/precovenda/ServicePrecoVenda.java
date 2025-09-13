@@ -59,11 +59,11 @@ public class ServicePrecoVenda {
             return;
         }
         PrecoVenda pv = new PrecoVenda();
-        pv.setPreco(preco);
-        pv.setPrecoExclTaxa(precoSemTaxa);
-        pv.setPrecoInclTaxa(precoComTaxa);
+        pv.setPrecoNormal(preco);
+        pv.setPrecoFinal(precoSemTaxa);
+        pv.setPrecoVenda(precoComTaxa);
         pv.setData_inicio(data_inicio);
-        pv.setData_fim(data_fim);
+        pv.setDataValidade(data_fim);
         pv.setUsuario(user);
         pv.setProduto(pro);
         if (precoVendaDao.addEntity(pv)) {
@@ -94,11 +94,11 @@ public class ServicePrecoVenda {
         }
 
         PrecoVenda pv = new PrecoVenda();
-        pv.setPreco(preco);
-        pv.setPrecoExclTaxa(precoSemTaxa);
-        pv.setPrecoInclTaxa(precoComTaxa);
+        pv.setPrecoNormal(preco);
+        pv.setPrecoFinal(precoSemTaxa);
+        pv.setPrecoVenda(precoComTaxa);
         pv.setData_inicio(data_inicio);
-        pv.setData_fim(data_fim);
+        pv.setDataValidade(data_fim);
         pv.setUsuario(user);
 
         if (precoVendaDao.updateEntityByID(pv, id)) {

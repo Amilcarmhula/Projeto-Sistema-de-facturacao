@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
 import jminvsm.dao.produto.ProdutoDAO;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.produto.Produto;
-import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.model.imposto.Imposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
@@ -73,7 +73,7 @@ public class ServiceProduto {
         }
 
         Produto p = new Produto();
-        p.setNomeProduto(nome);
+        p.setNome(nome);
         p.setCodigo_barra(codBarras);
         p.setControle_stock(controleStock);
         p.setNivelstock(nivelstock);
@@ -84,9 +84,9 @@ public class ServiceProduto {
         UnidadeMedida u = new UnidadeMedida();
         u.setId(id_uni);
         p.setUnidade_medida(u);
-        TaxaImposto t = new TaxaImposto();
+        Imposto t = new Imposto();
         t.setId(id_tax);
-        p.setTaxa_imposto(t);
+        p.setImposto(t);
 
         if (produtoDao.addEntity(p)) {
             setOpsSuccess(true);
@@ -129,7 +129,7 @@ public class ServiceProduto {
         }
 
         Produto p = new Produto();
-        p.setNomeProduto(nome);
+        p.setNome(nome);
         p.setCodigo_barra(codBarras);
         p.setControle_stock(controleStock);
         p.setNivelstock(nivelstock);
@@ -140,9 +140,9 @@ public class ServiceProduto {
         UnidadeMedida u = new UnidadeMedida();
         u.setId(id_uni);
         p.setUnidade_medida(u);
-        TaxaImposto t = new TaxaImposto();
+        Imposto t = new Imposto();
         t.setId(id_tax);
-        p.setTaxa_imposto(t);
+        p.setImposto(t);
 
         if (produtoDao.updateEntityByID(p, id)) {
             setOpsSuccess(true);

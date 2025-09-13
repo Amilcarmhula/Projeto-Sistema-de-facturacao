@@ -35,13 +35,13 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
             sql = "insert into precovenda (precoNormal,data_inicio, data_fim, "
                     + "fk_id_produto ,fk_id_usuario,precoInclTaxa,precoExclTaxa) value (?,?,?,?,?,?,?)";
             ps = con.prepareStatement(sql);
-            ps.setDouble(1, x.getPreco());
+            ps.setDouble(1, x.getPrecoNormal());
             ps.setString(2, x.getData_inicio());
-            ps.setString(3, x.getData_fim());
+            ps.setString(3, x.getDataValidade());
             ps.setInt(4, x.getProduto().getId());
             ps.setInt(5, x.getUsuario().getId());
-            ps.setDouble(6, x.getPrecoInclTaxa());
-            ps.setDouble(7, x.getPrecoExclTaxa());
+            ps.setDouble(6, x.getPrecoVenda());
+            ps.setDouble(7, x.getPrecoFinal());
             
 
             int rowsAffected = ps.executeUpdate();
@@ -71,12 +71,12 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
             sql = "update precovenda set precoNormal=?,data_inicio=?, data_fim=?"
                     + " ,fk_id_usuario=?, precoInclTaxa=? ,precoExclTaxa=? where id=?";
             ps = con.prepareStatement(sql);
-            ps.setDouble(1, x.getPreco());
+            ps.setDouble(1, x.getPrecoNormal());
             ps.setString(2, x.getData_inicio());
-            ps.setString(3, x.getData_fim());
+            ps.setString(3, x.getDataValidade());
             ps.setInt(4, x.getUsuario().getId());
-            ps.setDouble(5, x.getPrecoInclTaxa());
-            ps.setDouble(6, x.getPrecoExclTaxa());
+            ps.setDouble(5, x.getPrecoVenda());
+            ps.setDouble(6, x.getPrecoFinal());
             ps.setInt(7, id);
 
             int rowsAffected = ps.executeUpdate();
@@ -112,11 +112,11 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
                 //melhorar esta funcao
                 pv = new PrecoVenda();
                 pv.setId(result.getInt("id"));
-                pv.setPreco(result.getDouble("precoNormal"));
-                pv.setPrecoInclTaxa(result.getDouble("precoInclTaxa"));
-                pv.setPrecoExclTaxa(result.getDouble("precoExclTaxa"));
+                pv.setPrecoNormal(result.getDouble("precoNormal"));
+                pv.setPrecoVenda(result.getDouble("precoInclTaxa"));
+                pv.setPrecoFinal(result.getDouble("precoExclTaxa"));
                 pv.setData_inicio(result.getString("data_inicio"));
-                pv.setData_fim(result.getString("data_fim"));
+                pv.setDataValidade(result.getString("data_fim"));
                 pv.setEstado(result.getString("estado"));
                 lista.add(pv);
             }

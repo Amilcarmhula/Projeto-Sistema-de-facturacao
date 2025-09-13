@@ -47,7 +47,7 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
-import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.model.imposto.Imposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
@@ -309,7 +309,7 @@ public class ProdutoController implements Initializable {
         categoria.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getCategoria().getFamilia()));
         taxa.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getTaxa_imposto().getNomeImposto()));
+                -> new SimpleStringProperty(cellData.getValue().getImposto().getNome()));
         quantidade.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getSaldo())));
         nivelStock.setCellValueFactory(new PropertyValueFactory<>("nivelstock"));
@@ -377,7 +377,7 @@ public class ProdutoController implements Initializable {
                 
                 // Verifica o filtro da unidade
                 boolean taxaValida = ( taxaSelecionada.isEmpty())
-                        || x.getTaxa_imposto().getNomeImposto().toLowerCase().contains(taxaSelecionada.toLowerCase());
+                        || x.getImposto().getNome().toLowerCase().contains(taxaSelecionada.toLowerCase());
 
                 // Retorna verdadeiro somente se ambos os filtros forem válidos
                 return armazemValida && categoriaValida && unidadeValida && taxaValida;
@@ -591,10 +591,10 @@ public class ProdutoController implements Initializable {
 
             if (!newVal.isEmpty()) {
                 if (combTaxa.getValue() != null) {
-                    TaxaImposto t = mapaTaxas.get(combTaxa.getValue());
+                    Imposto t = mapaTaxas.get(combTaxa.getValue());
                     double preco = Double.parseDouble(newVal);
-                    double precoComTaxa = preco + preco * t.getPercentagemImposto();
-                    double precoSemTaxa = preco - preco * t.getPercentagemImposto();
+                    double precoComTaxa = preco + preco * t.getPercentagem();
+                    double precoSemTaxa = preco - preco * t.getPercentagem();
                     txtprecoInclTaxa.setText(precoComTaxa + "");
                     txtprecoExclTaxa.setText(precoSemTaxa + "");
                 } else {
@@ -615,8 +615,8 @@ public class ProdutoController implements Initializable {
     private Map<String, UnidadeMedida> mapaUnidades;
     private ObservableList<UnidadeMedida> listaUnidades;
 
-    private Map<String, TaxaImposto> mapaTaxas;
-    private ObservableList<TaxaImposto> listaTaxa;
+    private Map<String, Imposto> mapaTaxas;
+    private ObservableList<Imposto> listaTaxa;
 
     public void populateCombos() {
         listaCategorias = serCategoria.listaCategorias();
@@ -651,9 +651,9 @@ public class ProdutoController implements Initializable {
         List<String> listaTax = new ArrayList<>();
         listaTax.add("Todas...");
         mapaTaxas = new HashMap<>();
-        for (TaxaImposto t : listaTaxa) {
-            listaTax.add(t.getNomeImposto());
-            mapaTaxas.put(t.getNomeImposto(), t);
+        for (Imposto t : listaTaxa) {
+            listaTax.add(t.getNome());
+            mapaTaxas.put(t.getNome(), t);
         }
         combCategoria.setItems(FXCollections.observableArrayList(listaCat));
         combUnidade.setItems(FXCollections.observableArrayList(listaUni));
@@ -674,13 +674,13 @@ public class ProdutoController implements Initializable {
 
             txtNivelStock.setText(String.valueOf(p.getNivelstock()));
             txtIDProduto.setText(String.valueOf(p.getId()));
-            txtNomeProduto.setText(p.getNomeProduto());
+            txtNomeProduto.setText(p.getNome());
             txtcodigobarrasProduto.setText(p.getCodigo_barra());
             txtdescricaoProduto.setText(p.getDescricao());
             checkControle.setSelected(p.isControle_stock());
             combCategoria.setValue(p.getCategoria().getFamilia());
             combUnidade.setValue(p.getUnidade_medida().getIdentificador());
-            combTaxa.setValue(p.getTaxa_imposto().getNomeImposto());
+            combTaxa.setValue(p.getImposto().getNome());
             stockControlChecked();
             showPrecoVenda();
             
@@ -721,10 +721,10 @@ public class ProdutoController implements Initializable {
         PrecoVenda pv = tabelaPrecos.getSelectionModel().getSelectedItem();
         if (pv != null && !"desactivo".equals(pv.getEstado())) {
             labIDPreco.setText(pv.getId() + "");
-            txtPreco.setText(pv.getPreco() + "");
-            txtprecoExclTaxa.setText(pv.getPrecoExclTaxa() + "");
-            txtprecoInclTaxa.setText(pv.getPrecoInclTaxa() + "");
-            dataFim.setValue(LocalDate.parse(pv.getData_fim()));
+            txtPreco.setText(pv.getPrecoNormal() + "");
+            txtprecoExclTaxa.setText(pv.getPrecoFinal() + "");
+            txtprecoInclTaxa.setText(pv.getPrecoVenda() + "");
+            dataFim.setValue(LocalDate.parse(pv.getDataValidade()));
             dataInicio.setValue(LocalDate.parse(pv.getData_inicio()));
         }
         deletePreco(event, pv);

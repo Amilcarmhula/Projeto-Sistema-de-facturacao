@@ -2,26 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package jminvsm.model.taxa_imposto;
+package jminvsm.model.imposto;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public class TaxaImposto {
+public class Imposto {
 
     private int id;
-    private String nomeImposto;
-    private double percentagemImposto;
+    private String nome;
+    private double percentagem;
     private String descricao;
     private String data_criacao;
 
-    public TaxaImposto() {
+    public Imposto() {
     }
 
-    public TaxaImposto(String identificador, double percentagem, String descricao, String data_criacao) {
-        this.nomeImposto = identificador;
-        this.percentagemImposto = percentagem;
+    public Imposto(String nome, double percentagem, String descricao, String data_criacao) {
+        this.nome = nome;
+        this.percentagem = percentagem;
         this.descricao = descricao;
     }
 
@@ -33,20 +33,20 @@ public class TaxaImposto {
         this.id = id;
     }
 
-    public String getNomeImposto() {
-        return nomeImposto;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeImposto(String nomeImposto) {
-        this.nomeImposto = nomeImposto;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public double getPercentagemImposto() {
-        return percentagemImposto;
+    public double getPercentagem() {
+        return percentagem;
     }
 
-    public void setPercentagemImposto(double percentagemImposto) {
-        this.percentagemImposto = percentagemImposto;
+    public void setPercentagem(double percentagem) {
+        this.percentagem = percentagem;
     }
 
     public String getDescricao() {

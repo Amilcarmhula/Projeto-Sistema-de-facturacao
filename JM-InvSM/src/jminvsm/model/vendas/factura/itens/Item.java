@@ -4,12 +4,12 @@
  */
 package jminvsm.model.vendas.factura.itens;
 
+import javafx.scene.control.TableView;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.desconto.Desconto;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
-
 
 /**
  *
@@ -18,11 +18,9 @@ import jminvsm.model.vendas.factura.Factura;
 public class Item {
 
     private int id;
-    private double preco;
     private int quantidade;
     private int qtd_por_unidade;
     private double subtotal;
-    private Desconto desconto;
     private Produto produto;
     private Factura factura;
     private Usuario usuario;
@@ -34,21 +32,17 @@ public class Item {
         super();
     }
 
-    public Item(double preco, int quantidade, int qtd_por_unidade, double subtotal, Desconto desconto, Produto produto, Factura factura, Usuario usuario, Armazem armazem, String unidade_vendida) {
+    public Item(int quantidade, int qtd_por_unidade, double subtotal, Produto produto, Factura factura, Usuario usuario, Armazem armazem, String unidade_vendida) {
         super();
-        this.preco = preco;
         this.quantidade = quantidade;
         this.qtd_por_unidade = qtd_por_unidade;
         this.subtotal = subtotal;
-        this.desconto = desconto;
         this.produto = produto;
         this.factura = factura;
         this.usuario = usuario;
         this.armazem = armazem;
         this.unidade_vendida = unidade_vendida;
     }
-
-    
 
     public int getId() {
         return id;
@@ -58,13 +52,6 @@ public class Item {
         this.id = id;
     }
 
-    public double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(double preco) {
-        this.preco = preco;
-    }
 
     public int getQuantidade() {
         return quantidade;
@@ -96,14 +83,6 @@ public class Item {
 
     public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
-    }
-
-    public Desconto getDesconto() {
-        return desconto;
-    }
-
-    public void setDesconto(Desconto desconto) {
-        this.desconto = desconto;
     }
 
     public Produto getProduto() {
@@ -145,47 +124,65 @@ public class Item {
     public void setArmazem(Armazem armazem) {
         this.armazem = armazem;
     }
+
+//    public void calculateSubtotal_onTable(Item item, TableView table) {
+//        double x = item.getQuantidade() * item.getQtd_por_unidade() * item.getPreco();
+//        item.setSubtotal(x);
+//        table.refresh();
+//    }
     
+//    public double calculateSubtotal(Item item, TableView table) {
+//        double x = item.getQuantidade() * item.getQtd_por_unidade() * item.getPreco();
+//        if(item.getDesconto() != null){
+//            x -= x * item.getDesconto().getPercentagem();
+//        }
+//        
+//        if(item.getProduto().getImposto() != null){
+//            x += x * item.getProduto().getImposto().getPercentagem();
+//        }
+//        item.setSubtotal(x);
+//        table.refresh();
+//        return subtotal;
+//    }
+    
+    
+
     /*
     Expondo Propriedades BEANS
-    */
-    
-    public String getNomeProduto(){
-        if(produto != null){
-            return  produto.getNomeProduto();
+     */
+    public String getNomeProduto() {
+        if (produto != null) {
+            return produto.getNome();
         }
         return null;
     }
-    public String getDescricao(){
+
+    public String getDescricao() {
         if (produto != null) {
             return produto.getDescricao();
         }
         return null;
     }
-    
-    
-    
-    public Double getPercentagemImposto(){
-        if(produto != null){
-            return produto.getTaxa_imposto().getPercentagemImposto();
+
+    public Double getPercentagemImposto() {
+        if (produto != null) {
+            return produto.getImposto().getPercentagem();
         }
         return null;
     }
-    public Double getPercentagemDesconto(){
-        if(desconto != null){
-            return desconto.getPercentagemDesconto();
-        }
-        return null;
-    }
-    public String getNumero(){
-        if(factura !=null){
+
+//    public Double getPercentagemDesconto() {
+//        if (desconto != null) {
+//            return desconto.getPercentagem();
+//        }
+//        return null;
+//    }
+
+    public String getNumero() {
+        if (factura != null) {
             return factura.getNumero_fac();
         }
         return null;
     }
-    
-    
-    
-    
 
 }

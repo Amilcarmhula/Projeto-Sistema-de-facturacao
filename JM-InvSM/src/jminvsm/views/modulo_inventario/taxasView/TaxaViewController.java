@@ -31,7 +31,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
-import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.model.imposto.Imposto;
 import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
@@ -45,25 +45,25 @@ public class TaxaViewController implements Initializable {
 
     private ServiceTaxaImpostos servicoTaxa;
     @FXML
-    private TableColumn<TaxaImposto, Integer> ID;
+    private TableColumn<Imposto, Integer> ID;
 
     @FXML
     private Button btnAdd;
 
     @FXML
-    private TableColumn<TaxaImposto, String> btnTabela;
+    private TableColumn<Imposto, String> btnTabela;
 
     @FXML
-    private TableColumn<TaxaImposto, String> descricao;
+    private TableColumn<Imposto, String> descricao;
 
     @FXML
-    private TableColumn<TaxaImposto, Double> percentagem;
+    private TableColumn<Imposto, Double> percentagem;
 
     @FXML
-    private TableView<TaxaImposto> tabelaTaxa;
+    private TableView<Imposto> tabelaTaxa;
 
     @FXML
-    private TableColumn<TaxaImposto, String> tipoTaxa;
+    private TableColumn<Imposto, String> tipoTaxa;
 
     @FXML
     private TextField txtDescricao;
@@ -114,16 +114,16 @@ public class TaxaViewController implements Initializable {
             Logger.getLogger(TaxaViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private ObservableList<TaxaImposto> listaTaxas;
+    private ObservableList<Imposto> listaTaxas;
 
     public void showTaxas() {
 //        listaTaxas = servicoTaxa.getTaxas();
-        List<TaxaImposto> lista = new ArrayList<>();
-        for (TaxaImposto t : servicoTaxa.getTaxas()) {
+        List<Imposto> lista = new ArrayList<>();
+        for (Imposto t : servicoTaxa.getTaxas()) {
             t.setId(t.getId());
             t.setDescricao(t.getDescricao());
-            t.setNomeImposto(t.getNomeImposto());
-            t.setPercentagemImposto(t.getPercentagemImposto()*100);
+            t.setNome(t.getNome());
+            t.setPercentagem(t.getPercentagem()*100);
             lista.add(t);
         }
         listaTaxas = FXCollections.observableArrayList(lista);
@@ -133,7 +133,7 @@ public class TaxaViewController implements Initializable {
         percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagemImposto"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
-        FilteredList<TaxaImposto> dadosFiltrados = new FilteredList<>(listaTaxas, b -> true);
+        FilteredList<Imposto> dadosFiltrados = new FilteredList<>(listaTaxas, b -> true);
         txtTaxa.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(x -> {
 
@@ -141,7 +141,7 @@ public class TaxaViewController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNomeImposto().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
@@ -151,7 +151,7 @@ public class TaxaViewController implements Initializable {
 
             });
         });
-        SortedList<TaxaImposto> sortedData = new SortedList<>(dadosFiltrados);
+        SortedList<Imposto> sortedData = new SortedList<>(dadosFiltrados);
         sortedData.comparatorProperty().bind(tabelaTaxa.comparatorProperty());
 
         tabelaTaxa.setItems(sortedData);
@@ -177,19 +177,19 @@ public class TaxaViewController implements Initializable {
     }
 
     public void linhaSelecionadaTaxa(MouseEvent event) throws SQLException {
-        TaxaImposto x = tabelaTaxa.getSelectionModel().getSelectedItem();
+        Imposto x = tabelaTaxa.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
             txtDescricao.setText(x.getDescricao());
-            txtPercentagem.setText(String.valueOf(x.getPercentagemImposto()));
-            txtTaxa.setText(x.getNomeImposto());
+            txtPercentagem.setText(String.valueOf(x.getPercentagem()));
+            txtTaxa.setText(x.getNome());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
             deleteItem(event, x);
             SysFact.setData(x);
         }
     }
 
-    public void deleteItem(MouseEvent event, TaxaImposto x) {
+    public void deleteItem(MouseEvent event, Imposto x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");

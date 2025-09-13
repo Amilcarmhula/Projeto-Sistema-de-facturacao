@@ -30,7 +30,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
 import jminvsm.model.desconto.Desconto;
-import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.model.imposto.Imposto;
 import jminvsm.service.desconto.ServiceDesconto;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
@@ -44,7 +44,7 @@ public class DescontoViewController implements Initializable {
 
     private ServiceDesconto servicoDesconto;
     @FXML
-    private TableColumn<TaxaImposto, Integer> ID;
+    private TableColumn<Imposto, Integer> ID;
 
     @FXML
     private Button btnAdd;
@@ -118,8 +118,8 @@ public class DescontoViewController implements Initializable {
         for (Desconto t : servicoDesconto.getDescontos()) {
             t.setId(t.getId());
             t.setDescricao(t.getDescricao());
-            t.setNomeDesconto(t.getNomeDesconto());
-            t.setPercentagemDesconto(Double.parseDouble(String.format("%.2f", t.getPercentagemDesconto() * 100)));
+            t.setNome(t.getNome());
+            t.setPercentagem(Double.parseDouble(String.format("%.2f", t.getPercentagem() * 100)));
             lista.add(t);
         }
         listaDesconto = FXCollections.observableArrayList(lista);
@@ -156,8 +156,8 @@ public class DescontoViewController implements Initializable {
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
             txtDescricao.setText(x.getDescricao());
-            txtPercentagem.setText(String.valueOf(x.getPercentagemDesconto()));
-            txtDesconto.setText(x.getNomeDesconto());
+            txtPercentagem.setText(String.valueOf(x.getPercentagem()));
+            txtDesconto.setText(x.getNome());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
             deleteItem(event, x);
             SysFact.setData(x);

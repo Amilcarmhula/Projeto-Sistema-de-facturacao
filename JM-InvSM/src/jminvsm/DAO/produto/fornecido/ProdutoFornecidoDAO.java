@@ -121,6 +121,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
         }
         return mapa;
     }
+}
 
 //    @Override
 //    public boolean updateEntityByID(ProdutoFornecido t, int id) {
@@ -156,4 +157,4 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
 //        return isSuccess;
 //    }
 
-}
+//}

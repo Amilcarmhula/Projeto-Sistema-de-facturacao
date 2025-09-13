@@ -32,14 +32,13 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     public boolean addEntity(Desconto t) {
         boolean isSuccess = false;
         try {
-            sql = "insert into desconto (identificador,percentagem,descricao)"
-                    + " value (?,?,?)";
+            sql = "insert into desconto (nome,descricao)"
+                    + " value (?,?)";
 
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getNomeDesconto());
-            ps.setDouble(2, t.getPercentagemDesconto());
-            ps.setString(3, t.getDescricao());
+            ps.setString(1, t.getNome());
+            ps.setString(2, t.getDescricao());
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -64,13 +63,12 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     public boolean updateEntity(Desconto t, int id) {
         boolean isSuccess = false;
         try {
-            sql = "update desconto set identificador=?,percentagem=?,descricao=? where id=?";
+            sql = "update desconto set nome=?,descricao=? where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getNomeDesconto());
-            ps.setDouble(2, t.getPercentagemDesconto());
-            ps.setString(3, t.getDescricao());
-            ps.setInt(4, id);
+            ps.setString(1, t.getNome());
+            ps.setString(2, t.getDescricao());
+            ps.setInt(3, id);
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -101,8 +99,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
             while (result.next()) {
                 Desconto c = new Desconto();
                 c.setId(result.getInt("id"));
-                c.setNomeDesconto(result.getString("identificador"));
-                c.setPercentagemDesconto(result.getDouble("percentagem"));
+                c.setNome(result.getString("nome"));
                 c.setDescricao(result.getString("descricao"));
                 c.setData_criacao(result.getString("data_criacao"));
                 lista.add(c);

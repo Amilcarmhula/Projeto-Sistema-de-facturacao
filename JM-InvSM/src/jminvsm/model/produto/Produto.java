@@ -8,7 +8,7 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.stock.Stock;
-import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.model.imposto.Imposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 
 /**
@@ -18,37 +18,34 @@ import jminvsm.model.unidade_medida.UnidadeMedida;
 public class Produto {
 
     private int id;
-    private String nomeProduto;
+    private String nome;
     private String codigo_barra;
+    private double preco;
     private String descricao;
     private boolean controle_stock;
     private int nivelstock;
     private Categoria categoria;
     private UnidadeMedida unidade_medida;
-    private TaxaImposto taxa_imposto;
-    private PrecoVenda precovenda;
-    private Stock stock;
+    private Imposto imposto;
     private String data_criacao;
-    private Armazem armazem;
 
     public Produto() {
         super();
     }
 
-    public Produto(String nome, String codigo_barra, String descricao, 
+    public Produto(String nome, String codigo_barra, double preco, String descricao, 
             boolean contole_stock, int nivelstock, Categoria categoria, UnidadeMedida unidade_medida,
-            TaxaImposto taxa_imposto, PrecoVenda precovenda, Stock stock, Armazem armazem) {
+            Imposto taxa_imposto) {
         super();
-        this.nomeProduto = nome;
+        this.nome = nome;
         this.codigo_barra = codigo_barra;
+        this.preco = preco;
         this.descricao = descricao;
         this.controle_stock = contole_stock;
         this.categoria = categoria;
         this.unidade_medida = unidade_medida;
-        this.taxa_imposto = taxa_imposto;
-        this.precovenda = precovenda;
-        this.stock = stock;
-        this.armazem = armazem;
+        this.imposto = taxa_imposto;
+
         this.nivelstock = nivelstock;
     }
 
@@ -60,12 +57,12 @@ public class Produto {
         this.id = id;
     }
 
-    public String getNomeProduto() {
-        return nomeProduto;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getCodigo_barra() {
@@ -75,6 +72,16 @@ public class Produto {
     public void setCodigo_barra(String codigo_barra) {
         this.codigo_barra = codigo_barra;
     }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+    
+    
 
     public String getDescricao() {
         return descricao;
@@ -116,29 +123,14 @@ public class Produto {
         this.unidade_medida = unidade_medida;
     }
 
-    public TaxaImposto getTaxa_imposto() {
-        return taxa_imposto;
+    public Imposto getImposto() {
+        return imposto;
     }
 
-    public void setTaxa_imposto(TaxaImposto taxa_imposto) {
-        this.taxa_imposto = taxa_imposto;
+    public void setImposto(Imposto imposto) {
+        this.imposto = imposto;
     }
 
-    public PrecoVenda getPrecovenda() {
-        return precovenda;
-    }
-
-    public void setPrecovenda(PrecoVenda precovenda) {
-        this.precovenda = precovenda;
-    }
-
-    public Stock getStock() {
-        return stock;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
-    }
 
     public String getData_criacao() {
         return data_criacao;
@@ -147,15 +139,4 @@ public class Produto {
     public void setData_criacao(String data_criacao) {
         this.data_criacao = data_criacao;
     }
-
-    public Armazem getArmazem() {
-        return armazem;
-    }
-
-    public void setArmazem(Armazem armazem) {
-        this.armazem = armazem;
-    }
-    
-
-    
 }

@@ -285,7 +285,7 @@ CREATE PROCEDURE procedure_updatePrecoVenda()
 BEGIN
     UPDATE precovenda
     SET estado = 'desactivo'
-    WHERE data_fim <= CURDATE() AND estado = 'activo';
+    WHERE dataValidade <= CURDATE() AND estado = 'activo';
 END//
 DELIMITER ;
 

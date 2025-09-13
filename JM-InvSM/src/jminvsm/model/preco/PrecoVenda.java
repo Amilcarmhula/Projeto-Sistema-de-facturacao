@@ -14,11 +14,11 @@ import jminvsm.model.usuario.Usuario;
 public class PrecoVenda {
 
     private int id;
-    private double preco;
-    private double precoInclTaxa;
-    private double precoExclTaxa;
+    private double precoNormal;
+    private double precoVenda;
+    private double precoFinal;
     private String data_inicio;
-    private String data_fim;
+    private String dataValidade;
     private String estado;
     private Produto produto;
     private Usuario usuario;
@@ -26,13 +26,12 @@ public class PrecoVenda {
 
     public PrecoVenda(){
     }
-    public PrecoVenda(double preco, double precoInclTaxa, double precoExclTaxa, String data_inicio, String data_fim, 
+    public PrecoVenda(double precoNormal, double precoVenda, double precoFinal, String dataValidade, 
             Produto produto,Usuario usuario) {
-        this.precoInclTaxa = precoInclTaxa;
-        this.precoExclTaxa = precoExclTaxa;
-        this.preco = preco;
-        this.data_inicio = data_inicio;
-        this.data_fim = data_fim;
+        this.precoVenda = precoVenda;
+        this.precoFinal = precoFinal;
+        this.precoNormal = precoNormal;
+        this.dataValidade = dataValidade;
         this.produto = produto;
         this.usuario = usuario;
     }
@@ -45,28 +44,28 @@ public class PrecoVenda {
         this.id = id;
     }
 
-    public double getPreco() {
-        return preco;
+    public double getPrecoNormal() {
+        return precoNormal;
     }
 
-    public void setPreco(double preco) {
-        this.preco = preco;
+    public void setPrecoNormal(double precoNormal) {
+        this.precoNormal = precoNormal;
     }
 
-    public double getPrecoInclTaxa() {
-        return precoInclTaxa;
+    public double getPrecoVenda() {
+        return precoVenda;
     }
 
-    public void setPrecoInclTaxa(double precoInclTaxa) {
-        this.precoInclTaxa = precoInclTaxa;
+    public void setPrecoVenda(double precoVenda) {
+        this.precoVenda = precoVenda;
     }
 
-    public double getPrecoExclTaxa() {
-        return precoExclTaxa;
+    public double getPrecoFinal() {
+        return precoFinal;
     }
 
-    public void setPrecoExclTaxa(double precoExclTaxa) {
-        this.precoExclTaxa = precoExclTaxa;
+    public void setPrecoFinal(double precoFinal) {
+        this.precoFinal = precoFinal;
     }
 
     public String getData_inicio() {
@@ -77,12 +76,12 @@ public class PrecoVenda {
         this.data_inicio = data_inicio;
     }
 
-    public String getData_fim() {
-        return data_fim;
+    public String getDataValidade() {
+        return dataValidade;
     }
 
-    public void setData_fim(String data_fim) {
-        this.data_fim = data_fim;
+    public void setDataValidade(String dataValidade) {
+        this.dataValidade = dataValidade;
     }
 
     public Produto getProduto() {

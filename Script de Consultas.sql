@@ -1,5 +1,5 @@
 use _sysface;
-select * from cliente;
+select * from empresa;
 
 SELECT p.id as ID_Prod, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, 
                     c.id as id_categoria, c.familia as categoria,
@@ -27,7 +27,7 @@ select * from parcelas;
 select id from parcelas order by id desc limit 1;
 select * from itemfactura;
 select * from itemcotacao;
-select * from taxa_imposto;
+select * from transacoes;
 select * from contacorrente;
 select * from caixa;
 

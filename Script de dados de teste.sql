@@ -49,7 +49,7 @@ INSERT INTO contacto_fornecedor (pessoa_de_contacto, contacto, email, website, f
 SELECT 'Fornecedor Padrao',contacto, email,website,(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM contacto_empresa order by id DESC LIMIT 1;
 
 INSERT INTO armazem (nome, tipo, descricao, estado) VALUE
-('Armazém Central', 'Central', 'Armazem Principalo', 1);
+('Armazém Paddrap', 'Central', 'Armazem Principalo', 1);
 
 INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, fk_id_armazem,fk_id_usuario) 
 SELECT provincia, cidade, bairro, avenida, rua, codigo_postal, numero,(Select id from armazem order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM endereco_empresa order by id DESC LIMIT 1;
@@ -60,18 +60,18 @@ SELECT 'Gerente de Armazam',contacto, email,(Select id from armazem order by id 
 INSERT INTO categoria (tipo, grupo, subgrupo, familia, descricao) VALUE
 ('Produtos', 'Padrao', 'SubPadrao', 'Categoria Padrao', 'Categoria padrao para qualquer produto');
 
-INSERT INTO unidade_medida (identificador, sigla, descricao)
+INSERT INTO unidade_medida (nome, sigla, descricao)
 VALUE 
 ('Unidade', 'Un', 'Unidade padrao');
 
-INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUE
+INSERT INTO imposto (nome, percentagem, descricao) VALUE
 ('Isento', 0.00, 'Produtos isentos de imposto');
 
-INSERT INTO desconto (identificador, percentagem, descricao) VALUE
-('Isento', 0.0, 'Desconto aplicado em produtos sem desconto');
+INSERT INTO desconto (nome, descricao) VALUE
+('Isento', 'Desconto aplicado em produtos sem desconto');
 
-INSERT INTO produto (nome, codigo_barra, descricao, controle_stock,fk_id_categoria,fk_id_unidade_medida,fk_id_taxa_imposto) 
-SELECT 'Produto Padrao','1000000000001', 'Produto Padrao',1,(Select id from categoria order by id DESC LIMIT 1),(Select id from unidade_medida order by id DESC LIMIT 1),(Select id from taxa_imposto order by id DESC LIMIT 1);
+INSERT INTO produto (nome, codigo_barra, preco, descricao, controle_stock,fk_id_categoria,fk_id_unidade_medida,fk_id_imposto) 
+SELECT 'Produto Padrao','1000000000001', 100.55, 'Produto Padrao',1,(Select id from categoria order by id DESC LIMIT 1),(Select id from unidade_medida order by id DESC LIMIT 1),(Select id from imposto order by id DESC LIMIT 1);
 
 INSERT INTO produto_fornecido (quantidade, data_fornecida,unidade_fornecida, qtd_por_unidade, custo, fk_id_armazem,fk_id_produto,fk_id_fornecedor,fk_id_usuario) 
 SELECT 0,current_date(),'unidade',0, 0.00, (Select id from armazem order by id DESC LIMIT 1),(Select id from produto order by id DESC LIMIT 1),(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1);
@@ -130,35 +130,35 @@ insert into metodo_pagamento(nome, descricao) values
 -- ('Serviços', 'Consultoria', 'TI', 'Infraestruturas', 'Consultoria em infraestrutura de TI');
 
 
-INSERT INTO unidade_medida (identificador, sigla, descricao)
-VALUES 
-('Quilograma', 'kg', 'Unidade de massa usada no sistema métrico'),
-('Litro', 'L', 'Unidade de volume usada para medir líquidos'),
-('Lote', 'Lt', 'Volume por unidades'),
-('Metro', 'm', 'Unidade de comprimento usada no sistema métrico'),
-('Centímetro', 'cm', 'Unidade menor de comprimento no sistema métrico'),
-('Mililitro', 'ml', 'Unidade de volume usada para pequenas quantidades de líquidos'),
-('Grama', 'g', 'Unidade de massa usada para pequenas quantidades'),
-('Tonelada', 't', 'Unidade de massa usada para grandes quantidades'),
-('Polegada', 'in', 'Unidade de comprimento usada no sistema imperial'),
-('Galão', 'gal', 'Unidade de volume usada no sistema imperial'),
-('Onça', 'oz', 'Unidade de peso usada no sistema imperial');
+-- INSERT INTO unidade_medida (nome, sigla, descricao)
+-- VALUES 
+-- ('Quilograma', 'kg', 'Unidade de massa usada no sistema métrico'),
+-- ('Litro', 'L', 'Unidade de volume usada para medir líquidos'),
+-- ('Lote', 'Lt', 'Volume por unidades'),
+-- ('Metro', 'm', 'Unidade de comprimento usada no sistema métrico'),
+-- ('Centímetro', 'cm', 'Unidade menor de comprimento no sistema métrico'),
+-- ('Mililitro', 'ml', 'Unidade de volume usada para pequenas quantidades de líquidos'),
+-- ('Grama', 'g', 'Unidade de massa usada para pequenas quantidades'),
+-- ('Tonelada', 't', 'Unidade de massa usada para grandes quantidades'),
+-- ('Polegada', 'in', 'Unidade de comprimento usada no sistema imperial'),
+-- ('Galão', 'gal', 'Unidade de volume usada no sistema imperial'),
+-- ('Onça', 'oz', 'Unidade de peso usada no sistema imperial');
 
 
-INSERT INTO taxa_imposto (identificador, percentagem, descricao) VALUES
-('IVA', 0.16, 'Imposto sobre o valor acrescentado (IVA)'),
-('ISPC', 0.5, 'Imposto Simplificado para Pequenos Contribuintes (ISPC)'),
-('Taxa Reduzida', 0.075, 'Taxa de imposto reduzida para produtos essenciais');
+-- INSERT INTO imposto (nome, percentagem, descricao) VALUES
+-- ('IVA', 16.0, 'Imposto sobre o valor acrescentado (IVA)'),
+-- ('ISPC', 5.0, 'Imposto Simplificado para Pequenos Contribuintes (ISPC)'),
+-- ('Taxa Reduzida', 7.5, 'Taxa de imposto reduzida para produtos essenciais');
 
-INSERT INTO desconto (identificador, percentagem, descricao) VALUES
-('Desconto de Lançamento', 0.1, 'Desconto aplicado em novos produtos no lançamento'),
-('Desconto de Fim de Ano', 0.155, 'Desconto especial para vendas de final de ano'),
-('Desconto por Quantidade', 0.575, 'Desconto aplicado para compras em grandes quantidades'),
-('Desconto Promocional', 0.2, 'Desconto aplicado em promoções especiais por tempo limitado'),
-('Desconto Fidelidade', 0.8, 'Desconto para clientes fiéis com mais de 1 ano de compras'),
-('Desconto Black Friday', 0.3, 'Desconto massivo durante a Black Friday'),
-('Desconto de Parceria', 0.125, 'Desconto exclusivo para parceiros comerciais'),
-('Desconto de Natal', 0.1825, 'Desconto sazonal para o período de Natal');
+-- INSERT INTO desconto (nome, descricao) VALUES
+-- ('Desconto de Lançamento', 'Desconto aplicado em novos produtos no lançamento'),
+-- ('Desconto de Fim de Ano', 'Desconto especial para vendas de final de ano'),
+-- ('Desconto por Quantidade', 'Desconto aplicado para compras em grandes quantidades'),
+-- ('Desconto Promocional', 'Desconto aplicado em promoções especiais por tempo limitado'),
+-- ('Desconto Fidelidade', 'Desconto para clientes fiéis com mais de 1 ano de compras'),
+-- ('Desconto Black Friday', 'Desconto massivo durante a Black Friday'),
+-- ('Desconto de Parceria', 'Desconto exclusivo para parceiros comerciais'),
+-- ('Desconto de Natal', 'Desconto sazonal para o período de Natal');
 
 
 --     

@@ -6,8 +6,8 @@ package jminvsm.service.taxaimposto;
 
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
-import jminvsm.dao.taxaimposto.TaxaImpostoDAO;
-import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.dao.imposto.ImpostoDAO;
+import jminvsm.model.imposto.Imposto;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
@@ -16,11 +16,11 @@ import static jminvsm.util.AlertUtilities.showSuccessAlert;
  * @author JM-Tecnologias
  */
 public class ServiceTaxaImpostos {
-    private final TaxaImpostoDAO taxaDao;
+    private final ImpostoDAO taxaDao;
     private boolean opsSuccess;
     
     public ServiceTaxaImpostos() throws SQLException{
-        this.taxaDao = new TaxaImpostoDAO();
+        this.taxaDao = new ImpostoDAO();
     }
     public void setOpsSuccess(boolean opsSuccess) {
         this.opsSuccess = opsSuccess;
@@ -45,9 +45,9 @@ public class ServiceTaxaImpostos {
         if(descricao == null || descricao.isEmpty()){
             descricao = "Taxa/Imposto sem descricao. Esta e uma descriao padrao!";
         }
-        TaxaImposto t = new TaxaImposto();
-        t.setNomeImposto(identificador);
-        t.setPercentagemImposto(percentagem/100);
+        Imposto t = new Imposto();
+        t.setNome(identificador);
+        t.setPercentagem(percentagem/100);
         t.setDescricao(descricao);
         
         if(taxaDao.addEntity(t)){
@@ -76,9 +76,9 @@ public class ServiceTaxaImpostos {
         if(descricao == null || descricao.isEmpty()){
             descricao = "Taxa/Imposto sem descricao. Esta e uma descriao padrao!";
         }
-        TaxaImposto t = new TaxaImposto();
-        t.setNomeImposto(identificador);
-        t.setPercentagemImposto(percentagem/100);
+        Imposto t = new Imposto();
+        t.setNome(identificador);
+        t.setPercentagem(percentagem/100);
         t.setDescricao(descricao);
         
         if(taxaDao.updateEntityByID(t, id)){
@@ -95,7 +95,7 @@ public class ServiceTaxaImpostos {
             showSuccessAlert("Registo excluido com sucesso");
         }
     }
-    public ObservableList<TaxaImposto> getTaxas(){
+    public ObservableList<Imposto> getTaxas(){
         return taxaDao.listAllEntities();
     }
 }

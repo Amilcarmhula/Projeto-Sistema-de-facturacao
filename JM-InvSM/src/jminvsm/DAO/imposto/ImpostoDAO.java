@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package jminvsm.dao.taxaimposto;
+package jminvsm.dao.imposto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
-import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.model.imposto.Imposto;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
@@ -19,24 +19,24 @@ import jminvsm.util.Conexao;
  *
  * @author JM-Tecnologias
  */
-public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
+public class ImpostoDAO  implements ImpostoDAOImpl<Imposto> {
 
     private Connection con;
     private PreparedStatement ps;
     private String sql;
 
-    public TaxaImpostoDAO() throws SQLException {
+    public ImpostoDAO() throws SQLException {
         this.con = Conexao.getConexao();
     }
    @Override
-    public boolean addEntity(TaxaImposto t) {
+    public boolean addEntity(Imposto t) {
         boolean isSuccess = false;
         try {
-            sql = "insert into taxa_imposto (identificador, percentagem, descricao)"
+            sql = "insert into imposto (nome, percentagem, descricao)"
                     + " value (?,?,?)";
             ps = con.prepareStatement(sql);
-            ps.setString(1, t.getNomeImposto());
-            ps.setDouble(2, t.getPercentagemImposto());
+            ps.setString(1, t.getNome());
+            ps.setDouble(2, t.getPercentagem());
             ps.setString(3, t.getDescricao());
 
            int rowsAffected = ps.executeUpdate();
@@ -59,15 +59,15 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
     }
 
     @Override
-    public boolean updateEntityByID(TaxaImposto  t, int id) {
+    public boolean updateEntityByID(Imposto  t, int id) {
                 boolean isSuccess = false;
         try {
-            sql = "update taxa_imposto set identificador=?, percentagem=?, descricao=?"
+            sql = "update imposto set nome=?, percentagem=?, descricao=?"
                     + " where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getNomeImposto());
-            ps.setDouble(2, t.getPercentagemImposto());
+            ps.setString(1, t.getNome());
+            ps.setDouble(2, t.getPercentagem());
             ps.setString(3, t.getDescricao());
             ps.setInt(4, id);
 
@@ -91,17 +91,17 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
     }
 
     @Override
-    public ObservableList<TaxaImposto> listAllEntities() {
-        ObservableList<TaxaImposto> lista = FXCollections.observableArrayList();
+    public ObservableList<Imposto> listAllEntities() {
+        ObservableList<Imposto> lista = FXCollections.observableArrayList();
         try {
-            sql = "select * from taxa_imposto";
+            sql = "select * from imposto";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
-                TaxaImposto ti = new TaxaImposto();
+                Imposto ti = new Imposto();
                 ti.setId(result.getInt("id"));
-                ti.setNomeImposto(result.getString("identificador"));
-                ti.setPercentagemImposto(result.getDouble("percentagem"));
+                ti.setNome(result.getString("nome"));
+                ti.setPercentagem(result.getDouble("percentagem"));
                 ti.setDescricao(result.getString("descricao"));
                 lista.add(ti);
             }
@@ -114,20 +114,19 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
     }
     
     @Override
-    public TaxaImposto getEntityByID(int id) {
-        TaxaImposto ti = null;
+    public Imposto getEntityByID(int id) {
+        Imposto ti = null;
         try {
-            sql = "select * from taxa_imposto where id=?";
+            sql = "select * from imposto where id=?";
             ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet result = ps.executeQuery();
             if (result.next()) {
-                ti = new TaxaImposto();
+                ti = new Imposto();
                 ti.setId(result.getInt("id"));
-                ti.setNomeImposto(result.getString("identificador"));
-                ti.setPercentagemImposto(result.getDouble("percentagem"));
+                ti.setNome(result.getString("nome"));
+                ti.setPercentagem(result.getDouble("percentagem"));
                 ti.setDescricao(result.getString("descricao"));
-                ti.setData_criacao(result.getString("data_criacao"));
             }
             result.close();
             ps.close();
@@ -141,7 +140,7 @@ public class TaxaImpostoDAO  implements TaxaImpostoDAOImpl<TaxaImposto> {
     public boolean deleteEntity(int x) {
                 boolean isSuccess = false;
         try {
-            sql =  "delete from taxa_imposto where id=?";
+            sql =  "delete from imposto where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x);

@@ -17,7 +17,7 @@ public class Conexao {
 
     private static final String db = "jdbc:mysql://localhost:3306/_sysface";
     private static final String user = "root";
-    private static final String pws = "Informatico@12";
+    private static final String pws = "Informatico12";
 
     /**
      * Metodo que busca o conexao com o banco de dados usando o driver de

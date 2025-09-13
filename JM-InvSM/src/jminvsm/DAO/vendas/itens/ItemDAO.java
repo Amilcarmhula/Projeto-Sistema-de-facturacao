@@ -13,7 +13,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import jminvsm.model.desconto.Desconto;
 import jminvsm.model.produto.Produto;
-import jminvsm.model.taxa_imposto.TaxaImposto;
+import jminvsm.model.imposto.Imposto;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.model.vendas.factura.itens.Item;
 import jminvsm.util.Conexao;
@@ -37,19 +37,17 @@ public class ItemDAO implements ItemDAOImpl<Item> {
     public void addEntity(List<Item> items) {
         try {
             for (Item t : items) {
-                sql = "insert into itemfactura (quantidade, subtotal,fk_id_desconto,fk_id_produto,fk_numero,"
-                        + "fk_id_usuario, fk_id_armazem,preco,unidade_vendida,qtd_por_unidade) value (?,?,?,?,?,?,?,?,?,?)";
+                sql = "insert into itemfactura (quantidade, subtotal,fk_id_produto,fk_numero,"
+                        + "fk_id_usuario, fk_id_armazem,unidade_vendida,qtd_por_unidade) value (?,?,?,?,?,?,?,?)";
                 ps = con.prepareStatement(sql);
                 ps.setInt(1, t.getQuantidade());// ***********
                 ps.setDouble(2, t.getSubtotal());// ***********
-                ps.setInt(3, t.getDesconto().getId());// ***********
-                ps.setInt(4, t.getProduto().getId());// ***********
-                ps.setString(5, t.getFactura().getNumero_fac());// ***********
-                ps.setInt(6, t.getUsuario().getId());// ***********
-                ps.setInt(7, t.getArmazem().getId());// ***********
-                ps.setDouble(8, t.getPreco());
-                ps.setString(9, t.getUnidade_vendida());
-                ps.setInt(10, t.getQtd_por_unidade());
+                ps.setInt(3, t.getProduto().getId());// ***********
+                ps.setString(4, t.getFactura().getNumero_fac());// ***********
+                ps.setInt(5, t.getUsuario().getId());// ***********
+                ps.setInt(6, t.getArmazem().getId());// ***********
+                ps.setString(7, t.getUnidade_vendida());
+                ps.setInt(8, t.getQtd_por_unidade());
 
                 ps.execute();
                 ps.close();
@@ -64,19 +62,17 @@ public class ItemDAO implements ItemDAOImpl<Item> {
     public void addEntityQuotation(List<Item> items) {
         try {
             for (Item t : items) {
-                sql = "insert into itemcotacao (quantidade, subtotal,fk_id_desconto,fk_id_produto,fk_numero,"
-                        + "fk_id_usuario, fk_id_armazem,preco,unidade_vendida,qtd_por_unidade) value (?,?,?,?,?,?,?,?,?,?)";
+                sql = "insert into itemcotacao (quantidade, subtotal,fk_id_produto,fk_numero,"
+                        + "fk_id_usuario, fk_id_armazem,unidade_vendida,qtd_por_unidade) value (?,?,?,?,?,?,?,?)";
                 ps = con.prepareStatement(sql);
                 ps.setInt(1, t.getQuantidade());// ***********
                 ps.setDouble(2, t.getSubtotal());// ***********
-                ps.setInt(3, t.getDesconto().getId());// ***********
-                ps.setInt(4, t.getProduto().getId());// ***********
-                ps.setString(5, t.getFactura().getNumero_fac());// ***********
-                ps.setInt(6, t.getUsuario().getId());// ***********
-                ps.setInt(7, t.getArmazem().getId());// ***********
-                ps.setDouble(8, t.getPreco());
-                ps.setString(9, t.getUnidade_vendida());
-                ps.setInt(10, t.getQtd_por_unidade());
+                ps.setInt(3, t.getProduto().getId());// ***********
+                ps.setString(4, t.getFactura().getNumero_fac());// ***********
+                ps.setInt(5, t.getUsuario().getId());// ***********
+                ps.setInt(6, t.getArmazem().getId());// ***********
+                ps.setString(7, t.getUnidade_vendida());
+                ps.setInt(9, t.getQtd_por_unidade());
 
                 ps.execute();
                 ps.close();
@@ -93,29 +89,25 @@ public class ItemDAO implements ItemDAOImpl<Item> {
         try {
             if(factura.endsWith("/2")){
                 sql = "SELECT p.nome, p.descricao,"
-                    + "i.quantidade,i.preco, i.subtotal, "
+                    + "i.quantidade, i.subtotal, "
                     + "i.unidade_vendida, i.qtd_por_unidade, "
-                    + "ip.identificador as descricao_imposto, ip.percentagem AS imposto, "
-                    + "d.identificador AS descricao_desconto, d.percentagem AS desconto, "
+                    + "ip.nome as descricao_imposto, ip.percentagem AS imposto, "
                     + "f.numero "
                     + "FROM itemcotacao i "
                     + "LEFT JOIN factura f ON f.numero = i.fk_numero "
-                    + "LEFT JOIN desconto d ON d.id = i.fk_id_desconto "
                     + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
-                    + "LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto "
+                    + "LEFT JOIN imposto ip ON ip.id = p.fk_id_imposto "
                     + "WHERE i.fk_numero = ?";
             }else{
                 sql = "SELECT p.nome, p.descricao,"
-                    + "i.quantidade,i.preco, i.subtotal, "
+                    + "i.quantidade, i.subtotal, "
                     + "i.unidade_vendida, i.qtd_por_unidade, "
-                    + "ip.identificador as descricao_imposto, ip.percentagem AS imposto, "
-                    + "d.identificador AS descricao_desconto, d.percentagem AS desconto, "
+                    + "ip.nome as descricao_imposto, ip.percentagem AS imposto, "
                     + "f.numero "
                     + "FROM itemfactura i "
                     + "LEFT JOIN factura f ON f.numero = i.fk_numero "
-                    + "LEFT JOIN desconto d ON d.id = i.fk_id_desconto "
                     + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
-                    + "LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto "
+                    + "LEFT JOIN imposto ip ON ip.id = p.fk_id_imposto "
                     + "WHERE i.fk_numero = ?";
             }
             ps = con.prepareStatement(sql);
@@ -125,28 +117,21 @@ public class ItemDAO implements ItemDAOImpl<Item> {
             while (result.next()) {
                 i = new Item();
                 
-                Desconto d = new Desconto();
-                d.setNomeDesconto(result.getString("descricao_desconto"));
-                d.setPercentagemDesconto(result.getDouble("desconto"));
-                i.setDesconto(d);
-                i.setPreco(result.getDouble("preco"));
                 i.setQuantidade(result.getInt("quantidade"));
                 i.setSubtotal(result.getDouble("subtotal"));
                 i.setUnidade_vendida(result.getString("unidade_vendida"));
                 i.setQtd_por_unidade(result.getInt("qtd_por_unidade"));
                 Produto p = new Produto();
-                p.setNomeProduto(result.getString("nome"));
+                p.setNome(result.getString("nome"));
                 p.setDescricao(result.getString("descricao"));
-                TaxaImposto t = new TaxaImposto();
-                t.setNomeImposto(result.getString("descricao_imposto"));
-                t.setPercentagemImposto(result.getDouble("imposto"));
-                p.setTaxa_imposto(t);
+                Imposto t = new Imposto();
+                t.setNome(result.getString("descricao_imposto"));
+                t.setPercentagem(result.getDouble("imposto"));
+                p.setImposto(t);
                 i.setProduto(p);
                 Factura f = new Factura();
                 f.setNumero_fac(result.getString("numero"));
                 i.setFactura(f);
-//                sub += i.getQuantidadeProduto() * i.getPrecoProduto();
-//                i.setSubtotal(sub);
                 lista.add(i);
             }
             result.close();

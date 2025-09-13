@@ -6,6 +6,7 @@ package jminvsm.service.vendas.factura.itens;
 
 import java.sql.SQLException;
 import java.util.List;
+import javafx.scene.control.TableView;
 import jminvsm.dao.vendas.itens.ItemDAO;
 import jminvsm.model.vendas.factura.itens.Item;
 import static jminvsm.util.AlertUtilities.showDialog;
@@ -52,4 +53,5 @@ public class ServiceItem {
     public List<Item>  consultaItensFactura(String numero){
         return itemDao.getItensData(numero);
     }
+    
 }

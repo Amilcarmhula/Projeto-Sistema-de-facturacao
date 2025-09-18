@@ -131,7 +131,7 @@ public class UnidadeViewController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getIdentificador().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
                 } else if (x.getSigla().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
                     return true;
@@ -171,7 +171,7 @@ public class UnidadeViewController implements Initializable {
         UnidadeMedida x = tabelaUnidade.getSelectionModel().getSelectedItem();
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
-            txtUnidade.setText(x.getIdentificador());
+            txtUnidade.setText(x.getNome());
             txtSigla.setText(x.getSigla());
             txtDescricao.setText(x.getDescricao());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);

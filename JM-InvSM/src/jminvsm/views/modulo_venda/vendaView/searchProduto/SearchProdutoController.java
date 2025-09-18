@@ -257,13 +257,13 @@ public class SearchProdutoController implements Initializable {
         listaProduto = serProduto.getProdutos();
         mapaProdutos = new HashMap<>();
         for (Produto p : listaProduto) {
-            mapaProdutos.put((p.getId()+p.getArmazem().getId()), p);
+//            mapaProdutos.put((p.getId()+p.getArmazem().getId()), p);
         }
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         artigo.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
-        armazem.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
+//        armazem.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
         codigobarras.setCellValueFactory(new PropertyValueFactory<>("codigo_barra"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
@@ -273,8 +273,8 @@ public class SearchProdutoController implements Initializable {
                 -> new SimpleStringProperty(cellData.getValue().getCategoria().getFamilia()));
         taxa.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getImposto().getNome()));
-        quantidade.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getSaldo())));
+//        quantidade.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getStock().getSaldo())));
         nivelStock.setCellValueFactory(new PropertyValueFactory<>("nivelstock"));
 
         //add cell of checkBox edit 
@@ -454,8 +454,8 @@ public class SearchProdutoController implements Initializable {
         List<String> listaUni = new ArrayList<>();
         mapaUnidades = new HashMap<>();
         for (UnidadeMedida u : listaUnidades) {
-            listaUni.add(u.getIdentificador());
-            mapaUnidades.put(u.getIdentificador(), u);
+            listaUni.add(u.getNome());
+            mapaUnidades.put(u.getNome(), u);
         }
 
         List<String> listaTax = new ArrayList<>();
@@ -474,23 +474,23 @@ public class SearchProdutoController implements Initializable {
     public void selecionaProduto(MouseEvent event) {
         Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
-            Produto p = mapaProdutos.get(x.getId()+x.getArmazem().getId());
+//            Produto p = mapaProdutos.get(x.getId()+x.getArmazem().getId());
             
-            txtNivelStock.setText(String.valueOf(p.getNivelstock()));
-            txtIDProduto.setText(String.valueOf(p.getId()));
-            txtNomeProduto.setText(p.getNome());
-            txtcodigobarrasProduto.setText(p.getCodigo_barra());
-            txtdescricaoProduto.setText(p.getDescricao());
-            checkControle.setSelected(p.isControle_stock());
-            combCategoria.setValue(p.getCategoria().getFamilia());
-            combUnidade.setValue(p.getUnidade_medida().getIdentificador());
-            combTaxa.setValue(p.getImposto().getNome());
-            stockControlChecked();
-            showPrecoVenda(p);
-            SysFact.setData(p);
-            if (event.getClickCount() == 2 && p.isControle_stock()) {
-                getStockView(event);
-            }
+//            txtNivelStock.setText(String.valueOf(p.getNivelstock()));
+//            txtIDProduto.setText(String.valueOf(p.getId()));
+//            txtNomeProduto.setText(p.getNome());
+//            txtcodigobarrasProduto.setText(p.getCodigo_barra());
+//            txtdescricaoProduto.setText(p.getDescricao());
+//            checkControle.setSelected(p.isControle_stock());
+//            combCategoria.setValue(p.getCategoria().getFamilia());
+//            combUnidade.setValue(p.getUnidade_medida().getNome());
+//            combTaxa.setValue(p.getImposto().getNome());
+//            stockControlChecked();
+//            showPrecoVenda(p);
+//            SysFact.setData(p);
+//            if (event.getClickCount() == 2 && p.isControle_stock()) {
+//                getStockView(event);
+//            }
 //            System.out.println("Preco normal: "+p.getPrecovenda().getPreco());
             ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         }
@@ -527,7 +527,7 @@ public class SearchProdutoController implements Initializable {
         estadoPreco.setCellValueFactory(new PropertyValueFactory<>("estado"));
         for (PrecoVenda preco : listaPrecos) {
             if(!"desactivo".equals(preco.getEstado()) && preco != null){
-                p.setPrecovenda(preco);
+//                p.setPrecovenda(preco);
             }
         }
         

@@ -38,7 +38,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
             sql = "insert into unidade_medida (identificador, sigla, descricao)"
                     + " value (?,?,?)";
             ps = con.prepareStatement(sql);
-            ps.setString(1, t.getIdentificador());
+            ps.setString(1, t.getNome());
             ps.setString(2, t.getSigla());
             ps.setString(3, t.getDescricao());
 
@@ -69,7 +69,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
                     + " where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getIdentificador());
+            ps.setString(1, t.getNome());
             ps.setString(2, t.getSigla());
             ps.setString(3, t.getDescricao());
             ps.setInt(4, id);
@@ -103,7 +103,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
             while (result.next()) {
                 UnidadeMedida u = new UnidadeMedida();
                 u.setId(result.getInt("id"));
-                u.setIdentificador(result.getString("identificador"));
+                u.setNome(result.getString("nome"));
                 u.setSigla(result.getString("sigla"));
                 u.setDescricao(result.getString("descricao"));
                 lista.add(u);
@@ -127,7 +127,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
             if (result.next()) {
                 u = new UnidadeMedida();
                 u.setId(result.getInt("id"));
-                u.setIdentificador(result.getString("identificador"));
+                u.setNome(result.getString("identificador"));
                 u.setSigla(result.getString("sigla"));
                 u.setDescricao(result.getString("descricao"));
             }

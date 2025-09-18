@@ -143,7 +143,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setCategoria(cat);
                 UnidadeMedida u = new UnidadeMedida();
                 u.setId(result.getInt("id_unidade"));
-                u.setIdentificador(result.getString("identificador"));
+                u.setNome(result.getString("identificador"));
                 u.setSigla(result.getString("sigla"));
                 p.setUnidade_medida(u);
                 Imposto t = new Imposto();

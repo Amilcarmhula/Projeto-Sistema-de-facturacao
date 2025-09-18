@@ -11,7 +11,7 @@ package jminvsm.model.unidade_medida;
  */
 public class UnidadeMedida {
     private int id;
-    private String identificador;
+    private String nome;
     private String sigla;
     private String data_criacao;
     private String descricao;
@@ -19,7 +19,7 @@ public class UnidadeMedida {
     public UnidadeMedida(){}
 
     public UnidadeMedida(String identificador, String sigla, String descricao) {
-        this.identificador = identificador;
+        this.nome = identificador;
         this.sigla = sigla;
         this.descricao = descricao;
     }
@@ -34,12 +34,12 @@ public class UnidadeMedida {
         this.id = id;
     }
 
-    public String getIdentificador() {
-        return identificador;
+    public String getNome() {
+        return nome;
     }
 
-    public void setIdentificador(String identificador) {
-        this.identificador = identificador;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getSigla() {

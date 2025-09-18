@@ -51,7 +51,7 @@ public class ServiceUnidadeMedida {
         }
 
         UnidadeMedida u = new UnidadeMedida();
-        u.setIdentificador(identificador);
+        u.setNome(identificador);
         u.setSigla(sigla);
         u.setDescricao(descricao);
 
@@ -85,7 +85,7 @@ public class ServiceUnidadeMedida {
         }
 
         UnidadeMedida u = new UnidadeMedida();
-        u.setIdentificador(identificador);
+        u.setNome(identificador);
         u.setSigla(sigla);
         u.setDescricao(descricao);
 

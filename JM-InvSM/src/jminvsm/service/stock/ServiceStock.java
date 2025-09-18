@@ -24,6 +24,7 @@
 package jminvsm.service.stock;
 
 import java.sql.SQLException;
+import java.util.List;
 import javafx.collections.ObservableList;
 import jminvsm.dao.stock.StockDAO;
 import jminvsm.model.stock.Stock;
@@ -37,6 +38,10 @@ public class ServiceStock {
     
     public ServiceStock() throws SQLException{
         this.stockDao = new StockDAO();
+    }
+    
+    public ObservableList<Stock> listaInvenarioProdutos(){
+        return stockDao.listInventario();
     }
     
     public ObservableList<Stock> stockBaixo(){

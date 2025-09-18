@@ -119,7 +119,7 @@ public class DescontoViewController implements Initializable {
             t.setId(t.getId());
             t.setDescricao(t.getDescricao());
             t.setNome(t.getNome());
-            t.setPercentagem(Double.parseDouble(String.format("%.2f", t.getPercentagem() * 100)));
+//            t.setPercentagem(Double.parseDouble(String.format("%.2f", t.getPercentagem() * 100)));
             lista.add(t);
         }
         listaDesconto = FXCollections.observableArrayList(lista);
@@ -156,7 +156,7 @@ public class DescontoViewController implements Initializable {
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
             txtDescricao.setText(x.getDescricao());
-            txtPercentagem.setText(String.valueOf(x.getPercentagem()));
+//            txtPercentagem.setText(String.valueOf(x.getPercentagem()));
             txtDesconto.setText(x.getNome());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
             deleteItem(event, x);

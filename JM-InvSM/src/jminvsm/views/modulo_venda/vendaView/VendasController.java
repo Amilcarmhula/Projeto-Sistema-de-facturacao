@@ -269,16 +269,16 @@ public class VendasController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
                     if (SysFact.getData() instanceof Produto && SysFact.getData() != null) {
-                        Produto x = (Produto) SysFact.getData();
-                        if (x.getPrecovenda() != null) {
-                            int num = randNum.nextInt(50);
-                            mapaProdutos.put(num, x);
-                            txtID.setText(num + "");
-                            txtStock.setText(String.valueOf(x.getStock().getSaldo()));
-                            txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
-                            txtNome.setText(x.getNome());
-                            txtDescricao.setText(x.getDescricao());
-                        }
+//                        Produto x = (Produto) SysFact.getData();
+//                        if (x.getPrecovenda() != null) {
+//                            int num = randNum.nextInt(50);
+//                            mapaProdutos.put(num, x);
+//                            txtID.setText(num + "");
+//                            txtStock.setText(String.valueOf(x.getStock().getSaldo()));
+//                            txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
+//                            txtNome.setText(x.getNome());
+//                            txtDescricao.setText(x.getDescricao());
+//                        }
                     }
                 }
             }
@@ -291,8 +291,8 @@ public class VendasController implements Initializable {
         
         idtabelaItens.setCellValueFactory(new PropertyValueFactory<>("id"));
         nometabelaItens.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
-        precotabelaItens.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPrecovenda().getPreco()) + " MT"));
+//        precotabelaItens.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPrecovenda().getPreco()) + " MT"));
         unidadetabelaItens.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidade_medida().getSigla())));
         quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
@@ -304,7 +304,7 @@ public class VendasController implements Initializable {
                 item.setQuantidade(event.getNewValue()); // Atualiza a propriedade
                 
                 Item i = new Item();
-                i.calculateSubtotal_onTable(item,tabelaItens);
+//                i.calculateSubtotal_onTable(item,tabelaItens);
                 displayPrice(); 
             }
         });
@@ -317,14 +317,14 @@ public class VendasController implements Initializable {
                 item.setQtd_por_unidade(event.getNewValue()); // Atualiza a propriedade
                 
                 Item i = new Item();
-                i.calculateSubtotal_onTable(item,tabelaItens);
+//                i.calculateSubtotal_onTable(item,tabelaItens);
                 
                 displayPrice(); 
             }
         });
 
-        descontotabelaItens.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getDesconto().getPercentagem() * 100) + "%"));
+//        descontotabelaItens.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getDesconto().getPercentagem() * 100) + "%"));
         taxatabelaItens.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getImposto().getPercentagem() * 100) + "%"));
         subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
@@ -423,10 +423,10 @@ public class VendasController implements Initializable {
         Item i = new Item();
         i.setId(id);
         i.setProduto(x);
-        i.setDesconto(desconto);
-        i.setPreco(x.getPrecovenda().getPreco());
+//        i.setDesconto(desconto);
+//        i.setPreco(x.getPrecovenda().getPreco());
         Armazem a = new Armazem();
-        a.setId(x.getArmazem().getId());
+//        a.setId(x.getArmazem().getId());
         i.setArmazem(a);
         i.setQuantidade(qtd);
         i.setQtd_por_unidade(qtd_por_unidade);
@@ -434,13 +434,13 @@ public class VendasController implements Initializable {
         double subtotal = 0;
         double desc;
         double taxa;
-        taxa = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() * x.getImposto().getPercentagem();
-        desc = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() * desconto.getPercentagem();
+//        taxa = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() * x.getImposto().getPercentagem();
+//        desc = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() * desconto.getPercentagem();
         if (combTipoDoc.getValue() != null) {
             if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
-                subtotal = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() - desc;
+//                subtotal = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() - desc;
             } else {
-                subtotal = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() + taxa - desc;
+//                subtotal = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() + taxa - desc;
             }
         } else {
             AlertUtilities.showDialog("Erro", "Tipo de documento nao selecionado! Selecione o tipo de factura");
@@ -448,7 +448,7 @@ public class VendasController implements Initializable {
         }
         i.setSubtotal(subtotal);
         if (x.isControle_stock() == true) {
-            if (x.getStock().getSaldo() > qtd * qtd_por_unidade) {
+            if (/*x.getStock().getSaldo() >*/ qtd < qtd_por_unidade) {
                 tabelaItens.getItems().add(i);
                 resetProduto();
                 displayPrice();
@@ -532,14 +532,14 @@ public class VendasController implements Initializable {
             i = new Item();
             Produto p = mapaProdutos.get(item.getId());
             i.setProduto(p);
-            i.setPreco(item.getPreco());
+//            i.setPreco(item.getPreco());
             i.setQuantidade(item.getQuantidade());
             i.setUnidade_vendida(item.getUnidade_vendida());
             i.setQtd_por_unidade(item.getQtd_por_unidade());
             i.setSubtotal(item.getSubtotal());
-            Desconto desconto = mapaDesconto.get(item.getDesconto().getNome());
-            i.setDesconto(desconto);
-            i.setArmazem(p.getArmazem());
+//            Desconto desconto = mapaDesconto.get(item.getDesconto().getNome());
+//            i.setDesconto(desconto);
+//            i.setArmazem(p.getArmazem());
             i.setUsuario(userData);
             Factura f = new Factura();
             f.setNumero_fac(labNumeroFactura.getText());
@@ -557,19 +557,19 @@ public class VendasController implements Initializable {
         double total = 0;
         for (Item item : itens) {
             Produto x = mapaProdutos.get(item.getId());
-            if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
-                subtotal += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco();
-                taxa += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * x.getImposto().getPercentagem();
-                Desconto desconto = mapaDesconto.get(item.getDesconto().getNome());
-                desc += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * desconto.getPercentagem();
-                total = subtotal - desc;
-            } else {
-                subtotal += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco();
-                taxa += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * x.getImposto().getPercentagem();
-                Desconto desconto = mapaDesconto.get(item.getDesconto().getNome());
-                desc += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * desconto.getPercentagem();
-                total = subtotal + taxa - desc;
-            }
+//            if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
+//                subtotal += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco();
+//                taxa += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * x.getImposto().getPercentagem();
+//                Desconto desconto = mapaDesconto.get(item.getDesconto().getNome());
+//                desc += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * desconto.getPercentagem();
+//                total = subtotal - desc;
+//            } else {
+//                subtotal += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco();
+//                taxa += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * x.getImposto().getPercentagem();
+//                Desconto desconto = mapaDesconto.get(item.getDesconto().getNome());
+//                desc += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * desconto.getPercentagem();
+//                total = subtotal + taxa - desc;
+//            }
 
         }
         labSubtotal.setText(String.format("%.2f", subtotal));

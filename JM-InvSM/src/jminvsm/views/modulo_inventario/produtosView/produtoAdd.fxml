@@ -13,6 +13,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anchorProduto" prefHeight="909.0" prefWidth="1400.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.produtosView.ProdutoController">
@@ -23,7 +24,7 @@
                <children>
                   <HBox layoutX="10.0">
                      <children>
-                        <Button fx:id="btn_categorias" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="220.0" stylesheets="@../../../style/dashboard.css" text="Controle de categorias" textFill="WHITE">
+                        <Button fx:id="btn_categorias" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="220.0" stylesheets="@../../../style/dashboard.css" text="Controle de Categorias" textFill="WHITE">
                            <font>
                               <Font name="Berlin Sans FB" size="20.0" />
                            </font>
@@ -33,7 +34,7 @@
                               <String fx:value="hand-efect" />
                            </styleClass>
                         </Button>
-                        <Button fx:id="btn_taxas" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de taxas" textFill="WHITE">
+                        <Button fx:id="btn_taxas" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de Impostos" textFill="WHITE">
                            <font>
                               <Font name="Berlin Sans FB" size="20.0" />
                            </font>
@@ -46,7 +47,20 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="btn_unidades" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de unidades" textFill="WHITE">
+                        <Button fx:id="btn_unidades" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de Unidades" textFill="WHITE">
+                           <font>
+                              <Font name="Berlin Sans FB" size="20.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="secondary-color" />
+                              <String fx:value="shadow-efect" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btn_unidades1" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de Descontos" textFill="WHITE">
                            <font>
                               <Font name="Berlin Sans FB" size="20.0" />
                            </font>
@@ -65,21 +79,22 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="340.0" onMouseClicked="#selecionaProduto" prefHeight="569.0" prefWidth="1400.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="278.0" onMouseClicked="#selecionaProduto" prefHeight="388.0" prefWidth="1432.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="278.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
             <TableColumn fx:id="artigo" prefWidth="250.0" text="Artigo" />
             <TableColumn fx:id="codigobarras" prefWidth="150.0" text="Codigo de barras" />
-            <TableColumn fx:id="descricao" prefWidth="400.0" resizable="false" text="Descrição" />
-            <TableColumn fx:id="unidade" prefWidth="63.0" resizable="false" text="Unidade" />
-            <TableColumn fx:id="categoria" prefWidth="216.0" resizable="false" text="Categoria" />
-            <TableColumn fx:id="taxa" prefWidth="78.0" resizable="false" text="Taxa" />
-            <TableColumn fx:id="stock" prefWidth="57.0" resizable="false" text="Stock" />
-            <TableColumn fx:id="nivelStock" prefWidth="57.0" resizable="false" text="Nivel" />
-            <TableColumn fx:id="quantidade" prefWidth="68.0" resizable="false" text="Qtd." />
+            <TableColumn fx:id="preco" prefWidth="64.0" resizable="false" text="Preco" />
+            <TableColumn fx:id="descricao" prefWidth="325.0" resizable="false" text="Descrição" />
+            <TableColumn fx:id="unidade" prefWidth="82.0" resizable="false" text="Unidade" />
+            <TableColumn fx:id="categoria" prefWidth="203.0" resizable="false" text="Categoria" />
+            <TableColumn fx:id="taxa" prefWidth="110.0" resizable="false" text="Taxa" />
+            <TableColumn fx:id="stock" prefWidth="66.0" resizable="false" text="Stock" />
+            <TableColumn fx:id="nivelStock" prefWidth="56.0" resizable="false" text="Nivel" />
+            <TableColumn fx:id="quantidade" prefWidth="61.0" resizable="false" text="Qtd." />
          </columns>
       </TableView>
-      <AnchorPane prefHeight="243.0" prefWidth="1432.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <AnchorPane prefHeight="228.0" prefWidth="1432.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
             <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="14.0" layoutY="21.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
                <styleClass>
@@ -109,22 +124,22 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <TextArea fx:id="txtdescricaoProduto" layoutX="14.0" layoutY="122.0" prefHeight="64.0" prefWidth="240.0" promptText="Descricao" wrapText="true" />
+            <TextArea fx:id="txtdescricaoProduto" layoutX="14.0" layoutY="122.0" prefHeight="86.0" prefWidth="240.0" promptText="Descricao" wrapText="true" />
             <ComboBox fx:id="combCategoria" layoutX="271.0" layoutY="53.0" prefHeight="30.0" prefWidth="191.0" promptText="Caregoria" visibleRowCount="5" />
-            <ComboBox fx:id="combUnidade" layoutX="271.0" layoutY="87.0" prefHeight="30.0" prefWidth="191.0" promptText="Unidade" visibleRowCount="5" />
-            <ComboBox fx:id="combTaxa" layoutX="271.0" layoutY="122.0" prefHeight="30.0" prefWidth="191.0" promptText="Taxas/Impostos" visibleRowCount="5" />
-            <CheckBox fx:id="checkControle" layoutX="358.0" layoutY="157.0" mnemonicParsing="false" onAction="#stockControlChecked">
+            <ComboBox fx:id="combUnidade" layoutX="271.0" layoutY="90.0" prefHeight="30.0" prefWidth="191.0" promptText="Unidade" visibleRowCount="5" />
+            <ComboBox fx:id="combTaxa" layoutX="271.0" layoutY="128.0" prefHeight="30.0" prefWidth="191.0" promptText="Imposto" visibleRowCount="5" />
+            <CheckBox fx:id="checkControle" layoutX="559.0" layoutY="53.0" mnemonicParsing="false" onAction="#stockControlChecked">
                <font>
                   <Font size="18.0" />
                </font>
             </CheckBox>
-            <TextField fx:id="txtNivelStock" disable="true" layoutX="387.0" layoutY="159.0" prefHeight="26.0" prefWidth="75.0" promptText="Nivel" />
-            <Label layoutX="271.0" layoutY="157.0" prefHeight="30.0" prefWidth="82.0" text="Ctrl.Stock" textFill="WHITE">
+            <TextField fx:id="txtNivelStock" disable="true" layoutX="474.0" layoutY="92.0" prefHeight="26.0" prefWidth="114.0" promptText="Nivel" />
+            <Label layoutX="472.0" layoutY="53.0" prefHeight="30.0" prefWidth="82.0" text="Ctrl.Stock" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtPreco" alignment="CENTER_RIGHT" layoutX="604.0" layoutY="51.0" prefHeight="26.0" prefWidth="126.0" promptText="Preco normal" stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtPreco" alignment="CENTER_RIGHT" layoutX="474.0" layoutY="130.0" prefHeight="26.0" prefWidth="114.0" promptText="Preco Base" stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
@@ -135,21 +150,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtprecoExclTaxa" alignment="CENTER_RIGHT" editable="false" layoutX="604.0" layoutY="120.0" prefHeight="26.0" prefWidth="126.0" promptText="Preco Excl. taxa" stylesheets="@../../../style/dashboard.css">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </TextField>
-            <TextField fx:id="txtprecoInclTaxa" alignment="CENTER_RIGHT" editable="false" layoutX="604.0" layoutY="85.0" prefHeight="26.0" prefWidth="126.0" promptText="Preco Incl. taxa" stylesheets="@../../../style/dashboard.css">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </TextField>
-            <DatePicker fx:id="dataInicio" layoutX="468.0" layoutY="155.0" prefHeight="30.0" prefWidth="126.0" />
-            <DatePicker fx:id="dataFim" layoutX="603.0" layoutY="155.0" prefHeight="30.0" prefWidth="126.0" />
-            <Button fx:id="btnAddProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="581.0" layoutY="199.0" mnemonicParsing="false" onAction="#addORupdate" prefHeight="36.0" prefWidth="149.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="btnAddProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="271.0" layoutY="171.0" mnemonicParsing="false" onAction="#addORupdate" prefHeight="36.0" prefWidth="321.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -162,75 +163,138 @@
                   <Insets />
                </opaqueInsets>
             </Button>
-            <TableView fx:id="tabelaPrecos" layoutX="742.0" layoutY="32.0" onMouseClicked="#selecionaPreco" prefHeight="161.0" prefWidth="650.0" style="-fx-border-color: transparent; -fx-background-color: white;">
+            <TableView fx:id="tabelaPrecos" layoutX="608.0" layoutY="21.0" onMouseClicked="#selecionaPreco" prefHeight="185.0" prefWidth="559.0" style="-fx-border-color: transparent; -fx-background-color: white;">
                <columns>
                   <TableColumn fx:id="idPreco" prefWidth="50.0" text="ID" />
-                  <TableColumn fx:id="precoNormal" prefWidth="100.0" text="Preco Normal" />
-                  <TableColumn fx:id="precoComTaxa" prefWidth="100.0" text="Preco com taxas" />
-                  <TableColumn fx:id="precoSemTaxa" prefWidth="100.0" text="Preco sem taxas" />
-                  <TableColumn fx:id="dataInicial" prefWidth="100.0" text="De" />
-                  <TableColumn fx:id="dataFinal" prefWidth="100.0" text="Ate" />
+                  <TableColumn fx:id="precoNormal" prefWidth="100.0" text="Preco Base" />
+                  <TableColumn fx:id="precoComTaxa" prefWidth="100.0" text="Preco de Venda" />
+                  <TableColumn fx:id="precoSemTaxa" prefWidth="100.0" text="Preco Final" />
+                  <TableColumn fx:id="dataFinal" prefWidth="100.0" text="Validade" />
                   <TableColumn fx:id="estadoPreco" prefWidth="100.0" text="Estado" />
                </columns>
             </TableView>
-            <Label layoutX="468.0" layoutY="51.0" prefHeight="30.0" prefWidth="126.0" text="Preco Normal" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="468.0" layoutY="85.0" prefHeight="30.0" prefWidth="126.0" text="Preco C/ Taxa" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="468.0" layoutY="120.0" prefHeight="30.0" prefWidth="126.0" text="Preco S/ taxa" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="1216.0" layoutY="199.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="175.0" stylesheets="@../../../style/dashboard.css" text="Histórico de preçários" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <styleClass>
-                  <String fx:value="shadow-efect" />
-                  <String fx:value="hand-efect" />
-                  <String fx:value="secondary-color" />
-               </styleClass>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </Button>
+            <VBox layoutX="1189.0" layoutY="21.0" prefHeight="146.0" prefWidth="220.0">
+               <children>
+                  <ComboBox fx:id="combArmazemPesq" onMouseClicked="#populateCombos" prefHeight="30.0" prefWidth="220.0" promptText="Armazem" visibleRowCount="5">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </ComboBox>
+                  <ComboBox fx:id="combCategoriaPesq" prefHeight="30.0" prefWidth="220.0" promptText="Caregoria" visibleRowCount="5">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </ComboBox>
+                  <ComboBox fx:id="combUnidadePesq" prefHeight="30.0" prefWidth="220.0" promptText="Unidade" visibleRowCount="5">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </ComboBox>
+                  <ComboBox fx:id="combTaxaPesq" prefHeight="30.0" prefWidth="220.0" promptText="Impostos" visibleRowCount="5">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </ComboBox>
+                  <TextField fx:id="txtPesquisar" prefHeight="26.0" prefWidth="220.0" promptText="Pesquisar produto" stylesheets="@../../../style/dashboard.css">
+                     <styleClass>
+                        <String fx:value="text-squared-border" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </TextField>
+               </children>
+            </VBox>
          </children>
       </AnchorPane>
-      <HBox layoutX="10.0" layoutY="302.0">
+      <AnchorPane layoutY="622.0" prefHeight="243.0" prefWidth="1432.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0">
          <children>
-            <ComboBox fx:id="combArmazemPesq" onMouseClicked="#populateCombos" prefHeight="30.0" prefWidth="220.0" promptText="Armazem" visibleRowCount="5" />
-            <ComboBox fx:id="combCategoriaPesq" prefHeight="30.0" prefWidth="191.0" promptText="Caregoria" visibleRowCount="5">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-            </ComboBox>
-            <ComboBox fx:id="combUnidadePesq" prefHeight="30.0" prefWidth="191.0" promptText="Unidade" visibleRowCount="5">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-            </ComboBox>
-            <ComboBox fx:id="combTaxaPesq" prefHeight="30.0" prefWidth="191.0" promptText="Taxas/Impostos" visibleRowCount="5">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-            </ComboBox>
-            <TextField fx:id="txtPesquisar" prefHeight="26.0" prefWidth="321.0" promptText="Pesquisar produto" stylesheets="@../../../style/dashboard.css">
+            <Label fx:id="labIDPreco1" layoutX="468.0" layoutY="19.0" prefHeight="30.0" prefWidth="82.0" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <VBox layoutX="522.0" layoutY="64.0">
+               <children>
+                  <HBox>
+                     <children>
+                        <TextField fx:id="txtNomeProduto11" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="98.0" promptText="Percentagem" stylesheets="@../../../style/dashboard.css">
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets top="3.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="25.0" text="\%" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <DatePicker fx:id="dataInicio1" prefHeight="30.0" prefWidth="126.0">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </DatePicker>
+                  <DatePicker fx:id="dataFim1" prefHeight="30.0" prefWidth="126.0">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </DatePicker>
+                  <Button fx:id="btnAddProduto1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addORupdate" prefHeight="36.0" prefWidth="126.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="shadow-efect" />
+                        <String fx:value="hand-efect" />
+                        <String fx:value="secondary-color" />
+                     </styleClass>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Button>
+               </children>
+            </VBox>
+            <TableView fx:id="tabelaPrecos1" layoutY="49.0" onMouseClicked="#selecionaPreco" prefHeight="185.0" prefWidth="496.0" style="-fx-border-color: transparent; -fx-background-color: white;">
+               <columns>
+                  <TableColumn fx:id="idPreco1" prefWidth="50.0" text="ID" />
+                  <TableColumn fx:id="precoNormal1" prefWidth="176.0" text="Nome" />
+                  <TableColumn fx:id="precoComTaxa1" prefWidth="258.0" text="Descricao" />
+               </columns>
+            </TableView>
+            <TextField fx:id="txtIDProduto1" alignment="CENTER" disable="true" layoutX="10.0" layoutY="14.0" prefHeight="26.0" prefWidth="106.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
             </TextField>
+            <TextField fx:id="txtNomeProduto1" layoutX="124.0" layoutY="14.0" prefHeight="26.0" prefWidth="372.0" promptText="Pesquisa desconto" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TableView fx:id="tabelaPrecos11" layoutX="672.0" layoutY="49.0" onMouseClicked="#selecionaPreco" prefHeight="185.0" prefWidth="747.0" style="-fx-border-color: transparent; -fx-background-color: white;" AnchorPane.rightAnchor="0.0">
+               <columns>
+                  <TableColumn fx:id="idPreco11" prefWidth="190.0" text="Produto" />
+                  <TableColumn fx:id="precoNormal11" prefWidth="212.0" text="Armazem" />
+                  <TableColumn fx:id="precoComTaxa11" prefWidth="118.0" text="Desconto" />
+                  <TableColumn fx:id="precoComTaxa111" prefWidth="84.0" text="Data Inicio" />
+                  <TableColumn fx:id="precoComTaxa112" prefWidth="84.0" text="Data Fim" />
+                  <TableColumn fx:id="precoComTaxa113" prefWidth="45.0" text="\%" />
+               </columns>
+            </TableView>
+            <Label layoutX="685.0" layoutY="12.0" prefHeight="30.0" prefWidth="642.0" text="Descricao do Produto e Armazem onde o desconto e aplicado" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
          </children>
-      </HBox>
+      </AnchorPane>
    </children>
 </AnchorPane>

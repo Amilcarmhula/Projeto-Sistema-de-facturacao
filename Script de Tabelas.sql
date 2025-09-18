@@ -196,7 +196,18 @@ create table categoria(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     check(tipo in('Produtos','Serviços'))
 );
-
+select p.id as idProduto, p.nome as nomeProduto, p.codigo_barra, p.preco, p.descricao,p.controle_stock, p.nivelstock,
+	a.id as idArmazem, a.nome as nomeArmazem, a.tipo,
+    c.id as idCategoria, c.familia,
+	u.id as idUnidade, u.sigla as siglaUnidade,
+    i.id as idImposto, i.nome as nomeImposto,
+    s.saldo 
+	from stock s
+	join produto p on s.fk_id_produto=p.id
+    join armazem a on s.fk_id_armazem=a.id
+    join categoria c on p.fk_id_categoria=c.id
+    join unidade_medida u on p.fk_id_unidade_medida=u.id
+    join imposto i on p.fk_id_imposto=i.id;
 create table unidade_medida(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -204,6 +215,8 @@ create table unidade_medida(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
  
 -- create table taxa_imposto(
 -- 	id integer primary key auto_increment,
@@ -269,6 +282,8 @@ create table desconto(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
+
 select * from stock;
 create table produto(
 	id integer primary key auto_increment,
@@ -286,6 +301,9 @@ create table produto(
     foreign key (fk_id_categoria) references categoria(id),
     foreign key (fk_id_unidade_medida) references unidade_medida(id)
 );
+
+
+    
 select * from produtodesconto;
 create table produtodesconto(
 	idProduto integer not null,
@@ -472,8 +490,7 @@ create table movimento(
 ALTER TABLE movimento
 ADD COLUMN unidade_movimentada VARCHAR(20) DEFAULT 'Unidade',
 ADD COLUMN qtd_por_unidade INT DEFAULT 1;
-
-
+    
 create table stock(
 	fk_id_produto integer,
     fk_id_armazem integer,

@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/model/desconto/ProdutoDesconto.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/desconto/ProdutoDescontoDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/produto/ProdutoDAO.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/service/stock/ServiceStock.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_venda/pagamentosView/PagamentoController.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/service/armazem/ServiceArmazem.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_inventario/produtosView/ProdutoController.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/stock/StockDAO.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/armazem/ArmazemDAO.java</file>
         </group>
     </open-files>
 </project-private>

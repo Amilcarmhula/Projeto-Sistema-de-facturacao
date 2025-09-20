@@ -289,7 +289,7 @@ create table produto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
     codigo_barra varchar(50),
-    preco DECIMAL(10, 2) default 0.01 NULL,
+   -- preco DECIMAL(10, 2) default 0.01 NULL,
     descricao text,
     controle_stock boolean not null,
     nivelstock integer default 0,
@@ -302,6 +302,14 @@ create table produto(
     foreign key (fk_id_unidade_medida) references unidade_medida(id)
 );
 
+create table precoProdutoArmazem(
+	idProduto integer,
+    idArmazem integer,
+    preco DECIMAL(10, 2) default 0.01 NULL,
+    foreign key (idProduto) references produto(id) on delete cascade,
+    foreign key (idArmazem) references armazem(id)on delete cascade,
+    primary key(idProduto, idArmazem)
+);
 
     
 select * from produtodesconto;

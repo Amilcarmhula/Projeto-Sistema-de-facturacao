@@ -660,9 +660,9 @@ public class ProdutoController implements Initializable {
         combUnidade.setItems(FXCollections.observableArrayList(listaUni));
         combTaxa.setItems(FXCollections.observableArrayList(listaTax));
         
-        combCategoriaPesq.setItems(FXCollections.observableArrayList(listaCat));
-        combUnidadePesq.setItems(FXCollections.observableArrayList(listaUni));
-        combTaxaPesq.setItems(FXCollections.observableArrayList(listaTax));
+//        combCategoriaPesq.setItems(FXCollections.observableArrayList(listaCat));
+//        combUnidadePesq.setItems(FXCollections.observableArrayList(listaUni));
+//        combTaxaPesq.setItems(FXCollections.observableArrayList(listaTax));
         combArmazemPesq.setItems(FXCollections.observableArrayList(listaArm));
 
     }

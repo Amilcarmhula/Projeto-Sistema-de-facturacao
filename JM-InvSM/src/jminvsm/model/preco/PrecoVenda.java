@@ -4,6 +4,7 @@
  */
 package jminvsm.model.preco;
 
+import jminvsm.model.armazem.Armazem;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.usuario.Usuario;
 
@@ -21,18 +22,23 @@ public class PrecoVenda {
     private String dataValidade;
     private String estado;
     private Produto produto;
+    private Armazem armazem;
     private Usuario usuario;
     private String data_criacao;
 
     public PrecoVenda(){
     }
-    public PrecoVenda(double precoNormal, double precoVenda, double precoFinal, String dataValidade, 
-            Produto produto,Usuario usuario) {
+
+    public PrecoVenda(int id, double precoNormal, double precoVenda, double precoFinal, String data_inicio, String dataValidade, String estado, Produto produto, Armazem armazem, Usuario usuario) {
+        this.id = id;
+        this.precoNormal = precoNormal;
         this.precoVenda = precoVenda;
         this.precoFinal = precoFinal;
-        this.precoNormal = precoNormal;
+        this.data_inicio = data_inicio;
         this.dataValidade = dataValidade;
+        this.estado = estado;
         this.produto = produto;
+        this.armazem = armazem;
         this.usuario = usuario;
     }
 
@@ -84,12 +90,28 @@ public class PrecoVenda {
         this.dataValidade = dataValidade;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     public Produto getProduto() {
         return produto;
     }
 
     public void setProduto(Produto produto) {
         this.produto = produto;
+    }
+
+    public Armazem getArmazem() {
+        return armazem;
+    }
+
+    public void setArmazem(Armazem armazem) {
+        this.armazem = armazem;
     }
 
     public Usuario getUsuario() {
@@ -106,14 +128,6 @@ public class PrecoVenda {
 
     public void setData_criacao(String data_criacao) {
         this.data_criacao = data_criacao;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
     
 }

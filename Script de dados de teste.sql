@@ -49,7 +49,7 @@ INSERT INTO contacto_fornecedor (pessoa_de_contacto, contacto, email, website, f
 SELECT 'Fornecedor Padrao',contacto, email,website,(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM contacto_empresa order by id DESC LIMIT 1;
 
 INSERT INTO armazem (nome, tipo, descricao, estado) VALUE
-('Armazém Paddrap', 'Central', 'Armazem Principalo', 1);
+('Armazém Z', 'Central', 'Armazem Principalo', 1);
 
 INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, fk_id_armazem,fk_id_usuario) 
 SELECT provincia, cidade, bairro, avenida, rua, codigo_postal, numero,(Select id from armazem order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM endereco_empresa order by id DESC LIMIT 1;
@@ -70,8 +70,8 @@ INSERT INTO imposto (nome, percentagem, descricao) VALUE
 INSERT INTO desconto (nome, descricao) VALUE
 ('Isento', 'Desconto aplicado em produtos sem desconto');
 
-INSERT INTO produto (nome, codigo_barra, preco, descricao, controle_stock,fk_id_categoria,fk_id_unidade_medida,fk_id_imposto) 
-SELECT 'Produto Padrao','1000000000001', 100.55, 'Produto Padrao',1,(Select id from categoria order by id DESC LIMIT 1),(Select id from unidade_medida order by id DESC LIMIT 1),(Select id from imposto order by id DESC LIMIT 1);
+INSERT INTO produto (nome, codigo_barra, descricao, controle_stock,fk_id_categoria,fk_id_unidade_medida,fk_id_imposto) 
+SELECT 'Produto Arm Z','1000000000001', 'Produto Padrao',1,(Select id from categoria order by id DESC LIMIT 1),(Select id from unidade_medida order by id DESC LIMIT 1),(Select id from imposto order by id DESC LIMIT 1);
 
 INSERT INTO produto_fornecido (quantidade, data_fornecida,unidade_fornecida, qtd_por_unidade, custo, fk_id_armazem,fk_id_produto,fk_id_fornecedor,fk_id_usuario) 
 SELECT 0,current_date(),'unidade',0, 0.00, (Select id from armazem order by id DESC LIMIT 1),(Select id from produto order by id DESC LIMIT 1),(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1);

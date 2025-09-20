@@ -21,6 +21,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -83,7 +85,7 @@ public class ProdutoController implements Initializable {
     @FXML
     private TableColumn<Stock, String> ID;
     @FXML
-    private TableColumn<Stock, String> preco;
+    private TableColumn<Stock, String> armazem;
     @FXML
     private TableColumn<Stock, String> artigo;
     @FXML
@@ -130,13 +132,15 @@ public class ProdutoController implements Initializable {
     private ComboBox<String> combUnidade;
     @FXML
     private ComboBox<String> combTaxa;
-    
+
     @FXML
     private ComboBox<String> combCategoriaPesq;
     @FXML
     private ComboBox<String> combUnidadePesq;
     @FXML
     private ComboBox<String> combTaxaPesq;
+    @FXML
+    private ComboBox<String> combTipoArmazemPesq;
     @FXML
     private ComboBox<String> combArmazemPesq;
 
@@ -198,7 +202,7 @@ public class ProdutoController implements Initializable {
         }
     }
 
-    public void addORupdate(ActionEvent e){
+    public void addORupdate(ActionEvent e) {
         if ("".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
             addProduto(e);
         } else if (!"".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
@@ -251,12 +255,12 @@ public class ProdutoController implements Initializable {
         });
     }
 
-    public void getDataOnFocus(){
+    public void getDataOnFocus() {
         tabelaProduto.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
-                        showInvenarioProdutos();
+                    showInvenarioProdutos();
                 }
             }
         });
@@ -284,7 +288,7 @@ public class ProdutoController implements Initializable {
         populateCombos();
         precoListener();
         ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
-        
+
         combArmazemPesq.getSelectionModel().select(1);
         combArmazemPesq.requestFocus();
     }
@@ -294,21 +298,20 @@ public class ProdutoController implements Initializable {
 
     private Map<Integer, Stock> mapaProdutos;
 
-    public void showInvenarioProdutos(){
+    public void showInvenarioProdutos() {
 //        listaProduto = serProduto.getProdutos();
         listaProduto = serStock.listaInvenarioProdutos();
 
         mapaProdutos = new HashMap<>();
         for (Stock s : listaProduto) {
-//            mapaProdutos.put(s.getId(), s);
+            mapaProdutos.put(s.getProduto().getId(), s);
         }
 
-        ID.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getId()))); 
-        preco.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPreco())));
+        ID.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getId())));
+        armazem.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getArmazem().getNome_arm()+": "+cellData.getValue().getArmazem().getTipo())));
         artigo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
         codigobarras.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCodigo_barra()));
         descricao.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getDescricao()));
-
         unidade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getUnidade_medida().getSigla()));
         categoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCategoria().getFamilia()));
         taxa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getImposto().getNome()));
@@ -341,158 +344,102 @@ public class ProdutoController implements Initializable {
         };
         stock.setCellFactory(cellFoctory2);
 
-                //        FilteredList<Produto> dadosFiltrados = new FilteredList<>(listaProduto, b -> true);
-                //        // Método auxiliar para atualizar o filtro com base nas duas ComboBox
-                //        Runnable atualizarFiltro = () -> {
-                //            dadosFiltrados.setPredicate(x -> {
-                //                String armazemSelecionada = combArmazemPesq.getValue();
-                //                String categoriaSelecionada = combCategoriaPesq.getValue();
-                //                String unidadeSelecionada = combUnidadePesq.getValue();
-                //                String taxaSelecionada = combTaxaPesq.getValue();
-                //                
-                //                if(armazemSelecionada == null || armazemSelecionada.equals("Todos...")){
-                //                    armazemSelecionada = "";
-                //                }
-                //                if(categoriaSelecionada == null || categoriaSelecionada.equals("Todas...")){
-                //                    categoriaSelecionada = "";
-                //                }
-                //                if(unidadeSelecionada == null || unidadeSelecionada.equals("Todas...")){
-                //                    unidadeSelecionada = "";
-                //                }
-                //                if(taxaSelecionada == null || taxaSelecionada.equals("Todas...")){
-                //                    taxaSelecionada = "";
-                //                }
-                //                
-                //                // Verifica o filtro de armazem
-                //                boolean armazemValida = ( armazemSelecionada.isEmpty())
-                //                        || x.getArmazem().getNome_arm().toLowerCase().contains(armazemSelecionada.toLowerCase());
-                //
-                //                // Verifica o filtro da categoria
-                //                boolean categoriaValida = ( categoriaSelecionada.isEmpty())
-                //                        || x.getCategoria().getFamilia().toLowerCase().contains(categoriaSelecionada.toLowerCase());
-                //
-                //                // Verifica o filtro da unidade
-                //                boolean unidadeValida = ( unidadeSelecionada.isEmpty())
-                //                        || x.getUnidade_medida().getIdentificador().toLowerCase().contains(unidadeSelecionada.toLowerCase());
-                //                
-                //                // Verifica o filtro da unidade
-                //                boolean taxaValida = ( taxaSelecionada.isEmpty())
-                //                        || x.getImposto().getNome().toLowerCase().contains(taxaSelecionada.toLowerCase());
-                //
-                //                // Retorna verdadeiro somente se ambos os filtros forem válidos
-                //                return armazemValida && categoriaValida && unidadeValida && taxaValida;
-                //            });
-                //        };
+        FilteredList<Stock> dadosFiltrados = new FilteredList<>(listaProduto, b -> true);
+        // Método auxiliar para atualizar o filtro com base nas duas ComboBox
+        Runnable atualizarFiltro = () -> {
+            dadosFiltrados.setPredicate(x -> {
+                String armazemSelecionada = combArmazemPesq.getValue();
+                String armazemTipoSelecionada = combTipoArmazemPesq.getValue();
 
-                    //        // Adiciona listeners para atualizar o filtro sempre que a seleção mudar
-                    //        combCategoriaPesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
-                    //        combArmazemPesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
-                    //        combUnidadePesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
-                    //        combTaxaPesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
 
-//        txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
-//            dadosFiltrados.setPredicate(x -> {
-//
-//                if (newValue == null || newValue.isEmpty()) {
-//                    return true;
-//                }
-//                String filtroCaixaBaixa = newValue.toLowerCase();
-//                if (x.getNomeProduto().toLowerCase().contains(filtroCaixaBaixa)) {
-//                    return true;
-//                } else if (x.getCodigo_barra().toLowerCase().contains(filtroCaixaBaixa)) {
-//                    return true;
-//                } else if (x.getUnidade_medida().getIdentificador().toLowerCase().contains(filtroCaixaBaixa)) {
-//                    return true;
-//                } else if (x.getDescricao().toLowerCase().contains(filtroCaixaBaixa)) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//
-//            });
-//        });
-//
-//        // Adiciona um listener à ComboBox para definir o filtro quando um item é selecionado
-//        combArmazem.valueProperty().addListener((observable, oldValue, newValue) -> {
-//            dadosFiltrados.setPredicate(x -> {
-//                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
-//                if (newValue == null || newValue.isEmpty()) {
-//                    return true;
-//                }
-//                // Converte o filtro para caixa baixa para facilitar a busca
-//                String filtroCaixaBaixa = newValue.toLowerCase();
-//
-//                // Aplica o filtro com base na seleção da ComboBox
-//                if (x.getArmazem().getNome_arm().toLowerCase().contains(filtroCaixaBaixa)) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            });
-//
-//        });
-//        
-//        combCategoria.valueProperty().addListener((observable, oldValue, newValue) -> {
-//            dadosFiltrados.setPredicate(x -> {
-//                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
-//                if (newValue == null || newValue.isEmpty()) {
-//                    return true;
-//                }
-//                // Converte o filtro para caixa baixa para facilitar a busca
-//                String filtroCaixaBaixa = newValue.toLowerCase();
-//
-//                // Aplica o filtro com base na seleção da ComboBox
-//                if (x.getCategoria().getFamilia().toLowerCase().contains(filtroCaixaBaixa)) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            });
-//
-//        });
-//
-//        // Adiciona um listener à ComboBox para definir o filtro quando um item é selecionado
-//        combUnidade.valueProperty().addListener((observable, oldValue, newValue) -> {
-//            dadosFiltrados.setPredicate(x -> {
-//                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
-//                if (newValue == null || newValue.isEmpty()) {
-//                    return true;
-//                }
-//                // Converte o filtro para caixa baixa para facilitar a busca
-//                String filtroCaixaBaixa = newValue.toLowerCase();
-//                // Aplica o filtro com base na seleção da ComboBox
-//                if (x.getUnidade_medida().getIdentificador().toLowerCase().contains(filtroCaixaBaixa)) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            });
-//        });
-//
-//        // Adiciona um listener à ComboBox para definir o filtro quando um item é selecionado
-//        combTaxa.valueProperty().addListener((observable, oldValue, newValue) -> {
-//            dadosFiltrados.setPredicate(x -> {
-//                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
-//                if (newValue == null || newValue.isEmpty()) {
-//                    return true;
-//                }
-//                // Converte o filtro para caixa baixa para facilitar a busca
-//                String filtroCaixaBaixa = newValue.toLowerCase();
-//
-//                // Aplica o filtro com base na seleção da ComboBox
-//                if (x.getTaxa_imposto().getNomeImposto().toLowerCase().contains(filtroCaixaBaixa)) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            });
-//        });
-//
-            //        SortedList<Produto> sortedData = new SortedList<>(dadosFiltrados);
-            //        sortedData.comparatorProperty().bind(tabelaProduto.comparatorProperty());
-            //
-//                    tabelaProduto.setItems(sortedData);
-                    tabelaProduto.setItems(listaProduto);
+                if (armazemSelecionada == null || armazemSelecionada.equals("Todos...")) {
+                    armazemSelecionada = "";
+                }
+                if (armazemTipoSelecionada == null || armazemTipoSelecionada.equals("Todas...")) {
+                    armazemTipoSelecionada = "";
+                }
+
+                // Verifica o filtro de armazem
+                boolean armazemValida = (armazemSelecionada.isEmpty())
+                        || x.getArmazem().getNome_arm().toLowerCase().contains(armazemSelecionada.toLowerCase());
+
+                // Verifica o filtro da categoria
+                boolean armazemTipoValida = (armazemTipoSelecionada.isEmpty())
+                        || x.getArmazem().getTipo().toLowerCase().contains(armazemTipoSelecionada.toLowerCase());
+
+                // Retorna verdadeiro somente se ambos os filtros forem válidos
+                return armazemValida && armazemTipoValida;
+            });
+        };
+
+        // Adiciona listeners para atualizar o filtro sempre que a seleção mudar
+        combArmazemPesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
+        combTipoArmazemPesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
+
+        txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
+            dadosFiltrados.setPredicate(x -> {
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String filtroCaixaBaixa = newValue.toLowerCase();
+                if (x.getProduto().getNome().toLowerCase().contains(filtroCaixaBaixa)) {
+                    return true;
+                } else if (x.getProduto().getCodigo_barra().toLowerCase().contains(filtroCaixaBaixa)) {
+                    return true;
+                } else if (x.getProduto().getDescricao().toLowerCase().contains(filtroCaixaBaixa)) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            });
+        });
+
+        // Adiciona um listener à ComboBox para definir o filtro quando um item é selecionado
+        combArmazemPesq.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dadosFiltrados.setPredicate(x -> {
+                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                // Converte o filtro para caixa baixa para facilitar a busca
+                String filtroCaixaBaixa = newValue.toLowerCase();
+
+                // Aplica o filtro com base na seleção da ComboBox
+                if (x.getArmazem().getNome_arm().toLowerCase().contains(filtroCaixaBaixa)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
+        });
+
+        combTipoArmazemPesq.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dadosFiltrados.setPredicate(x -> {
+                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                // Converte o filtro para caixa baixa para facilitar a busca
+                String filtroCaixaBaixa = newValue.toLowerCase();
+
+                // Aplica o filtro com base na seleção da ComboBox
+                if (x.getArmazem().getTipo().toLowerCase().contains(filtroCaixaBaixa)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
+        });
+
+        SortedList<Stock> sortedData = new SortedList<>(dadosFiltrados);
+        sortedData.comparatorProperty().bind(tabelaProduto.comparatorProperty());
+        //
+        tabelaProduto.setItems(sortedData);
+//        tabelaProduto.setItems(listaProduto);
 
     }
 
@@ -503,7 +450,7 @@ public class ProdutoController implements Initializable {
     }
 
 //  ############################################################################
-    public void addProduto(ActionEvent e){
+    public void addProduto(ActionEvent e) {
         if (combCategoria.getValue() == null) {
             AlertUtilities.showErroAlert("Categoria nao selecionada!");
             return;
@@ -530,7 +477,7 @@ public class ProdutoController implements Initializable {
         stockControlChecked();
     }
 
-    public void addPrecoVenda(ActionEvent e){
+    public void addPrecoVenda(ActionEvent e) {
         double precoNorm = Double.parseDouble(txtPreco.getText());
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
@@ -541,7 +488,7 @@ public class ProdutoController implements Initializable {
         resetCampos();
     }
 
-    public void addPrecoVendaONSelected(){
+    public void addPrecoVendaONSelected() {
         if (txtPreco.getText().equals("")) {
             return;
         }
@@ -659,7 +606,7 @@ public class ProdutoController implements Initializable {
         combCategoria.setItems(FXCollections.observableArrayList(listaCat));
         combUnidade.setItems(FXCollections.observableArrayList(listaUni));
         combTaxa.setItems(FXCollections.observableArrayList(listaTax));
-        
+
 //        combCategoriaPesq.setItems(FXCollections.observableArrayList(listaCat));
 //        combUnidadePesq.setItems(FXCollections.observableArrayList(listaUni));
 //        combTaxaPesq.setItems(FXCollections.observableArrayList(listaTax));
@@ -670,32 +617,32 @@ public class ProdutoController implements Initializable {
 
     public void selecionaProduto(MouseEvent event) {
         Stock x = tabelaProduto.getSelectionModel().getSelectedItem();
-//        if (x != null) {
-//            Stock p = mapaProdutos.get(x.getId());
-//
-//            txtNivelStock.setText(String.valueOf(p.getNivelstock()));
-//            txtIDProduto.setText(String.valueOf(p.getId()));
-//            txtNomeProduto.setText(p.getNome());
-//            txtcodigobarrasProduto.setText(p.getCodigo_barra());
-//            txtdescricaoProduto.setText(p.getDescricao());
-//            checkControle.setSelected(p.isControle_stock());
-//            combCategoria.setValue(p.getCategoria().getFamilia());
-//            combUnidade.setValue(p.getUnidade_medida().getIdentificador());
-//            combTaxa.setValue(p.getImposto().getNome());
-//            stockControlChecked();
+        if (x != null) {
+            Stock s = mapaProdutos.get(x.getProduto().getId());
+
+            txtNivelStock.setText(String.valueOf(s.getProduto().getNivelstock()));
+            txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
+            txtNomeProduto.setText(s.getProduto().getNome());
+            txtcodigobarrasProduto.setText(s.getProduto().getCodigo_barra());
+            txtdescricaoProduto.setText(s.getProduto().getDescricao());
+            checkControle.setSelected(s.getProduto().isControle_stock());
+            combCategoria.setValue(s.getProduto().getCategoria().getFamilia());
+            combUnidade.setValue(s.getProduto().getUnidade_medida().getNome());
+            combTaxa.setValue(s.getProduto().getImposto().getNome());
+            stockControlChecked();
 //            showPrecoVenda();
-//            
-//            if (event.getClickCount() == 2 && p.isControle_stock()) {
-//                SysFact.setData(p);
-//                getStockView(event);
-//            }
-//            deleteProduto(event, x);
-//            ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
-//        }
+
+            if (event.getClickCount() == 2 && s.getProduto().isControle_stock()) {
+                SysFact.setData(s);
+                getStockView(event);
+            }
+            deleteProduto(event, x);
+            ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
+        }
 
     }
 
-    public void deleteProduto(MouseEvent event, Produto x) {
+    public void deleteProduto(MouseEvent event, Stock x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -708,7 +655,7 @@ public class ProdutoController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                serProduto.excluir(x.getId());
+                serProduto.excluir(x.getProduto().getId());
                 showInvenarioProdutos();
                 resetCampos();
             } else if (result.get() == btnCancel) {
@@ -734,7 +681,7 @@ public class ProdutoController implements Initializable {
         }
     }
 
-    public void deletePreco(MouseEvent event, PrecoVenda x){
+    public void deletePreco(MouseEvent event, PrecoVenda x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
@@ -773,7 +720,6 @@ public class ProdutoController implements Initializable {
 //
 //        tabelaPrecos.setItems(listaPrecos);
 //    }
-
 //  ############################################################################
     public void resetCampos() {
         labIDPreco.setText("");

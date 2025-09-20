@@ -144,22 +144,22 @@ public class ProdutoDescontoDAO {
         ProdutoDescontoDAO dao = new ProdutoDescontoDAO();
         ProdutoDesconto pd = new ProdutoDesconto();
         Produto p = new Produto();
-        p.setId(4);
+        p.setId(6);
         pd.setProduto(p);
         Armazem a = new Armazem();
         a.setId(2);
         pd.setArmazem(a);
         Desconto d = new Desconto();
-        d.setId(1);
+        d.setId(2);
         pd.setDesconto(d);
-        pd.setPercentagem(0.0);
-        pd.setDataInicio("2025-09-13");
-        pd.setDataFim("2025-09-3");
+        pd.setPercentagem(7.0);
+        pd.setDataInicio("2025-09-03");
+        pd.setDataFim("2025-09-21");
         dao.addEntity(pd);
         
-        for(ProdutoDesconto des: dao.listAll()){
-            System.out.println(des.getPercentagem());
-        }
+//        for(ProdutoDesconto des: dao.listAll()){
+//            System.out.println(des.getPercentagem());
+//        }
         
 //        dao.delete(pd);
         

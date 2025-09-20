@@ -13,10 +13,14 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
+import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.imposto.Imposto;
+import jminvsm.model.preco.PrecoProdutoArmazem;
+import jminvsm.model.stock.Stock;
 import jminvsm.model.unidade_medida.UnidadeMedida;
+import jminvsm.util.AlertUtilities;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
@@ -38,20 +42,19 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     public boolean addEntity(Produto t) {
         boolean isSuccess = false;
         try {
-            sql = "insert into produto (nome, codigo_barra, preco, descricao,fk_id_categoria, "
-                    + "fk_id_unidade_medida,fk_id_imposto,controle_stock,nivelstock) value (?,?,?,?,?,?,?,?,?)";
+            sql = "insert into produto (nome, codigo_barra, descricao,fk_id_categoria, "
+                    + "fk_id_unidade_medida,fk_id_imposto,controle_stock,nivelstock) value (?,?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNome());
             ps.setString(2, t.getCodigo_barra());
-            ps.setDouble(3, t.getPreco());
-            ps.setString(4, t.getDescricao());
-            ps.setInt(5, t.getCategoria().getId());
-            ps.setInt(6, t.getUnidade_medida().getId());
-            ps.setInt(7, t.getImposto().getId());
-            ps.setBoolean(8, t.isControle_stock());
-            ps.setInt(9, t.getNivelstock());
+            ps.setString(3, t.getDescricao());
+            ps.setInt(4, t.getCategoria().getId());
+            ps.setInt(5, t.getUnidade_medida().getId());
+            ps.setInt(6, t.getImposto().getId());
+            ps.setBoolean(7, t.isControle_stock());
+            ps.setInt(8, t.getNivelstock());
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -78,20 +81,19 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     public boolean updateEntityByID(Produto t, int id) {
         boolean isSuccess = false;
         try {
-            sql = "update produto set nome=?,codigo_barra=?, preco=? ,descricao=?,fk_id_categoria=?, "
+            sql = "update produto set nome=?,codigo_barra=? ,descricao=?,fk_id_categoria=?, "
                     + "fk_id_unidade_medida=?,fk_id_imposto=?, nivelstock=?, controle_stock=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNome());
             ps.setString(2, t.getCodigo_barra());
-            ps.setDouble(3, t.getPreco());
-            ps.setString(4, t.getDescricao());
-            ps.setInt(5, t.getCategoria().getId());
-            ps.setInt(6, t.getUnidade_medida().getId());
-            ps.setInt(7, t.getImposto().getId());
-            ps.setInt(8, t.getNivelstock());
-            ps.setBoolean(9, t.isControle_stock());
-            ps.setInt(10, id);
+            ps.setString(3, t.getDescricao());
+            ps.setInt(4, t.getCategoria().getId());
+            ps.setInt(5, t.getUnidade_medida().getId());
+            ps.setInt(6, t.getImposto().getId());
+            ps.setInt(7, t.getNivelstock());
+            ps.setBoolean(8, t.isControle_stock());
+            ps.setInt(9, id);
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -118,7 +120,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     public ObservableList<Produto> getCombinedEntities() {
         ObservableList<Produto> lista = FXCollections.observableArrayList();
         try {
-            sql = "SELECT p.id, p.nome, p.codigo_barra, p.preco, p.descricao, p.controle_stock, p.nivelstock, "
+            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
                     + "		c.id as id_categoria, c.familia as categoria,"
                     + "         u.id as id_unidade, u.identificador, u.sigla,"
                     + "         t.id as id_taxa, t.nome as taxa, t.percentagem,"
@@ -133,8 +135,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setId(result.getInt("id"));
                 p.setNome(result.getString("nome"));
                 p.setCodigo_barra(result.getString("codigo_barra"));
-                p.setCodigo_barra(result.getString("codigo_barra"));
-                p.setPreco(result.getDouble("preco"));
                 p.setDescricao(result.getString("descricao"));
                 p.setNivelstock(result.getInt("nivelstock"));
                 Categoria cat = new Categoria();
@@ -173,7 +173,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setId(result.getInt("id"));
                 p.setNome(result.getString("nome"));
                 p.setCodigo_barra(result.getString("codigo_barra"));
-                p.setPreco(result.getDouble("preco"));
                 p.setDescricao(result.getString("descricao"));
                 p.setNivelstock(result.getInt("nivelstock"));
                 Categoria cat = new Categoria();
@@ -196,6 +195,68 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         return lista;
     }
 
+    public ObservableList<Stock> listInventario() {
+        ObservableList<Stock> lista = FXCollections.observableArrayList();
+        try {
+            sql = "select p.id as idProduto, p.nome as nomeProduto, p.codigo_barra, p.descricao,p.controle_stock, p.nivelstock, "
+                    + "	a.id as idArmazem, a.nome as nomeArmazem, a.tipo, "
+                    + " c.id as idCategoria, c.familia, "
+                    + "	u.id as idUnidade, u.sigla as siglaUnidade, "
+                    + " i.id as idImposto, i.nome as nomeImposto, "
+                    + " pv.precoNormal, pv.precoVenda, pv.precoFinal, "
+                    + " s.saldo "
+                    + "	from  produto p "
+                    + "	join stock s on p.id=s.fk_id_produto "
+                    + " join precovenda pv on p.id=pv.idProduto and s.fk_id_armazem=pv.idArmazem "
+                    + " join armazem a on s.fk_id_armazem=a.id "
+                    + " join categoria c on p.fk_id_categoria=c.id "
+                    + " join unidade_medida u on p.fk_id_unidade_medida=u.id "
+                    + " join imposto i on p.fk_id_imposto=i.id ";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                Stock s = new Stock();
+                Produto p = new Produto();
+                p.setId(result.getInt("idProduto"));
+                p.setNome(result.getString("nomeProduto"));
+                p.setCodigo_barra(result.getString("codigo_barra"));
+                p.setDescricao(result.getString("descricao"));
+                p.setControle_stock(result.getBoolean("controle_stock"));
+                p.setNivelstock(result.getInt("nivelstock"));
+                PrecoProdutoArmazem ppa = new PrecoProdutoArmazem();
+                ppa.setPreco(result.getDouble("PrecoProdutoArmazem"));
+                Armazem a = new Armazem();
+                ppa.setArmazem(a);
+                a.setId(result.getInt("idArmazem"));
+                a.setNome_arm(result.getString("nomeArmazem"));
+                a.setTipo(result.getString("tipo"));
+                s.setArmazem(a);
+                Categoria c = new Categoria();
+                c.setId(result.getInt("idCategoria"));
+                c.setFamilia(result.getString("familia"));
+                p.setCategoria(c);
+                UnidadeMedida u = new UnidadeMedida();
+                u.setId(result.getInt("idUnidade"));
+                u.setSigla(result.getString("siglaUnidade"));
+                p.setUnidade_medida(u);
+                Imposto i = new Imposto();
+                i.setId(result.getInt("idImposto"));
+                i.setNome(result.getString("nomeImposto"));
+                p.setImposto(i);
+                s.setProduto(p);
+                s.setSaldo(result.getInt("saldo"));
+                lista.add(s);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            System.out.println("Erro Detalhes: " + ex);
+            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
+
+        }
+        return lista;
+    }
+
     /*Busca o ID do ultimo produto adicionado para poder acicionar o preco*/
     @Override
     public Produto getLastEntity() {
@@ -209,7 +270,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setId(result.getInt("id"));
                 p.setNome(result.getString("nome"));
                 p.setCodigo_barra(result.getString("codigo_barra"));
-                p.setPreco(result.getDouble("preco"));
                 p.setDescricao(result.getString("descricao"));
                 p.setNivelstock(result.getInt("nivelstock"));
                 Categoria cat = new Categoria();
@@ -222,7 +282,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 t.setId(result.getInt("fk_id_imposto"));
                 p.setImposto(t);
                 p.setControle_stock(result.getBoolean("controle_stock"));
-                
+
             }
             result.close();
             ps.close();
@@ -255,7 +315,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            System.out.println("Erro de contagem: " + ex); 
+            System.out.println("Erro de contagem: " + ex);
 //            showDialog("Erro de contagem", "Detalhes: " + ex);
 
         }
@@ -278,7 +338,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             }
 
         } catch (SQLException ex) {
-            System.out.println("Erro: "+ex);
+            System.out.println("Erro: " + ex);
 //            showDialog("Erro de exclusao", "Detalhes: " + ex);
         } finally {
             try {
@@ -296,7 +356,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         Produto p = new Produto();
         p.setNome("Prod sem IVA");
         p.setCodigo_barra("1234567890124");
-        p.setPreco(150);
         p.setDescricao("Descricar de teste do Produto 4");
         p.setControle_stock(true);
         p.setNivelstock(14);
@@ -314,10 +373,10 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         for (Produto pro : dao.listAllEntities()) {
             System.out.println(pro.getNome());
         }
-        System.out.println("O Last: "+dao.getLastEntity().getNivelstock());
+        System.out.println("O Last: " + dao.getLastEntity().getNivelstock());
 //        dao.deleteEntity(2);
-        System.out.println("O Last: "+dao.getLastEntity().getNivelstock());
-        
+        System.out.println("O Last: " + dao.getLastEntity().getNivelstock());
+
     }
 
 }

@@ -4,6 +4,7 @@
  */
 package jminvsm.model.produto;
 
+import java.util.List;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.preco.PrecoVenda;
@@ -20,12 +21,12 @@ public class Produto {
     private int id;
     private String nome;
     private String codigo_barra;
-    private double preco;
     private String descricao;
     private boolean controle_stock;
     private int nivelstock;
     private Categoria categoria;
     private UnidadeMedida unidade_medida;
+    private List<PrecoVenda> precoVenda;
     private Imposto imposto;
     private String data_criacao;
 
@@ -33,13 +34,12 @@ public class Produto {
         super();
     }
 
-    public Produto(String nome, String codigo_barra, double preco, String descricao, 
+    public Produto(String nome, String codigo_barra, String descricao, 
             boolean contole_stock, int nivelstock, Categoria categoria, UnidadeMedida unidade_medida,
             Imposto taxa_imposto) {
         super();
         this.nome = nome;
         this.codigo_barra = codigo_barra;
-        this.preco = preco;
         this.descricao = descricao;
         this.controle_stock = contole_stock;
         this.categoria = categoria;
@@ -71,17 +71,7 @@ public class Produto {
 
     public void setCodigo_barra(String codigo_barra) {
         this.codigo_barra = codigo_barra;
-    }
-
-    public double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(double preco) {
-        this.preco = preco;
-    }
-    
-    
+    } 
 
     public String getDescricao() {
         return descricao;
@@ -139,4 +129,14 @@ public class Produto {
     public void setData_criacao(String data_criacao) {
         this.data_criacao = data_criacao;
     }
+
+    public List<PrecoVenda> getPrecoVenda() {
+        return precoVenda;
+    }
+
+    public void setPrecoVenda(List<PrecoVenda> precoVenda) {
+        this.precoVenda = precoVenda;
+    }
+    
+    
 }

@@ -28,6 +28,7 @@ import jminvsm.SysFact;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.produto.Produto;
+import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.fornecedor.ServiceFornecedor;
@@ -123,8 +124,8 @@ public class AddStockController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 //        priceFormaterProduto();
-        Produto p = (Produto) SysFact.getData();
-        txtIDProduto.setText(String.valueOf(p.getId()));
+        Stock s = (Stock) SysFact.getData();
+        txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
         try {
             service = new ServiceProdutoFornecido();
             serviceArmazem = new ServiceArmazem();

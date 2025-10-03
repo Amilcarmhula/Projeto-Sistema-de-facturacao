@@ -290,7 +290,6 @@ create table produto(
 );
 
 
-
 create table precoProdutoArmazem(
 	idProduto integer,
     idArmazem integer,
@@ -308,56 +307,16 @@ create table produtodesconto(
     idArmazem integer not null,
     dataInicio date not null,
     dataFim date not null,
-    percentagem decimal(4,3),
+    percentagem decimal(4,2),
     foreign key (idProduto) references produto(id) on delete cascade,
     foreign key (idDesconto) references desconto(id) on delete cascade,
     foreign key (idArmazem) references armazem(id)on delete cascade,
     primary key(idProduto, idDesconto, idArmazem, dataInicio, dataFim)
 );
+-- ALTER TABLE produtodesconto 
+-- MODIFY COLUMN percentagem DECIMAL(4,2);
 
-select * from produtodesconto;
-select * from precovenda;
-select * from precoProdutoArmazem;
-select * from produto;
-select * from stock;
-select * from produtodesconto;
-select * from desconto;
-select * from imposto;
-select * from precovenda;
 
-select p.id as idProduto, p.nome as nomeProduto, p.codigo_barra, p.descricao,p.controle_stock, p.nivelstock,
-	a.id as idArmazem, a.nome as nomeArmazem, a.tipo,
-    c.id as idCategoria, c.familia,
-	u.id as idUnidade, u.sigla as siglaUnidade,
-    i.id as idImposto, i.nome as nomeImposto,
-    pv.precoNormal, pv.precoVenda, pv.precoFinal,
-    s.saldo 
-	from stock s
-	join produto p on s.fk_id_produto=p.id
-    join precovenda pv on p.id=pv.idProduto and s.fk_id_armazem=pv.idArmazem
-    join armazem a on s.fk_id_armazem=a.id
-    join categoria c on p.fk_id_categoria=c.id
-    join unidade_medida u on p.fk_id_unidade_medida=u.id
-    join imposto i on p.fk_id_imposto=i.id;
-    
-    
-SELECT p.id AS idProduto, p.nome AS nomeProduto, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, 
-                     a.id AS idArmazem, a.nome AS nomeArmazem, a.tipo, 
-                     c.id AS idCategoria, c.familia, 
-                     u.id AS idUnidade, u.sigla AS siglaUnidade, 
-                     i.id AS idImposto, i.nome AS nomeImposto, 
-                     pv.id AS idPrecoVenda, pv.precoNormal, pv.precoVenda, pv.precoFinal, pv.dataValidade, pv.estado, pv.fk_id_usuario, pv.data_criacao, 
-                     s.saldo 
-                    FROM stock s 
-                     JOIN produto p ON s.fk_id_produto = p.id 
-                     JOIN precovenda pv ON p.id = pv.idProduto AND s.fk_id_armazem = pv.idArmazem 
-                     JOIN armazem a ON s.fk_id_armazem = a.id 
-                     JOIN categoria c ON p.fk_id_categoria = c.id 
-                     JOIN unidade_medida u ON p.fk_id_unidade_medida = u.id 
-                    JOIN imposto i ON p.fk_id_imposto = i.id;
-    
-    
-    
 CREATE TABLE precovenda (
     id integer PRIMARY KEY AUTO_INCREMENT, 
     precoNormal DECIMAL(10, 2) default 0.01 NULL,
@@ -374,9 +333,10 @@ CREATE TABLE precovenda (
     foreign key (fk_id_usuario) references usuario(id)
 );
 
+
+
 DELIMITER //
 
--- Trigger AFTER INSERT em produtodesconto
 CREATE TRIGGER trg_precovenda_after_produtodesconto
 AFTER INSERT ON produtodesconto
 FOR EACH ROW
@@ -388,7 +348,14 @@ BEGIN
     DECLARE preco_final DECIMAL(10,2);
     DECLARE id_imposto INT;
 
-    -- Buscar o preço base e o imposto associado ao produto
+    -- 1) Desactivar preços anteriores do mesmo produto e armazém
+    UPDATE precovenda
+    SET estado = 'desactivo'
+    WHERE idProduto = NEW.idProduto
+      AND idArmazem = NEW.idArmazem
+      AND estado = 'activo';
+
+    -- 2) Buscar o preço base e o imposto associado ao produto
     SELECT ppa.preco, pr.fk_id_imposto
     INTO preco_base, id_imposto
     FROM precoProdutoArmazem ppa
@@ -396,7 +363,7 @@ BEGIN
     WHERE ppa.idProduto = NEW.idProduto
       AND ppa.idArmazem = NEW.idArmazem;
 
-    -- Calcular imposto
+    -- 3) Calcular imposto
     IF id_imposto IS NOT NULL THEN
         SELECT IFNULL(percentagem,0) INTO imposto_val
         FROM imposto
@@ -406,14 +373,14 @@ BEGIN
         SET imposto_val = 0;
     END IF;
 
-    -- Calcular desconto
+    -- 4) Calcular desconto
     SET desconto_val = preco_base * (NEW.percentagem / 100);
 
-    -- Calcular preços
+    -- 5) Calcular preços
     SET preco_venda = preco_base + imposto_val;
     SET preco_final = preco_venda - desconto_val;
 
-    -- Inserir em precovenda
+    -- 6) Inserir novo preço de venda como activo
     INSERT INTO precovenda (
         precoNormal,
         precoVenda,
@@ -437,6 +404,10 @@ BEGIN
     );
 END;
 //
+DELIMITER ;
+
+
+DELIMITER //
 
 
 -- Trigger AFTER UPDATE em produtodesconto
@@ -516,6 +487,7 @@ ADD COLUMN unidade_fornecida VARCHAR(20) DEFAULT 'Unidade',
 ADD COLUMN qtd_por_unidade INT DEFAULT 1;
 
 
+
 create table movimento(
 	id integer primary key auto_increment,
     tipo_movimento varchar(8) not null,
@@ -533,7 +505,14 @@ create table movimento(
 ALTER TABLE movimento
 ADD COLUMN unidade_movimentada VARCHAR(20) DEFAULT 'Unidade',
 ADD COLUMN qtd_por_unidade INT DEFAULT 1;
-    
+
+select * from produto_fornecido;
+select * from movimento;
+select * from stock;
+select * from produto;
+select * from unidade_medida;
+
+
 create table stock(
 	fk_id_produto integer,
     fk_id_armazem integer,

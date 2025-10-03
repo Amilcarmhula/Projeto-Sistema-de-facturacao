@@ -30,10 +30,13 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.desconto.Desconto;
 import jminvsm.model.desconto.ProdutoDesconto;
 import jminvsm.model.produto.Produto;
+import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
 /**
@@ -55,7 +58,7 @@ public class ProdutoDescontoDAO {
         boolean isSuccess = false;
         try {
             sql = "INSERT INTO produtodesconto (idProduto, idDesconto, dataInicio, dataFim, percentagem, idArmazem) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
 
             ps = con.prepareStatement(sql);
             ps.setInt(1, t.getProduto().getId());
@@ -75,33 +78,52 @@ public class ProdutoDescontoDAO {
         } catch (SQLException ex) {
             System.out.println("Erro ao inserir ProdutoDesconto: " + ex);
         } finally {
-            try { if (ps != null) ps.close(); } catch (SQLException e) {}
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+            }
         }
         return isSuccess;
     }
 
     // READ ALL
-    public List<ProdutoDesconto> listAll() {
-        List<ProdutoDesconto> lista = new ArrayList<>();
+    public ObservableList<ProdutoDesconto> getEntityByID(int idProduto, int idArmazem) {
+        ObservableList<ProdutoDesconto> lista = FXCollections.observableArrayList();
+        ProdutoDesconto pd = null;
         try {
-            sql = "SELECT * FROM produtodesconto";
+            sql = "select p.nome as nomeProduto, p.descricao as descricaoProduto,"
+                    + "	a.nome as nomeArmazem, a.tipo as tipoArmazem, a.descricao as descicaoArmazem, "
+                    + " d.nome as nomeDesconto, "
+                    + " pd.dataInicio, pd.dataFim, pd.percentagem "
+                    + "	from produtodesconto pd "
+                    + "	join produto p on pd.idProduto=p.id "
+                    + " join desconto d on pd.idDesconto=d.id "
+                    + " join armazem a on pd.idArmazem=a.id "
+                    + " where idProduto=? and idArmazem=?";
             ps = con.prepareStatement(sql);
+            ps.setInt(1,  idProduto);
+            ps.setInt(2,  idArmazem);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                ProdutoDesconto pd = new ProdutoDesconto();
+                pd = new ProdutoDesconto();
                 Produto p = new Produto();
-                p.setId(rs.getInt("idProduto"));
+                p.setNome(rs.getString("nomeProduto"));
+                p.setDescricao(rs.getString("descricaoProduto"));
                 pd.setProduto(p);
 
-                Desconto d = new Desconto();
-                d.setId(rs.getInt("idDesconto"));
-                pd.setDesconto(d);
-                
                 Armazem a = new Armazem();
-                a.setId(rs.getInt("idArmazem"));
+                a.setNome_arm(rs.getString("nomeArmazem"));
+                a.setDescricao_arm(rs.getString("descicaoArmazem"));
+                a.setTipo(rs.getString("tipoArmazem"));
                 pd.setArmazem(a);
                 
+                Desconto d = new Desconto();
+                d.setNome(rs.getString("nomeDesconto"));
+                pd.setDesconto(d);
+
                 pd.setDataInicio(rs.getString("dataInicio"));
                 pd.setDataFim(rs.getString("dataFim"));
                 pd.setPercentagem(rs.getDouble("percentagem"));
@@ -110,8 +132,8 @@ public class ProdutoDescontoDAO {
             }
             rs.close();
             ps.close();
-        } catch (SQLException ex) {
-            System.out.println("Erro ao listar ProdutoDesconto: " + ex);
+        } catch (SQLException e) {
+            showDialog( "Erro de consulta!", "Detalhes: " + e);
         }
         return lista;
     }
@@ -135,11 +157,16 @@ public class ProdutoDescontoDAO {
         } catch (SQLException ex) {
             System.out.println("Erro ao apagar ProdutoDesconto: " + ex);
         } finally {
-            try { if (ps != null) ps.close(); } catch (SQLException e) {}
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+            }
         }
         return isSuccess;
     }
-    
+
     public static void main(String[] args) throws SQLException {
         ProdutoDescontoDAO dao = new ProdutoDescontoDAO();
         ProdutoDesconto pd = new ProdutoDesconto();
@@ -156,13 +183,11 @@ public class ProdutoDescontoDAO {
         pd.setDataInicio("2025-09-03");
         pd.setDataFim("2025-09-21");
         dao.addEntity(pd);
-        
+
 //        for(ProdutoDesconto des: dao.listAll()){
 //            System.out.println(des.getPercentagem());
 //        }
-        
 //        dao.delete(pd);
-        
 //        for(ProdutoDesconto des: dao.listAll()){
 //            System.out.println(des.getPercentagem());
 //        }

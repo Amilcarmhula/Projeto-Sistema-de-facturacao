@@ -49,7 +49,7 @@ import jminvsm.model.imposto.Imposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.categoria.ServicoCategoria;
-import jminvsm.service.precovenda.ServicePrecoVenda;
+import jminvsm.service.PrecoProdutoArmazem.ServicePrecoProdutoArmazem;
 import jminvsm.service.produto.ServiceProduto;
 import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
 import jminvsm.service.unidadeMedida.ServiceUnidadeMedida;
@@ -66,12 +66,12 @@ import jminvsm.util.LoadAndMoveUtilities;
 public class SearchProdutoController implements Initializable {
 
     private Usuario userData;
-    private ServicePrecoVenda servicePrecos;
+    private ServicePrecoProdutoArmazem servicePrecos;
     private ServicoCategoria serCategoria;
     private ServiceTaxaImpostos serTaxa;
     private ServiceUnidadeMedida serUnidade;
     private ServiceProduto serProduto;
-    private ServicePrecoVenda servPreco;
+    private ServicePrecoProdutoArmazem servPreco;
 
     @FXML
     private TableView<Produto> tabelaProduto;
@@ -233,12 +233,12 @@ public class SearchProdutoController implements Initializable {
 
         this.userData = SysFact.getUserData();
         try {
-            servicePrecos = new ServicePrecoVenda();
+            servicePrecos = new ServicePrecoProdutoArmazem();
             serCategoria = new ServicoCategoria();
             serTaxa = new ServiceTaxaImpostos();
             serUnidade = new ServiceUnidadeMedida();
             serProduto = new ServiceProduto();
-            servPreco = new ServicePrecoVenda();
+            servPreco = new ServicePrecoProdutoArmazem();
 
             getData();
             showProduto();
@@ -361,9 +361,9 @@ public class SearchProdutoController implements Initializable {
         double precoNorm = Double.parseDouble(txtPreco.getText());
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
-        servPreco.registraPrecoVenda(precoNorm, precoComTax, precoSemTax,
-                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData, serProduto.getUltimo());
+//        servPreco.registraPreco(precoNorm, precoComTax, precoSemTax,
+//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+//                userData, serProduto.getUltimo());
         showProduto();
         resetCampos();
     }
@@ -374,9 +374,9 @@ public class SearchProdutoController implements Initializable {
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
         Produto p = new Produto();
         p.setId(Integer.parseInt(txtIDProduto.getText()));
-        servPreco.registraPrecoVenda(precoNorm, precoComTax, precoSemTax,
-                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData, p);
+//        servPreco.registraPreco(precoNorm, precoComTax, precoSemTax,
+//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+//                userData, p);
         showProduto();
         resetCampos();
         labIDPreco.setText("");
@@ -401,9 +401,9 @@ public class SearchProdutoController implements Initializable {
         double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText().equals("")?"0":txtprecoInclTaxa.getText());
         double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText().equals("")?"0":txtprecoExclTaxa.getText());
         int id_preco = Integer.parseInt(labIDPreco.getText().equals("")?"0":labIDPreco.getText());
-        servPreco.actualizaPrecoVenda(id_preco, precoNorm, precoComTax, precoSemTax,
-                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData);
+//        servPreco.actualizaPrecoVenda(id_preco, precoNorm, precoComTax, precoSemTax,
+//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+//                userData);
         showProduto();
 //        showPrecoVenda();
         resetCampos();
@@ -506,7 +506,6 @@ public class SearchProdutoController implements Initializable {
             txtprecoExclTaxa.setText(pv.getPrecoFinal() + "");
             txtprecoInclTaxa.setText(pv.getPrecoVenda() + "");
             dataFim.setValue(LocalDate.parse(pv.getDataValidade()));
-            dataInicio.setValue(LocalDate.parse(pv.getData_inicio()));
         }
         if (pv != null && "desactivo".equals(pv.getEstado())) {
             labIDPreco.setText("");
@@ -517,7 +516,7 @@ public class SearchProdutoController implements Initializable {
 
     public void showPrecoVenda(Produto p) {
         int id_produto = p.getId();
-        listaPrecos = servicePrecos.consultaPrecos(id_produto);
+//        listaPrecos = servicePrecos.consultaPrecos(id_produto);
         idPreco.setCellValueFactory(new PropertyValueFactory<>("id"));
         precoNormal.setCellValueFactory(new PropertyValueFactory<>("preco"));
         precoComTaxa.setCellValueFactory(new PropertyValueFactory<>("precoInclTaxa"));

@@ -7,7 +7,6 @@ package jminvsm.views.modulo_inventario.produtosView;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +44,8 @@ import javafx.util.Callback;
 import jminvsm.SysFact;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
+import jminvsm.model.desconto.Desconto;
+import jminvsm.model.desconto.ProdutoDesconto;
 import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.imposto.Imposto;
@@ -53,7 +54,10 @@ import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.categoria.ServicoCategoria;
-import jminvsm.service.precovenda.ServicePrecoVenda;
+import jminvsm.service.desconto.ServiceDesconto;
+import jminvsm.service.desconto.ServiceProdutoDesconto;
+import jminvsm.service.PrecoProdutoArmazem.ServicePrecoProdutoArmazem;
+import jminvsm.service.precoVenda.ServicePrecoVenda;
 import jminvsm.service.produto.ServiceProduto;
 import jminvsm.service.stock.ServiceStock;
 import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
@@ -71,14 +75,34 @@ import jminvsm.util.LoadAndMoveUtilities;
 public class ProdutoController implements Initializable {
 
     private Usuario userData;
-    private ServicePrecoVenda servicePrecos;
+    private ServicePrecoProdutoArmazem serPrecosProduArm;
+    private ServicePrecoVenda serPrecoVenda;
     private ServicoCategoria serCategoria;
     private ServiceTaxaImpostos serTaxa;
     private ServiceUnidadeMedida serUnidade;
     private ServiceProduto serProduto;
-    private ServicePrecoVenda servPreco;
+    private ServicePrecoProdutoArmazem servPreco;
     private ServiceArmazem servArmazem;
     private ServiceStock serStock;
+    private ServiceDesconto serDesconto;
+    private ServiceProdutoDesconto serProDesconto;
+
+    private int idArmazem;
+    
+    @FXML
+    private TableView<ProdutoDesconto> tabelaprodutodesconto;
+    @FXML
+    private TableColumn<ProdutoDesconto, String> pdProduto;
+    @FXML
+    private TableColumn<ProdutoDesconto, String> pdArmazem;
+    @FXML
+    private TableColumn<ProdutoDesconto, String> pdDesconto;
+    @FXML
+    private TableColumn<ProdutoDesconto, String> pdDataInicial;
+    @FXML
+    private TableColumn<ProdutoDesconto, String> pdDataFinal;
+    @FXML
+    private TableColumn<ProdutoDesconto, Double> pdPercentagem;
 
     @FXML
     private TableView<Stock> tabelaProduto;
@@ -108,14 +132,29 @@ public class ProdutoController implements Initializable {
     private TableColumn<Stock, String> btntabelaProduto;
 
     @FXML
+    private TableView<Desconto> tableDescontos;
+    @FXML
+    private TableColumn<Desconto, Integer> idDesconto;
+    @FXML
+    private TableColumn<Desconto, String> nomeDesconto;
+    @FXML
+    private TableColumn<Desconto, String> descricaoDesconto;
+
+    @FXML
     private CheckBox checkControle;
     @FXML
     private DatePicker dataFim;
     @FXML
     private DatePicker dataInicio;
+    @FXML
+    private DatePicker dataInicioDesconto;
+    @FXML
+    private DatePicker dataFimDesconto;
 
     @FXML
     private TextField txtIDProduto;
+    @FXML
+    private TextField txtIDDesconto;
     @FXML
     private TextField txtNomeProduto;
     @FXML
@@ -126,6 +165,8 @@ public class ProdutoController implements Initializable {
     private TextField txtPesquisar;
     @FXML
     private TextField txtNivelStock;
+    @FXML
+    private TextField txtPercentagemDesconto;
     @FXML
     private ComboBox<String> combCategoria;
     @FXML
@@ -139,19 +180,17 @@ public class ProdutoController implements Initializable {
     private ComboBox<String> combUnidadePesq;
     @FXML
     private ComboBox<String> combTaxaPesq;
-    @FXML
-    private ComboBox<String> combTipoArmazemPesq;
-    @FXML
-    private ComboBox<String> combArmazemPesq;
+//    @FXML
+//    private ComboBox<String> combTipoArmazemPesq;
+//    @FXML
+//    private ComboBox<String> combArmazemPesq;
 
     @FXML
     private Label labIDPreco;
     @FXML
     private TextField txtPreco;
     @FXML
-    private TextField txtprecoInclTaxa;
-    @FXML
-    private TextField txtprecoExclTaxa;
+    private TextField txtPesqDesconto;
     @FXML
     private TableView<PrecoVenda> tabelaPrecos;
     @FXML
@@ -159,13 +198,11 @@ public class ProdutoController implements Initializable {
     @FXML
     private TableColumn<Produto, Double> precoNormal;
     @FXML
-    private TableColumn<Produto, Double> precoComTaxa;
+    private TableColumn<Produto, Double> precoVenda;
     @FXML
-    private TableColumn<Produto, Double> precoSemTaxa;
+    private TableColumn<Produto, Double> precoFinal;
     @FXML
-    private TableColumn<Produto, String> dataInicial;
-    @FXML
-    private TableColumn<Produto, String> dataFinal;
+    private TableColumn<Produto, String> dataValidade;
     @FXML
     private TableColumn<Produto, String> estadoPreco;
     @FXML
@@ -177,6 +214,8 @@ public class ProdutoController implements Initializable {
     private Button btn_unidades;
     @FXML
     private Button btn_categorias;
+    @FXML
+    private Button btn_Descontos;
 
     @FXML
     public void getViews(ActionEvent e) {
@@ -189,6 +228,8 @@ public class ProdutoController implements Initializable {
             path = "/jminvsm/views/modulo_inventario/unidadeView/unidadeView.fxml";
         } else if (e.getSource() == btn_categorias) {
             path = "/jminvsm/views/modulo_inventario/categoriaView/categoriaView.fxml";
+        } else if (e.getSource() == btn_Descontos) {
+            path = "/jminvsm/views/modulo_venda/descontoView/descontoView.fxml";
         }
         LoadAndMoveUtilities.showAsPopUP(e, null);
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, path);
@@ -270,45 +311,74 @@ public class ProdutoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.userData = SysFact.getUserData();
         try {
-            servicePrecos = new ServicePrecoVenda();
+            serPrecosProduArm = new ServicePrecoProdutoArmazem();
+            serPrecoVenda = new ServicePrecoVenda();
             serCategoria = new ServicoCategoria();
             serTaxa = new ServiceTaxaImpostos();
             serUnidade = new ServiceUnidadeMedida();
             serProduto = new ServiceProduto();
-            servPreco = new ServicePrecoVenda();
+            servPreco = new ServicePrecoProdutoArmazem();
             servArmazem = new ServiceArmazem();
             serStock = new ServiceStock();
+            serDesconto = new ServiceDesconto();
+            serProDesconto = new ServiceProdutoDesconto();
 
             getData();
             getDataOnFocus();
             showInvenarioProdutos();
+            showDescontos();
         } catch (SQLException ex) {
             Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
         }
         populateCombos();
-        precoListener();
+//        precoListener();
         ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
 
-        combArmazemPesq.getSelectionModel().select(1);
-        combArmazemPesq.requestFocus();
     }
 
-//    private ObservableList<Produto> listaProduto;  
-    private ObservableList<Stock> listaProduto;
+    private ObservableList<Desconto> listaDescontos;
 
-    private Map<Integer, Stock> mapaProdutos;
+    public void showDescontos() {
+        listaDescontos = serDesconto.listDescontos();
+
+        idDesconto.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nomeDesconto.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        descricaoDesconto.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+
+        FilteredList<Desconto> dadosFiltrados = new FilteredList<>(listaDescontos, b -> true);
+        txtPesqDesconto.textProperty().addListener((observable, oldValues, newValues) -> {
+            dadosFiltrados.setPredicate(x -> {
+                if (newValues == null || newValues.isEmpty()) {
+                    return true;
+                }
+                String filtroCaixaBaixa = newValues.toLowerCase();
+                if (x.getNome().toLowerCase().contains(filtroCaixaBaixa)) {
+                    return true;
+                } else if (x.getDescricao().toLowerCase().contains(filtroCaixaBaixa)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        });
+        SortedList<Desconto> sortedData = new SortedList<>(dadosFiltrados);
+        sortedData.comparatorProperty().bind(tableDescontos.comparatorProperty());
+//        tabelaDesconto.setItems(listaDescontos);
+        tableDescontos.setItems(sortedData);
+    }
+
+    private ObservableList<Stock> listaProduto;
+    private Map<String, Stock> mapaProdutos;
 
     public void showInvenarioProdutos() {
-//        listaProduto = serProduto.getProdutos();
         listaProduto = serStock.listaInvenarioProdutos();
-
         mapaProdutos = new HashMap<>();
         for (Stock s : listaProduto) {
-            mapaProdutos.put(s.getProduto().getId(), s);
+            mapaProdutos.put(s.getProduto().getId() + "," + s.getArmazem().getId(), s);
         }
 
-        ID.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getId())));
-        armazem.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getArmazem().getNome_arm()+": "+cellData.getValue().getArmazem().getTipo())));
+        ID.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getId() + "," + cellData.getValue().getArmazem().getId())));
+        armazem.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getArmazem().getNome_arm() + ": " + cellData.getValue().getArmazem().getTipo())));
         artigo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
         codigobarras.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCodigo_barra()));
         descricao.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getDescricao()));
@@ -345,36 +415,6 @@ public class ProdutoController implements Initializable {
         stock.setCellFactory(cellFoctory2);
 
         FilteredList<Stock> dadosFiltrados = new FilteredList<>(listaProduto, b -> true);
-        // Método auxiliar para atualizar o filtro com base nas duas ComboBox
-        Runnable atualizarFiltro = () -> {
-            dadosFiltrados.setPredicate(x -> {
-                String armazemSelecionada = combArmazemPesq.getValue();
-                String armazemTipoSelecionada = combTipoArmazemPesq.getValue();
-
-
-                if (armazemSelecionada == null || armazemSelecionada.equals("Todos...")) {
-                    armazemSelecionada = "";
-                }
-                if (armazemTipoSelecionada == null || armazemTipoSelecionada.equals("Todas...")) {
-                    armazemTipoSelecionada = "";
-                }
-
-                // Verifica o filtro de armazem
-                boolean armazemValida = (armazemSelecionada.isEmpty())
-                        || x.getArmazem().getNome_arm().toLowerCase().contains(armazemSelecionada.toLowerCase());
-
-                // Verifica o filtro da categoria
-                boolean armazemTipoValida = (armazemTipoSelecionada.isEmpty())
-                        || x.getArmazem().getTipo().toLowerCase().contains(armazemTipoSelecionada.toLowerCase());
-
-                // Retorna verdadeiro somente se ambos os filtros forem válidos
-                return armazemValida && armazemTipoValida;
-            });
-        };
-
-        // Adiciona listeners para atualizar o filtro sempre que a seleção mudar
-        combArmazemPesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
-        combTipoArmazemPesq.valueProperty().addListener((observable, oldValue, newValue) -> atualizarFiltro.run());
 
         txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(x -> {
@@ -395,46 +435,6 @@ public class ProdutoController implements Initializable {
 
             });
         });
-
-        // Adiciona um listener à ComboBox para definir o filtro quando um item é selecionado
-        combArmazemPesq.valueProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
-                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                // Converte o filtro para caixa baixa para facilitar a busca
-                String filtroCaixaBaixa = newValue.toLowerCase();
-
-                // Aplica o filtro com base na seleção da ComboBox
-                if (x.getArmazem().getNome_arm().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-
-        });
-
-        combTipoArmazemPesq.valueProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
-                // Se o valor da ComboBox for nulo ou vazio, exibe todos os itens
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                // Converte o filtro para caixa baixa para facilitar a busca
-                String filtroCaixaBaixa = newValue.toLowerCase();
-
-                // Aplica o filtro com base na seleção da ComboBox
-                if (x.getArmazem().getTipo().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-
-        });
-
         SortedList<Stock> sortedData = new SortedList<>(dadosFiltrados);
         sortedData.comparatorProperty().bind(tabelaProduto.comparatorProperty());
         //
@@ -472,18 +472,28 @@ public class ProdutoController implements Initializable {
                 txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("") ? "0" : txtNivelStock.getText()));
         showInvenarioProdutos();
-        addPrecoVenda(e);
         resetCampos();
         stockControlChecked();
     }
 
-    public void addPrecoVenda(ActionEvent e) {
-        double precoNorm = Double.parseDouble(txtPreco.getText());
-        double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText());
-        double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText());
-        servPreco.registraPrecoVenda(precoNorm, precoComTax, precoSemTax,
-                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData, serProduto.getUltimo());
+    public void addPrecoProdutoArmazem(ActionEvent e) {
+        double precoNorm = Double.parseDouble(txtPreco.getText().equals("") ? "0" : txtPreco.getText());
+        Integer idProd = Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText());
+
+        servPreco.registraPreco(idProd, idArmazem, precoNorm);
+        showInvenarioProdutos();
+        resetCampos();
+    }
+
+    public void addProdutoDesconto(ActionEvent e) {
+        Double percentagem = Double.valueOf(txtPercentagemDesconto.getText().equals("") ? "0" : txtPercentagemDesconto.getText());
+        Integer idProd = Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText());
+        Integer idDesc = Integer.valueOf(txtIDDesconto.getText().equals("") ? "0" : txtIDDesconto.getText());
+
+        serProDesconto.regista(idProd, idDesc, idArmazem,
+                String.valueOf(dataInicioDesconto.getValue()),
+                String.valueOf(dataFimDesconto.getValue()), percentagem);
+
         showInvenarioProdutos();
         resetCampos();
     }
@@ -493,13 +503,11 @@ public class ProdutoController implements Initializable {
             return;
         }
         double precoNorm = Double.parseDouble(txtPreco.getText()/*.equals("")?"0":txtPreco.getText()*/);
-        double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText()/*.equals("")?"0":txtprecoInclTaxa.getText()*/);
-        double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText()/*.equals("")?"0":txtprecoExclTaxa.getText()*/);
         Produto p = new Produto();
         p.setId(Integer.parseInt(txtIDProduto.getText()));
-        servPreco.registraPrecoVenda(precoNorm, precoComTax, precoSemTax,
-                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData, p);
+//        servPreco.registraPreco(precoNorm, precoComTax, precoSemTax,
+//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+//                userData, p);
         showInvenarioProdutos();
 //        showPrecoVenda();
         resetCampos();
@@ -522,37 +530,34 @@ public class ProdutoController implements Initializable {
 
     public void updatePrecoVenda(ActionEvent e) {
         double precoNorm = Double.parseDouble(txtPreco.getText().equals("") ? "0" : txtPreco.getText());
-        double precoComTax = Double.parseDouble(txtprecoInclTaxa.getText().equals("") ? "0" : txtprecoInclTaxa.getText());
-        double precoSemTax = Double.parseDouble(txtprecoExclTaxa.getText().equals("") ? "0" : txtprecoExclTaxa.getText());
         int id_preco = Integer.parseInt(labIDPreco.getText().equals("") ? "0" : labIDPreco.getText());
-        servPreco.actualizaPrecoVenda(id_preco, precoNorm, precoComTax, precoSemTax,
-                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-                userData);
+//        servPreco.actualizaPrecoVenda(id_preco, precoNorm, precoComTax, precoSemTax,
+//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
+//                userData);
         showInvenarioProdutos();
 //        showPrecoVenda();
         resetCampos();
     }
 //  ############################################################################
 
-    public void precoListener() {
-        txtPreco.textProperty().addListener(((observable, oldVal, newVal) -> {
-
-            if (!newVal.isEmpty()) {
-                if (combTaxa.getValue() != null) {
-                    Imposto t = mapaTaxas.get(combTaxa.getValue());
-                    double preco = Double.parseDouble(newVal);
-                    double precoComTaxa = preco + preco * t.getPercentagem();
-                    double precoSemTaxa = preco - preco * t.getPercentagem();
-                    txtprecoInclTaxa.setText(precoComTaxa + "");
-                    txtprecoExclTaxa.setText(precoSemTaxa + "");
-                } else {
-                    txtPreco.setText("");
-                    AlertUtilities.showDialog("Erro", "Tipo de Taxa/Imposto nao selecionado!");
-                }
-            }
-        }));
-    }
-
+//    public void precoListener() {
+//        txtPreco.textProperty().addListener(((observable, oldVal, newVal) -> {
+//
+//            if (!newVal.isEmpty()) {
+//                if (combTaxa.getValue() != null) {
+//                    Imposto t = mapaTaxas.get(combTaxa.getValue());
+//                    double preco = Double.parseDouble(newVal);
+//                    double precoComTaxa = preco + preco * t.getPercentagem();
+//                    double precoSemTaxa = preco - preco * t.getPercentagem();
+//                    txtprecoInclTaxa.setText(precoComTaxa + "");
+//                    txtprecoExclTaxa.setText(precoSemTaxa + "");
+//                } else {
+//                    txtPreco.setText("");
+//                    AlertUtilities.showDialog("Erro", "Tipo de Taxa/Imposto nao selecionado!");
+//                }
+//            }
+//        }));
+//    }
 //  ############################################################################
     private Map<String, Armazem> mapaArmazens;
     private ObservableList<Armazem> listaArmazens;
@@ -607,19 +612,22 @@ public class ProdutoController implements Initializable {
         combUnidade.setItems(FXCollections.observableArrayList(listaUni));
         combTaxa.setItems(FXCollections.observableArrayList(listaTax));
 
-//        combCategoriaPesq.setItems(FXCollections.observableArrayList(listaCat));
-//        combUnidadePesq.setItems(FXCollections.observableArrayList(listaUni));
-//        combTaxaPesq.setItems(FXCollections.observableArrayList(listaTax));
-        combArmazemPesq.setItems(FXCollections.observableArrayList(listaArm));
-
     }
 //  ############################################################################
 
     public void selecionaProduto(MouseEvent event) {
+//        TablePosition pos = tabelaProduto.getSelectionModel().getSelectedCells().get(0);
+//        int linha = pos.getRow();
+//        TableColumn coluna = tabelaProduto.getColumns().get(0);
+//        Object obj = coluna.getCellData(linha);
+//
+//        System.out.println("Valor: " + obj);
+
         Stock x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
-            Stock s = mapaProdutos.get(x.getProduto().getId());
+            Stock s = mapaProdutos.get(x.getProduto().getId() + "," + x.getArmazem().getId());
 
+            idArmazem = s.getArmazem().getId();
             txtNivelStock.setText(String.valueOf(s.getProduto().getNivelstock()));
             txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
             txtNomeProduto.setText(s.getProduto().getNome());
@@ -639,7 +647,15 @@ public class ProdutoController implements Initializable {
             deleteProduto(event, x);
             ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         }
+        showPrecoVenda();
+        showProdutoDesconto();
+    }
 
+    public void selecionaDesconto(MouseEvent event) {
+        Desconto x = tableDescontos.getSelectionModel().getSelectedItem();
+        if (x != null) {
+            txtIDDesconto.setText(String.valueOf(x.getId()));
+        }
     }
 
     public void deleteProduto(MouseEvent event, Stock x) {
@@ -665,22 +681,18 @@ public class ProdutoController implements Initializable {
     }
 //  ############################################################################
 
-    public void selecionaPreco(MouseEvent event) {
-        PrecoVenda pv = tabelaPrecos.getSelectionModel().getSelectedItem();
-        if (pv != null && !"desactivo".equals(pv.getEstado())) {
-            labIDPreco.setText(pv.getId() + "");
-            txtPreco.setText(pv.getPrecoNormal() + "");
-            txtprecoExclTaxa.setText(pv.getPrecoFinal() + "");
-            txtprecoInclTaxa.setText(pv.getPrecoVenda() + "");
-            dataFim.setValue(LocalDate.parse(pv.getDataValidade()));
-            dataInicio.setValue(LocalDate.parse(pv.getData_inicio()));
-        }
-        deletePreco(event, pv);
-        if (pv != null && "desactivo".equals(pv.getEstado())) {
-            labIDPreco.setText("");
-        }
-    }
-
+//    public void selecionaPreco(MouseEvent event) {
+//        PrecoVenda pv = tabelaPrecos.getSelectionModel().getSelectedItem();
+//        if (pv != null && !"desactivo".equals(pv.getEstado())) {
+//            labIDPreco.setText(pv.getId() + "");
+//            txtPreco.setText(pv.getPrecoNormal() + "");
+//            dataFim.setValue(LocalDate.parse(pv.getDataValidade()));
+//        }
+//        deletePreco(event, pv);
+//        if (pv != null && "desactivo".equals(pv.getEstado())) {
+//            labIDPreco.setText("");
+//        }
+//    }
     public void deletePreco(MouseEvent event, PrecoVenda x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
@@ -694,8 +706,8 @@ public class ProdutoController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                servicePrecos.deletePreco(x.getId());
-                if (servicePrecos.isOpsSuccess()) {
+//                servicePrecos.deletePreco(x.getId());
+                if (serPrecosProduArm.isOpsSuccess()) {
                     showInvenarioProdutos();
 //                    showPrecoVenda();
                     resetCampos();
@@ -708,26 +720,45 @@ public class ProdutoController implements Initializable {
 //  ############################################################################
     private ObservableList<PrecoVenda> listaPrecos;
 
-//    public void showPrecoVenda() {
-//        listaPrecos = servicePrecos.consultaPrecos(Integer.parseInt(txtIDProduto.getText()));
-//        idPreco.setCellValueFactory(new PropertyValueFactory<>("id"));
-//        precoNormal.setCellValueFactory(new PropertyValueFactory<>("preco"));
-//        precoComTaxa.setCellValueFactory(new PropertyValueFactory<>("precoInclTaxa"));
-//        precoSemTaxa.setCellValueFactory(new PropertyValueFactory<>("precoExclTaxa"));
-//        dataInicial.setCellValueFactory(new PropertyValueFactory<>("data_inicio"));
-//        dataFinal.setCellValueFactory(new PropertyValueFactory<>("data_fim"));
-//        estadoPreco.setCellValueFactory(new PropertyValueFactory<>("estado"));
-//
-//        tabelaPrecos.setItems(listaPrecos);
-//    }
+    public void showPrecoVenda() {
+        Stock x = tabelaProduto.getSelectionModel().getSelectedItem();
+        if (x != null) {
+
+            listaPrecos = serPrecoVenda.consultaPrecosVendas(x.getProduto().getId(), x.getArmazem().getId());
+            idPreco.setCellValueFactory(new PropertyValueFactory<>("id"));
+            precoNormal.setCellValueFactory(new PropertyValueFactory<>("precoNormal"));
+            precoVenda.setCellValueFactory(new PropertyValueFactory<>("precoVenda"));
+            precoFinal.setCellValueFactory(new PropertyValueFactory<>("precoFinal"));
+            dataValidade.setCellValueFactory(new PropertyValueFactory<>("dataValidade"));
+            estadoPreco.setCellValueFactory(new PropertyValueFactory<>("estado"));
+
+            tabelaPrecos.setItems(listaPrecos);
+        }
+    }
+    
+    private ObservableList<ProdutoDesconto> listaprodutodesconto;
+
+    public void showProdutoDesconto() {
+        Stock x = tabelaProduto.getSelectionModel().getSelectedItem();
+        if (x != null) {
+
+            listaprodutodesconto = serProDesconto.consultaProdutoDesconto(x.getProduto().getId(), x.getArmazem().getId());
+            
+            pdProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
+            pdArmazem.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
+            pdDesconto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDesconto().getNome()));
+            pdDataInicial.setCellValueFactory(new PropertyValueFactory<>("dataInicio"));
+            pdDataFinal.setCellValueFactory(new PropertyValueFactory<>("dataFim"));
+            pdPercentagem.setCellValueFactory(new PropertyValueFactory<>("percentagem"));
+
+            tabelaprodutodesconto.setItems(listaprodutodesconto);
+        }
+    }
 //  ############################################################################
+
     public void resetCampos() {
         labIDPreco.setText("");
         txtPreco.setText("");
-        txtprecoExclTaxa.setText("");
-        txtprecoInclTaxa.setText("");
-        dataInicio.setValue(LocalDate.now());
-        dataFim.setValue(LocalDate.now());
         checkControle.setSelected(false);
         stockControlChecked();
         txtNivelStock.setText("");

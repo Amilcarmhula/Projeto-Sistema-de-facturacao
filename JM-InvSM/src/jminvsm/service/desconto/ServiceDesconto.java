@@ -28,15 +28,11 @@ public class ServiceDesconto {
         this.opsSuccess = opsSuccess;
     }
 
-    public void regista(String nomeDesconto,Double percentagem, String descricao) {
+    public void regista(String nomeDesconto, String descricao) {
         setOpsSuccess(false);
         
         if (nomeDesconto == null || nomeDesconto.isEmpty()) {
             showErroAlert( "Designacao do desconto nao pode ser nula!");
-            return;
-        }
-        if (percentagem == null || percentagem <= 0) {
-            showErroAlert( "Percentagem do desconto nao informada!");
             return;
         }
         
@@ -53,7 +49,7 @@ public class ServiceDesconto {
         }
     }
     
-    public void actualizar(Integer id, String nomeDesconto,Double percentagem, String descricao) {
+    public void actualizar(Integer id, String nomeDesconto, String descricao) {
         setOpsSuccess(false);
         
         if (id == null) {
@@ -63,10 +59,6 @@ public class ServiceDesconto {
         
         if (nomeDesconto == null || nomeDesconto.isEmpty()) {
             showErroAlert( "Designacao do desconto nao pode ser nula!");
-            return;
-        }
-        if (percentagem == null) {
-            showErroAlert( "Percentagem do desconto nao informada!");
             return;
         }
         
@@ -96,7 +88,7 @@ public class ServiceDesconto {
         }
     }
 
-    public ObservableList<Desconto> getDescontos() {
+    public ObservableList<Desconto> listDescontos() {
         return descontoDao.listAllEntities();
     }
 }

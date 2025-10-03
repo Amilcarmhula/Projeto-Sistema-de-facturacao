@@ -18,7 +18,6 @@ public class PrecoVenda {
     private double precoNormal;
     private double precoVenda;
     private double precoFinal;
-    private String data_inicio;
     private String dataValidade;
     private String estado;
     private Produto produto;
@@ -29,12 +28,11 @@ public class PrecoVenda {
     public PrecoVenda(){
     }
 
-    public PrecoVenda(int id, double precoNormal, double precoVenda, double precoFinal, String data_inicio, String dataValidade, String estado, Produto produto, Armazem armazem, Usuario usuario) {
+    public PrecoVenda(int id, double precoNormal, double precoVenda, double precoFinal, String dataValidade, String estado, Produto produto, Armazem armazem, Usuario usuario) {
         this.id = id;
         this.precoNormal = precoNormal;
         this.precoVenda = precoVenda;
         this.precoFinal = precoFinal;
-        this.data_inicio = data_inicio;
         this.dataValidade = dataValidade;
         this.estado = estado;
         this.produto = produto;
@@ -72,14 +70,6 @@ public class PrecoVenda {
 
     public void setPrecoFinal(double precoFinal) {
         this.precoFinal = precoFinal;
-    }
-
-    public String getData_inicio() {
-        return data_inicio;
-    }
-
-    public void setData_inicio(String data_inicio) {
-        this.data_inicio = data_inicio;
     }
 
     public String getDataValidade() {

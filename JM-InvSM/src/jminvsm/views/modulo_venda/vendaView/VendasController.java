@@ -387,7 +387,7 @@ public class VendasController implements Initializable {
 
     public void populateComboDesconto() throws SQLException {
         mapaDesconto = new HashMap<>();
-        listaDescontos = serDesconto.getDescontos();
+        listaDescontos = serDesconto.listDescontos();
         List<String> lista = new ArrayList<>();
         for (Desconto d : listaDescontos) {
             mapaDesconto.put(d.getNome(), d);

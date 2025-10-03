@@ -119,7 +119,7 @@ public class UnidadeViewController implements Initializable {
         listaUnidade = serviceUnidade.getUnidades();
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        unidade.setCellValueFactory(new PropertyValueFactory<>("identificador"));
+        unidade.setCellValueFactory(new PropertyValueFactory<>("nome"));
         sigla.setCellValueFactory(new PropertyValueFactory<>("sigla"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 

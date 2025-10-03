@@ -18,7 +18,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -27,7 +29,6 @@ import javafx.stage.Stage;
 import jminvsm.SysFact;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
-import jminvsm.model.produto.Produto;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
@@ -49,21 +50,9 @@ public class AddStockController implements Initializable {
     private ServiceFornecedor servicoFornecedor;
 
     private Usuario userData;
+    private Stock s;
     @FXML
     private Button btnAdd;
-
-    @FXML
-    private TableView<Armazem> tabelaArmazem;
-    @FXML
-    private TableColumn<Armazem, String> tipotabelaArmazem;
-    @FXML
-    private TableColumn<Armazem, Integer> IDtabelaArmazem;
-    @FXML
-    private TableColumn<Armazem, String> descricaotabelaArmazem;
-    @FXML
-    private TableColumn<Armazem, Boolean> estadotabelaArmazem;
-    @FXML
-    private TableColumn<Armazem, String> nometabelaArmazem;
 
     @FXML
     private TableView<Fornecedor> tabelaFornecedor;
@@ -92,9 +81,6 @@ public class AddStockController implements Initializable {
     private TextField txtIDProduto;
     
     @FXML
-    private TextField txtUnidade;
-
-    @FXML
     private TextField txtPesquisaArmazem;
 
     @FXML
@@ -105,6 +91,12 @@ public class AddStockController implements Initializable {
     
     @FXML
     private TextField txtQtd_por_unidade;
+    
+    @FXML
+    private RadioButton radSimples;
+    
+    @FXML
+    private RadioButton radComposto;
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
@@ -117,6 +109,18 @@ public class AddStockController implements Initializable {
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
     }
+    
+    
+    public void checkTipoLote(){
+        if (radSimples.isArmed()) {
+            radComposto.setSelected(false);
+            txtQuantidade.setDisable(true);
+        }
+        if (radComposto.isArmed()) {
+            radSimples.setSelected(false);
+            txtQuantidade.setDisable(false);
+        }
+    }
 
     /**
      * Initializes the controller class.
@@ -124,7 +128,7 @@ public class AddStockController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 //        priceFormaterProduto();
-        Stock s = (Stock) SysFact.getData();
+        s = (Stock) SysFact.getData();
         txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
         try {
             service = new ServiceProdutoFornecido();
@@ -132,7 +136,6 @@ public class AddStockController implements Initializable {
             servicoFornecedor = new ServiceFornecedor();
             this.userData = SysFact.getUserData();
             showFornecedores();
-            showArmazens();
             ButtonUtilities.buttonChangeText(btnAdd, txtIDProduto);
         } catch (SQLException ex) {
             Logger.getLogger(AddStockController.class.getName()).log(Level.SEVERE, null, ex);
@@ -146,9 +149,6 @@ public class AddStockController implements Initializable {
 
         IDtabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("id"));
         razaotabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("razaosocial_forn"));
-//        nuittabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("nuit_forn"));
-//        contactotabelaFornecedor.setCellValueFactory(cellData
-//                -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
 
         FilteredList<Fornecedor> dadosFiltrados = new FilteredList<>(listaFornecedoress, b -> true);
         txtPesquisafrnecedor.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -181,66 +181,23 @@ public class AddStockController implements Initializable {
         }
     }
 
-    private ObservableList<Armazem> listaArmazens;
-
-    public void showArmazens() {        
-        listaArmazens = FXCollections.observableArrayList();
-        for (Armazem a : serviceArmazem.listaArmazens()) {
-            if (a.isEstado()) {
-                listaArmazens.add(a);
-            }
-        }
-
-        IDtabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipotabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        nometabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("nome_arm"));
-        descricaotabelaArmazem.setCellValueFactory(new PropertyValueFactory<>("descricao_arm"));
-
-        FilteredList<Armazem> dadosFiltrados = new FilteredList<>(listaArmazens, b -> true);
-        txtPesquisaArmazem.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
-
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome_arm().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (x.getDescricao_arm().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (x.getTipo().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else {
-                    return false;
-                }
-
-            });
-        });
-        SortedList<Armazem> sortedData = new SortedList<>(dadosFiltrados);
-        sortedData.comparatorProperty().bind(tabelaArmazem.comparatorProperty());
-
-        tabelaArmazem.setItems(sortedData);
-    }
-
-    /*
-        Funcoes de linha selecionada
-     */
-    public void selectedRowArmazem() throws SQLException {
-        Armazem c = tabelaArmazem.getSelectionModel().getSelectedItem();
-        if (c != null) {
-            txtIDArmazem.setText(String.valueOf(c.getId()));
-        }
-
-    }
-
     public void addProdutoFornecido(ActionEvent e) throws SQLException {
-        service.registraProdutoFornecido(Integer.valueOf(txtIDArmazem.getText().equals("") ? "0" : txtIDArmazem.getText()),
+        String tipoLote = "";
+        int quantidade = 1;
+        if(radSimples.isSelected()){
+            tipoLote= "Simples";
+            txtQuantidade.setText("1");
+        }
+        if(radComposto.isSelected()){
+            tipoLote="Composto";
+        }
+        service.registraProdutoFornecido(s.getArmazem().getId()/*Integer.valueOf(txtIDArmazem.getText().equals("") ? "0" : txtIDArmazem.getText())*/,
                 Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText()),
                 Integer.valueOf(txtIDFornecedor.getText().equals("") ? "0" : txtIDFornecedor.getText()), userData,
                 Integer.valueOf(txtQuantidade.getText().equals("") ? "1" : txtQuantidade.getText()),
                 String.valueOf(dataAquisicao.getValue() == null ? "" : dataAquisicao.getValue()),
                 Double.valueOf(txtCustoAquisicao.getText().equals("") ? "0" : txtCustoAquisicao.getText()),
-                String.valueOf(txtUnidade.getText().equals("") ? "unidade" : txtUnidade.getText()),
+                tipoLote,
                 Integer.valueOf(txtQtd_por_unidade.getText().equals("") ? "1" : txtQtd_por_unidade.getText()));
     }
 }

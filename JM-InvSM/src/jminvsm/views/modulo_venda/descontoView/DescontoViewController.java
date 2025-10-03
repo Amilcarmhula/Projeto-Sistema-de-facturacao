@@ -56,22 +56,16 @@ public class DescontoViewController implements Initializable {
     private TableColumn<Desconto, String> descricao;
 
     @FXML
-    private TableColumn<Desconto, Double> percentagem;
-
-    @FXML
     private TableView<Desconto> tabelaDesconto;
 
     @FXML
-    private TableColumn<Desconto, String> tipoDesconto;
+    private TableColumn<Desconto, String> nomeDesconto;
 
     @FXML
     private TextField txtDescricao;
 
     @FXML
     private TextField txtID;
-
-    @FXML
-    private TextField txtPercentagem;
 
     @FXML
     private TextField txtDesconto;
@@ -115,7 +109,7 @@ public class DescontoViewController implements Initializable {
     public void showDesconto() {
 //        listaTaxas = servicoTaxa.getTaxas();
         List<Desconto> lista = new ArrayList<>();
-        for (Desconto t : servicoDesconto.getDescontos()) {
+        for (Desconto t : servicoDesconto.listDescontos()) {
             t.setId(t.getId());
             t.setDescricao(t.getDescricao());
             t.setNome(t.getNome());
@@ -125,16 +119,14 @@ public class DescontoViewController implements Initializable {
         listaDesconto = FXCollections.observableArrayList(lista);
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipoDesconto.setCellValueFactory(new PropertyValueFactory<>("nomeDesconto"));
-        percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagemDesconto"));
+        nomeDesconto.setCellValueFactory(new PropertyValueFactory<>("nome"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
         tabelaDesconto.setItems(listaDesconto);
     }
 
     public void addDesconto() {
-        double taxa = Double.parseDouble(txtPercentagem.getText().equals("") ? "0" : txtPercentagem.getText());
-        servicoDesconto.regista(txtDesconto.getText(), taxa, txtDescricao.getText());
+        servicoDesconto.regista(txtDesconto.getText(), txtDescricao.getText());
         if (servicoDesconto.isOpsSuccess()) {
             resetCampos();
             showDesconto();
@@ -142,9 +134,8 @@ public class DescontoViewController implements Initializable {
     }
 
     public void updateDesconto() {
-        double taxa = Double.parseDouble(txtPercentagem.getText().equals("") ? "0" : txtPercentagem.getText());
         int id = Integer.parseInt(txtID.getText().equals("")?"0":txtID.getText());
-        servicoDesconto.actualizar(id, txtDesconto.getText(), taxa, txtDescricao.getText());
+        servicoDesconto.actualizar(id, txtDesconto.getText(), txtDescricao.getText());
         if (servicoDesconto.isOpsSuccess()) {
             resetCampos();
             showDesconto();
@@ -156,7 +147,6 @@ public class DescontoViewController implements Initializable {
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
             txtDescricao.setText(x.getDescricao());
-//            txtPercentagem.setText(String.valueOf(x.getPercentagem()));
             txtDesconto.setText(x.getNome());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
             deleteItem(event, x);
@@ -192,7 +182,6 @@ public class DescontoViewController implements Initializable {
     public void resetCampos() {
         txtID.setText("");
         txtDescricao.setText("");
-        txtPercentagem.setText("");
         txtDesconto.setText("");
         ButtonUtilities.buttonChangeText(btnAdd, txtID);
         showDesconto();

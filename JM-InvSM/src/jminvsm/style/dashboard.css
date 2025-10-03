@@ -53,6 +53,13 @@
 .label{
     -fx-font-family: 'Berlin Sans FB';
 }
+.check-box{
+    -fx-font-family: 'Berlin Sans FB';
+}
+
+.radio-button{
+    -fx-font-family: 'Berlin Sans FB';
+}
 
 .close{
     -fx-background-color:transparent;

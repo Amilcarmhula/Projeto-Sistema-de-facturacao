@@ -147,15 +147,15 @@ public class CategoriaViewController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getTipo().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                if (x.getTipo().toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
-                } else if (x.getGrupo().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (x.getGrupo().toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
-                } else if (String.valueOf(x.getSubgrupo()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (String.valueOf(x.getSubgrupo()).toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
-                } else if (String.valueOf(x.getFamilia()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (String.valueOf(x.getFamilia()).toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
-                } else if (String.valueOf(x.getDescricao()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+                } else if (String.valueOf(x.getDescricao()).toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
                 } else {
                     return false;

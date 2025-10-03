@@ -129,8 +129,8 @@ public class TaxaViewController implements Initializable {
         listaTaxas = FXCollections.observableArrayList(lista);
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipoTaxa.setCellValueFactory(new PropertyValueFactory<>("nomeImposto"));
-        percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagemImposto"));
+        tipoTaxa.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagem"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
         FilteredList<Imposto> dadosFiltrados = new FilteredList<>(listaTaxas, b -> true);

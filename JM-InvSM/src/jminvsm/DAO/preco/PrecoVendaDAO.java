@@ -10,7 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import jminvsm.model.armazem.Armazem;
 import jminvsm.model.preco.PrecoVenda;
+import jminvsm.model.produto.Produto;
+import jminvsm.model.usuario.Usuario;
+import jminvsm.service.precoVenda.ServicePrecoVenda;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
@@ -28,96 +32,36 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
         this.con = Conexao.getConexao();
     }
 
-    @Override
-    public boolean addEntity(PrecoVenda x) {
-        boolean isSuccess = false;
-        try {
-            sql = "insert into precovenda (precoNormal,data_inicio, data_fim, "
-                    + "fk_id_produto ,fk_id_usuario,precoInclTaxa,precoExclTaxa) value (?,?,?,?,?,?,?)";
-            ps = con.prepareStatement(sql);
-            ps.setDouble(1, x.getPrecoNormal());
-            ps.setString(2, x.getData_inicio());
-            ps.setString(3, x.getDataValidade());
-            ps.setInt(4, x.getProduto().getId());
-            ps.setInt(5, x.getUsuario().getId());
-            ps.setDouble(6, x.getPrecoVenda());
-            ps.setDouble(7, x.getPrecoFinal());
-            
-
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
-            }
-
-        } catch (SQLException ex) {
-            showDialog( "Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return isSuccess;
-    }
+   
 
     @Override
-    public boolean updateEntityByID(PrecoVenda x, int id) {
-        boolean isSuccess = false;
-        try {
-            sql = "update precovenda set precoNormal=?,data_inicio=?, data_fim=?"
-                    + " ,fk_id_usuario=?, precoInclTaxa=? ,precoExclTaxa=? where id=?";
-            ps = con.prepareStatement(sql);
-            ps.setDouble(1, x.getPrecoNormal());
-            ps.setString(2, x.getData_inicio());
-            ps.setString(3, x.getDataValidade());
-            ps.setInt(4, x.getUsuario().getId());
-            ps.setDouble(5, x.getPrecoVenda());
-            ps.setDouble(6, x.getPrecoFinal());
-            ps.setInt(7, id);
-
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
-            }
-
-        } catch (SQLException ex) {
-            showDialog( "Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return isSuccess;
-    }
-
-    @Override
-    public ObservableList<PrecoVenda> getEntityByProdutoID(int idProduto) {
+    public ObservableList<PrecoVenda> getEntityByID(int idProduto, int idArmazem) {
         ObservableList<PrecoVenda> lista = FXCollections.observableArrayList();
         PrecoVenda pv = null;
         try {
-            sql = "select * from precovenda where fk_id_produto=?";
+            sql = "select * from precovenda where idProduto=? and idArmazem=?";
             ps = con.prepareStatement(sql);
             ps.setInt(1,  idProduto);
+            ps.setInt(2,  idArmazem);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
                 //melhorar esta funcao
                 pv = new PrecoVenda();
                 pv.setId(result.getInt("id"));
                 pv.setPrecoNormal(result.getDouble("precoNormal"));
-                pv.setPrecoVenda(result.getDouble("precoInclTaxa"));
-                pv.setPrecoFinal(result.getDouble("precoExclTaxa"));
-                pv.setData_inicio(result.getString("data_inicio"));
-                pv.setDataValidade(result.getString("data_fim"));
+                pv.setPrecoVenda(result.getDouble("precoVenda"));
+                pv.setPrecoFinal(result.getDouble("precoFinal"));
+                pv.setDataValidade(result.getString("dataValidade"));
                 pv.setEstado(result.getString("estado"));
+                Produto p = new Produto();
+                p.setId(result.getInt("idProduto"));
+                pv.setProduto(p);
+                Armazem a = new Armazem();
+                a.setId(result.getInt("idArmazem"));
+                pv.setArmazem(a);
+                Usuario u = new Usuario();
+                u.setId(result.getInt("fk_id_usuario"));
+                pv.setUsuario(u);
                 lista.add(pv);
             }
             result.close();
@@ -182,8 +126,4 @@ public class PrecoVendaDAO implements PrecoVendaDAOImpl<PrecoVenda> {
         return isSuccess;
     }
    
-
-    
-
-
 }

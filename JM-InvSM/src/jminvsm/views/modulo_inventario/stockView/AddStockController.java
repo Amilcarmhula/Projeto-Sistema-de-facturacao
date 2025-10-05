@@ -76,7 +76,7 @@ public class AddStockController implements Initializable {
 
     @FXML
     private TextField txtIDProduto;
-    
+
     @FXML
     private TextField txtPesquisaArmazem;
 
@@ -85,13 +85,13 @@ public class AddStockController implements Initializable {
 
     @FXML
     private TextField txtQuantidade;
-    
+
     @FXML
     private TextField txtQtd_por_unidade;
-    
+
     @FXML
     private RadioButton radSimples;
-    
+
     @FXML
     private RadioButton radComposto;
 
@@ -106,16 +106,16 @@ public class AddStockController implements Initializable {
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
     }
-    
-    
-    public void checkTipoLote(){
-        if (s.getProduto().getTipo().equals("Composto")) {
-            radComposto.setSelected(true);
+
+    public void checkTipoLote() {
+        if (radComposto.isArmed()) {
             radSimples.setSelected(false);
+            txtQtd_por_unidade.setDisable(false);
         }
-        if (s.getProduto().getTipo().equals("Simples")) {
-            radSimples.setSelected(true);
+        if (radSimples.isArmed()) {
             radComposto.setSelected(false);
+            txtQtd_por_unidade.setText("1");
+            txtQtd_por_unidade.setDisable(true);
         }
     }
 
@@ -127,7 +127,6 @@ public class AddStockController implements Initializable {
 //        priceFormaterProduto();
         s = (Stock) SysFact.getData();
         txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
-        txtQuantidade.setText(String.valueOf(s.getProduto().getUnidadesPorTipo()));
         checkTipoLote();
         try {
             service = new ServiceProdutoFornecido();
@@ -181,13 +180,20 @@ public class AddStockController implements Initializable {
     }
 
     public void addProdutoFornecido(ActionEvent e) throws SQLException {
+        String tipo = "";
+        if (radComposto.isSelected()) {
+            tipo = "Composto";
+        }
+        if (radSimples.isSelected()) {
+            tipo = "Simples";
+        }
         service.registraProdutoFornecido(s.getArmazem().getId(),
                 Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText()),
                 Integer.valueOf(txtIDFornecedor.getText().equals("") ? "0" : txtIDFornecedor.getText()), userData,
-                Integer.valueOf(txtQuantidade.getText().equals("") ? "1" : txtQuantidade.getText()),
+                Integer.valueOf(txtQuantidade.getText().equals("") ? "0" : txtQuantidade.getText()),
                 String.valueOf(dataAquisicao.getValue() == null ? "" : dataAquisicao.getValue()),
                 Double.valueOf(txtCustoAquisicao.getText().equals("") ? "0" : txtCustoAquisicao.getText()),
-                s.getProduto().getTipo(),
+                tipo,
                 Integer.valueOf(txtQtd_por_unidade.getText().equals("") ? "1" : txtQtd_por_unidade.getText()));
     }
 }

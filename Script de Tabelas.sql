@@ -280,7 +280,7 @@ create table stock(
     foreign key(fk_id_produto) references produto(id) on delete cascade,
     foreign key(fk_id_armazem) references armazem(id) on delete cascade
 );
-
+desc produto_fornecido;
 create table produto_fornecido(
 	id integer primary key auto_increment,
     quantidade integer,

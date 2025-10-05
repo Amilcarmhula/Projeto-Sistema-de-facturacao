@@ -147,24 +147,82 @@ delimiter ;
 -- Automatiza o registo de entrada de stock
 -- Mantém histórico de movimentação
 -- Garante consistência entre fornecimento e saldo de stock
-delimiter //
+
+DELIMITER //
 CREATE TRIGGER Tg_CU_Stock_Entrada
-	AFTER INSERT ON produto_fornecido
-	FOR EACH ROW
-	BEGIN
-		DECLARE total_unidades INT;
+AFTER INSERT ON produto_fornecido
+FOR EACH ROW
+BEGIN
+    -- Todas as variáveis precisam estar no início do bloco
+    DECLARE tipoProduto VARCHAR(20);
+    DECLARE done INT DEFAULT 0;
+    DECLARE comp_id INT;
+    DECLARE comp_qtd INT;
+    DECLARE total_unidades INT;
 
-		SET total_unidades = NEW.quantidade * NEW.qtd_por_unidade;
+    -- Declara cursor e handler também no início
+    DECLARE cur CURSOR FOR
+        SELECT idSimples, quantidadePorUnidade
+        FROM produto_composicao
+        WHERE idComposto = NEW.fk_id_produto;
 
-		INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
-		VALUES (NEW.fk_id_produto, NEW.fk_id_armazem, total_unidades)
-		ON DUPLICATE KEY UPDATE saldo = saldo + total_unidades;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
-		-- Inserir também na tabela movimento
-		INSERT INTO movimento (tipo_movimento, data_movimento, quantidade, fk_id_produto, fk_id_usuario, fk_id_armazem, tipoUnidadeMov, uniPorTipoMove)
-		VALUES ('Entrada', NEW.data_fornecida, NEW.quantidade, NEW.fk_id_produto, NEW.fk_id_usuario, NEW.fk_id_armazem, NEW.unidade_fornecida, NEW.qtd_por_unidade);
-	END//
-delimiter ;
+    -- Descobre se o produto fornecido é simples ou composto
+    SELECT tipo INTO tipoProduto
+    FROM produto
+    WHERE id = NEW.fk_id_produto;
+
+    IF tipoProduto = 'Simples' THEN
+        -- Entrada direta no produto simples
+        INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
+        VALUES (NEW.fk_id_produto, NEW.fk_id_armazem, NEW.quantidade)
+       -- ON DUPLICATE KEY UPDATE saldo = saldo + NEW.quantidade*NEW.qtd_por_unidade;
+        ON DUPLICATE KEY UPDATE saldo = saldo + NEW.quantidade*NEW.qtd_por_unidade;
+
+        -- Registra movimento
+        INSERT INTO movimento (
+            tipo_movimento, data_movimento, quantidade,
+            tipoUnidadeMov, uniPorTipoMove, fk_id_produto,
+            fk_id_usuario, fk_id_armazem
+        ) VALUES (
+            'Entrada', NEW.data_fornecida, NEW.quantidade,
+            NEW.unidade_fornecida, NEW.qtd_por_unidade,
+            NEW.fk_id_produto, NEW.fk_id_usuario, NEW.fk_id_armazem
+        );
+
+    ELSEIF tipoProduto = 'Composto' THEN
+        -- Entrada de produto composto: converter em simples
+        OPEN cur;
+        read_loop: LOOP
+            FETCH cur INTO comp_id, comp_qtd;
+            IF done THEN
+                LEAVE read_loop;
+            END IF;
+
+            -- Total de unidades a lançar no stock simples
+            SET total_unidades = NEW.quantidade * comp_qtd;
+
+            -- Atualiza stock do produto simples
+            INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
+            VALUES (comp_id, NEW.fk_id_armazem, total_unidades)
+            ON DUPLICATE KEY UPDATE saldo = saldo + total_unidades;
+
+            -- Registra movimento com referência ao simples
+            INSERT INTO movimento (
+                tipo_movimento, data_movimento, quantidade,
+                tipoUnidadeMov, uniPorTipoMove, fk_id_produto,
+                fk_id_usuario, fk_id_armazem
+            ) VALUES (
+                'Entrada', NEW.data_fornecida, NEW.quantidade,
+                NEW.unidade_fornecida, comp_qtd,
+                comp_id, NEW.fk_id_usuario, NEW.fk_id_armazem
+            );
+        END LOOP;
+        CLOSE cur;
+    END IF;
+END//
+DELIMITER ;
 
 
 -- Quando um produto é vendido ou movimentado como "Saída", atualizar o stock.

@@ -70,7 +70,7 @@ public class ServiceProdutoDesconto {
             return;
         }
 
-        if (percentagem == null || percentagem <= 0) {
+        if (percentagem == null) {
             showErroAlert("Valor da percentagem nao definida.");
             return;
         }

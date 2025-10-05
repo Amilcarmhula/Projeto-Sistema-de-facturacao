@@ -82,16 +82,18 @@
       <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="278.0" onMouseClicked="#selecionaProduto" prefHeight="351.0" prefWidth="1432.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="243.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
-            <TableColumn fx:id="artigo" prefWidth="184.0" text="Artigo" />
-            <TableColumn fx:id="codigobarras" prefWidth="122.0" text="Codigo de barras" />
-            <TableColumn fx:id="armazem" prefWidth="284.0" resizable="false" text="Armazem" />
-            <TableColumn fx:id="descricao" prefWidth="338.0" resizable="false" text="Descrição" />
-            <TableColumn fx:id="unidade" prefWidth="66.0" resizable="false" text="Unidade" />
-            <TableColumn fx:id="categoria" prefWidth="114.0" resizable="false" text="Categoria" />
-            <TableColumn fx:id="taxa" prefWidth="68.0" resizable="false" text="Taxa" />
-            <TableColumn fx:id="stock" prefWidth="52.0" resizable="false" text="Stock" />
-            <TableColumn fx:id="nivelStock" prefWidth="54.0" resizable="false" text="Nivel" />
-            <TableColumn fx:id="quantidade" prefWidth="55.0" resizable="false" text="Qtd." />
+            <TableColumn fx:id="artigo" prefWidth="140.0" text="Artigo" />
+            <TableColumn fx:id="codigobarras" prefWidth="155.0" text="Codigo de barras" />
+            <TableColumn fx:id="armazem" prefWidth="225.0" resizable="false" text="Armazem" />
+            <TableColumn fx:id="descricao" prefWidth="243.0" resizable="false" text="Descrição" />
+            <TableColumn fx:id="tipoProduto" prefWidth="120.0" resizable="false" text="Tipo" />
+            <TableColumn fx:id="unidade" prefWidth="55.0" resizable="false" text="Unidade" />
+            <TableColumn fx:id="unidadesPorTipo" prefWidth="67.0" resizable="false" text="Un.P/Tipo" />
+            <TableColumn fx:id="categoria" prefWidth="117.0" resizable="false" text="Categoria" />
+            <TableColumn fx:id="taxa" prefWidth="66.0" resizable="false" text="Taxa" />
+            <TableColumn fx:id="stock" prefWidth="48.0" resizable="false" text="Stock" />
+            <TableColumn fx:id="nivelStock" prefWidth="43.0" resizable="false" text="Nivel" />
+            <TableColumn fx:id="quantidade" prefWidth="61.0" resizable="false" text="Qtd." />
          </columns>
       </TableView>
       <AnchorPane prefHeight="265.0" prefWidth="1432.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
@@ -150,7 +152,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnAddProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="351.0" layoutY="171.0" mnemonicParsing="false" onAction="#addORupdate" prefHeight="36.0" prefWidth="321.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="btnAddProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="351.0" layoutY="218.0" mnemonicParsing="false" onAction="#addORupdate" prefHeight="36.0" prefWidth="321.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -203,6 +205,8 @@
                   <Font size="20.0" />
                </font>
             </Label>
+            <ComboBox fx:id="combTipo" layoutX="353.0" layoutY="165.0" prefHeight="30.0" prefWidth="191.0" promptText="Tipo" visibleRowCount="5" />
+            <TextField fx:id="txtUnidadesPorTipo" layoutX="564.0" layoutY="167.0" prefHeight="26.0" prefWidth="114.0" promptText="Unidade por tipo" />
          </children>
       </AnchorPane>
       <AnchorPane layoutY="622.0" prefHeight="243.0" prefWidth="1400.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

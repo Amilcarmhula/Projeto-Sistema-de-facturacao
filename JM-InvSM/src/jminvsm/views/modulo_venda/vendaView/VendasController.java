@@ -42,9 +42,9 @@ import javafx.util.converter.IntegerStringConverter;
 import jminvsm.SysFact;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.cliente.Cliente;
-import jminvsm.model.desconto.Desconto;
 import jminvsm.model.empresa.Empresa;
 import jminvsm.model.produto.Produto;
+import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.documetos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.Factura;
@@ -84,13 +84,7 @@ public class VendasController implements Initializable {
 
     @FXML
     private Button btnRemoveItem;
-
-    @FXML
-    private ComboBox<String> combDesconto;
-
-    @FXML
-    private ComboBox<String> combUnidadeVendida;
-
+    
     @FXML
     private Label labDesconto;
 
@@ -145,7 +139,9 @@ public class VendasController implements Initializable {
     @FXML
     private TextField txtQtd_por_unidade;
     @FXML
-    private TextField txtStock;
+    private TextField txtTipo;
+    @FXML
+    private TextField txtUnidadePorTipo;
     @FXML
     private TextField txtNome;
     @FXML
@@ -176,7 +172,7 @@ public class VendasController implements Initializable {
     @FXML
     private ComboBox<String> combTipoDoc;
 
-    private Map<Integer, Produto> mapaProdutos;
+    private Map<Integer, Stock> mapaProdutos;
 
     private Random randNum;
 
@@ -232,16 +228,16 @@ public class VendasController implements Initializable {
 
     }
 
-    public void selecionaLote() {
-        String tipoLote = combUnidadeVendida.getSelectionModel().getSelectedItem();
-        if ("Unidade".equals(tipoLote)) {
-            txtQuantidade.setText("1");
-            txtQuantidade.setDisable(true);
-        } else {
-            txtQuantidade.setDisable(false);
-            txtQuantidade.clear();
-        }
-    }
+//    public void selecionaLote() {
+//        String tipoLote = combUnidadeVendida.getSelectionModel().getSelectedItem();
+//        if ("Unidade".equals(tipoLote)) {
+//            txtQuantidade.setText("1");
+//            txtQuantidade.setDisable(true);
+//        } else {
+//            txtQuantidade.setDisable(false);
+//            txtQuantidade.clear();
+//        }
+//    }
 
     public void getDataOnFocus() throws SQLException {
         txtIDCliente.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -268,17 +264,18 @@ public class VendasController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
-                    if (SysFact.getData() instanceof Produto && SysFact.getData() != null) {
-//                        Produto x = (Produto) SysFact.getData();
-//                        if (x.getPrecovenda() != null) {
-//                            int num = randNum.nextInt(50);
-//                            mapaProdutos.put(num, x);
-//                            txtID.setText(num + "");
-//                            txtStock.setText(String.valueOf(x.getStock().getSaldo()));
-//                            txtPrecovenda.setText(String.valueOf(x.getPrecovenda().getPreco()));
-//                            txtNome.setText(x.getNome());
-//                            txtDescricao.setText(x.getDescricao());
-//                        }
+                    if (SysFact.getData() instanceof Stock && SysFact.getData() != null) {
+                        Stock x = (Stock) SysFact.getData();
+                        if (x.getProduto().getPrecoVenda().getPrecoNormal() != null) {
+                            int num = randNum.nextInt(50);
+                            mapaProdutos.put(num, x);
+                            txtID.setText(num + "");
+                            txtTipo.setText(String.valueOf(x.getProduto().getTipo()));
+                            txtPrecovenda.setText(String.valueOf(x.getProduto().getPrecoVenda().getPrecoVenda()));
+                            txtNome.setText(x.getProduto().getNome());
+                            txtDescricao.setText(x.getProduto().getDescricao());
+                            txtUnidadePorTipo.setText(String.valueOf(x.getProduto().getUnidadesPorTipo()));
+                        }
                     }
                 }
             }
@@ -357,12 +354,10 @@ public class VendasController implements Initializable {
             serDocs = new ServiceDocumentos();
             labDataInicial.setText(InvoiceUtilities.actualDate());
             populateComboFactura();
-            populateComboDesconto();
             getDataOnFocus();
         } catch (SQLException ex) {
             Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        combUnidadeVendida.setItems(FXCollections.observableArrayList("Unidade", "Caixa"));
     }
 
     private ObservableList<DocumentosComerciais> listaDocComercial;
@@ -382,23 +377,10 @@ public class VendasController implements Initializable {
         combTipoDoc.setItems(FXCollections.observableArrayList(lista));
     }
 
-    private ObservableList<Desconto> listaDescontos;
-    private Map<String, Desconto> mapaDesconto;
-
-    public void populateComboDesconto() throws SQLException {
-        mapaDesconto = new HashMap<>();
-        listaDescontos = serDesconto.listDescontos();
-        List<String> lista = new ArrayList<>();
-        for (Desconto d : listaDescontos) {
-            mapaDesconto.put(d.getNome(), d);
-            lista.add(d.getNome());
-        }
-        combDesconto.setItems(FXCollections.observableArrayList(lista));
-    }
 
     public void populateTableItems(ActionEvent e) {
         int qtd;
-        int qtd_por_unidade;
+        int qtd_por_unidade = 1;
         if (txtID.getText() == null || txtID.getText().isEmpty()) {
             showErroAlert("Produto/Servico nao selecionado!");
             return;
@@ -411,18 +393,18 @@ public class VendasController implements Initializable {
             qtd = Integer.parseInt(txtQuantidade.getText());
         }
 
-        if (combUnidadeVendida.getValue() == null) {
-
-            qtd_por_unidade = 1;
-        } else {
-            qtd_por_unidade = Integer.parseInt(txtQtd_por_unidade.getText());
-        }
+//        if (combUnidadeVendida.getValue() == null) {
+//
+//            qtd_por_unidade = 1;
+//        } else {
+//            qtd_por_unidade = Integer.parseInt(txtQtd_por_unidade.getText());
+//        }
         int id = Integer.parseInt(txtID.getText());
-        Produto x = mapaProdutos.get(id);
-        Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());
+        Stock x = mapaProdutos.get(id);
+//        Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());
         Item i = new Item();
         i.setId(id);
-        i.setProduto(x);
+//        i.setProduto(x);
 //        i.setDesconto(desconto);
 //        i.setPreco(x.getPrecovenda().getPreco());
         Armazem a = new Armazem();
@@ -430,7 +412,7 @@ public class VendasController implements Initializable {
         i.setArmazem(a);
         i.setQuantidade(qtd);
         i.setQtd_por_unidade(qtd_por_unidade);
-        i.setUnidade_vendida(combUnidadeVendida.getValue() == null ? "Unidade" : combUnidadeVendida.getValue());
+//        i.setUnidade_vendida(combUnidadeVendida.getValue() == null ? "Unidade" : combUnidadeVendida.getValue());
         double subtotal = 0;
         double desc;
         double taxa;
@@ -447,19 +429,19 @@ public class VendasController implements Initializable {
             return;
         }
         i.setSubtotal(subtotal);
-        if (x.isControle_stock() == true) {
-            if (/*x.getStock().getSaldo() >*/ qtd < qtd_por_unidade) {
-                tabelaItens.getItems().add(i);
-                resetProduto();
-                displayPrice();
-            } else {
-                AlertUtilities.showDialog("Erro", "Stock baixo. Produto nao pode ser comercializado!");
-            }
-        } else {
-            tabelaItens.getItems().add(i);
-            resetProduto();
-            displayPrice();
-        }
+//        if (x.isControle_stock() == true) {
+//            if (/*x.getStock().getSaldo() >*/ qtd < qtd_por_unidade) {
+//                tabelaItens.getItems().add(i);
+//                resetProduto();
+//                displayPrice();
+//            } else {
+//                AlertUtilities.showDialog("Erro", "Stock baixo. Produto nao pode ser comercializado!");
+//            }
+//        } else {
+//            tabelaItens.getItems().add(i);
+//            resetProduto();
+//            displayPrice();
+//        }
     }
     
 
@@ -530,8 +512,8 @@ public class VendasController implements Initializable {
         List<Item> listaItems = new ArrayList<>();
         for (Item item : itens) {
             i = new Item();
-            Produto p = mapaProdutos.get(item.getId());
-            i.setProduto(p);
+//            Produto p = mapaProdutos.get(item.getId());
+//            i.setProduto(p);
 //            i.setPreco(item.getPreco());
             i.setQuantidade(item.getQuantidade());
             i.setUnidade_vendida(item.getUnidade_vendida());
@@ -556,7 +538,7 @@ public class VendasController implements Initializable {
         double taxa = 0;
         double total = 0;
         for (Item item : itens) {
-            Produto x = mapaProdutos.get(item.getId());
+//            Produto x = mapaProdutos.get(item.getId());
 //            if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
 //                subtotal += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco();
 //                taxa += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * x.getImposto().getPercentagem();
@@ -585,7 +567,7 @@ public class VendasController implements Initializable {
 
     public void resetProduto() {
         txtID.setText("");
-        txtStock.setText("");
+        txtTipo.setText("");
         txtPrecovenda.setText("");
         txtNome.setText("");
         txtDescricao.setText("");

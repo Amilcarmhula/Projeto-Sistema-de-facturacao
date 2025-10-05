@@ -88,7 +88,7 @@ public class ProdutoController implements Initializable {
     private ServiceProdutoDesconto serProDesconto;
 
     private int idArmazem;
-    
+
     @FXML
     private TableView<ProdutoDesconto> tabelaprodutodesconto;
     @FXML
@@ -128,6 +128,10 @@ public class ProdutoController implements Initializable {
     private TableColumn<Stock, String> nivelStock;
     @FXML
     private TableColumn<Stock, String> quantidade;
+    @FXML
+    private TableColumn<Stock, String> tipoProduto;
+    @FXML
+    private TableColumn<Stock, String> unidadesPorTipo;
     @FXML
     private TableColumn<Stock, String> btntabelaProduto;
 
@@ -172,6 +176,8 @@ public class ProdutoController implements Initializable {
     @FXML
     private ComboBox<String> combUnidade;
     @FXML
+    private ComboBox<String> combTipo;
+    @FXML
     private ComboBox<String> combTaxa;
 
     @FXML
@@ -190,21 +196,23 @@ public class ProdutoController implements Initializable {
     @FXML
     private TextField txtPreco;
     @FXML
+    private TextField txtUnidadesPorTipo;
+    @FXML
     private TextField txtPesqDesconto;
     @FXML
     private TableView<PrecoVenda> tabelaPrecos;
     @FXML
-    private TableColumn<Produto, Integer> idPreco;
+    private TableColumn<PrecoVenda, Integer> idPreco;
     @FXML
-    private TableColumn<Produto, Double> precoNormal;
+    private TableColumn<PrecoVenda, Double> precoNormal;
     @FXML
-    private TableColumn<Produto, Double> precoVenda;
+    private TableColumn<PrecoVenda, Double> precoVenda;
     @FXML
-    private TableColumn<Produto, Double> precoFinal;
+    private TableColumn<PrecoVenda, Double> precoFinal;
     @FXML
-    private TableColumn<Produto, String> dataValidade;
+    private TableColumn<PrecoVenda, String> dataValidade;
     @FXML
-    private TableColumn<Produto, String> estadoPreco;
+    private TableColumn<PrecoVenda, String> estadoPreco;
     @FXML
     private Button btnAddProduto;
 
@@ -248,7 +256,6 @@ public class ProdutoController implements Initializable {
             addProduto(e);
         } else if (!"".equals(txtIDProduto.getText()) && "".equals(labIDPreco.getText())) {
             updateProduto(e);
-            addPrecoVendaONSelected();
         } else if (!"".equals(txtIDProduto.getText()) && !"0".equals(labIDPreco.getText())) {
             updateProduto(e);
             updatePrecoVenda(e);
@@ -383,6 +390,8 @@ public class ProdutoController implements Initializable {
         codigobarras.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCodigo_barra()));
         descricao.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getDescricao()));
         unidade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getUnidade_medida().getSigla()));
+        tipoProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getTipo()));
+        unidadesPorTipo.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidadesPorTipo())));
         categoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCategoria().getFamilia()));
         taxa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getImposto().getNome()));
         quantidade.setCellValueFactory(new PropertyValueFactory<>("saldo"));
@@ -466,10 +475,12 @@ public class ProdutoController implements Initializable {
         int id_cat = mapaCategorias.get(combCategoria.getValue()).getId();
         int id_uni = mapaUnidades.get(combUnidade.getValue()).getId();
         int id_tax = mapaTaxas.get(combTaxa.getValue()).getId();
+        String tipo = combTipo.getValue();
+        Integer uniPorTipo = Integer.valueOf(txtUnidadesPorTipo.getText().equals("") ? "0" :txtUnidadesPorTipo.getText());
 
         serProduto.regista(id_cat, id_uni,
                 id_tax, txtNomeProduto.getText(),
-                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
+                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), tipo, uniPorTipo,
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("") ? "0" : txtNivelStock.getText()));
         showInvenarioProdutos();
         resetCampos();
@@ -498,29 +509,18 @@ public class ProdutoController implements Initializable {
         resetCampos();
     }
 
-    public void addPrecoVendaONSelected() {
-        if (txtPreco.getText().equals("")) {
-            return;
-        }
-        double precoNorm = Double.parseDouble(txtPreco.getText()/*.equals("")?"0":txtPreco.getText()*/);
-        Produto p = new Produto();
-        p.setId(Integer.parseInt(txtIDProduto.getText()));
-//        servPreco.registraPreco(precoNorm, precoComTax, precoSemTax,
-//                String.valueOf(dataInicio.getValue()), String.valueOf(dataFim.getValue()),
-//                userData, p);
-        showInvenarioProdutos();
-//        showPrecoVenda();
-        resetCampos();
-    }
+   
 
     public void updateProduto(ActionEvent e) {
         int id_pro = Integer.parseInt(txtIDProduto.getText());
         int id_cat = mapaCategorias.get(combCategoria.getValue().equals("") ? "0" : combCategoria.getValue()).getId();
         int id_uni = mapaUnidades.get(combUnidade.getValue().equals("") ? "0" : combUnidade.getValue()).getId();
         int id_tax = mapaTaxas.get(combTaxa.getValue().equals("") ? "0" : combTaxa.getValue()).getId();
+        String tipo = combTipo.getValue();
+        Integer uniPorTipo = Integer.valueOf(txtUnidadesPorTipo.getText().equals("") ? "0" :txtUnidadesPorTipo.getText());
 
         serProduto.actualiza(id_pro, id_cat, id_uni, id_tax, txtNomeProduto.getText(),
-                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(),
+                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), tipo, uniPorTipo,
                 checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
 
         showInvenarioProdutos();
@@ -611,6 +611,7 @@ public class ProdutoController implements Initializable {
         combCategoria.setItems(FXCollections.observableArrayList(listaCat));
         combUnidade.setItems(FXCollections.observableArrayList(listaUni));
         combTaxa.setItems(FXCollections.observableArrayList(listaTax));
+        combTipo.setItems(FXCollections.observableArrayList("Simples","Composto"));
 
     }
 //  ############################################################################
@@ -636,7 +637,9 @@ public class ProdutoController implements Initializable {
             checkControle.setSelected(s.getProduto().isControle_stock());
             combCategoria.setValue(s.getProduto().getCategoria().getFamilia());
             combUnidade.setValue(s.getProduto().getUnidade_medida().getNome());
+            combTipo.setValue(s.getProduto().getTipo());
             combTaxa.setValue(s.getProduto().getImposto().getNome());
+            txtUnidadesPorTipo.setText(String.valueOf(s.getProduto().getUnidadesPorTipo()));
             stockControlChecked();
 //            showPrecoVenda();
 
@@ -735,7 +738,7 @@ public class ProdutoController implements Initializable {
             tabelaPrecos.setItems(listaPrecos);
         }
     }
-    
+
     private ObservableList<ProdutoDesconto> listaprodutodesconto;
 
     public void showProdutoDesconto() {
@@ -743,7 +746,7 @@ public class ProdutoController implements Initializable {
         if (x != null) {
 
             listaprodutodesconto = serProDesconto.consultaProdutoDesconto(x.getProduto().getId(), x.getArmazem().getId());
-            
+
             pdProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
             pdArmazem.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
             pdDesconto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDesconto().getNome()));

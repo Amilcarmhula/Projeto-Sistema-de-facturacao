@@ -36,7 +36,8 @@ public class ServiceProduto {
     }
 
     public void regista(Integer id_cat, Integer id_uni, Integer id_tax,
-            String nome, String codBarras, String descricao, Boolean controleStock, Integer nivelstock) {
+            String nome, String codBarras, String descricao, String tipo, Integer unidadePorTipo,
+            Boolean controleStock, Integer nivelstock) {
         setOpsSuccess(false);
         // Validações básicas antes de registrar a categoria
         if (id_cat == null || id_cat <= 0) {
@@ -78,6 +79,8 @@ public class ServiceProduto {
         p.setControle_stock(controleStock);
         p.setNivelstock(nivelstock);
         p.setDescricao(descricao);
+        p.setTipo(tipo);
+        p.setUnidadesPorTipo(unidadePorTipo);
         Categoria c = new Categoria();
         c.setId(id_cat);
         p.setCategoria(c);
@@ -95,7 +98,7 @@ public class ServiceProduto {
     }
 
     public void actualiza(int id, Integer id_cat, Integer id_uni, Integer id_tax,
-            String nome, String codBarras, String descricao, Boolean controleStock, Integer nivelstock) {
+            String nome, String codBarras, String descricao,String tipo, Integer unidadePorTipo, Boolean controleStock, Integer nivelstock) {
         setOpsSuccess(false);
 
         // Validações básicas antes de registrar a categoria
@@ -134,6 +137,8 @@ public class ServiceProduto {
         p.setControle_stock(controleStock);
         p.setNivelstock(nivelstock);
         p.setDescricao(descricao);
+        p.setTipo(tipo);
+        p.setUnidadesPorTipo(unidadePorTipo);
         Categoria c = new Categoria();
         c.setId(id_cat);
         p.setCategoria(c);

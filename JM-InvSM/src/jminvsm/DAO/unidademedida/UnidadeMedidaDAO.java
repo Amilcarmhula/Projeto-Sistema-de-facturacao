@@ -35,7 +35,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
     public boolean addEntity(UnidadeMedida t) {
         boolean isSuccess = false;
         try {
-            sql = "insert into unidade_medida (identificador, sigla, descricao)"
+            sql = "insert into unidade_medida (nome, sigla, descricao)"
                     + " value (?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, t.getNome());
@@ -65,7 +65,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
     public boolean updateEntityByID(UnidadeMedida t, int id) {
         boolean isSuccess = false;
         try {
-            sql = "update unidade_medida set identificador=?, sigla=?, descricao=?"
+            sql = "update unidade_medida set nome=?, sigla=?, descricao=?"
                     + " where id=?";
             ps = con.prepareStatement(sql);
 

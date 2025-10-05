@@ -49,7 +49,7 @@ INSERT INTO contacto_fornecedor (pessoa_de_contacto, contacto, email, website, f
 SELECT 'Fornecedor Padrao',contacto, email,website,(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM contacto_empresa order by id DESC LIMIT 1;
 
 INSERT INTO armazem (nome, tipo, descricao, estado) VALUE
-('Armazém Z', 'Central', 'Armazem Principalo', 1);
+('Armazem PL', 'Central', 'Armazem Principal', 1);
 
 INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, fk_id_armazem,fk_id_usuario) 
 SELECT provincia, cidade, bairro, avenida, rua, codigo_postal, numero,(Select id from armazem order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM endereco_empresa order by id DESC LIMIT 1;

@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -18,7 +17,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -27,7 +25,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
-import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
@@ -112,13 +109,13 @@ public class AddStockController implements Initializable {
     
     
     public void checkTipoLote(){
-        if (radSimples.isArmed()) {
-            radComposto.setSelected(false);
-            txtQuantidade.setDisable(true);
-        }
-        if (radComposto.isArmed()) {
+        if (s.getProduto().getTipo().equals("Composto")) {
+            radComposto.setSelected(true);
             radSimples.setSelected(false);
-            txtQuantidade.setDisable(false);
+        }
+        if (s.getProduto().getTipo().equals("Simples")) {
+            radSimples.setSelected(true);
+            radComposto.setSelected(false);
         }
     }
 
@@ -130,6 +127,8 @@ public class AddStockController implements Initializable {
 //        priceFormaterProduto();
         s = (Stock) SysFact.getData();
         txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
+        txtQuantidade.setText(String.valueOf(s.getProduto().getUnidadesPorTipo()));
+        checkTipoLote();
         try {
             service = new ServiceProdutoFornecido();
             serviceArmazem = new ServiceArmazem();
@@ -182,22 +181,13 @@ public class AddStockController implements Initializable {
     }
 
     public void addProdutoFornecido(ActionEvent e) throws SQLException {
-        String tipoLote = "";
-        int quantidade = 1;
-        if(radSimples.isSelected()){
-            tipoLote= "Simples";
-            txtQuantidade.setText("1");
-        }
-        if(radComposto.isSelected()){
-            tipoLote="Composto";
-        }
-        service.registraProdutoFornecido(s.getArmazem().getId()/*Integer.valueOf(txtIDArmazem.getText().equals("") ? "0" : txtIDArmazem.getText())*/,
+        service.registraProdutoFornecido(s.getArmazem().getId(),
                 Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText()),
                 Integer.valueOf(txtIDFornecedor.getText().equals("") ? "0" : txtIDFornecedor.getText()), userData,
                 Integer.valueOf(txtQuantidade.getText().equals("") ? "1" : txtQuantidade.getText()),
                 String.valueOf(dataAquisicao.getValue() == null ? "" : dataAquisicao.getValue()),
                 Double.valueOf(txtCustoAquisicao.getText().equals("") ? "0" : txtCustoAquisicao.getText()),
-                tipoLote,
+                s.getProduto().getTipo(),
                 Integer.valueOf(txtQtd_por_unidade.getText().equals("") ? "1" : txtQtd_por_unidade.getText()));
     }
 }

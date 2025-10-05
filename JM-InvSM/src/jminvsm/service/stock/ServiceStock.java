@@ -24,7 +24,6 @@
 package jminvsm.service.stock;
 
 import java.sql.SQLException;
-import java.util.List;
 import javafx.collections.ObservableList;
 import jminvsm.dao.stock.StockDAO;
 import jminvsm.model.stock.Stock;

@@ -47,12 +47,7 @@
       <AnchorPane layoutX="10.0" layoutY="55.0" prefHeight="171.0" prefWidth="552.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="115.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-            <TextField fx:id="txtQuantidade" alignment="CENTER" layoutX="187.0" layoutY="57.0" prefHeight="26.0" prefWidth="107.0" promptText="Default: 1" stylesheets="@../../../style/dashboard.css">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </TextField>
+            <TextField fx:id="txtQuantidade" alignment="CENTER" disable="true" layoutX="168.0" layoutY="57.0" prefHeight="26.0" prefWidth="107.0" promptText="Default: 1" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
             <Button fx:id="btnAdd" layoutX="337.0" layoutY="133.0" mnemonicParsing="false" onAction="#addProdutoFornecido" prefHeight="20.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -95,28 +90,28 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="9.0" layoutY="60.0" text="Lotes(Qtd se compostos):" textFill="WHITE">
+            <Label layoutX="9.0" layoutY="60.0" text="Quantidade  no Lote:" textFill="WHITE">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="txtQtd_por_unidade" alignment="CENTER" layoutX="440.0" layoutY="56.0" prefHeight="26.0" prefWidth="107.0" promptText="Qtd." stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtQtd_por_unidade" alignment="CENTER" layoutX="421.0" layoutY="56.0" prefHeight="26.0" prefWidth="107.0" promptText="Qtd." stylesheets="@../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <Label layoutX="308.0" layoutY="59.0" text="Qtd de unidades:" textFill="WHITE">
+            <Label layoutX="289.0" layoutY="59.0" text="Qtd de unidades:" textFill="WHITE">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <RadioButton fx:id="radSimples" layoutX="241.0" layoutY="19.0" mnemonicParsing="false" onAction="#checkTipoLote" text="Simples" textFill="WHITE">
+            <RadioButton fx:id="radSimples" disable="true" layoutX="241.0" layoutY="19.0" mnemonicParsing="false" onAction="#checkTipoLote" text="Simples" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </RadioButton>
-            <RadioButton fx:id="radComposto" layoutX="326.0" layoutY="19.0" mnemonicParsing="false" onAction="#checkTipoLote" text="Composto" textFill="WHITE">
+            <RadioButton fx:id="radComposto" disable="true" layoutX="326.0" layoutY="19.0" mnemonicParsing="false" onAction="#checkTipoLote" text="Composto" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>

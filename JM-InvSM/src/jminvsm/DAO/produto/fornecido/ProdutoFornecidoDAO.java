@@ -77,8 +77,8 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
         Map<String, Integer> mapa = new HashMap<>();
         try {
             sql = "SELECT "
-                    + "SUM(CASE WHEN mp.tipo_movimento = 'Entrada' THEN (mp.quantidade * mp.qtd_por_unidade) ELSE 0 END) as entradas,"
-                    + "SUM(CASE WHEN mp.tipo_movimento = 'Saída' THEN (mp.quantidade * mp.qtd_por_unidade) ELSE 0 END) AS saidas,"
+                    + "SUM(CASE WHEN mp.tipo_movimento = 'Entrada' THEN (mp.quantidade * mp.uniPorTipoMove) ELSE 0 END) as entradas,"
+                    + "SUM(CASE WHEN mp.tipo_movimento = 'Saída' THEN (mp.quantidade * mp.uniPorTipoMove) ELSE 0 END) AS saidas,"
                     + "MONTH(mp.data_movimento) AS mes, "
                     + "YEAR(mp.data_movimento) AS ano "
                     + "FROM movimento mp "

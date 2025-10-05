@@ -8,17 +8,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import jminvsm.dao.produto.ProdutoDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.imposto.Imposto;
-import jminvsm.model.preco.PrecoProdutoArmazem;
 import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.stock.Stock;
@@ -44,18 +38,24 @@ public class StockDAO implements StockDAOImpl<Stock> {
     public ObservableList<Stock> listInventario() {
         ObservableList<Stock> lista = FXCollections.observableArrayList();
         try {
-            sql = "SELECT p.id AS idProduto, p.nome AS nomeProduto, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
-                    + " a.id AS idArmazem, a.nome AS nomeArmazem, a.tipo, "
-                    + " c.id AS idCategoria, c.familia, "
-                    + " u.id AS idUnidade, u.sigla AS siglaUnidade, "
-                    + " i.id AS idImposto, i.nome AS nomeImposto, "
-                    + " s.saldo "
-                    + " FROM stock s "
-                    + " JOIN produto p ON s.fk_id_produto = p.id "
-                    + " JOIN armazem a ON s.fk_id_armazem = a.id "
-                    + " JOIN categoria c ON p.fk_id_categoria = c.id "
-                    + " JOIN unidade_medida u ON p.fk_id_unidade_medida = u.id "
-                    + " JOIN imposto i ON p.fk_id_imposto = i.id";
+            sql = "SELECT p.id AS idProduto,  p.nome AS nomeProduto,p.codigo_barra,"
+                    + "  p.descricao, p.controle_stock, p.nivelstock, p.tipo, p.unidadePorTipo, a.id AS idArmazem,"
+                    + " a.nome AS nomeArmazem, a.tipo as tipoArmazem, c.id AS idCategoria, c.familia,"
+                    + " u.id AS idUnidade, u.nome as unidadeNome, u.sigla AS siglaUnidade, i.id AS idImposto, "
+                    + "    i.nome AS nomeImposto, pv.precoNormal, pv.precoVenda, "
+                    + "    pv.precoFinal, pv.estado as estadoPreco, s.saldo "
+                    + "FROM stock s "
+                    + "JOIN produto p ON s.fk_id_produto = p.id "
+                    + "JOIN armazem a ON s.fk_id_armazem = a.id "
+                    + "JOIN categoria c ON p.fk_id_categoria = c.id "
+                    + "JOIN unidade_medida u ON p.fk_id_unidade_medida = u.id "
+                    + "JOIN imposto i ON p.fk_id_imposto = i.id "
+                    + "LEFT JOIN precovenda pv ON pv.id = (SELECT pv2.id "
+                    + "        FROM precovenda pv2 "
+                    + "        WHERE pv2.idProduto = s.fk_id_produto "
+                    + "          AND pv2.idArmazem = s.fk_id_armazem "
+                    + "        ORDER BY pv2.data_criacao DESC "
+                    + "        LIMIT 1)";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
@@ -67,10 +67,18 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 p.setDescricao(result.getString("descricao"));
                 p.setControle_stock(result.getBoolean("controle_stock"));
                 p.setNivelstock(result.getInt("nivelstock"));
+                p.setTipo(result.getString("tipo"));
+                p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
+                PrecoVenda pv = new PrecoVenda();
+                pv.setPrecoNormal(result.getDouble("precoNormal"));
+                pv.setPrecoVenda(result.getDouble("precoVenda"));
+                pv.setPrecoFinal(result.getDouble("precoFinal"));
+                pv.setEstado(result.getString("estadoPreco"));
+                p.setPrecoVenda(pv);
                 Armazem a = new Armazem();
                 a.setId(result.getInt("idArmazem"));
                 a.setNome_arm(result.getString("nomeArmazem"));
-                a.setTipo(result.getString("tipo"));
+                a.setTipo(result.getString("tipoArmazem"));
                 s.setArmazem(a);
                 Categoria c = new Categoria();
                 c.setId(result.getInt("idCategoria"));
@@ -78,6 +86,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 p.setCategoria(c);
                 UnidadeMedida u = new UnidadeMedida();
                 u.setId(result.getInt("idUnidade"));
+                u.setNome(result.getString("unidadeNome"));
                 u.setSigla(result.getString("siglaUnidade"));
                 p.setUnidade_medida(u);
                 Imposto i = new Imposto();
@@ -92,113 +101,11 @@ public class StockDAO implements StockDAOImpl<Stock> {
             ps.close();
         } catch (SQLException ex) {
             System.out.println("Erro Detalhes: " + ex);
-//            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
+            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
 
         }
         return lista;
     }
-
-    /* 
-    Metodo melhorado, mas nao aplicavel
-     */
-//    public ObservableList<Stock> listInventario() {
-//        ObservableList<Stock> lista = FXCollections.observableArrayList();
-//        try {
-//            sql = "SELECT p.id AS idProduto, p.nome AS nomeProduto, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
-//                    + " a.id AS idArmazem, a.nome AS nomeArmazem, a.tipo, "
-//                    + " c.id AS idCategoria, c.familia, "
-//                    + " u.id AS idUnidade, u.sigla AS siglaUnidade, "
-//                    + " i.id AS idImposto, i.nome AS nomeImposto, "
-//                    + " pv.id AS idPrecoVenda, pv.precoNormal, pv.precoVenda, pv.precoFinal, pv.dataValidade, pv.estado, pv.fk_id_usuario, pv.data_criacao, "
-//                    + " s.saldo "
-//                    + " FROM stock s "
-//                    + " JOIN produto p ON s.fk_id_produto = p.id "
-//                    + " JOIN precovenda pv ON p.id = pv.idProduto AND s.fk_id_armazem = pv.idArmazem "
-//                    + " JOIN armazem a ON s.fk_id_armazem = a.id "
-//                    + " JOIN categoria c ON p.fk_id_categoria = c.id "
-//                    + " JOIN unidade_medida u ON p.fk_id_unidade_medida = u.id "
-//                    + " JOIN imposto i ON p.fk_id_imposto = i.id";
-//
-//            ps = con.prepareStatement(sql);
-//            ResultSet result = ps.executeQuery();
-//
-//            Map<Integer, Stock> stockMap = new HashMap<>(); // controla duplicados de produtos
-//
-//            while (result.next()) {
-//                int idProduto = result.getInt("idProduto");
-//
-//                Stock s;
-//                Produto p;
-//
-//                if (stockMap.containsKey(idProduto)) {
-//                    s = stockMap.get(idProduto);
-//                    p = s.getProduto();
-//                } else {
-//                    s = new Stock();
-//                    p = new Produto();
-//                    p.setId(idProduto);
-//                    p.setNome(result.getString("nomeProduto"));
-//                    p.setCodigo_barra(result.getString("codigo_barra"));
-//                    p.setDescricao(result.getString("descricao"));
-//                    p.setControle_stock(result.getBoolean("controle_stock"));
-//                    p.setNivelstock(result.getInt("nivelstock"));
-//
-//                    // categoria
-//                    Categoria c = new Categoria();
-//                    c.setId(result.getInt("idCategoria"));
-//                    c.setFamilia(result.getString("familia"));
-//                    p.setCategoria(c);
-//
-//                    // unidade de medida
-//                    UnidadeMedida u = new UnidadeMedida();
-//                    u.setId(result.getInt("idUnidade"));
-//                    u.setSigla(result.getString("siglaUnidade"));
-//                    p.setUnidade_medida(u);
-//
-//                    // imposto
-//                    Imposto i = new Imposto();
-//                    i.setId(result.getInt("idImposto"));
-//                    i.setNome(result.getString("nomeImposto"));
-//                    p.setImposto(i);
-//
-//                    // armazem
-//                    Armazem a = new Armazem();
-//                    a.setId(result.getInt("idArmazem"));
-//                    a.setNome_arm(result.getString("nomeArmazem"));
-//                    a.setTipo(result.getString("tipo"));
-//                    s.setArmazem(a);
-//
-//                    // saldo
-//                    s.setSaldo(result.getInt("saldo"));
-//                    s.setProduto(p);
-//
-//                    p.setPrecoVenda(new ArrayList<>());
-//
-//                    stockMap.put(idProduto, s);
-//                    lista.add(s);
-//                }
-//
-//                // sempre criar um novo PrecoVenda para cada linha
-//                PrecoVenda pv = new PrecoVenda();
-//                pv.setId(result.getInt("idPrecoVenda"));
-//                pv.setPrecoNormal(result.getDouble("precoNormal"));
-//                pv.setPrecoVenda(result.getDouble("precoVenda"));
-//                pv.setPrecoFinal(result.getDouble("precoFinal"));
-//                pv.setDataValidade(result.getString("dataValidade"));
-//                pv.setEstado(result.getString("estado"));
-//                pv.setProduto(p); //IdProduto(idProduto);
-//
-//                p.getPrecoVenda().add(pv);
-//            }
-//
-//            result.close();
-//            ps.close();
-//        } catch (SQLException ex) {
-//            System.out.println("Erro Detalhes: " + ex);
-//            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
-//        }
-//        return lista;
-//    }
     /**
      * Este metodo faz a listagem dos produtos e seu saldo remanescente no
      * estoque quando informados a categoria e o armazem que os contem

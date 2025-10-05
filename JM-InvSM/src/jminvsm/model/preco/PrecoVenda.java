@@ -15,7 +15,7 @@ import jminvsm.model.usuario.Usuario;
 public class PrecoVenda {
 
     private int id;
-    private double precoNormal;
+    private Double precoNormal;
     private double precoVenda;
     private double precoFinal;
     private String dataValidade;
@@ -48,11 +48,11 @@ public class PrecoVenda {
         this.id = id;
     }
 
-    public double getPrecoNormal() {
+    public Double getPrecoNormal() {
         return precoNormal;
     }
 
-    public void setPrecoNormal(double precoNormal) {
+    public void setPrecoNormal(Double precoNormal) {
         this.precoNormal = precoNormal;
     }
 

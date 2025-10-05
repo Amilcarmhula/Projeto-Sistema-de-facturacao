@@ -185,7 +185,7 @@ create table contacto_armazem(
     foreign key (fk_id_armazem) references armazem(id) on delete cascade,
     foreign key (fk_id_usuario) references usuario(id)
 );
-
+ 
 create table categoria(
 	id integer primary key auto_increment,
     tipo varchar(30) not null,
@@ -196,8 +196,6 @@ create table categoria(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     check(tipo in('Produtos','Serviços'))
 );
-
-    
     
 create table unidade_medida(
 	id integer primary key auto_increment,
@@ -206,59 +204,6 @@ create table unidade_medida(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-
- 
--- create table taxa_imposto(
--- 	id integer primary key auto_increment,
---     identificador varchar(50) not null,
---     percentagem decimal(4,3),
---     descricao text,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
--- );
-
--- create table desconto(
--- 	id integer primary key auto_increment,
---     identificador varchar(100) not null,
---     percentagem decimal(4,3),
---     descricao text,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
--- );
-
--- create table produto(
--- 	id integer primary key auto_increment,
---     nome varchar(50) not null,
---     codigo_barra varchar(50),
---     descricao text,
---     controle_stock boolean not null, -- define condicao se sera armazenado no stock pelo trigger_registra_produto
---     nivelstock integer default 0,
---     fk_id_categoria integer not null,
---     fk_id_unidade_medida integer,
---     -- fk_id_taxa_imposto integer,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   --  foreign key (fk_id_taxa_imposto) references taxa_imposto(id),
---     foreign key (fk_id_categoria) references categoria(id),
---     foreign key (fk_id_unidade_medida) references unidade_medida(id)
--- );
-
--- CREATE TABLE precovenda (
---     -- id integer PRIMARY KEY AUTO_INCREMENT,
---     precoNormal DECIMAL(10, 2) default 0.01 NULL,
---     precoInclTaxa DECIMAL(10, 2) default 0.01 NULL,
---     precoExclTaxa DECIMAL(10, 2) default 0.01 NULL,
---     data_inicio DATE,
---     data_fim DATE,
---     estado varchar(20) default 'activo' not null,
---     fk_id_produto integer not null,
---     fk_id_taxa_imposto integer, --
---     fk_id_desconto integer, --
---     fk_id_usuario integer not null,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     FOREIGN KEY (fk_id_produto) REFERENCES produto(id) on delete cascade,
---     foreign key (fk_id_usuario) references usuario(id),
---     PRIMARY KEY(fk_id_produto,fk_id_taxa_imposto,fk_id_desconto,data_inicio,data_fim)
--- );
--- select * from imposto;
 
 create table imposto(
 	id integer primary key auto_increment,
@@ -273,10 +218,13 @@ create table desconto(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 create table produto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
     codigo_barra varchar(50),
+    tipo enum('Simples', 'Composto') default 'Simples',
+    unidadePorTipo integer default 1,
     descricao text,
     controle_stock boolean not null,
     nivelstock integer default 0,
@@ -289,7 +237,6 @@ create table produto(
     foreign key (fk_id_unidade_medida) references unidade_medida(id)
 );
 
-
 create table precoProdutoArmazem(
 	idProduto integer,
     idArmazem integer,
@@ -298,9 +245,6 @@ create table precoProdutoArmazem(
     foreign key (idArmazem) references armazem(id)on delete cascade,
     primary key(idProduto, idArmazem)
 );
-
-
-    
 create table produtodesconto(
 	idProduto integer not null,
     idDesconto integer not null,
@@ -313,10 +257,6 @@ create table produtodesconto(
     foreign key (idArmazem) references armazem(id)on delete cascade,
     primary key(idProduto, idDesconto, idArmazem, dataInicio, dataFim)
 );
--- ALTER TABLE produtodesconto 
--- MODIFY COLUMN percentagem DECIMAL(4,2);
-
-
 CREATE TABLE precovenda (
     id integer PRIMARY KEY AUTO_INCREMENT, 
     precoNormal DECIMAL(10, 2) default 0.01 NULL,
@@ -332,143 +272,20 @@ CREATE TABLE precovenda (
     foreign key (idArmazem) references armazem(id)on delete cascade,
     foreign key (fk_id_usuario) references usuario(id)
 );
-
-
-
-DELIMITER //
-
-CREATE TRIGGER trg_precovenda_after_produtodesconto
-AFTER INSERT ON produtodesconto
-FOR EACH ROW
-BEGIN
-    DECLARE preco_base DECIMAL(10,2);
-    DECLARE preco_venda DECIMAL(10,2);
-    DECLARE imposto_val DECIMAL(10,2);
-    DECLARE desconto_val DECIMAL(10,2);
-    DECLARE preco_final DECIMAL(10,2);
-    DECLARE id_imposto INT;
-
-    -- 1) Desactivar preços anteriores do mesmo produto e armazém
-    UPDATE precovenda
-    SET estado = 'desactivo'
-    WHERE idProduto = NEW.idProduto
-      AND idArmazem = NEW.idArmazem
-      AND estado = 'activo';
-
-    -- 2) Buscar o preço base e o imposto associado ao produto
-    SELECT ppa.preco, pr.fk_id_imposto
-    INTO preco_base, id_imposto
-    FROM precoProdutoArmazem ppa
-    JOIN produto pr ON pr.id = ppa.idProduto
-    WHERE ppa.idProduto = NEW.idProduto
-      AND ppa.idArmazem = NEW.idArmazem;
-
-    -- 3) Calcular imposto
-    IF id_imposto IS NOT NULL THEN
-        SELECT IFNULL(percentagem,0) INTO imposto_val
-        FROM imposto
-        WHERE id = id_imposto;
-        SET imposto_val = preco_base * (imposto_val / 100);
-    ELSE
-        SET imposto_val = 0;
-    END IF;
-
-    -- 4) Calcular desconto
-    SET desconto_val = preco_base * (NEW.percentagem / 100);
-
-    -- 5) Calcular preços
-    SET preco_venda = preco_base + imposto_val;
-    SET preco_final = preco_venda - desconto_val;
-
-    -- 6) Inserir novo preço de venda como activo
-    INSERT INTO precovenda (
-        precoNormal,
-        precoVenda,
-        precoFinal,
-        dataValidade,
-        estado,
-        idProduto,
-        idArmazem,
-        fk_id_usuario,
-        data_criacao
-    ) VALUES (
-        preco_base,
-        preco_venda,
-        preco_final,
-        NEW.dataFim,
-        'activo',
-        NEW.idProduto,
-        NEW.idArmazem,
-        1,   -- ajustar: ID do usuário logado
-        NOW()
-    );
-END;
-//
-DELIMITER ;
-
-
-DELIMITER //
-
-
--- Trigger AFTER UPDATE em produtodesconto
-CREATE TRIGGER trg_precovenda_update_produtodesconto
-AFTER UPDATE ON produtodesconto
-FOR EACH ROW
-BEGIN
-    DECLARE preco_base DECIMAL(10,2);
-    DECLARE preco_venda DECIMAL(10,2);
-    DECLARE imposto_val DECIMAL(10,2);
-    DECLARE desconto_val DECIMAL(10,2);
-    DECLARE preco_final DECIMAL(10,2);
-    DECLARE id_imposto INT;
-
-    -- Buscar o preço base e o imposto associado ao produto
-    SELECT ppa.preco, pr.fk_id_imposto
-    INTO preco_base, id_imposto
-    FROM precoProdutoArmazem ppa
-    JOIN produto pr ON pr.id = ppa.idProduto
-    WHERE ppa.idProduto = NEW.idProduto
-      AND ppa.idArmazem = NEW.idArmazem;
-
-    -- Calcular imposto
-    IF id_imposto IS NOT NULL THEN
-        SELECT IFNULL(percentagem,0) INTO imposto_val
-        FROM imposto
-        WHERE id = id_imposto;
-        SET imposto_val = preco_base * (imposto_val / 100);
-    ELSE
-        SET imposto_val = 0;
-    END IF;
-
-    -- Calcular desconto atualizado
-    SET desconto_val = preco_base * (NEW.percentagem / 100);
-
-    -- Calcular preços
-    SET preco_venda = preco_base + imposto_val;
-    SET preco_final = preco_venda - desconto_val;
-
-    -- Atualizar precovenda correspondente
-    UPDATE precovenda
-    SET 
-        precoNormal = preco_base,
-        precoVenda = preco_venda,
-        precoFinal = preco_final,
-        dataValidade = NEW.dataFim,
-        data_criacao = NOW()
-    WHERE idProduto = NEW.idProduto
-      AND idArmazem = NEW.idArmazem
-      AND dataValidade = OLD.dataFim;
-END;
-//
-
-DELIMITER ;
-
-
-
+create table stock(
+	fk_id_produto integer,
+    fk_id_armazem integer,
+    saldo integer not null,
+    primary key (fk_id_produto,fk_id_armazem),
+    foreign key(fk_id_produto) references produto(id) on delete cascade,
+    foreign key(fk_id_armazem) references armazem(id) on delete cascade
+);
 
 create table produto_fornecido(
 	id integer primary key auto_increment,
     quantidade integer,
+    unidade_fornecida enum('Simples', 'Composto') DEFAULT 'Simples',
+    qtd_por_unidade integer DEFAULT 1,
     data_fornecida date,
     custo decimal(10,2) not null,
     fk_id_armazem integer default 1 not null,
@@ -481,16 +298,12 @@ create table produto_fornecido(
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_fornecedor) references fornecedor(id)
 );
--- Nova tabela para controlo de vendas por unidades e lotes
-ALTER TABLE produto_fornecido
-ADD COLUMN unidade_fornecida VARCHAR(20) DEFAULT 'Unidade',
-ADD COLUMN qtd_por_unidade INT DEFAULT 1;
-
-
 
 create table movimento(
 	id integer primary key auto_increment,
     tipo_movimento varchar(8) not null,
+    tipoUnidadeMov enum('Simples', 'Composto') default 'Simples',
+    uniPorTipoMove integer,
     data_movimento date,
     quantidade integer not null,
     fk_id_produto integer not null,
@@ -500,26 +313,6 @@ create table movimento(
 	foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_armazem) references armazem(id),
     check (tipo_movimento in('Entrada','Saída'))
-);
--- Nova tabela para controlo de vendas por unidades e lotes
-ALTER TABLE movimento
-ADD COLUMN unidade_movimentada VARCHAR(20) DEFAULT 'Unidade',
-ADD COLUMN qtd_por_unidade INT DEFAULT 1;
-
-select * from produto_fornecido;
-select * from movimento;
-select * from stock;
-select * from produto;
-select * from unidade_medida;
-
-
-create table stock(
-	fk_id_produto integer,
-    fk_id_armazem integer,
-    saldo integer not null,
-    primary key (fk_id_produto,fk_id_armazem),
-    foreign key(fk_id_produto) references produto(id) on delete cascade,
-    foreign key(fk_id_armazem) references armazem(id) on delete cascade
 );
 
 -- Armazena as siglas das facturas e o numero de dias uteis
@@ -553,18 +346,11 @@ CREATE TABLE factura (
     FOREIGN KEY (fk_id_usuario) REFERENCES usuario(id),
     FOREIGN KEY (fk_id_cliente) REFERENCES cliente(id)
 );
-
-ALTER TABLE factura
-ADD COLUMN fk_id_armazem INT,
-ADD CONSTRAINT fk_factura_armazem FOREIGN KEY (fk_id_armazem) REFERENCES armazem(id);
- 
  
 create table itemfactura(
 	id integer primary key auto_increment,
-   -- preco decimal(10,2) not null, o protudo ja tem relacao com o preco de venda
     quantidade decimal(10,2) not null,
     subtotal decimal(10,2) not null,
-    -- fk_id_desconto integer, o produto ja tem relacao com o desconto na tabela ProdutoDesconto
     fk_id_produto integer not null,
     fk_numero varchar(20) not null,
     fk_id_usuario integer not null,
@@ -572,11 +358,10 @@ create table itemfactura(
     data_adicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id),
-   -- foreign key (fk_id_desconto) references desconto(id),
     foreign key (fk_id_produto) references produto(id),
     foreign key (fk_numero) references factura(numero)
 );
-
+select * from itemfactura;
 ALTER TABLE itemfactura
 ADD COLUMN unidade_vendida VARCHAR(20) DEFAULT 'Unidade',
 ADD COLUMN qtd_por_unidade INT DEFAULT 1;

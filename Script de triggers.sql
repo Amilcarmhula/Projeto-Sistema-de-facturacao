@@ -1,4 +1,134 @@
 use _sysface;
+
+DELIMITER //
+CREATE TRIGGER trg_precovenda_after_produtodesconto
+AFTER INSERT ON produtodesconto
+FOR EACH ROW
+BEGIN
+    DECLARE preco_base DECIMAL(10,2);
+    DECLARE preco_venda DECIMAL(10,2);
+    DECLARE imposto_val DECIMAL(10,2);
+    DECLARE desconto_val DECIMAL(10,2);
+    DECLARE preco_final DECIMAL(10,2);
+    DECLARE id_imposto INT;
+
+    -- 1) Desactivar preços anteriores do mesmo produto e armazém
+    UPDATE precovenda
+    SET estado = 'desactivo'
+    WHERE idProduto = NEW.idProduto
+      AND idArmazem = NEW.idArmazem
+      AND estado = 'activo';
+
+    -- 2) Buscar o preço base e o imposto associado ao produto
+    SELECT ppa.preco, pr.fk_id_imposto
+    INTO preco_base, id_imposto
+    FROM precoProdutoArmazem ppa
+    JOIN produto pr ON pr.id = ppa.idProduto
+    WHERE ppa.idProduto = NEW.idProduto
+      AND ppa.idArmazem = NEW.idArmazem;
+
+    -- 3) Calcular imposto
+    IF id_imposto IS NOT NULL THEN
+        SELECT IFNULL(percentagem,0) INTO imposto_val
+        FROM imposto
+        WHERE id = id_imposto;
+        SET imposto_val = preco_base * (imposto_val / 100);
+    ELSE
+        SET imposto_val = 0;
+    END IF;
+
+    -- 4) Calcular desconto
+    SET desconto_val = preco_base * (NEW.percentagem / 100);
+
+    -- 5) Calcular preços
+    SET preco_venda = preco_base + imposto_val;
+    SET preco_final = preco_venda - desconto_val;
+
+    -- 6) Inserir novo preço de venda como activo
+    INSERT INTO precovenda (
+        precoNormal,
+        precoVenda,
+        precoFinal,
+        dataValidade,
+        estado,
+        idProduto,
+        idArmazem,
+        fk_id_usuario,
+        data_criacao
+    ) VALUES (
+        preco_base,
+        preco_venda,
+        preco_final,
+        NEW.dataFim,
+        'activo',
+        NEW.idProduto,
+        NEW.idArmazem,
+        1,   -- ajustar: ID do usuário logado
+        NOW()
+    );
+END;
+//
+DELIMITER ;
+
+
+DELIMITER //
+
+
+-- Trigger AFTER UPDATE em produtodesconto
+CREATE TRIGGER trg_precovenda_update_produtodesconto
+AFTER UPDATE ON produtodesconto
+FOR EACH ROW
+BEGIN
+    DECLARE preco_base DECIMAL(10,2);
+    DECLARE preco_venda DECIMAL(10,2);
+    DECLARE imposto_val DECIMAL(10,2);
+    DECLARE desconto_val DECIMAL(10,2);
+    DECLARE preco_final DECIMAL(10,2);
+    DECLARE id_imposto INT;
+
+    -- Buscar o preço base e o imposto associado ao produto
+    SELECT ppa.preco, pr.fk_id_imposto
+    INTO preco_base, id_imposto
+    FROM precoProdutoArmazem ppa
+    JOIN produto pr ON pr.id = ppa.idProduto
+    WHERE ppa.idProduto = NEW.idProduto
+      AND ppa.idArmazem = NEW.idArmazem;
+
+    -- Calcular imposto
+    IF id_imposto IS NOT NULL THEN
+        SELECT IFNULL(percentagem,0) INTO imposto_val
+        FROM imposto
+        WHERE id = id_imposto;
+        SET imposto_val = preco_base * (imposto_val / 100);
+    ELSE
+        SET imposto_val = 0;
+    END IF;
+
+    -- Calcular desconto atualizado
+    SET desconto_val = preco_base * (NEW.percentagem / 100);
+
+    -- Calcular preços
+    SET preco_venda = preco_base + imposto_val;
+    SET preco_final = preco_venda - desconto_val;
+
+    -- Atualizar precovenda correspondente
+    UPDATE precovenda
+    SET 
+        precoNormal = preco_base,
+        precoVenda = preco_venda,
+        precoFinal = preco_final,
+        dataValidade = NEW.dataFim,
+        data_criacao = NOW()
+    WHERE idProduto = NEW.idProduto
+      AND idArmazem = NEW.idArmazem
+      AND dataValidade = OLD.dataFim;
+END;
+//
+
+DELIMITER ;
+
+
+
 -- Triggers para controlo de estoque e registo de movimentos(Saidas & Entradas)
 -- Automatiza a preparação de stock para o novo produto em todos os armazéns existentes, evitando esquecimentos manuais
 delimiter //
@@ -31,7 +161,7 @@ CREATE TRIGGER Tg_CU_Stock_Entrada
 		ON DUPLICATE KEY UPDATE saldo = saldo + total_unidades;
 
 		-- Inserir também na tabela movimento
-		INSERT INTO movimento (tipo_movimento, data_movimento, quantidade, fk_id_produto, fk_id_usuario, fk_id_armazem, unidade_movimentada, qtd_por_unidade)
+		INSERT INTO movimento (tipo_movimento, data_movimento, quantidade, fk_id_produto, fk_id_usuario, fk_id_armazem, tipoUnidadeMov, uniPorTipoMove)
 		VALUES ('Entrada', NEW.data_fornecida, NEW.quantidade, NEW.fk_id_produto, NEW.fk_id_usuario, NEW.fk_id_armazem, NEW.unidade_fornecida, NEW.qtd_por_unidade);
 	END//
 delimiter ;
@@ -48,7 +178,7 @@ BEGIN
     DECLARE total_unidades INT;
     DECLARE estoque_atual INT;
 
-    SET total_unidades = NEW.quantidade * NEW.qtd_por_unidade;
+    SET total_unidades = NEW.quantidade * NEW.uniPorTipoMove;
 
     -- Busca o saldo atual do produto no armazém
     SELECT saldo
@@ -67,7 +197,7 @@ BEGIN
     END IF;
 END//
 DELIMITER ;
-
+-- drop trigger Tg_C_Saida;
 -- Trigger para controlar fluxo de stock(saldo de determinado produto em seu armazarm) quando um movimento de saida e registado na tabela itemfactura
 DELIMITER //
 CREATE TRIGGER Tg_C_Saida
@@ -94,8 +224,8 @@ BEGIN
             tipo_movimento,
             data_movimento,
             quantidade,
-            unidade_movimentada,
-            qtd_por_unidade,
+            tipoUnidadeMov,
+            uniPorTipoMove,
             fk_id_produto,
             fk_id_usuario,
             fk_id_armazem

@@ -22,11 +22,13 @@ public class Produto {
     private String nome;
     private String codigo_barra;
     private String descricao;
+    private String tipo; // Simples ou Composto
+    private Integer unidadesPorTipo;
     private boolean controle_stock;
     private int nivelstock;
     private Categoria categoria;
     private UnidadeMedida unidade_medida;
-    private List<PrecoVenda> precoVenda;
+    private PrecoVenda precoVenda;
     private Imposto imposto;
     private String data_criacao;
 
@@ -34,13 +36,15 @@ public class Produto {
         super();
     }
 
-    public Produto(String nome, String codigo_barra, String descricao, 
+    public Produto(String nome, String codigo_barra, String descricao, String tipo, Integer unidadesPorTipo,
             boolean contole_stock, int nivelstock, Categoria categoria, UnidadeMedida unidade_medida,
             Imposto taxa_imposto) {
         super();
         this.nome = nome;
         this.codigo_barra = codigo_barra;
         this.descricao = descricao;
+        this.tipo = tipo;
+        this.unidadesPorTipo = unidadesPorTipo;
         this.controle_stock = contole_stock;
         this.categoria = categoria;
         this.unidade_medida = unidade_medida;
@@ -79,6 +83,22 @@ public class Produto {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public Integer getUnidadesPorTipo() {
+        return unidadesPorTipo;
+    }
+
+    public void setUnidadesPorTipo(Integer unidadesPorTipo) {
+        this.unidadesPorTipo = unidadesPorTipo;
     }
 
     public boolean isControle_stock() {
@@ -130,11 +150,11 @@ public class Produto {
         this.data_criacao = data_criacao;
     }
 
-    public List<PrecoVenda> getPrecoVenda() {
+    public PrecoVenda getPrecoVenda() {
         return precoVenda;
     }
 
-    public void setPrecoVenda(List<PrecoVenda> precoVenda) {
+    public void setPrecoVenda(PrecoVenda precoVenda) {
         this.precoVenda = precoVenda;
     }
     

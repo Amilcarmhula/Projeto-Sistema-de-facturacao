@@ -84,7 +84,7 @@ public class VendasController implements Initializable {
 
     @FXML
     private Button btnRemoveItem;
-    
+
     @FXML
     private Label labDesconto;
 
@@ -113,13 +113,13 @@ public class VendasController implements Initializable {
     private TableColumn<Item, Integer> quantidadetabelaItens;
 
     @FXML
-    private TableColumn<Item, Integer> lotetabelaItens;
+    private TableColumn<Item, String> lotetabelaItens;
 
     @FXML
     private TableColumn<Item, Double> subTotaltabelaItens;
 
     @FXML
-    private TableColumn<Item, String> descontotabelaItens;
+    private TableColumn<Item, String> precoFinaltabelaItens;
 
     @FXML
     private TableColumn<Item, Integer> idtabelaItens;
@@ -238,7 +238,6 @@ public class VendasController implements Initializable {
 //            txtQuantidade.clear();
 //        }
 //    }
-
     public void getDataOnFocus() throws SQLException {
         txtIDCliente.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -285,13 +284,14 @@ public class VendasController implements Initializable {
     private void initTableItems() {
         // habilita a tabela a ser editavel
         tabelaItens.setEditable(true);
-        
+
         idtabelaItens.setCellValueFactory(new PropertyValueFactory<>("id"));
         nometabelaItens.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
-//        precotabelaItens.setCellValueFactory(cellData
-//                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPrecovenda().getPreco()) + " MT"));
+        precotabelaItens.setCellValueFactory(cellData
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getPrecoVenda().getPrecoVenda()) + " MT"));
         unidadetabelaItens.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidade_medida().getSigla())));
+
         quantidadetabelaItens.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
         quantidadetabelaItens.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         quantidadetabelaItens.setOnEditCommit(new EventHandler<CellEditEvent<Item, Integer>>() {
@@ -299,31 +299,18 @@ public class VendasController implements Initializable {
             public void handle(CellEditEvent<Item, Integer> event) {
                 Item item = event.getRowValue(); // Obtém o objeto da linha
                 item.setQuantidade(event.getNewValue()); // Atualiza a propriedade
-                
-                Item i = new Item();
-//                i.calculateSubtotal_onTable(item,tabelaItens);
-                displayPrice(); 
-            }
-        });
-        lotetabelaItens.setCellValueFactory(new PropertyValueFactory<>("qtd_por_unidade"));
-        lotetabelaItens.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        lotetabelaItens.setOnEditCommit(new EventHandler<CellEditEvent<Item, Integer>>() {
-            @Override
-            public void handle(CellEditEvent<Item, Integer> event) {
-                Item item = event.getRowValue(); // Obtém o objeto da linha
-                item.setQtd_por_unidade(event.getNewValue()); // Atualiza a propriedade
-                
-                Item i = new Item();
-//                i.calculateSubtotal_onTable(item,tabelaItens);
-                
-                displayPrice(); 
-            }
-        });
 
-//        descontotabelaItens.setCellValueFactory(cellData
-//                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getDesconto().getPercentagem() * 100) + "%"));
+                Item i = new Item();
+//                i.calculateSubtotal_onTable(item,tabelaItens);
+                displayPrice();
+            }
+        });
+        lotetabelaItens.setCellValueFactory(cellData
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getTipo())));
+        precoFinaltabelaItens.setCellValueFactory(cellData
+                -> new SimpleStringProperty(String.valueOf("x " + cellData.getValue().getProduto().getPrecoVenda().getPrecoFinal()) + " MT"));
         taxatabelaItens.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getImposto().getPercentagem() * 100) + "%"));
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getImposto().getPercentagem()) + "%"));
         subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
         randNum = new Random();
         mapaProdutos = new HashMap<>();
@@ -341,11 +328,6 @@ public class VendasController implements Initializable {
         // Aqui você poderia manter a aplicação rodando, ou criar lógica para parar depois
         // leitor.parar(); // Chame quando quiser fechar a porta
 
-        
-        
-        
-        
-        
         this.userData = SysFact.getUserData();
         this.empresaData = SysFact.getEmpresaData();
         try {
@@ -377,58 +359,50 @@ public class VendasController implements Initializable {
         combTipoDoc.setItems(FXCollections.observableArrayList(lista));
     }
 
-
     public void populateTableItems(ActionEvent e) {
         int qtd;
-        int qtd_por_unidade = 1;
         if (txtID.getText() == null || txtID.getText().isEmpty()) {
             showErroAlert("Produto/Servico nao selecionado!");
             return;
         }
 
         if (txtQuantidade.getText() == null || txtQuantidade.getText().isEmpty()) {
-//            showErroAlert("Erro", "Quantidade nao informada!");
             qtd = 1;
         } else {
             qtd = Integer.parseInt(txtQuantidade.getText());
         }
 
-//        if (combUnidadeVendida.getValue() == null) {
-//
-//            qtd_por_unidade = 1;
-//        } else {
-//            qtd_por_unidade = Integer.parseInt(txtQtd_por_unidade.getText());
-//        }
         int id = Integer.parseInt(txtID.getText());
         Stock x = mapaProdutos.get(id);
-//        Desconto desconto = mapaDesconto.get(combDesconto.getValue() == null ? "Isento" : combDesconto.getValue());
         Item i = new Item();
         i.setId(id);
-//        i.setProduto(x);
-//        i.setDesconto(desconto);
-//        i.setPreco(x.getPrecovenda().getPreco());
-        Armazem a = new Armazem();
-//        a.setId(x.getArmazem().getId());
-        i.setArmazem(a);
         i.setQuantidade(qtd);
-        i.setQtd_por_unidade(qtd_por_unidade);
-//        i.setUnidade_vendida(combUnidadeVendida.getValue() == null ? "Unidade" : combUnidadeVendida.getValue());
-        double subtotal = 0;
-        double desc;
-        double taxa;
-//        taxa = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() * x.getImposto().getPercentagem();
-//        desc = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() * desconto.getPercentagem();
+        double subtotal;
+        /*
+        Condicao a baixo deve ser revisada em funcao do tipo de factura a ser emitida
+         */
         if (combTipoDoc.getValue() != null) {
             if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
-//                subtotal = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() - desc;
+                subtotal = qtd * x.getProduto().getPrecoVenda().getPrecoFinal();
             } else {
-//                subtotal = qtd * qtd_por_unidade * x.getPrecovenda().getPreco() + taxa - desc;
+                subtotal = qtd * x.getProduto().getPrecoVenda().getPrecoFinal();
             }
         } else {
             AlertUtilities.showDialog("Erro", "Tipo de documento nao selecionado! Selecione o tipo de factura");
             return;
         }
         i.setSubtotal(subtotal);
+        i.setUnidade_vendida(x.getProduto().getTipo());
+        i.setQtd_por_unidade(x.getProduto().getUnidadesPorTipo());
+        i.setProduto(x.getProduto());
+        Factura f = new Factura();
+        f.setNumero_fac(labNumeroFactura.getText());
+        i.setFactura(f);
+        i.setUsuario(userData);
+        Armazem a = new Armazem();
+        a.setId(x.getArmazem().getId());
+        i.setArmazem(a);
+
 //        if (x.isControle_stock() == true) {
 //            if (/*x.getStock().getSaldo() >*/ qtd < qtd_por_unidade) {
 //                tabelaItens.getItems().add(i);
@@ -438,12 +412,11 @@ public class VendasController implements Initializable {
 //                AlertUtilities.showDialog("Erro", "Stock baixo. Produto nao pode ser comercializado!");
 //            }
 //        } else {
-//            tabelaItens.getItems().add(i);
-//            resetProduto();
-//            displayPrice();
+        tabelaItens.getItems().add(i);
+        resetProduto();
+        displayPrice();
 //        }
     }
-    
 
     public void radioParcelado() {
         String condicao;
@@ -512,20 +485,18 @@ public class VendasController implements Initializable {
         List<Item> listaItems = new ArrayList<>();
         for (Item item : itens) {
             i = new Item();
-//            Produto p = mapaProdutos.get(item.getId());
-//            i.setProduto(p);
-//            i.setPreco(item.getPreco());
+            Stock p = mapaProdutos.get(item.getId());
+            
             i.setQuantidade(item.getQuantidade());
+            i.setSubtotal(item.getSubtotal());
             i.setUnidade_vendida(item.getUnidade_vendida());
             i.setQtd_por_unidade(item.getQtd_por_unidade());
-            i.setSubtotal(item.getSubtotal());
-//            Desconto desconto = mapaDesconto.get(item.getDesconto().getNome());
-//            i.setDesconto(desconto);
-//            i.setArmazem(p.getArmazem());
-            i.setUsuario(userData);
+            i.setProduto(p.getProduto());
             Factura f = new Factura();
             f.setNumero_fac(labNumeroFactura.getText());
             i.setFactura(f);
+            i.setUsuario(userData);
+            i.setArmazem(p.getArmazem());
             listaItems.add(i);
         }
         return listaItems;
@@ -538,20 +509,19 @@ public class VendasController implements Initializable {
         double taxa = 0;
         double total = 0;
         for (Item item : itens) {
-//            Produto x = mapaProdutos.get(item.getId());
-//            if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
-//                subtotal += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco();
-//                taxa += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * x.getImposto().getPercentagem();
-//                Desconto desconto = mapaDesconto.get(item.getDesconto().getNome());
-//                desc += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * desconto.getPercentagem();
-//                total = subtotal - desc;
-//            } else {
-//                subtotal += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco();
-//                taxa += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * x.getImposto().getPercentagem();
-//                Desconto desconto = mapaDesconto.get(item.getDesconto().getNome());
-//                desc += item.getQuantidade() * item.getQtd_por_unidade() * x.getPrecovenda().getPreco() * desconto.getPercentagem();
-//                total = subtotal + taxa - desc;
-//            }
+            Stock x = mapaProdutos.get(item.getId());
+            if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
+                subtotal += item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoFinal();
+//                taxa += subtotal - (item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoNormal());
+                taxa += (item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoVenda()) - (item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoNormal());
+                desc += item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoVenda() - (item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoFinal());
+                total = subtotal;
+            } else {
+                subtotal += item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoNormal();
+                taxa += (item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoVenda()) - (item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoNormal());
+                desc += item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoVenda() - (item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoFinal());
+                total = subtotal + taxa - desc;
+            }
 
         }
         labSubtotal.setText(String.format("%.2f", subtotal));

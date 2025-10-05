@@ -151,7 +151,7 @@ insert into metodo_pagamento(nome, descricao) values
 -- ('Taxa Reduzida', 7.5, 'Taxa de imposto reduzida para produtos essenciais');
 
 -- INSERT INTO desconto (nome, descricao) VALUES
--- ('Desconto de Lançamento', 'Desconto aplicado em novos produtos no lançamento'),
+-- ('Desconto de Lançamento', 'Desconto aplicado em novos produtos no lançamento');
 -- ('Desconto de Fim de Ano', 'Desconto especial para vendas de final de ano'),
 -- ('Desconto por Quantidade', 'Desconto aplicado para compras em grandes quantidades'),
 -- ('Desconto Promocional', 'Desconto aplicado em promoções especiais por tempo limitado'),

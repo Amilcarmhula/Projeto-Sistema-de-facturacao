@@ -42,7 +42,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                     + "  p.descricao, p.controle_stock, p.nivelstock, p.tipo, p.unidadePorTipo, a.id AS idArmazem,"
                     + " a.nome AS nomeArmazem, a.tipo as tipoArmazem, c.id AS idCategoria, c.familia,"
                     + " u.id AS idUnidade, u.nome as unidadeNome, u.sigla AS siglaUnidade, i.id AS idImposto, "
-                    + "    i.nome AS nomeImposto, pv.precoNormal, pv.precoVenda, "
+                    + "    i.nome AS nomeImposto, i.percentagem as impPerc, pv.precoNormal, pv.precoVenda, "
                     + "    pv.precoFinal, pv.estado as estadoPreco, s.saldo "
                     + "FROM stock s "
                     + "JOIN produto p ON s.fk_id_produto = p.id "
@@ -92,6 +92,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 Imposto i = new Imposto();
                 i.setId(result.getInt("idImposto"));
                 i.setNome(result.getString("nomeImposto"));
+                i.setPercentagem(result.getDouble("impPerc"));
                 p.setImposto(i);
                 s.setProduto(p);
                 s.setSaldo(result.getInt("saldo"));

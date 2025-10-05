@@ -346,11 +346,13 @@ CREATE TABLE factura (
     FOREIGN KEY (fk_id_usuario) REFERENCES usuario(id),
     FOREIGN KEY (fk_id_cliente) REFERENCES cliente(id)
 );
- 
+ desc itemfactura;
 create table itemfactura(
 	id integer primary key auto_increment,
     quantidade decimal(10,2) not null,
     subtotal decimal(10,2) not null,
+    unidade_vendida enum('Simples', 'Composto') default 'Simples',
+    qtd_por_unidade integer DEFAULT 1,
     fk_id_produto integer not null,
     fk_numero varchar(20) not null,
     fk_id_usuario integer not null,
@@ -361,10 +363,9 @@ create table itemfactura(
     foreign key (fk_id_produto) references produto(id),
     foreign key (fk_numero) references factura(numero)
 );
-select * from itemfactura;
-ALTER TABLE itemfactura
-ADD COLUMN unidade_vendida VARCHAR(20) DEFAULT 'Unidade',
-ADD COLUMN qtd_por_unidade INT DEFAULT 1;
+desc itemfactura;
+
+
 
 create table itemcotacao(
 	id integer primary key auto_increment,

@@ -1,5 +1,10 @@
 /SysFact/dist/
-/THERMAL_PRINTER_DRIVER_SOFTWARE
+THERMAL PRINTER DRIVER SOFTWARE/
+THERMAL_PRINTER_DRIVER_SOFTWARE/
+*.zip
+*.exe
+*.rar
+*.7z
 
 /SysFact/build/
 /JM-InvSM/build/

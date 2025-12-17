@@ -162,3 +162,194 @@ insert into metodo_pagamento(nome, descricao) values
 
 
 --     
+
+
+
+
+SELECT p.id AS idProduto,  p.nome AS nomeProduto,p.codigo_barra,
+                      p.descricao, p.controle_stock, p.nivelstock, p.tipo, p.unidadePorTipo, a.id AS idArmazem,
+                     a.nome AS nomeArmazem, a.tipo as tipoArmazem, c.id AS idCategoria, c.familia,
+                     u.id AS idUnidade, u.nome as unidadeNome, u.sigla AS siglaUnidade, i.id AS idImposto, 
+                        i.nome AS nomeImposto, pv.precoNormal, pv.precoVenda, 
+                        pv.precoFinal, pv.estado as estadoPreco, s.saldo 
+                    FROM stock s 
+                    JOIN produto p ON s.fk_id_produto = p.id 
+                    JOIN armazem a ON s.fk_id_armazem = a.id 
+                    JOIN categoria c ON p.fk_id_categoria = c.id 
+                    JOIN unidade_medida u ON p.fk_id_unidade_medida = u.id 
+                    JOIN imposto i ON p.fk_id_imposto = i.id 
+                    LEFT JOIN precovenda pv ON pv.id = (SELECT pv2.id 
+                           FROM precovenda pv2 
+                            WHERE pv2.idProduto = s.fk_id_produto 
+                              AND pv2.idArmazem = s.fk_id_armazem 
+                            ORDER BY pv2.data_criacao DESC 
+                            LIMIT 1);
+
+
+CREATE TABLE produto_composicao (
+    idComposto INT NOT NULL,
+    idSimples INT NOT NULL,
+    quantidadePorUnidade INT NOT NULL,
+    PRIMARY KEY (idComposto, idSimples),
+    FOREIGN KEY (idComposto) REFERENCES produto(id) ON DELETE CASCADE,
+    FOREIGN KEY (idSimples) REFERENCES produto(id) ON DELETE CASCADE
+);
+
+DELIMITER //
+CREATE TRIGGER Tg_C_Saida
+AFTER INSERT ON itemfactura
+FOR EACH ROW
+BEGIN
+    -- Declarações devem vir primeiro
+    DECLARE total_unidades INT;
+    DECLARE estoque_atual INT;
+    DECLARE tipoProduto VARCHAR(20);
+
+    DECLARE done INT DEFAULT 0;
+    DECLARE comp_id INT;
+    DECLARE comp_qtd INT;
+
+    DECLARE cur CURSOR FOR
+        SELECT idSimples, quantidadePorUnidade
+        FROM produto_composicao
+        WHERE idComposto = NEW.fk_id_produto;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    -- Descobre se o produto é simples ou composto
+    SELECT tipo INTO tipoProduto
+    FROM produto
+    WHERE id = NEW.fk_id_produto;
+
+    IF tipoProduto = 'Simples' THEN
+        -- Caso simples: calcula total direto
+        SET total_unidades = NEW.quantidade * NEW.qtd_por_unidade;
+
+        -- Verifica saldo
+        SELECT saldo INTO estoque_atual
+        FROM stock
+        WHERE fk_id_produto = NEW.fk_id_produto
+          AND fk_id_armazem = NEW.fk_id_armazem;
+
+        IF estoque_atual >= total_unidades THEN
+            INSERT INTO movimento (
+                tipo_movimento, data_movimento, quantidade,
+                tipoUnidadeMov, uniPorTipoMove, fk_id_produto,
+                fk_id_usuario, fk_id_armazem
+            ) VALUES (
+                'Saída', NEW.data_adicao, NEW.quantidade,
+                NEW.unidade_vendida, NEW.qtd_por_unidade,
+                NEW.fk_id_produto, NEW.fk_id_usuario, NEW.fk_id_armazem
+            );
+        END IF;
+
+    ELSEIF tipoProduto = 'Composto' THEN
+        -- Caso composto: usar cursor para os itens do composto
+        OPEN cur;
+        read_loop: LOOP
+            FETCH cur INTO comp_id, comp_qtd;
+            IF done THEN
+                LEAVE read_loop;
+            END IF;
+
+            SET total_unidades = NEW.quantidade * comp_qtd;
+
+            -- Verifica saldo do produto simples
+            SELECT saldo INTO estoque_atual
+            FROM stock
+            WHERE fk_id_produto = comp_id
+              AND fk_id_armazem = NEW.fk_id_armazem;
+
+            IF estoque_atual >= total_unidades THEN
+                INSERT INTO movimento (
+                    tipo_movimento, data_movimento, quantidade,
+                    tipoUnidadeMov, uniPorTipoMove, fk_id_produto,
+                    fk_id_usuario, fk_id_armazem
+                ) VALUES (
+                    'Saída', NEW.data_adicao, NEW.quantidade,
+                    NEW.unidade_vendida, comp_qtd,
+                    comp_id, NEW.fk_id_usuario, NEW.fk_id_armazem
+                );
+            END IF;
+        END LOOP;
+        CLOSE cur;
+    END IF;
+END//
+DELIMITER ;
+
+
+
+
+
+
+-- Produto simples
+INSERT INTO produto (nome, codigo_barra, tipo, unidadePorTipo, descricao, controle_stock, fk_id_categoria, fk_id_unidade_medida, fk_id_imposto)
+VALUES ('Garrafa Água 500ml', '123456789', 'Simples', 1, 'Água mineral', TRUE, 1, 1, 1);
+
+-- Produto composto
+INSERT INTO produto (nome, codigo_barra, tipo, unidadePorTipo, descricao, controle_stock, fk_id_categoria, fk_id_unidade_medida, fk_id_imposto)
+VALUES ('Caixa 12 Garrafas Água 500ml', '987654321', 'Composto', 12, 'Caixa com 12 unidades de 500ml', TRUE, 1, 1, 1);
+
+
+INSERT INTO produto_composicao (idComposto, idSimples, quantidadePorUnidade)
+VALUES (2, 1, 12);
+
+INSERT INTO produto_fornecido (quantidade, unidade_fornecida, qtd_por_unidade, data_fornecida, custo, fk_id_armazem, fk_id_produto, fk_id_fornecedor, fk_id_usuario)
+VALUES (2, 'Composto', 12, '2025-10-04', 50.00, 1, 2, 1, 1);
+
+INSERT INTO factura (
+    numero, data_emissao, data_vencimento, total, totalPago, saldoPendente, estado,
+    condicaoPagemento, numeroParcelas, fk_id_empresa, fk_id_cliente, fk_id_usuario, fk_id_doc
+) VALUES (
+    'FAT2025001', 
+    CURDATE(),               -- data_emissao
+    DATE_ADD(CURDATE(), INTERVAL 30 DAY), -- data_vencimento (ex: 30 dias)
+    120.00,                  -- total da venda
+    0.00,                    -- ainda não pago
+    120.00,                  -- saldo pendente = total - totalPago
+    'Pendente',
+    'A vista',               -- ou 'Parcelado' se houver parcelas
+    0,                       -- numeroParcelas (0 para pagamento à vista)
+    1,                       -- fk_id_empresa (empresa emissora)
+    1,                       -- fk_id_cliente (cliente comprador)
+    1,                       -- fk_id_usuario (usuário vendedor)
+    1                        -- fk_id_doc (tipo de documento, ex: fatura, nota, etc.)
+);
+
+
+INSERT INTO itemfactura (quantidade, subtotal, fk_id_produto, fk_numero, fk_id_usuario, fk_id_armazem, unidade_vendida, qtd_por_unidade)
+VALUES (1, 120.00, 2, 'FAT2025001', 1, 1, 'Composto', 12);
+
+
+select * from precovenda;
+select *  from precoprodutoarmazem;
+select * from produtodesconto;
+select * from produto_fornecido;
+select * from stock;
+select * from factura;
+select * from itemfactura;
+select * from movimento;
+
+INSERT INTO produto_fornecido (
+    quantidade, unidade_fornecida, qtd_por_unidade, data_fornecida, custo, 
+    fk_id_armazem, fk_id_produto, fk_id_fornecedor, fk_id_usuario
+) VALUES 
+(120, 'Simples', 1, '2025-10-04', 5.00, 1, 1, 1, 1);
+
+INSERT INTO itemfactura (
+    quantidade, subtotal, fk_id_produto, fk_numero, fk_id_usuario, fk_id_armazem, unidade_vendida, qtd_por_unidade
+) VALUES (
+    2,        -- quantidade de garrafas
+    20.00,    -- subtotal (ex: 10 MT por garrafa x 2)
+    1,        -- produto simples
+    'FAT2025001',
+    1,        -- usuário
+    1,        -- armazém
+    'Simples',
+    1         -- cada unidade = 1 garrafa
+);
+
+
+
+
+

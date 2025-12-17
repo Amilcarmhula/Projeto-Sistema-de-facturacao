@@ -11,6 +11,7 @@ create table fornecedor(
     nuit integer
 );
 
+
 create table endereco_fornecedor(
 	id integer primary key auto_increment,
     provincia varchar(50),

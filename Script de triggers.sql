@@ -131,130 +131,131 @@ DELIMITER ;
 
 -- Triggers para controlo de estoque e registo de movimentos(Saidas & Entradas)
 -- Automatiza a preparação de stock para o novo produto em todos os armazéns existentes, evitando esquecimentos manuais
-delimiter //
-CREATE TRIGGER Tg_C_Stock
-	AFTER INSERT ON produto
-	FOR EACH ROW
-	BEGIN
-		IF NEW.controle_stock THEN
-			INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
-			SELECT NEW.id, id, 0 FROM armazem;
-		END IF;
-	END//
-delimiter ;
+-- delimiter //
+-- CREATE TRIGGER Tg_C_Stock
+-- 	AFTER INSERT ON produto
+-- 	FOR EACH ROW
+-- 	BEGIN
+-- 		IF NEW.controle_stock THEN
+-- 			INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
+-- 			SELECT NEW.id, id, 0 FROM armazem;
+-- 		END IF;
+-- 	END//
+-- delimiter ;
 
 -- Quando um produto é fornecido, atualizar o stock automaticamente no armazém indicado
 -- Automatiza o registo de entrada de stock
 -- Mantém histórico de movimentação
 -- Garante consistência entre fornecimento e saldo de stock
 
-DELIMITER //
-CREATE TRIGGER Tg_CU_Stock_Entrada
-AFTER INSERT ON produto_fornecido
-FOR EACH ROW
-BEGIN
-    -- Todas as variáveis precisam estar no início do bloco
-    DECLARE tipoProduto VARCHAR(20);
-    DECLARE done INT DEFAULT 0;
-    DECLARE comp_id INT;
-    DECLARE comp_qtd INT;
-    DECLARE total_unidades INT;
+-- DELIMITER //
+-- CREATE TRIGGER Tg_CU_Stock_Entrada
+-- AFTER INSERT ON produto_fornecido
+-- FOR EACH ROW
+-- BEGIN
+--     -- Todas as variáveis precisam estar no início do bloco
+--     DECLARE tipoProduto VARCHAR(20);
+--     DECLARE done INT DEFAULT 0;
+--     DECLARE comp_id INT;
+--     DECLARE comp_qtd INT;
+--     DECLARE total_unidades INT;
 
-    -- Declara cursor e handler também no início
-    DECLARE cur CURSOR FOR
-        SELECT idSimples, quantidadePorUnidade
-        FROM produto_composicao
-        WHERE idComposto = NEW.fk_id_produto;
+--     -- Declara cursor e handler também no início
+--     DECLARE cur CURSOR FOR
+--         SELECT idSimples, quantidadePorUnidade
+--         FROM produto_composicao
+--         WHERE idComposto = NEW.fk_id_produto;
 
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+--     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
-    -- Descobre se o produto fornecido é simples ou composto
-    SELECT tipo INTO tipoProduto
-    FROM produto
-    WHERE id = NEW.fk_id_produto;
+--     -- Descobre se o produto fornecido é simples ou composto
+--     SELECT tipo INTO tipoProduto
+--     FROM produto
+--     WHERE id = NEW.fk_id_produto;
 
-    IF tipoProduto = 'Simples' THEN
-        -- Entrada direta no produto simples
-        INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
-        VALUES (NEW.fk_id_produto, NEW.fk_id_armazem, NEW.quantidade)
-       -- ON DUPLICATE KEY UPDATE saldo = saldo + NEW.quantidade*NEW.qtd_por_unidade;
-        ON DUPLICATE KEY UPDATE saldo = saldo + NEW.quantidade*NEW.qtd_por_unidade;
+--     IF tipoProduto = 'Simples' THEN
+--         -- Entrada direta no produto simples
+--         INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
+--         VALUES (NEW.fk_id_produto, NEW.fk_id_armazem, NEW.quantidade)
+--        -- ON DUPLICATE KEY UPDATE saldo = saldo + NEW.quantidade*NEW.qtd_por_unidade;
+--         ON DUPLICATE KEY UPDATE saldo = saldo + NEW.quantidade*NEW.qtd_por_unidade;
 
-        -- Registra movimento
-        INSERT INTO movimento (
-            tipo_movimento, data_movimento, quantidade,
-            tipoUnidadeMov, uniPorTipoMove, fk_id_produto,
-            fk_id_usuario, fk_id_armazem
-        ) VALUES (
-            'Entrada', NEW.data_fornecida, NEW.quantidade,
-            NEW.unidade_fornecida, NEW.qtd_por_unidade,
-            NEW.fk_id_produto, NEW.fk_id_usuario, NEW.fk_id_armazem
-        );
+--         -- Registra movimento
+--         INSERT INTO movimento (
+--             tipo_movimento, data_movimento, quantidade,
+--             tipoUnidadeMov, uniPorTipoMove, fk_id_produto,
+--             fk_id_usuario, fk_id_armazem
+--         ) VALUES (
+--             'Entrada', NEW.data_fornecida, NEW.quantidade,
+--             NEW.unidade_fornecida, NEW.qtd_por_unidade,
+--             NEW.fk_id_produto, NEW.fk_id_usuario, NEW.fk_id_armazem
+--         );
 
-    ELSEIF tipoProduto = 'Composto' THEN
-        -- Entrada de produto composto: converter em simples
-        OPEN cur;
-        read_loop: LOOP
-            FETCH cur INTO comp_id, comp_qtd;
-            IF done THEN
-                LEAVE read_loop;
-            END IF;
+--     ELSEIF tipoProduto = 'Composto' THEN
+--         -- Entrada de produto composto: converter em simples
+--         OPEN cur;
+--         read_loop: LOOP
+--             FETCH cur INTO comp_id, comp_qtd;
+--             IF done THEN
+--                 LEAVE read_loop;
+--             END IF;
 
-            -- Total de unidades a lançar no stock simples
-            SET total_unidades = NEW.quantidade * comp_qtd;
+--             -- Total de unidades a lançar no stock simples
+--             SET total_unidades = NEW.quantidade * comp_qtd;
 
-            -- Atualiza stock do produto simples
-            INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
-            VALUES (comp_id, NEW.fk_id_armazem, total_unidades)
-            ON DUPLICATE KEY UPDATE saldo = saldo + total_unidades;
+--             -- Atualiza stock do produto simples
+--             INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
+--             VALUES (comp_id, NEW.fk_id_armazem, total_unidades)
+--             ON DUPLICATE KEY UPDATE saldo = saldo + total_unidades;
 
-            -- Registra movimento com referência ao simples
-            INSERT INTO movimento (
-                tipo_movimento, data_movimento, quantidade,
-                tipoUnidadeMov, uniPorTipoMove, fk_id_produto,
-                fk_id_usuario, fk_id_armazem
-            ) VALUES (
-                'Entrada', NEW.data_fornecida, NEW.quantidade,
-                NEW.unidade_fornecida, comp_qtd,
-                comp_id, NEW.fk_id_usuario, NEW.fk_id_armazem
-            );
-        END LOOP;
-        CLOSE cur;
-    END IF;
-END//
-DELIMITER ;
+--             -- Registra movimento com referência ao simples
+--             INSERT INTO movimento (
+--                 tipo_movimento, data_movimento, quantidade,
+--                 tipoUnidadeMov, uniPorTipoMove, fk_id_produto,
+--                 fk_id_usuario, fk_id_armazem
+--             ) VALUES (
+--                 'Entrada', NEW.data_fornecida, NEW.quantidade,
+--                 NEW.unidade_fornecida, comp_qtd,
+--                 comp_id, NEW.fk_id_usuario, NEW.fk_id_armazem
+--             );
+--         END LOOP;
+--         CLOSE cur;
+--     END IF;
+-- END//
+-- DELIMITER ;
 
 
 -- Quando um produto é vendido ou movimentado como "Saída", atualizar o stock.
 -- Automatiza a subtração do stock com base na movimentação
 -- Suporta múltiplas unidades (ex: caixas, pacotes)
-DELIMITER //
-CREATE TRIGGER Tg_U_Stock_Saida
-AFTER INSERT ON movimento
-FOR EACH ROW
-BEGIN
-    DECLARE total_unidades INT;
-    DECLARE estoque_atual INT;
+-- DELIMITER //
+-- CREATE TRIGGER Tg_U_Stock_Saida
+-- AFTER INSERT ON movimento
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE total_unidades INT;
+--     DECLARE estoque_atual INT;
 
-    SET total_unidades = NEW.quantidade * NEW.uniPorTipoMove;
+--     SET total_unidades = NEW.quantidade * NEW.uniPorTipoMove;
 
-    -- Busca o saldo atual do produto no armazém
-    SELECT saldo
-    INTO estoque_atual
-    FROM stock
-    WHERE fk_id_produto = NEW.fk_id_produto
-      AND fk_id_armazem = NEW.fk_id_armazem
-    LIMIT 1;
+--     -- Busca o saldo atual do produto no armazém
+--     SELECT saldo
+--     INTO estoque_atual
+--     FROM stock
+--     WHERE fk_id_produto = NEW.fk_id_produto
+--       AND fk_id_armazem = NEW.fk_id_armazem
+--     LIMIT 1;
 
-    -- Verifica se é saída e se há estoque suficiente
-    IF NEW.tipo_movimento = 'Saída' AND estoque_atual >= total_unidades THEN
-        UPDATE stock
-        SET saldo = saldo - total_unidades
-        WHERE fk_id_produto = NEW.fk_id_produto
-          AND fk_id_armazem = NEW.fk_id_armazem;
-    END IF;
-END//
-DELIMITER ;
+--     -- Verifica se é saída e se há estoque suficiente
+--     IF NEW.tipo_movimento = 'Saída' AND estoque_atual >= total_unidades THEN
+--         UPDATE stock
+--         SET saldo = saldo - total_unidades
+--         WHERE fk_id_produto = NEW.fk_id_produto
+--           AND fk_id_armazem = NEW.fk_id_armazem;
+--     END IF;
+-- END//
+-- DELIMITER ;
+
 -- drop trigger Tg_C_Saida;
 -- Trigger para controlar fluxo de stock(saldo de determinado produto em seu armazarm) quando um movimento de saida e registado na tabela itemfactura
 DELIMITER //

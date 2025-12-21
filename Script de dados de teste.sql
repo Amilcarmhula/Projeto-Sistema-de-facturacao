@@ -39,28 +39,28 @@ INSERT INTO usuario (nome, email, usuario, senha, estado, fk_nivel_acesso, fk_pe
 VALUE
 ('Amilcar Mula', 'amilcar.mula@example.com', 'root', 'senha123', 1, 1, 15);
 
-INSERT INTO fornecedor (tipo, razaosocial, nuit, fk_id_usuario) VALUE
-('Pessoa Jurídica', 'Fornecedor Padrao.LDA', 100000001, (Select id from usuario order by id DESC LIMIT 1));
+INSERT INTO fornecedor (tipo, razaosocial, nuit) VALUE
+('Pessoa Jurídica', 'Fornecedor Padrao.LDA', 100000001);
 
-INSERT INTO endereco_fornecedor (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, fk_id_fornecedor,fk_id_usuario) 
-SELECT provincia, cidade, bairro, avenida, rua, codigo_postal, numero,(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM endereco_empresa order by id DESC LIMIT 1;
+INSERT INTO endereco_fornecedor (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, idFornecedor) 
+SELECT provincia, cidade, bairro, avenida, rua, codigo_postal, numero,(Select id from fornecedor order by id DESC LIMIT 1) FROM endereco_empresa order by id DESC LIMIT 1;
 
-INSERT INTO contacto_fornecedor (pessoa_de_contacto, contacto, email, website, fk_id_fornecedor,fk_id_usuario) 
-SELECT 'Fornecedor Padrao',contacto, email,website,(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM contacto_empresa order by id DESC LIMIT 1;
+INSERT INTO contacto_fornecedor (pessoa_de_contacto, contacto, email, website, idFornecedor) 
+SELECT 'Fornecedor Padrao',contacto, email,website,(Select id from fornecedor order by id DESC LIMIT 1) FROM contacto_empresa order by id DESC LIMIT 1;
 
 INSERT INTO armazem (nome, tipo, descricao, estado) VALUE
 ('Armazem PL', 'Central', 'Armazem Principal', 1);
 
-INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, fk_id_armazem,fk_id_usuario) 
-SELECT provincia, cidade, bairro, avenida, rua, codigo_postal, numero,(Select id from armazem order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM endereco_empresa order by id DESC LIMIT 1;
+INSERT INTO endereco_armazem (provincia, cidade, bairro, avenida, rua, codigo_postal, numero, idArmazem) 
+SELECT provincia, cidade, bairro, avenida, rua, codigo_postal, numero,(Select id from armazem order by id DESC LIMIT 1) FROM endereco_empresa order by id DESC LIMIT 1;
 
-INSERT INTO contacto_armazem (pessoa_de_contacto, contacto, email, fk_id_armazem,fk_id_usuario) 
-SELECT 'Gerente de Armazam',contacto, email,(Select id from armazem order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1) FROM contacto_empresa order by id DESC LIMIT 1;
+INSERT INTO contacto_armazem (pessoa_de_contacto, contacto, email, idArmazem) 
+SELECT 'Gerente de Armazam',contacto, email,(Select id from armazem order by id DESC LIMIT 1) FROM contacto_empresa order by id DESC LIMIT 1;
 
-INSERT INTO categoria (tipo, grupo, subgrupo, familia, descricao) VALUE
-('Produtos', 'Padrao', 'SubPadrao', 'Categoria Padrao', 'Categoria padrao para qualquer produto');
+INSERT INTO categoria ( grupo, subgrupo, familia, descricao) VALUE
+('Padrao', 'SubPadrao', 'Categoria Padrao', 'Categoria padrao para qualquer produto');
 
-INSERT INTO unidade_medida (nome, sigla, descricao)
+INSERT INTO unidadeMedida (nome, sigla, descricao)
 VALUE 
 ('Unidade', 'Un', 'Unidade padrao');
 
@@ -70,11 +70,24 @@ INSERT INTO imposto (nome, percentagem, descricao) VALUE
 INSERT INTO desconto (nome, descricao) VALUE
 ('Isento', 'Desconto aplicado em produtos sem desconto');
 
-INSERT INTO produto (nome, codigo_barra, descricao, controle_stock,fk_id_categoria,fk_id_unidade_medida,fk_id_imposto) 
-SELECT 'Produto Arm Z','1000000000001', 'Produto Padrao',1,(Select id from categoria order by id DESC LIMIT 1),(Select id from unidade_medida order by id DESC LIMIT 1),(Select id from imposto order by id DESC LIMIT 1);
+INSERT INTO produto (nome, codigo_barra, descricao, controle_stock,idCategoria,idUnidade,idImposto) 
+SELECT 'Produto Arm Z','1000000000001', 'Produto Padrao',1,(Select id from categoria order by id DESC LIMIT 1),(Select id from unidadeMedida order by id DESC LIMIT 1),(Select id from imposto order by id DESC LIMIT 1);
 
-INSERT INTO produto_fornecido (quantidade, data_fornecida,unidade_fornecida, qtd_por_unidade, custo, fk_id_armazem,fk_id_produto,fk_id_fornecedor,fk_id_usuario) 
-SELECT 0,current_date(),'unidade',0, 0.00, (Select id from armazem order by id DESC LIMIT 1),(Select id from produto order by id DESC LIMIT 1),(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1);
+-- Tabela Subsistituida pela tabela LOTE
+-- INSERT INTO produto_fornecido (quantidade, data_fornecida,unidade_fornecida, qtd_por_unidade, custo, fk_id_armazem,fk_id_produto,fk_id_fornecedor,fk_id_usuario) 
+-- SELECT 0,current_date(),'unidade',0, 0.00, (Select id from armazem order by id DESC LIMIT 1),(Select id from produto order by id DESC LIMIT 1),(Select id from fornecedor order by id DESC LIMIT 1),(Select id from usuario order by id DESC LIMIT 1);
+
+INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
+VALUES 
+('L001', 1, 1, 1, '2025-09-01', 2000, 60.00);
+INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
+VALUES 
+('L002', 1, 1, 1, '2025-09-01', 1500, 70.00);
+INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
+VALUES 
+('L003', 1, 1, 1, '2025-10-01', 1500, 75.00);INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
+VALUES 
+('L004', 1, 1, 1, '2025-10-01', 500, 70.00);
 
 INSERT INTO documentocomercial (sigla, nome, diasuteis, descricao) VALUES
 ('FA','Fatura', 5, 'Fatura: Documento comercial que representa a venda de produtos ou serviços, devendo ser emitida no ato da venda ou até 5 dias úteis após a transação.'),

@@ -22,15 +22,14 @@ public class Produto {
     private String nome;
     private String codigo_barra;
     private String descricao;
-    private String tipo; // Simples ou Composto
+    private String tipoProduto; // Simples ou Composto
     private Integer unidadesPorTipo;
     private boolean controle_stock;
     private int nivelstock;
     private Categoria categoria;
-    private UnidadeMedida unidade_medida;
-    private PrecoVenda precoVenda;
+    private UnidadeMedida unidadeMedida;
+//    private PrecoVenda precoVenda;
     private Imposto imposto;
-    private String data_criacao;
 
     public Produto() {
         super();
@@ -43,11 +42,11 @@ public class Produto {
         this.nome = nome;
         this.codigo_barra = codigo_barra;
         this.descricao = descricao;
-        this.tipo = tipo;
+        this.tipoProduto = tipo;
         this.unidadesPorTipo = unidadesPorTipo;
         this.controle_stock = contole_stock;
         this.categoria = categoria;
-        this.unidade_medida = unidade_medida;
+        this.unidadeMedida = unidade_medida;
         this.imposto = taxa_imposto;
 
         this.nivelstock = nivelstock;
@@ -85,12 +84,12 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getTipoProduto() {
+        return tipoProduto;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setTipoProduto(String tipoProduto) {
+        this.tipoProduto = tipoProduto;
     }
 
     public Integer getUnidadesPorTipo() {
@@ -125,12 +124,12 @@ public class Produto {
         this.categoria = categoria;
     }
 
-    public UnidadeMedida getUnidade_medida() {
-        return unidade_medida;
+    public UnidadeMedida getUnidadeMedida() {
+        return unidadeMedida;
     }
 
-    public void setUnidade_medida(UnidadeMedida unidade_medida) {
-        this.unidade_medida = unidade_medida;
+    public void setUnidadeMedida(UnidadeMedida unidadeMedida) {
+        this.unidadeMedida = unidadeMedida;
     }
 
     public Imposto getImposto() {
@@ -140,23 +139,14 @@ public class Produto {
     public void setImposto(Imposto imposto) {
         this.imposto = imposto;
     }
-
-
-    public String getData_criacao() {
-        return data_criacao;
-    }
-
-    public void setData_criacao(String data_criacao) {
-        this.data_criacao = data_criacao;
-    }
-
-    public PrecoVenda getPrecoVenda() {
-        return precoVenda;
-    }
-
-    public void setPrecoVenda(PrecoVenda precoVenda) {
-        this.precoVenda = precoVenda;
-    }
+//
+//    public PrecoVenda getPrecoVenda() {
+//        return precoVenda;
+//    }
+//
+//    public void setPrecoVenda(PrecoVenda precoVenda) {
+//        this.precoVenda = precoVenda;
+//    }
     
     
 }

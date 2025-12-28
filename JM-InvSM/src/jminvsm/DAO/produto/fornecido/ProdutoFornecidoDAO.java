@@ -121,6 +121,17 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
         }
         return mapa;
     }
+    
+//    public static void main(String[] args) throws SQLException {
+//        System.out.println("Teste");
+//        ProdutoFornecidoDAO d = new ProdutoFornecidoDAO();
+//        Map<String, Integer> mapinha = d.getMovimentos(1, 1);
+//        for (Map.Entry<String, Integer> entry : mapinha.entrySet()) {
+//            System.out.println(entry.getKey()+": "+entry.getValue());
+//            
+//        }
+//
+//    }
 }
 
 //    @Override

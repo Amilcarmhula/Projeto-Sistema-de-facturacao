@@ -7,6 +7,7 @@ package jminvsm.model.vendas.factura.itens;
 import javafx.scene.control.TableView;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.desconto.Desconto;
+import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
@@ -27,6 +28,7 @@ public class Item {
     private Armazem armazem;
     private String data_criacao;
     private String unidade_vendida;
+    private PrecoVenda precoVenda;
 
     public Item() {
         super();
@@ -124,6 +126,16 @@ public class Item {
     public void setArmazem(Armazem armazem) {
         this.armazem = armazem;
     }
+
+    public PrecoVenda getPrecoVenda() {
+        return precoVenda;
+    }
+
+    public void setPrecoVenda(PrecoVenda precoVenda) {
+        this.precoVenda = precoVenda;
+    }
+    
+    
 
 //    public void calculateSubtotal_onTable(Item item, TableView table) {
 //        double x = item.getQuantidade() * item.getQtd_por_unidade() * item.getPreco();

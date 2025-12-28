@@ -119,7 +119,7 @@ public class SearchProdutoController implements Initializable {
         armazem.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getArmazem().getNome_arm() + ": " + cellData.getValue().getArmazem().getTipo())));
         artigo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
         descricao.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getDescricao()));
-        unidade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getUnidade_medida().getSigla()));
+        unidade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getUnidadeMedida().getSigla()));
         categoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCategoria().getFamilia()));
         quantidade.setCellValueFactory(new PropertyValueFactory<>("saldo"));
 
@@ -162,7 +162,7 @@ public class SearchProdutoController implements Initializable {
         Stock x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
             Stock s = mapaProdutos.get(x.getProduto().getId() + "," + x.getArmazem().getId());
-            System.out.println("ID: "+s.getProduto().getId() + "," + s.getArmazem().getId()+" - PV: "+s.getProduto().getPrecoVenda().getPrecoVenda());
+            System.out.println("ID: "+s.getProduto().getId() + "," + s.getArmazem().getId()+" - PV: "+s.getPrecoVenda().getPrecoVenda());
             SysFact.setData(s);
         }
     }

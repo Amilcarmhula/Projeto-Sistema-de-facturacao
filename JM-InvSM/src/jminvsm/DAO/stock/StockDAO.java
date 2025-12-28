@@ -66,7 +66,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                     + "    pv.precoVenda, "
                     + "    pv.precoFinal, "
                     + "    pv.estado          AS estadoPreco, "
-                    + "    s.saldo n"
+                    + "    s.saldo "
                     + "FROM stock s "
                     + "JOIN produto p       ON p.id = s.idProduto "
                     + "JOIN armazem a       ON a.id = s.idArmazem "
@@ -96,7 +96,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 p.setDescricao(rs.getString("descricao"));
                 p.setControle_stock(rs.getBoolean("controle_stock"));
                 p.setNivelstock(rs.getInt("nivelstock"));
-                p.setTipo(rs.getString("tipoProduto"));
+                p.setTipoProduto(rs.getString("tipoProduto"));
                 p.setUnidadesPorTipo(rs.getInt("unidadePorTipo"));
 
                 Categoria c = new Categoria();
@@ -110,28 +110,29 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 u.setId(rs.getInt("idUnidade"));
                 u.setNome(rs.getString("unidadeNome"));
                 u.setSigla(rs.getString("siglaUnidade"));
-                p.setUnidade_medida(u);
+                p.setUnidadeMedida(u);
 
                 Imposto i = new Imposto();
                 i.setId(rs.getInt("idImposto"));
                 i.setNome(rs.getString("nomeImposto"));
                 i.setPercentagem(rs.getDouble("impPerc"));
                 p.setImposto(i);
-
-                PrecoVenda pv = new PrecoVenda();
-                pv.setPrecoNormal(rs.getDouble("precoNormal"));
-                pv.setPrecoVenda(rs.getDouble("precoVenda"));
-                pv.setPrecoFinal(rs.getDouble("precoFinal"));
-                pv.setEstado(rs.getString("estadoPreco"));
-                p.setPrecoVenda(pv);
+                
 
                 Armazem a = new Armazem();
                 a.setId(rs.getInt("idArmazem"));
                 a.setNome_arm(rs.getString("nomeArmazem"));
                 a.setTipo(rs.getString("tipoArmazem"));
+                
+                PrecoVenda pv = new PrecoVenda();
+                pv.setPrecoNormal(rs.getDouble("precoNormal"));
+                pv.setPrecoVenda(rs.getDouble("precoVenda"));
+                pv.setPrecoFinal(rs.getDouble("precoFinal"));
+                pv.setEstado(rs.getString("estadoPreco"));
 
                 stock.setProduto(p);
                 stock.setArmazem(a);
+                stock.setPrecoVenda(pv);
                 stock.setSaldo(rs.getInt("saldo"));
 
                 lista.add(stock);
@@ -321,6 +322,11 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 System.out.println("Descrição: " + s.getProduto().getDescricao());
                 System.out.println("Controle Stock: " + s.getProduto().isControle_stock());
                 System.out.println("Nível Stock: " + s.getProduto().getNivelstock());
+                
+                System.out.println("=== Preco de Venda ===");
+                System.out.println("Preco Normal: "+s.getPrecoVenda().getPrecoNormal());
+                System.out.println("Preco Venda: "+s.getPrecoVenda().getPrecoVenda());
+                System.out.println("Preco Final: "+s.getPrecoVenda().getPrecoFinal());
 
                 System.out.println("=== Armazém ===");
                 System.out.println("ID Armazém: " + s.getArmazem().getId());
@@ -332,8 +338,8 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 System.out.println("Família: " + s.getProduto().getCategoria().getFamilia());
 
                 System.out.println("=== Unidade de Medida ===");
-                System.out.println("ID Unidade: " + s.getProduto().getUnidade_medida().getId());
-                System.out.println("Sigla: " + s.getProduto().getUnidade_medida().getSigla());
+                System.out.println("ID Unidade: " + s.getProduto().getUnidadeMedida().getId());
+                System.out.println("Sigla: " + s.getProduto().getUnidadeMedida().getSigla());
 
                 System.out.println("=== Imposto ===");
                 System.out.println("ID Imposto: " + s.getProduto().getImposto().getId());

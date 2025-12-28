@@ -50,11 +50,11 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setString(2, t.getCodigo_barra());
             ps.setString(3, t.getDescricao());
             ps.setInt(4, t.getCategoria().getId());
-            ps.setInt(5, t.getUnidade_medida().getId());
+            ps.setInt(5, t.getUnidadeMedida().getId());
             ps.setInt(6, t.getImposto().getId());
             ps.setBoolean(7, t.isControle_stock());
             ps.setInt(8, t.getNivelstock());
-            ps.setString(9, t.getTipo());
+            ps.setString(9, t.getTipoProduto());
             ps.setInt(10, t.getUnidadesPorTipo());
             int rowsAffected = ps.executeUpdate();
 
@@ -91,11 +91,11 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             ps.setString(2, t.getCodigo_barra());
             ps.setString(3, t.getDescricao());
             ps.setInt(4, t.getCategoria().getId());
-            ps.setInt(5, t.getUnidade_medida().getId());
+            ps.setInt(5, t.getUnidadeMedida().getId());
             ps.setInt(6, t.getImposto().getId());
             ps.setInt(7, t.getNivelstock());
             ps.setBoolean(8, t.isControle_stock());
-            ps.setString(9, t.getTipo());
+            ps.setString(9, t.getTipoProduto());
             ps.setInt(10, t.getUnidadesPorTipo());
             ps.setInt(11, id);
             int rowsAffected = ps.executeUpdate();
@@ -142,7 +142,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setCodigo_barra(result.getString("codigo_barra"));
                 p.setDescricao(result.getString("descricao"));
                 p.setNivelstock(result.getInt("nivelstock"));
-                p.setTipo(result.getString("tipo"));
+                p.setTipoProduto(result.getString("tipo"));
                 p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
                 Categoria cat = new Categoria();
                 cat.setId(result.getInt("id_categoria"));
@@ -152,7 +152,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 u.setId(result.getInt("id_unidade"));
                 u.setNome(result.getString("identificador"));
                 u.setSigla(result.getString("sigla"));
-                p.setUnidade_medida(u);
+                p.setUnidadeMedida(u);
                 Imposto t = new Imposto();
                 t.setId(result.getInt("id_taxa"));
                 t.setNome(result.getString("taxa"));
@@ -182,14 +182,14 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setCodigo_barra(result.getString("codigo_barra"));
                 p.setDescricao(result.getString("descricao"));
                 p.setNivelstock(result.getInt("nivelstock"));
-                p.setTipo(result.getString("tipo"));
+                p.setTipoProduto(result.getString("tipo"));
                 p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
                 Categoria cat = new Categoria();
                 cat.setId(result.getInt("fk_id_categoria"));
                 p.setCategoria(cat);
                 UnidadeMedida u = new UnidadeMedida();
                 u.setId(result.getInt("fk_id_unidade_medida"));
-                p.setUnidade_medida(u);
+                p.setUnidadeMedida(u);
                 Imposto t = new Imposto();
                 t.setId(result.getInt("fk_id_imposto"));
                 p.setImposto(t);
@@ -233,7 +233,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setDescricao(result.getString("descricao"));
                 p.setControle_stock(result.getBoolean("controle_stock"));
                 p.setNivelstock(result.getInt("nivelstock"));
-                p.setTipo(result.getString("tipo"));
+                p.setTipoProduto(result.getString("tipo"));
                 p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
                 PrecoProdutoArmazem ppa = new PrecoProdutoArmazem();
                 ppa.setPreco(result.getDouble("PrecoProdutoArmazem"));
@@ -250,7 +250,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 UnidadeMedida u = new UnidadeMedida();
                 u.setId(result.getInt("idUnidade"));
                 u.setSigla(result.getString("siglaUnidade"));
-                p.setUnidade_medida(u);
+                p.setUnidadeMedida(u);
                 Imposto i = new Imposto();
                 i.setId(result.getInt("idImposto"));
                 i.setNome(result.getString("nomeImposto"));
@@ -284,14 +284,14 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setCodigo_barra(result.getString("codigo_barra"));
                 p.setDescricao(result.getString("descricao"));
                 p.setNivelstock(result.getInt("nivelstock"));
-                p.setTipo(result.getString("tipo"));
+                p.setTipoProduto(result.getString("tipo"));
                 p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
                 Categoria cat = new Categoria();
                 cat.setId(result.getInt("fk_id_categoria"));
                 p.setCategoria(cat);
                 UnidadeMedida u = new UnidadeMedida();
                 u.setId(result.getInt("fk_id_unidade_medida"));
-                p.setUnidade_medida(u);
+                p.setUnidadeMedida(u);
                 Imposto t = new Imposto();
                 t.setId(result.getInt("fk_id_imposto"));
                 p.setImposto(t);
@@ -378,7 +378,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         p.setCategoria(c);
         UnidadeMedida u = new UnidadeMedida();
         u.setId(1);
-        p.setUnidade_medida(u);
+        p.setUnidadeMedida(u);
         Imposto i = new Imposto();
         i.setId(1);
         p.setImposto(i);

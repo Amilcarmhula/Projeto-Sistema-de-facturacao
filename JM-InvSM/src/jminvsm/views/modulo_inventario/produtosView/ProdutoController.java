@@ -389,8 +389,8 @@ public class ProdutoController implements Initializable {
         artigo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
         codigobarras.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCodigo_barra()));
         descricao.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getDescricao()));
-        unidade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getUnidade_medida().getSigla()));
-        tipoProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getTipo()));
+        unidade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getUnidadeMedida().getSigla()));
+        tipoProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getTipoProduto()));
         unidadesPorTipo.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidadesPorTipo())));
         categoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCategoria().getFamilia()));
         taxa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getImposto().getNome()));
@@ -636,8 +636,8 @@ public class ProdutoController implements Initializable {
             txtdescricaoProduto.setText(s.getProduto().getDescricao());
             checkControle.setSelected(s.getProduto().isControle_stock());
             combCategoria.setValue(s.getProduto().getCategoria().getFamilia());
-            combUnidade.setValue(s.getProduto().getUnidade_medida().getNome());
-            combTipo.setValue(s.getProduto().getTipo());
+            combUnidade.setValue(s.getProduto().getUnidadeMedida().getNome());
+            combTipo.setValue(s.getProduto().getTipoProduto());
             combTaxa.setValue(s.getProduto().getImposto().getNome());
             txtUnidadesPorTipo.setText(String.valueOf(s.getProduto().getUnidadesPorTipo()));
             stockControlChecked();

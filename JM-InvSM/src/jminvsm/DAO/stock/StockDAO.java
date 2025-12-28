@@ -118,9 +118,9 @@ public class StockDAO implements StockDAOImpl<Stock> {
         try {
             sql = "SELECT p.nome AS produto, s.saldo "
                     + "FROM produto p "
-                    + "JOIN stock s ON p.id = s.fk_id_produto "
-                    + "JOIN categoria c ON p.fk_id_categoria = c.id "
-                    + "JOIN armazem a ON s.fk_id_armazem = a.id "
+                    + "JOIN stock s ON p.id = s.idProduto "
+                    + "JOIN categoria c ON p.idCategoria = c.id "
+                    + "JOIN armazem a ON s.idArmazem = a.id "
                     + "WHERE (? IS NULL OR c.id = ?) "
                     + "AND (? IS NULL OR a.id = ?) ";
             ps = con.prepareStatement(sql);

@@ -107,6 +107,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
         }
         return lista;
     }
+
     /**
      * Este metodo faz a listagem dos produtos e seu saldo remanescente no
      * estoque quando informados a categoria e o armazem que os contem
@@ -198,11 +199,10 @@ public class StockDAO implements StockDAOImpl<Stock> {
         int total = 0;
         try {
             sql = "select sum(s.saldo) as total_stock from stock s "
-                    + "LEFT JOIN armazem a ON a.id=s.fk_id_armazem "
-                    + "LEFT JOIN produto p ON p.id=s.fk_id_produto "
-                    + "LEFT JOIN categoria c ON c.id=p.fk_id_categoria "
-                    + "where "
-                    + "(? IS NULL OR a.id=?) AND (? IS NULL OR c.id=?)";
+                    + " LEFT JOIN armazem a ON a.id=s.idArmazem "
+                    + " LEFT JOIN produto p ON p.id=s.idProduto "
+                    + " LEFT JOIN categoria c ON c.id=p.idCategoria "
+                    + " where (? IS NULL OR a.id=?) AND (? IS NULL OR c.id=?)";
             ps = con.prepareStatement(sql);
             // Se a categoria não for informado, passar valor nulo
             if (arm == null) {

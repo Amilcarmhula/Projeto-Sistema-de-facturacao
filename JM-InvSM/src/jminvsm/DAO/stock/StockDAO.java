@@ -36,75 +36,115 @@ public class StockDAO implements StockDAOImpl<Stock> {
     }
 
     public ObservableList<Stock> listInventario() {
+
         ObservableList<Stock> lista = FXCollections.observableArrayList();
+
         try {
-            sql = "SELECT p.id AS idProduto,  p.nome AS nomeProduto,p.codigo_barra,"
-                    + "  p.descricao, p.controle_stock, p.nivelstock, p.tipo, p.unidadePorTipo, a.id AS idArmazem,"
-                    + " a.nome AS nomeArmazem, a.tipo as tipoArmazem, c.id AS idCategoria, c.familia,"
-                    + " u.id AS idUnidade, u.nome as unidadeNome, u.sigla AS siglaUnidade, i.id AS idImposto, "
-                    + "    i.nome AS nomeImposto, i.percentagem as impPerc, pv.precoNormal, pv.precoVenda, "
-                    + "    pv.precoFinal, pv.estado as estadoPreco, s.saldo "
+            sql = "SELECT "
+                    + "    p.id               AS idProduto,"
+                    + "    p.nome             AS nomeProduto, "
+                    + "    p.codigo_barra, "
+                    + "    p.descricao, "
+                    + "    p.controle_stock, "
+                    + "    p.nivelstock, "
+                    + "    p.tipoProduto, "
+                    + "    p.unidadePorTipo, "
+                    + "    a.id               AS idArmazem, "
+                    + "    a.nome             AS nomeArmazem, "
+                    + "    a.tipo             AS tipoArmazem, "
+                    + "    c.id               AS idCategoria, "
+                    + "    c.grupo, "
+                    + "    c.subgrupo, "
+                    + "    c.familia, "
+                    + "    u.id               AS idUnidade, "
+                    + "    u.nome             AS unidadeNome, "
+                    + "    u.sigla            AS siglaUnidade, "
+                    + "    i.id               AS idImposto, "
+                    + "    i.nome             AS nomeImposto, "
+                    + "    i.percentagem      AS impPerc, "
+                    + "    pv.precoNormal, "
+                    + "    pv.precoVenda, "
+                    + "    pv.precoFinal, "
+                    + "    pv.estado          AS estadoPreco, "
+                    + "    s.saldo n"
                     + "FROM stock s "
-                    + "JOIN produto p ON s.fk_id_produto = p.id "
-                    + "JOIN armazem a ON s.fk_id_armazem = a.id "
-                    + "JOIN categoria c ON p.fk_id_categoria = c.id "
-                    + "JOIN unidade_medida u ON p.fk_id_unidade_medida = u.id "
-                    + "JOIN imposto i ON p.fk_id_imposto = i.id "
-                    + "LEFT JOIN precovenda pv ON pv.id = (SELECT pv2.id "
+                    + "JOIN produto p       ON p.id = s.idProduto "
+                    + "JOIN armazem a       ON a.id = s.idArmazem "
+                    + "JOIN categoria c     ON c.id = p.idCategoria "
+                    + "LEFT JOIN unidadeMedida u ON u.id = p.idUnidade "
+                    + "LEFT JOIN imposto i  ON i.id = p.idImposto "
+                    + "LEFT JOIN precovenda pv "
+                    + "    ON pv.id = ("
+                    + "        SELECT pv2.id "
                     + "        FROM precovenda pv2 "
-                    + "        WHERE pv2.idProduto = s.fk_id_produto "
-                    + "          AND pv2.idArmazem = s.fk_id_armazem "
+                    + "        WHERE pv2.idProduto = s.idProduto "
+                    + "          AND pv2.idArmazem = s.idArmazem "
+                    + "          AND pv2.estado = 'activo' "
                     + "        ORDER BY pv2.data_criacao DESC "
-                    + "        LIMIT 1)";
+                    + "        LIMIT 1 )";
             ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                Stock s = new Stock();
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Stock stock = new Stock();
+
                 Produto p = new Produto();
-                p.setId(result.getInt("idProduto"));
-                p.setNome(result.getString("nomeProduto"));
-                p.setCodigo_barra(result.getString("codigo_barra"));
-                p.setDescricao(result.getString("descricao"));
-                p.setControle_stock(result.getBoolean("controle_stock"));
-                p.setNivelstock(result.getInt("nivelstock"));
-                p.setTipo(result.getString("tipo"));
-                p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
-                PrecoVenda pv = new PrecoVenda();
-                pv.setPrecoNormal(result.getDouble("precoNormal"));
-                pv.setPrecoVenda(result.getDouble("precoVenda"));
-                pv.setPrecoFinal(result.getDouble("precoFinal"));
-                pv.setEstado(result.getString("estadoPreco"));
-                p.setPrecoVenda(pv);
-                Armazem a = new Armazem();
-                a.setId(result.getInt("idArmazem"));
-                a.setNome_arm(result.getString("nomeArmazem"));
-                a.setTipo(result.getString("tipoArmazem"));
-                s.setArmazem(a);
+                p.setId(rs.getInt("idProduto"));
+                p.setNome(rs.getString("nomeProduto"));
+                p.setCodigo_barra(rs.getString("codigo_barra"));
+                p.setDescricao(rs.getString("descricao"));
+                p.setControle_stock(rs.getBoolean("controle_stock"));
+                p.setNivelstock(rs.getInt("nivelstock"));
+                p.setTipo(rs.getString("tipoProduto"));
+                p.setUnidadesPorTipo(rs.getInt("unidadePorTipo"));
+
                 Categoria c = new Categoria();
-                c.setId(result.getInt("idCategoria"));
-                c.setFamilia(result.getString("familia"));
+                c.setId(rs.getInt("idCategoria"));
+                c.setGrupo(rs.getString("grupo"));
+                c.setSubgrupo(rs.getString("subgrupo"));
+                c.setFamilia(rs.getString("familia"));
                 p.setCategoria(c);
+
                 UnidadeMedida u = new UnidadeMedida();
-                u.setId(result.getInt("idUnidade"));
-                u.setNome(result.getString("unidadeNome"));
-                u.setSigla(result.getString("siglaUnidade"));
+                u.setId(rs.getInt("idUnidade"));
+                u.setNome(rs.getString("unidadeNome"));
+                u.setSigla(rs.getString("siglaUnidade"));
                 p.setUnidade_medida(u);
+
                 Imposto i = new Imposto();
-                i.setId(result.getInt("idImposto"));
-                i.setNome(result.getString("nomeImposto"));
-                i.setPercentagem(result.getDouble("impPerc"));
+                i.setId(rs.getInt("idImposto"));
+                i.setNome(rs.getString("nomeImposto"));
+                i.setPercentagem(rs.getDouble("impPerc"));
                 p.setImposto(i);
-                s.setProduto(p);
-                s.setSaldo(result.getInt("saldo"));
-                lista.add(s);
+
+                PrecoVenda pv = new PrecoVenda();
+                pv.setPrecoNormal(rs.getDouble("precoNormal"));
+                pv.setPrecoVenda(rs.getDouble("precoVenda"));
+                pv.setPrecoFinal(rs.getDouble("precoFinal"));
+                pv.setEstado(rs.getString("estadoPreco"));
+                p.setPrecoVenda(pv);
+
+                Armazem a = new Armazem();
+                a.setId(rs.getInt("idArmazem"));
+                a.setNome_arm(rs.getString("nomeArmazem"));
+                a.setTipo(rs.getString("tipoArmazem"));
+
+                stock.setProduto(p);
+                stock.setArmazem(a);
+                stock.setSaldo(rs.getInt("saldo"));
+
+                lista.add(stock);
             }
-            result.close();
+
+            rs.close();
             ps.close();
+
         } catch (SQLException ex) {
             System.out.println("Erro Detalhes: " + ex);
-            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
-
+            AlertUtilities.showDialog("Erro de consulta", ex.getMessage());
         }
+
         return lista;
     }
 

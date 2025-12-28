@@ -229,7 +229,7 @@ public class DashboardController implements Initializable {
         lista.add("Todas...");
         for (Categoria categoria : listaFamilias) {
             mapaCategorias.put(categoria.getFamilia(), categoria);
-            if (!"Serviço".equals(categoria.getTipo())) {
+            if (!"Serviço".equals(categoria.getFamilia())) {
                 lista.add(categoria.getFamilia());
             }
         }

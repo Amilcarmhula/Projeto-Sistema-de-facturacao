@@ -32,16 +32,15 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
     public boolean addEntity(Categoria t) {
         boolean isSuccess = false;
         try {
-            sql = "insert into categoria (tipo, grupo, subgrupo, familia,"
-                    + " descricao) value (?,?,?,?,?)";
+            sql = "insert into categoria (grupo, subgrupo, familia,"
+                    + " descricao) value (?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getTipo());
-            ps.setString(2, t.getGrupo());
-            ps.setString(3, t.getSubgrupo());
-            ps.setString(4, t.getFamilia());
-            ps.setString(5, t.getDescricao());
+            ps.setString(1, t.getGrupo());
+            ps.setString(2, t.getSubgrupo());
+            ps.setString(3, t.getFamilia());
+            ps.setString(4, t.getDescricao());
 
             // Usando executeUpdate para verificar se uma linha foi inserida
             int rowsAffected = ps.executeUpdate();
@@ -68,16 +67,15 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
     public boolean updateEntityByID(Categoria t) {
         boolean isSuccess = false;
         try {
-            sql = "update categoria set tipo=?, grupo=?, subgrupo=?, familia=?,"
+            sql = "update categoria set grupo=?, subgrupo=?, familia=?,"
                     + " descricao=? where id=?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1, t.getTipo());
-            ps.setString(2, t.getGrupo());
-            ps.setString(3, t.getSubgrupo());
-            ps.setString(4, t.getFamilia());
-            ps.setString(5, t.getDescricao());
-            ps.setInt(6, t.getId());
+            ps.setString(1, t.getGrupo());
+            ps.setString(2, t.getSubgrupo());
+            ps.setString(3, t.getFamilia());
+            ps.setString(4, t.getDescricao());
+            ps.setInt(5, t.getId());
 
             int rowsAffected = ps.executeUpdate();
 
@@ -109,7 +107,6 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             while (result.next()) {
                 Categoria c = new Categoria();
                 c.setId(result.getInt("id"));
-                c.setTipo(result.getString("tipo"));
                 c.setGrupo(result.getString("grupo"));
                 c.setSubgrupo(result.getString("subgrupo"));
                 c.setFamilia(result.getString("familia"));

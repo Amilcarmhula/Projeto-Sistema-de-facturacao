@@ -33,15 +33,11 @@ public class ServicoCategoria {
         this.opsSuccess = opsSuccess;
     }
 
-    public void registar(String tipo, String grupo, String subgrupo,
+    public void registar(String grupo, String subgrupo,
             String familia, String descricao) {
         setOpsSuccess(false);
 
         // Validações básicas antes de registrar a categoria
-        if (tipo == null || tipo.isEmpty()) {
-            showErroAlert("Tipo de categoria nao definido!");
-            return;
-        }
         if (grupo == null || grupo.isEmpty()) {
             showErroAlert( "Grupo nao pode ser nulo!");
             return;
@@ -60,7 +56,6 @@ public class ServicoCategoria {
         }
 
         Categoria c = new Categoria();
-        c.setTipo(tipo);
         c.setGrupo(grupo);
         c.setSubgrupo(subgrupo);
         c.setFamilia(familia);
@@ -72,15 +67,11 @@ public class ServicoCategoria {
         }
     }
 
-    public void actualizar(int id, String tipo, String grupo, String subgrupo,
+    public void actualizar(int id, String grupo, String subgrupo,
             String familia, String descricao) {
         setOpsSuccess(false);
 
         // Validações básicas antes de registrar a categoria
-        if (tipo == null || tipo.isEmpty()) {
-            showErroAlert( "Tipo de categoria nao definido!");
-            return;
-        }
         if (grupo == null || grupo.isEmpty()) {
             showErroAlert( "Grupo nao pode ser nulo!");
             return;
@@ -99,7 +90,6 @@ public class ServicoCategoria {
         }
         Categoria c = new Categoria();
         c.setId(id);
-        c.setTipo(tipo);
         c.setGrupo(grupo);
         c.setSubgrupo(subgrupo);
         c.setFamilia(familia);

@@ -77,8 +77,6 @@ public class CategoriaViewController implements Initializable {
     @FXML
     private TextField ps_txtfamiliaCategoria;
     @FXML
-    private ComboBox<String> ps_combTipoCategoria;
-    @FXML
     private TextArea ps_txtdescricaoCategoria;
     
     public void close(ActionEvent event) {
@@ -110,7 +108,6 @@ public class CategoriaViewController implements Initializable {
 
         // Opcional: configurar a largura máxima do texto
         //ps_txtdescricaoProduto.setPrefColumnCount(30); // Ajuste conforme necessário
-        ps_combTipoCategoria.setItems(FXCollections.observableArrayList("Produtos", "Serviços"));
         try {
             showCategoria();
         } catch (SQLException ex) {
@@ -147,9 +144,7 @@ public class CategoriaViewController implements Initializable {
                     return true;
                 }
                 String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getTipo().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getGrupo().toLowerCase().contains(filtroCaixaBaixa)) {
+                if (x.getGrupo().toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
                 } else if (String.valueOf(x.getSubgrupo()).toLowerCase().contains(filtroCaixaBaixa)) {
                     return true;
@@ -179,7 +174,6 @@ public class CategoriaViewController implements Initializable {
         SysFact.setData(x);
         if (x != null) {
             ps_txtIDCategoria.setText(String.valueOf(x.getId()));
-            ps_combTipoCategoria.setValue(x.getTipo());
             ps_txtgrupoCategoria.setText(x.getGrupo());
             ps_txtsubgrupoCategoria.setText(x.getSubgrupo());
             ps_txtfamiliaCategoria.setText(x.getFamilia());
@@ -220,7 +214,7 @@ public class CategoriaViewController implements Initializable {
      */
     public void addCategoria(ActionEvent e) throws SQLException {
         ServicoCategoria sc = new ServicoCategoria();
-        sc.registar(ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
+        sc.registar(ps_txtgrupoCategoria.getText(),
                 ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
                 ps_txtdescricaoCategoria.getText());
         if (sc.isOpsSuccess()) {
@@ -235,8 +229,7 @@ public class CategoriaViewController implements Initializable {
      */
     public void updateCategoria(ActionEvent e) throws SQLException {
         ServicoCategoria sc = new ServicoCategoria();
-        sc.actualizar(Integer.parseInt(ps_txtIDCategoria.getText()),
-                ps_combTipoCategoria.getValue(), ps_txtgrupoCategoria.getText(),
+        sc.actualizar(Integer.parseInt(ps_txtIDCategoria.getText()), ps_txtgrupoCategoria.getText(),
                 ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
                 ps_txtdescricaoCategoria.getText());
         

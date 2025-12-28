@@ -311,7 +311,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         int total = 0;
         try {
             sql = "select count(*) as total_produto from produto p "
-                    + "LEFT JOIN categoria c ON c.id=p.fk_id_categoria "
+                    + "LEFT JOIN categoria c ON c.id=p.idCategoria "
                     + "where (? IS NULL OR c.id = ?)";
             ps = con.prepareStatement(sql);
             // Se a categoria não for informado, passar valor nulo

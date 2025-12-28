@@ -167,8 +167,8 @@ public class StockDAO implements StockDAOImpl<Stock> {
         try {
             sql = "select p.nome as Produto, a.nome as Armazem, s.saldo "
                     + "from stock s "
-                    + "LEFT JOIN produto p ON p.id=s.fk_id_produto "
-                    + "LEFT JOIN armazem a ON a.id=s.fk_id_armazem "
+                    + "LEFT JOIN produto p ON p.id=s.idProduto "
+                    + "LEFT JOIN armazem a ON a.id=s.idArmazem "
                     + "where s.saldo<=p.nivelstock";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();

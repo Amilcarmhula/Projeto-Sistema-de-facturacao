@@ -21,7 +21,6 @@ public class Armazem {
     private String nome_arm;
     private String descricao_arm;
     private boolean estado;
-    private String data_criacao;
     private List<ContactoArmazem> contactoArmazem;
     private List<EnderecoArmazem> enderecoArmazem;
     
@@ -77,14 +76,6 @@ public class Armazem {
         this.estado = estado;
     }
 
-    public String getData_criacao() {
-        return data_criacao;
-    }
-
-    public void setData_criacao(String data_criacao) {
-        this.data_criacao = data_criacao;
-    }
-    
     public String printContatos(){
         String contacto = "";
         if(contactoArmazem != null){

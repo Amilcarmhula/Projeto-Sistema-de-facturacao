@@ -101,7 +101,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             sql = "SELECT a.id, a.tipo, a.nome, a.descricao, a.estado, "
                     + "GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos "
                     + "FROM armazem a "
-                    + "LEFT JOIN contacto_armazem ct ON ct.fk_id_armazem = a.id "
+                    + "LEFT JOIN contacto_armazem ct ON ct.idArmazem = a.id "
                     + "GROUP BY a.id, a.tipo, a.nome, a.descricao, a.estado";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
@@ -219,7 +219,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 Armazem c = new Armazem();
                 c.setId(result.getInt("id"));
                 c.setTipo(result.getString("tipo"));
-                c.setNome_arm(result.getString("razaosocial"));
+                c.setNome_arm(result.getString("nome"));
                 c.setDescricao_arm(result.getString("descricao"));
             }
             result.close();

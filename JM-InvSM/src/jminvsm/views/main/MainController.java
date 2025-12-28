@@ -16,11 +16,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
 import jminvsm.model.usuario.Usuario;
-import jminvsm.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class

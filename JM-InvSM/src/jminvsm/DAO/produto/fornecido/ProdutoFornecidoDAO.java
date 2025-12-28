@@ -65,7 +65,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
         }
         return isSuccess;
     }
-    
+
     /**
      *
      * @param cat ID da categoria que pretendemos consultar o movimento
@@ -76,20 +76,20 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
     public Map<String, Integer> getMovimentos(Integer cat, Integer arm) {
         Map<String, Integer> mapa = new HashMap<>();
         try {
-            sql = "SELECT "
-                    + "SUM(CASE WHEN mp.tipo_movimento = 'Entrada' THEN (mp.quantidade * mp.uniPorTipoMove) ELSE 0 END) as entradas,"
-                    + "SUM(CASE WHEN mp.tipo_movimento = 'Saída' THEN (mp.quantidade * mp.uniPorTipoMove) ELSE 0 END) AS saidas,"
-                    + "MONTH(mp.data_movimento) AS mes, "
-                    + "YEAR(mp.data_movimento) AS ano "
-                    + "FROM movimento mp "
-                    + "LEFT JOIN produto p ON p.id = mp.fk_id_produto "
-                    + "LEFT JOIN categoria c ON c.id = p.fk_id_categoria "
-                    + "LEFT JOIN armazem a ON a.id = mp.fk_id_armazem "
+            sql = "SELECT SUM(CASE WHEN m.tipoMovimento = 'Entrada' THEN (m.quantidade * p.unidadePorTipo) ELSE 0 END) AS entradas, "
+                    + "    SUM(CASE WHEN m.tipoMovimento = 'Saida' THEN (m.quantidade * p.unidadePorTipo) ELSE 0 END) AS saidas, "
+                    + "    MONTH(m.dataMovimento) AS mes, "
+                    + "    YEAR(m.dataMovimento) AS ano "
+                    + "FROM movimento m "
+                    + "INNER JOIN produto p   ON p.id = m.idProduto "
+                    + "INNER JOIN categoria c ON c.id = p.idCategoria "
+                    + "INNER JOIN armazem a   ON a.id = m.idArmazem "
                     + "WHERE (? IS NULL OR c.id = ?) "
-                    + "AND (? IS NULL OR a.id = ?) "
-                    + "AND MONTH(mp.data_movimento)=MONTH(current_date()) "
-                    + "AND YEAR(mp.data_movimento)=YEAR(current_date()) "
-                    + "GROUP BY mes, ano";
+                    + "    AND (? IS NULL OR a.id = ?) "
+                    + "    AND MONTH(m.dataMovimento) = MONTH(CURRENT_DATE()) "
+                    + "    AND YEAR(m.dataMovimento) = YEAR(CURRENT_DATE()) "
+                    + "GROUP BY ano, mes "
+                    + "ORDER BY ano, mes";
             ps = con.prepareStatement(sql);
 
             // Se a categoria ou armazém não forem informados, passar valores nulos

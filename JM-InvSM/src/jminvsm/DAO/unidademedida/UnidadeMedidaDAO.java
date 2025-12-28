@@ -35,7 +35,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
     public boolean addEntity(UnidadeMedida t) {
         boolean isSuccess = false;
         try {
-            sql = "insert into unidade_medida (nome, sigla, descricao)"
+            sql = "insert into unidadeMedida (nome, sigla, descricao)"
                     + " value (?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, t.getNome());
@@ -65,7 +65,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
     public boolean updateEntityByID(UnidadeMedida t, int id) {
         boolean isSuccess = false;
         try {
-            sql = "update unidade_medida set nome=?, sigla=?, descricao=?"
+            sql = "update unidadeMedida set nome=?, sigla=?, descricao=?"
                     + " where id=?";
             ps = con.prepareStatement(sql);
 
@@ -97,7 +97,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
     public ObservableList<UnidadeMedida> listAllEntities() {
         ObservableList<UnidadeMedida> lista = FXCollections.observableArrayList();
         try {
-            sql = "select * from unidade_medida";
+            sql = "select * from unidadeMedida";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
@@ -120,7 +120,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
     public UnidadeMedida getEntityByID(int id) {
         UnidadeMedida u = null;
         try {
-            sql = "select * from unidade_medida where id=?";
+            sql = "select * from unidadeMedida where id=?";
             ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet result = ps.executeQuery();
@@ -162,7 +162,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
         boolean isSuccess = false;
 
         try {
-            sql = "delete from unidade_medida  where id=?";
+            sql = "delete from unidadeMedida  where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, x);

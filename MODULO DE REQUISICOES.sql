@@ -430,7 +430,7 @@ VALUES ('Água Mineral 1L', '7891234567890', 'Simples', 1, 'Garrafa de 1 litro',
 -- Lotes de entrada
 INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
 VALUES 
-('L001', 1, 1, 1, '2025-09-01', 2000, 60.00);
+('L004', 1, 1, 1, '2025-12-01', 2000, 60.00);
 INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
 VALUES 
 ('L002', 1, 1, 1, '2025-09-01', 1500, 70.00);

@@ -299,7 +299,7 @@ public class AddFornecedorController implements Initializable {
 
     public void addContacto() {
         Fornecedor forn = serviceFornecedor.consultaFornecedor(Integer.parseInt(txtIDCliente.getText().equals("")?"0":txtIDCliente.getText()));
-        serviceContacto.registar(txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText(), forn, userData);
+        serviceContacto.registar(txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText(), forn);
         if (serviceContacto.isOpsSuccess()) {
             showContactos();
             restContacto();
@@ -330,7 +330,7 @@ public class AddFornecedorController implements Initializable {
     }
 
     public void updateContacto(){
-        serviceContacto.actualizar(Integer.parseInt(txtIDContacto.getText()), txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText(), userData);
+        serviceContacto.actualizar(Integer.parseInt(txtIDContacto.getText()), txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText());
         if (serviceContacto.isOpsSuccess()) {
             showContactos();
             restContacto();

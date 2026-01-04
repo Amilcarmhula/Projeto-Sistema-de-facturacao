@@ -34,7 +34,7 @@ public class ServiceContacto {
         this.opsSuccess = opsSuccess;
     }
 
-    public void registar(String email, String numero, String website, String responsavel, Fornecedor forn, Usuario user) {
+    public void registar(String email, String numero, String website, String responsavel, Fornecedor forn) {
         setOpsSuccess(false);
         if (email == null || email.isEmpty()) {
             email = "email.padrao@mail.com";
@@ -51,7 +51,6 @@ public class ServiceContacto {
         contacto.setWebsite_forn(website);
         contacto.setContacto_forn(numero);
         contacto.setResponsavel_forn(responsavel);
-        contacto.setUsuario(user);
         contacto.setFornecedor(forn);
 
         if (contactoDao.addEntity(contacto)) {
@@ -60,7 +59,7 @@ public class ServiceContacto {
         }
     }
 
-    public void actualizar(Integer id, String email, String numero, String website, String responsavel, Usuario user) {
+    public void actualizar(Integer id, String email, String numero, String website, String responsavel) {
         setOpsSuccess(false);
         if (email == null || email.isEmpty()) {
             email = "email.padrao@mail.com";
@@ -75,7 +74,6 @@ public class ServiceContacto {
         contacto.setWebsite_forn(website);
         contacto.setContacto_forn(numero);
         contacto.setResponsavel_forn(responsavel);
-        contacto.setUsuario(user);
 
         if (contactoDao.updateEntityByID(contacto, id)) {
             setOpsSuccess(true);

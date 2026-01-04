@@ -35,8 +35,8 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
         boolean isSuccess = false;
         try {
             sql = "insert into endereco_fornecedor (provincia,cidade,bairro,avenida,"
-                    + "rua,codigo_postal,numero, fk_id_fornecedor, fk_id_usuario)"
-                    + " value (?,?,?,?,?,?,?,?,?)";
+                    + "rua,codigo_postal,numero, idFornecedor)"
+                    + " value (?,?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -48,7 +48,6 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
             ps.setInt(6, t.getCodigoPostal_forn());
             ps.setInt(7, t.getNumero_forn());
             ps.setInt(8, t.getFornecedor().getId());
-            ps.setInt(9, t.getUsuario().getId());
 
             int rowsAffected = ps.executeUpdate();
 
@@ -75,7 +74,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
         boolean isSuccess = false;
         try {
             sql = "update endereco_fornecedor set provincia=?,cidade=?,bairro=?,avenida=?,"
-                    + "rua=?,codigo_postal=?,numero=?,fk_id_usuario=? where id=?";
+                    + "rua=?,codigo_postal=?,numero=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getProvincia_forn());
@@ -85,8 +84,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
             ps.setString(5, t.getRua_forn());
             ps.setInt(6, t.getCodigoPostal_forn());
             ps.setInt(7, t.getNumero_forn());
-            ps.setInt(8, t.getUsuario().getId());
-            ps.setInt(9, id);
+            ps.setInt(8, id);
 
             int rowsAffected = ps.executeUpdate();
 
@@ -138,7 +136,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
     public ObservableList<EnderecoFornecedor> searchEntityByCLiente(int id) {
         ObservableList<EnderecoFornecedor> lista = FXCollections.observableArrayList();
         try {
-            sql = "select * from endereco_fornecedor where fk_id_fornecedor=?";
+            sql = "select * from endereco_fornecedor where idFornecedor=?";
             ps = con.prepareStatement(sql);
             ps.setInt(1,id);
             ResultSet result = ps.executeQuery();

@@ -68,7 +68,7 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
         boolean isSuccess = false;
         try {
             sql = "update contacto_fornecedor set contacto=?, email=? ,website=? ,"
-                    + "pessoa_de_contacto=?, where id=?";
+                    + "pessoa_de_contacto=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getContacto_forn());

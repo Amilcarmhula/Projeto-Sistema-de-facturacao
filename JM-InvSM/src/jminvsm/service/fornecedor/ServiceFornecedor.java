@@ -33,7 +33,7 @@ public class ServiceFornecedor {
         this.opsSuccess = opsSuccess;
     }
 
-    public void registar(String razaosocial, String tipo, Integer nuit, Usuario user) {
+    public void registar(String razaosocial, String tipo, Integer nuit) {
         setOpsSuccess(false);
 
         if (razaosocial == null || razaosocial.isEmpty()) {
@@ -50,14 +50,13 @@ public class ServiceFornecedor {
         f.setRazaosocial_forn(razaosocial);
         f.setNuit_forn(nuit);
         f.setTipo_forn(tipo);
-        f.setUsuario(user);
         if (fornecedor.addEntity(f)) {
             setOpsSuccess(true);
             showSuccessAlert( "Registo adicionado com sucesso.");
         }
     }
 
-    public void actualizar(Integer id, String razaosocial, String tipo, Integer nuit, Usuario user) {
+    public void actualizar(Integer id, String razaosocial, String tipo, Integer nuit) {
         setOpsSuccess(false);
         if (id == null || id <= 0) {
             showErroAlert( "Fornecedor nao selecionado!");
@@ -78,7 +77,6 @@ public class ServiceFornecedor {
         f.setRazaosocial_forn(razaosocial);
         f.setNuit_forn(nuit);
         f.setTipo_forn(tipo);
-        f.setUsuario(user);
         if (fornecedor.updateEntityByID(f, id)) {
             setOpsSuccess(true);
             showSuccessAlert( "Registo actualizado com sucesso.");

@@ -290,7 +290,7 @@ public class AddFornecedorController implements Initializable {
     Funcoes de Adicao de registros
      */
     public void addFornecedor() {
-        serviceFornecedor.registar(txtRazao.getText(), combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText().equals("")?"0":txtNuit.getText()), userData);
+        serviceFornecedor.registar(txtRazao.getText(), combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText().equals("")?"0":txtNuit.getText()));
         if (serviceFornecedor.isOpsSuccess()) {
             showCliente();
             ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
@@ -321,7 +321,7 @@ public class AddFornecedorController implements Initializable {
     Funcoes para Actualizar registros
      */
     public void updateFornecedor() {
-        serviceFornecedor.actualizar(Integer.parseInt(txtIDCliente.getText()), txtRazao.getText(), combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText()), userData);
+        serviceFornecedor.actualizar(Integer.parseInt(txtIDCliente.getText()), txtRazao.getText(), combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText()));
         if (serviceFornecedor.isOpsSuccess()) {
             showCliente();
             showContactos();

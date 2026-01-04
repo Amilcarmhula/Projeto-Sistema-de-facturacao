@@ -16,7 +16,6 @@ public class ContactoFornecedor{
     private int id; //
     private String responsavel_forn;
     private Fornecedor fornecedor;
-    private Usuario usuario;
     private String data_criacao;
     private String contacto_forn;
     private String email_forn;
@@ -25,10 +24,9 @@ public class ContactoFornecedor{
     
     public ContactoFornecedor(){}
 
-    public ContactoFornecedor(String responsavel, Fornecedor fornecedor, Usuario usuario, String contacto, String email, String website) {
+    public ContactoFornecedor(String responsavel, Fornecedor fornecedor, String contacto, String email, String website) {
         this.responsavel_forn = responsavel;
         this.fornecedor = fornecedor;
-        this.usuario = usuario;
         this.contacto_forn = contacto;
         this.email_forn = email;
         this.website_forn = website;
@@ -58,14 +56,6 @@ public class ContactoFornecedor{
 
     public void setFornecedor(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
     public String getData_criacao() {

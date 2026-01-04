@@ -24,19 +24,17 @@ public class Fornecedor {
     private String data_criacao;
     private List<ContactoFornecedor> contactoFornecedor;
     private List<EnderecoFornecedor> enderecoFornecedor;
-    private Usuario usuario;
     
 
     public Fornecedor() {
     }
 
-    public Fornecedor(String tipo, String razaosocial, int nuit, List<ContactoFornecedor> contactoFornecedor, List<EnderecoFornecedor> enderecoFornecedor, Usuario usuario) {
+    public Fornecedor(String tipo, String razaosocial, int nuit, List<ContactoFornecedor> contactoFornecedor, List<EnderecoFornecedor> enderecoFornecedor) {
         this.tipo_forn = tipo;
         this.razaosocial_forn = razaosocial;
         this.nuit_forn = nuit;
         this.contactoFornecedor = contactoFornecedor;
         this.enderecoFornecedor = enderecoFornecedor;
-        this.usuario = usuario;
     }
 
     
@@ -106,13 +104,5 @@ public class Fornecedor {
     public void setEnderecoFornecedor(List<EnderecoFornecedor> enderecoFornecedor) {
         this.enderecoFornecedor = enderecoFornecedor;
     }
-    
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
+   
 }

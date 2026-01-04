@@ -34,7 +34,7 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
         boolean isSuccess = false;
         try {
             sql = "insert into contacto_fornecedor (contacto, email,website,pessoa_de_contacto, "
-                    + "fk_id_fornecedor, fk_id_usuario) value (?,?,?,?,?,?)";
+                    + "idFornecedor) value (?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -43,7 +43,6 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
             ps.setString(3, t.getWebsite_forn());
             ps.setString(4, t.getResponsavel_forn());
             ps.setInt(5, t.getFornecedor().getId());
-            ps.setInt(6, t.getUsuario().getId());
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -69,15 +68,14 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
         boolean isSuccess = false;
         try {
             sql = "update contacto_fornecedor set contacto=?, email=? ,website=? ,"
-                    + "pessoa_de_contacto=?, fk_id_usuario=? where id=?";
+                    + "pessoa_de_contacto=?, where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getContacto_forn());
             ps.setString(2, t.getEmail_forn());
             ps.setString(3, t.getWebsite_forn());
             ps.setString(4, t.getResponsavel_forn());
-            ps.setInt(5, t.getUsuario().getId());
-            ps.setInt(6, id);
+            ps.setInt(5, id);
 
             int rowsAffected = ps.executeUpdate();
 
@@ -127,7 +125,7 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
     public ObservableList<ContactoFornecedor> searchEntityByCLiente(int id) {
         ObservableList<ContactoFornecedor> lista = FXCollections.observableArrayList();
         try {
-            sql = "select * from contacto_fornecedor where fk_id_fornecedor=?";
+            sql = "select * from contacto_fornecedor where idFornecedor=?";
             ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet result = ps.executeQuery();

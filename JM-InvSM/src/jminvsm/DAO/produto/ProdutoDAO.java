@@ -41,8 +41,8 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     public boolean addEntity(Produto t) {
         boolean isSuccess = false;
         try {
-            sql = "insert into produto (nome, codigo_barra, descricao,fk_id_categoria, "
-                    + "fk_id_unidade_medida,fk_id_imposto,controle_stock,nivelstock, tipo, unidadePorTipo) value (?,?,?,?,?,?,?,?,?,?)";
+            sql = "insert into produto (nome, codigo_barra, descricao,idCategoria, "
+                    + "idUnidade,idImposto,controle_stock,nivelstock, tipoProduto, unidadePorTipo) value (?,?,?,?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -82,8 +82,8 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     public boolean updateEntityByID(Produto t, int id) {
         boolean isSuccess = false;
         try {
-            sql = "update produto set nome=?,codigo_barra=? ,descricao=?,fk_id_categoria=?, "
-                    + "fk_id_unidade_medida=?,fk_id_imposto=?, nivelstock=?, controle_stock=?, tipo=?,"
+            sql = "update produto set nome=?,codigo_barra=? ,descricao=?,idCategoria=?, "
+                    + "idUnidade=?,idImposto=?, nivelstock=?, controle_stock=?, tipoProduto=?,"
                     + " unidadePorTipo=? where id=?";
             ps = con.prepareStatement(sql);
 
@@ -130,9 +130,9 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + "         u.id as id_unidade, u.identificador, u.sigla,"
                     + "         t.id as id_taxa, t.nome as taxa, t.percentagem,"
                     + "FROM produto p "
-                    + "LEFT JOIN categoria c ON c.id = p.fk_id_categoria "
-                    + "LEFT JOIN unidade_medida u ON u.id = p.fk_id_unidade_medida "
-                    + "LEFT JOIN imposto t ON t.id = p.fk_id_imposto ";
+                    + "LEFT JOIN categoria c ON c.id = p.idCategoria "
+                    + "LEFT JOIN unidade_medida u ON u.id = p.idUnidade "
+                    + "LEFT JOIN imposto t ON t.id = p.idImposto ";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
@@ -216,12 +216,12 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + " pv.precoNormal, pv.precoVenda, pv.precoFinal, "
                     + " s.saldo "
                     + "	from  produto p "
-                    + "	join stock s on p.id=s.fk_id_produto "
-                    + " join precovenda pv on p.id=pv.idProduto and s.fk_id_armazem=pv.idArmazem "
-                    + " join armazem a on s.fk_id_armazem=a.id "
-                    + " join categoria c on p.fk_id_categoria=c.id "
-                    + " join unidade_medida u on p.fk_id_unidade_medida=u.id "
-                    + " join imposto i on p.fk_id_imposto=i.id ";
+                    + "	join stock s on p.id=s.idProduto "
+                    + " join precovenda pv on p.id=pv.idProduto and s.idArmazem=pv.idArmazem "
+                    + " join armazem a on s.idArmazem=a.id "
+                    + " join categoria c on p.idCategoria=c.id "
+                    + " join unidade_medida u on p.idUnidade=u.id "
+                    + " join imposto i on p.idImposto=i.id ";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
@@ -287,13 +287,13 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setTipoProduto(result.getString("tipo"));
                 p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
                 Categoria cat = new Categoria();
-                cat.setId(result.getInt("fk_id_categoria"));
+                cat.setId(result.getInt("idCategoria"));
                 p.setCategoria(cat);
                 UnidadeMedida u = new UnidadeMedida();
-                u.setId(result.getInt("fk_id_unidade_medida"));
+                u.setId(result.getInt("idUnidade"));
                 p.setUnidadeMedida(u);
                 Imposto t = new Imposto();
-                t.setId(result.getInt("fk_id_imposto"));
+                t.setId(result.getInt("idImposto"));
                 p.setImposto(t);
                 p.setControle_stock(result.getBoolean("controle_stock"));
 

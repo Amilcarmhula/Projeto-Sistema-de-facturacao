@@ -9,6 +9,7 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.desconto.Desconto;
 import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
+import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
 
@@ -34,7 +35,7 @@ public class Item {
         super();
     }
 
-    public Item(int quantidade, int qtd_por_unidade, double subtotal, Produto produto, Factura factura, Usuario usuario, Armazem armazem, String unidade_vendida) {
+    public Item(int quantidade, int qtd_por_unidade, double subtotal, Produto produto, Factura factura, Usuario usuario, Armazem armazem, String unidade_vendida, PrecoVenda precoVenda) {
         super();
         this.quantidade = quantidade;
         this.qtd_por_unidade = qtd_por_unidade;
@@ -44,6 +45,7 @@ public class Item {
         this.usuario = usuario;
         this.armazem = armazem;
         this.unidade_vendida = unidade_vendida;
+        this.precoVenda = precoVenda;
     }
 
     public int getId() {
@@ -134,7 +136,6 @@ public class Item {
     public void setPrecoVenda(PrecoVenda precoVenda) {
         this.precoVenda = precoVenda;
     }
-    
     
 
 //    public void calculateSubtotal_onTable(Item item, TableView table) {

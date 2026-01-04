@@ -72,9 +72,9 @@ public class ServiceProdutoFornecido {
         f.setId(id_for);
         pf.setFornecedor(f);
         pf.setUsuario(user);
-        pf.setQuantidade(qtd);
-        pf.setData_fornecida(data_fornecida);
-        pf.setCusto(custo);
+        pf.setQuantidadeInicial(qtd);
+        pf.setDataEntrada(data_fornecida);
+        pf.setCustoUnitario(custo);
         pf.setUnidade_fornecida(unidade_fornecida);
         pf.setQtd_por_unidade(qtd_por_unidade);
 

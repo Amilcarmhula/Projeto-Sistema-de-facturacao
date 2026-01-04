@@ -300,7 +300,7 @@ public class VendasController implements Initializable {
                 Item item = event.getRowValue(); // Obtém o objeto da linha
                 item.setQuantidade(event.getNewValue()); // Atualiza a propriedade
 
-                Item i = new Item();
+//                Item i = new Item();
 //                i.calculateSubtotal_onTable(item,tabelaItens);
                 displayPrice();
             }
@@ -395,6 +395,7 @@ public class VendasController implements Initializable {
         i.setUnidade_vendida(x.getProduto().getTipoProduto());
         i.setQtd_por_unidade(x.getProduto().getUnidadesPorTipo());
         i.setProduto(x.getProduto());
+        i.setPrecoVenda(x.getPrecoVenda());
         Factura f = new Factura();
         f.setNumero_fac(labNumeroFactura.getText());
         i.setFactura(f);

@@ -17,32 +17,32 @@ import jminvsm.model.usuario.Usuario;
 public class ProdutoFornecido {
 
     private int id;
-    private int quantidade;
-    private int qtd_por_unidade;
-    private String data_fornecida;
-    private String unidade_fornecida;
-    private double custo;
-    private Armazem armazem;
+    private String codigo;
     private Produto produto;
+    private Armazem armazem;
     private Fornecedor fornecedor;
-    private Usuario usuario;
-    private String data_criacao;
+    private String dataEntrada;
+    private int quantidadeInicial;
+    private int quantidadeActual;
+    private double custoUnitario;
+    private double valorTotal;
+    private boolean estado;
     
     public ProdutoFornecido(){}
 
-    public ProdutoFornecido(int quantidade, int qtd_por_unidade, String data_fornecida, String unidade_fornecida, double custo, Armazem armazem, Produto produto, Fornecedor fornecedor, Usuario usuario) {
-        this.quantidade = quantidade;
-        this.qtd_por_unidade = qtd_por_unidade;
-        this.data_fornecida = data_fornecida;
-        this.unidade_fornecida = unidade_fornecida;
-        this.custo = custo;
-        this.armazem = armazem;
+    public ProdutoFornecido(int id, String codigo, Produto produto, Armazem armazem, Fornecedor fornecedor, String dataEntrada, int quantidadeInicial, int quantidadeActual, double custoUnitario, double valorTotal, boolean estado) {
+        this.id = id;
+        this.codigo = codigo;
         this.produto = produto;
+        this.armazem = armazem;
         this.fornecedor = fornecedor;
-        this.usuario = usuario;
+        this.dataEntrada = dataEntrada;
+        this.quantidadeInicial = quantidadeInicial;
+        this.quantidadeActual = quantidadeActual;
+        this.custoUnitario = custoUnitario;
+        this.valorTotal = valorTotal;
+        this.estado = estado;
     }
-
-    
 
     public int getId() {
         return id;
@@ -52,54 +52,12 @@ public class ProdutoFornecido {
         this.id = id;
     }
 
-    public int getQuantidade() {
-        return quantidade;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public int getQtd_por_unidade() {
-        return qtd_por_unidade;
-    }
-
-    public void setQtd_por_unidade(int qtd_por_unidade) {
-        this.qtd_por_unidade = qtd_por_unidade;
-    }
-
-    public String getData_fornecida() {
-        return data_fornecida;
-    }
-
-    public void setData_fornecida(String data_fornecida) {
-        this.data_fornecida = data_fornecida;
-    }
-
-    public String getUnidade_fornecida() {
-        return unidade_fornecida;
-    }
-
-    public void setUnidade_fornecida(String unidade_fornecida) {
-        this.unidade_fornecida = unidade_fornecida;
-    }
-    
-    
-
-    public double getCusto() {
-        return custo;
-    }
-
-    public void setCusto(double custo) {
-        this.custo = custo;
-    }
-
-    public Armazem getArmazem() {
-        return armazem;
-    }
-
-    public void setArmazem(Armazem armazem) {
-        this.armazem = armazem;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public Produto getProduto() {
@@ -110,6 +68,14 @@ public class ProdutoFornecido {
         this.produto = produto;
     }
 
+    public Armazem getArmazem() {
+        return armazem;
+    }
+
+    public void setArmazem(Armazem armazem) {
+        this.armazem = armazem;
+    }
+
     public Fornecedor getFornecedor() {
         return fornecedor;
     }
@@ -118,21 +84,53 @@ public class ProdutoFornecido {
         this.fornecedor = fornecedor;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public String getDataEntrada() {
+        return dataEntrada;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setDataEntrada(String dataEntrada) {
+        this.dataEntrada = dataEntrada;
     }
 
-    public String getData_criacao() {
-        return data_criacao;
+    public int getQuantidadeInicial() {
+        return quantidadeInicial;
     }
 
-    public void setData_criacao(String data_criacao) {
-        this.data_criacao = data_criacao;
+    public void setQuantidadeInicial(int quantidadeInicial) {
+        this.quantidadeInicial = quantidadeInicial;
     }
 
-    
+    public int getQuantidadeActual() {
+        return quantidadeActual;
+    }
+
+    public void setQuantidadeActual(int quantidadeActual) {
+        this.quantidadeActual = quantidadeActual;
+    }
+
+    public double getCustoUnitario() {
+        return custoUnitario;
+    }
+
+    public void setCustoUnitario(double custoUnitario) {
+        this.custoUnitario = custoUnitario;
+    }
+
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+   
 }

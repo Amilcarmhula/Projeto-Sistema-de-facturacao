@@ -28,7 +28,6 @@ public class Produto {
     private int nivelstock;
     private Categoria categoria;
     private UnidadeMedida unidadeMedida;
-//    private PrecoVenda precoVenda;
     private Imposto imposto;
 
     public Produto() {

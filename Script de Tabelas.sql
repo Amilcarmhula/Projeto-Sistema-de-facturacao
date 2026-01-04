@@ -45,16 +45,17 @@ create table contacto_empresa(
     foreign key (fk_id_empresa) references empresa(id)
 );
 
-
 create table nivel_acesso(
 	id integer primary key auto_increment,
     descricao varchar(50) not null
 );
+
 create table permissao( 
 	id integer primary key auto_increment,
     tipo varchar(4) not null,
     descricao varchar(40) not null
 );
+
 create table usuario(
 	id integer primary key auto_increment,
     nome varchar(100) not null,
@@ -96,6 +97,7 @@ create table endereco_cliente(
     foreign key (fk_id_usuario) references usuario(id),
     check(tipo in('Facturação','Envio'))
 );
+
 create table contacto_cliente(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
@@ -109,14 +111,12 @@ create table contacto_cliente(
     foreign key (fk_id_usuario) references usuario(id)
 );
 
-
 create table fornecedor(
 	id integer primary key auto_increment,
     tipo varchar(50) not null, --  (Pessoa Física/Jurídica)
     razaosocial varchar(100) not null,-- Razao social
     nuit integer
 );
-
 
 create table endereco_fornecedor(
 	id integer primary key auto_increment,
@@ -141,45 +141,6 @@ create table contacto_fornecedor(
     foreign key (idFornecedor) references fornecedor(id) on delete cascade
 );
 
-
--- create table armazem(
--- 	id integer primary key auto_increment,
---     nome varchar(50) not null,
---     tipo varchar(50) not null, -- de Armazém: (Central, Regional, Loja, etc.)
---     descricao varchar(50),
---     estado boolean default 1 not null, -- Ativo/Inativo.
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
--- );
--- create table endereco_armazem(
--- 	id integer primary key auto_increment,
---     provincia varchar(50),
---     cidade varchar(50),
---     bairro varchar(50),
---     avenida varchar(50),
---     rua varchar(30),
---     codigo_postal integer,
---     numero integer not null,
--- 	fk_id_armazem integer not null,
---     fk_id_usuario integer not null,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     foreign key (fk_id_armazem) references armazem(id) on delete cascade,
---     foreign key (fk_id_usuario) references usuario(id)
--- );
-
-
--- create table contacto_armazem(
--- 	id integer primary key auto_increment,
---     pessoa_de_contacto varchar(100),
---     contacto varchar(20) not null,
--- 	email varchar(50),
---     fk_id_armazem integer,
---     fk_id_usuario integer not null,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     foreign key (fk_id_armazem) references armazem(id) on delete cascade,
---     foreign key (fk_id_usuario) references usuario(id)
--- );
---  
-
 create table armazem(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -187,6 +148,7 @@ create table armazem(
     descricao varchar(50),
     estado boolean default 1 not null -- Ativo/Inativo.
 );
+
 create table endereco_armazem(
 	id integer primary key auto_increment,
     provincia varchar(50),
@@ -199,6 +161,7 @@ create table endereco_armazem(
 	idArmazem integer,
     foreign key (idArmazem) references armazem(id) on delete cascade
 );
+
 create table contacto_armazem(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
@@ -215,8 +178,6 @@ create table categoria(
     familia varchar(50),
     descricao text
 );
-
-
     
 create table unidadeMedida(
 	id integer primary key auto_increment,
@@ -233,7 +194,6 @@ create table imposto(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 
 create table desconto(
 	id integer primary key auto_increment,
@@ -512,7 +472,7 @@ END//
 DELIMITER ;
 
 
-
+select * from produto;
 create table precoProdutoArmazem(
 	idProduto integer,
     idArmazem integer,
@@ -521,6 +481,7 @@ create table precoProdutoArmazem(
     foreign key (idArmazem) references armazem(id)on delete cascade,
     primary key(idProduto, idArmazem)
 );
+desc precovenda;
 create table produtodesconto(
 	idProduto integer not null,
     idDesconto integer not null,

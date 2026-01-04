@@ -20,7 +20,7 @@ BEGIN
       AND estado = 'activo';
 
     -- 2) Buscar o preço base e o imposto associado ao produto
-    SELECT ppa.preco, pr.fk_id_imposto
+    SELECT ppa.preco, pr.idImposto
     INTO preco_base, id_imposto
     FROM precoProdutoArmazem ppa
     JOIN produto pr ON pr.id = ppa.idProduto

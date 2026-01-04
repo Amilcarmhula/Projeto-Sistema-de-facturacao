@@ -76,7 +76,7 @@ public class ProdutoDescontoDAO {
             isSuccess = rows > 0;
 
         } catch (SQLException ex) {
-            System.out.println("Erro ao inserir ProdutoDesconto: " + ex);
+            System.out.println("Erro ao inserir ProdutoDesconto:: " + ex);
         } finally {
             try {
                 if (ps != null) {

@@ -32,20 +32,18 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
     public boolean addEntity(ProdutoFornecido t) {
         boolean isSuccess = false;
         try {
-            sql = "insert into produto_fornecido (quantidade,data_fornecida,custo, fk_id_armazem,fk_id_produto, "
-                    + "fk_id_fornecedor,fk_id_usuario,unidade_fornecida,qtd_por_unidade) value (?,?,?,?,?,?,?,?,?)";
+            sql = "INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario) value (?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
-            ps.setInt(1, t.getQuantidade());
-            ps.setString(2, t.getData_fornecida());
-            ps.setDouble(3, t.getCusto());
-            ps.setInt(4, t.getArmazem().getId());
-            ps.setInt(5, t.getProduto().getId());
-            ps.setInt(6, t.getFornecedor().getId());
-            ps.setInt(7, t.getUsuario().getId());
-            ps.setString(8, t.getUnidade_fornecida());
-            ps.setInt(9, t.getQtd_por_unidade());
+            ps.setString(1, t.getCodigo());
+            ps.setInt(2, t.getProduto().getId());
+            ps.setInt(3, t.getArmazem().getId());
+            ps.setInt(4, t.getFornecedor().getId());
+            ps.setString(5, t.getDataEntrada());
+            ps.setInt(6, t.getQuantidadeActual());
+            ps.setDouble(7, t.getCustoUnitario());
+            
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {

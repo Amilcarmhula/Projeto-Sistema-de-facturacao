@@ -6,6 +6,7 @@ package jminvsm.service.produto.fornecido;
 
 import java.sql.SQLException;
 import java.util.Map;
+import javafx.collections.ObservableList;
 import jminvsm.dao.produto.fornecido.ProdutoFornecidoDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
@@ -71,12 +72,10 @@ public class ServiceProdutoFornecido {
         Fornecedor f = new Fornecedor();
         f.setId(id_for);
         pf.setFornecedor(f);
-        pf.setUsuario(user);
         pf.setQuantidadeInicial(qtd);
         pf.setDataEntrada(data_fornecida);
         pf.setCustoUnitario(custo);
-        pf.setUnidade_fornecida(unidade_fornecida);
-        pf.setQtd_por_unidade(qtd_por_unidade);
+
 
         if (produtoFornecidoDao.addEntity(pf)) {
             setOpsSuccess(true);
@@ -86,6 +85,18 @@ public class ServiceProdutoFornecido {
     
     public Map<String, Integer> consultaMovimento(Integer cat, Integer arm){
         return produtoFornecidoDao.getMovimentos(cat, arm);
+    }
+    
+    public ObservableList<ProdutoFornecido> getLotes(Integer idProd) {
+        return produtoFornecidoDao.getLotesForStock(idProd);
+    }
+    
+    public static void main(String[] args) throws SQLException {
+        ServiceProdutoFornecido dao = new ServiceProdutoFornecido();
+        ObservableList<ProdutoFornecido> lista = dao.getLotes(1);
+        for (ProdutoFornecido x : lista) {
+            System.out.println("Lotes: "+ x.getDataEntrada());
+        }
     }
 
 }

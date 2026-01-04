@@ -7,7 +7,6 @@ package jminvsm.model.produto.fornecido;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.produto.Produto;
-import jminvsm.model.usuario.Usuario;
 
 
 /**
@@ -26,11 +25,11 @@ public class ProdutoFornecido {
     private int quantidadeActual;
     private double custoUnitario;
     private double valorTotal;
-    private boolean estado;
+    private String estado;
     
     public ProdutoFornecido(){}
 
-    public ProdutoFornecido(int id, String codigo, Produto produto, Armazem armazem, Fornecedor fornecedor, String dataEntrada, int quantidadeInicial, int quantidadeActual, double custoUnitario, double valorTotal, boolean estado) {
+    public ProdutoFornecido(int id, String codigo, Produto produto, Armazem armazem, Fornecedor fornecedor, String dataEntrada, int quantidadeInicial, int quantidadeActual, double custoUnitario, double valorTotal, String estado) {
         this.id = id;
         this.codigo = codigo;
         this.produto = produto;
@@ -124,11 +123,11 @@ public class ProdutoFornecido {
         this.valorTotal = valorTotal;
     }
 
-    public boolean isEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 

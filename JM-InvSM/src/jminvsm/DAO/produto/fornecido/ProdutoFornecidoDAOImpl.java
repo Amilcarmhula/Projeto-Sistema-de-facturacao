@@ -6,6 +6,7 @@ package jminvsm.dao.produto.fornecido;
 
 
 import java.util.Map;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -15,6 +16,7 @@ import java.util.Map;
 public interface ProdutoFornecidoDAOImpl<T> {
     boolean  addEntity(T x);
     Map<String, Integer> getMovimentos(Integer cat, Integer arm);
+    ObservableList<T> getLotesForStock(Integer idProduto);
 //    boolean updateEntityByID(T t, int id);
     
     

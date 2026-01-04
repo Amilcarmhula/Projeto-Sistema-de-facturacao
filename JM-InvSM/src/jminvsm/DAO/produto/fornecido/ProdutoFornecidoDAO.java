@@ -10,7 +10,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import jminvsm.model.armazem.Armazem;
+import jminvsm.model.categoria.Categoria;
+import jminvsm.model.imposto.Imposto;
+import jminvsm.model.preco.PrecoProdutoArmazem;
+import jminvsm.model.produto.Produto;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
+import jminvsm.model.stock.Stock;
+import jminvsm.model.unidade_medida.UnidadeMedida;
+import jminvsm.util.AlertUtilities;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
@@ -43,7 +53,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             ps.setString(5, t.getDataEntrada());
             ps.setInt(6, t.getQuantidadeActual());
             ps.setDouble(7, t.getCustoUnitario());
-            
+
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -62,6 +72,52 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             }
         }
         return isSuccess;
+    }
+
+    @Override
+    public ObservableList<ProdutoFornecido> getLotesForStock(Integer idProduto) {
+        ObservableList<ProdutoFornecido> lista = FXCollections.observableArrayList();
+        try {
+            sql = "SELECT "
+                    + "    l.id as idLote, "
+                    + "    l.codigo AS loteCode, "
+                    + "    a.nome AS armazem, "
+                    + "    l.dataEntrada, "
+                    + "    l.quantidadeInicial, "
+                    + "    l.quantidadeAtual, "
+                    + "    l.custoUnitario, "
+                    + "    l.valorTotal, "
+                    + "    l.estado "
+                    + "FROM lote l "
+                    + "JOIN armazem a ON a.id = l.idArmazem "
+                    + "WHERE l.idProduto = ? "
+                    + "ORDER BY l.dataEntrada ASC;";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idProduto);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                ProdutoFornecido l = new ProdutoFornecido();
+                l.setId(result.getInt("idLote"));
+                l.setCodigo(result.getString("loteCode"));
+                Armazem a = new Armazem();
+                a.setNome_arm(result.getString("armazem"));
+                l.setArmazem(a);
+                l.setDataEntrada(result.getString("dataEntrada"));
+                l.setQuantidadeInicial(result.getInt("quantidadeInicial"));
+                l.setQuantidadeActual(result.getInt("quantidadeAtual"));
+                l.setCustoUnitario(result.getDouble("custoUnitario"));
+                l.setValorTotal(result.getDouble("valorTotal"));
+                l.setEstado(result.getString("estado"));
+                lista.add(l);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            System.out.println("Erro Detalhes: " + ex);
+            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
+
+        }
+        return lista;
     }
 
     /**
@@ -120,6 +176,8 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
         return mapa;
     }
     
+    
+
 //    public static void main(String[] args) throws SQLException {
 //        System.out.println("Teste");
 //        ProdutoFornecidoDAO d = new ProdutoFornecidoDAO();

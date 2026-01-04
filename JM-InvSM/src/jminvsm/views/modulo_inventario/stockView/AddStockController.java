@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -26,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
 import jminvsm.model.fornecedor.Fornecedor;
+import jminvsm.model.produto.fornecido.ProdutoFornecido;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
@@ -45,6 +47,7 @@ public class AddStockController implements Initializable {
     private ServiceProdutoFornecido service;
     private ServiceArmazem serviceArmazem;
     private ServiceFornecedor servicoFornecedor;
+    private ServiceProdutoFornecido servicoprodFornecido;
 
     private Usuario userData;
     private Stock s;
@@ -52,15 +55,25 @@ public class AddStockController implements Initializable {
     private Button btnAdd;
 
     @FXML
-    private TableView<Fornecedor> tabelaFornecedor;
+    private TableView<ProdutoFornecido> tableLote;
     @FXML
-    private TableColumn<Fornecedor, Integer> IDtabelaFornecedor;
+    private TableColumn<ProdutoFornecido, Integer> IDLote;
     @FXML
-    private TableColumn<Fornecedor, String> contactotabelaFornecedor;
+    private TableColumn<ProdutoFornecido, String> codeLote;
     @FXML
-    private TableColumn<Fornecedor, Integer> nuittabelaFornecedor;
+    private TableColumn<ProdutoFornecido, String> armazemLote;
     @FXML
-    private TableColumn<Fornecedor, String> razaotabelaFornecedor;
+    private TableColumn<ProdutoFornecido, String> entredaLote;
+    @FXML
+    private TableColumn<ProdutoFornecido, Integer> qtdInicialLote;
+    @FXML
+    private TableColumn<ProdutoFornecido, Integer> qtdActualLote;
+    @FXML
+    private TableColumn<ProdutoFornecido, Double> custoUnitarioLote;
+    @FXML
+    private TableColumn<ProdutoFornecido, Double> totalLote;
+    @FXML
+    private TableColumn<ProdutoFornecido, String> estadoLote;
 
     @FXML
     private DatePicker dataAquisicao;
@@ -107,17 +120,7 @@ public class AddStockController implements Initializable {
         }
     }
 
-    public void checkTipoLote() {
-        if (radComposto.isArmed()) {
-            radSimples.setSelected(false);
-            txtQtd_por_unidade.setDisable(false);
-        }
-        if (radSimples.isArmed()) {
-            radComposto.setSelected(false);
-            txtQtd_por_unidade.setText("1");
-            txtQtd_por_unidade.setDisable(true);
-        }
-    }
+
 
     /**
      * Initializes the controller class.
@@ -127,56 +130,35 @@ public class AddStockController implements Initializable {
 //        priceFormaterProduto();
         s = (Stock) SysFact.getData();
         txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
-        checkTipoLote();
         try {
             service = new ServiceProdutoFornecido();
             serviceArmazem = new ServiceArmazem();
             servicoFornecedor = new ServiceFornecedor();
+            servicoprodFornecido = new ServiceProdutoFornecido();
             this.userData = SysFact.getUserData();
-            showFornecedores();
+            showLotes(s.getProduto().getId());
             ButtonUtilities.buttonChangeText(btnAdd, txtIDProduto);
         } catch (SQLException ex) {
             Logger.getLogger(AddStockController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private ObservableList<Fornecedor> listaFornecedoress;
+    private ObservableList<ProdutoFornecido> listaFornecedoress;
 
-    public void showFornecedores() throws SQLException {
-        listaFornecedoress = servicoFornecedor.getFornecedores();
+    public void showLotes(int id) throws SQLException {
+        listaFornecedoress = servicoprodFornecido.getLotes(id);
 
-        IDtabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("id"));
-        razaotabelaFornecedor.setCellValueFactory(new PropertyValueFactory<>("razaosocial_forn"));
+        IDLote.setCellValueFactory(new PropertyValueFactory<>("id"));
+        codeLote.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        armazemLote.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
+        entredaLote.setCellValueFactory(new PropertyValueFactory<>("dataEntrada"));
+        qtdInicialLote.setCellValueFactory(new PropertyValueFactory<>("quantidadeInicial"));
+        qtdActualLote.setCellValueFactory(new PropertyValueFactory<>("quantidadeActual"));
+        custoUnitarioLote.setCellValueFactory(new PropertyValueFactory<>("custoUnitario"));
+        totalLote.setCellValueFactory(new PropertyValueFactory<>("valorTotal"));
+        estadoLote.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
-        FilteredList<Fornecedor> dadosFiltrados = new FilteredList<>(listaFornecedoress, b -> true);
-        txtPesquisafrnecedor.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
-
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getRazaosocial_forn().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (String.valueOf(x.getNuit_forn()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else {
-                    return false;
-                }
-
-            });
-        });
-        SortedList<Fornecedor> sortedData = new SortedList<>(dadosFiltrados);
-        sortedData.comparatorProperty().bind(tabelaFornecedor.comparatorProperty());
-
-        tabelaFornecedor.setItems(sortedData);
-    }
-
-    public void selectedRowFornecedor() {
-        Fornecedor c = tabelaFornecedor.getSelectionModel().getSelectedItem();
-        if (c != null) {
-            txtIDFornecedor.setText(String.valueOf(c.getId()));
-        }
+        tableLote.setItems(listaFornecedoress);
     }
 
     public void addProdutoFornecido(ActionEvent e) throws SQLException {

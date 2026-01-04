@@ -110,46 +110,6 @@ create table contacto_cliente(
 );
 
 
--- create table fornecedor(
--- 	id integer primary key auto_increment,
---     tipo varchar(50) not null, --  (Pessoa Física/Jurídica)
---     razaosocial varchar(100) not null,-- Razao social
---     nuit integer,
---     fk_id_usuario integer not null,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     foreign key (fk_id_usuario) references usuario(id)
--- );
-
--- create table endereco_fornecedor(
--- 	id integer primary key auto_increment,
---     provincia varchar(50),
---     cidade varchar(50),
---     bairro varchar(50),
---     avenida varchar(50),
---     rua varchar(30),
---     codigo_postal integer,
---     numero integer not null,
--- 	fk_id_fornecedor integer not null,
---     fk_id_usuario integer not null,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     foreign key (fk_id_fornecedor) references fornecedor(id) on delete cascade,
---     foreign key (fk_id_usuario) references usuario(id)
--- );
-
--- create table contacto_fornecedor(
--- 	id integer primary key auto_increment,
---     pessoa_de_contacto varchar(100),
---     contacto varchar(20) not null,
--- 	email varchar(100) unique,
---     website varchar(100) ,
---     fk_id_fornecedor integer,
---     fk_id_usuario integer not null,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     foreign key (fk_id_fornecedor) references fornecedor(id) on delete cascade,
---     foreign key (fk_id_usuario) references usuario(id)
--- );
-
--- Nova estrutura
 create table fornecedor(
 	id integer primary key auto_increment,
     tipo varchar(50) not null, --  (Pessoa Física/Jurídica)

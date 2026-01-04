@@ -17,7 +17,6 @@ public class EnderecoArmazem{
     private int id;
     private String data_criacao;
     private Armazem armazem;
-    private Usuario usuario;
     private String provincia_arm;
     private String cidade_arm;
     private String bairro_arm;
@@ -62,14 +61,6 @@ public class EnderecoArmazem{
 
     public void setArmazem(Armazem armazem) {
         this.armazem = armazem;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
     public String getProvincia_arm() {

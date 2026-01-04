@@ -33,7 +33,7 @@ public class ServiceContacto {
         this.opsSuccess = opsSuccess;
     }
     
-    public void registar(String responsavel, String contacto, String email, Integer id_arm, Usuario user) {
+    public void registar(String responsavel, String contacto, String email, Integer id_arm) {
         setOpsSuccess(false);
         if (responsavel == null || responsavel.isEmpty()) {
             showErroAlert("Responsavel nao pode ser nulo!");
@@ -57,7 +57,6 @@ public class ServiceContacto {
         x.setResponsavel_arm(responsavel);
         x.setContacto_arm(contacto);
         x.setEmail_arm(email);
-        x.setUsuario(user);
         x.setArmazem(a);
 
         if (contatoArmazemDao.addEntity(x)) {
@@ -66,7 +65,7 @@ public class ServiceContacto {
         }
     }
     
-    public void actualizar(String responsavel, String contacto, String email, Integer id_contacto, Usuario user) {
+    public void actualizar(String responsavel, String contacto, String email, Integer id_contacto) {
         setOpsSuccess(false);
         if (responsavel == null || responsavel.isEmpty()) {
             showErroAlert( "Responsavel nao pode ser nulo!");
@@ -88,7 +87,6 @@ public class ServiceContacto {
         x.setResponsavel_arm(responsavel);
         x.setContacto_arm(contacto);
         x.setEmail_arm(email);
-        x.setUsuario(user);
 
         if (contatoArmazemDao.updateEntityByID(x, id_contacto)) {
             setOpsSuccess(true);

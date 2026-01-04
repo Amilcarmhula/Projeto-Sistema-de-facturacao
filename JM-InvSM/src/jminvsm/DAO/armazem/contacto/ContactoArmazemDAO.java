@@ -33,7 +33,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
         boolean isSuccess = false;
         try {
             sql = "insert into contacto_armazem (contacto, email,pessoa_de_contacto, "
-                    + "fk_id_armazem, fk_id_usuario) value (?,?,?,?,?)";
+                    + "idArmazem) value (?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -41,7 +41,6 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
             ps.setString(2, t.getEmail_arm());
             ps.setString(3, t.getResponsavel_arm());
             ps.setInt(4, t.getArmazem().getId());
-            ps.setInt(5, t.getUsuario().getId());
 
             // Usando executeUpdate para verificar se uma linha foi inserida
             int rowsAffected = ps.executeUpdate();
@@ -70,14 +69,13 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
         boolean isSuccess = false;
         try {
             sql = "update contacto_armazem set contacto=?, email=? ,"
-                    + "pessoa_de_contacto=?, fk_id_usuario=? where id=?";
+                    + "pessoa_de_contacto=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getContacto_arm());
             ps.setString(2, t.getEmail_arm());
             ps.setString(3, t.getResponsavel_arm());
-            ps.setInt(4, t.getUsuario().getId());
-            ps.setInt(5, id);
+            ps.setInt(4, id);
 
             // Usando executeUpdate para verificar se uma linha foi inserida
             int rowsAffected = ps.executeUpdate();
@@ -127,7 +125,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
     public ObservableList<ContactoArmazem> searchEntityByCLiente(int idArmazem) {
         ObservableList<ContactoArmazem> lista = FXCollections.observableArrayList();
         try {
-            sql = "select * from contacto_armazem where fk_id_armazem=?";
+            sql = "select * from contacto_armazem where idArmazem=?";
             ps = con.prepareStatement(sql);
             ps.setInt(1, idArmazem);
             ResultSet result = ps.executeQuery();

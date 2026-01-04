@@ -17,18 +17,15 @@ public class ContactoArmazem {
     private int id;
     private String responsavel_arm;
     private Armazem armazem;
-    private Usuario usuario;
-    private String data_criacao;
     private String contacto_arm;
     private String email_arm;
 
     public ContactoArmazem() {
     }
 
-    public ContactoArmazem(String responsavel, Armazem armazem, String data_criacao, String contacto, String email) {
+    public ContactoArmazem(String responsavel, Armazem armazem, String contacto, String email) {
         this.responsavel_arm = responsavel;
         this.armazem = armazem;
-        this.data_criacao = data_criacao;
         this.contacto_arm = contacto;
         this.email_arm = email;
     }
@@ -55,22 +52,6 @@ public class ContactoArmazem {
 
     public void setArmazem(Armazem armazem) {
         this.armazem = armazem;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getData_criacao() {
-        return data_criacao;
-    }
-
-    public void setData_criacao(String data_criacao) {
-        this.data_criacao = data_criacao;
     }
 
     public String getContacto_arm() {

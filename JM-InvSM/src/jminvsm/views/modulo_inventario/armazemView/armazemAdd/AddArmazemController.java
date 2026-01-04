@@ -307,7 +307,7 @@ public class AddArmazemController implements Initializable {
 
     public void addContacto(ActionEvent e) {
         Integer id = Integer.valueOf(txtIDCliente.getText());
-        serviceContacto.registar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
+        serviceContacto.registar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id);
         if (serviceContacto.isOpsSuccess()) {
             
             showContactos();
@@ -321,7 +321,7 @@ public class AddArmazemController implements Initializable {
         Integer id = Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
         serviceEndereco.registar(txtAvenida.getText(), txtBairro.getText(),
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(), id, userData);
+                txtRua.getText(), id);
         if (serviceEndereco.isOpsSuccess()) {
             showEndereco();
             resetEndereco();
@@ -343,7 +343,7 @@ public class AddArmazemController implements Initializable {
 
     public void updateContacto(ActionEvent e) {
         Integer id = Integer.valueOf(txtIDContacto.getText());
-        serviceContacto.actualizar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id, userData);
+        serviceContacto.actualizar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id);
         if (serviceContacto.isOpsSuccess()) {
             showContactos();
             restContacto();
@@ -356,7 +356,7 @@ public class AddArmazemController implements Initializable {
         Integer id = Integer.valueOf(txtIDEndereco.getText().equals("") ? "0" : txtIDEndereco.getText());
         serviceEndereco.actualizar(txtAvenida.getText(), txtBairro.getText(),
                 txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(), id, userData);
+                txtRua.getText(), id);
         if (serviceEndereco.isOpsSuccess()) {
             showEndereco();
             resetEndereco();

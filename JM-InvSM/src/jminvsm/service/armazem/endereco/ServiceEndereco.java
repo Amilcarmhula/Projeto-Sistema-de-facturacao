@@ -36,7 +36,7 @@ public class ServiceEndereco {
 
     public void registar(String avenida, String bairro, String cidade,
             Integer postalCode, Integer numero, String provincia, String rua,
-            Integer id_arm, Usuario user) {
+            Integer id_arm) {
         setOpsSuccess(false);
         if (avenida == null || avenida.isEmpty()) {
             avenida = "de Mocambique";
@@ -78,7 +78,6 @@ public class ServiceEndereco {
         x.setNumero_arm(numero);
         x.setProvincia_arm(provincia);
         x.setRua_arm(rua);
-        x.setUsuario(user);
         x.setArmazem(a);
 
         if (enderecoArmazemDao.addEntity(x)) {
@@ -89,7 +88,7 @@ public class ServiceEndereco {
 
     public void actualizar(String avenida, String bairro, String cidade,
             Integer postalCode, Integer numero, String provincia, String rua,
-            Integer id, Usuario user) {
+            Integer id) {
         setOpsSuccess(false);
         if (avenida == null || avenida.isEmpty()) {
             avenida = "de Mocambique";
@@ -129,7 +128,6 @@ public class ServiceEndereco {
         x.setNumero_arm(numero);
         x.setProvincia_arm(provincia);
         x.setRua_arm(rua);
-        x.setUsuario(user);
 
         if (enderecoArmazemDao.updateEntityByID(x, id)) {
             setOpsSuccess(true);

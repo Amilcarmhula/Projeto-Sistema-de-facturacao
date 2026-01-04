@@ -33,8 +33,8 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
         boolean isSuccess = false;
         try {
             sql = "insert into endereco_armazem (provincia,cidade,bairro,avenida,"
-                    + "rua,codigo_postal,numero, fk_id_armazem, fk_id_usuario)"
-                    + " value (?,?,?,?,?,?,?,?,?)";
+                    + "rua,codigo_postal,numero, idArmazem)"
+                    + " value (?,?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(sql);
 
@@ -46,7 +46,6 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             ps.setInt(6, t.getCodigoPostal_arm());
             ps.setInt(7, t.getNumero_arm());
             ps.setInt(8, t.getArmazem().getId());
-            ps.setInt(9, t.getUsuario().getId());
 
             // Usando executeUpdate para verificar se uma linha foi inserida
             int rowsAffected = ps.executeUpdate();
@@ -75,7 +74,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
         boolean isSuccess = false;
         try {
             sql = "update endereco_armazem set provincia=?,cidade=?,bairro=?,avenida=?,"
-                    + "rua=?,codigo_postal=?,numero=?, fk_id_usuario=? where id=?";
+                    + "rua=?,codigo_postal=?,numero=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getProvincia_arm());
@@ -85,8 +84,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             ps.setString(5, t.getRua_arm());
             ps.setInt(6, t.getCodigoPostal_arm());
             ps.setInt(7, t.getNumero_arm());
-            ps.setInt(8, t.getUsuario().getId());
-            ps.setInt(9, id);
+            ps.setInt(8, id);
 
             // Usando executeUpdate para verificar se uma linha foi inserida
             int rowsAffected = ps.executeUpdate();
@@ -140,7 +138,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
     public ObservableList<EnderecoArmazem> searchEntityByCLiente(int idCliente) {
         ObservableList<EnderecoArmazem> lista = FXCollections.observableArrayList();
         try {
-            sql = "select * from endereco_armazem where fk_id_armazem=?";
+            sql = "select * from endereco_armazem where idArmazem=?";
             ps = con.prepareStatement(sql);
             ps.setInt(1, idCliente);
             ResultSet result = ps.executeQuery();

@@ -51,6 +51,10 @@ public class ServiceStock {
         return stockDao.getStock(idCat, idArm);
     }
     
+    public ObservableList<Stock> getResumo(Integer idPro){
+        return stockDao.getResumoStock(idPro);
+    }
+    
     public int contaSaldoStock(Integer idCat, Integer idArm){
         return stockDao.countStock(idCat, idArm);
     }

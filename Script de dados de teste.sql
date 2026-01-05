@@ -308,7 +308,7 @@ INSERT INTO produto_composicao (idComposto, idSimples, quantidadePorUnidade)
 VALUES (2, 1, 12);
 
 INSERT INTO produto_fornecido (quantidade, unidade_fornecida, qtd_por_unidade, data_fornecida, custo, fk_id_armazem, fk_id_produto, fk_id_fornecedor, fk_id_usuario)
-VALUES (2, 'Composto', 12, '2025-10-04', 50.00, 1, 2, 1, 1);
+VALUES (2, 'Composto', 12, '2025-12-04', 50.00, 1, 2, 1, 1);
 
 INSERT INTO factura (
     numero, data_emissao, data_vencimento, total, totalPago, saldoPendente, estado,
@@ -361,6 +361,30 @@ INSERT INTO itemfactura (
     'Simples',
     1         -- cada unidade = 1 garrafa
 );
+
+SELECT 
+    a.id AS idArmazem,
+    a.nome AS armazem,
+    s.saldo
+FROM stock s
+JOIN produto p ON p.id = s.idProduto
+JOIN armazem a ON a.id = s.idArmazem
+WHERE p.id = 3;
+
+select * from stock;
+SELECT 
+    l.codigo AS lote,
+    a.nome AS armazem,
+    l.dataEntrada,
+    l.quantidadeInicial,
+    l.quantidadeAtual,
+    l.custoUnitario,
+    l.valorTotal,
+    l.estado
+FROM lote l
+JOIN armazem a ON a.id = l.idArmazem
+WHERE l.idProduto = 1
+ORDER BY l.dataEntrada ASC;
 
 
 

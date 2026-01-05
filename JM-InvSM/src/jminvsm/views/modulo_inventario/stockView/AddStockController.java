@@ -11,8 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,13 +24,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
-import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.fornecedor.ServiceFornecedor;
 import jminvsm.service.produto.fornecido.ServiceProdutoFornecido;
+import jminvsm.service.stock.ServiceStock;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 //import sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController;
@@ -48,12 +46,20 @@ public class AddStockController implements Initializable {
     private ServiceArmazem serviceArmazem;
     private ServiceFornecedor servicoFornecedor;
     private ServiceProdutoFornecido servicoprodFornecido;
+    private ServiceStock serviceStock;
 
     private Usuario userData;
     private Stock s;
     @FXML
     private Button btnAdd;
+    @FXML
+    private TableView<Stock> tableResumoStock;
+    @FXML
+    private TableColumn<Stock, String> armazemResumoStock;
+    @FXML
+    private TableColumn<Stock, Integer> saldoResumoStock;
 
+    
     @FXML
     private TableView<ProdutoFornecido> tableLote;
     @FXML
@@ -135,8 +141,10 @@ public class AddStockController implements Initializable {
             serviceArmazem = new ServiceArmazem();
             servicoFornecedor = new ServiceFornecedor();
             servicoprodFornecido = new ServiceProdutoFornecido();
+            serviceStock = new ServiceStock();
             this.userData = SysFact.getUserData();
             showLotes(s.getProduto().getId());
+            showResumoStock(s.getProduto().getId());
             ButtonUtilities.buttonChangeText(btnAdd, txtIDProduto);
         } catch (SQLException ex) {
             Logger.getLogger(AddStockController.class.getName()).log(Level.SEVERE, null, ex);
@@ -159,6 +167,17 @@ public class AddStockController implements Initializable {
         estadoLote.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         tableLote.setItems(listaFornecedoress);
+    }
+    
+    private ObservableList<Stock> listaResumoStock;
+
+    public void showResumoStock(int id) throws SQLException {
+        listaResumoStock = serviceStock.getResumo(id);
+        
+        armazemResumoStock.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
+        saldoResumoStock.setCellValueFactory(new PropertyValueFactory<>("saldo"));
+
+        tableResumoStock.setItems(listaResumoStock);
     }
 
     public void addProdutoFornecido(ActionEvent e) throws SQLException {

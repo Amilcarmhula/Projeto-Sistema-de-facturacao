@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="726.0" prefWidth="1342.0" style="-fx-border-width: 5px; -fx-border-color: #17b5c3;" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.stockView.AddStockController">
+<AnchorPane prefHeight="726.0" prefWidth="1342.0" style="-fx-border-width: 5px; -fx-border-color: #000000b3;" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.stockView.AddStockController">
    <children>
       <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -200,11 +200,19 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <ChoiceBox prefHeight="22.0" prefWidth="382.0">
+                        <ChoiceBox prefHeight="22.0" prefWidth="220.0">
                            <HBox.margin>
                               <Insets left="75.0" />
                            </HBox.margin>
                         </ChoiceBox>
+                        <Label prefHeight="22.0" prefWidth="168.0" text="Tipo(Regional...)" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
                      </children>
                      <VBox.margin>
                         <Insets bottom="5.0" top="5.0" />
@@ -356,7 +364,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <Label alignment="CENTER" layoutX="570.0" layoutY="64.0" text="Estado do Stock do Produto">
+      <Label alignment="CENTER" layoutX="570.0" layoutY="56.0" text="Estado do Stock do Produto">
          <font>
             <Font size="25.0" />
          </font>
@@ -364,23 +372,7 @@
             <Insets left="10.0" />
          </padding>
       </Label>
-      <Label layoutX="570.0" layoutY="102.0" prefHeight="29.0" prefWidth="395.0" text="Armazem">
-         <font>
-            <Font size="20.0" />
-         </font>
-         <padding>
-            <Insets left="10.0" />
-         </padding>
-      </Label>
-      <Label layoutX="986.0" layoutY="102.0" prefHeight="29.0" prefWidth="143.0" text="Quantidde">
-         <font>
-            <Font size="20.0" />
-         </font>
-         <padding>
-            <Insets left="10.0" />
-         </padding>
-      </Label>
-      <Label alignment="CENTER" layoutX="570.0" layoutY="155.0" prefHeight="29.0" prefWidth="762.0" text="Lotes do Produto">
+      <Label alignment="CENTER" layoutX="553.0" layoutY="277.0" prefHeight="29.0" prefWidth="767.0" text="Lotes do Produto" AnchorPane.rightAnchor="0.0">
          <font>
             <Font size="25.0" />
          </font>
@@ -388,7 +380,7 @@
             <Insets left="10.0" />
          </padding>
       </Label>
-      <TableView fx:id="tableLote" layoutX="570.0" layoutY="187.0" prefHeight="483.0" prefWidth="762.0" style="-fx-border-color: transparent;">
+      <TableView fx:id="tableLote" layoutX="570.0" layoutY="302.0" prefHeight="415.0" prefWidth="762.0" style="-fx-border-color: transparent;">
          <columns>
             <TableColumn fx:id="IDLote" prefWidth="38.0" text="ID" />
             <TableColumn fx:id="codeLote" prefWidth="64.0" text="Lote" />
@@ -400,6 +392,12 @@
             <TableColumn fx:id="totalLote" prefWidth="93.0" text="Total" />
             <TableColumn fx:id="estadoLote" prefWidth="74.0" text="Estado" />
          </columns>
+      </TableView>
+      <TableView fx:id="tableResumoStock" layoutX="570.0" layoutY="92.0" prefHeight="182.0" prefWidth="762.0" style="-fx-border-color: transparent;">
+        <columns>
+          <TableColumn fx:id="armazemResumoStock" prefWidth="539.0" text="Armazem" />
+            <TableColumn fx:id="saldoResumoStock" prefWidth="212.0" text="Qt. Em Stock" />
+        </columns>
       </TableView>
    </children>
 </AnchorPane>

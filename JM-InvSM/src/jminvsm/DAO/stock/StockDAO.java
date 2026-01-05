@@ -117,13 +117,12 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 i.setNome(rs.getString("nomeImposto"));
                 i.setPercentagem(rs.getDouble("impPerc"));
                 p.setImposto(i);
-                
 
                 Armazem a = new Armazem();
                 a.setId(rs.getInt("idArmazem"));
                 a.setNome_arm(rs.getString("nomeArmazem"));
                 a.setTipo(rs.getString("tipoArmazem"));
-                
+
                 PrecoVenda pv = new PrecoVenda();
                 pv.setPrecoNormal(rs.getDouble("precoNormal"));
                 pv.setPrecoVenda(rs.getDouble("precoVenda"));
@@ -189,6 +188,38 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 p.setNome(result.getString("produto"));
                 s.setSaldo(result.getInt("saldo"));
                 s.setProduto(p);
+                lista.add(s);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
+        }
+        return lista;
+    }
+
+    @Override
+    public ObservableList<Stock> getResumoStock(Integer idProduto) {
+        ObservableList<Stock> lista = FXCollections.observableArrayList();
+        try {
+            sql = "SELECT "
+                    + "    a.nome AS armazem, "
+                    + "    s.saldo "
+                    + "FROM stock s "
+                    + "JOIN produto p ON p.id = s.idProduto "
+                    + "JOIN armazem a ON a.id = s.idArmazem "
+                    + "WHERE p.id = ?";
+            ps = con.prepareStatement(sql);
+
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idProduto);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                Stock s = new Stock();
+                Armazem a = new Armazem();
+                a.setNome_arm(result.getString("armazem"));
+                s.setArmazem(a);
+                s.setSaldo(result.getInt("saldo"));
                 lista.add(s);
             }
             result.close();
@@ -322,11 +353,11 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 System.out.println("Descrição: " + s.getProduto().getDescricao());
                 System.out.println("Controle Stock: " + s.getProduto().isControle_stock());
                 System.out.println("Nível Stock: " + s.getProduto().getNivelstock());
-                
+
                 System.out.println("=== Preco de Venda ===");
-                System.out.println("Preco Normal: "+s.getPrecoVenda().getPrecoNormal());
-                System.out.println("Preco Venda: "+s.getPrecoVenda().getPrecoVenda());
-                System.out.println("Preco Final: "+s.getPrecoVenda().getPrecoFinal());
+                System.out.println("Preco Normal: " + s.getPrecoVenda().getPrecoNormal());
+                System.out.println("Preco Venda: " + s.getPrecoVenda().getPrecoVenda());
+                System.out.println("Preco Final: " + s.getPrecoVenda().getPrecoFinal());
 
                 System.out.println("=== Armazém ===");
                 System.out.println("ID Armazém: " + s.getArmazem().getId());

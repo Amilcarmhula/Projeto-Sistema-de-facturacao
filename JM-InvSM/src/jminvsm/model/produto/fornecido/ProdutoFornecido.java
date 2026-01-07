@@ -54,9 +54,13 @@ public class ProdutoFornecido {
     public String getCodigo() {
         return codigo;
     }
-
     public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+
+    public void setCodigoForSave(String codigo) {
+        codigo =  codigo.substring(1);
+        this.codigo = "L"+String.valueOf(Integer.parseInt(codigo) + 1);
     }
 
     public Produto getProduto() {

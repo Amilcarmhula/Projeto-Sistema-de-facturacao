@@ -202,24 +202,6 @@ create table desconto(
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- create table produto(
--- 	id integer primary key auto_increment,
---     nome varchar(50) not null,
---     codigo_barra varchar(50),
---     tipo enum('Simples', 'Composto') default 'Simples',
---     unidadePorTipo integer default 1,
---     descricao text,
---     controle_stock boolean not null,
---     nivelstock integer default 0,
---     fk_id_categoria integer not null,
---     fk_id_unidade_medida integer,
---     fk_id_imposto integer,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     foreign key (fk_id_imposto) references imposto(id),
---     foreign key (fk_id_categoria) references categoria(id),
---     foreign key (fk_id_unidade_medida) references unidade_medida(id)
--- );
-
 create table produto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -723,4 +705,3 @@ create table historico_requisicao(
     primary key(id, fk_requisicao),
     foreign key(fk_requisicao) references requisicao(id)
 );
-

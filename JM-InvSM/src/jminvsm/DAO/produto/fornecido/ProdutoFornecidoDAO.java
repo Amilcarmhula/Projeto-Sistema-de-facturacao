@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.armazem.Armazem;
@@ -175,19 +177,29 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
         }
         return mapa;
     }
-    
-    
 
-//    public static void main(String[] args) throws SQLException {
-//        System.out.println("Teste");
-//        ProdutoFornecidoDAO d = new ProdutoFornecidoDAO();
-//        Map<String, Integer> mapinha = d.getMovimentos(1, 1);
-//        for (Map.Entry<String, Integer> entry : mapinha.entrySet()) {
-//            System.out.println(entry.getKey()+": "+entry.getValue());
-//            
-//        }
-//
-//    }
+    public ProdutoFornecido getLastCodeLote() {
+        ProdutoFornecido pf = null;
+        try {
+            sql = "select codigo from lote order by id DESC LIMIT 1";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            if (result.next()) {
+                pf = new ProdutoFornecido();
+                pf.setCodigoForSave(result.getString("codigo"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erro: " + ex);
+            showDialog("Erro de consulta", "Detalhes: " + ex);
+        }
+        return pf;
+    }
+
+    public static void main(String[] args) throws SQLException {
+        System.out.println("Teste");
+        ProdutoFornecidoDAO d = new ProdutoFornecidoDAO();
+        System.out.println(d.getLastCodeLote().getCodigo());
+    }
 }
 
 //    @Override

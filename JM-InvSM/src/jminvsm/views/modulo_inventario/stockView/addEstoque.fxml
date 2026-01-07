@@ -59,14 +59,14 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="332.0">
+                  <HBox prefHeight="30.0" prefWidth="332.0">
                      <children>
-                        <Label text="Produto:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Produto:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtNomeProduto" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="379.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtNomeProduto" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="379.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="85.0" />
                            </HBox.margin>
@@ -76,14 +76,14 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
+                  <HBox prefHeight="30.0" prefWidth="445.0">
                      <children>
-                        <Label text="Codigo de Barras:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Codigo de Barras:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtCodigoBarrasProduto" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="254.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtCodigoBarrasProduto" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="254.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="11.0" />
                            </HBox.margin>
@@ -93,14 +93,14 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
+                  <HBox prefHeight="30.0" prefWidth="445.0">
                      <children>
-                        <Label text="Categoria:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Categoria:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtCategoriaProduto" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="190.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtCategoriaProduto" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="190.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="71.0" />
                            </HBox.margin>
@@ -118,14 +118,14 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
+                  <HBox prefHeight="30.0" prefWidth="445.0">
                      <children>
-                        <Label text="Unidade:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Unidade:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtUnidadeProduto" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="190.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtUnidadeProduto" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="190.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="81.0" />
                            </HBox.margin>
@@ -135,14 +135,14 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
+                  <HBox prefHeight="30.0" prefWidth="445.0">
                      <children>
-                        <Label text="Controlo de Stock:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Controlo de Stock:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <CheckBox fx:id="chkControloStockProduto" mnemonicParsing="false">
+                        <CheckBox fx:id="chkControloStockProduto" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -150,7 +150,7 @@
                               <Insets left="8.0" right="13.0" />
                            </HBox.margin>
                         </CheckBox>
-                        <Label fx:id="labControloStock" text="Nao" textFill="WHITE">
+                        <Label fx:id="labControloStock" prefHeight="30.0" text="Nao" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -186,12 +186,12 @@
                   </HBox>
                   <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="332.0">
                      <children>
-                        <Label prefHeight="21.0" prefWidth="130.0" text="Cod do Lote:" textFill="WHITE">
+                        <Label prefHeight="30.0" prefWidth="130.0" text="Cod do Lote:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtQuantidade11" alignment="CENTER" prefHeight="26.0" prefWidth="161.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtLoteCode" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="161.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="32.0" />
                            </HBox.margin>
@@ -228,7 +228,7 @@
                   </HBox>
                   <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
-                        <Label text="Fornecedor:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Fornecedor:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -245,7 +245,7 @@
                   </HBox>
                   <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
-                        <Label text="Data de Entrada:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Data de Entrada:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -262,17 +262,17 @@
                   </HBox>
                   <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
-                        <Label text="Quantidade Inicial:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Quantidade Inicial:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtQtInicial" alignment="CENTER" prefHeight="26.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtQtInicial" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>
                         </TextField>
-                        <Label text="Quantidade Actual:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Quantidade Actual:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -280,7 +280,7 @@
                               <Insets left="5.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="txtQuantidade" alignment="CENTER" prefHeight="26.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtQtActual" alignment="CENTER" prefHeight="30.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>
@@ -292,17 +292,17 @@
                   </HBox>
                   <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
-                        <Label text="Custo Unitario:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Custo Unitario:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtCustoAquisicao" alignment="CENTER" prefHeight="26.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtCustoUnitario" alignment="CENTER" prefHeight="30.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="40.0" />
                            </HBox.margin>
                         </TextField>
-                        <Label text="MT" textFill="WHITE">
+                        <Label prefHeight="30.0" text="MT" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -317,17 +317,17 @@
                   </HBox>
                   <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
-                        <Label text="Valor Total:" textFill="WHITE">
+                        <Label prefHeight="30.0" text="Valor Total:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtQuantidade1111111" alignment="CENTER" prefHeight="26.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="66.0" />
                            </HBox.margin>
                         </TextField>
-                        <Label text="MT" textFill="WHITE">
+                        <Label prefHeight="30.0" text="MT" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>

@@ -37,8 +37,8 @@ public class ServiceProdutoFornecido {
         this.OpsSuccess = OpsSuccess;
     }
 
-    public void registraProdutoFornecido(Integer id_arm, Integer id_pro, Integer id_for,
-            Usuario user, Integer qtd, String data_fornecida, Double custo,String unidade_fornecida,Integer qtd_por_unidade) {
+    public void registraProdutoFornecido(String code, Integer id_pro, Integer id_arm, Integer id_for,
+             Integer qtdActual, String data_fornecida, Double custo) {
         setOpsSuccess(false);
 
         // Validações básicas antes de registrar a categoria
@@ -49,7 +49,7 @@ public class ServiceProdutoFornecido {
         if (id_for <= 0) {
             id_for = 1;
         }
-        if (qtd <= 0) {
+        if (qtdActual <= 0) {
             showErroAlert("Quantidade não definida!");
             return;
         }
@@ -72,7 +72,8 @@ public class ServiceProdutoFornecido {
         Fornecedor f = new Fornecedor();
         f.setId(id_for);
         pf.setFornecedor(f);
-        pf.setQuantidadeInicial(qtd);
+        pf.setCodigo(code);
+        pf.setQuantidadeActual(qtdActual);
         pf.setDataEntrada(data_fornecida);
         pf.setCustoUnitario(custo);
 
@@ -91,6 +92,10 @@ public class ServiceProdutoFornecido {
         return produtoFornecidoDao.getLotesForStock(idProd);
     }
     
+    public ProdutoFornecido getLastCodeLote(){
+        return produtoFornecidoDao.getLastCodeLote();
+    }
+    
     public static void main(String[] args) throws SQLException {
         ServiceProdutoFornecido dao = new ServiceProdutoFornecido();
         ObservableList<ProdutoFornecido> lista = dao.getLotes(1);
@@ -98,5 +103,6 @@ public class ServiceProdutoFornecido {
             System.out.println("Lotes: "+ x.getDataEntrada());
         }
     }
+    
 
 }

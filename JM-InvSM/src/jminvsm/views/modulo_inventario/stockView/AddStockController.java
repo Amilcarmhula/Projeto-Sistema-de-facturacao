@@ -71,7 +71,7 @@ public class AddStockController implements Initializable {
 
     @FXML
     private ComboBox<String> cBoxArmazem;
-    
+
     @FXML
     private ComboBox<String> cBoxFornecedor;
 
@@ -100,12 +100,14 @@ public class AddStockController implements Initializable {
     private DatePicker dataAquisicao;
 
     @FXML
-    private TextField txtCustoAquisicao;
+    private TextField txtCustoUnitario;
 
     @FXML
     private TextField txtIDArmazem;
     @FXML
     private TextField txtQtInicial;
+    @FXML
+    private TextField txtLoteCode;
 
     @FXML
     private TextField txtIDProduto;
@@ -139,13 +141,7 @@ public class AddStockController implements Initializable {
     private TextField txtQuantidade;
 
     @FXML
-    private TextField txtQtd_por_unidade;
-
-    @FXML
-    private RadioButton radSimples;
-
-    @FXML
-    private RadioButton radComposto;
+    private TextField txtQtActual;
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
@@ -176,13 +172,18 @@ public class AddStockController implements Initializable {
             this.userData = SysFact.getUserData();
             showLotes(s.getProduto().getId());
             showResumoStock(s.getProduto().getId());
-            
+
             setDetalhesProduto();
             ButtonUtilities.buttonChangeText(btnAdd, txtIDProduto);
         } catch (SQLException ex) {
             Logger.getLogger(AddStockController.class.getName()).log(Level.SEVERE, null, ex);
         }
         populateComb_ArmazemFornecedor();
+        cBoxArmazem.setOnAction(evt -> {
+            String data = cBoxArmazem.getSelectionModel().getSelectedItem();
+
+            labTipoArmazem.setText(mapaArmazens.get(data).getTipo());
+        });
     }
 
     private ObservableList<ProdutoFornecido> listaFornecedoress;
@@ -204,7 +205,7 @@ public class AddStockController implements Initializable {
     }
 
     public void setDetalhesProduto() {
-//        s = (Stock) SysFact.getData();
+        // Carega detalhes do produto
         txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
         txtNomeProduto.setText(s.getProduto().getNome());
         txtCodigoBarrasProduto.setText(s.getProduto().getCodigo_barra());
@@ -222,6 +223,10 @@ public class AddStockController implements Initializable {
             labControloStock.setStyle("-fx-text-fill: red;");
         }
 
+        // Gera codigo do proximo lote
+        ProdutoFornecido pf = servicoprodFornecido.getLastCodeLote();
+        txtLoteCode.setText("" + pf.getCodigo());
+
     }
 
     private ObservableList<Stock> listaResumoStock;
@@ -237,7 +242,7 @@ public class AddStockController implements Initializable {
 
     private ObservableList<Armazem> storeList;
     private Map<String, Armazem> mapaArmazens;
-    
+
     private ObservableList<Fornecedor> fornecedorList;
     private Map<String, Fornecedor> mapaFornecedor;
 
@@ -250,7 +255,7 @@ public class AddStockController implements Initializable {
             mapaArmazens.put(a.getNome_arm(), a);
         }
         cBoxArmazem.setItems(FXCollections.observableArrayList(listaArm));
-        
+
         fornecedorList = servicoFornecedor.listaTodosFornecedores();
         List<String> listaForne = new ArrayList<>();
         mapaFornecedor = new HashMap<>();
@@ -262,20 +267,20 @@ public class AddStockController implements Initializable {
     }
 
     public void addProdutoFornecido(ActionEvent e) throws SQLException {
-        String tipo = "";
-        if (radComposto.isSelected()) {
-            tipo = "Composto";
-        }
-        if (radSimples.isSelected()) {
-            tipo = "Simples";
-        }
-        service.registraProdutoFornecido(s.getArmazem().getId(),
-                Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText()),
-                Integer.valueOf(txtIDFornecedor.getText().equals("") ? "0" : txtIDFornecedor.getText()), userData,
-                Integer.valueOf(txtQuantidade.getText().equals("") ? "0" : txtQuantidade.getText()),
+//        INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
+        service.registraProdutoFornecido(txtLoteCode.getText(),
+                Integer.valueOf(txtIDProduto.getText()),
+                Integer.valueOf(mapaArmazens.get(cBoxArmazem.getValue()).getId()),
+                Integer.valueOf(mapaFornecedor.get(cBoxFornecedor.getValue()).getId()),
+                Integer.valueOf(txtQtActual.getText().equals("") ? "1" : txtQtActual.getText()),
                 String.valueOf(dataAquisicao.getValue() == null ? "" : dataAquisicao.getValue()),
-                Double.valueOf(txtCustoAquisicao.getText().equals("") ? "0" : txtCustoAquisicao.getText()),
-                tipo,
-                Integer.valueOf(txtQtd_por_unidade.getText().equals("") ? "1" : txtQtd_por_unidade.getText()));
+                Double.valueOf(txtCustoUnitario.getText().equals("") ? "0" : txtCustoUnitario.getText())
+        );
+        showLotes(s.getProduto().getId());
+        showResumoStock(s.getProduto().getId());
+
+        // Gera codigo do proximo lote
+        ProdutoFornecido pf = servicoprodFornecido.getLastCodeLote();
+        txtLoteCode.setText("" + pf.getCodigo());
     }
 }

@@ -6,17 +6,25 @@ package jminvsm.views.modulo_inventario.stockView;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,6 +32,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
+import jminvsm.model.armazem.Armazem;
+import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
@@ -59,7 +69,12 @@ public class AddStockController implements Initializable {
     @FXML
     private TableColumn<Stock, Integer> saldoResumoStock;
 
+    @FXML
+    private ComboBox<String> cBoxArmazem;
     
+    @FXML
+    private ComboBox<String> cBoxFornecedor;
+
     @FXML
     private TableView<ProdutoFornecido> tableLote;
     @FXML
@@ -91,10 +106,26 @@ public class AddStockController implements Initializable {
     private TextField txtIDArmazem;
 
     @FXML
-    private TextField txtIDFornecedor;
+    private TextField txtIDProduto;
+    @FXML
+    private TextField txtNomeProduto;
+    @FXML
+    private TextField txtCodigoBarrasProduto;
+    @FXML
+    private TextField txtCategoriaProduto;
+    @FXML
+    private Label labGrupoProduto;
+    @FXML
+    private Label labTipoArmazem;
+    @FXML
+    private Label labControloStock;
+    @FXML
+    private TextField txtUnidadeProduto;
+    @FXML
+    private CheckBox chkControloStockProduto;
 
     @FXML
-    private TextField txtIDProduto;
+    private TextField txtIDFornecedor;
 
     @FXML
     private TextField txtPesquisaArmazem;
@@ -126,8 +157,6 @@ public class AddStockController implements Initializable {
         }
     }
 
-
-
     /**
      * Initializes the controller class.
      */
@@ -145,10 +174,13 @@ public class AddStockController implements Initializable {
             this.userData = SysFact.getUserData();
             showLotes(s.getProduto().getId());
             showResumoStock(s.getProduto().getId());
+            
+            setDetalhesProduto();
             ButtonUtilities.buttonChangeText(btnAdd, txtIDProduto);
         } catch (SQLException ex) {
             Logger.getLogger(AddStockController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        populateComb_ArmazemFornecedor();
     }
 
     private ObservableList<ProdutoFornecido> listaFornecedoress;
@@ -168,16 +200,62 @@ public class AddStockController implements Initializable {
 
         tableLote.setItems(listaFornecedoress);
     }
-    
+
+    public void setDetalhesProduto() {
+//        s = (Stock) SysFact.getData();
+        txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
+        txtNomeProduto.setText(s.getProduto().getNome());
+        txtCodigoBarrasProduto.setText(s.getProduto().getCodigo_barra());
+        txtCategoriaProduto.setText(s.getProduto().getCategoria().getFamilia());
+        labGrupoProduto.setText(s.getProduto().getCategoria().getGrupo());
+        txtUnidadeProduto.setText(s.getProduto().getUnidadeMedida().getNome());
+        if (s.getProduto().isControle_stock()) {
+            chkControloStockProduto.setSelected(true);
+            labControloStock.setText("SIM");
+            labControloStock.setStyle("-fx-text-fill: green;");
+        } else {
+            chkControloStockProduto.setSelected(false);
+            labControloStock.setText("NAO");
+            labControloStock.setStyle("-fx-text-fill: red;");
+        }
+
+    }
+
     private ObservableList<Stock> listaResumoStock;
 
     public void showResumoStock(int id) throws SQLException {
         listaResumoStock = serviceStock.getResumo(id);
-        
+
         armazemResumoStock.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
         saldoResumoStock.setCellValueFactory(new PropertyValueFactory<>("saldo"));
 
         tableResumoStock.setItems(listaResumoStock);
+    }
+
+    private ObservableList<Armazem> storeList;
+    private Map<String, Armazem> mapaArmazens;
+    
+    private ObservableList<Fornecedor> fornecedorList;
+    private Map<String, Fornecedor> mapaFornecedor;
+
+    public void populateComb_ArmazemFornecedor() {
+        storeList = serviceArmazem.listaTodosArmazens();
+        List<String> listaArm = new ArrayList<>();
+        mapaArmazens = new HashMap<>();
+        for (Armazem a : storeList) {
+            listaArm.add(a.getNome_arm());
+            mapaArmazens.put(a.getNome_arm(), a);
+        }
+        cBoxArmazem.setItems(FXCollections.observableArrayList(listaArm));
+        
+        fornecedorList = servicoFornecedor.listaTodosFornecedores();
+        List<String> listaForne = new ArrayList<>();
+        mapaFornecedor = new HashMap<>();
+        for (Fornecedor a : fornecedorList) {
+            listaForne.add(a.getRazaosocial_forn());
+            mapaFornecedor.put(a.getRazaosocial_forn(), a);
+        }
+        cBoxFornecedor.setItems(FXCollections.observableArrayList(listaForne));
     }
 
     public void addProdutoFornecido(ActionEvent e) throws SQLException {

@@ -209,7 +209,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
     }
 
     @Override
-    public ObservableList<Armazem> listAllEntitiesTypeArmazem() {
+    public ObservableList<Armazem> listAllArmazens() {
         ObservableList<Armazem> lista = FXCollections.observableArrayList();
         try {
             sql = "select * from armazem";
@@ -221,6 +221,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 c.setTipo(result.getString("tipo"));
                 c.setNome_arm(result.getString("nome"));
                 c.setDescricao_arm(result.getString("descricao"));
+                lista.add(c);
             }
             result.close();
             ps.close();
@@ -229,6 +230,14 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
 
         }
         return lista;
+    }
+    
+    public static void main(String[] args) throws SQLException {
+     ArmazemDAO dao = new ArmazemDAO();
+        for (Armazem a : dao.listAllArmazens()) {
+            System.out.println("Arm: "+a.getNome_arm());
+        }
+     
     }
 
 }

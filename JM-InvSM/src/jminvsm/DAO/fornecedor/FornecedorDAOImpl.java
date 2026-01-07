@@ -14,6 +14,7 @@ public interface FornecedorDAOImpl<T> {
     boolean  addEntity(T t);
     boolean updateEntityByID(T t, int id);
     ObservableList<T> listAllEntities();
+    ObservableList<T> listAllFornecedores();
     T getLastEntity();
     T getEntityByID(int id);
 //    void deleteEntityByROOT(int id);

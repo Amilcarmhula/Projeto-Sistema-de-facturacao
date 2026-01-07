@@ -88,6 +88,10 @@ public class ServiceArmazem {
         return armazemDao.listAllEntities();
     }
     
+    public ObservableList<Armazem> listaTodosArmazens(){
+        return armazemDao.listAllArmazens();
+    }
+    
     public Armazem getUltimoArmazem(){
         return armazemDao.getLastEntity();
     }

@@ -14,7 +14,7 @@ public interface ArmazemDAOImpl<T> {
     boolean  addEntity(T t);
     boolean updateEntityByID(T t, int id);
     ObservableList<T> listAllEntities();
-    ObservableList<T> listAllEntitiesTypeArmazem();
+    ObservableList<T> listAllArmazens();
     T getLastEntity();
     T getEntityByID(int id);
 //    void deleteEntityByROOT(int id);

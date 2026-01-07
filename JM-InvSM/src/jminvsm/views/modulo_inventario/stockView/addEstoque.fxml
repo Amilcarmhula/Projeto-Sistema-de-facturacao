@@ -4,7 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -66,7 +66,7 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtQuantidade1" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="379.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtNomeProduto" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="379.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="85.0" />
                            </HBox.margin>
@@ -83,7 +83,7 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtQuantidade11" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="254.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtCodigoBarrasProduto" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="254.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="11.0" />
                            </HBox.margin>
@@ -100,11 +100,19 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtQuantidade111" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="190.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtCategoriaProduto" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="190.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="71.0" />
                            </HBox.margin>
                         </TextField>
+                        <Label fx:id="labGrupoProduto" prefHeight="35.0" prefWidth="195.0" text="Tipo(Regional...)" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
                      </children>
                      <VBox.margin>
                         <Insets bottom="5.0" top="5.0" />
@@ -117,7 +125,7 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtQuantidade1111" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="190.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtUnidadeProduto" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="190.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="81.0" />
                            </HBox.margin>
@@ -134,7 +142,7 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <CheckBox mnemonicParsing="false">
+                        <CheckBox fx:id="chkControloStockProduto" mnemonicParsing="false">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -142,7 +150,7 @@
                               <Insets left="8.0" right="13.0" />
                            </HBox.margin>
                         </CheckBox>
-                        <Label text="Nao" textFill="WHITE">
+                        <Label fx:id="labControloStock" text="Nao" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -164,9 +172,9 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="5.0" layoutY="324.0" prefHeight="345.0" prefWidth="565.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css">
+      <AnchorPane layoutX="5.0" layoutY="324.0" prefHeight="359.0" prefWidth="565.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css">
          <children>
-            <VBox layoutX="10.0" layoutY="38.0" prefHeight="234.0" prefWidth="552.0">
+            <VBox layoutX="10.0" layoutY="38.0" minHeight="-Infinity" prefHeight="322.0" prefWidth="552.0">
                <children>
                   <HBox prefHeight="0.0" prefWidth="445.0">
                      <children>
@@ -176,7 +184,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="332.0">
+                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="332.0">
                      <children>
                         <Label prefHeight="21.0" prefWidth="130.0" text="Cod do Lote:" textFill="WHITE">
                            <font>
@@ -193,19 +201,19 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
+                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
-                        <Label text="Armazem:" textFill="WHITE">
+                        <Label prefHeight="30.0" prefWidth="187.0" text="Armazem:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <ChoiceBox prefHeight="22.0" prefWidth="220.0">
+                        <ComboBox fx:id="cBoxArmazem" prefHeight="30.0" prefWidth="188.0">
                            <HBox.margin>
-                              <Insets left="75.0" />
+                              <Insets left="-16.0" />
                            </HBox.margin>
-                        </ChoiceBox>
-                        <Label prefHeight="22.0" prefWidth="168.0" text="Tipo(Regional...)" textFill="WHITE">
+                        </ComboBox>
+                        <Label fx:id="labTipoArmazem" prefHeight="30.0" prefWidth="216.0" text="..." textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -218,24 +226,24 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
+                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
                         <Label text="Fornecedor:" textFill="WHITE">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <ChoiceBox prefHeight="22.0" prefWidth="381.0">
+                        <ComboBox fx:id="cBoxFornecedor" prefHeight="30.0" prefWidth="272.0">
                            <HBox.margin>
-                              <Insets left="64.0" />
+                              <Insets left="65.0" />
                            </HBox.margin>
-                        </ChoiceBox>
+                        </ComboBox>
                      </children>
                      <VBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
+                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
                         <Label text="Data de Entrada:" textFill="WHITE">
                            <font>
@@ -252,7 +260,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
+                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
                         <Label text="Quantidade Inicial:" textFill="WHITE">
                            <font>
@@ -282,7 +290,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
+                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
                         <Label text="Custo Unitario:" textFill="WHITE">
                            <font>
@@ -307,7 +315,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
+                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
                      <children>
                         <Label text="Valor Total:" textFill="WHITE">
                            <font>
@@ -344,7 +352,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <Button fx:id="btnAdd" layoutX="320.0" layoutY="683.0" mnemonicParsing="false" onAction="#addProdutoFornecido" prefHeight="20.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+      <Button fx:id="btnAdd" layoutX="320.0" layoutY="688.0" mnemonicParsing="false" onAction="#addProdutoFornecido" prefHeight="20.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -354,7 +362,7 @@
             <String fx:value="shadow-efect" />
          </styleClass>
       </Button>
-      <Button layoutX="163.0" layoutY="683.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Limpar" textFill="WHITE">
+      <Button layoutX="163.0" layoutY="688.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Limpar" textFill="WHITE">
          <styleClass>
             <String fx:value="secondary-color" />
             <String fx:value="hand-efect" />

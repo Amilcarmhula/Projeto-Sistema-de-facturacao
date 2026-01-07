@@ -86,6 +86,10 @@ public class ServiceFornecedor {
     public ObservableList<Fornecedor> getFornecedores() {
         return fornecedor.listAllEntities();
     }
+    
+    public ObservableList<Fornecedor> listaTodosFornecedores() {
+        return fornecedor.listAllFornecedores();
+    }
     public Fornecedor ultimoFornecedor() {
         return fornecedor.getLastEntity();
        

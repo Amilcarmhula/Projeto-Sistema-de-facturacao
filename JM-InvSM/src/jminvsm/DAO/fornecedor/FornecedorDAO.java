@@ -184,6 +184,30 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
         }
         return c;
     }
+    
+    @Override
+    public ObservableList<Fornecedor> listAllFornecedores() {
+        ObservableList<Fornecedor> lista = FXCollections.observableArrayList();
+        try {
+            sql = "select * from fornecedor";
+            ps = con.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                Fornecedor c = new Fornecedor();
+                c.setId(result.getInt("id"));
+                c.setTipo_forn(result.getString("tipo"));
+                c.setRazaosocial_forn(result.getString("razaosocial"));
+                c.setNuit_forn(result.getInt("nuit"));
+                lista.add(c);
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException e) {
+            showDialog("Erro de consulta!", "Detalhes: " + e);
+
+        }
+        return lista;
+    }
 
     @Override
     public boolean deleteEntity(int x) {

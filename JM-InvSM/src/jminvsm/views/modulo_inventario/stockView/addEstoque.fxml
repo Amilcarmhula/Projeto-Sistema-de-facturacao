@@ -267,7 +267,7 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtQuantidade111111" alignment="CENTER" prefHeight="26.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtQtInicial" alignment="CENTER" prefHeight="26.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>

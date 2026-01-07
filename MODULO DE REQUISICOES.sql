@@ -426,11 +426,11 @@ INSERT INTO imposto (nome, percentagem) VALUES ('IVA', 17.000);
 -- Produto
 INSERT INTO produto (nome, codigo_barra, tipoProduto, unidadePorTipo, descricao, controle_stock, idCategoria, idUnidade, idImposto)
 VALUES ('Água Mineral 1L', '7891234567890', 'Simples', 1, 'Garrafa de 1 litro', TRUE, 1, 1, 1);
-
+use _sysface;
 -- Lotes de entrada
 INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
 VALUES 
-('L004', 1, 1, 1, '2025-12-01', 2000, 60.00);
+('L006', 3, 3, 1, '2026-01-07', 800, 60.00);
 INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
 VALUES 
 ('L002', 1, 1, 1, '2025-09-01', 1500, 70.00);

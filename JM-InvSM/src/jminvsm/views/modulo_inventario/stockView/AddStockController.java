@@ -104,6 +104,8 @@ public class AddStockController implements Initializable {
 
     @FXML
     private TextField txtIDArmazem;
+    @FXML
+    private TextField txtQtInicial;
 
     @FXML
     private TextField txtIDProduto;
@@ -209,6 +211,7 @@ public class AddStockController implements Initializable {
         txtCategoriaProduto.setText(s.getProduto().getCategoria().getFamilia());
         labGrupoProduto.setText(s.getProduto().getCategoria().getGrupo());
         txtUnidadeProduto.setText(s.getProduto().getUnidadeMedida().getNome());
+        txtQtInicial.setText(String.valueOf(s.getSaldo()));
         if (s.getProduto().isControle_stock()) {
             chkControloStockProduto.setSelected(true);
             labControloStock.setText("SIM");

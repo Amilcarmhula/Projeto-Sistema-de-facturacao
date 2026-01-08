@@ -454,16 +454,20 @@ END//
 DELIMITER ;
 
 
-select * from produto;
 create table precoProdutoArmazem(
+	id integer PRIMARY KEY AUTO_INCREMENT, 
 	idProduto integer,
     idArmazem integer,
     preco DECIMAL(10, 2) default 0.01 NULL,
+    precoVenda DECIMAL(10, 2) default 0.01 NULL,
+    precoFinal DECIMAL(10, 2) default 0.01 NULL,
+    dataValidade DATE,
+    estado varchar(20) default 'activo' not null,
     foreign key (idProduto) references produto(id) on delete cascade,
     foreign key (idArmazem) references armazem(id)on delete cascade,
     primary key(idProduto, idArmazem)
 );
-desc precovenda;
+
 create table produtodesconto(
 	idProduto integer not null,
     idDesconto integer not null,
@@ -476,21 +480,21 @@ create table produtodesconto(
     foreign key (idArmazem) references armazem(id)on delete cascade,
     primary key(idProduto, idDesconto, idArmazem, dataInicio, dataFim)
 );
-CREATE TABLE precovenda (
-    id integer PRIMARY KEY AUTO_INCREMENT, 
-    precoNormal DECIMAL(10, 2) default 0.01 NULL,
-    precoVenda DECIMAL(10, 2) default 0.01 NULL,
-    precoFinal DECIMAL(10, 2) default 0.01 NULL,
-    dataValidade DATE,
-    estado varchar(20) default 'activo' not null,
-    idProduto integer not null,
-    idArmazem integer not null,
-    fk_id_usuario integer not null,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (idProduto) REFERENCES produto(id) on delete cascade,
-    foreign key (idArmazem) references armazem(id)on delete cascade,
-    foreign key (fk_id_usuario) references usuario(id)
-);
+-- CREATE TABLE precovenda (
+--     id integer PRIMARY KEY AUTO_INCREMENT, 
+--     precoNormal DECIMAL(10, 2) default 0.01 NULL,
+--     precoVenda DECIMAL(10, 2) default 0.01 NULL,
+--     precoFinal DECIMAL(10, 2) default 0.01 NULL,
+--     dataValidade DATE,
+--     estado varchar(20) default 'activo' not null,
+--     idProduto integer not null,
+--     idArmazem integer not null,
+--     fk_id_usuario integer not null,
+--     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (idProduto) REFERENCES produto(id) on delete cascade,
+--     foreign key (idArmazem) references armazem(id)on delete cascade,
+--     foreign key (fk_id_usuario) references usuario(id)
+-- );
 -- create table stock(
 -- 	fk_id_produto integer,
 --     fk_id_armazem integer,

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorProduto" minWidth="-Infinity" prefHeight="909.0" prefWidth="1400.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.produtosView.ProdutoController">
+   <children>
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane layoutY="7.0" prefHeight="36.0" prefWidth="438.0">
+               <children>
+                  <HBox layoutX="10.0">
+                     <children>
+                        <Button fx:id="btn_categorias" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="220.0" stylesheets="@../../../style/dashboard.css" text="Controle de Categorias" textFill="WHITE">
+                           <font>
+                              <Font name="Berlin Sans FB" size="20.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="secondary-color" />
+                              <String fx:value="shadow-efect" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
+                        </Button>
+                        <Button fx:id="btn_taxas" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de Impostos" textFill="WHITE">
+                           <font>
+                              <Font name="Berlin Sans FB" size="20.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="secondary-color" />
+                              <String fx:value="shadow-efect" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btn_unidades" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de Unidades" textFill="WHITE">
+                           <font>
+                              <Font name="Berlin Sans FB" size="20.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="secondary-color" />
+                              <String fx:value="shadow-efect" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btn_Descontos" mnemonicParsing="false" onAction="#getViews" prefHeight="36.0" prefWidth="210.0" stylesheets="@../../../style/dashboard.css" text="Controle de Descontos" textFill="WHITE">
+                           <font>
+                              <Font name="Berlin Sans FB" size="20.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="secondary-color" />
+                              <String fx:value="shadow-efect" />
+                              <String fx:value="hand-efect" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="278.0" onMouseClicked="#selecionaProduto" prefHeight="351.0" prefWidth="1432.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="243.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <columns>
+            <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
+            <TableColumn fx:id="artigo" prefWidth="140.0" text="Artigo" />
+            <TableColumn fx:id="codigobarras" prefWidth="155.0" text="Codigo de barras" />
+            <TableColumn fx:id="armazem" prefWidth="225.0" resizable="false" text="Armazem" />
+            <TableColumn fx:id="descricao" prefWidth="243.0" resizable="false" text="Descrição" />
+            <TableColumn fx:id="tipoProduto" prefWidth="120.0" resizable="false" text="Tipo" />
+            <TableColumn fx:id="unidade" prefWidth="55.0" resizable="false" text="Unidade" />
+            <TableColumn fx:id="unidadesPorTipo" prefWidth="67.0" resizable="false" text="Un.P/Tipo" />
+            <TableColumn fx:id="categoria" prefWidth="117.0" resizable="false" text="Categoria" />
+            <TableColumn fx:id="taxa" prefWidth="66.0" resizable="false" text="Taxa" />
+            <TableColumn fx:id="stock" prefWidth="48.0" resizable="false" text="Stock" />
+            <TableColumn fx:id="nivelStock" prefWidth="43.0" resizable="false" text="Nivel" />
+            <TableColumn fx:id="quantidade" prefWidth="61.0" resizable="false" text="Qtd." />
+         </columns>
+      </TableView>
+      <AnchorPane prefHeight="265.0" prefWidth="1432.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" layoutX="24.0" layoutY="21.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtNomeProduto" layoutX="24.0" layoutY="53.0" prefHeight="26.0" prefWidth="298.0" promptText="Nome do artigo ou servico" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtcodigobarrasProduto" layoutX="23.0" layoutY="87.0" prefHeight="26.0" prefWidth="298.0" promptText="Codigo de barras" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <Button layoutX="149.0" layoutY="19.0" mnemonicParsing="false" onAction="#resetCampos" prefHeight="30.0" prefWidth="114.0" text="Limpar" textFill="WHITE">
+               <styleClass>
+                  <String fx:value="secondary-color" />
+                  <String fx:value="hand-efect" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <TextArea fx:id="txtdescricaoProduto" layoutX="24.0" layoutY="122.0" prefHeight="86.0" prefWidth="298.0" promptText="Descricao" wrapText="true" />
+            <ComboBox fx:id="combCategoria" layoutX="351.0" layoutY="53.0" prefHeight="30.0" prefWidth="191.0" promptText="Caregoria" visibleRowCount="5" />
+            <ComboBox fx:id="combUnidade" layoutX="351.0" layoutY="90.0" prefHeight="30.0" prefWidth="191.0" promptText="Unidade" visibleRowCount="5" />
+            <ComboBox fx:id="combTaxa" layoutX="351.0" layoutY="128.0" prefHeight="30.0" prefWidth="191.0" promptText="Imposto" visibleRowCount="5" />
+            <CheckBox fx:id="checkControle" layoutX="649.0" layoutY="53.0" mnemonicParsing="false" onAction="#stockControlChecked">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </CheckBox>
+            <TextField fx:id="txtNivelStock" disable="true" layoutX="564.0" layoutY="92.0" prefHeight="26.0" prefWidth="114.0" promptText="Nivel" />
+            <Label layoutX="562.0" layoutY="53.0" prefHeight="30.0" prefWidth="82.0" text="Ctrl.Stock" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtPreco" alignment="CENTER_RIGHT" layoutX="1259.0" layoutY="92.0" prefHeight="26.0" prefWidth="114.0" promptText="Preco Base" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <Label fx:id="labIDPreco" layoutX="448.0" layoutY="19.0" prefHeight="30.0" prefWidth="82.0" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnAddProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="351.0" layoutY="218.0" mnemonicParsing="false" onAction="#addORupdate" prefHeight="36.0" prefWidth="321.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="shadow-efect" />
+                  <String fx:value="hand-efect" />
+                  <String fx:value="secondary-color" />
+               </styleClass>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Button>
+            <TableView fx:id="tabelaPrecos" layoutX="721.0" layoutY="56.0" prefHeight="185.0" prefWidth="504.0" style="-fx-border-color: transparent; -fx-background-color: white;">
+               <columns>
+                  <TableColumn fx:id="idPreco" prefWidth="40.0" text="ID" />
+                  <TableColumn fx:id="precoNormal" prefWidth="77.0" text="Preco Base" />
+                  <TableColumn fx:id="precoVenda" prefWidth="101.0" text="Preco de Venda" />
+                  <TableColumn fx:id="precoFinal" prefWidth="90.0" text="Preco Final" />
+                  <TableColumn fx:id="dataValidade" prefWidth="124.0" text="Validade" />
+                  <TableColumn fx:id="estadoPreco" prefWidth="62.0" text="Estado" />
+               </columns>
+            </TableView>
+            <TextField fx:id="txtPesquisar" layoutX="24.0" layoutY="223.0" prefHeight="26.0" prefWidth="298.0" promptText="Pesquisar produto" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtIDPreco" alignment="CENTER" disable="true" layoutX="1259.0" layoutY="55.0" prefHeight="20.0" prefWidth="114.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <Button fx:id="btnValidarPreco" alignment="CENTER" contentDisplay="CENTER" layoutX="1242.0" layoutY="125.0" mnemonicParsing="false" onAction="#addPrecoProdutoArmazem" prefHeight="36.0" prefWidth="147.0" stylesheets="@../../../style/dashboard.css" text="Validar Preco" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="shadow-efect" />
+                  <String fx:value="hand-efect" />
+                  <String fx:value="secondary-color" />
+               </styleClass>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Button>
+            <Label layoutX="721.0" layoutY="19.0" prefHeight="30.0" prefWidth="653.0" text="Descricao do preco em funcao do armazem" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="combTipo" layoutX="353.0" layoutY="165.0" prefHeight="30.0" prefWidth="191.0" promptText="Tipo" visibleRowCount="5" />
+            <TextField fx:id="txtUnidadesPorTipo" layoutX="564.0" layoutY="167.0" prefHeight="26.0" prefWidth="114.0" promptText="Unidade por tipo" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="622.0" prefHeight="243.0" prefWidth="1400.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Label fx:id="labIDPreco1" layoutX="468.0" layoutY="19.0" prefHeight="30.0" prefWidth="82.0" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <VBox layoutX="522.0" layoutY="64.0">
+               <children>
+                  <HBox>
+                     <children>
+                        <TextField fx:id="txtPercentagemDesconto" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="98.0" promptText="Percentagem" stylesheets="@../../../style/dashboard.css">
+                           <styleClass>
+                              <String fx:value="text-squared-border" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets top="3.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="25.0" text="\%" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <DatePicker fx:id="dataInicioDesconto" prefHeight="30.0" prefWidth="126.0">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </DatePicker>
+                  <DatePicker fx:id="dataFimDesconto" prefHeight="30.0" prefWidth="126.0">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </DatePicker>
+                  <Button fx:id="btnAddProdutodesconto" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addProdutoDesconto" prefHeight="36.0" prefWidth="126.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="shadow-efect" />
+                        <String fx:value="hand-efect" />
+                        <String fx:value="secondary-color" />
+                     </styleClass>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Button>
+               </children>
+            </VBox>
+            <TableView fx:id="tableDescontos" layoutY="49.0" onMouseClicked="#selecionaDesconto" prefHeight="185.0" prefWidth="496.0" style="-fx-border-color: transparent; -fx-background-color: white;">
+               <columns>
+                  <TableColumn fx:id="idDesconto" prefWidth="50.0" text="ID" />
+                  <TableColumn fx:id="nomeDesconto" prefWidth="176.0" text="Nome" />
+                  <TableColumn fx:id="descricaoDesconto" prefWidth="258.0" text="Descricao" />
+               </columns>
+            </TableView>
+            <TextField fx:id="txtIDDesconto" alignment="CENTER" disable="true" layoutX="10.0" layoutY="14.0" prefHeight="26.0" prefWidth="106.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TextField fx:id="txtPesqDesconto" layoutX="124.0" layoutY="14.0" prefHeight="26.0" prefWidth="372.0" promptText="Pesquisa desconto" stylesheets="@../../../style/dashboard.css">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="shadow" />
+               </styleClass>
+            </TextField>
+            <TableView fx:id="tabelaprodutodesconto" layoutX="672.0" layoutY="49.0" prefHeight="185.0" prefWidth="747.0" style="-fx-border-color: transparent; -fx-background-color: white;" AnchorPane.rightAnchor="0.0">
+               <columns>
+                  <TableColumn fx:id="pdProduto" prefWidth="97.0" text="Produto" />
+                  <TableColumn fx:id="pdArmazem" prefWidth="126.0" text="Armazem" />
+                  <TableColumn fx:id="pdDesconto" prefWidth="255.0" text="Desconto" />
+                  <TableColumn fx:id="pdDataInicial" prefWidth="100.0" text="Data Inicio" />
+                  <TableColumn fx:id="pdDataFinal" prefWidth="110.0" text="Data Fim" />
+                  <TableColumn fx:id="pdPercentagem" prefWidth="45.0" text="\%" />
+               </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

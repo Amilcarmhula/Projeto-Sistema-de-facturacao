@@ -164,7 +164,7 @@ public class ProdutoController implements Initializable {
     @FXML
     private TextField txtcodigobarrasProduto;
     @FXML
-    private TextArea txtdescricaoProduto;
+    private TextField txtdescricaoProduto;
     @FXML
     private TextField txtPesquisar;
     @FXML
@@ -333,7 +333,7 @@ public class ProdutoController implements Initializable {
             getData();
             getDataOnFocus();
             showInvenarioProdutos();
-            showDescontos();
+//            showDescontos();
         } catch (SQLException ex) {
             Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -343,36 +343,36 @@ public class ProdutoController implements Initializable {
 
     }
 
-    private ObservableList<Desconto> listaDescontos;
-
-    public void showDescontos() {
-        listaDescontos = serDesconto.listDescontos();
-
-        idDesconto.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nomeDesconto.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        descricaoDesconto.setCellValueFactory(new PropertyValueFactory<>("descricao"));
-
-        FilteredList<Desconto> dadosFiltrados = new FilteredList<>(listaDescontos, b -> true);
-        txtPesqDesconto.textProperty().addListener((observable, oldValues, newValues) -> {
-            dadosFiltrados.setPredicate(x -> {
-                if (newValues == null || newValues.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValues.toLowerCase();
-                if (x.getNome().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getDescricao().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-        });
-        SortedList<Desconto> sortedData = new SortedList<>(dadosFiltrados);
-        sortedData.comparatorProperty().bind(tableDescontos.comparatorProperty());
-//        tabelaDesconto.setItems(listaDescontos);
-        tableDescontos.setItems(sortedData);
-    }
+//    private ObservableList<Desconto> listaDescontos;
+//
+//    public void showDescontos() {
+//        listaDescontos = serDesconto.listDescontos();
+//
+////        idDesconto.setCellValueFactory(new PropertyValueFactory<>("id"));
+////        nomeDesconto.setCellValueFactory(new PropertyValueFactory<>("nome"));
+////        descricaoDesconto.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+//
+//        FilteredList<Desconto> dadosFiltrados = new FilteredList<>(listaDescontos, b -> true);
+//        txtPesqDesconto.textProperty().addListener((observable, oldValues, newValues) -> {
+//            dadosFiltrados.setPredicate(x -> {
+//                if (newValues == null || newValues.isEmpty()) {
+//                    return true;
+//                }
+//                String filtroCaixaBaixa = newValues.toLowerCase();
+//                if (x.getNome().toLowerCase().contains(filtroCaixaBaixa)) {
+//                    return true;
+//                } else if (x.getDescricao().toLowerCase().contains(filtroCaixaBaixa)) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            });
+//        });
+//        SortedList<Desconto> sortedData = new SortedList<>(dadosFiltrados);
+//        sortedData.comparatorProperty().bind(tableDescontos.comparatorProperty());
+////        tabelaDesconto.setItems(listaDescontos);
+//        tableDescontos.setItems(sortedData);
+//    }
 
     private ObservableList<Stock> listaProduto;
     private Map<String, Stock> mapaProdutos;
@@ -385,16 +385,16 @@ public class ProdutoController implements Initializable {
         }
 
         ID.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getId() + "," + cellData.getValue().getArmazem().getId())));
-        armazem.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getArmazem().getNome_arm() + ": " + cellData.getValue().getArmazem().getTipo())));
+//        armazem.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getArmazem().getNome_arm() + ": " + cellData.getValue().getArmazem().getTipo())));
         artigo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
         codigobarras.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCodigo_barra()));
         descricao.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getDescricao()));
-        unidade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getUnidadeMedida().getSigla()));
+//        unidade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getUnidadeMedida().getSigla()));
         tipoProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getTipoProduto()));
         unidadesPorTipo.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getUnidadesPorTipo())));
-        categoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCategoria().getFamilia()));
-        taxa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getImposto().getNome()));
-        quantidade.setCellValueFactory(new PropertyValueFactory<>("saldo"));
+//        categoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCategoria().getFamilia()));
+//        taxa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getImposto().getNome()));
+//        quantidade.setCellValueFactory(new PropertyValueFactory<>("saldo"));
         nivelStock.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getNivelstock())));
 
         //add cell of checkBox edit 

@@ -169,10 +169,19 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         return lista;
     }
 
-    public List<Produto> listAllEntities() {
-        List<Produto> lista = new ArrayList<>();
+    @Override
+    public ObservableList<Produto> listAllEntties() {
+        ObservableList<Produto> lista = FXCollections.observableArrayList();
         try {
-            sql = "SELECT * FROM produto";
+            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
+                    + " p.tipoProduto, p.unidadePorTipo, "
+                    + " c.familia as categoria, "
+                    + "	u.nome as nomeUnidade, "
+                    + " t.nome as taxa "
+                    + " FROM produto p "
+                    + " LEFT JOIN categoria c ON c.id = p.idCategoria "
+                    + " LEFT JOIN unidadeMedida u ON u.id = p.idUnidade "
+                    + " LEFT JOIN imposto t ON t.id = p.idImposto ";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
@@ -182,16 +191,16 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setCodigo_barra(result.getString("codigo_barra"));
                 p.setDescricao(result.getString("descricao"));
                 p.setNivelstock(result.getInt("nivelstock"));
-                p.setTipoProduto(result.getString("tipo"));
+                p.setTipoProduto(result.getString("tipoProduto"));
                 p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
                 Categoria cat = new Categoria();
-                cat.setId(result.getInt("fk_id_categoria"));
+                cat.setFamilia(result.getString("categoria"));
                 p.setCategoria(cat);
                 UnidadeMedida u = new UnidadeMedida();
-                u.setId(result.getInt("fk_id_unidade_medida"));
+                u.setNome(result.getString("nomeUnidade"));
                 p.setUnidadeMedida(u);
                 Imposto t = new Imposto();
-                t.setId(result.getInt("fk_id_imposto"));
+                t.setNome(result.getString("taxa"));
                 p.setImposto(t);
                 p.setControle_stock(result.getBoolean("controle_stock"));
                 lista.add(p);
@@ -364,33 +373,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             }
         }
         return isSuccess;
-    }
-
-    public static void main(String[] args) throws SQLException {
-        Produto p = new Produto();
-        p.setNome("Prod sem IVA");
-        p.setCodigo_barra("1234567890124");
-        p.setDescricao("Descricar de teste do Produto 4");
-        p.setControle_stock(true);
-        p.setNivelstock(14);
-        Categoria c = new Categoria();
-        c.setId(1);
-        p.setCategoria(c);
-        UnidadeMedida u = new UnidadeMedida();
-        u.setId(1);
-        p.setUnidadeMedida(u);
-        Imposto i = new Imposto();
-        i.setId(1);
-        p.setImposto(i);
-        ProdutoDAO dao = new ProdutoDAO();
-        dao.addEntity(p);
-        for (Produto pro : dao.listAllEntities()) {
-            System.out.println(pro.getNome());
-        }
-        System.out.println("O Last: " + dao.getLastEntity().getNivelstock());
-//        dao.deleteEntity(2);
-        System.out.println("O Last: " + dao.getLastEntity().getNivelstock());
-
     }
 
 }

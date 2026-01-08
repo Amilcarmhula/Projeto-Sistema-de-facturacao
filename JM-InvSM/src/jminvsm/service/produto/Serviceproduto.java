@@ -159,6 +159,9 @@ public class ServiceProduto {
     public ObservableList<Produto> getProdutos() {
         return produtoDao.getCombinedEntities();
     }
+    public ObservableList<Produto> listaTodosProdutos() {
+        return produtoDao.listAllEntties();
+    }
     public Produto getUltimo() {
         return produtoDao.getLastEntity();
     }

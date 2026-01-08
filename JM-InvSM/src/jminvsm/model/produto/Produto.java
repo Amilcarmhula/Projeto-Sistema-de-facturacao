@@ -4,11 +4,7 @@
  */
 package jminvsm.model.produto;
 
-import java.util.List;
-import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
-import jminvsm.model.preco.PrecoVenda;
-import jminvsm.model.stock.Stock;
 import jminvsm.model.imposto.Imposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 

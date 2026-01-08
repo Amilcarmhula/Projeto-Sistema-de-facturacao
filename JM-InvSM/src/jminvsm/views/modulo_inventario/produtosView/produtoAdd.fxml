@@ -80,12 +80,12 @@
       <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="394.0" onMouseClicked="#selecionaProduto" prefHeight="510.0" prefWidth="880.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
-            <TableColumn fx:id="artigo" prefWidth="177.0" text="Artigo" />
-            <TableColumn fx:id="codigobarras" prefWidth="118.0" text="Codigo de barras" />
-            <TableColumn fx:id="descricao" prefWidth="243.0" resizable="false" text="Descrição" />
-            <TableColumn fx:id="tipoProduto" prefWidth="120.0" resizable="false" text="Tipo" />
-            <TableColumn fx:id="unidadesPorTipo" prefWidth="67.0" resizable="false" text="Un.P/Tipo" />
-            <TableColumn fx:id="stock" prefWidth="48.0" resizable="false" text="Stock" />
+            <TableColumn fx:id="artigo" prefWidth="175.0" text="Artigo" />
+            <TableColumn fx:id="codigobarras" prefWidth="147.0" text="Codigo de barras" />
+            <TableColumn fx:id="descricao" prefWidth="234.0" resizable="false" text="Descrição" />
+            <TableColumn fx:id="tipoProduto" prefWidth="100.0" resizable="false" text="Tipo de Produto" />
+            <TableColumn fx:id="unidadesPorTipo" prefWidth="69.0" resizable="false" text="Un.P/Tipo" />
+            <TableColumn fx:id="controloStock" prefWidth="48.0" resizable="false" text="Stock" />
             <TableColumn fx:id="nivelStock" prefWidth="43.0" resizable="false" text="Nivel" />
          </columns>
       </TableView>

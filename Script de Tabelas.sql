@@ -455,7 +455,7 @@ DELIMITER ;
 
 
 create table precoProdutoArmazem(
-	id integer PRIMARY KEY AUTO_INCREMENT, 
+	id integer AUTO_INCREMENT, 
 	idProduto integer,
     idArmazem integer,
     preco DECIMAL(10, 2) default 0.01 NULL,
@@ -465,7 +465,7 @@ create table precoProdutoArmazem(
     estado varchar(20) default 'activo' not null,
     foreign key (idProduto) references produto(id) on delete cascade,
     foreign key (idArmazem) references armazem(id)on delete cascade,
-    primary key(idProduto, idArmazem)
+    primary key(id, idProduto, idArmazem)
 );
 
 create table produtodesconto(
@@ -480,6 +480,7 @@ create table produtodesconto(
     foreign key (idArmazem) references armazem(id)on delete cascade,
     primary key(idProduto, idDesconto, idArmazem, dataInicio, dataFim)
 );
+drop table precoProdutoArmazem;
 -- CREATE TABLE precovenda (
 --     id integer PRIMARY KEY AUTO_INCREMENT, 
 --     precoNormal DECIMAL(10, 2) default 0.01 NULL,

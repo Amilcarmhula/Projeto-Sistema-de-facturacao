@@ -15,6 +15,8 @@ public interface ProdutoDAOImpl<T> {
     boolean  addEntity(T t);
     boolean updateEntityByID(T t, int id);
     ObservableList<T> getCombinedEntities();
+    
+    public ObservableList<T> listAllEntties();
     T getLastEntity();
     int countProdutos(Integer cat);
     

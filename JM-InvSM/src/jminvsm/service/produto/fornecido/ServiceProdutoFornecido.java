@@ -12,7 +12,6 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
-import jminvsm.model.usuario.Usuario;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
 

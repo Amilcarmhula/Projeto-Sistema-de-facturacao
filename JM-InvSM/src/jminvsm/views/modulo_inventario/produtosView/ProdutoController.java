@@ -83,9 +83,10 @@ public class ProdutoController implements Initializable {
     private ServiceProduto productService;
     private ServicePrecoProdutoArmazem servPreco;
     private ServiceArmazem servArmazem;
-    private ServiceStock serStock;
+    private ServiceStock serviceStock;
     private ServiceDesconto serDesconto;
     private ServiceProdutoDesconto serProDesconto;
+    
 
     private int idArmazem;
 
@@ -122,6 +123,13 @@ public class ProdutoController implements Initializable {
     private TableColumn<Produto, String> unidadesPorTipo;
     @FXML
     private TableColumn<Produto, String> controloStock;
+    
+    @FXML
+    private TableView<Stock> tableResumoStock;
+    @FXML
+    private TableColumn<Stock, String> armazemResumoStock;
+    @FXML
+    private TableColumn<Stock, Integer> saldoResumoStock;
 
     @FXML
     private TableView<Desconto> tableDescontos;
@@ -314,7 +322,7 @@ public class ProdutoController implements Initializable {
             productService = new ServiceProduto();
             servPreco = new ServicePrecoProdutoArmazem();
             servArmazem = new ServiceArmazem();
-            serStock = new ServiceStock();
+            serviceStock = new ServiceStock();
             serDesconto = new ServiceDesconto();
             serProDesconto = new ServiceProdutoDesconto();
 
@@ -596,7 +604,7 @@ public class ProdutoController implements Initializable {
     }
 //  ############################################################################
 
-    public void selecionaProduto(MouseEvent event) {
+    public void selecionaProduto(MouseEvent event) throws SQLException {
 //        TablePosition pos = tabelaProduto.getSelectionModel().getSelectedCells().get(0);
 //        int linha = pos.getRow();
 //        TableColumn coluna = tabelaProduto.getColumns().get(0);
@@ -620,6 +628,7 @@ public class ProdutoController implements Initializable {
             combTaxa.setValue(p.getImposto().getNome());
             txtUnidadesPorTipo.setText(String.valueOf(p.getUnidadesPorTipo()));
             stockControlChecked();
+            showResumoStock(x.getId());
 //            showPrecoVenda();
 
             if (event.getClickCount() == 2 && p.isControle_stock()) {
@@ -631,6 +640,17 @@ public class ProdutoController implements Initializable {
         }
         showPrecoVenda();
         showProdutoDesconto();
+    }
+    
+    private ObservableList<Stock> listaResumoStock;
+
+    public void showResumoStock(int id) throws SQLException {
+        listaResumoStock = serviceStock.getResumo(id);
+
+        armazemResumoStock.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
+        saldoResumoStock.setCellValueFactory(new PropertyValueFactory<>("saldo"));
+
+        tableResumoStock.setItems(listaResumoStock);
     }
 
     public void selecionaDesconto(MouseEvent event) {

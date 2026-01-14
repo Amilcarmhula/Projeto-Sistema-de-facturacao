@@ -57,20 +57,15 @@ public class ProdutoDescontoDAO {
     public boolean addEntity(ProdutoDesconto t) {
         boolean isSuccess = false;
         try {
-            sql = "INSERT INTO produtodesconto (idProduto, idDesconto, dataInicio, dataFim, percentagem, idArmazem) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            sql = "INSERT INTO produtodesconto (idProduto, idDesconto, dataInicio, dataFim,idArmazem) "
+                    + "VALUES (?, ?, ?, ?, ?)";
 
             ps = con.prepareStatement(sql);
             ps.setInt(1, t.getProduto().getId());
             ps.setInt(2, t.getDesconto().getId());
             ps.setString(3, t.getDataInicio());
             ps.setString(4, t.getDataFim());
-            ps.setInt(6, t.getArmazem().getId());
-            if (t.getPercentagem() != null) {
-                ps.setDouble(5, t.getPercentagem());
-            } else {
-                ps.setNull(5, Types.DOUBLE);
-            }
+            ps.setInt(5, t.getArmazem().getId());
 
             int rows = ps.executeUpdate();
             isSuccess = rows > 0;
@@ -96,7 +91,7 @@ public class ProdutoDescontoDAO {
             sql = "select p.nome as nomeProduto, p.descricao as descricaoProduto,"
                     + "	a.nome as nomeArmazem, a.tipo as tipoArmazem, a.descricao as descicaoArmazem, "
                     + " d.nome as nomeDesconto, "
-                    + " pd.dataInicio, pd.dataFim, pd.percentagem "
+                    + " pd.dataInicio, pd.dataFim, d.percentagem "
                     + "	from produtodesconto pd "
                     + "	join produto p on pd.idProduto=p.id "
                     + " join desconto d on pd.idDesconto=d.id "
@@ -122,11 +117,12 @@ public class ProdutoDescontoDAO {
                 
                 Desconto d = new Desconto();
                 d.setNome(rs.getString("nomeDesconto"));
+                d.setPercentagem(rs.getDouble("percentagem"));
                 pd.setDesconto(d);
 
                 pd.setDataInicio(rs.getString("dataInicio"));
                 pd.setDataFim(rs.getString("dataFim"));
-                pd.setPercentagem(rs.getDouble("percentagem"));
+                
 
                 lista.add(pd);
             }
@@ -179,14 +175,13 @@ public class ProdutoDescontoDAO {
         Desconto d = new Desconto();
         d.setId(2);
         pd.setDesconto(d);
-        pd.setPercentagem(7.0);
         pd.setDataInicio("2025-09-03");
         pd.setDataFim("2025-09-21");
-        dao.addEntity(pd);
+//        dao.addEntity(pd);
 
-//        for(ProdutoDesconto des: dao.listAll()){
-//            System.out.println(des.getPercentagem());
-//        }
+        for(ProdutoDesconto des: dao.getEntityByID(1,1)){
+            System.out.println(des.getDesconto().getPercentagem());
+        }
 //        dao.delete(pd);
 //        for(ProdutoDesconto des: dao.listAll()){
 //            System.out.println(des.getPercentagem());

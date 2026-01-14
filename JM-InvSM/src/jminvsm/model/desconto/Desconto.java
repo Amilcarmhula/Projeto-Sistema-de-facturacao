@@ -12,15 +12,17 @@ package jminvsm.model.desconto;
 public class Desconto {
     private int id;
     private String nome;
+    private double percentagem;
     private String descricao;
     private String data_criacao;
     
     public Desconto(){super();}
 
-    public Desconto(int id, String nome, String descricao, String data_criacao) {
+    public Desconto(int id, String nome, double percentagem, String descricao, String data_criacao) {
         super();
         this.id = id;
         this.nome = nome;
+        this.percentagem = percentagem;
         this.descricao = descricao;
         this.data_criacao = data_criacao;
     }
@@ -39,6 +41,14 @@ public class Desconto {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public double getPercentagem() {
+        return percentagem;
+    }
+
+    public void setPercentagem(double percentagem) {
+        this.percentagem = percentagem;
     }
 
     public String getDescricao() {

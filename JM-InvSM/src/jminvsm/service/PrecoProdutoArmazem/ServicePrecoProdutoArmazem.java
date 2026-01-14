@@ -42,7 +42,7 @@ public class ServicePrecoProdutoArmazem {
         }
         
         PrecoProdutoArmazem ppa = new PrecoProdutoArmazem();
-        ppa.setPreco(preco);
+        ppa.setPrecoBase(preco);
         Armazem a = new Armazem();
         a.setId(idArmazem);
         ppa.setArmazem(a);

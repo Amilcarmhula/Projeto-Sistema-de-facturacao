@@ -57,7 +57,7 @@ public class ServiceProdutoDesconto {
     }
 
     public void regista(Integer idProduto, Integer idDesconto, Integer idArmazem,
-            String dataInicio, String dataFim, Double percentagem) {
+            String dataInicio, String dataFim) {
         setOpsSuccess(false);
 
         if (idProduto == null) {
@@ -70,10 +70,6 @@ public class ServiceProdutoDesconto {
             return;
         }
 
-        if (percentagem == null) {
-            showErroAlert("Valor da percentagem nao definida.");
-            return;
-        }
         if (dataInicio == null || dataInicio.isEmpty() || "null".equalsIgnoreCase(dataInicio)) {
             showErroAlert("Data de descontos nao definidas!");
             dataInicio = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -95,7 +91,6 @@ public class ServiceProdutoDesconto {
         pd.setArmazem(a);
         pd.setDataInicio(dataInicio);
         pd.setDataFim(dataFim);
-        pd.setPercentagem(percentagem);
         if (dao.addEntity(pd)) {
             setOpsSuccess(true);
             showSuccessAlert("Desconto registado com sucesso!");
@@ -103,7 +98,7 @@ public class ServiceProdutoDesconto {
     }
     
     public ObservableList<ProdutoDesconto> consultaProdutoDesconto(int idProduto, int idArmazem) {
-        return dao.getEntityByID(idProduto,idArmazem);
+        return dao.getEntityByID(idProduto, idArmazem);
     }
 
 }

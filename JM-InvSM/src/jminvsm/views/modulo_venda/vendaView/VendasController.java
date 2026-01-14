@@ -265,7 +265,7 @@ public class VendasController implements Initializable {
                 if (!oldValue && newValue) {
                     if (SysFact.getData() instanceof Stock && SysFact.getData() != null) {
                         Stock x = (Stock) SysFact.getData();
-                        if (x.getPrecoProdutoArmazem().getPreco() != null) {
+                        if (x.getPrecoProdutoArmazem().getPrecoBase() != null) {
                             int num = randNum.nextInt(50);
                             mapaProdutos.put(num, x);
                             txtID.setText(num + "");
@@ -514,12 +514,12 @@ public class VendasController implements Initializable {
             if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
                 subtotal += item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoFinal();
 //                taxa += subtotal - (item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoNormal());
-                taxa += (item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoVenda()) - (item.getQuantidade() * x.getPrecoProdutoArmazem().getPreco());
+                taxa += (item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoVenda()) - (item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoBase());
                 desc += item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoVenda() - (item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoFinal());
                 total = subtotal;
             } else {
-                subtotal += item.getQuantidade() * x.getPrecoProdutoArmazem().getPreco();
-                taxa += (item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoVenda()) - (item.getQuantidade() * x.getPrecoProdutoArmazem().getPreco());
+                subtotal += item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoBase();
+                taxa += (item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoVenda()) - (item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoBase());
                 desc += item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoVenda() - (item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoFinal());
                 total = subtotal + taxa - desc;
             }

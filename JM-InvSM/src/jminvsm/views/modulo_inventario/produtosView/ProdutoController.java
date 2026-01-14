@@ -101,7 +101,7 @@ public class ProdutoController implements Initializable {
     @FXML
     private TableColumn<ProdutoDesconto, String> pdDataFinal;
     @FXML
-    private TableColumn<ProdutoDesconto, Double> pdPercentagem;
+    private TableColumn<ProdutoDesconto, String> pdPercentagem;
 
     @FXML
     private TableView<Produto> tabelaProduto;
@@ -193,6 +193,10 @@ public class ProdutoController implements Initializable {
     private Label labIDPreco;
     @FXML
     private Label labDescricaoDesconto;
+    @FXML
+    private Label labCategoria;
+    @FXML
+    private Label labFamilia;
     @FXML
     private TextField txtPreco;
     @FXML
@@ -340,6 +344,7 @@ public class ProdutoController implements Initializable {
         cBoxArmazem.setOnAction(evt -> {
             String data = cBoxArmazem.getSelectionModel().getSelectedItem();
             idArmazem = mapaArmazens.get(data).getId();
+            showProdutoDesconto();
         });
         cBoxDesconto.setOnAction(evt -> {
             String data = cBoxDesconto.getSelectionModel().getSelectedItem();
@@ -504,7 +509,7 @@ public class ProdutoController implements Initializable {
 
         serProDesconto.regista(idProd, idDescontoComb, idArmazem,
                 String.valueOf(dataInicioDesconto.getValue()),
-                String.valueOf(dataFimDesconto.getValue()), percentagem);
+                String.valueOf(dataFimDesconto.getValue()));
 
         showPrecoProdutoArmazem();
 //        resetCampos();
@@ -651,6 +656,7 @@ public class ProdutoController implements Initializable {
             combTipo.setValue(p.getTipoProduto());
             combTaxa.setValue(p.getImposto().getNome());
             txtUnidadesPorTipo.setText(String.valueOf(p.getUnidadesPorTipo()));
+            labCategoria.setText(p.getCategoria().getGrupo()+" > "+p.getCategoria().getSubgrupo()+" > "+p.getCategoria().getFamilia());
             stockControlChecked();
             showResumoStock(x.getId());
 //            showPrecoProdutoArmazem();
@@ -676,13 +682,13 @@ public class ProdutoController implements Initializable {
         tableResumoStock.setItems(listaResumoStock);
     }
 
-    public void selecionaArmazemNaTabelaPreco(MouseEvent event) {
-        PrecoProdutoArmazem x = tabelaPrecos.getSelectionModel().getSelectedItem();
-        if (x != null) {
-            idArmazem = mapaPrecoProdutoArmazem.get(x.getId()).getArmazem().getId();
-            showProdutoDesconto();
-        }
-    }
+//    public void selecionaArmazemNaTabelaPreco(MouseEvent event) {
+//        PrecoProdutoArmazem x = tabelaPrecos.getSelectionModel().getSelectedItem();
+//        if (x != null) {
+//            idArmazem = mapaPrecoProdutoArmazem.get(x.getId()).getArmazem().getId();
+//            
+//        }
+//    }
 
     public void deleteProduto(MouseEvent event, Produto x) {
         if (event.getButton().name().equals("SECONDARY")) {
@@ -758,10 +764,10 @@ public class ProdutoController implements Initializable {
             }
             
             idPreco.setCellValueFactory(new PropertyValueFactory<>("id"));
-            preco.setCellValueFactory(new PropertyValueFactory<>("preco"));
+            preco.setCellValueFactory(new PropertyValueFactory<>("precoBase"));
             precoVenda.setCellValueFactory(new PropertyValueFactory<>("precoVenda"));
             precoFinal.setCellValueFactory(new PropertyValueFactory<>("precoFinal"));
-            dataValidade.setCellValueFactory(new PropertyValueFactory<>("dataValidade"));
+            dataValidade.setCellValueFactory(new PropertyValueFactory<>("dataFimVigencia"));
             estadoPreco.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
             tabelaPrecos.setItems(listaPrecos);
@@ -772,16 +778,16 @@ public class ProdutoController implements Initializable {
     private ObservableList<ProdutoDesconto> listaprodutodesconto;
 
     public void showProdutoDesconto() {
-        
+        System.out.println("id Arma:"+idArmazem);
 
-            listaprodutodesconto = serProDesconto.consultaProdutoDesconto(Integer.parseInt(txtIDProduto.getText()), idArmazem);
+            listaprodutodesconto = serProDesconto.consultaProdutoDesconto(Integer.parseInt(txtIDProduto.getText()),idArmazem);
 
             pdProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
             pdArmazem.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
             pdDesconto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDesconto().getNome()));
             pdDataInicial.setCellValueFactory(new PropertyValueFactory<>("dataInicio"));
             pdDataFinal.setCellValueFactory(new PropertyValueFactory<>("dataFim"));
-            pdPercentagem.setCellValueFactory(new PropertyValueFactory<>("percentagem"));
+            pdPercentagem.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDesconto().getPercentagem()+" %"));
 
             tabelaprodutodesconto.setItems(listaprodutodesconto);
         

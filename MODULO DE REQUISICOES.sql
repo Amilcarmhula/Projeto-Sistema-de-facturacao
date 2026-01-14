@@ -218,50 +218,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Trigger para actualizar saldos do stock segundo os movimentos
--- DELIMITER //
--- CREATE TRIGGER Tg_actualizaStock_IO
--- AFTER INSERT ON movimento
--- FOR EACH ROW
--- BEGIN
---     DECLARE totalMovimentado integer; -- podem ser entradas ou saidas
---     DECLARE estoque_atual integer; -- saldo no stock;
---     DECLARE estadoLote varchar(20);
---     DECLARE prodID integer;
---     DECLARE armID integer;
---     DECLARE loteID integer;
-
---     SET totalMovimentado = NEW.quantidade;
---     
---        -- Busca dados do lote relacionado ao movimento
---     SELECT idProduto, idArmazem
---     INTO  prodID, armID
---     FROM movimento
---     WHERE id = NEW.id
---     LIMIT 1;
-
---     -- Busca o saldo atual do stock
---     SELECT saldo
---     INTO estoque_atual
---     FROM stock
---     WHERE idProduto = prodID AND idArmazem = armID
---     LIMIT 1;
-
---     -- Se for SAÍDA e o lote estiver ativo
---     IF NEW.tipoMovimento = 'Saida' THEN
---         UPDATE stock
---         SET saldo = GREATEST(estoque_atual - totalMovimentado, 0)
---         WHERE idProduto = prodID AND idArmazem = armID;
---     END IF;
-
---     -- Se for ENTRADA e o lote estiver ativo
---     IF NEW.tipoMovimento = 'Entrada' THEN
---         UPDATE stock
---         SET saldo = estoque_atual + totalMovimentado
---         WHERE idProduto = prodID AND idArmazem = armID;
---     END IF;
--- END//
--- DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER Tg_actualizaStock_IO
@@ -448,5 +404,20 @@ VALUES ( 3000, 1, 1, 1);
 
 INSERT INTO itemRequisicao (quantidade, idRequisicao, idProduto, idArmazem)
 VALUES (700, 1, 1, 1);
+
+
+use _sysface;
+
+select p.nome as nomeProduto, p.descricao as descricaoProduto,
+                    	a.nome as nomeArmazem, a.tipo as tipoArmazem, a.descricao as descicaoArmazem, 
+                     d.nome as nomeDesconto, 
+                     pd.dataInicio, pd.dataFim, d.percentagem 
+                    	from produtodesconto pd 
+                    	join produto p on pd.idProduto=p.id 
+                     join desconto d on pd.idDesconto=d.id 
+                     join armazem a on pd.idArmazem=a.id 
+                     where idProduto=1 and idArmazem=1;
+                     
+                     select * from produtodesconto;
 
 

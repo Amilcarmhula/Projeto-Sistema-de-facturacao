@@ -124,7 +124,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 a.setTipo(rs.getString("tipoArmazem"));
 
                 PrecoProdutoArmazem pv = new PrecoProdutoArmazem();
-                pv.setPreco(rs.getDouble("preco"));
+                pv.setPrecoBase(rs.getDouble("preco"));
                 pv.setPrecoVenda(rs.getDouble("precoVenda"));
                 pv.setPrecoFinal(rs.getDouble("precoFinal"));
                 pv.setEstado(rs.getString("estadoPreco"));
@@ -355,7 +355,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 System.out.println("Nível Stock: " + s.getProduto().getNivelstock());
 
                 System.out.println("=== Preco de Venda ===");
-                System.out.println("Preco Normal: " + s.getPrecoProdutoArmazem().getPreco());
+                System.out.println("Preco Normal: " + s.getPrecoProdutoArmazem().getPrecoBase());
                 System.out.println("Preco Venda: " + s.getPrecoProdutoArmazem().getPrecoVenda());
                 System.out.println("Preco Final: " + s.getPrecoProdutoArmazem().getPrecoFinal());
 

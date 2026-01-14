@@ -38,18 +38,16 @@ public class ProdutoDesconto {
     private Armazem armazem;
     private String dataInicio;
     private String dataFim;
-    private Double percentagem;
 
     public ProdutoDesconto() {
     }
 
-    public ProdutoDesconto(Produto produto, Desconto desconto, Armazem armazem, String dataInicio, String dataFim, Double percentagem) {
+    public ProdutoDesconto(Produto produto, Desconto desconto, Armazem armazem, String dataInicio, String dataFim) {
         this.produto = produto;
         this.desconto = desconto;
         this.armazem = armazem;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
-        this.percentagem = percentagem;
     }
 
     // Getters e Setters
@@ -91,13 +89,5 @@ public class ProdutoDesconto {
 
     public void setDataFim(String dataFim) {
         this.dataFim = dataFim;
-    }
-
-    public Double getPercentagem() {
-        return percentagem;
-    }
-
-    public void setPercentagem(Double percentagem) {
-        this.percentagem = percentagem;
     }
 }

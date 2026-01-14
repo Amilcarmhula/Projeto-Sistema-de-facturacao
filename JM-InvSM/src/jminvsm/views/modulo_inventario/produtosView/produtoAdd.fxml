@@ -77,7 +77,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="394.0" onMouseClicked="#selecionaProduto" prefHeight="510.0" prefWidth="880.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0">
+      <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="394.0" onMouseClicked="#selecionaProduto" prefHeight="325.0" prefWidth="880.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0">
          <columns>
             <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
             <TableColumn fx:id="artigo" prefWidth="175.0" text="Artigo" />
@@ -157,7 +157,7 @@
                   <Insets />
                </opaqueInsets>
             </Button>
-            <TableView fx:id="tabelaPrecos" layoutX="450.0" layoutY="93.0" onMouseClicked="#selecionaArmazemNaTabelaPreco" prefHeight="196.0" prefWidth="504.0" style="-fx-border-color: transparent; -fx-background-color: white;">
+            <TableView fx:id="tabelaPrecos" layoutX="450.0" layoutY="93.0" prefHeight="196.0" prefWidth="504.0" style="-fx-border-color: transparent; -fx-background-color: white;">
                <columns>
                   <TableColumn fx:id="idPreco" prefWidth="40.0" text="ID" />
                   <TableColumn fx:id="preco" prefWidth="77.0" text="Preco Base" />
@@ -267,33 +267,23 @@
       </Label>
       <HBox layoutX="890.0" layoutY="398.0" prefHeight="30.0" prefWidth="500.0">
          <children>
-            <Label prefHeight="30.0" prefWidth="98.0" text="Categoria:">
+            <Label prefHeight="30.0" prefWidth="70.0" text="Categoria:">
                <font>
-                  <Font size="20.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="labCategoria" prefHeight="30.0" prefWidth="168.0" text="...">
+            <Label fx:id="labCategoria" prefHeight="30.0" prefWidth="431.0" text="...">
                <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label prefHeight="30.0" prefWidth="32.0" text="  &gt;">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label fx:id="labFamilia" prefHeight="30.0" prefWidth="204.0" text="...">
-               <font>
-                  <Font size="20.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
          </children>
       </HBox>
       <HBox layoutX="890.0" layoutY="433.0">
          <children>
-            <Label prefHeight="30.0" prefWidth="98.0" text="Unidade:">
+            <Label prefHeight="30.0" prefWidth="70.0" text="Unidade:">
                <font>
-                  <Font size="20.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
             <Label fx:id="labUnidade" prefHeight="30.0" prefWidth="116.0" text="...">
@@ -326,21 +316,24 @@
             <Insets left="10.0" />
          </padding>
       </Label>
-      <TableView fx:id="tableResumoStock" layoutX="890.0" layoutY="500.0" prefHeight="200.0" prefWidth="497.0" style="-fx-border-color: transparent;">
+      <TableView fx:id="tableResumoStock" layoutX="890.0" layoutY="500.0" prefHeight="218.0" prefWidth="504.0" style="-fx-border-color: transparent;">
          <columns>
-            <TableColumn fx:id="armazemResumoStock" prefWidth="373.0" text="Armazem" />
-            <TableColumn fx:id="saldoResumoStock" prefWidth="115.0" text="Qt. Em Stock" />
+            <TableColumn fx:id="armazemResumoStock" prefWidth="395.0" text="Armazem" />
+            <TableColumn fx:id="saldoResumoStock" prefWidth="101.0" text="Qt. Em Stock" />
          </columns>
       </TableView>
-      <TableView fx:id="tabelaprodutodesconto" layoutX="890.0" layoutY="702.0" prefHeight="201.0" prefWidth="497.0" style="-fx-border-color: transparent; -fx-background-color: white;">
+      <TableView fx:id="tabelaprodutodesconto" layoutX="577.0" layoutY="719.0" prefHeight="184.0" prefWidth="821.0" style="-fx-border-color: transparent; -fx-background-color: white;">
          <columns>
-            <TableColumn fx:id="pdProduto" prefWidth="97.0" text="Produto" />
-            <TableColumn fx:id="pdArmazem" prefWidth="126.0" text="Armazem" />
-            <TableColumn fx:id="pdDesconto" prefWidth="255.0" text="Desconto" />
-            <TableColumn fx:id="pdDataInicial" prefWidth="100.0" text="Data Inicio" />
-            <TableColumn fx:id="pdDataFinal" prefWidth="110.0" text="Data Fim" />
-            <TableColumn fx:id="pdPercentagem" prefWidth="45.0" text="\%" />
+            <TableColumn fx:id="pdProduto" prefWidth="160.0" text="Produto" />
+            <TableColumn fx:id="pdArmazem" prefWidth="175.0" text="Armazem" />
+            <TableColumn fx:id="pdDesconto" prefWidth="261.0" text="Desconto" />
+            <TableColumn fx:id="pdDataInicial" prefWidth="86.0" text="Data Inicio" />
+            <TableColumn fx:id="pdDataFinal" prefWidth="81.0" text="Data Fim" />
+            <TableColumn fx:id="pdPercentagem" prefWidth="50.0" text="\%" />
          </columns>
       </TableView>
+      <Label layoutX="57.0" layoutY="787.0" text="Label" />
+      <Label layoutX="216.0" layoutY="787.0" text="Label" />
+      <Label layoutX="395.0" layoutY="787.0" text="Label" />
    </children>
 </AnchorPane>

@@ -32,13 +32,14 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     public boolean addEntity(Desconto t) {
         boolean isSuccess = false;
         try {
-            sql = "insert into desconto (nome,descricao)"
-                    + " value (?,?)";
+            sql = "insert into desconto (nome,descricao,percentagem)"
+                    + " value (?,?,?)";
 
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNome());
             ps.setString(2, t.getDescricao());
+            ps.setDouble(3, t.getPercentagem());
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -63,12 +64,14 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     public boolean updateEntity(Desconto t, int id) {
         boolean isSuccess = false;
         try {
-            sql = "update desconto set nome=?,descricao=? where id=?";
+            sql = "update desconto set nome=?,descricao=?,percentagem=? where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, t.getNome());
             ps.setString(2, t.getDescricao());
-            ps.setInt(3, id);
+            ps.setDouble(3, t.getPercentagem());
+
+            ps.setInt(4, id);
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -92,7 +95,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     @Override
     public ObservableList<Desconto> listAllEntities() {
         ObservableList<Desconto> lista = FXCollections.observableArrayList();
-        Desconto c ;
+        Desconto c;
         try {
             sql = "select * from desconto";
             ps = con.prepareStatement(sql);
@@ -101,6 +104,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
                 c = new Desconto();
                 c.setId(result.getInt("id"));
                 c.setNome(result.getString("nome"));
+                c.setPercentagem(result.getDouble("percentagem"));
                 c.setDescricao(result.getString("descricao"));
                 c.setData_criacao(result.getString("data_criacao"));
                 lista.add(c);
@@ -117,7 +121,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     public boolean deleteEntity(int id) {
         boolean isSuccess = false;
         try {
-            sql =  "delete from desconto where id=?";
+            sql = "delete from desconto where id=?";
             ps = con.prepareStatement(sql);
 
             ps.setInt(1, id);
@@ -140,15 +144,16 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
         }
         return isSuccess;
     }
-    
+
     public static void main(String[] args) throws SQLException {
         DescontoDAO dao = new DescontoDAO();
-        
-        for(Desconto d : dao.listAllEntities()){
-            System.out.println("Nome: "+d.getNome());
-            System.out.println("Descricao: "+d.getDescricao());
+
+        for (Desconto d : dao.listAllEntities()) {
+            System.out.println("Nome: " + d.getNome());
+            System.out.println("Descricao: " + d.getDescricao());
+            System.out.println("desconto: " + d.getPercentagem());
+
         }
-        
-        
+
     }
 }

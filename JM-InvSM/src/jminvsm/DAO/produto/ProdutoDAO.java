@@ -175,7 +175,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         try {
             sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
                     + " p.tipoProduto, p.unidadePorTipo, "
-                    + " c.familia as categoria, "
+                    + " c.grupo, c.subgrupo, c.familia, "
                     + "	u.nome as nomeUnidade, "
                     + " t.nome as taxa "
                     + " FROM produto p "
@@ -194,7 +194,9 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setTipoProduto(result.getString("tipoProduto"));
                 p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
                 Categoria cat = new Categoria();
-                cat.setFamilia(result.getString("categoria"));
+                cat.setGrupo(result.getString("grupo"));
+                cat.setSubgrupo(result.getString("subgrupo"));
+                cat.setFamilia(result.getString("familia"));
                 p.setCategoria(cat);
                 UnidadeMedida u = new UnidadeMedida();
                 u.setNome(result.getString("nomeUnidade"));
@@ -245,7 +247,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setTipoProduto(result.getString("tipo"));
                 p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
                 PrecoProdutoArmazem ppa = new PrecoProdutoArmazem();
-                ppa.setPreco(result.getDouble("PrecoProdutoArmazem"));
+                ppa.setPrecoBase(result.getDouble("PrecoProdutoArmazem"));
                 Armazem a = new Armazem();
                 ppa.setArmazem(a);
                 a.setId(result.getInt("idArmazem"));

@@ -62,8 +62,8 @@ public class PrecoProdutoArmazemDAO {
             ps.setInt(1, x.getProduto().getId());
             ps.setInt(2, x.getArmazem().getId());
 //            ps.setDouble(3, x.getPreco());
-            if (x.getPreco() != null) {
-                ps.setDouble(3, x.getPreco());
+            if (x.getPrecoBase() != null) {
+                ps.setDouble(3, x.getPrecoBase());
             } else {
                 ps.setNull(3, Types.DOUBLE);
             }
@@ -88,7 +88,7 @@ public class PrecoProdutoArmazemDAO {
         ObservableList<PrecoProdutoArmazem> lista = FXCollections.observableArrayList();
         PrecoProdutoArmazem pv = null;
         try {
-            sql = "select * from precovenda where idProduto=? and idArmazem=?";
+            sql = "select * from precoProdutoArmazem where idProduto=? and idArmazem=?";
             ps = con.prepareStatement(sql);
             ps.setInt(1, idProduto);
             ps.setInt(2, idArmazem);
@@ -100,7 +100,7 @@ public class PrecoProdutoArmazemDAO {
 //                pv.setPrecoNormal(result.getDouble("precoNormal"));
                 pv.setPrecoVenda(result.getDouble("preco"));
                 pv.setPrecoFinal(result.getDouble("precoFinal"));
-                pv.setDataValidade(result.getString("dataValidade"));
+                pv.setDataFimVigencia(result.getString("dataValidade"));
 //                pv.setEstado(result.getString("estado"));
                 Produto p = new Produto();
                 p.setId(result.getInt("idProduto"));
@@ -122,8 +122,8 @@ public class PrecoProdutoArmazemDAO {
         ObservableList<PrecoProdutoArmazem> listaPrecos = FXCollections.observableArrayList();
         PrecoProdutoArmazem pr = null;
         try {
-            sql = "SELECT pr.id, pr.idProduto, pr.idArmazem, pr.preco, pr.precoVenda, "
-                    + " pr.precoFinal, pr.dataValidade, pr.estado "
+            sql = "SELECT pr.id, pr.idProduto, pr.idArmazem, pr.precoBase, pr.precoVenda, "
+                    + " pr.precoFinal, pr.dataInicioVigencia, pr.dataFimVigencia, pr.estado "
                     + " FROM precoProdutoArmazem pr "
                     + " LEFT JOIN produto p ON p.id = pr.idProduto "
                     + "where p.id = ?";
@@ -142,8 +142,9 @@ public class PrecoProdutoArmazemDAO {
                 pr.setArmazem(a);
                 pr.setPrecoVenda(result.getDouble("precoVenda"));
                 pr.setPrecoFinal(result.getDouble("precoFinal"));
-                pr.setPreco(result.getDouble("preco"));
-                pr.setDataValidade(result.getString("dataValidade"));
+                pr.setPrecoBase(result.getDouble("precoBase"));
+                pr.setDataInicioVigencia(result.getString("dataInicioVigencia"));
+                pr.setDataFimVigencia(result.getString("dataFimVigencia"));
                 pr.setEstado(result.getString("estado"));
                 listaPrecos.add(pr);
             }
@@ -157,7 +158,7 @@ public class PrecoProdutoArmazemDAO {
     public boolean deleteEntityByUSER(int id) {
         boolean isSuccess = false;
         try {
-            sql = "update precovenda set estado='desactivo' where id=?";
+            sql = "update precoProdutoArmazem set estado='desactivo' where id=?";
             ps = con.prepareStatement(sql);
             ps.setInt(1, id);
 

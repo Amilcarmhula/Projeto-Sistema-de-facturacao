@@ -1,262 +1,256 @@
 use _sysface;
 
+-- Inicio de Trigger e procedimentos para tratamento de precos
 DELIMITER //
-CREATE TRIGGER trg_precovenda_after_produtodesconto
-AFTER INSERT ON produtodesconto
+create trigger trg_antesDeInserirPreco
+BEFORE INSERT ON precoProdutoArmazem
 FOR EACH ROW
 BEGIN
-    DECLARE preco_base DECIMAL(10,2);
-    DECLARE preco_venda DECIMAL(10,2);
-    DECLARE imposto_val DECIMAL(10,2);
-    DECLARE desconto_val DECIMAL(10,2);
-    DECLARE preco_final DECIMAL(10,2);
-    DECLARE id_imposto INT;
+    DECLARE desconto_taxa DECIMAL(4,2);
+    DECLARE imposto_taxa DECIMAL(4,2);
 
-    -- 1) Desactivar preços anteriores do mesmo produto e armazém
-    UPDATE precovenda
-    SET estado = 'desactivo'
-    WHERE idProduto = NEW.idProduto
-      AND idArmazem = NEW.idArmazem
+    -- imposto (exemplo simples)
+    SELECT i.percentagem
+    INTO imposto_taxa
+    FROM imposto i
+    JOIN produto p ON p.idImposto = i.id
+    WHERE p.id = NEW.idProduto
+    LIMIT 1;
+
+    IF imposto_taxa IS NULL THEN
+        SET imposto_taxa = 0;
+    END IF;
+
+    -- preço venda
+    SET NEW.precoVenda = NEW.precoBase + ((NEW.precoBase * imposto_taxa) / 100);
+
+    -- desconto activo
+    SELECT d.percentagem
+    INTO desconto_taxa
+    FROM produtodesconto pd
+    JOIN desconto d ON d.id = pd.idDesconto
+    WHERE pd.idProduto = NEW.idProduto
+      AND pd.idArmazem = NEW.idArmazem
+      AND CURRENT_DATE BETWEEN pd.dataInicio AND pd.dataFim
+    LIMIT 1;
+
+    -- preço final
+    IF desconto_taxa IS NOT NULL THEN
+        SET NEW.precoFinal =
+            NEW.precoVenda - ((NEW.precoVenda * desconto_taxa) / 100);
+    ELSE
+        SET NEW.precoFinal = NEW.precoVenda;
+    END IF;
+
+    SET NEW.estado = 'activo';
+    SET NEW.dataInicioVigencia = CURRENT_DATE;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE sp_registar_preco (
+    IN p_idProduto INT,
+    IN p_idArmazem INT,
+    IN p_precoBase DECIMAL(10,2)
+)
+BEGIN
+    START TRANSACTION;
+
+    -- 1️ desactivar preço activo anterior
+    UPDATE precoProdutoArmazem
+    SET estado = 'desactivo',
+        dataFimVigencia = CURRENT_DATE
+    WHERE idProduto = p_idProduto
+      AND idArmazem = p_idArmazem
       AND estado = 'activo';
 
-    -- 2) Buscar o preço base e o imposto associado ao produto
-    SELECT ppa.preco, pr.idImposto
-    INTO preco_base, id_imposto
-    FROM precoProdutoArmazem ppa
-    JOIN produto pr ON pr.id = ppa.idProduto
-    WHERE ppa.idProduto = NEW.idProduto
-      AND ppa.idArmazem = NEW.idArmazem;
+    -- 2️ inserir novo preço
+    INSERT INTO precoProdutoArmazem
+    (idProduto, idArmazem, precoBase)
+    VALUES
+    (p_idProduto, p_idArmazem, p_precoBase);
 
-    -- 3) Calcular imposto
-    IF id_imposto IS NOT NULL THEN
-        SELECT IFNULL(percentagem,0) INTO imposto_val
-        FROM imposto
-        WHERE id = id_imposto;
-        SET imposto_val = preco_base * (imposto_val / 100);
-    ELSE
-        SET imposto_val = 0;
-    END IF;
-
-    -- 4) Calcular desconto
-    SET desconto_val = preco_base * (NEW.percentagem / 100);
-
-    -- 5) Calcular preços
-    SET preco_venda = preco_base + imposto_val;
-    SET preco_final = preco_venda - desconto_val;
-
-    -- 6) Inserir novo preço de venda como activo
-    INSERT INTO precovenda (
-        precoNormal,
-        precoVenda,
-        precoFinal,
-        dataValidade,
-        estado,
-        idProduto,
-        idArmazem,
-        fk_id_usuario,
-        data_criacao
-    ) VALUES (
-        preco_base,
-        preco_venda,
-        preco_final,
-        NEW.dataFim,
-        'activo',
-        NEW.idProduto,
-        NEW.idArmazem,
-        1,   -- ajustar: ID do usuário logado
-        NOW()
-    );
+    COMMIT;
 END;
 //
+DELIMITER ;
+
+-- CALL sp_registar_preco(1, 1, 500);
+-- CALL sp_registar_preco(1, 1, 550);
+-- CALL sp_registar_preco(1, 1, 700);
+
+SET GLOBAL event_scheduler = ON;
+CREATE EVENT evt_marcar_expiracao_precos
+ON SCHEDULE EVERY 1 DAY
+DO
+UPDATE precoProdutoArmazem
+SET dataFimVigencia = CURRENT_DATE
+WHERE estado = 'activo'
+  AND dataFimVigencia IS NOT NULL
+  AND dataFimVigencia < CURRENT_DATE;
+  
+-- Fim de Trigger e procedimentos para tratamento de precos
+
+-- Para Controlo de Stock
+delimiter //
+CREATE TRIGGER Tg_C_Stock
+	AFTER INSERT ON produto
+	FOR EACH ROW
+	BEGIN
+		IF NEW.controle_stock THEN
+			INSERT INTO stock (idProduto, idArmazem, saldo)
+			SELECT NEW.id, id, 0 FROM armazem;
+		END IF;
+	END//
+delimiter ;
+
+DELIMITER //
+CREATE TRIGGER copiar_saldo_para_lote
+BEFORE INSERT ON lote
+FOR EACH ROW
+BEGIN
+    -- Declaração de uma variável para armazenar o saldo
+    DECLARE saldo_atual integer;
+
+    -- Busca o saldo atual do produto no armazém correspondente
+    SELECT saldo
+    INTO saldo_atual
+    FROM stock
+    WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem LIMIT 1;
+    
+    set NEW.quantidadeInicial= saldo_atual;
+END //
 DELIMITER ;
 
 
 DELIMITER //
-
-
--- Trigger AFTER UPDATE em produtodesconto
-CREATE TRIGGER trg_precovenda_update_produtodesconto
-AFTER UPDATE ON produtodesconto
+CREATE TRIGGER Tg_registaMovimentoEntrada
+AFTER INSERT ON lote
 FOR EACH ROW
 BEGIN
-    DECLARE preco_base DECIMAL(10,2);
-    DECLARE preco_venda DECIMAL(10,2);
-    DECLARE imposto_val DECIMAL(10,2);
-    DECLARE desconto_val DECIMAL(10,2);
-    DECLARE preco_final DECIMAL(10,2);
-    DECLARE id_imposto INT;
-
-    -- Buscar o preço base e o imposto associado ao produto
-    SELECT ppa.preco, pr.fk_id_imposto
-    INTO preco_base, id_imposto
-    FROM precoProdutoArmazem ppa
-    JOIN produto pr ON pr.id = ppa.idProduto
-    WHERE ppa.idProduto = NEW.idProduto
-      AND ppa.idArmazem = NEW.idArmazem;
-
-    -- Calcular imposto
-    IF id_imposto IS NOT NULL THEN
-        SELECT IFNULL(percentagem,0) INTO imposto_val
-        FROM imposto
-        WHERE id = id_imposto;
-        SET imposto_val = preco_base * (imposto_val / 100);
-    ELSE
-        SET imposto_val = 0;
-    END IF;
-
-    -- Calcular desconto atualizado
-    SET desconto_val = preco_base * (NEW.percentagem / 100);
-
-    -- Calcular preços
-    SET preco_venda = preco_base + imposto_val;
-    SET preco_final = preco_venda - desconto_val;
-
-    -- Atualizar precovenda correspondente
-    UPDATE precovenda
-    SET 
-        precoNormal = preco_base,
-        precoVenda = preco_venda,
-        precoFinal = preco_final,
-        dataValidade = NEW.dataFim,
-        data_criacao = NOW()
-    WHERE idProduto = NEW.idProduto
-      AND idArmazem = NEW.idArmazem
-      AND dataValidade = OLD.dataFim;
-END;
-//
-
+	-- Registra movimento de entrada de lote
+	INSERT INTO movimento (tipoMovimento, dataMovimento, quantidade,idArmazem,idProduto,idLote) 
+		VALUES ('Entrada', NEW.dataEntrada, NEW.quantidadeAtual,NEW.idArmazem, NEW.idProduto, NEW.id);
+END//
 DELIMITER ;
 
 
+DELIMITER //
+CREATE TRIGGER Tg_actualizaStock_IO
+AFTER INSERT ON movimento
+FOR EACH ROW
+BEGIN
+    DECLARE totalMovimentado INT;
+    DECLARE estoque_atual INT;
 
--- Triggers para controlo de estoque e registo de movimentos(Saidas & Entradas)
--- Automatiza a preparação de stock para o novo produto em todos os armazéns existentes, evitando esquecimentos manuais
--- delimiter //
--- CREATE TRIGGER Tg_C_Stock
--- 	AFTER INSERT ON produto
--- 	FOR EACH ROW
--- 	BEGIN
--- 		IF NEW.controle_stock THEN
--- 			INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
--- 			SELECT NEW.id, id, 0 FROM armazem;
--- 		END IF;
--- 	END//
--- delimiter ;
+    SET totalMovimentado = NEW.quantidade;
 
--- Quando um produto é fornecido, atualizar o stock automaticamente no armazém indicado
--- Automatiza o registo de entrada de stock
--- Mantém histórico de movimentação
--- Garante consistência entre fornecimento e saldo de stock
+    SELECT saldo INTO estoque_atual
+    FROM stock
+    WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem
+    LIMIT 1;
 
--- DELIMITER //
--- CREATE TRIGGER Tg_CU_Stock_Entrada
--- AFTER INSERT ON produto_fornecido
--- FOR EACH ROW
--- BEGIN
---     -- Todas as variáveis precisam estar no início do bloco
---     DECLARE tipoProduto VARCHAR(20);
---     DECLARE done INT DEFAULT 0;
---     DECLARE comp_id INT;
---     DECLARE comp_qtd INT;
---     DECLARE total_unidades INT;
-
---     -- Declara cursor e handler também no início
---     DECLARE cur CURSOR FOR
---         SELECT idSimples, quantidadePorUnidade
---         FROM produto_composicao
---         WHERE idComposto = NEW.fk_id_produto;
-
---     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
-
---     -- Descobre se o produto fornecido é simples ou composto
---     SELECT tipo INTO tipoProduto
---     FROM produto
---     WHERE id = NEW.fk_id_produto;
-
---     IF tipoProduto = 'Simples' THEN
---         -- Entrada direta no produto simples
---         INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
---         VALUES (NEW.fk_id_produto, NEW.fk_id_armazem, NEW.quantidade)
---        -- ON DUPLICATE KEY UPDATE saldo = saldo + NEW.quantidade*NEW.qtd_por_unidade;
---         ON DUPLICATE KEY UPDATE saldo = saldo + NEW.quantidade*NEW.qtd_por_unidade;
-
---         -- Registra movimento
---         INSERT INTO movimento (
---             tipo_movimento, data_movimento, quantidade,
---             tipoUnidadeMov, uniPorTipoMove, fk_id_produto,
---             fk_id_usuario, fk_id_armazem
---         ) VALUES (
---             'Entrada', NEW.data_fornecida, NEW.quantidade,
---             NEW.unidade_fornecida, NEW.qtd_por_unidade,
---             NEW.fk_id_produto, NEW.fk_id_usuario, NEW.fk_id_armazem
---         );
-
---     ELSEIF tipoProduto = 'Composto' THEN
---         -- Entrada de produto composto: converter em simples
---         OPEN cur;
---         read_loop: LOOP
---             FETCH cur INTO comp_id, comp_qtd;
---             IF done THEN
---                 LEAVE read_loop;
---             END IF;
-
---             -- Total de unidades a lançar no stock simples
---             SET total_unidades = NEW.quantidade * comp_qtd;
-
---             -- Atualiza stock do produto simples
---             INSERT INTO stock (fk_id_produto, fk_id_armazem, saldo)
---             VALUES (comp_id, NEW.fk_id_armazem, total_unidades)
---             ON DUPLICATE KEY UPDATE saldo = saldo + total_unidades;
-
---             -- Registra movimento com referência ao simples
---             INSERT INTO movimento (
---                 tipo_movimento, data_movimento, quantidade,
---                 tipoUnidadeMov, uniPorTipoMove, fk_id_produto,
---                 fk_id_usuario, fk_id_armazem
---             ) VALUES (
---                 'Entrada', NEW.data_fornecida, NEW.quantidade,
---                 NEW.unidade_fornecida, comp_qtd,
---                 comp_id, NEW.fk_id_usuario, NEW.fk_id_armazem
---             );
---         END LOOP;
---         CLOSE cur;
---     END IF;
--- END//
--- DELIMITER ;
+    -- Apenas ENTRADAS
+    IF NEW.tipoMovimento = 'Entrada' THEN
+        UPDATE stock
+        SET saldo = estoque_atual + totalMovimentado
+        WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem;
+    END IF;
+END//
+DELIMITER ;
 
 
--- Quando um produto é vendido ou movimentado como "Saída", atualizar o stock.
--- Automatiza a subtração do stock com base na movimentação
--- Suporta múltiplas unidades (ex: caixas, pacotes)
--- DELIMITER //
--- CREATE TRIGGER Tg_U_Stock_Saida
--- AFTER INSERT ON movimento
--- FOR EACH ROW
--- BEGIN
---     DECLARE total_unidades INT;
---     DECLARE estoque_atual INT;
+DELIMITER //
+CREATE TRIGGER Tg_RegistaMovimentoSaida
+AFTER INSERT ON itemRequisicao
+FOR EACH ROW
+BEGIN
+    -- Registra movimento de saide de lote
+	INSERT INTO movimento (tipoMovimento, dataMovimento, quantidade,idArmazem,idProduto,idItemRequisicao) 
+		VALUES ('Saida', CURDATE(), NEW.quantidade,NEW.idArmazem, NEW.idProduto, NEW.id);
+        
+	-- update requisicao set estado = 'Em processamento' where idItemRequisicao=NEW.idRequisicao;
 
---     SET total_unidades = NEW.quantidade * NEW.uniPorTipoMove;
+END//
+DELIMITER ;
 
---     -- Busca o saldo atual do produto no armazém
---     SELECT saldo
---     INTO estoque_atual
---     FROM stock
---     WHERE fk_id_produto = NEW.fk_id_produto
---       AND fk_id_armazem = NEW.fk_id_armazem
---     LIMIT 1;
 
---     -- Verifica se é saída e se há estoque suficiente
---     IF NEW.tipo_movimento = 'Saída' AND estoque_atual >= total_unidades THEN
---         UPDATE stock
---         SET saldo = saldo - total_unidades
---         WHERE fk_id_produto = NEW.fk_id_produto
---           AND fk_id_armazem = NEW.fk_id_armazem;
---     END IF;
--- END//
--- DELIMITER ;
+DELIMITER //
+CREATE TRIGGER Tg_FIFO
+AFTER INSERT ON movimento
+FOR EACH ROW
+BEGIN
+    DECLARE qtdRestante INT;
+    DECLARE loteID INT;
+    DECLARE qtdLote INT;
+    DECLARE done INT DEFAULT 0;
 
--- drop trigger Tg_C_Saida;
+    DECLARE curLotes CURSOR FOR
+        SELECT id, quantidadeAtual
+        FROM lote
+        WHERE idProduto = NEW.idProduto
+          AND idArmazem = NEW.idArmazem
+          AND quantidadeAtual > 0
+        ORDER BY dataEntrada ASC;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    IF NEW.tipoMovimento = 'Saida' THEN
+        SET qtdRestante = NEW.quantidade;
+
+        OPEN curLotes;
+
+        read_loop: LOOP
+            FETCH curLotes INTO loteID, qtdLote;
+            IF done = 1 OR qtdRestante <= 0 THEN
+                LEAVE read_loop;
+            END IF;
+
+            IF qtdLote >= qtdRestante THEN
+                -- Retira o restante do lote atual
+                UPDATE lote
+                SET quantidadeAtual = quantidadeAtual - qtdRestante,
+                    estado = CASE WHEN quantidadeAtual - qtdRestante = 0 THEN 'Esgotado' ELSE estado END
+                WHERE id = loteID;
+
+                -- Registra no log
+                INSERT INTO movimento_lote (idMovimento, idLote, quantidadeRetirada)
+                VALUES (NEW.id, loteID, qtdRestante);
+
+                SET qtdRestante = 0;
+            ELSE
+                -- Lote esgotado completamente
+                UPDATE lote
+                SET quantidadeAtual = 0,
+                    estado = 'Esgotado'
+                WHERE id = loteID;
+
+                INSERT INTO movimento_lote (idMovimento, idLote, quantidadeRetirada)
+                VALUES (NEW.id, loteID, qtdLote);
+
+                SET qtdRestante = qtdRestante - qtdLote;
+            END IF;
+        END LOOP;
+
+        CLOSE curLotes;
+
+        -- Atualiza saldo geral no stock
+        UPDATE stock
+        SET saldo = saldo - NEW.quantidade
+        WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem;
+
+        IF qtdRestante > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Stock insuficiente para completar a saída (FIFO).';
+        END IF;
+    END IF;
+END//
+DELIMITER ;
+
+-- Para Controlo de Stock
+
+
 -- Trigger para controlar fluxo de stock(saldo de determinado produto em seu armazarm) quando um movimento de saida e registado na tabela itemfactura
 DELIMITER //
 CREATE TRIGGER Tg_C_Saida

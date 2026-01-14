@@ -7,7 +7,7 @@ package jminvsm.model.vendas.factura.itens;
 import javafx.scene.control.TableView;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.desconto.Desconto;
-import jminvsm.model.preco.PrecoVenda;
+import jminvsm.model.preco.PrecoProdutoArmazem;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
@@ -29,13 +29,13 @@ public class Item {
     private Armazem armazem;
     private String data_criacao;
     private String unidade_vendida;
-    private PrecoVenda precoVenda;
+    private PrecoProdutoArmazem precoProdutoArmazem;
 
     public Item() {
         super();
     }
 
-    public Item(int quantidade, int qtd_por_unidade, double subtotal, Produto produto, Factura factura, Usuario usuario, Armazem armazem, String unidade_vendida, PrecoVenda precoVenda) {
+    public Item(int quantidade, int qtd_por_unidade, double subtotal, Produto produto, Factura factura, Usuario usuario, Armazem armazem, String unidade_vendida, PrecoProdutoArmazem precoProdutoArmazem) {
         super();
         this.quantidade = quantidade;
         this.qtd_por_unidade = qtd_por_unidade;
@@ -45,7 +45,7 @@ public class Item {
         this.usuario = usuario;
         this.armazem = armazem;
         this.unidade_vendida = unidade_vendida;
-        this.precoVenda = precoVenda;
+        this.precoProdutoArmazem = precoProdutoArmazem;
     }
 
     public int getId() {
@@ -129,12 +129,12 @@ public class Item {
         this.armazem = armazem;
     }
 
-    public PrecoVenda getPrecoVenda() {
-        return precoVenda;
+    public PrecoProdutoArmazem getPrecoProdutoArmazem() {
+        return precoProdutoArmazem;
     }
 
-    public void setPrecoVenda(PrecoVenda precoVenda) {
-        this.precoVenda = precoVenda;
+    public void setPrecoProdutoArmazem(PrecoProdutoArmazem precoProdutoArmazem) {
+        this.precoProdutoArmazem = precoProdutoArmazem;
     }
     
 

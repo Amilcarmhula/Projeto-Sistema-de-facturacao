@@ -2,18 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package jminvsm.service.PrecoProdutoArmazem;
+package jminvsm.service.precoProdutoArmazem;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import javafx.collections.ObservableList;
-import jminvsm.dao.preco.PrecoProdutoArmazemDAO;
-import jminvsm.dao.preco.PrecoVendaDAO;
+import jminvsm.dao.precoProdutoArmazem.PrecoProdutoArmazemDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.preco.PrecoProdutoArmazem;
-import jminvsm.model.preco.PrecoVenda;
 import jminvsm.model.produto.Produto;
-import jminvsm.model.usuario.Usuario;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
@@ -94,9 +90,13 @@ public class ServicePrecoProdutoArmazem {
 //        }
 //    }
 //
-//    public ObservableList<PrecoVenda> consultaPrecos(int idProduto) {
-//        return precoDao.getEntityByProdutoID(idProduto);
-//    }
+    public ObservableList<PrecoProdutoArmazem> listaTodosPrecos(int idProduto) {
+        return precoDao.listAllPrecos(idProduto);
+    }
+    
+    public ObservableList<PrecoProdutoArmazem> consultaPrecosVendas(int idProduto, int idArmazem) {
+        return precoDao.getEntityByID(idProduto,idArmazem);
+    }
 //
 //    public void deletePreco(int id) {
 //        setOpsSuccess(false);

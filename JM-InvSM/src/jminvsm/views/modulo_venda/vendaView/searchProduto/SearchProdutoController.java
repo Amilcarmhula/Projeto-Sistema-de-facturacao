@@ -162,7 +162,7 @@ public class SearchProdutoController implements Initializable {
         Stock x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
             Stock s = mapaProdutos.get(x.getProduto().getId() + "," + x.getArmazem().getId());
-            System.out.println("ID: "+s.getProduto().getId() + "," + s.getArmazem().getId()+" - PV: "+s.getPrecoVenda().getPrecoVenda());
+            System.out.println("ID: "+s.getProduto().getId() + "," + s.getArmazem().getId()+" - PV: "+s.getPrecoProdutoArmazem().getPrecoVenda());
             SysFact.setData(s);
         }
     }

@@ -92,12 +92,13 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     @Override
     public ObservableList<Desconto> listAllEntities() {
         ObservableList<Desconto> lista = FXCollections.observableArrayList();
+        Desconto c ;
         try {
             sql = "select * from desconto";
             ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
-                Desconto c = new Desconto();
+                c = new Desconto();
                 c.setId(result.getInt("id"));
                 c.setNome(result.getString("nome"));
                 c.setDescricao(result.getString("descricao"));

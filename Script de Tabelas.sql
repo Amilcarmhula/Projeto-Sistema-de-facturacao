@@ -97,7 +97,6 @@ create table endereco_cliente(
     foreign key (fk_id_usuario) references usuario(id),
     check(tipo in('Facturação','Envio'))
 );
-
 create table contacto_cliente(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
@@ -117,7 +116,6 @@ create table fornecedor(
     razaosocial varchar(100) not null,-- Razao social
     nuit integer
 );
-
 create table endereco_fornecedor(
 	id integer primary key auto_increment,
     provincia varchar(50),
@@ -130,7 +128,6 @@ create table endereco_fornecedor(
 	idFornecedor integer,
     foreign key (idFornecedor) references fornecedor(id) on delete cascade
 );
-
 create table contacto_fornecedor(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
@@ -148,7 +145,6 @@ create table armazem(
     descricao varchar(50),
     estado boolean default 1 not null -- Ativo/Inativo.
 );
-
 create table endereco_armazem(
 	id integer primary key auto_increment,
     provincia varchar(50),
@@ -161,7 +157,6 @@ create table endereco_armazem(
 	idArmazem integer,
     foreign key (idArmazem) references armazem(id) on delete cascade
 );
-
 create table contacto_armazem(
 	id integer primary key auto_increment,
     pessoa_de_contacto varchar(100),
@@ -178,7 +173,6 @@ create table categoria(
     familia varchar(50),
     descricao text
 );
-    
 create table unidadeMedida(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -186,7 +180,6 @@ create table unidadeMedida(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 create table imposto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
@@ -194,11 +187,11 @@ create table imposto(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 create table desconto(
 	id integer primary key auto_increment,
     nome varchar(50) not null,
     descricao text,
+    percentagem decimal(4,2),
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -226,19 +219,6 @@ create table stock(
     foreign key(idProduto) references produto(id) on delete cascade,
     foreign key(idArmazem) references armazem(id) on delete cascade
 );
-delimiter //
-CREATE TRIGGER Tg_C_Stock
-	AFTER INSERT ON produto
-	FOR EACH ROW
-	BEGIN
-		IF NEW.controle_stock THEN
-			INSERT INTO stock (idProduto, idArmazem, saldo)
-			SELECT NEW.id, id, 0 FROM armazem;
-		END IF;
-	END//
-delimiter ;
-
-
 create table lote (
     id integer primary key auto_increment,
     codigo varchar(20) unique not null, -- Ex: 'L1', 'L2', 'L3'
@@ -255,25 +235,6 @@ create table lote (
     foreign key (idFornecedor) references fornecedor(id),
     foreign key (idArmazem) references armazem(id)
 );
-
-
-DELIMITER //
-CREATE TRIGGER copiar_saldo_para_lote
-BEFORE INSERT ON lote
-FOR EACH ROW
-BEGIN
-    -- Declaração de uma variável para armazenar o saldo
-    DECLARE saldo_atual integer;
-
-    -- Busca o saldo atual do produto no armazém correspondente
-    SELECT saldo
-    INTO saldo_atual
-    FROM stock
-    WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem LIMIT 1;
-    
-    set NEW.quantidadeInicial= saldo_atual;
-END //
-DELIMITER ;
 
 create table requisicao(
 	id integer primary key auto_increment,
@@ -316,42 +277,6 @@ create table movimento(
     )
 );
 
-DELIMITER //
-CREATE TRIGGER Tg_registaMovimentoEntrada
-AFTER INSERT ON lote
-FOR EACH ROW
-BEGIN
-	-- Registra movimento de entrada de lote
-	INSERT INTO movimento (tipoMovimento, dataMovimento, quantidade,idArmazem,idProduto,idLote) 
-		VALUES ('Entrada', NEW.dataEntrada, NEW.quantidadeAtual,NEW.idArmazem, NEW.idProduto, NEW.id);
-END//
-DELIMITER ;
-
-
-DELIMITER //
-CREATE TRIGGER Tg_actualizaStock_IO
-AFTER INSERT ON movimento
-FOR EACH ROW
-BEGIN
-    DECLARE totalMovimentado INT;
-    DECLARE estoque_atual INT;
-
-    SET totalMovimentado = NEW.quantidade;
-
-    SELECT saldo INTO estoque_atual
-    FROM stock
-    WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem
-    LIMIT 1;
-
-    -- Apenas ENTRADAS
-    IF NEW.tipoMovimento = 'Entrada' THEN
-        UPDATE stock
-        SET saldo = estoque_atual + totalMovimentado
-        WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem;
-    END IF;
-END//
-DELIMITER ;
-
 -- Para rastrear quais lotes foram usados em cada saída (ex: vendas grandes que usam vários lotes),
 -- recomenda-se criar uma tabela adicional movimento_lote.
 CREATE TABLE movimento_lote (
@@ -366,178 +291,33 @@ CREATE TABLE movimento_lote (
 -- A requisicao quando ela e criada tem o seu estado inicial como Pendente
 
 
-DELIMITER //
-CREATE TRIGGER Tg_RegistaMovimentoSaida
-AFTER INSERT ON itemRequisicao
-FOR EACH ROW
-BEGIN
-    -- Registra movimento de saide de lote
-	INSERT INTO movimento (tipoMovimento, dataMovimento, quantidade,idArmazem,idProduto,idItemRequisicao) 
-		VALUES ('Saida', CURDATE(), NEW.quantidade,NEW.idArmazem, NEW.idProduto, NEW.id);
-        
-	-- update requisicao set estado = 'Em processamento' where idItemRequisicao=NEW.idRequisicao;
-
-END//
-DELIMITER ;
-
-
-DELIMITER //
-CREATE TRIGGER Tg_FIFO
-AFTER INSERT ON movimento
-FOR EACH ROW
-BEGIN
-    DECLARE qtdRestante INT;
-    DECLARE loteID INT;
-    DECLARE qtdLote INT;
-    DECLARE done INT DEFAULT 0;
-
-    DECLARE curLotes CURSOR FOR
-        SELECT id, quantidadeAtual
-        FROM lote
-        WHERE idProduto = NEW.idProduto
-          AND idArmazem = NEW.idArmazem
-          AND quantidadeAtual > 0
-        ORDER BY dataEntrada ASC;
-
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
-
-    IF NEW.tipoMovimento = 'Saida' THEN
-        SET qtdRestante = NEW.quantidade;
-
-        OPEN curLotes;
-
-        read_loop: LOOP
-            FETCH curLotes INTO loteID, qtdLote;
-            IF done = 1 OR qtdRestante <= 0 THEN
-                LEAVE read_loop;
-            END IF;
-
-            IF qtdLote >= qtdRestante THEN
-                -- Retira o restante do lote atual
-                UPDATE lote
-                SET quantidadeAtual = quantidadeAtual - qtdRestante,
-                    estado = CASE WHEN quantidadeAtual - qtdRestante = 0 THEN 'Esgotado' ELSE estado END
-                WHERE id = loteID;
-
-                -- Registra no log
-                INSERT INTO movimento_lote (idMovimento, idLote, quantidadeRetirada)
-                VALUES (NEW.id, loteID, qtdRestante);
-
-                SET qtdRestante = 0;
-            ELSE
-                -- Lote esgotado completamente
-                UPDATE lote
-                SET quantidadeAtual = 0,
-                    estado = 'Esgotado'
-                WHERE id = loteID;
-
-                INSERT INTO movimento_lote (idMovimento, idLote, quantidadeRetirada)
-                VALUES (NEW.id, loteID, qtdLote);
-
-                SET qtdRestante = qtdRestante - qtdLote;
-            END IF;
-        END LOOP;
-
-        CLOSE curLotes;
-
-        -- Atualiza saldo geral no stock
-        UPDATE stock
-        SET saldo = saldo - NEW.quantidade
-        WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem;
-
-        IF qtdRestante > 0 THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Stock insuficiente para completar a saída (FIFO).';
-        END IF;
-    END IF;
-END//
-DELIMITER ;
-
 
 create table precoProdutoArmazem(
 	id integer AUTO_INCREMENT, 
 	idProduto integer,
     idArmazem integer,
-    preco DECIMAL(10, 2) default 0.01 NULL,
+    precoBase DECIMAL(10, 2) default 0.01 NULL,
     precoVenda DECIMAL(10, 2) default 0.01 NULL,
     precoFinal DECIMAL(10, 2) default 0.01 NULL,
-    dataValidade DATE,
-    estado varchar(20) default 'activo' not null,
+    dataInicioVigencia DATE,
+    dataFimVigencia DATE,
+    estado enum('activo','desactivo') default 'desactivo' not null,
     foreign key (idProduto) references produto(id) on delete cascade,
     foreign key (idArmazem) references armazem(id)on delete cascade,
-    primary key(id, idProduto, idArmazem)
+    primary key(id)
 );
-
 create table produtodesconto(
+	id integer primary key auto_increment,
 	idProduto integer not null,
     idDesconto integer not null,
     idArmazem integer not null,
     dataInicio date not null,
     dataFim date not null,
-    percentagem decimal(4,2),
     foreign key (idProduto) references produto(id) on delete cascade,
     foreign key (idDesconto) references desconto(id) on delete cascade,
-    foreign key (idArmazem) references armazem(id)on delete cascade,
-    primary key(idProduto, idDesconto, idArmazem, dataInicio, dataFim)
+    foreign key (idArmazem) references armazem(id)on delete cascade
 );
-drop table precoProdutoArmazem;
--- CREATE TABLE precovenda (
---     id integer PRIMARY KEY AUTO_INCREMENT, 
---     precoNormal DECIMAL(10, 2) default 0.01 NULL,
---     precoVenda DECIMAL(10, 2) default 0.01 NULL,
---     precoFinal DECIMAL(10, 2) default 0.01 NULL,
---     dataValidade DATE,
---     estado varchar(20) default 'activo' not null,
---     idProduto integer not null,
---     idArmazem integer not null,
---     fk_id_usuario integer not null,
---     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     FOREIGN KEY (idProduto) REFERENCES produto(id) on delete cascade,
---     foreign key (idArmazem) references armazem(id)on delete cascade,
---     foreign key (fk_id_usuario) references usuario(id)
--- );
--- create table stock(
--- 	fk_id_produto integer,
---     fk_id_armazem integer,
---     saldo integer not null,
---     primary key (fk_id_produto,fk_id_armazem),
---     foreign key(fk_id_produto) references produto(id) on delete cascade,
---     foreign key(fk_id_armazem) references armazem(id) on delete cascade
--- );
--- desc produto_fornecido;
--- create table produto_fornecido(
--- 	id integer primary key auto_increment,
---     quantidade integer,
---     unidade_fornecida enum('Simples', 'Composto') DEFAULT 'Simples',
---     qtd_por_unidade integer DEFAULT 1,
---     data_fornecida date,
---     custo decimal(10,2) not null,
---     fk_id_armazem integer default 1 not null,
---     fk_id_produto integer not null,
---     fk_id_fornecedor integer default 1 not null,
---     fk_id_usuario integer not null,
--- 	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     foreign key (fk_id_armazem) references armazem(id),
---     foreign key (fk_id_produto) references produto(id),
---     foreign key (fk_id_usuario) references usuario(id),
---     foreign key (fk_id_fornecedor) references fornecedor(id)
--- );
 
--- create table movimento(
--- 	id integer primary key auto_increment,
---     tipo_movimento varchar(8) not null,
---     tipoUnidadeMov enum('Simples', 'Composto') default 'Simples',
---     uniPorTipoMove integer,
---     data_movimento date,
---     quantidade integer not null,
---     fk_id_produto integer not null,
--- 	fk_id_usuario integer not null,
---     fk_id_armazem integer not null,
---     foreign key (fk_id_produto) references produto(id),
--- 	foreign key (fk_id_usuario) references usuario(id),
---     foreign key (fk_id_armazem) references armazem(id),
---     check (tipo_movimento in('Entrada','Saída'))
--- );
 
 -- Armazena as siglas das facturas e o numero de dias uteis
 create table documentocomercial(
@@ -547,8 +327,6 @@ create table documentocomercial(
     diasuteis integer not null,
     descricao text not null    
 );
-
-
 
 -- Tabelas para armazenar dados das facturacoes
 CREATE TABLE factura (
@@ -587,8 +365,6 @@ create table itemfactura(
     foreign key (fk_id_produto) references produto(id),
     foreign key (fk_numero) references factura(numero)
 );
-desc itemfactura;
-
 
 
 create table itemcotacao(
@@ -616,7 +392,6 @@ create table metodo_pagamento(
     descricao text,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 create table parcelas(
 	id integer primary key auto_increment,
     parcelaNumero integer not null,
@@ -632,7 +407,6 @@ create table parcelas(
     foreign key (fk_usuario) references usuario(id),
     FOREIGN KEY (fk_factura) REFERENCES factura(numero)
 );
-
 -- transacoes 
 create table transacoes(
 	id integer primary key auto_increment,
@@ -654,7 +428,6 @@ create table transacoes(
     foreign key (fk_numero) references factura(numero),
     foreign key (fk_parcela) references parcelas(id)
 );
-
 -- esta tabela sera actualizada com uma trigger
 CREATE TABLE caixa (
     id INT PRIMARY KEY AUTO_INCREMENT,

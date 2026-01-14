@@ -31,20 +31,35 @@ import jminvsm.model.produto.Produto;
  * @author JM-Tecnologias
  */
 public class PrecoProdutoArmazem {
+    private int id;
     private Produto produto;
     private Armazem armazem;
     private Double preco;
+    private Double precoVenda;
+    private Double precoFinal;
+    private String dataValidade;
+    private String estado;
 
     public PrecoProdutoArmazem() {
     }
 
-    public PrecoProdutoArmazem(Produto produto, Armazem armazem, Double preco) {
+    public PrecoProdutoArmazem(Produto produto, Armazem armazem, Double preco, Double precoVenda, Double precoFinal, String dataValidade, String estado) {
         this.produto = produto;
         this.armazem = armazem;
         this.preco = preco;
+        this.precoVenda = precoVenda;
+        this.precoFinal = precoFinal;
+        this.dataValidade = dataValidade;
+        this.estado = estado;
     }
-    
-    
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Produto getProduto() {
         return produto;
@@ -69,5 +84,38 @@ public class PrecoProdutoArmazem {
     public void setPreco(Double preco) {
         this.preco = preco;
     }
-    
+
+    public Double getPrecoVenda() {
+        return precoVenda;
+    }
+
+    public void setPrecoVenda(Double precoVenda) {
+        this.precoVenda = precoVenda;
+    }
+
+    public Double getPrecoFinal() {
+        return precoFinal;
+    }
+
+    public void setPrecoFinal(Double precoFinal) {
+        this.precoFinal = precoFinal;
+    }
+
+    public String getDataValidade() {
+        return dataValidade;
+    }
+
+    public void setDataValidade(String dataValidade) {
+        this.dataValidade = dataValidade;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+   
 }

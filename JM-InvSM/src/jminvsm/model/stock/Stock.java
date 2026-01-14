@@ -5,7 +5,7 @@
 package jminvsm.model.stock;
 
 import jminvsm.model.armazem.Armazem;
-import jminvsm.model.preco.PrecoVenda;
+import jminvsm.model.preco.PrecoProdutoArmazem;
 import jminvsm.model.produto.Produto;
 
 /**
@@ -15,7 +15,7 @@ import jminvsm.model.produto.Produto;
 public class Stock {
     private Produto produto;
     private Armazem armazem;
-    private PrecoVenda precoVenda;
+    private PrecoProdutoArmazem precoProdutoArmazem;
     private int saldo;
 
     public Stock() {
@@ -51,12 +51,12 @@ public class Stock {
         this.saldo = saldo;
     }
 
-    public PrecoVenda getPrecoVenda() {
-        return precoVenda;
+    public PrecoProdutoArmazem getPrecoProdutoArmazem() {
+        return precoProdutoArmazem;
     }
 
-    public void setPrecoVenda(PrecoVenda precoVenda) {
-        this.precoVenda = precoVenda;
+    public void setPrecoProdutoArmazem(PrecoProdutoArmazem precoProdutoArmazem) {
+        this.precoProdutoArmazem = precoProdutoArmazem;
     }
 
    

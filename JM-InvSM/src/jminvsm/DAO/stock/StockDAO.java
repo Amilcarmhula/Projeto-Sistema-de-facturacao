@@ -13,7 +13,7 @@ import javafx.collections.ObservableList;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.imposto.Imposto;
-import jminvsm.model.preco.PrecoVenda;
+import jminvsm.model.preco.PrecoProdutoArmazem;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.unidade_medida.UnidadeMedida;
@@ -123,15 +123,15 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 a.setNome_arm(rs.getString("nomeArmazem"));
                 a.setTipo(rs.getString("tipoArmazem"));
 
-                PrecoVenda pv = new PrecoVenda();
-                pv.setPrecoNormal(rs.getDouble("precoNormal"));
+                PrecoProdutoArmazem pv = new PrecoProdutoArmazem();
+                pv.setPreco(rs.getDouble("preco"));
                 pv.setPrecoVenda(rs.getDouble("precoVenda"));
                 pv.setPrecoFinal(rs.getDouble("precoFinal"));
                 pv.setEstado(rs.getString("estadoPreco"));
 
                 stock.setProduto(p);
                 stock.setArmazem(a);
-                stock.setPrecoVenda(pv);
+                stock.setPrecoProdutoArmazem(pv);
                 stock.setSaldo(rs.getInt("saldo"));
 
                 lista.add(stock);
@@ -355,9 +355,9 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 System.out.println("Nível Stock: " + s.getProduto().getNivelstock());
 
                 System.out.println("=== Preco de Venda ===");
-                System.out.println("Preco Normal: " + s.getPrecoVenda().getPrecoNormal());
-                System.out.println("Preco Venda: " + s.getPrecoVenda().getPrecoVenda());
-                System.out.println("Preco Final: " + s.getPrecoVenda().getPrecoFinal());
+                System.out.println("Preco Normal: " + s.getPrecoProdutoArmazem().getPreco());
+                System.out.println("Preco Venda: " + s.getPrecoProdutoArmazem().getPrecoVenda());
+                System.out.println("Preco Final: " + s.getPrecoProdutoArmazem().getPrecoFinal());
 
                 System.out.println("=== Armazém ===");
                 System.out.println("ID Armazém: " + s.getArmazem().getId());

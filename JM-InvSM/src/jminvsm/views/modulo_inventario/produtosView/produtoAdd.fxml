@@ -157,10 +157,10 @@
                   <Insets />
                </opaqueInsets>
             </Button>
-            <TableView fx:id="tabelaPrecos" layoutX="450.0" layoutY="93.0" prefHeight="196.0" prefWidth="504.0" style="-fx-border-color: transparent; -fx-background-color: white;">
+            <TableView fx:id="tabelaPrecos" layoutX="450.0" layoutY="93.0" onMouseClicked="#selecionaArmazemNaTabelaPreco" prefHeight="196.0" prefWidth="504.0" style="-fx-border-color: transparent; -fx-background-color: white;">
                <columns>
                   <TableColumn fx:id="idPreco" prefWidth="40.0" text="ID" />
-                  <TableColumn fx:id="precoNormal" prefWidth="77.0" text="Preco Base" />
+                  <TableColumn fx:id="preco" prefWidth="77.0" text="Preco Base" />
                   <TableColumn fx:id="precoVenda" prefWidth="101.0" text="Preco de Venda" />
                   <TableColumn fx:id="precoFinal" prefWidth="90.0" text="Preco Final" />
                   <TableColumn fx:id="dataValidade" prefWidth="124.0" text="Validade" />
@@ -205,7 +205,7 @@
                </font>
             </Label>
             <ComboBox fx:id="cBoxArmazem" layoutX="547.0" layoutY="48.0" prefHeight="30.0" prefWidth="188.0" promptText="Armazens" />
-            <ComboBox fx:id="cBoxDesconto" layoutX="965.0" layoutY="93.0" prefHeight="30.0" prefWidth="298.0" promptText="Tipo de Desconto" />
+            <ComboBox fx:id="cBoxDesconto" layoutX="965.0" layoutY="93.0" prefHeight="30.0" prefWidth="420.0" promptText="Tipo de Desconto" />
             <Label fx:id="labDescricaoDesconto" layoutX="965.0" layoutY="131.0" prefHeight="30.0" prefWidth="431.0" text="Descricao" textFill="WHITE">
                <font>
                   <Font size="20.0" />

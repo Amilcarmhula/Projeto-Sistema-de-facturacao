@@ -55,8 +55,7 @@ public class PrecoProdutoArmazemDAO {
     public boolean addEntity(PrecoProdutoArmazem x) {
         boolean isSuccess = false;
         try {
-            sql = "INSERT INTO precoProdutoArmazem (idProduto, idArmazem, preco) "
-                    + "VALUES (?, ?, ?)";
+            sql = "CALL sp_registar_preco(?, ?, ?) ";
 
             ps = con.prepareStatement(sql);
             ps.setInt(1, x.getProduto().getId());

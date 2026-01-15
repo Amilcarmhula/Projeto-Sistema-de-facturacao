@@ -288,7 +288,6 @@ CREATE TABLE movimento_lote (
     FOREIGN KEY (idLote) REFERENCES lote(id)
 );
 
--- A requisicao quando ela e criada tem o seu estado inicial como Pendente
 
 
 
@@ -446,6 +445,8 @@ CREATE TABLE caixa (
     foreign key (fk_id_transacoes) references transacoes(id)
 );
 
+
+-- A requisicao quando ela e criada tem o seu estado inicial como Pendente
 -- __________________________________________________ Tabelas para suportar funcionalidades de requisicoes __________________________________________________
 -- A requisicao quando ela e criada tem o seu estado inicial como Pendente
 -- tabelas ja existentes do modulo de requisicoes

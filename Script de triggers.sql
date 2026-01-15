@@ -1,53 +1,5 @@
 use _sysface;
 
--- Inicio de Trigger e procedimentos para tratamento de precos
-DELIMITER //
-create trigger trg_antesDeInserirPreco
-BEFORE INSERT ON precoProdutoArmazem
-FOR EACH ROW
-BEGIN
-    DECLARE desconto_taxa DECIMAL(4,2);
-    DECLARE imposto_taxa DECIMAL(4,2);
-
-    -- imposto (exemplo simples)
-    SELECT i.percentagem
-    INTO imposto_taxa
-    FROM imposto i
-    JOIN produto p ON p.idImposto = i.id
-    WHERE p.id = NEW.idProduto
-    LIMIT 1;
-
-    IF imposto_taxa IS NULL THEN
-        SET imposto_taxa = 0;
-    END IF;
-
-    -- preço venda
-    SET NEW.precoVenda = NEW.precoBase + ((NEW.precoBase * imposto_taxa) / 100);
-
-    -- desconto activo
-    SELECT d.percentagem
-    INTO desconto_taxa
-    FROM produtodesconto pd
-    JOIN desconto d ON d.id = pd.idDesconto
-    WHERE pd.idProduto = NEW.idProduto
-      AND pd.idArmazem = NEW.idArmazem
-      AND CURRENT_DATE BETWEEN pd.dataInicio AND pd.dataFim
-    LIMIT 1;
-
-    -- preço final
-    IF desconto_taxa IS NOT NULL THEN
-        SET NEW.precoFinal =
-            NEW.precoVenda - ((NEW.precoVenda * desconto_taxa) / 100);
-    ELSE
-        SET NEW.precoFinal = NEW.precoVenda;
-    END IF;
-
-    SET NEW.estado = 'activo';
-    SET NEW.dataInicioVigencia = CURRENT_DATE;
-END;
-//
-DELIMITER ;
-
 DELIMITER //
 CREATE PROCEDURE sp_registar_preco (
     IN p_idProduto INT,
@@ -55,8 +7,12 @@ CREATE PROCEDURE sp_registar_preco (
     IN p_precoBase DECIMAL(10,2)
 )
 BEGIN
+	DECLARE desconto_taxa DECIMAL(4,2);
+    DECLARE imposto_taxa DECIMAL(4,2);
+    DECLARE p_Venda DECIMAL(10,2);
+    DECLARE p_Final DECIMAL(10,2);
+    
     START TRANSACTION;
-
     -- 1️ desactivar preço activo anterior
     UPDATE precoProdutoArmazem
     SET estado = 'desactivo',
@@ -64,21 +20,122 @@ BEGIN
     WHERE idProduto = p_idProduto
       AND idArmazem = p_idArmazem
       AND estado = 'activo';
+      
+	-- imposto (exemplo simples)
+    SELECT i.percentagem
+    INTO imposto_taxa
+    FROM imposto i
+    JOIN produto p ON p.idImposto = i.id
+    WHERE p.id = p_idProduto
+    LIMIT 1;
+	-- preco venda
+    IF imposto_taxa IS NULL THEN
+        SET imposto_taxa = 0;
+    END IF;
+    set p_Venda = p_precoBase + ((p_precoBase * imposto_taxa) / 100);
+
+    
+    -- desconto activo
+    SELECT d.percentagem
+    INTO desconto_taxa
+    FROM produtodesconto pd
+    JOIN desconto d ON d.id = pd.idDesconto
+    WHERE pd.idProduto = p_idProduto
+      AND pd.idArmazem = p_idArmazem
+      AND CURRENT_DATE BETWEEN pd.dataInicio AND pd.dataFim
+    LIMIT 1;
+    -- preço final
+    IF desconto_taxa IS NOT NULL THEN
+        SET p_Final = p_Venda - ((p_Venda * desconto_taxa) / 100);
+    ELSE
+        SET p_Final = p_Venda;
+    END IF;
 
     -- 2️ inserir novo preço
     INSERT INTO precoProdutoArmazem
-    (idProduto, idArmazem, precoBase)
+    (idProduto, idArmazem, precoBase,precoVenda,precoFinal,dataInicioVigencia,estado)
     VALUES
-    (p_idProduto, p_idArmazem, p_precoBase);
-
+    (p_idProduto, p_idArmazem, p_precoBase, p_Venda, p_Final,CURRENT_DATE,'activo');
+    
     COMMIT;
 END;
 //
 DELIMITER ;
 
--- CALL sp_registar_preco(1, 1, 500);
--- CALL sp_registar_preco(1, 1, 550);
--- CALL sp_registar_preco(1, 1, 700);
+DELIMITER //
+CREATE PROCEDURE sp_aplicar_desconto_ao_preco(
+    IN p_idProduto INT,
+    IN p_idArmazem INT
+)
+BEGIN
+    DECLARE v_precoBase DECIMAL(10,2) DEFAULT 0.01;
+    DECLARE v_precoVenda DECIMAL(10,2) DEFAULT 0.01;
+    DECLARE v_precoFinal DECIMAL(10,2) DEFAULT 0.01;
+    DECLARE v_desconto DECIMAL(4,2) DEFAULT 0;
+    DECLARE v_imposto DECIMAL(4,2) DEFAULT 0;
+
+    -- 1️⃣ Obter o último preço activo
+    SELECT precoBase
+    INTO v_precoBase
+    FROM precoProdutoArmazem
+    WHERE idProduto = p_idProduto
+      AND idArmazem = p_idArmazem
+      AND estado = 'activo'
+    ORDER BY dataInicioVigencia DESC
+    LIMIT 1;
+
+    -- Se não existir preço anterior, mantém 0.01
+    IF v_precoBase IS NULL THEN
+        SET v_precoBase = 0.01;
+    END IF;
+
+    -- 2️⃣ Obter desconto activo
+    SELECT d.percentagem
+    INTO v_desconto
+    FROM desconto d
+    JOIN produtodesconto pd ON pd.idDesconto = d.id
+    WHERE pd.idProduto = p_idProduto
+      AND pd.idArmazem = p_idArmazem
+      AND CURRENT_DATE BETWEEN pd.dataInicio AND pd.dataFim
+    ORDER BY pd.dataInicio DESC
+    LIMIT 1;
+
+    IF v_desconto IS NULL THEN
+        SET v_desconto = 0;
+    END IF;
+
+    -- 3️⃣ Obter imposto do produto
+    SELECT i.percentagem
+    INTO v_imposto
+    FROM produto p
+    JOIN imposto i ON p.idImposto = i.id
+    WHERE p.id = p_idProduto
+    LIMIT 1;
+
+    IF v_imposto IS NULL THEN
+        SET v_imposto = 0;
+    END IF;
+
+    -- 4️⃣ Desactivar preço activo anterior
+    UPDATE precoProdutoArmazem
+    SET estado = 'desactivo', dataFimVigencia = CURRENT_DATE
+    WHERE idProduto = p_idProduto
+      AND idArmazem = p_idArmazem
+      AND estado = 'activo';
+
+    -- 5️⃣ Calcular preços
+    SET v_precoVenda = v_precoBase + (v_precoBase * v_imposto / 100);
+    SET v_precoFinal = v_precoVenda - (v_precoVenda * v_desconto / 100);
+
+    -- 6️⃣ Inserir novo preço
+    INSERT INTO precoProdutoArmazem
+    (idProduto, idArmazem, precoBase, precoVenda, precoFinal, estado, dataInicioVigencia)
+    VALUES
+    (p_idProduto, p_idArmazem, v_precoBase, v_precoVenda, v_precoFinal, 'activo', CURRENT_DATE);
+
+END;
+//
+DELIMITER ;
 
 SET GLOBAL event_scheduler = ON;
 CREATE EVENT evt_marcar_expiracao_precos

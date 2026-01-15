@@ -406,18 +406,10 @@ INSERT INTO itemRequisicao (quantidade, idRequisicao, idProduto, idArmazem)
 VALUES (700, 1, 1, 1);
 
 
-use _sysface;
 
-select p.nome as nomeProduto, p.descricao as descricaoProduto,
-                    	a.nome as nomeArmazem, a.tipo as tipoArmazem, a.descricao as descicaoArmazem, 
-                     d.nome as nomeDesconto, 
-                     pd.dataInicio, pd.dataFim, d.percentagem 
-                    	from produtodesconto pd 
-                    	join produto p on pd.idProduto=p.id 
-                     join desconto d on pd.idDesconto=d.id 
-                     join armazem a on pd.idArmazem=a.id 
-                     where idProduto=1 and idArmazem=1;
+
                      
-                     select * from produtodesconto;
+                     
+
 
 

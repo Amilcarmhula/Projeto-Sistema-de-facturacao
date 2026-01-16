@@ -86,6 +86,7 @@ public class ProdutoController implements Initializable {
     private ServiceProdutoDesconto serProDesconto;
 
     private int idArmazem;
+    private int idArmazemDesconto;
     private int idDescontoComb;
 
     @FXML
@@ -177,6 +178,8 @@ public class ProdutoController implements Initializable {
     private ComboBox<String> cBoxArmazem;
     @FXML
     private ComboBox<String> cBoxDesconto;
+    @FXML
+    private ComboBox<String> cBoxArmazemDesconto;
 
     @FXML
     private ComboBox<String> combCategoriaPesq;
@@ -346,6 +349,11 @@ public class ProdutoController implements Initializable {
             idArmazem = mapaArmazens.get(data).getId();
             showProdutoDesconto();
         });
+        cBoxArmazemDesconto.setOnAction(evt -> {
+            String data = cBoxArmazemDesconto.getSelectionModel().getSelectedItem();
+            idArmazemDesconto = mapaArmazens.get(data).getId();
+            showProdutoDesconto();
+        });
         cBoxDesconto.setOnAction(evt -> {
             String data = cBoxDesconto.getSelectionModel().getSelectedItem();
             idDescontoComb = mapaDesconto.get(data).getId();
@@ -500,18 +508,22 @@ public class ProdutoController implements Initializable {
 
         serPrecosProduArm.registraPreco(idProd, idArmazem, precoNorm);
         showPrecoProdutoArmazem();
+        showProdutoDesconto();
+        showPrecoProdutoArmazem();
     }
 
     public void addProdutoDesconto(ActionEvent e) {
-        Double percentagem = Double.valueOf(txtPercentagemDesconto.getText().equals("") ? "0" : txtPercentagemDesconto.getText());
+        //Double percentagem = Double.valueOf(txtPercentagemDesconto.getText().equals("") ? "0" : txtPercentagemDesconto.getText());
         Integer idProd = Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText());
         Integer idDesc = idDescontoComb;
 
-        serProDesconto.regista(idProd, idDescontoComb, idArmazem,
+        serProDesconto.regista(idProd, idDescontoComb, idArmazemDesconto,
                 String.valueOf(dataInicioDesconto.getValue()),
                 String.valueOf(dataFimDesconto.getValue()));
 
         showPrecoProdutoArmazem();
+        showProdutoDesconto();
+        showProdutoDesconto();
 //        resetCampos();
     }
 
@@ -587,6 +599,7 @@ public class ProdutoController implements Initializable {
             mapaArmazens.put(a.getNome_arm(), a);
         }
         cBoxArmazem.setItems(FXCollections.observableArrayList(listaArm));
+        cBoxArmazemDesconto.setItems(FXCollections.observableArrayList(listaArm));
 
 //        descontos
         descontoList = serDesconto.listDescontos();
@@ -656,7 +669,7 @@ public class ProdutoController implements Initializable {
             combTipo.setValue(p.getTipoProduto());
             combTaxa.setValue(p.getImposto().getNome());
             txtUnidadesPorTipo.setText(String.valueOf(p.getUnidadesPorTipo()));
-            labCategoria.setText(p.getCategoria().getGrupo()+" > "+p.getCategoria().getSubgrupo()+" > "+p.getCategoria().getFamilia());
+            labCategoria.setText(p.getCategoria().getGrupo() + " > " + p.getCategoria().getSubgrupo() + " > " + p.getCategoria().getFamilia());
             stockControlChecked();
             showResumoStock(x.getId());
 //            showPrecoProdutoArmazem();
@@ -669,6 +682,8 @@ public class ProdutoController implements Initializable {
             ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         }
         showPrecoProdutoArmazem();
+        showProdutoDesconto();
+
     }
 
     private ObservableList<Stock> listaResumoStock;
@@ -689,7 +704,6 @@ public class ProdutoController implements Initializable {
 //            
 //        }
 //    }
-
     public void deleteProduto(MouseEvent event, Produto x) {
         if (event.getButton().name().equals("SECONDARY")) {
             Dialog<ButtonType> dialog = new Dialog<>();
@@ -762,7 +776,7 @@ public class ProdutoController implements Initializable {
             for (PrecoProdutoArmazem ppa : listaPrecos) {
                 mapaPrecoProdutoArmazem.put(ppa.getId(), ppa);
             }
-            
+
             idPreco.setCellValueFactory(new PropertyValueFactory<>("id"));
             preco.setCellValueFactory(new PropertyValueFactory<>("precoBase"));
             precoVenda.setCellValueFactory(new PropertyValueFactory<>("precoVenda"));
@@ -778,19 +792,17 @@ public class ProdutoController implements Initializable {
     private ObservableList<ProdutoDesconto> listaprodutodesconto;
 
     public void showProdutoDesconto() {
-        System.out.println("id Arma:"+idArmazem);
+        listaprodutodesconto = serProDesconto.consultaProdutoDesconto(Integer.parseInt(txtIDProduto.getText()));
 
-            listaprodutodesconto = serProDesconto.consultaProdutoDesconto(Integer.parseInt(txtIDProduto.getText()),idArmazem);
+        pdProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
+        pdArmazem.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
+        pdDesconto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDesconto().getNome()));
+        pdDataInicial.setCellValueFactory(new PropertyValueFactory<>("dataInicio"));
+        pdDataFinal.setCellValueFactory(new PropertyValueFactory<>("dataFim"));
+        pdPercentagem.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDesconto().getPercentagem() + " %"));
 
-            pdProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
-            pdArmazem.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
-            pdDesconto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDesconto().getNome()));
-            pdDataInicial.setCellValueFactory(new PropertyValueFactory<>("dataInicio"));
-            pdDataFinal.setCellValueFactory(new PropertyValueFactory<>("dataFim"));
-            pdPercentagem.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDesconto().getPercentagem()+" %"));
+        tabelaprodutodesconto.setItems(listaprodutodesconto);
 
-            tabelaprodutodesconto.setItems(listaprodutodesconto);
-        
     }
 //  ############################################################################
 

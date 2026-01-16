@@ -211,35 +211,24 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label layoutX="985.0" layoutY="163.0" prefHeight="30.0" prefWidth="132.0" text="Data de Inicio" textFill="WHITE">
+            <Label layoutX="966.0" layoutY="163.0" prefHeight="30.0" prefWidth="132.0" text="Data de Inicio" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label layoutX="985.0" layoutY="226.0" prefHeight="30.0" prefWidth="132.0" text="Data de Fim" textFill="WHITE">
+            <Label layoutX="966.0" layoutY="226.0" prefHeight="30.0" prefWidth="132.0" text="Data de Fim" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <DatePicker fx:id="dataInicioDesconto" layoutX="985.0" layoutY="195.0" prefHeight="30.0" prefWidth="126.0" />
-            <DatePicker fx:id="dataFimDesconto" layoutX="985.0" layoutY="258.0" prefHeight="30.0" prefWidth="126.0" />
-            <Label layoutX="1135.0" layoutY="163.0" prefHeight="30.0" prefWidth="220.0" text="Percentagem de desconto" textFill="WHITE">
+            <DatePicker fx:id="dataInicioDesconto" layoutX="966.0" layoutY="195.0" prefHeight="30.0" prefWidth="126.0" />
+            <DatePicker fx:id="dataFimDesconto" layoutX="966.0" layoutY="258.0" prefHeight="30.0" prefWidth="126.0" />
+            <Label layoutX="1116.0" layoutY="163.0" prefHeight="30.0" prefWidth="259.0" text="Armazem a aplicar desconto" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtPercentagemDesconto" alignment="TOP_CENTER" layoutX="1135.0" layoutY="195.0" prefHeight="30.0" prefWidth="98.0" promptText="Percentagem" stylesheets="@../../../style/dashboard.css">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </TextField>
-            <Label alignment="CENTER" layoutX="1242.0" layoutY="195.0" prefHeight="30.0" prefWidth="25.0" text="\%" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Button fx:id="btnAddProdutodesconto" alignment="CENTER" contentDisplay="CENTER" layoutX="1135.0" layoutY="258.0" mnemonicParsing="false" onAction="#addProdutoDesconto" prefHeight="30.0" prefWidth="126.0" stylesheets="@../../../style/dashboard.css" text="Validar Preco" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="btnAddProdutodesconto" alignment="CENTER" contentDisplay="CENTER" layoutX="1116.0" layoutY="258.0" mnemonicParsing="false" onAction="#addProdutoDesconto" prefHeight="30.0" prefWidth="126.0" stylesheets="@../../../style/dashboard.css" text="Validar Preco" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -252,6 +241,7 @@
                   <Insets />
                </opaqueInsets>
             </Button>
+            <ComboBox fx:id="cBoxArmazemDesconto" layoutX="1116.0" layoutY="204.0" prefHeight="30.0" prefWidth="188.0" promptText="Armazens" />
          </children>
       </AnchorPane>
       <TextField fx:id="txtPesquisar" layoutX="372.0" layoutY="361.0" prefHeight="30.0" prefWidth="504.0" promptText="Pesquisar produto" stylesheets="@../../../style/dashboard.css">
@@ -332,7 +322,7 @@
             <TableColumn fx:id="pdPercentagem" prefWidth="50.0" text="\%" />
          </columns>
       </TableView>
-      <Label layoutX="57.0" layoutY="787.0" text="Label" />
+      <Label layoutX="10.0" layoutY="772.0" prefHeight="14.0" prefWidth="551.0" text="quando preco selecionado, mostrar o armazem e os precos base, de venda e final; mostrar o estado tambem" />
       <Label layoutX="216.0" layoutY="787.0" text="Label" />
       <Label layoutX="395.0" layoutY="787.0" text="Label" />
    </children>

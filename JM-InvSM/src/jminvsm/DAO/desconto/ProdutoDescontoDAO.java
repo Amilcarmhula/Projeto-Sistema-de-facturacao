@@ -82,9 +82,34 @@ public class ProdutoDescontoDAO {
         }
         return isSuccess;
     }
+    
+    public boolean callAplicaDesconto(ProdutoDesconto t) {
+        boolean isSuccess = false;
+        try {
+            sql = "CALL sp_aplicar_desconto_ao_preco(?, ?)";
+
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, t.getProduto().getId());
+            ps.setInt(2, t.getArmazem().getId());
+
+            int rows = ps.executeUpdate();
+            isSuccess = rows > 0;
+
+        } catch (SQLException ex) {
+            System.out.println("Erro ao inserir: " + ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+            }
+        }
+        return isSuccess;
+    }
 
     // READ ALL
-    public ObservableList<ProdutoDesconto> getEntityByID(int idProduto, int idArmazem) {
+    public ObservableList<ProdutoDesconto> getEntityByID(int idProduto) {
         ObservableList<ProdutoDesconto> lista = FXCollections.observableArrayList();
         ProdutoDesconto pd = null;
         try {
@@ -96,10 +121,9 @@ public class ProdutoDescontoDAO {
                     + "	join produto p on pd.idProduto=p.id "
                     + " join desconto d on pd.idDesconto=d.id "
                     + " join armazem a on pd.idArmazem=a.id "
-                    + " where idProduto=? and idArmazem=?";
+                    + " where idProduto=? ";
             ps = con.prepareStatement(sql);
             ps.setInt(1,  idProduto);
-            ps.setInt(2,  idArmazem);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -179,7 +203,7 @@ public class ProdutoDescontoDAO {
         pd.setDataFim("2025-09-21");
 //        dao.addEntity(pd);
 
-        for(ProdutoDesconto des: dao.getEntityByID(1,1)){
+        for(ProdutoDesconto des: dao.getEntityByID(1)){
             System.out.println(des.getDesconto().getPercentagem());
         }
 //        dao.delete(pd);

@@ -92,13 +92,14 @@ public class ServiceProdutoDesconto {
         pd.setDataInicio(dataInicio);
         pd.setDataFim(dataFim);
         if (dao.addEntity(pd)) {
+            dao.callAplicaDesconto(pd);
             setOpsSuccess(true);
             showSuccessAlert("Desconto registado com sucesso!");
         }
     }
     
-    public ObservableList<ProdutoDesconto> consultaProdutoDesconto(int idProduto, int idArmazem) {
-        return dao.getEntityByID(idProduto, idArmazem);
+    public ObservableList<ProdutoDesconto> consultaProdutoDesconto(int idProduto) {
+        return dao.getEntityByID(idProduto);
     }
 
 }

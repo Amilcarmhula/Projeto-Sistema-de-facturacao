@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javax.swing.JOptionPane;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.imposto.Imposto;
@@ -35,6 +36,58 @@ public class StockDAO implements StockDAOImpl<Stock> {
         this.con = Conexao.getConexao();
     }
 
+    
+    public Stock getProdutoForStock(int idProduto) {
+        Stock s = null;
+        try {
+            sql = "select p.id as idProduto, p.nome as nomeProduto, p.codigo_barra, "
+                    + " p.descricao,p.controle_stock, p.nivelstock, p.tipoProduto, p.unidadePorTipo, "
+                    + " c.id as idCategoria,c.grupo, c.subgrupo, c.familia,"
+                    + " u.id as idUnidade, u.nome as nomeUnidade, u.sigla as siglaUnidade, "
+                    + " s.saldo "
+                    + " from  produto p "
+                    + " left join stock s on p.id=s.idProduto "
+                    + " left join categoria c on p.idCategoria=c.id "
+                    + " left join unidadeMedida u on p.idUnidade=u.id where p.id=? ";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idProduto);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                s = new Stock();
+                Produto p = new Produto();
+                p.setId(result.getInt("idProduto"));
+                p.setNome(result.getString("nomeProduto"));
+                p.setCodigo_barra(result.getString("codigo_barra"));
+                p.setDescricao(result.getString("descricao"));
+                p.setControle_stock(result.getBoolean("controle_stock"));
+                p.setNivelstock(result.getInt("nivelstock"));
+                p.setTipoProduto(result.getString("tipoProduto"));
+                p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
+                Categoria cat = new Categoria();
+                cat.setId(result.getInt("idCategoria"));
+                cat.setGrupo(result.getString("grupo"));
+                cat.setSubgrupo(result.getString("subgrupo"));
+                cat.setFamilia(result.getString("familia"));
+                p.setCategoria(cat);
+                UnidadeMedida u = new UnidadeMedida();
+                u.setId(result.getInt("idUnidade"));
+                u.setNome(result.getString("nomeUnidade"));
+                u.setSigla(result.getString("siglaUnidade"));
+                p.setUnidadeMedida(u);
+                s.setSaldo(result.getInt("saldo"));
+                s.setProduto(p);
+
+                
+            }
+            result.close();
+            ps.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+        }
+        return s;
+    }
+
+    // corrigir
     public ObservableList<Stock> listInventario() {
 
         ObservableList<Stock> lista = FXCollections.observableArrayList();
@@ -336,51 +389,50 @@ public class StockDAO implements StockDAOImpl<Stock> {
 //        }
 
 // _______________________________________________________________________________________________________  
-        StockDAO stockDAO = new StockDAO();
-
-        // Chamar o método
-        ObservableList<Stock> inventario = stockDAO.listInventario();
-
-        // Verificar se veio algo
-        if (inventario == null || inventario.isEmpty()) {
-            System.out.println("Nenhum item encontrado no inventário.");
-        } else {
-            for (Stock s : inventario) {
-                System.out.println("=== Produto ===");
-                System.out.println("ID Produto: " + s.getProduto().getId());
-                System.out.println("Nome Produto: " + s.getProduto().getNome());
-                System.out.println("Código de Barra: " + s.getProduto().getCodigo_barra());
-                System.out.println("Descrição: " + s.getProduto().getDescricao());
-                System.out.println("Controle Stock: " + s.getProduto().isControle_stock());
-                System.out.println("Nível Stock: " + s.getProduto().getNivelstock());
-
-                System.out.println("=== Preco de Venda ===");
-                System.out.println("Preco Normal: " + s.getPrecoProdutoArmazem().getPrecoBase());
-                System.out.println("Preco Venda: " + s.getPrecoProdutoArmazem().getPrecoVenda());
-                System.out.println("Preco Final: " + s.getPrecoProdutoArmazem().getPrecoFinal());
-
-                System.out.println("=== Armazém ===");
-                System.out.println("ID Armazém: " + s.getArmazem().getId());
-                System.out.println("Nome Armazém: " + s.getArmazem().getNome_arm());
-                System.out.println("Tipo Armazém: " + s.getArmazem().getTipo());
-
-                System.out.println("=== Categoria ===");
-                System.out.println("ID Categoria: " + s.getProduto().getCategoria().getId());
-                System.out.println("Família: " + s.getProduto().getCategoria().getFamilia());
-
-                System.out.println("=== Unidade de Medida ===");
-                System.out.println("ID Unidade: " + s.getProduto().getUnidadeMedida().getId());
-                System.out.println("Sigla: " + s.getProduto().getUnidadeMedida().getSigla());
-
-                System.out.println("=== Imposto ===");
-                System.out.println("ID Imposto: " + s.getProduto().getImposto().getId());
-                System.out.println("Nome Imposto: " + s.getProduto().getImposto().getNome());
-
-                System.out.println("=== Stock ===");
-                System.out.println("Saldo: " + s.getSaldo());
-                System.out.println("----------------------------------");
-            }
-        }
-
+//        StockDAO stockDAO = new StockDAO();
+//
+//        // Chamar o método
+//        ObservableList<Stock> inventario = stockDAO.listInventario();
+//
+//        // Verificar se veio algo
+//        if (inventario == null || inventario.isEmpty()) {
+//            System.out.println("Nenhum item encontrado no inventário.");
+//        } else {
+//            for (Stock s : inventario) {
+//                System.out.println("=== Produto ===");
+//                System.out.println("ID Produto: " + s.getProduto().getId());
+//                System.out.println("Nome Produto: " + s.getProduto().getNome());
+//                System.out.println("Código de Barra: " + s.getProduto().getCodigo_barra());
+//                System.out.println("Descrição: " + s.getProduto().getDescricao());
+//                System.out.println("Controle Stock: " + s.getProduto().isControle_stock());
+//                System.out.println("Nível Stock: " + s.getProduto().getNivelstock());
+//
+//                System.out.println("=== Preco de Venda ===");
+//                System.out.println("Preco Normal: " + s.getPrecoProdutoArmazem().getPrecoBase());
+//                System.out.println("Preco Venda: " + s.getPrecoProdutoArmazem().getPrecoVenda());
+//                System.out.println("Preco Final: " + s.getPrecoProdutoArmazem().getPrecoFinal());
+//
+//                System.out.println("=== Armazém ===");
+//                System.out.println("ID Armazém: " + s.getArmazem().getId());
+//                System.out.println("Nome Armazém: " + s.getArmazem().getNome_arm());
+//                System.out.println("Tipo Armazém: " + s.getArmazem().getTipo());
+//
+//                System.out.println("=== Categoria ===");
+//                System.out.println("ID Categoria: " + s.getProduto().getCategoria().getId());
+//                System.out.println("Família: " + s.getProduto().getCategoria().getFamilia());
+//
+//                System.out.println("=== Unidade de Medida ===");
+//                System.out.println("ID Unidade: " + s.getProduto().getUnidadeMedida().getId());
+//                System.out.println("Sigla: " + s.getProduto().getUnidadeMedida().getSigla());
+//
+//                System.out.println("=== Imposto ===");
+//                System.out.println("ID Imposto: " + s.getProduto().getImposto().getId());
+//                System.out.println("Nome Imposto: " + s.getProduto().getImposto().getNome());
+//
+//                System.out.println("=== Stock ===");
+//                System.out.println("Saldo: " + s.getSaldo());
+//                System.out.println("----------------------------------");
+//            }
+//        }
     }
 }

@@ -34,6 +34,7 @@ import javafx.stage.Stage;
 import jminvsm.SysFact;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
+import jminvsm.model.produto.Produto;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
@@ -59,7 +60,8 @@ public class AddStockController implements Initializable {
     private ServiceStock serviceStock;
 
     private Usuario userData;
-    private Stock s;
+    private Stock stock;
+    private Produto prod;
     @FXML
     private Button btnAdd;
     @FXML
@@ -161,8 +163,8 @@ public class AddStockController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 //        priceFormaterProduto();
-        s = (Stock) SysFact.getData();
-        txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
+        prod = (Produto) SysFact.getData();
+        txtIDProduto.setText(String.valueOf(prod.getId()));
         try {
             service = new ServiceProdutoFornecido();
             serviceArmazem = new ServiceArmazem();
@@ -170,8 +172,8 @@ public class AddStockController implements Initializable {
             servicoprodFornecido = new ServiceProdutoFornecido();
             serviceStock = new ServiceStock();
             this.userData = SysFact.getUserData();
-            showLotes(s.getProduto().getId());
-            showResumoStock(s.getProduto().getId());
+            showLotes(prod.getId());
+            showResumoStock(prod.getId());
 
             setDetalhesProduto();
             ButtonUtilities.buttonChangeText(btnAdd, txtIDProduto);
@@ -206,6 +208,8 @@ public class AddStockController implements Initializable {
 
     public void setDetalhesProduto() {
         // Carega detalhes do produto
+        
+        Stock s = serviceStock.consultaDetalhesProduto(prod.getId());
         txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
         txtNomeProduto.setText(s.getProduto().getNome());
         txtCodigoBarrasProduto.setText(s.getProduto().getCodigo_barra());
@@ -276,8 +280,8 @@ public class AddStockController implements Initializable {
                 String.valueOf(dataAquisicao.getValue() == null ? "" : dataAquisicao.getValue()),
                 Double.valueOf(txtCustoUnitario.getText().equals("") ? "0" : txtCustoUnitario.getText())
         );
-        showLotes(s.getProduto().getId());
-        showResumoStock(s.getProduto().getId());
+        showLotes(stock.getProduto().getId());
+        showResumoStock(stock.getProduto().getId());
 
         // Gera codigo do proximo lote
         ProdutoFornecido pf = servicoprodFornecido.getLastCodeLote();

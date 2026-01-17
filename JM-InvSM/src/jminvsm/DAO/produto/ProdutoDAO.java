@@ -170,7 +170,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     }
 
     @Override
-    public ObservableList<Produto> listAllEntties() {
+    public ObservableList<Produto> listAllProducts() {
         ObservableList<Produto> lista = FXCollections.observableArrayList();
         try {
             sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
@@ -215,70 +215,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         return lista;
     }
 
-    public ObservableList<Stock> listInventario() {
-        ObservableList<Stock> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select p.id as idProduto, p.nome as nomeProduto, p.codigo_barra,"
-                    + " p.descricao,p.controle_stock, p.nivelstock, p.tipo, p.unidadePorTipo, "
-                    + "	a.id as idArmazem, a.nome as nomeArmazem, a.tipo, "
-                    + " c.id as idCategoria, c.familia, "
-                    + "	u.id as idUnidade, u.sigla as siglaUnidade, "
-                    + " i.id as idImposto, i.nome as nomeImposto, "
-                    + " pv.precoNormal, pv.precoVenda, pv.precoFinal, "
-                    + " s.saldo "
-                    + "	from  produto p "
-                    + "	join stock s on p.id=s.idProduto "
-                    + " join precovenda pv on p.id=pv.idProduto and s.idArmazem=pv.idArmazem "
-                    + " join armazem a on s.idArmazem=a.id "
-                    + " join categoria c on p.idCategoria=c.id "
-                    + " join unidade_medida u on p.idUnidade=u.id "
-                    + " join imposto i on p.idImposto=i.id ";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                Stock s = new Stock();
-                Produto p = new Produto();
-                p.setId(result.getInt("idProduto"));
-                p.setNome(result.getString("nomeProduto"));
-                p.setCodigo_barra(result.getString("codigo_barra"));
-                p.setDescricao(result.getString("descricao"));
-                p.setControle_stock(result.getBoolean("controle_stock"));
-                p.setNivelstock(result.getInt("nivelstock"));
-                p.setTipoProduto(result.getString("tipo"));
-                p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
-                PrecoProdutoArmazem ppa = new PrecoProdutoArmazem();
-                ppa.setPrecoBase(result.getDouble("PrecoProdutoArmazem"));
-                Armazem a = new Armazem();
-                ppa.setArmazem(a);
-                a.setId(result.getInt("idArmazem"));
-                a.setNome_arm(result.getString("nomeArmazem"));
-                a.setTipo(result.getString("tipo"));
-                s.setArmazem(a);
-                Categoria c = new Categoria();
-                c.setId(result.getInt("idCategoria"));
-                c.setFamilia(result.getString("familia"));
-                p.setCategoria(c);
-                UnidadeMedida u = new UnidadeMedida();
-                u.setId(result.getInt("idUnidade"));
-                u.setSigla(result.getString("siglaUnidade"));
-                p.setUnidadeMedida(u);
-                Imposto i = new Imposto();
-                i.setId(result.getInt("idImposto"));
-                i.setNome(result.getString("nomeImposto"));
-                p.setImposto(i);
-                s.setProduto(p);
-                s.setSaldo(result.getInt("saldo"));
-                lista.add(s);
-            }
-            result.close();
-            ps.close();
-        } catch (SQLException ex) {
-            System.out.println("Erro Detalhes: " + ex);
-            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
-
-        }
-        return lista;
-    }
+    
 
     /*Busca o ID do ultimo produto adicionado para poder acicionar o preco*/
     @Override

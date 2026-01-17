@@ -39,7 +39,8 @@ public class ServiceStock {
         this.stockDao = new StockDAO();
     }
     
-    public ObservableList<Stock> listaInvenarioProdutos(){
+    // metodo que buscao produtos mara mostrar na tabela de inventarios. CORRIGIR
+    public ObservableList<Stock> listaInventarioProdutos(){
         return stockDao.listInventario();
     }
     
@@ -49,6 +50,10 @@ public class ServiceStock {
     
     public ObservableList<Stock> consultaStock(Integer idCat, Integer idArm){
         return stockDao.getStock(idCat, idArm);
+    }
+    
+    public Stock consultaDetalhesProduto(Integer id){
+        return stockDao.getProdutoForStock(id);
     }
     
     public ObservableList<Stock> getResumo(Integer idPro){

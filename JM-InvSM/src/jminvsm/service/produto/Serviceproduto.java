@@ -160,7 +160,7 @@ public class ServiceProduto {
         return produtoDao.getCombinedEntities();
     }
     public ObservableList<Produto> listaTodosProdutos() {
-        return produtoDao.listAllEntties();
+        return produtoDao.listAllProducts();
     }
     public Produto getUltimo() {
         return produtoDao.getLastEntity();

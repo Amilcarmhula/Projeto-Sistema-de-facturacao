@@ -161,10 +161,10 @@
                <columns>
                   <TableColumn fx:id="idPreco" prefWidth="40.0" text="ID" />
                   <TableColumn fx:id="preco" prefWidth="77.0" text="Preco Base" />
-                  <TableColumn fx:id="precoVenda" prefWidth="101.0" text="Preco de Venda" />
-                  <TableColumn fx:id="precoFinal" prefWidth="90.0" text="Preco Final" />
-                  <TableColumn fx:id="dataValidade" prefWidth="124.0" text="Validade" />
-                  <TableColumn fx:id="estadoPreco" prefWidth="62.0" text="Estado" />
+                  <TableColumn fx:id="precoVenda" prefWidth="84.0" text="Preco Venda" />
+                  <TableColumn fx:id="precoFinal" prefWidth="84.0" text="Preco Final" />
+                  <TableColumn fx:id="dataValidade" prefWidth="93.0" text="Validade" />
+                  <TableColumn fx:id="estadoPreco" prefWidth="113.0" text="Estado" />
                </columns>
             </TableView>
             <TextField fx:id="txtIDPreco" alignment="CENTER" disable="true" layoutX="450.0" layoutY="48.0" prefHeight="30.0" prefWidth="90.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
@@ -316,9 +316,9 @@
          <columns>
             <TableColumn fx:id="pdProduto" prefWidth="160.0" text="Produto" />
             <TableColumn fx:id="pdArmazem" prefWidth="175.0" text="Armazem" />
-            <TableColumn fx:id="pdDesconto" prefWidth="261.0" text="Desconto" />
-            <TableColumn fx:id="pdDataInicial" prefWidth="86.0" text="Data Inicio" />
-            <TableColumn fx:id="pdDataFinal" prefWidth="81.0" text="Data Fim" />
+            <TableColumn fx:id="pdDesconto" prefWidth="257.0" text="Desconto" />
+            <TableColumn fx:id="pdDataInicial" prefWidth="85.0" text="Data Inicio" />
+            <TableColumn fx:id="pdDataFinal" prefWidth="86.0" text="Data Fim" />
             <TableColumn fx:id="pdPercentagem" prefWidth="50.0" text="\%" />
          </columns>
       </TableView>

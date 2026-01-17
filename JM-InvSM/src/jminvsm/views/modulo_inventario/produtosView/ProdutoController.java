@@ -297,29 +297,19 @@ public class ProdutoController implements Initializable {
         }
     }
 
-    public void getData() {
-        txtPreco.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!oldValue && newValue) {
-                    if (SysFact.getData() instanceof Double) {
-                        txtPreco.setText(SysFact.getData() + "");
-                    }
-                }
-            }
-        });
-    }
+//    public void getData() {
+//        txtPreco.focusedProperty().addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+//                if (!oldValue && newValue) {
+//                    if (SysFact.getData() instanceof Double) {
+//                        txtPreco.setText(SysFact.getData() + "");
+//                    }
+//                }
+//            }
+//        });
+//    }
 
-    public void getDataOnFocus() {
-        tabelaProduto.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!oldValue && newValue) {
-                    showProdutos();
-                }
-            }
-        });
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -335,8 +325,7 @@ public class ProdutoController implements Initializable {
             serDesconto = new ServiceDesconto();
             serProDesconto = new ServiceProdutoDesconto();
 
-            getData();
-            getDataOnFocus();
+//            getData();
             showProdutos();
 //            showDescontos();
         } catch (SQLException ex) {
@@ -646,14 +635,7 @@ public class ProdutoController implements Initializable {
     }
 //  ############################################################################
 
-    public void selecionaProduto(MouseEvent event) throws SQLException {
-//        TablePosition pos = tabelaProduto.getSelectionModel().getSelectedCells().get(0);
-//        int linha = pos.getRow();
-//        TableColumn coluna = tabelaProduto.getColumns().get(0);
-//        Object obj = coluna.getCellData(linha);
-//
-//        System.out.println("Valor: " + obj);
-
+    public void selecionaProduto(MouseEvent event) {
         Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
             Produto p = mapaProdutos.get(x.getId());
@@ -672,23 +654,22 @@ public class ProdutoController implements Initializable {
             labCategoria.setText(p.getCategoria().getGrupo() + " > " + p.getCategoria().getSubgrupo() + " > " + p.getCategoria().getFamilia());
             stockControlChecked();
             showResumoStock(x.getId());
-//            showPrecoProdutoArmazem();
+            showPrecoProdutoArmazem();
+            showProdutoDesconto();
 
             if (event.getClickCount() == 2 && p.isControle_stock()) {
                 SysFact.setData(p);
                 getStockView(event);
             }
             deleteProduto(event, x);
-            ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
+//            ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
         }
-        showPrecoProdutoArmazem();
-        showProdutoDesconto();
 
     }
 
     private ObservableList<Stock> listaResumoStock;
 
-    public void showResumoStock(int id) throws SQLException {
+    public void showResumoStock(int id)  {
         listaResumoStock = serviceStock.getResumo(id);
 
         armazemResumoStock.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));

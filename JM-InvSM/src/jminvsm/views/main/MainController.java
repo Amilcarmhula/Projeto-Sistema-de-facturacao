@@ -104,7 +104,8 @@ public class MainController implements Initializable {
         } else if (e.getSource() == btn_armazem) {
             path = "/jminvsm/views/modulo_inventario/armazemView/armazemView.fxml";
         } else if (e.getSource() == btn_vendas) {
-            path = "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
+//            path = "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
+            path = "/jminvsm/views/modulo_venda/vendaView/vendasFactura/vendasPorFacturacaoView.fxml";
         } else if (e.getSource() == btn_pagamento) {
             path = "/jminvsm/views/modulo_venda/pagamentosView/pagamentoView.fxml";
         }

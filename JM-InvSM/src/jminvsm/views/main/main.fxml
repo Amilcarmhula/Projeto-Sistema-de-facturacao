@@ -167,6 +167,24 @@
                                                 <String fx:value="shadow-efect" />
                                              </styleClass>
                                           </Button>
+                                          <Button fx:id="btn_vendasPOS" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="POS" textFill="WHITE">
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="btn_vendasFactura" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Factura" textFill="WHITE">
+                                             <styleClass>
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Button>
                                        </children>
                                        <padding>
                                           <Insets top="5.0" />

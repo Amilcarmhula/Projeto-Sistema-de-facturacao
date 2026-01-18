@@ -5,10 +5,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,293 +19,262 @@
 
 <AnchorPane prefHeight="909.0" prefWidth="1400.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.vendaView.vendasPOS.VendasPOSController">
    <children>
-      <AnchorPane layoutY="60.0" prefHeight="430.0" prefWidth="470.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0">
+      <AnchorPane layoutY="60.0" prefHeight="187.0" prefWidth="1400.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <VBox layoutX="10.0" layoutY="60.0" prefWidth="445.0">
-               <children>
-                  <HBox>
-                     <children>
-                        <Label fx:id="labTotalFactura1" prefHeight="30.0" prefWidth="171.0" text="Tipo de Factura:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="combTipoDoc" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="274.0" promptText="Selecione o tipo de factura a emitir" />
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minWidth="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" prefWidth="166.0" text="N° Da Factura:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labNumeroFactura" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="279.0" text="..." textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura2" prefHeight="30.0" prefWidth="179.0" text="Data de Emissao:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labDataInicial" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="264.0" text="..." textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura" prefHeight="30.0" prefWidth="130.0" text="Vencimento:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labValidade" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="312.0" text="..." textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura3" prefHeight="30.0" prefWidth="262.0" text="Metodo de Pagamento:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="combTipoDoc1" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="196.0" promptText="Transferencia Bancaria" />
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura31" prefHeight="30.0" prefWidth="114.0" text="Vendedor:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labValidade2" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="327.0" text="..." textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-               </children>
-            </VBox>
             <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <Label fx:id="labTotalFactura12" layoutX="64.0" layoutY="14.0" prefHeight="30.0" prefWidth="279.0" text="Dados Da Factura" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Label fx:id="labTotalFactura12" layoutX="30.0" prefHeight="50.0" prefWidth="120.0" text="POS Loja:" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
-                        <Font size="24.0" />
+                        <Font name="System Bold" size="26.0" />
                      </font>
+                  </Label>
+                  <Label fx:id="labTotalFactura121" layoutX="154.0" prefHeight="50.0" prefWidth="266.0" text="Nome da Loja" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="26.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="combTipoDoc12" layoutX="420.0" onAction="#selecionaFactura" prefHeight="50.0" prefWidth="517.0" promptText="Armazem" stylesheets="@../../../../style/posStyleTable.css" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="1079.0" opacity="0.8" prefHeight="50.0" prefWidth="464.0" text="Vendedor:" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
                   </Label>
                </children>
             </AnchorPane>
-            <Button fx:id="btnAddItem1" layoutX="37.0" layoutY="293.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" stylesheets="@../../../style/dashboard.css" text="Gerar Referencia" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
+            <TextField fx:id="txtIDCliente11" layoutX="10.0" layoutY="64.0" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="50.0" prefWidth="931.0" promptText="Passe o codigo no leitor ou digite o nome do produto" stylesheets="@../../../../style/posStyleTable.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
-                  <String fx:value="secondary-color" />
+                  <String fx:value="Squared-border" />
                   <String fx:value="hand-efect" />
-                  <String fx:value="shadow-efect" />
                </styleClass>
-            </Button>
-            <Button fx:id="btnAddItem11" layoutX="238.0" layoutY="293.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" stylesheets="@../../../style/dashboard.css" text="Carregar Factura" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font size="20.0" />
                </font>
+            </TextField>
+            <AnchorPane layoutX="751.0" layoutY="64.0" opacity="0.5" prefHeight="50.0" prefWidth="190.0">
+               <children>
+                  <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="73.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="3.0" AnchorPane.topAnchor="3.0">
+                     <image>
+                        <Image url="@../../../../image/icons/repeat.png" />
+                     </image>
+                  </ImageView>
+               </children>
                <styleClass>
-                  <String fx:value="text-squared-border" />
                   <String fx:value="secondary-color" />
-                  <String fx:value="hand-efect" />
-                  <String fx:value="shadow-efect" />
+                  <String fx:value="Squared-border" />
                </styleClass>
-            </Button>
-            <Button fx:id="btnAddItem12" layoutX="136.0" layoutY="348.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" stylesheets="@../../../style/dashboard.css" text="Nova Factura" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="secondary-color" />
-                  <String fx:value="hand-efect" />
-                  <String fx:value="shadow-efect" />
-               </styleClass>
-            </Button>
+            </AnchorPane>
+            <HBox layoutX="10.0" layoutY="124.0" prefHeight="50.0" prefWidth="700.0">
+               <children>
+                  <ToggleButton minHeight="50.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="350.0" text="Por Codigo" textFill="WHITE">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="toggleGruop" />
+                     </toggleGroup>
+                     <styleClass>
+                        <String fx:value="Squared-border" />
+                        <String fx:value="primary-color" />
+                        <String fx:value="hand-efect" />
+                     </styleClass>
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                  </ToggleButton>
+                  <ToggleButton minHeight="50.0" mnemonicParsing="false" prefWidth="350.0" text="Por Nome" textFill="WHITE" toggleGroup="$toggleGruop">
+                     <styleClass>
+                        <String fx:value="Squared-border" />
+                        <String fx:value="primary-color" />
+                        <String fx:value="hand-efect" />
+                     </styleClass>
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </ToggleButton>
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaItens" layoutY="489.0" prefHeight="328.0" prefWidth="930.0" style="-fx-border-color: transparent;">
+      <TableView fx:id="tabelaItens" layoutY="256.0" prefHeight="502.0" prefWidth="1092.0" style="-fx-border-color: transparent;" stylesheets="@../../../../style/posStyleTable.css">
          <columns>
             <TableColumn fx:id="idtabelaItens" prefWidth="46.0" text="#" />
             <TableColumn fx:id="nometabelaItens" prefWidth="466.0" text="Descrição" />
-            <TableColumn fx:id="unidadetabelaItens" prefWidth="50.0" text="Uni." />
-            <TableColumn fx:id="taxatabelaItens" prefWidth="51.0" text="Taxa %" />
-            <TableColumn fx:id="lotetabelaItens" prefWidth="54.0" text="Lote" />
-            <TableColumn fx:id="quantidadetabelaItens" prefWidth="50.0" text="Qtd." />
-            <TableColumn fx:id="precoFinaltabelaItens" prefWidth="87.0" text="Preco Unitario" />
-            <TableColumn fx:id="subTotaltabelaItens" prefWidth="115.0" text="Total" />
+            <TableColumn fx:id="unidadetabelaItens" prefWidth="77.0" text="Uni." />
+            <TableColumn fx:id="taxatabelaItens" prefWidth="60.0" text="\%" />
+            <TableColumn fx:id="lotetabelaItens" prefWidth="65.0" text="Lote" />
+            <TableColumn fx:id="quantidadetabelaItens" prefWidth="73.0" text="Qtd." />
+            <TableColumn fx:id="precoFinaltabelaItens" prefWidth="106.0" text="Preco Uni." />
+            <TableColumn fx:id="subTotaltabelaItens" prefWidth="121.0" text="Total" />
+            <TableColumn fx:id="subTotaltabelaItens1" prefWidth="71.0" text="Accao" />
          </columns>
       </TableView>
-      <AnchorPane layoutX="1145.0" layoutY="60.0" prefHeight="430.0" prefWidth="250.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css">
+      <AnchorPane layoutX="1092.0" layoutY="256.0" prefHeight="653.0" prefWidth="308.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.rightAnchor="0.0">
          <children>
             <AnchorPane layoutX="8.0" layoutY="39.0" prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label alignment="CENTER" layoutX="196.0" text="Resumo Factura" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Label alignment="CENTER" layoutX="196.0" text="Resumo Venda" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
-                        <Font size="24.0" />
+                        <Font name="System Bold" size="25.0" />
                      </font>
                   </Label>
                </children>
             </AnchorPane>
-            <Label fx:id="labTotalFactura11" alignment="CENTER" layoutY="290.0" prefHeight="35.0" prefWidth="249.0" text="Condicao de pagamento" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <Label fx:id="labTotalFactura11" alignment="CENTER" layoutY="320.0" prefHeight="35.0" prefWidth="249.0" text="Condicao de pagamento" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <font>
-                  <Font size="21.0" />
+                  <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <RadioButton fx:id="rdPagamentoVista" layoutX="56.0" layoutY="372.0" mnemonicParsing="false" onAction="#radioVista" text="Pagamento A Vista" textFill="#fcfcfc">
+            <VBox layoutY="51.0" prefHeight="260.0" prefWidth="298.0">
+               <children>
+                  <Label minHeight="30.0" prefHeight="30.0" prefWidth="267.0" text="Sub-Total:" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                  </Label>
+                  <HBox>
+                     <children>
+                        <Label fx:id="labSubtotal" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="230.0" text="0,00" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label text="Mt" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Label minHeight="30.0" prefHeight="30.0" prefWidth="267.0" text="Taxas:" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                  </Label>
+                  <HBox>
+                     <children>
+                        <Label fx:id="labTaxas" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="230.0" text="0,00" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label text="Mt" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Label minHeight="30.0" prefHeight="30.0" prefWidth="262.0" text="Desconto:" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                  </Label>
+                  <HBox>
+                     <children>
+                        <Label fx:id="labDesconto" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="230.0" text="0,00" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label text="Mt" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="264.0" text="Total Geral:" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                  </Label>
+                  <HBox>
+                     <children>
+                        <Label fx:id="labTotalGeral" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="230.0" text="0,00" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label text="Mt" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </VBox>
+            <Label layoutY="424.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="301.0" text="Valor Recebido:" textFill="WHITE">
                <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="25.0" />
                </font>
-            </RadioButton>
-            <RadioButton fx:id="rdPagamentoParcelado" layoutX="46.0" layoutY="343.0" mnemonicParsing="false" onAction="#radioParcelado" text="Pagamento Parcelado" textFill="WHITE">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="txtIDCliente111" alignment="CENTER" layoutX="73.0" layoutY="463.0" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="50.0" prefWidth="230.0" promptText="0,00" stylesheets="@../../../../style/posStyleTable.css" AnchorPane.rightAnchor="5.0">
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="Squared-border" />
+                  <String fx:value="hand-efect" />
+               </styleClass>
                <font>
-                  <Font size="14.0" />
+                  <Font size="20.0" />
                </font>
-            </RadioButton>
-            <HBox layoutX="5.0" layoutY="66.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <Label minHeight="30.0" prefWidth="98.0" text="Sub-Total:" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="labSubtotal" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="117.0" text="0,00" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets right="5.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Label text="Mt" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox layoutX="5.0" layoutY="110.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <Label minHeight="30.0" prefWidth="98.0" text="Taxas:" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="labTaxas" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="117.0" text="0,00" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets right="5.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Label text="Mt" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox layoutX="5.0" layoutY="158.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <Label minHeight="30.0" prefWidth="98.0" text="Desconto:" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="labDesconto" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="117.0" text="0,00" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets right="5.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Label text="Mt" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox layoutX="5.0" layoutY="204.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="98.0" text="Total Geral:" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="labTotalGeral" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="117.0" text="0,00" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets right="5.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Label text="Mt" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
+            </TextField>
+            <Label layoutY="522.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="301.0" text="Trocos:" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <ComboBox fx:id="combTipoDoc121" layoutX="27.0" layoutY="361.0" onAction="#selecionaFactura" prefHeight="52.0" prefWidth="255.0" promptText="Armazem" stylesheets="@../../../../style/posStyleTable.css" />
+            <Button fx:id="btnFinalizaFactura" layoutX="5.0" layoutY="592.0" mnemonicParsing="false" onAction="#criarFactura" prefHeight="44.0" prefWidth="294.0" text="Finalizar" textFill="WHITE" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="secondary-color" />
+                  <String fx:value="hand-efect" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+            </Button>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="labTotalFactura1222" layoutX="439.0" layoutY="11.0" minWidth="-Infinity" prefHeight="50.0" prefWidth="510.0" text="Vendas Por Facturacao" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="labTotalFactura1222" layoutX="439.0" layoutY="11.0" minWidth="-Infinity" prefHeight="50.0" prefWidth="510.0" text="Vendas POS" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="32.0" />
                </font>
@@ -321,184 +291,9 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="478.0" layoutY="60.0" prefHeight="430.0" prefWidth="660.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css">
+      <AnchorPane layoutY="758.0" prefHeight="152.0" prefWidth="1092.0" styleClass="secondary-color" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
          <children>
-            <VBox layoutX="10.0" layoutY="60.0" prefHeight="214.0" prefWidth="540.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
-               <children>
-                  <HBox minHeight="-Infinity">
-                     <children>
-                        <Label fx:id="labTotalFactura12" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="ID:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtIDCliente" alignment="CENTER" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="30.0" prefWidth="125.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
-                           <styleClass>
-                              <String fx:value="text-squared-border" />
-                              <String fx:value="hand-efect" />
-                           </styleClass>
-                        </TextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" minWidth="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Tipo de Cliente:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labNumeroFactura1" prefHeight="30.0" prefWidth="340.0" text="..." textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura211" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Nome do Cliente:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtNomeCLiente1" disable="true" prefHeight="30.0" prefWidth="319.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura21" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Razao Social:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtNomeCLiente" disable="true" prefHeight="30.0" prefWidth="440.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura1" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="NUIT:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtNuitCLiente" disable="true" prefHeight="30.0" prefWidth="239.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura31" prefHeight="30.0" prefWidth="200.0" text="Tempo de Relacao:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labValidade211" prefHeight="30.0" prefWidth="327.0" text="..." textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura3111" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Contacto:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtContactoCLiente" disable="true" prefHeight="30.0" prefWidth="243.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura31111" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="E-mail:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtEmailCLiente" disable="true" prefHeight="30.0" prefWidth="328.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura31112" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Endereco:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtEnderecoCliente" disable="true" prefHeight="30.0" prefWidth="440.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura311" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Vendedor:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labValidade21" prefHeight="30.0" prefWidth="442.0" text="..." textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-               </children>
-            </VBox>
-            <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <Label fx:id="labTotalFactura121" layoutX="64.0" layoutY="14.0" prefHeight="30.0" prefWidth="279.0" text="Dados Do Cliente" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutY="817.0" prefHeight="88.0" prefWidth="930.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0">
-         <children>
-            <Button fx:id="btnCancelaFactura" layoutX="302.0" layoutY="30.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="156.0" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="302.0" AnchorPane.rightAnchor="472.0">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="secondary-color" />
-                  <String fx:value="hand-efect" />
-                  <String fx:value="shadow-efect" />
-               </styleClass>
-            </Button>
-            <Button fx:id="btnFinalizaFactura" layoutX="121.0" layoutY="30.0" mnemonicParsing="false" onAction="#criarFactura" prefHeight="30.0" prefWidth="162.0" text="Finalizar" textFill="WHITE">
+            <Button fx:id="btnCancelaFactura" layoutX="297.0" layoutY="54.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="156.0" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="297.0" AnchorPane.rightAnchor="477.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -511,45 +306,5 @@
             </Button>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="919.0" layoutY="586.0" prefHeight="287.0" prefWidth="470.0" style="-fx-border-color: transparent;" AnchorPane.rightAnchor="0.0">
-         <columns>
-            <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
-            <TableColumn fx:id="artigo" prefWidth="175.0" text="Artigo" />
-            <TableColumn fx:id="descricao" prefWidth="234.0" resizable="false" text="Descrição" />
-         </columns>
-      </TableView>
-      <HBox layoutX="936.0" layoutY="554.0" prefHeight="30.0" prefWidth="464.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <TextField fx:id="txtIDCliente1" alignment="CENTER" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="30.0" prefWidth="251.0" promptText="ID">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="hand-efect" />
-               </styleClass>
-               <HBox.margin>
-                  <Insets right="5.0" />
-               </HBox.margin>
-            </TextField>
-            <ComboBox fx:id="combTipoDoc11" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="211.0" promptText="Transferencia Bancaria" />
-         </children>
-      </HBox>
-      <HBox layoutX="1073.0" layoutY="873.0" prefHeight="30.0" prefWidth="327.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <Label fx:id="labTotalFactura122" minWidth="-Infinity" prefHeight="30.0" prefWidth="165.0" text="Saldo em Stock:">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <Label fx:id="labTotalFactura1221" alignment="CENTER" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" text="...">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
-      <Label alignment="CENTER" layoutX="1088.0" layoutY="500.0" prefHeight="40.0" prefWidth="312.0" text="Pesquisa de Itens" AnchorPane.rightAnchor="0.0">
-         <font>
-            <Font size="42.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>

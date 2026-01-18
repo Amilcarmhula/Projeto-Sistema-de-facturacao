@@ -1,0 +1,63 @@
+
+.combo-box {
+    -fx-font-size:25px;
+    -fx-font-weight: bold;
+}
+
+.text-field{
+    -fx-font-family: 'Berlin Sans FB';
+    -fx-font-size: 24px;
+    /*-fx-font-weight: bold;*/
+}
+
+.table-view {
+    -fx-border-color: #17b5c3;
+    -fx-background-color: transparent;
+    /*-fx-border-radius: 10px 10px 0px 0px;*/
+    -fx-border-width: 3px;
+    -fx-alignment: center;
+}
+
+
+.table-view .column-header-background{
+    -fx-background-color: #17b5c3;
+    /*-fx-background-radius: 10px 10px 0px 0px;*/
+}
+
+.table-view .column-header, .filter{
+    -fx-background-color: transparent;
+    -fx-size:40px;
+}
+/* Selected Row Styling */
+.table-view .table-row-cell:selected {
+    -fx-background-color: rgba(23, 180, 194, 0.5);
+    -fx-text-fill: black;
+}
+
+.table-view .column-header .label{
+    -fx-text-fill: #fff;
+    -fx-font-size: 20px;
+    /*-fx-font-family: 'Berlin Sans FB';*/
+}
+/* Row Styling */
+/* Estilizando as células da tabela */
+.table-view .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-font-size: 20px;
+    -fx-font-family: 'Berlin Sans FB';
+    
+}
+
+.table-view .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.table-view .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.table-view .scroll-bar .thumb {
+    -fx-background-color:  rgba(35, 35, 35, .5);
+    -fx-background-insets: 6;
+    -fx-background-radius: 20px;
+}

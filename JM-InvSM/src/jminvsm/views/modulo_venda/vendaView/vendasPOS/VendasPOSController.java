@@ -239,25 +239,25 @@ public class VendasPOSController implements Initializable {
 //        }
 //    }
     public void getDataOnFocus() throws SQLException {
-        txtIDCliente.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!oldValue && newValue) {
-                    if (SysFact.getData() instanceof Cliente) {
-                        Cliente c = (Cliente) SysFact.getData();
-                        Cliente x = serviceCliente.getClienteCompletoByID(c.getId());
-                        if (x != null) {
-                            txtIDCliente.setText(x.getId() + "");
-                            txtEnderecoCliente.setText(x.printEnderecos());
-                            txtNomeCLiente.setText(x.getRazao_cli());
-                            txtNuitCLiente.setText(x.getNuit_cli() + "");
-                            txtContactoCLiente.setText(x.printContatos());
-                            txtEmailCLiente.setText(x.getContactoCliente().getEmail_cli());
-                        }
-                    }
-                }
-            }
-        });
+//        txtIDCliente.focusedProperty().addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+//                if (!oldValue && newValue) {
+//                    if (SysFact.getData() instanceof Cliente) {
+//                        Cliente c = (Cliente) SysFact.getData();
+//                        Cliente x = serviceCliente.getClienteCompletoByID(c.getId());
+//                        if (x != null) {
+//                            txtIDCliente.setText(x.getId() + "");
+//                            txtEnderecoCliente.setText(x.printEnderecos());
+//                            txtNomeCLiente.setText(x.getRazao_cli());
+//                            txtNuitCLiente.setText(x.getNuit_cli() + "");
+//                            txtContactoCLiente.setText(x.printContatos());
+//                            txtEmailCLiente.setText(x.getContactoCliente().getEmail_cli());
+//                        }
+//                    }
+//                }
+//            }
+//        });
 
 //        txtID.focusedProperty().addListener(new ChangeListener<Boolean>() {
 //            @Override
@@ -334,7 +334,7 @@ public class VendasPOSController implements Initializable {
             serDesconto = new ServiceDesconto();
             serviceCliente = new ServiceCliente();
             serDocs = new ServiceDocumentos();
-            labDataInicial.setText(InvoiceUtilities.actualDate());
+//            labDataInicial.setText(InvoiceUtilities.actualDate());
             populateComboFactura();
             getDataOnFocus();
         } catch (SQLException ex) {
@@ -356,7 +356,7 @@ public class VendasPOSController implements Initializable {
             }
 
         }
-        combTipoDoc.setItems(FXCollections.observableArrayList(lista));
+//        combTipoDoc.setItems(FXCollections.observableArrayList(lista));
     }
 
     public void populateTableItems(ActionEvent e) {

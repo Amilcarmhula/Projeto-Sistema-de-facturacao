@@ -57,6 +57,10 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btn_vendas;
+    @FXML
+    private Button btn_vendasPOS;
+    @FXML
+    private Button btn_vendasFactura;
 
     /*Butoes do modulo de configuracao*/
     @FXML
@@ -104,6 +108,12 @@ public class MainController implements Initializable {
         } else if (e.getSource() == btn_armazem) {
             path = "/jminvsm/views/modulo_inventario/armazemView/armazemView.fxml";
         } else if (e.getSource() == btn_vendas) {
+            path = "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
+//            path = "/jminvsm/views/modulo_venda/vendaView/vendasFactura/vendasPorFacturacaoView.fxml";
+        } else if (e.getSource() == btn_vendasPOS) {
+//            path = "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
+            path = "/jminvsm/views/modulo_venda/vendaView/vendasPOS/vendasPOSView.fxml";
+        } else if (e.getSource() == btn_vendasFactura) {
 //            path = "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
             path = "/jminvsm/views/modulo_venda/vendaView/vendasFactura/vendasPorFacturacaoView.fxml";
         } else if (e.getSource() == btn_pagamento) {

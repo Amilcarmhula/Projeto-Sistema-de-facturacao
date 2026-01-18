@@ -109,7 +109,7 @@ public class SearchProdutoController implements Initializable {
     private Map<String, Stock> mapaProdutos;
 
     public void showInvenarioProdutos() {
-        listaProduto = serStock.listaInventarioProdutos();
+        listaProduto = serStock.listaStockProdutos();
         mapaProdutos = new HashMap<>();
         for (Stock s : listaProduto) {
             mapaProdutos.put(s.getProduto().getId() + "," + s.getArmazem().getId(), s);

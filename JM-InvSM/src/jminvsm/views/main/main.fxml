@@ -175,6 +175,9 @@
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
                                           </Button>
                                           <Button fx:id="btn_vendasFactura" alignment="CENTER" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="286.0" stylesheets="@../../style/dashboard.css" text="Factura" textFill="WHITE">
                                              <styleClass>
@@ -184,6 +187,9 @@
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="4.0" />
+                                             </VBox.margin>
                                           </Button>
                                        </children>
                                        <padding>

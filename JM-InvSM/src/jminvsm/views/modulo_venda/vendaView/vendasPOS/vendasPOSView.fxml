@@ -33,7 +33,7 @@
                         <Font name="System Bold" size="26.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="combTipoDoc12" layoutX="420.0" onAction="#selecionaFactura" prefHeight="50.0" prefWidth="517.0" promptText="Armazem" stylesheets="@../../../../style/posStyleTable.css" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ComboBox fx:id="combTipoDoc12" layoutX="420.0" minHeight="-Infinity" onAction="#selecionaFactura" prefHeight="50.0" prefWidth="517.0" promptText="Armazem" stylesheets="@../../../../style/posStyleTable.css" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <Label alignment="CENTER_RIGHT" layoutX="1079.0" opacity="0.8" prefHeight="50.0" prefWidth="464.0" text="Vendedor:" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font name="System Bold" size="30.0" />
@@ -96,7 +96,7 @@
             </HBox>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaItens" layoutY="256.0" prefHeight="502.0" prefWidth="1092.0" style="-fx-border-color: transparent;" stylesheets="@../../../../style/posStyleTable.css">
+      <TableView fx:id="tabelaItens" layoutY="252.0" minHeight="-Infinity" prefHeight="504.0" prefWidth="1092.0" style="-fx-border-color: transparent;" stylesheets="@../../../../style/posStyleTable.css">
          <columns>
             <TableColumn fx:id="idtabelaItens" prefWidth="46.0" text="#" />
             <TableColumn fx:id="nometabelaItens" prefWidth="466.0" text="Descrição" />
@@ -261,7 +261,7 @@
             <ComboBox fx:id="combTipoDoc121" layoutX="27.0" layoutY="361.0" onAction="#selecionaFactura" prefHeight="52.0" prefWidth="255.0" promptText="Armazem" stylesheets="@../../../../style/posStyleTable.css" />
             <Button fx:id="btnFinalizaFactura" layoutX="5.0" layoutY="592.0" mnemonicParsing="false" onAction="#criarFactura" prefHeight="44.0" prefWidth="294.0" text="Finalizar" textFill="WHITE" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font name="System Bold" size="25.0" />
                </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
@@ -293,9 +293,9 @@
       </AnchorPane>
       <AnchorPane layoutY="758.0" prefHeight="152.0" prefWidth="1092.0" styleClass="secondary-color" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
          <children>
-            <Button fx:id="btnCancelaFactura" layoutX="297.0" layoutY="54.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="156.0" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="297.0" AnchorPane.rightAnchor="477.0">
+            <Button fx:id="btnCancelaFactura" layoutX="763.0" layoutY="91.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="156.0" text="Cancelar" textFill="WHITE" AnchorPane.leftAnchor="763.0" AnchorPane.rightAnchor="11.0">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font name="System Bold" size="25.0" />
                </font>
                <styleClass>
                   <String fx:value="text-squared-border" />
@@ -304,6 +304,16 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
+            <Label layoutX="897.0" layoutY="14.0" prefHeight="35.0" prefWidth="190.0" text="0,00" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER_RIGHT" layoutX="776.0" layoutY="14.0" prefWidth="121.0" text="Total:  " textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

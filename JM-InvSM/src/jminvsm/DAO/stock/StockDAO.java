@@ -36,7 +36,6 @@ public class StockDAO implements StockDAOImpl<Stock> {
         this.con = Conexao.getConexao();
     }
 
-    
     public Stock getProdutoForStock(int idProduto) {
         Stock s = null;
         try {
@@ -77,7 +76,6 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 s.setSaldo(result.getInt("saldo"));
                 s.setProduto(p);
 
-                
             }
             result.close();
             ps.close();
@@ -88,53 +86,40 @@ public class StockDAO implements StockDAOImpl<Stock> {
     }
 
     // corrigir
-    public ObservableList<Stock> listInventario() {
+    public ObservableList<Stock> listStock() {
 
         ObservableList<Stock> lista = FXCollections.observableArrayList();
 
         try {
             sql = "SELECT "
-                    + "    p.id               AS idProduto,"
-                    + "    p.nome             AS nomeProduto, "
-                    + "    p.codigo_barra, "
-                    + "    p.descricao, "
-                    + "    p.controle_stock, "
-                    + "    p.nivelstock, "
-                    + "    p.tipoProduto, "
-                    + "    p.unidadePorTipo, "
-                    + "    a.id               AS idArmazem, "
-                    + "    a.nome             AS nomeArmazem, "
-                    + "    a.tipo             AS tipoArmazem, "
-                    + "    c.id               AS idCategoria, "
-                    + "    c.grupo, "
-                    + "    c.subgrupo, "
-                    + "    c.familia, "
-                    + "    u.id               AS idUnidade, "
-                    + "    u.nome             AS unidadeNome, "
-                    + "    u.sigla            AS siglaUnidade, "
-                    + "    i.id               AS idImposto, "
-                    + "    i.nome             AS nomeImposto, "
-                    + "    i.percentagem      AS impPerc, "
-                    + "    pv.precoNormal, "
-                    + "    pv.precoVenda, "
-                    + "    pv.precoFinal, "
-                    + "    pv.estado          AS estadoPreco, "
+                    + "    p.id                    AS idProduto,"
+                    + "    p.nome                  AS nomeProduto,"
+                    + "    p.descricao             AS descricaoProduto,"
+                    + "    p.unidadePorTipo,"
+                    + "    um.nome                 AS nomeUnidade,"
+                    + "    um.sigla                AS siglaUnidade,"
+                    + "    i.id                    AS idImposto,"
+                    + "    i.nome                  AS nomeImposto,"
+                    + "    i.percentagem           AS percentagemImposto,"
+                    + "    ppa.idArmazem,"
+                    + "    ppa.precoBase,"
+                    + "    ppa.precoVenda,"
+                    + "    ppa.precoFinal,"
+                    + "    ppa.dataInicioVigencia,"
+                    + "    ppa.dataFimVigencia,"
+                    + "    ppa.estado AS estadoPreco,"
                     + "    s.saldo "
                     + "FROM stock s "
-                    + "JOIN produto p       ON p.id = s.idProduto "
-                    + "JOIN armazem a       ON a.id = s.idArmazem "
-                    + "JOIN categoria c     ON c.id = p.idCategoria "
-                    + "LEFT JOIN unidadeMedida u ON u.id = p.idUnidade "
-                    + "LEFT JOIN imposto i  ON i.id = p.idImposto "
-                    + "LEFT JOIN precovenda pv "
-                    + "    ON pv.id = ("
-                    + "        SELECT pv2.id "
-                    + "        FROM precovenda pv2 "
-                    + "        WHERE pv2.idProduto = s.idProduto "
-                    + "          AND pv2.idArmazem = s.idArmazem "
-                    + "          AND pv2.estado = 'activo' "
-                    + "        ORDER BY pv2.data_criacao DESC "
-                    + "        LIMIT 1 )";
+                    + "JOIN produto p "
+                    + "    ON p.id = s.idProduto "
+                    + "LEFT JOIN unidadeMedida um "
+                    + "    ON um.id = p.idUnidade "
+                    + "LEFT JOIN imposto i "
+                    + "    ON i.id = p.idImposto "
+                    + "LEFT JOIN precoProdutoArmazem ppa "
+                    + "    ON ppa.idProduto = s.idProduto "
+                    + "   AND ppa.idArmazem = s.idArmazem "
+                    + "   AND ppa.estado = 'activo'  OR ppa.estado = 'NULL'";
             ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
@@ -145,41 +130,29 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 Produto p = new Produto();
                 p.setId(rs.getInt("idProduto"));
                 p.setNome(rs.getString("nomeProduto"));
-                p.setCodigo_barra(rs.getString("codigo_barra"));
-                p.setDescricao(rs.getString("descricao"));
-                p.setControle_stock(rs.getBoolean("controle_stock"));
-                p.setNivelstock(rs.getInt("nivelstock"));
-                p.setTipoProduto(rs.getString("tipoProduto"));
+                p.setDescricao(rs.getString("descricaoProduto"));
                 p.setUnidadesPorTipo(rs.getInt("unidadePorTipo"));
 
-                Categoria c = new Categoria();
-                c.setId(rs.getInt("idCategoria"));
-                c.setGrupo(rs.getString("grupo"));
-                c.setSubgrupo(rs.getString("subgrupo"));
-                c.setFamilia(rs.getString("familia"));
-                p.setCategoria(c);
-
                 UnidadeMedida u = new UnidadeMedida();
-                u.setId(rs.getInt("idUnidade"));
-                u.setNome(rs.getString("unidadeNome"));
+                u.setNome(rs.getString("nomeUnidade"));
                 u.setSigla(rs.getString("siglaUnidade"));
                 p.setUnidadeMedida(u);
 
                 Imposto i = new Imposto();
                 i.setId(rs.getInt("idImposto"));
                 i.setNome(rs.getString("nomeImposto"));
-                i.setPercentagem(rs.getDouble("impPerc"));
+                i.setPercentagem(rs.getDouble("percentagemImposto"));
                 p.setImposto(i);
 
                 Armazem a = new Armazem();
                 a.setId(rs.getInt("idArmazem"));
-                a.setNome_arm(rs.getString("nomeArmazem"));
-                a.setTipo(rs.getString("tipoArmazem"));
 
                 PrecoProdutoArmazem pv = new PrecoProdutoArmazem();
-                pv.setPrecoBase(rs.getDouble("preco"));
+                pv.setPrecoBase(rs.getDouble("precoBase"));
                 pv.setPrecoVenda(rs.getDouble("precoVenda"));
                 pv.setPrecoFinal(rs.getDouble("precoFinal"));
+                pv.setDataInicioVigencia(rs.getString("dataInicioVigencia"));
+                pv.setDataFimVigencia(rs.getString("dataFimVigencia"));
                 pv.setEstado(rs.getString("estadoPreco"));
 
                 stock.setProduto(p);
@@ -362,7 +335,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
 //        StockDAO dao = new StockDAO();
 //
 //        // Executa o método que queremos testar
-//        ObservableList<Stock> inventario = dao.listInventario();
+//        ObservableList<Stock> inventario = dao.listStock();
 //
 //        System.out.println("=== Teste de Inventário ===");
 //        for (Stock s : inventario) {
@@ -392,7 +365,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
 //        StockDAO stockDAO = new StockDAO();
 //
 //        // Chamar o método
-//        ObservableList<Stock> inventario = stockDAO.listInventario();
+//        ObservableList<Stock> inventario = stockDAO.listStock();
 //
 //        // Verificar se veio algo
 //        if (inventario == null || inventario.isEmpty()) {

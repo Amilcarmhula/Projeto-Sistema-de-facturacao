@@ -18,7 +18,7 @@
 
 <AnchorPane prefHeight="909.0" prefWidth="1400.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.vendaView.vendasFactura.VendasPorFacturacaoViewController">
    <children>
-      <AnchorPane layoutY="60.0" prefHeight="430.0" prefWidth="470.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0">
+      <AnchorPane layoutY="60.0" prefHeight="430.0" prefWidth="470.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0">
          <children>
             <VBox layoutX="10.0" layoutY="60.0" prefWidth="445.0">
                <children>
@@ -118,7 +118,7 @@
                   </HBox>
                </children>
             </VBox>
-            <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <Label fx:id="labTotalFactura12" layoutX="64.0" layoutY="14.0" prefHeight="30.0" prefWidth="279.0" text="Dados Da Factura" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
@@ -127,7 +127,7 @@
                   </Label>
                </children>
             </AnchorPane>
-            <Button fx:id="btnAddItem1" layoutX="37.0" layoutY="293.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" stylesheets="@../../../style/dashboard.css" text="Gerar Referencia" textFill="WHITE">
+            <Button fx:id="btnAddItem1" layoutX="37.0" layoutY="293.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" text="Gerar Referencia" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -138,7 +138,7 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <Button fx:id="btnAddItem11" layoutX="238.0" layoutY="293.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" stylesheets="@../../../style/dashboard.css" text="Carregar Factura" textFill="WHITE">
+            <Button fx:id="btnAddItem11" layoutX="238.0" layoutY="293.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" text="Carregar Factura" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -149,7 +149,7 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <Button fx:id="btnAddItem12" layoutX="136.0" layoutY="348.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" stylesheets="@../../../style/dashboard.css" text="Nova Factura" textFill="WHITE">
+            <Button fx:id="btnAddItem12" layoutX="136.0" layoutY="348.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" text="Nova Factura" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -174,9 +174,9 @@
             <TableColumn fx:id="subTotaltabelaItens" prefWidth="115.0" text="Total" />
          </columns>
       </TableView>
-      <AnchorPane layoutX="1145.0" layoutY="60.0" prefHeight="430.0" prefWidth="250.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css">
+      <AnchorPane layoutX="1145.0" layoutY="60.0" prefHeight="430.0" prefWidth="250.0" styleClass="secondary-color">
          <children>
-            <AnchorPane layoutX="8.0" layoutY="39.0" prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane layoutX="8.0" layoutY="39.0" prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label alignment="CENTER" layoutX="196.0" text="Resumo Factura" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
@@ -302,7 +302,7 @@
             </HBox>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="labTotalFactura1222" layoutX="439.0" layoutY="11.0" minWidth="-Infinity" prefHeight="50.0" prefWidth="510.0" text="Vendas Por Facturacao" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
@@ -321,7 +321,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="478.0" layoutY="60.0" prefHeight="430.0" prefWidth="660.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css">
+      <AnchorPane layoutX="478.0" layoutY="60.0" prefHeight="430.0" prefWidth="660.0" styleClass="secondary-color">
          <children>
             <VBox layoutX="10.0" layoutY="60.0" prefHeight="214.0" prefWidth="540.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                <children>
@@ -332,7 +332,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtIDCliente" alignment="CENTER" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="30.0" prefWidth="125.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
+                        <TextField fx:id="txtIDCliente" alignment="CENTER" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="30.0" prefWidth="125.0" promptText="ID">
                            <styleClass>
                               <String fx:value="text-squared-border" />
                               <String fx:value="hand-efect" />
@@ -367,7 +367,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtNomeCLiente1" disable="true" prefHeight="30.0" prefWidth="319.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+                        <TextField fx:id="txtNomeCLiente1" disable="true" prefHeight="30.0" prefWidth="319.0" promptText="Nome do cliente" styleClass="text-squared-border" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -380,7 +380,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtNomeCLiente" disable="true" prefHeight="30.0" prefWidth="440.0" promptText="Nome do cliente" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+                        <TextField fx:id="txtNomeCLiente" disable="true" prefHeight="30.0" prefWidth="440.0" promptText="Nome do cliente" styleClass="text-squared-border" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -393,7 +393,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtNuitCLiente" disable="true" prefHeight="30.0" prefWidth="239.0" promptText="NUIT" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+                        <TextField fx:id="txtNuitCLiente" disable="true" prefHeight="30.0" prefWidth="239.0" promptText="NUIT" styleClass="text-squared-border" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -423,7 +423,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtContactoCLiente" disable="true" prefHeight="30.0" prefWidth="243.0" promptText="Contacto" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+                        <TextField fx:id="txtContactoCLiente" disable="true" prefHeight="30.0" prefWidth="243.0" promptText="Contacto" styleClass="text-squared-border" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -436,7 +436,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtEmailCLiente" disable="true" prefHeight="30.0" prefWidth="328.0" promptText="Email" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+                        <TextField fx:id="txtEmailCLiente" disable="true" prefHeight="30.0" prefWidth="328.0" promptText="Email" styleClass="text-squared-border" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -449,7 +449,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtEnderecoCliente" disable="true" prefHeight="30.0" prefWidth="440.0" promptText="Endereço do cliente " styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+                        <TextField fx:id="txtEnderecoCliente" disable="true" prefHeight="30.0" prefWidth="440.0" promptText="Endereço do cliente " styleClass="text-squared-border" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -474,7 +474,7 @@
                   </HBox>
                </children>
             </VBox>
-            <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <Label fx:id="labTotalFactura121" layoutX="64.0" layoutY="14.0" prefHeight="30.0" prefWidth="279.0" text="Dados Do Cliente" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
@@ -513,14 +513,14 @@
       </AnchorPane>
       <TableView fx:id="tabelaProduto" layoutX="919.0" layoutY="586.0" prefHeight="287.0" prefWidth="470.0" style="-fx-border-color: transparent;" AnchorPane.rightAnchor="0.0">
          <columns>
-            <TableColumn fx:id="ID" prefWidth="53.0" text="ID" />
-            <TableColumn fx:id="artigo" prefWidth="175.0" text="Artigo" />
-            <TableColumn fx:id="descricao" prefWidth="234.0" resizable="false" text="Descrição" />
+            <TableColumn fx:id="IDtabelaProduto" prefWidth="53.0" text="ID" />
+            <TableColumn fx:id="artigotabelaProduto" prefWidth="175.0" text="Artigo" />
+            <TableColumn fx:id="descricaotabelaProduto" prefWidth="234.0" resizable="false" text="Descrição" />
          </columns>
       </TableView>
       <HBox layoutX="936.0" layoutY="554.0" prefHeight="30.0" prefWidth="464.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <TextField fx:id="txtIDCliente1" alignment="CENTER" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="30.0" prefWidth="251.0" promptText="ID">
+            <TextField fx:id="txtPesquisar" alignment="CENTER" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="30.0" prefWidth="251.0" promptText="ID">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="hand-efect" />

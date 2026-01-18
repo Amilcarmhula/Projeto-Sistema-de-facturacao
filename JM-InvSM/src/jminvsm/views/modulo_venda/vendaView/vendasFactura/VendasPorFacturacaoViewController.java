@@ -19,14 +19,18 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -38,6 +42,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
+import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
 import jminvsm.SysFact;
 import jminvsm.model.armazem.Armazem;
@@ -52,6 +57,7 @@ import jminvsm.model.vendas.factura.itens.Item;
 import jminvsm.service.cliente.ServiceCliente;
 import jminvsm.service.desconto.ServiceDesconto;
 import jminvsm.service.documentosComerciais.ServiceDocumentos;
+import jminvsm.service.stock.ServiceStock;
 import jminvsm.service.vendas.factura.ServiceFactura;
 import jminvsm.util.AlertUtilities;
 import jminvsm.util.InvoiceUtilities;
@@ -69,6 +75,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
     private ServiceCliente serviceCliente;
     private ServiceDesconto serDesconto;
     private ServiceDocumentos serDocs;
+    private ServiceStock serviceStock;
 
     private Empresa empresaData;
     private Usuario userData;
@@ -99,6 +106,17 @@ public class VendasPorFacturacaoViewController implements Initializable {
 
     @FXML
     private Label labTotalGeral;
+    
+    @FXML
+    private TableView<Stock> tabelaProduto;
+    @FXML
+    private TableColumn<Stock, String> IDtabelaProduto;
+     @FXML
+    private TableColumn<Stock, String> artigotabelaProduto;
+    @FXML
+    private TableColumn<Stock, String> descricaotabelaProduto;
+    @FXML
+    private TextField txtPesquisar;
 
     @FXML
     private TableView<Item> tabelaItens;
@@ -313,7 +331,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getImposto().getPercentagem()) + "%"));
         subTotaltabelaItens.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
         randNum = new Random();
-        mapaProdutos = new HashMap<>();
+        mapaStock = new HashMap<>();
 
     }
 
@@ -331,12 +349,15 @@ public class VendasPorFacturacaoViewController implements Initializable {
         this.userData = SysFact.getUserData();
         this.empresaData = SysFact.getEmpresaData();
         try {
+            serviceStock= new ServiceStock();
             serDesconto = new ServiceDesconto();
             serviceCliente = new ServiceCliente();
             serDocs = new ServiceDocumentos();
             labDataInicial.setText(InvoiceUtilities.actualDate());
             populateComboFactura();
             getDataOnFocus();
+            
+            showProdutos();
         } catch (SQLException ex) {
             Logger.getLogger(VendasPorFacturacaoViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -373,7 +394,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
         }
 
         int id = Integer.parseInt(txtID.getText());
-        Stock x = mapaProdutos.get(id);
+        Stock x = mapaStock.get(id);
         Item i = new Item();
         i.setId(id);
         i.setQuantidade(qtd);
@@ -486,7 +507,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
         List<Item> listaItems = new ArrayList<>();
         for (Item item : itens) {
             i = new Item();
-            Stock p = mapaProdutos.get(item.getId());
+            Stock p = mapaStock.get(item.getId());
             
             i.setQuantidade(item.getQuantidade());
             i.setSubtotal(item.getSubtotal());
@@ -510,7 +531,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
         double taxa = 0;
         double total = 0;
         for (Item item : itens) {
-            Stock x = mapaProdutos.get(item.getId());
+            Stock x = mapaStock.get(item.getId());
             if (combTipoDoc.getValue().equals("Fatura Simplificada")) {
                 subtotal += item.getQuantidade() * x.getPrecoProdutoArmazem().getPrecoFinal();
 //                taxa += subtotal - (item.getQuantidade() * x.getProduto().getPrecoVenda().getPrecoNormal());
@@ -569,5 +590,68 @@ public class VendasPorFacturacaoViewController implements Initializable {
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/miniPagamentoView/MiniPagamentoView.fxml");
 //        }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private ObservableList<Stock> listaStock;
+    private Map<String, Stock> mapaStock;
+
+    public void showProdutos() {
+        listaStock = serviceStock.listaStockProdutos();
+        mapaStock = new HashMap<>();
+        for (Stock s : listaStock) {
+            mapaStock.put(s.getProduto().getId() + "," + s.getArmazem().getId(), s);
+        }
+
+        IDtabelaProduto.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getProduto().getId()+","+cellData.getValue().getProduto().getId()));
+        artigotabelaProduto.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
+        descricaotabelaProduto.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getProduto().getDescricao()));
+
+
+        FilteredList<Stock> dadosFiltrados = new FilteredList<>(listaStock, b -> true);
+
+        txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
+            dadosFiltrados.setPredicate(x -> {
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String filtroCaixaBaixa = newValue.toLowerCase();
+                if (x.getProduto().getNome().toLowerCase().contains(filtroCaixaBaixa)) {
+                    return true;
+                } else if (x.getProduto().getDescricao().toLowerCase().contains(filtroCaixaBaixa)) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            });
+        });
+        SortedList<Stock> sortedData = new SortedList<>(dadosFiltrados);
+        sortedData.comparatorProperty().bind(tabelaProduto.comparatorProperty());
+        //
+        tabelaProduto.setItems(sortedData);
+//        tabelaProduto.setItems(listaProduto);
+
+    }
+
 
 }

@@ -40,8 +40,8 @@ public class ServiceStock {
     }
     
     // metodo que buscao produtos mara mostrar na tabela de inventarios. CORRIGIR
-    public ObservableList<Stock> listaInventarioProdutos(){
-        return stockDao.listInventario();
+    public ObservableList<Stock> listaStockProdutos(){
+        return stockDao.listStock();
     }
     
     public ObservableList<Stock> stockBaixo(){

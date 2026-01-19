@@ -48,12 +48,14 @@ import jminvsm.SysFact;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.empresa.Empresa;
+import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.documetos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.model.vendas.factura.itens.Item;
+import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.cliente.ServiceCliente;
 import jminvsm.service.desconto.ServiceDesconto;
 import jminvsm.service.documentosComerciais.ServiceDocumentos;
@@ -115,8 +117,15 @@ public class VendasPorFacturacaoViewController implements Initializable {
     private TableColumn<Stock, String> artigotabelaProduto;
     @FXML
     private TableColumn<Stock, String> descricaotabelaProduto;
+    
     @FXML
     private TextField txtPesquisar;
+    private ServiceArmazem serviceArmazem;
+    private String nomeArmazemFilter;
+    private Integer idArmazem = null;
+    @FXML
+    private ComboBox<String> cBoxArmazem;
+
 
     @FXML
     private TableView<Item> tabelaItens;
@@ -350,6 +359,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
         this.empresaData = SysFact.getEmpresaData();
         try {
             serviceStock= new ServiceStock();
+            serviceArmazem = new ServiceArmazem();
             serDesconto = new ServiceDesconto();
             serviceCliente = new ServiceCliente();
             serDocs = new ServiceDocumentos();
@@ -358,9 +368,15 @@ public class VendasPorFacturacaoViewController implements Initializable {
             getDataOnFocus();
             
             showProdutos();
+            populateComb_Armazem();
         } catch (SQLException ex) {
             Logger.getLogger(VendasPorFacturacaoViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        cBoxArmazem.setOnAction(evt -> {
+            String data = cBoxArmazem.getSelectionModel().getSelectedItem();
+            idArmazem = mapaArmazens.get(data).getId();
+            showProdutos();
+        });
     }
 
     private ObservableList<DocumentosComerciais> listaDocComercial;
@@ -612,18 +628,20 @@ public class VendasPorFacturacaoViewController implements Initializable {
     private Map<String, Stock> mapaStock;
 
     public void showProdutos() {
-        listaStock = serviceStock.listaStockProdutos();
+        listaStock = serviceStock.listaStockProdutos(idArmazem);
         mapaStock = new HashMap<>();
         for (Stock s : listaStock) {
-            mapaStock.put(s.getProduto().getId() + "," + s.getArmazem().getId(), s);
+            mapaStock.put(s.getProduto().getId() + "#" + s.getArmazem().getId(), s);
         }
 
         IDtabelaProduto.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getProduto().getId()+","+cellData.getValue().getProduto().getId()));
+                -> new SimpleStringProperty(cellData.getValue().getProduto().getId()+"#"+cellData.getValue().getArmazem().getId()));
         artigotabelaProduto.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
         descricaotabelaProduto.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getProduto().getDescricao()));
+//        armazemtabelaProduto.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
 
 
         FilteredList<Stock> dadosFiltrados = new FilteredList<>(listaStock, b -> true);
@@ -645,12 +663,25 @@ public class VendasPorFacturacaoViewController implements Initializable {
 
             });
         });
+        
         SortedList<Stock> sortedData = new SortedList<>(dadosFiltrados);
         sortedData.comparatorProperty().bind(tabelaProduto.comparatorProperty());
         //
         tabelaProduto.setItems(sortedData);
-//        tabelaProduto.setItems(listaProduto);
+    }
+    
+    private ObservableList<Armazem> storeList;
+    private Map<String, Armazem> mapaArmazens;
 
+    public void populateComb_Armazem() {
+        storeList = serviceArmazem.listaTodosArmazens();
+        List<String> listaArm = new ArrayList<>();
+        mapaArmazens = new HashMap<>();
+        for (Armazem a : storeList) {
+            listaArm.add(a.getNome_arm());
+            mapaArmazens.put(a.getNome_arm(), a);
+        }
+        cBoxArmazem.setItems(FXCollections.observableArrayList(listaArm));
     }
 
 

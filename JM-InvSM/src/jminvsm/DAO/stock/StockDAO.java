@@ -86,7 +86,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
     }
 
     // corrigir
-    public ObservableList<Stock> listStock() {
+    public ObservableList<Stock> listStock(Integer idArm) {
 
         ObservableList<Stock> lista = FXCollections.observableArrayList();
 
@@ -95,7 +95,8 @@ public class StockDAO implements StockDAOImpl<Stock> {
                     + "    p.id                    AS idProduto,"
                     + "    p.nome                  AS nomeProduto,"
                     + "    p.descricao             AS descricaoProduto,"
-                    + "    p.unidadePorTipo,"
+                    + "    p.unidadePorTipo, "
+                    + "    a.nome as nomeArmazem, "
                     + "    um.nome                 AS nomeUnidade,"
                     + "    um.sigla                AS siglaUnidade,"
                     + "    i.id                    AS idImposto,"
@@ -110,8 +111,8 @@ public class StockDAO implements StockDAOImpl<Stock> {
                     + "    ppa.estado AS estadoPreco,"
                     + "    s.saldo "
                     + "FROM stock s "
-                    + "JOIN produto p "
-                    + "    ON p.id = s.idProduto "
+                    + "JOIN produto p ON p.id = s.idProduto "
+                    + "JOIN Armazem a ON a.id = s.idArmazem "
                     + "LEFT JOIN unidadeMedida um "
                     + "    ON um.id = p.idUnidade "
                     + "LEFT JOIN imposto i "
@@ -119,8 +120,17 @@ public class StockDAO implements StockDAOImpl<Stock> {
                     + "LEFT JOIN precoProdutoArmazem ppa "
                     + "    ON ppa.idProduto = s.idProduto "
                     + "   AND ppa.idArmazem = s.idArmazem "
-                    + "   AND ppa.estado = 'activo'  OR ppa.estado = 'NULL'";
+                    + "   AND ppa.estado = 'activo'  "
+                    + "WHERE (? IS NULL OR s.idArmazem = ?) ";
             ps = con.prepareStatement(sql);
+
+            if (idArm == null) {
+                ps.setNull(1, java.sql.Types.INTEGER); // Para ? IS NULL
+                ps.setNull(2, java.sql.Types.INTEGER); // Para ? IS NULL
+            } else {
+                ps.setInt(1, idArm);  // Para ? IS NULL
+                ps.setInt(2, idArm);  // Para ? IS NULL
+            }
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -146,6 +156,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
 
                 Armazem a = new Armazem();
                 a.setId(rs.getInt("idArmazem"));
+                a.setNome_arm(rs.getString("nomeArmazem"));
 
                 PrecoProdutoArmazem pv = new PrecoProdutoArmazem();
                 pv.setPrecoBase(rs.getDouble("precoBase"));

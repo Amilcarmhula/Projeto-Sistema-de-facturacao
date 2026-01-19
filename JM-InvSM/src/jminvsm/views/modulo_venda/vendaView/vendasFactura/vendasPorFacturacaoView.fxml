@@ -520,7 +520,7 @@
       </TableView>
       <HBox layoutX="936.0" layoutY="554.0" prefHeight="30.0" prefWidth="464.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <TextField fx:id="txtPesquisar" alignment="CENTER" onKeyPressed="#getSearchClienteKEY" onMouseClicked="#getSearchCliente" prefHeight="30.0" prefWidth="251.0" promptText="ID">
+            <TextField fx:id="txtPesquisar" alignment="CENTER" onMouseClicked="#getSearchCliente" prefHeight="30.0" prefWidth="251.0" promptText="ID">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="hand-efect" />
@@ -529,7 +529,7 @@
                   <Insets right="5.0" />
                </HBox.margin>
             </TextField>
-            <ComboBox fx:id="combTipoDoc11" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="211.0" promptText="Transferencia Bancaria" />
+            <ComboBox fx:id="cBoxArmazem" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="211.0" promptText="Selecione o armazem" />
          </children>
       </HBox>
       <HBox layoutX="1073.0" layoutY="873.0" prefHeight="30.0" prefWidth="327.0" AnchorPane.rightAnchor="0.0">

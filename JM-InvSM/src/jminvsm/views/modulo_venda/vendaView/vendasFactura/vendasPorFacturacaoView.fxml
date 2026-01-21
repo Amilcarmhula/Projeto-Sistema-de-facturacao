@@ -511,7 +511,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <TableView fx:id="tabelaProduto" layoutX="919.0" layoutY="586.0" prefHeight="287.0" prefWidth="470.0" style="-fx-border-color: transparent;" AnchorPane.rightAnchor="0.0">
+      <TableView fx:id="tabelaProduto" layoutX="919.0" layoutY="586.0" onMouseClicked="#selecionaProduto" prefHeight="287.0" prefWidth="470.0" style="-fx-border-color: transparent;" AnchorPane.rightAnchor="0.0">
          <columns>
             <TableColumn fx:id="IDtabelaProduto" prefWidth="53.0" text="ID" />
             <TableColumn fx:id="artigotabelaProduto" prefWidth="175.0" text="Artigo" />
@@ -520,7 +520,7 @@
       </TableView>
       <HBox layoutX="936.0" layoutY="554.0" prefHeight="30.0" prefWidth="464.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <TextField fx:id="txtPesquisar" alignment="CENTER" onMouseClicked="#getSearchCliente" prefHeight="30.0" prefWidth="251.0" promptText="ID">
+            <TextField fx:id="txtPesquisar" alignment="CENTER" prefHeight="30.0" prefWidth="251.0" promptText="ID">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="hand-efect" />
@@ -539,7 +539,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labTotalFactura1221" alignment="CENTER" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" text="...">
+            <Label fx:id="labSaldoStock" alignment="CENTER" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" text="...">
                <font>
                   <Font size="24.0" />
                </font>

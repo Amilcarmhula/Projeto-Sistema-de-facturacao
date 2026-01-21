@@ -108,24 +108,25 @@ public class VendasPorFacturacaoViewController implements Initializable {
 
     @FXML
     private Label labTotalGeral;
-    
+
     @FXML
     private TableView<Stock> tabelaProduto;
     @FXML
     private TableColumn<Stock, String> IDtabelaProduto;
-     @FXML
+    @FXML
     private TableColumn<Stock, String> artigotabelaProduto;
     @FXML
     private TableColumn<Stock, String> descricaotabelaProduto;
-    
+
     @FXML
     private TextField txtPesquisar;
     private ServiceArmazem serviceArmazem;
     private String nomeArmazemFilter;
     private Integer idArmazem = null;
     @FXML
+    private Label labSaldoStock;
+    @FXML
     private ComboBox<String> cBoxArmazem;
-
 
     @FXML
     private TableView<Item> tabelaItens;
@@ -358,7 +359,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
         this.userData = SysFact.getUserData();
         this.empresaData = SysFact.getEmpresaData();
         try {
-            serviceStock= new ServiceStock();
+            serviceStock = new ServiceStock();
             serviceArmazem = new ServiceArmazem();
             serDesconto = new ServiceDesconto();
             serviceCliente = new ServiceCliente();
@@ -366,7 +367,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
             labDataInicial.setText(InvoiceUtilities.actualDate());
             populateComboFactura();
             getDataOnFocus();
-            
+
             showProdutos();
             populateComb_Armazem();
         } catch (SQLException ex) {
@@ -524,7 +525,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
         for (Item item : itens) {
             i = new Item();
             Stock p = mapaStock.get(item.getId());
-            
+
             i.setQuantidade(item.getQuantidade());
             i.setSubtotal(item.getSubtotal());
             i.setUnidade_vendida(item.getUnidade_vendida());
@@ -606,24 +607,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/miniPagamentoView/MiniPagamentoView.fxml");
 //        }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     private ObservableList<Stock> listaStock;
     private Map<String, Stock> mapaStock;
 
@@ -635,14 +619,13 @@ public class VendasPorFacturacaoViewController implements Initializable {
         }
 
         IDtabelaProduto.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getProduto().getId()+"#"+cellData.getValue().getArmazem().getId()));
+                -> new SimpleStringProperty(cellData.getValue().getProduto().getId() + "#" + cellData.getValue().getArmazem().getId()));
         artigotabelaProduto.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
         descricaotabelaProduto.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getProduto().getDescricao()));
 //        armazemtabelaProduto.setCellValueFactory(cellData
 //                -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
-
 
         FilteredList<Stock> dadosFiltrados = new FilteredList<>(listaStock, b -> true);
 
@@ -663,13 +646,21 @@ public class VendasPorFacturacaoViewController implements Initializable {
 
             });
         });
-        
+
         SortedList<Stock> sortedData = new SortedList<>(dadosFiltrados);
         sortedData.comparatorProperty().bind(tabelaProduto.comparatorProperty());
         //
         tabelaProduto.setItems(sortedData);
     }
-    
+
+    public void selecionaProduto(MouseEvent event) {
+        Stock x = tabelaProduto.getSelectionModel().getSelectedItem();
+        if(x != null){
+            Stock s = mapaStock.get(x.getProduto().getId() + "#" + x.getArmazem().getId());
+            labSaldoStock.setText(s.getSaldo()+"");
+        }
+    }
+
     private ObservableList<Armazem> storeList;
     private Map<String, Armazem> mapaArmazens;
 
@@ -683,6 +674,5 @@ public class VendasPorFacturacaoViewController implements Initializable {
         }
         cBoxArmazem.setItems(FXCollections.observableArrayList(listaArm));
     }
-
 
 }

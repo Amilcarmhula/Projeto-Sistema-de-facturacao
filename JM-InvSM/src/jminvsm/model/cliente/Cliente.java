@@ -4,12 +4,17 @@
  */
 package jminvsm.model.cliente;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jminvsm.model.cliente.contacto.ContactoCliente;
 import jminvsm.model.cliente.endereco.EnderecoCliente;
 import jminvsm.model.usuario.Usuario;
-
-
 
 /**
  *
@@ -23,12 +28,12 @@ public class Cliente {
     private String razao_cli;
     private int nuit_cli;
     private String data_criacao;
+    private long tempoRelacao;
     private List<ContactoCliente> contactosCliente;
     private List<EnderecoCliente> enderecosCliente;
     private ContactoCliente contactoCliente;
     private EnderecoCliente enderecoCliente;
     private Usuario usuario;
-    
 
     public Cliente() {
         super();
@@ -45,7 +50,6 @@ public class Cliente {
         this.usuario = usuario;
     }
 
-    
     public String getTipo() {
         return tipo;
     }
@@ -54,7 +58,6 @@ public class Cliente {
         this.tipo = tipo;
     }
 
-    
     public int getId() {
         return id;
     }
@@ -91,8 +94,29 @@ public class Cliente {
         return data_criacao;
     }
 
+    public long getTempoRelacao() {
+        return tempoRelacao;
+    }
+
+    public void setTempoRelacao(long tempoRelacao) {
+        this.tempoRelacao = tempoRelacao;
+    }
+
     public void setData_criacao(String data_criacao) {
         this.data_criacao = data_criacao;
+        Date dataActual = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date dataCriacao;
+        try {
+            dataCriacao = df.parse(data_criacao);
+            Date hoje = df.parse(df.format(dataActual));
+        long differenceInMiliseconds = Math.abs(hoje.getTime() - dataCriacao.getTime());
+        this.tempoRelacao = TimeUnit.DAYS.convert(differenceInMiliseconds, TimeUnit.MILLISECONDS);
+        } catch (ParseException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 
     public List<ContactoCliente> getContactosCliente() {
@@ -127,31 +151,26 @@ public class Cliente {
         this.enderecoCliente = enderecoCliente;
     }
 
-    
-    
-    public String printContatos(){
+    public String printContatos() {
         String contacto = "";
-        if(contactosCliente != null){
+        if (contactosCliente != null) {
             for (ContactoCliente c : contactosCliente) {
                 contacto += c.getContacto_cli() + "; ";
             }
         }
         return contacto;
     }
-    
-    public String printEnderecos(){
+
+    public String printEnderecos() {
         String endereco = "";
-        if(enderecoCliente != null){
-            endereco = "Av. "+enderecoCliente.getAvenida_cli()+", Rua "+enderecoCliente.getRua_cli()+
-                    ", Nr."+enderecoCliente.getNumero_cli()+"; Bairro "+enderecoCliente.getBairro_cli()
-                    +", "+enderecoCliente.getCidade_cli()+", "+enderecoCliente.getProvincia_cli()
-                    +"-"+enderecoCliente.getCodigoPostal_cli();
+        if (enderecoCliente != null) {
+            endereco = "Av. " + enderecoCliente.getAvenida_cli() + ", Rua " + enderecoCliente.getRua_cli()
+                    + ", Nr." + enderecoCliente.getNumero_cli() + "; Bairro " + enderecoCliente.getBairro_cli()
+                    + ", " + enderecoCliente.getCidade_cli() + ", " + enderecoCliente.getProvincia_cli()
+                    + "-" + enderecoCliente.getCodigoPostal_cli();
         }
         return endereco;
     }
-
-   
-    
 
     public Usuario getUsuario() {
         return usuario;

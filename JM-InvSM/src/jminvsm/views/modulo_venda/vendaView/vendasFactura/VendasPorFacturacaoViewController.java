@@ -181,11 +181,19 @@ public class VendasPorFacturacaoViewController implements Initializable {
     private Label labDataInicial;
 
     @FXML
+    private Label labTipoCliente;
+    @FXML
+    private Label labVendedor;
+    @FXML
+    private Label labTempoRelacaoCliente;
+    @FXML
     private TextField txtIDCliente;
     @FXML
     private TextField txtEnderecoCliente;
     @FXML
     private TextField txtNomeCLiente;
+    @FXML
+    private TextField txtRazaoSocialCLiente;
     @FXML
     private TextField txtNuitCLiente;
     @FXML
@@ -217,7 +225,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
     }
 
     public void getSearchCliente(MouseEvent mouseEvt) {
-        if (mouseEvt.getClickCount() == 1) {
+        if (mouseEvt.getClickCount() == 2) {
             SysFact.setData(null);
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
@@ -235,15 +243,19 @@ public class VendasPorFacturacaoViewController implements Initializable {
     public void getSearchClienteKEY(KeyEvent keyEvt) throws SQLException {
         if (keyEvt.getCode().equals(KeyCode.ENTER)) {
 
-            Cliente x = serviceCliente.getClienteCompletoByID(Integer.valueOf(txtIDCliente.getText()));
-            if (x != null) {
-                txtIDCliente.setText(x.getId() + "");
-                txtEnderecoCliente.setText(x.printEnderecos());
-                txtNomeCLiente.setText(x.getRazao_cli());
-                txtNuitCLiente.setText(x.getNuit_cli() + "");
-                txtContactoCLiente.setText(x.printContatos());
-                txtEmailCLiente.setText(x.getContactoCliente().getEmail_cli());
-            }
+            Cliente c = serviceCliente.getClienteCompletoByID(Integer.valueOf(txtIDCliente.getText()));
+                        if (c != null) {
+                            txtIDCliente.setText(c.getId() + "");
+                            txtEnderecoCliente.setText(c.printEnderecos());
+                            txtNomeCLiente.setText(c.getNome_cli());
+                            labTipoCliente.setText(c.getTipo());
+                            txtRazaoSocialCLiente.setText(c.getRazao_cli());
+                            labTempoRelacaoCliente.setText(c.getTempoRelacao()+" Dias");
+                            txtNuitCLiente.setText(c.getNuit_cli() + "");
+                            txtContactoCLiente.setText(c.printContatos());
+                            txtEmailCLiente.setText(c.getContactoCliente().getEmail_cli());
+                            labVendedor.setText(userData.getUsuario());
+                        }
 
         }
     }
@@ -273,14 +285,18 @@ public class VendasPorFacturacaoViewController implements Initializable {
                 if (!oldValue && newValue) {
                     if (SysFact.getData() instanceof Cliente) {
                         Cliente c = (Cliente) SysFact.getData();
-                        Cliente x = serviceCliente.getClienteCompletoByID(c.getId());
-                        if (x != null) {
-                            txtIDCliente.setText(x.getId() + "");
-                            txtEnderecoCliente.setText(x.printEnderecos());
-                            txtNomeCLiente.setText(x.getRazao_cli());
-                            txtNuitCLiente.setText(x.getNuit_cli() + "");
-                            txtContactoCLiente.setText(x.printContatos());
-                            txtEmailCLiente.setText(x.getContactoCliente().getEmail_cli());
+//                        Cliente x = serviceCliente.getClienteCompletoByID(c.getId());
+                        if (c != null) {
+                            txtIDCliente.setText(c.getId() + "");
+                            txtEnderecoCliente.setText(c.printEnderecos());
+                            txtNomeCLiente.setText(c.getNome_cli());
+                            labTipoCliente.setText(c.getTipo());
+                            txtRazaoSocialCLiente.setText(c.getRazao_cli());
+                            labTempoRelacaoCliente.setText(c.getTempoRelacao()+" Dias");
+                            txtNuitCLiente.setText(c.getNuit_cli() + "");
+                            txtContactoCLiente.setText(c.printContatos());
+                            txtEmailCLiente.setText(c.getContactoCliente().getEmail_cli());
+                            labVendedor.setText(userData.getUsuario());
                         }
                     }
                 }
@@ -357,6 +373,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
         // leitor.parar(); // Chame quando quiser fechar a porta
 
         this.userData = SysFact.getUserData();
+        System.out.println("User: "+userData.getUsuario());
         this.empresaData = SysFact.getEmpresaData();
         try {
             serviceStock = new ServiceStock();

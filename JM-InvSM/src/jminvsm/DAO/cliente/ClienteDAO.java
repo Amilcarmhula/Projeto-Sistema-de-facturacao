@@ -144,7 +144,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     public ObservableList<Cliente> listClientesForSearch() {
         ObservableList<Cliente> lista = FXCollections.observableArrayList();
         try {
-            sql = "SELECT c.id,c.tipo,c.nome,c.razaosocial,c.nuit,"
+            sql = "SELECT c.id,c.tipo,c.nome,c.razaosocial,c.nuit,c.data_criacao, "
                     + "GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR ' ') AS contatos, "
                     + "ct.email as email, "
                     + "GROUP_CONCAT(DISTINCT CONCAT(e.id, '- ', e.avenida, '- ',e.rua, '- ',e.numero, '- ',e.bairro, '- ',e.cidade, '- ',e.provincia, '- ',e.codigo_postal )) AS endereco "
@@ -161,6 +161,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 c.setNome_cli(result.getString("nome"));
                 c.setRazao_cli(result.getString("razaosocial"));
                 c.setNuit_cli(result.getInt("nuit"));
+                c.setData_criacao(result.getString("data_criacao"));
                 ContactoCliente cont = new ContactoCliente();
                 cont.setEmail_cli(result.getString("email"));
                 c.setContactoCliente(cont);
@@ -207,7 +208,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     public Cliente getFullClieneByID(int id) {
         Cliente c = null;
         try {
-            sql = "SELECT c.id,c.tipo,c.nome,c.razaosocial,c.nuit,"
+            sql = "SELECT c.id,c.tipo,c.nome,c.razaosocial,c.nuit,c.data_criacao, "
                     + "GROUP_CONCAT(DISTINCT ct.contacto SEPARATOR ' ') AS contatos, "
                     + "ct.email as email, "
                     + "GROUP_CONCAT(DISTINCT CONCAT(e.id, '- ', e.avenida, '- ',e.rua, '- ',e.numero, '- ',e.bairro, '- ',e.cidade, '- ',e.provincia, '- ',e.codigo_postal )) AS endereco "
@@ -226,6 +227,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 c.setNome_cli(result.getString("nome"));
                 c.setRazao_cli(result.getString("razaosocial"));
                 c.setNuit_cli(result.getInt("nuit"));
+                c.setData_criacao(result.getString("data_criacao"));
                 ContactoCliente cont = new ContactoCliente();
                 cont.setEmail_cli(result.getString("email"));
                 c.setContactoCliente(cont);

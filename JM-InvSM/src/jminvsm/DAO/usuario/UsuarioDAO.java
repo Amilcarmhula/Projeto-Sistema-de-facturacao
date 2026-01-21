@@ -33,7 +33,7 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
     public Usuario login(String u, String s) {
         Usuario user = null;
         try {
-            sql = "select u.id, u.nome, u.email,u.estado,"
+            sql = "select u.id, u.nome, u.email,u.estado,u.usuario,"
                     + "p.tipo,n.descricao "
                     + "from usuario u "
                     + "LEFT JOIN nivel_acesso n ON u.fk_nivel_acesso=n.id "
@@ -48,6 +48,7 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
                 user = new Usuario();
                 user.setId(result.getInt("id"));
                 user.setNome(result.getString("nome"));
+                user.setUsuario(result.getString("usuario"));
                 user.setEmail(result.getString("email"));
                 user.setEstado(result.getBoolean("estado"));
                 NivelAcesso n = new NivelAcesso();

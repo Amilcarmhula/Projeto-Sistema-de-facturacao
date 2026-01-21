@@ -6,6 +6,8 @@ package jminvsm.views.modulo_venda.vendaView.searchCliente;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +28,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
 import jminvsm.model.cliente.Cliente;
+import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.cliente.ServiceCliente;
 import jminvsm.util.ButtonUtilities;
@@ -111,11 +114,15 @@ public class ClienteSearchController implements Initializable {
  /*
         Funcoes para fazer pesquisas no banco de dados buscando todos dados
      */
+    private Map<Integer, Cliente> mapaCliente;
     private ObservableList<Cliente> listaClientes;
 
     public void showClientes() throws SQLException {
-
         listaClientes = servCliente.listaClientes();
+        mapaCliente = new HashMap<>();
+        for (Cliente c : listaClientes) {
+            mapaCliente.put(c.getId(), c);
+        }
 
         IDtabelaCliente.setCellValueFactory(new PropertyValueFactory<>("id"));
 //        tipotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -159,10 +166,11 @@ public class ClienteSearchController implements Initializable {
         Funcoes de linha selecionada
      */
     public void selectedLineCliente() throws SQLException {
-        Cliente c = tabelaCliente.getSelectionModel().getSelectedItem();
-        if (c != null) {
-            SysFact.setData(c);
-            txtIDCliente.setText(String.valueOf(c.getId()));
+        Cliente x = tabelaCliente.getSelectionModel().getSelectedItem();
+        if (x != null) {
+            Cliente c = mapaCliente.get(x.getId());
+            SysFact.setData(x);
+            txtIDCliente.setText(String.valueOf(x.getId()));
             ButtonUtilities.buttonChangeText(btnAdd, txtIDCliente);
         }
 

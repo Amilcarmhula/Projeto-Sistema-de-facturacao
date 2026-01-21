@@ -350,7 +350,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Label fx:id="labNumeroFactura1" prefHeight="30.0" prefWidth="340.0" text="..." textFill="WHITE">
+                        <Label fx:id="labTipoCliente" prefHeight="30.0" prefWidth="340.0" text="..." textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -367,7 +367,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtNomeCLiente1" disable="true" prefHeight="30.0" prefWidth="319.0" promptText="Nome do cliente" styleClass="text-squared-border" />
+                        <TextField fx:id="txtNomeCLiente" disable="true" prefHeight="30.0" prefWidth="319.0" promptText="Nome do cliente" styleClass="text-squared-border" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -380,7 +380,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtNomeCLiente" disable="true" prefHeight="30.0" prefWidth="440.0" promptText="Nome do cliente" styleClass="text-squared-border" />
+                        <TextField fx:id="txtRazaoSocialCLiente" disable="true" prefHeight="30.0" prefWidth="440.0" promptText="Nome do cliente" styleClass="text-squared-border" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -406,7 +406,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Label fx:id="labValidade211" prefHeight="30.0" prefWidth="327.0" text="..." textFill="WHITE">
+                        <Label fx:id="labTempoRelacaoCliente" prefHeight="30.0" prefWidth="327.0" text="..." textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -462,7 +462,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Label fx:id="labValidade21" prefHeight="30.0" prefWidth="442.0" text="..." textFill="WHITE">
+                        <Label fx:id="labVendedor" prefHeight="30.0" prefWidth="442.0" text="..." textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

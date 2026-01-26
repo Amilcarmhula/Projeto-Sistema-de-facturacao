@@ -20,6 +20,7 @@ import jminvsm.model.vendas.factura.Factura;
 public class Item {
 
     private int id;
+    private String ref; // referencia do item. e um valor auxiliar
     private int quantidade;
     private int qtd_por_unidade;
     private double subtotal;
@@ -54,6 +55,14 @@ public class Item {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getRef() {
+        return ref;
+    }
+
+    public void setRef(String ref) {
+        this.ref = ref;
     }
 
 
@@ -138,26 +147,11 @@ public class Item {
     }
     
 
-//    public void calculateSubtotal_onTable(Item item, TableView table) {
-//        double x = item.getQuantidade() * item.getQtd_por_unidade() * item.getPreco();
-//        item.setSubtotal(x);
-//        table.refresh();
-//    }
-    
-//    public double calculateSubtotal(Item item, TableView table) {
-//        double x = item.getQuantidade() * item.getQtd_por_unidade() * item.getPreco();
-//        if(item.getDesconto() != null){
-//            x -= x * item.getDesconto().getPercentagem();
-//        }
-//        
-//        if(item.getProduto().getImposto() != null){
-//            x += x * item.getProduto().getImposto().getPercentagem();
-//        }
-//        item.setSubtotal(x);
-//        table.refresh();
-//        return subtotal;
-//    }
-    
+    public void calculateSubtotal_onTable(Item item, TableView table) {
+        double x = item.getQuantidade() * item.getPrecoProdutoArmazem().getPrecoFinal();
+        item.setSubtotal(x);
+        table.refresh();
+    }
     
 
     /*
@@ -165,7 +159,7 @@ public class Item {
      */
     public String getNomeProduto() {
         if (produto != null) {
-            return produto.getNome();
+            return produto.getNome()+": "+getDescricao();
         }
         return null;
     }

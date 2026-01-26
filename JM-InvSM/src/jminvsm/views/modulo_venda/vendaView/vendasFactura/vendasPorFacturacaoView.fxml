@@ -29,7 +29,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="combTipoDoc" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="274.0" promptText="Selecione o tipo de factura a emitir" />
+                        <ComboBox fx:id="combTipoDoc" prefHeight="30.0" prefWidth="274.0" promptText="Selecione o tipo de factura a emitir" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -88,12 +88,12 @@
                   </HBox>
                   <HBox prefWidth="445.0">
                      <children>
-                        <Label fx:id="labTotalFactura3" prefHeight="30.0" prefWidth="262.0" text="Metodo de Pagamento:" textFill="WHITE">
+                        <Label fx:id="labTotalFactura3" prefHeight="30.0" prefWidth="262.0" text="Condicao de pagamento:" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="combTipoDoc1" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="196.0" promptText="Transferencia Bancaria" />
+                        <ComboBox fx:id="combCondPagamento" prefHeight="30.0" prefWidth="196.0" promptText="Condicao de  pagamento" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -106,7 +106,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Label fx:id="labValidade2" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="327.0" text="..." textFill="WHITE">
+                        <Label fx:id="labVendedor" prefHeight="30.0" prefWidth="325.0" text="..." textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -120,14 +120,14 @@
             </VBox>
             <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <Label fx:id="labTotalFactura12" layoutX="64.0" layoutY="14.0" prefHeight="30.0" prefWidth="279.0" text="Dados Da Factura" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Label layoutX="64.0" layoutY="14.0" prefHeight="30.0" prefWidth="279.0" text="Dados Da Factura" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
                </children>
             </AnchorPane>
-            <Button fx:id="btnAddItem1" layoutX="37.0" layoutY="293.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" text="Gerar Referencia" textFill="WHITE">
+            <Button fx:id="btnGeraFactura" layoutX="37.0" layoutY="310.0" mnemonicParsing="false" onAction="#geraFactura" prefHeight="44.0" prefWidth="190.0" text="Gerar Referencia" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -138,7 +138,7 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <Button fx:id="btnAddItem11" layoutX="238.0" layoutY="293.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" text="Carregar Factura" textFill="WHITE">
+            <Button fx:id="btnAddItem11" layoutX="238.0" layoutY="310.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="190.0" text="Carregar Factura" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -149,7 +149,18 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <Button fx:id="btnAddItem12" layoutX="136.0" layoutY="348.0" mnemonicParsing="false" onAction="#populateTableItems" prefHeight="44.0" prefWidth="190.0" text="Nova Factura" textFill="WHITE">
+            <Button fx:id="btnNovaFactura" disable="true" layoutX="37.0" layoutY="365.0" mnemonicParsing="false" onAction="#novaFactura" prefHeight="44.0" prefWidth="190.0" text="Nova Factura" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="text-squared-border" />
+                  <String fx:value="secondary-color" />
+                  <String fx:value="hand-efect" />
+                  <String fx:value="shadow-efect" />
+               </styleClass>
+            </Button>
+            <Button fx:id="btnAddItem121" disable="true" layoutX="238.0" layoutY="365.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="190.0" text="Cancelar Factura" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -164,14 +175,15 @@
       </AnchorPane>
       <TableView fx:id="tabelaItens" layoutY="489.0" prefHeight="328.0" prefWidth="930.0" style="-fx-border-color: transparent;">
          <columns>
-            <TableColumn fx:id="idtabelaItens" prefWidth="46.0" text="#" />
-            <TableColumn fx:id="nometabelaItens" prefWidth="466.0" text="Descrição" />
-            <TableColumn fx:id="unidadetabelaItens" prefWidth="50.0" text="Uni." />
+            <TableColumn fx:id="reftabelaItens" prefWidth="36.0" />
+            <TableColumn fx:id="idtabelaItens" prefWidth="56.0" text="#" />
+            <TableColumn fx:id="nometabelaItens" prefWidth="447.0" text="Descrição" />
+            <TableColumn fx:id="unidadetabelaItens" prefWidth="44.0" text="Uni." />
             <TableColumn fx:id="taxatabelaItens" prefWidth="51.0" text="Taxa %" />
-            <TableColumn fx:id="lotetabelaItens" prefWidth="54.0" text="Lote" />
-            <TableColumn fx:id="quantidadetabelaItens" prefWidth="50.0" text="Qtd." />
-            <TableColumn fx:id="precoFinaltabelaItens" prefWidth="87.0" text="Preco Unitario" />
-            <TableColumn fx:id="subTotaltabelaItens" prefWidth="115.0" text="Total" />
+            <TableColumn fx:id="lotetabelaItens" prefWidth="45.0" text="Lote" />
+            <TableColumn fx:id="quantidadetabelaItens" prefWidth="48.0" text="Qtd." />
+            <TableColumn fx:id="precoFinaltabelaItens" prefWidth="95.0" text="Preco Unitario" />
+            <TableColumn fx:id="subTotaltabelaItens" prefWidth="99.0" text="Total" />
          </columns>
       </TableView>
       <AnchorPane layoutX="1145.0" layoutY="60.0" prefHeight="430.0" prefWidth="250.0" styleClass="secondary-color">
@@ -185,7 +197,7 @@
                   </Label>
                </children>
             </AnchorPane>
-            <Label fx:id="labTotalFactura11" alignment="CENTER" layoutY="290.0" prefHeight="35.0" prefWidth="249.0" text="Condicao de pagamento" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <Label alignment="CENTER" layoutY="290.0" prefHeight="35.0" prefWidth="249.0" text="ddf" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <font>
                   <Font size="21.0" />
                </font>
@@ -388,7 +400,7 @@
                   </HBox>
                   <HBox minHeight="-Infinity" prefWidth="445.0">
                      <children>
-                        <Label fx:id="labTotalFactura1" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="NUIT:" textFill="WHITE">
+                        <Label minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="NUIT:" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -401,7 +413,7 @@
                   </HBox>
                   <HBox minHeight="-Infinity" prefWidth="445.0">
                      <children>
-                        <Label fx:id="labTotalFactura31" prefHeight="30.0" prefWidth="200.0" text="Tempo de Relacao:" textFill="WHITE">
+                        <Label prefHeight="30.0" prefWidth="200.0" text="Tempo de Relacao:" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -455,28 +467,11 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox minHeight="-Infinity" prefWidth="445.0">
-                     <children>
-                        <Label fx:id="labTotalFactura311" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Vendedor:" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labVendedor" prefHeight="30.0" prefWidth="442.0" text="..." textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
                </children>
             </VBox>
             <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <Label fx:id="labTotalFactura121" layoutX="64.0" layoutY="14.0" prefHeight="30.0" prefWidth="279.0" text="Dados Do Cliente" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Label layoutX="64.0" layoutY="14.0" prefHeight="30.0" prefWidth="279.0" text="Dados Do Cliente" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -529,12 +524,12 @@
                   <Insets right="5.0" />
                </HBox.margin>
             </TextField>
-            <ComboBox fx:id="cBoxArmazem" onAction="#selecionaFactura" prefHeight="30.0" prefWidth="211.0" promptText="Selecione o armazem" />
+            <ComboBox fx:id="cBoxArmazem" prefHeight="30.0" prefWidth="211.0" promptText="Selecione o armazem" />
          </children>
       </HBox>
       <HBox layoutX="1073.0" layoutY="873.0" prefHeight="30.0" prefWidth="327.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Label fx:id="labTotalFactura122" minWidth="-Infinity" prefHeight="30.0" prefWidth="165.0" text="Saldo em Stock:">
+            <Label minWidth="-Infinity" prefHeight="30.0" prefWidth="165.0" text="Saldo em Stock:">
                <font>
                   <Font size="24.0" />
                </font>

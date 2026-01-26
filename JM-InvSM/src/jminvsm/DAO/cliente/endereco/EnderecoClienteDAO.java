@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.endereco.EnderecoCliente;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
@@ -145,17 +146,21 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             ps.setInt(1,idCliente);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
-                EnderecoCliente c = new EnderecoCliente();
-                c.setId(result.getInt("id"));
-                c.setProvincia_cli(result.getString("provincia"));
-                c.setCidade_cli(result.getString("cidade"));
-                c.setBairro_cli(result.getString("bairro"));
-                c.setAvenida_cli(result.getString("avenida"));
-                c.setRua_cli(result.getString("rua"));
-                c.setCodigoPostal_cli(result.getInt("codigo_postal"));
-                c.setNumero_cli(result.getInt("numero"));
-                c.setTipo_cli(result.getString("tipo"));
-                lista.add(c);
+                EnderecoCliente ed = new EnderecoCliente();
+                ed.setId(result.getInt("id"));
+                ed.setProvincia_cli(result.getString("provincia"));
+                ed.setCidade_cli(result.getString("cidade"));
+                ed.setBairro_cli(result.getString("bairro"));
+                ed.setAvenida_cli(result.getString("avenida"));
+                ed.setRua_cli(result.getString("rua"));
+                ed.setCodigoPostal_cli(result.getInt("codigo_postal"));
+                ed.setNumero_cli(result.getInt("numero"));
+                ed.setTipo_cli(result.getString("tipo"));
+                Cliente cli = new Cliente();
+                cli.setId(result.getInt("fk_id_cliente"));
+                ed.setCliente(cli);
+                
+                lista.add(ed);
             }
             result.close();
             ps.close();

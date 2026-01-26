@@ -4,9 +4,9 @@
  */
 package jminvsm.views.modulo_venda.clienteView.clienteAdd;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,18 +14,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import jminvsm.SysFact;
 import jminvsm.model.cliente.Cliente;
@@ -53,102 +49,27 @@ public class AddClienteController implements Initializable {
     @FXML
     private Button btnAddCliente;
     @FXML
-    private Button btnAddContacto;
+    private Button btnContactoView;
     @FXML
-    private Button btnAddEndereco;
+    private Button btnEnderecoView;
+    private int countViewContacto = 1;
+    private int countViewEndereco = 1;
+    private Integer[] vectorDados = new Integer[3];
 
-    @FXML
-    private ComboBox<String> combProvincia;
     @FXML
     private ComboBox<String> combTipoCliente;
-    @FXML
-    private ComboBox<String> combTipoEndereco;
-
-    @FXML
-    private TableView<ContactoCliente> tabelaContacto;
-    @FXML
-    private TableColumn<ContactoCliente, Integer> IDtabelaContacto;
-    @FXML
-    private TableColumn<ContactoCliente, String> responsaveltabelaContacto;
-    @FXML
-    private TableColumn<ContactoCliente, String> contactotabelaContacto;
-    @FXML
-    private TableColumn<ContactoCliente, String> emailtabelaContacto;
-    @FXML
-    private TableColumn<ContactoCliente, String> btntabelaContacto;
-    @FXML
-    private TableColumn<ContactoCliente, String> websitetabelaContacto;
-
-    @FXML
-    private TableView<EnderecoCliente> tabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoCliente, String> tipotabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoCliente, Integer> numerotabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoCliente, String> provinciatabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoCliente, String> ruatabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoCliente, String> btntabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoCliente, String> cidadetabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoCliente, Integer> codigopostaltabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoCliente, Integer> IDtabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoCliente, String> avenidatabelaEndereco;
-    @FXML
-    private TableColumn<EnderecoCliente, String> bairrotabelaEndereco;
-
-    @FXML
-    private TextField txtAvenida;
-
-    @FXML
-    private TextField txtBairro;
-
-    @FXML
-    private TextField txtCidade;
-
-    @FXML
-    private TextField txtCodigooPostal;
-
-    @FXML
-    private TextField txtContacto;
-
-    @FXML
-    private TextField txtEmail;
 
     @FXML
     private TextField txtIDCliente;
-
-    @FXML
-    private TextField txtIDContacto;
-
-    @FXML
-    private TextField txtIDEndereco;
-
     @FXML
     private TextField txtNome;
-
     @FXML
     private TextField txtNuit;
-
-    @FXML
-    private TextField txtNumeroEndereco;
-
     @FXML
     private TextField txtRazao;
 
     @FXML
-    private TextField txtResponsavel;
-
-    @FXML
-    private TextField txtRua;
-
-    @FXML
-    private TextField txtSite;
+    private VBox anchorMain;
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
@@ -164,27 +85,11 @@ public class AddClienteController implements Initializable {
         }
     }
 
-    public void addORupdateContacto(ActionEvent e) throws SQLException {
-        if ("".equals(txtIDContacto.getText())) {
-            addContacto(e);
-        } else {
-            updateContacto(e);
-        }
-    }
-
     public void addORupdateCliente(ActionEvent e) throws SQLException {
         if ("".equals(txtIDCliente.getText())) {
             addCliente(e);
         } else {
             updateCliente(e);
-        }
-    }
-
-    public void addORupdateEndereco(ActionEvent e) throws SQLException {
-        if ("".equals(txtIDEndereco.getText())) {
-            addEndereco(e);
-        } else {
-            updateEndereco(e);
         }
     }
 
@@ -196,41 +101,26 @@ public class AddClienteController implements Initializable {
 
         this.userData = SysFact.getUserData();
         combTipoCliente.setItems(FXCollections.observableArrayList("Pessoa Física", "Jurídica"));
-        combTipoEndereco.setItems(FXCollections.observableArrayList("Facturação", "Envio"));
-        combProvincia.setItems(FXCollections.observableArrayList(
-                "Maputo(Cidade)",
-                "Maputo(Provincia)",
-                "Gaza",
-                "Inhambane",
-                "Sofala",
-                "Manica",
-                "Tete",
-                "Zambezia",
-                "Napula",
-                "Niassa",
-                "Cabo Delgado"
-        )
-        );
         if (SysFact.getData() != null) {
             if (SysFact.getData() instanceof Cliente) {
                 Cliente x = (Cliente) SysFact.getData();
                 txtIDCliente.setText(x.getId() + "");
             }
         }
-
         try {
             serviceCliente = new ServiceCliente();
             serviceContacto = new ServiceContacto();
             serviceEndereco = new ServiceEndereco();
-            showContactos();
-            showClienteByID();
-            showEndereco();
-            // TODO
+
+            lookContactos();
+            lookEnderecos();
+
         } catch (SQLException ex) {
+            Logger.getLogger(AddClienteController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(AddClienteController.class.getName()).log(Level.SEVERE, null, ex);
         }
         ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
-        ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
     }
 
     /*
@@ -243,7 +133,6 @@ public class AddClienteController implements Initializable {
         txtNome.setText(c.getNome_cli());
         txtRazao.setText(c.getRazao_cli());
         txtNuit.setText(String.valueOf(c.getNuit_cli()));
-        showContactos();
     }
 
     public void showClienteByID() throws SQLException {
@@ -253,49 +142,34 @@ public class AddClienteController implements Initializable {
             txtNome.setText(c.getNome_cli());
             txtRazao.setText(c.getRazao_cli());
             txtNuit.setText(String.valueOf(c.getNuit_cli()));
-            showContactos();
         }
 
-    }
-
-    private ObservableList<EnderecoCliente> listaEndereco;
-
-    public void showEndereco() throws SQLException {
-        if ("".equals(txtIDCliente.getText())) {
-            listaEndereco = serviceEndereco.listaEnderecos();
-        } else {
-            listaEndereco = serviceEndereco.consultaEnderecosPorCLiente(Integer.parseInt(txtIDCliente.getText()));
-        }
-
-        IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tipotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("tipo_cli"));
-        provinciatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("provincia_cli"));
-        cidadetabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("cidade_cli"));
-        bairrotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("bairro_cli"));
-        avenidatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("avenida_cli"));
-        ruatabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("rua_cli"));
-        codigopostaltabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("codigoPostal_cli"));
-        numerotabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("numero_cli"));
-
-        tabelaEndereco.setItems(listaEndereco);
     }
 
     private ObservableList<ContactoCliente> listaContactos;
-
-    public void showContactos() throws SQLException {
-        if ("".equals(txtIDCliente.getText())) {
-            listaContactos = serviceContacto.listaContactos();
-        } else {
-            listaContactos = serviceContacto.consultaContactoPorCLiente(Integer.parseInt(txtIDCliente.getText()));
+    public void lookContactos() throws SQLException, IOException {
+        listaContactos = serviceContacto.consultaContactoPorCLiente(Integer.parseInt(txtIDCliente.getText()));
+        if (listaContactos != null) {
+            for (ContactoCliente cc : listaContactos) {
+                SysFact.setData(cc);
+                AnchorPane pane = FXMLLoader.load(getClass().getResource("/jminvsm/views/modulo_venda/clienteView/clienteAdd/contactoView.fxml"));
+                anchorMain.getChildren().add(pane);
+            }
+            SysFact.setData(null);
         }
+    }
 
-        IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
-        contactotabelaContacto.setCellValueFactory(new PropertyValueFactory<>("contacto_cli"));
-        emailtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("email_cli"));
-        responsaveltabelaContacto.setCellValueFactory(new PropertyValueFactory<>("responsavel"));
-        websitetabelaContacto.setCellValueFactory(new PropertyValueFactory<>("website_cli"));
-
-        tabelaContacto.setItems(listaContactos);
+    private ObservableList<EnderecoCliente> listaEndereco;
+    public void lookEnderecos() throws SQLException, IOException {
+        listaEndereco = serviceEndereco.consultaEnderecosPorCLiente(Integer.parseInt(txtIDCliente.getText()));
+        if (listaEndereco != null) {
+            for (EnderecoCliente ec : listaEndereco) {
+                SysFact.setData(ec);
+                AnchorPane pane = FXMLLoader.load(getClass().getResource("/jminvsm/views/modulo_venda/clienteView/clienteAdd/enderecoView.fxml"));
+                anchorMain.getChildren().add(pane);
+            }
+            SysFact.setData(null);
+        }
     }
 
     /*
@@ -307,32 +181,6 @@ public class AddClienteController implements Initializable {
                 userData);
         if (serviceCliente.isOpsSuccess()) {
             showCliente();
-        }
-
-    }
-
-    public void addContacto(ActionEvent e) throws SQLException {
-        Cliente c = serviceCliente.consultaClienteByID(Integer.parseInt(txtIDCliente.getText()));
-        serviceContacto.registar(txtEmail.getText(), txtContacto.getText(),
-                txtSite.getText(), txtResponsavel.getText(), c, userData);
-
-        if (serviceContacto.isOpsSuccess()) {
-            serviceContacto.setOpsSuccess(false);
-            showContactos();
-            restContacto();
-        }
-    }
-
-    public void addEndereco(ActionEvent e) throws SQLException {
-        Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
-        Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
-        Integer id = Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
-        serviceEndereco.registar(combTipoEndereco.getValue(), txtAvenida.getText(), txtBairro.getText(),
-                txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(), id, userData);
-        if (serviceEndereco.isOpsSuccess()) {
-            showEndereco();
-            resetEndereco();
         }
     }
 
@@ -348,109 +196,6 @@ public class AddClienteController implements Initializable {
         }
     }
 
-    public void updateContacto(ActionEvent e) throws SQLException {
-        serviceContacto.actualizar(Integer.valueOf(txtIDContacto.getText()), txtEmail.getText(), txtContacto.getText(),
-                txtSite.getText(), txtResponsavel.getText(), userData);
-
-        if (serviceContacto.isOpsSuccess()) {
-            serviceContacto.setOpsSuccess(false);
-            showContactos();
-            restContacto();
-        }
-    }
-
-    public void updateEndereco(ActionEvent e) throws SQLException {
-        Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
-        Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
-        serviceEndereco.actualizar(Integer.valueOf(txtIDEndereco.getText()), combTipoEndereco.getValue(), txtAvenida.getText(), txtBairro.getText(),
-                txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(), userData);
-        if (serviceEndereco.isOpsSuccess()) {
-            showEndereco();
-            resetEndereco();
-        }
-    }
-
-    /*
-    Funcoes de Linha selecionada
-     */
-    public void selecionaContacto(MouseEvent event) throws SQLException {
-        ContactoCliente x = tabelaContacto.getSelectionModel().getSelectedItem();
-        if (x != null) {
-            txtIDContacto.setText(String.valueOf(x.getId()));
-            txtResponsavel.setText(x.getResponsavel());
-            txtContacto.setText(x.getContacto_cli());
-            txtEmail.setText(x.getEmail_cli());
-            txtSite.setText(x.getWebsite_cli());
-            deleteContacto(event, x);
-            ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
-        }
-    }
-
-    public void deleteContacto(MouseEvent event, ContactoCliente x) throws SQLException {
-        if (event.getButton().name().equals("SECONDARY")) {
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Aviso.");
-            dialog.setContentText("Deseja excluir o item?");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-
-            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
-            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
-            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
-
-            Optional<ButtonType> result = dialog.showAndWait();
-            if (result.get() == btnDelete) {
-                serviceContacto.excluir(x.getId());
-                if (serviceContacto.isOpsSuccess()) {
-                    showContactos();
-                    restContacto();
-                    serviceContacto.setOpsSuccess(false);
-                }
-            } else if (result.get() == btnCancel) {
-                restContacto();
-            }
-        }
-    }
-
-    public void selecionaEndereco(MouseEvent event) throws SQLException {
-        EnderecoCliente x = tabelaEndereco.getSelectionModel().getSelectedItem();
-        if (x != null) {
-            txtIDEndereco.setText(String.valueOf(x.getId()));
-            txtAvenida.setText(x.getAvenida_cli());
-            txtBairro.setText(x.getBairro_cli());
-            txtCidade.setText(x.getCidade_cli());
-            txtCodigooPostal.setText(String.valueOf(x.getCodigoPostal_cli()));
-            txtNumeroEndereco.setText(String.valueOf(x.getNumero_cli()));
-            combProvincia.setValue(x.getProvincia_cli());
-            txtRua.setText(x.getRua_cli());
-            combTipoEndereco.setValue(x.getTipo_cli());
-            deleteEndereco(event, x);
-            ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
-        }
-    }
-
-    public void deleteEndereco(MouseEvent event, EnderecoCliente x) throws SQLException {
-        if (event.getButton().name().equals("SECONDARY")) {
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Aviso.");
-            dialog.setContentText("Deseja excluir o item?");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-
-            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
-            ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
-            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
-
-            Optional<ButtonType> result = dialog.showAndWait();
-            if (result.get() == btnDelete) {
-                serviceEndereco.excluir(x.getId());
-                showEndereco();
-                resetEndereco();
-            } else if (result.get() == btnCancel) {
-                resetEndereco();
-            }
-        }
-    }
-
     /*
     Funcoes de Reset Campos
      */
@@ -461,32 +206,34 @@ public class AddClienteController implements Initializable {
         txtRazao.setText("");
         txtNuit.setText("");
         ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
-        showContactos();
-        showEndereco();
-        restContacto();
-        resetEndereco();
     }
 
-    public void restContacto() {
-        txtIDContacto.setText("");
-        txtResponsavel.setText("");
-        txtContacto.setText("");
-        txtEmail.setText("");
-        txtSite.setText("");
-        ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
-    }
+    @FXML
+    public void addConAddView(ActionEvent e) throws IOException {
+        SysFact.setData(null);
+        String path = "";
+        if (e.getSource() == btnContactoView) {
+            if (txtIDCliente.getText() != "") {
+                vectorDados[0] = Integer.parseInt(txtIDCliente.getText());
+                vectorDados[1] = countViewContacto++;
+            } else {
+                vectorDados[1] = 0;
+            }
 
-    public void resetEndereco() {
-        txtIDEndereco.setText("");
-        txtAvenida.setText("");
-        txtBairro.setText("");
-        txtCidade.setText("");
-        txtCodigooPostal.setText("");
-        txtNumeroEndereco.setText("");
-        combProvincia.setPromptText("Provincia");
-        txtRua.setText("");
-        combTipoEndereco.setPromptText("Tipo de endereco");
-        ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
+            path = "/jminvsm/views/modulo_venda/clienteView/clienteAdd/contactoView.fxml";
+        } else if (e.getSource() == btnEnderecoView) {
+            if (!"".equals(txtIDCliente.getText())) {
+                vectorDados[0] = Integer.parseInt(txtIDCliente.getText());
+                vectorDados[2] = countViewEndereco++;
+            } else {
+                vectorDados[2] = 0;
+            }
+            path = "/jminvsm/views/modulo_venda/clienteView/clienteAdd/enderecoView.fxml";
+        }
+        SysFact.setData(vectorDados);
+        AnchorPane pane = FXMLLoader.load(getClass().getResource(path));
+        anchorMain.getChildren().add(pane);
+
     }
 
 }

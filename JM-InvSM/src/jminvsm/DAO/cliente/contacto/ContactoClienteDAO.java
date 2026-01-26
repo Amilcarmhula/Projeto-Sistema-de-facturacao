@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
+import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.contacto.ContactoCliente;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
@@ -139,6 +140,9 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
                 c.setEmail_cli(result.getString("email"));
                 c.setWebsite_cli(result.getString("website"));
                 c.setResponsavel(result.getString("pessoa_de_contacto"));
+                Cliente cli = new Cliente();
+                cli.setId(result.getInt("fk_id_cliente"));
+                c.setCliente(cli);
                 lista.add(c);
             }
             result.close();

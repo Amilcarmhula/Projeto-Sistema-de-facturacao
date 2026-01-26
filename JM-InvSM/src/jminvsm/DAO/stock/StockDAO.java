@@ -342,7 +342,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
         return total;
     }
 
-    public static void main(String[] args) throws SQLException {
+//    public static void main(String[] args) throws SQLException {
 //        StockDAO dao = new StockDAO();
 //
 //        // Executa o método que queremos testar
@@ -418,5 +418,5 @@ public class StockDAO implements StockDAOImpl<Stock> {
 //                System.out.println("----------------------------------");
 //            }
 //        }
-    }
+//    }
 }

@@ -151,7 +151,7 @@ public class EnderecoController implements Initializable {
 
 
     public void showEndereco() throws SQLException {
-       if (SysFact.getData() != null) {
+       if ((SysFact.getData() instanceof EnderecoCliente) && SysFact.getData() != null) {
             EnderecoCliente ed = (EnderecoCliente)SysFact.getData();
                 txtIDEndereco.setText(ed.getId()+"");
                 txtCidade.setText(ed.getCidade_cli());

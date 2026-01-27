@@ -52,9 +52,6 @@ public class AddClienteController implements Initializable {
     private Button btnContactoView;
     @FXML
     private Button btnEnderecoView;
-    private int countViewContacto = 1;
-    private int countViewEndereco = 1;
-    private Integer[] vectorDados = new Integer[3];
 
     @FXML
     private ComboBox<String> combTipoCliente;
@@ -103,8 +100,12 @@ public class AddClienteController implements Initializable {
         combTipoCliente.setItems(FXCollections.observableArrayList("Pessoa Física", "Jurídica"));
         if (SysFact.getData() != null) {
             if (SysFact.getData() instanceof Cliente) {
-                Cliente x = (Cliente) SysFact.getData();
-                txtIDCliente.setText(x.getId() + "");
+                Cliente c = (Cliente) SysFact.getData();
+                txtIDCliente.setText(c.getId() + "");
+                combTipoCliente.setValue(c.getTipo());
+                txtNome.setText(c.getNome_cli());
+                txtRazao.setText(c.getRazao_cli());
+                txtNuit.setText(String.valueOf(c.getNuit_cli()));
             }
         }
         try {
@@ -112,8 +113,7 @@ public class AddClienteController implements Initializable {
             serviceContacto = new ServiceContacto();
             serviceEndereco = new ServiceEndereco();
 
-            lookContactos();
-            lookEnderecos();
+            lookDetails();
 
         } catch (SQLException ex) {
             Logger.getLogger(AddClienteController.class.getName()).log(Level.SEVERE, null, ex);
@@ -146,7 +146,15 @@ public class AddClienteController implements Initializable {
 
     }
 
+    public void lookDetails() throws SQLException, IOException {
+        if (!"".equals(txtIDCliente.getText())) {
+            lookContactos();
+            lookEnderecos();
+        }
+    }
+
     private ObservableList<ContactoCliente> listaContactos;
+
     public void lookContactos() throws SQLException, IOException {
         listaContactos = serviceContacto.consultaContactoPorCLiente(Integer.parseInt(txtIDCliente.getText()));
         if (listaContactos != null) {
@@ -155,11 +163,10 @@ public class AddClienteController implements Initializable {
                 AnchorPane pane = FXMLLoader.load(getClass().getResource("/jminvsm/views/modulo_venda/clienteView/clienteAdd/contactoView.fxml"));
                 anchorMain.getChildren().add(pane);
             }
-            SysFact.setData(null);
         }
     }
-
     private ObservableList<EnderecoCliente> listaEndereco;
+
     public void lookEnderecos() throws SQLException, IOException {
         listaEndereco = serviceEndereco.consultaEnderecosPorCLiente(Integer.parseInt(txtIDCliente.getText()));
         if (listaEndereco != null) {
@@ -168,7 +175,6 @@ public class AddClienteController implements Initializable {
                 AnchorPane pane = FXMLLoader.load(getClass().getResource("/jminvsm/views/modulo_venda/clienteView/clienteAdd/enderecoView.fxml"));
                 anchorMain.getChildren().add(pane);
             }
-            SysFact.setData(null);
         }
     }
 
@@ -192,7 +198,7 @@ public class AddClienteController implements Initializable {
                 combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText().equals("") ? "0" : txtNuit.getText()),
                 userData);
         if (serviceCliente.isOpsSuccess()) {
-            showCliente();
+            showClienteByID();
         }
     }
 
@@ -208,32 +214,33 @@ public class AddClienteController implements Initializable {
         ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
     }
 
-    @FXML
+    /*
+    
+     */
     public void addConAddView(ActionEvent e) throws IOException {
-        SysFact.setData(null);
         String path = "";
         if (e.getSource() == btnContactoView) {
-            if (txtIDCliente.getText() != "") {
-                vectorDados[0] = Integer.parseInt(txtIDCliente.getText());
-                vectorDados[1] = countViewContacto++;
+            if (txtIDCliente.getText() != "" && !txtIDCliente.getText().isEmpty()) {
+                Cliente c = serviceCliente.consultaClienteByID(Integer.valueOf(txtIDCliente.getText()));
+                SysFact.setData(c);
+                path = "/jminvsm/views/modulo_venda/clienteView/clienteAdd/contactoView.fxml";
+                AnchorPane pane = FXMLLoader.load(getClass().getResource(path));
+                anchorMain.getChildren().add(pane);
             } else {
-                vectorDados[1] = 0;
+                return;
             }
 
-            path = "/jminvsm/views/modulo_venda/clienteView/clienteAdd/contactoView.fxml";
         } else if (e.getSource() == btnEnderecoView) {
-            if (!"".equals(txtIDCliente.getText())) {
-                vectorDados[0] = Integer.parseInt(txtIDCliente.getText());
-                vectorDados[2] = countViewEndereco++;
+            if (txtIDCliente.getText() != null || !txtIDCliente.getText().isEmpty()) {
+                Cliente c = serviceCliente.consultaClienteByID(Integer.valueOf(txtIDCliente.getText()));
+                SysFact.setData(c);
+                path = "/jminvsm/views/modulo_venda/clienteView/clienteAdd/enderecoView.fxml";
+                AnchorPane pane = FXMLLoader.load(getClass().getResource(path));
+                anchorMain.getChildren().add(pane);
             } else {
-                vectorDados[2] = 0;
+                return;
             }
-            path = "/jminvsm/views/modulo_venda/clienteView/clienteAdd/enderecoView.fxml";
         }
-        SysFact.setData(vectorDados);
-        AnchorPane pane = FXMLLoader.load(getClass().getResource(path));
-        anchorMain.getChildren().add(pane);
-
     }
 
 }

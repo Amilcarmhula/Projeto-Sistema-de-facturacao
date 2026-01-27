@@ -153,7 +153,8 @@ public class ClienteViewController implements Initializable {
         if (c != null) {
             txtIDCliente.setText(String.valueOf(c.getId()));
             deleteItem(event, c);
-            SysFact.setData(c);
+            Cliente cc = serviceCliente.consultaClienteByID(Integer.valueOf(txtIDCliente.getText()));
+            SysFact.setData(cc);
             ButtonUtilities.buttonChangeText(btnAdd, txtIDCliente);
 //            btnAdd.setText("Actualizar");
         }

@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,7 +18,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import jminvsm.SysFact;
 import jminvsm.model.cliente.Cliente;
@@ -39,9 +37,13 @@ public class ContactoController implements Initializable {
     private Usuario userData;
     private ServiceCliente serviceCliente;
     private ServiceContacto serviceContacto;
+    private Cliente cliente;
+    private ContactoCliente contactoCliente;
 
     @FXML
     private Button btnAddContacto;
+    @FXML
+    private Button btnDelete;
 
     @FXML
     private Label labHeadTitle;
@@ -55,7 +57,6 @@ public class ContactoController implements Initializable {
     private TextField txtResponsavel;
     @FXML
     private TextField txtSite;
-    private int vectorDados[];
 
     public void addORupdateContacto(ActionEvent e) throws SQLException {
         if ("".equals(txtIDContacto.getText())) {
@@ -72,10 +73,11 @@ public class ContactoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         this.userData = SysFact.getUserData();
-//        Object obj = SysFact.getData();
-//        this.vectorDados = (int[]) obj;
-
-//        labHeadTitle.setText("Contacto #" + vectorDados[1]);
+        if (SysFact.getData() != null) {
+            if (SysFact.getData() instanceof Cliente) {
+                this.cliente = (Cliente) SysFact.getData();
+            }
+        }
 
         try {
             serviceCliente = new ServiceCliente();
@@ -88,28 +90,29 @@ public class ContactoController implements Initializable {
         ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
     }
 
-    
-
-    public void showContactos(){
-        if (SysFact.getData() != null) {
-            ContactoCliente cc = (ContactoCliente)SysFact.getData();
-                txtIDContacto.setText(cc.getId()+"");
-                txtResponsavel.setText(cc.getResponsavel());
-                txtContacto.setText(cc.getContacto_cli());
-                txtEmail.setText(cc.getEmail_cli());
-                txtSite.setText(cc.getWebsite_cli());
+    public void showContactos() {
+        if ((SysFact.getData() instanceof ContactoCliente) && SysFact.getData() != null) {
+            contactoCliente = (ContactoCliente) SysFact.getData();
+            txtIDContacto.setText(contactoCliente.getId() + "");
+            txtResponsavel.setText(contactoCliente.getResponsavel());
+            txtContacto.setText(contactoCliente.getContacto_cli());
+            txtEmail.setText(contactoCliente.getEmail_cli());
+            txtSite.setText(contactoCliente.getWebsite_cli());
+            ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
+            SysFact.setData(null);
         }
     }
 
     public void addContacto(ActionEvent e) throws SQLException {
-        Cliente c = serviceCliente.consultaClienteByID(Integer.parseInt(txtIDContacto.getText()));
         serviceContacto.registar(txtEmail.getText(), txtContacto.getText(),
-                txtSite.getText(), txtResponsavel.getText(), c, userData);
+                txtSite.getText(), txtResponsavel.getText(), cliente, userData);
 
         if (serviceContacto.isOpsSuccess()) {
             serviceContacto.setOpsSuccess(false);
-//            showContactos();
-            restContacto();
+            for (ContactoCliente cc : serviceContacto.consultaContactoPorCLiente(cliente.getId())) {
+                SysFact.setData(cc);
+            }
+            showContactos();
         }
     }
 
@@ -119,58 +122,27 @@ public class ContactoController implements Initializable {
 
         if (serviceContacto.isOpsSuccess()) {
             serviceContacto.setOpsSuccess(false);
-//            showContactos();
-            restContacto();
         }
     }
 
-    /*
-    Funcoes de Linha selecionada
-     */
-//    public void selecionaContacto(MouseEvent event) throws SQLException {
-//        ContactoCliente x = tabelaContacto.getSelectionModel().getSelectedItem();
-//        if (x != null) {
-//            txtIDContacto.setText(String.valueOf(x.getId()));
-//            txtResponsavel.setText(x.getResponsavel());
-//            txtContacto.setText(x.getContacto_cli());
-//            txtEmail.setText(x.getEmail_cli());
-//            txtSite.setText(x.getWebsite_cli());
-//            deleteContacto(event, x);
-//            ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
-//        }
-//    }
-    public void deleteContacto(MouseEvent event, ContactoCliente x) throws SQLException {
-        if (event.getButton().name().equals("SECONDARY")) {
+    public void deleteContacto(ActionEvent event) throws SQLException {
+        if ((event.getSource() ==  btnDelete) && (!"".equals(txtIDContacto.getText()) && !txtIDContacto.getText().isEmpty())) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
             dialog.setContentText("Deseja excluir o item?");
             dialog.initModality(Modality.APPLICATION_MODAL);
 
-            ButtonType btnDelete = new ButtonType("Apagar", ButtonType.OK.getButtonData());
+            ButtonType btnApagar = new ButtonType("Apagar", ButtonType.OK.getButtonData());
             ButtonType btnCancel = new ButtonType("Cancelar", ButtonType.CANCEL.getButtonData());
-            dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
+            dialog.getDialogPane().getButtonTypes().addAll(btnApagar, btnCancel);
 
             Optional<ButtonType> result = dialog.showAndWait();
-            if (result.get() == btnDelete) {
-                serviceContacto.excluir(x.getId());
+            if (result.get() == btnApagar) {
+                serviceContacto.excluir(Integer.parseInt(txtIDContacto.getText()));
                 if (serviceContacto.isOpsSuccess()) {
-//                    showContactos();
-                    restContacto();
                     serviceContacto.setOpsSuccess(false);
                 }
-            } else if (result.get() == btnCancel) {
-                restContacto();
             }
         }
     }
-
-    public void restContacto() {
-        txtIDContacto.setText("");
-        txtResponsavel.setText("");
-        txtContacto.setText("");
-        txtEmail.setText("");
-        txtSite.setText("");
-        ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
-    }
-
 }

@@ -13,11 +13,15 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import jminvsm.SysFact;
 import jminvsm.model.cliente.Cliente;
@@ -125,8 +129,9 @@ public class ContactoController implements Initializable {
         }
     }
 
+
     public void deleteContacto(ActionEvent event) throws SQLException {
-        if ((event.getSource() ==  btnDelete) && (!"".equals(txtIDContacto.getText()) && !txtIDContacto.getText().isEmpty())) {
+        if ((event.getSource() == btnDelete) && (!"".equals(txtIDContacto.getText()) && !txtIDContacto.getText().isEmpty())) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
             dialog.setContentText("Deseja excluir o item?");
@@ -141,6 +146,20 @@ public class ContactoController implements Initializable {
                 serviceContacto.excluir(Integer.parseInt(txtIDContacto.getText()));
                 if (serviceContacto.isOpsSuccess()) {
                     serviceContacto.setOpsSuccess(false);
+                    /*
+                    O que pretende aqui e encontrar a AnchorPane onde esta o botao que disparou esta accao dentro da VBox e remover essa AnchorPane
+                     */
+                    // botão que disparou a acção
+                    Node source = (Node) event.getSource();
+                    // AnchorPane que contém este botão
+                    AnchorPane contactoPane1 = (AnchorPane) source.getParent();
+                    // AnchorPane que contém essa AnchorPane que contém este botão
+                    AnchorPane contactoPane2 = (AnchorPane) contactoPane1.getParent();
+                    // VBox que contém essa AnchorPane que contém essa AnchorPane que contém este botão
+                    VBox vbox = (VBox) contactoPane2.getParent();
+                    // remover a view inteira
+                    vbox.getChildren().remove(contactoPane2);
+
                 }
             }
         }

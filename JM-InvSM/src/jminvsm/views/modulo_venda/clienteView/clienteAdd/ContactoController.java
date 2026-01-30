@@ -14,7 +14,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -39,8 +38,9 @@ import jminvsm.util.ButtonUtilities;
 public class ContactoController implements Initializable {
 
     private Usuario userData;
-    private ServiceCliente serviceCliente;
     private ServiceContacto serviceContacto;
+    private ServiceCliente serviceCliente;
+
     private Cliente cliente;
     private ContactoCliente contactoCliente;
 
@@ -128,7 +128,6 @@ public class ContactoController implements Initializable {
             serviceContacto.setOpsSuccess(false);
         }
     }
-
 
     public void deleteContacto(ActionEvent event) throws SQLException {
         if ((event.getSource() == btnDelete) && (!"".equals(txtIDContacto.getText()) && !txtIDContacto.getText().isEmpty())) {

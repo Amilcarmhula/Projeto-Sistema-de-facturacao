@@ -36,7 +36,7 @@ public class ServiceEndereco {
 
     public void registar(String tipo, String avenida, String bairro, String cidade,
             Integer postalCode, Integer numero, String provincia, String rua,
-            Integer id_cli, Usuario user) {
+            Cliente cliente, Usuario user) {
         setOpsSuccess(false);
         if (avenida == null || avenida.isEmpty()) {
             avenida = "de Mocambique";
@@ -64,17 +64,11 @@ public class ServiceEndereco {
         if (rua == null || rua.isEmpty()) {
             rua = "Dos Mocambicanos";
         }
-        if (id_cli == null || id_cli == 0) {
-            showErroAlert( "Cliente nao selecionado ou definido!");
-            return;
-        }
         if (tipo == null || tipo.isEmpty()) {
             tipo = "Facturação";
         }
 
         EnderecoCliente endereco = new EnderecoCliente();
-        Cliente c = new Cliente();
-        c.setId(id_cli);
         endereco.setAvenida_cli(avenida);
         endereco.setBairro_cli(bairro);
         endereco.setCidade_cli(cidade);
@@ -84,7 +78,7 @@ public class ServiceEndereco {
         endereco.setRua_cli(rua);
         endereco.setTipo_cli(tipo);
         endereco.setUsuario(user);
-        endereco.setCliente(c);
+        endereco.setCliente(cliente);
 
         if (enderecoDao.addEntity(endereco)) {
             setOpsSuccess(true);

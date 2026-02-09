@@ -271,11 +271,22 @@ create table movimento(
     FOREIGN KEY (idLote) REFERENCES lote(id),
     FOREIGN KEY (idItemRequisicao) REFERENCES itemRequisicao(id),
     CONSTRAINT chk_movimento_origem CHECK (
-        (tipoMovimento = 'Entrada' AND idLote IS NOT NULL AND idItemRequisicao IS NULL)
-        OR
-        (tipoMovimento = 'Saida' AND idItemRequisicao IS NOT NULL AND idLote IS NULL)
+		(tipoMovimento = 'Entrada' AND idLote IS NOT NULL)
+		OR
+		(tipoMovimento = 'Saida')
     )
 );
+
+ALTER TABLE movimento
+DROP CONSTRAINT chk_movimento_origem;
+
+ALTER TABLE movimento
+ADD CONSTRAINT chk_movimento_origem CHECK (
+    (tipoMovimento = 'Entrada' AND idLote IS NOT NULL)
+    OR
+    (tipoMovimento = 'Saida')
+);
+
 
 -- Para rastrear quais lotes foram usados em cada saída (ex: vendas grandes que usam vários lotes),
 -- recomenda-se criar uma tabela adicional movimento_lote.
@@ -352,7 +363,6 @@ create table itemfactura(
 	id integer primary key auto_increment,
     quantidade decimal(10,2) not null,
     subtotal decimal(10,2) not null,
-    unidade_vendida enum('Simples', 'Composto') default 'Simples',
     qtd_por_unidade integer DEFAULT 1,
     fk_id_produto integer not null,
     fk_numero varchar(20) not null,

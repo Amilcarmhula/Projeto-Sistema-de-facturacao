@@ -88,7 +88,7 @@ public class MiniPagamentoViewController implements Initializable {
                 LoadAndMoveUtilities.showAsPopUP(null, null);
                 ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
             }
-            service.geraRelatorio(labNumeroFactura.getText());
+//            service.geraRelatorio(labNumeroFactura.getText());
         }
     }
 

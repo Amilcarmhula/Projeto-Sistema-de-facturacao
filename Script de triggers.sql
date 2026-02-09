@@ -305,53 +305,134 @@ BEGIN
 END//
 DELIMITER ;
 
--- Para Controlo de Stock
-
 
 -- Trigger para controlar fluxo de stock(saldo de determinado produto em seu armazarm) quando um movimento de saida e registado na tabela itemfactura
+-- DELIMITER //
+-- CREATE TRIGGER Tg_C_Saida
+-- AFTER INSERT ON itemfactura
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE total_unidades INT;
+--     DECLARE estoque_atual INT;
+
+--     SET total_unidades = NEW.quantidade * NEW.qtd_por_unidade;
+
+
+--     SELECT saldo
+--     INTO estoque_atual
+--     FROM stock
+--     WHERE idProduto = NEW.fk_id_produto
+--       AND idArmazem = NEW.fk_id_armazem
+--     LIMIT 1;
+
+--     -- Só insere o movimento se houver saldo suficiente
+--     IF estoque_atual IS NOT NULL AND estoque_atual >= total_unidades THEN
+--         INSERT INTO movimento (
+--             tipoMovimento,
+--             dataMovimento,
+--             quantidade,
+--             idProduto,
+--             idArmazem
+--         )
+--         VALUES (
+--             'Saída',
+--             NEW.data_adicao,
+--             NEW.quantidade,
+--             NEW.fk_id_produto,
+--             NEW.fk_id_armazem
+--         );
+--     END IF;
+-- END//
+-- DELIMITER ;
+
 DELIMITER //
+
 CREATE TRIGGER Tg_C_Saida
 AFTER INSERT ON itemfactura
 FOR EACH ROW
 BEGIN
-    DECLARE total_unidades INT;
-    DECLARE estoque_atual INT;
+    DECLARE qtd_restante INT;
+    DECLARE lote_id INT;
+    DECLARE qtd_lote INT;
 
-    -- Calcula a quantidade total (ex.: caixas × unidades por caixa)
-    SET total_unidades = NEW.quantidade * NEW.qtd_por_unidade;
+    -- Quantidade real a sair
+    SET qtd_restante = NEW.quantidade * NEW.qtd_por_unidade;
 
-    -- Busca saldo atual do produto no armazém
-    SELECT saldo
-    INTO estoque_atual
-    FROM stock
-    WHERE fk_id_produto = NEW.fk_id_produto
-      AND fk_id_armazem = NEW.fk_id_armazem
-    LIMIT 1;
+    -- Loop FIFO pelos lotes activos
+    WHILE qtd_restante > 0 DO
 
-    -- Só insere o movimento se houver saldo suficiente
-    IF estoque_atual IS NOT NULL AND estoque_atual >= total_unidades THEN
-        INSERT INTO movimento (
-            tipo_movimento,
-            data_movimento,
-            quantidade,
-            tipoUnidadeMov,
-            uniPorTipoMove,
-            fk_id_produto,
-            fk_id_usuario,
-            fk_id_armazem
-        )
-        VALUES (
-            'Saída',
-            NEW.data_adicao,
-            NEW.quantidade,
-            NEW.unidade_vendida,
-            NEW.qtd_por_unidade,
-            NEW.fk_id_produto,
-            NEW.fk_id_usuario,
-            NEW.fk_id_armazem
-        );
-    END IF;
+        SELECT id, quantidadeAtual
+        INTO lote_id, qtd_lote
+        FROM lote
+        WHERE idProduto = NEW.fk_id_produto
+          AND idArmazem = NEW.fk_id_armazem
+          AND estado = 'Ativo'
+        ORDER BY dataEntrada
+        LIMIT 1;
+
+        -- Sem stock
+        IF lote_id IS NULL THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Stock insuficiente para concluir a venda';
+        END IF;
+
+        -- Abate parcial ou total
+        IF qtd_lote >= qtd_restante THEN
+
+            UPDATE lote
+            SET quantidadeAtual = quantidadeAtual - qtd_restante,
+                estado = IF(quantidadeAtual - qtd_restante = 0, 'Esgotado', 'Ativo')
+            WHERE id = lote_id;
+
+            INSERT INTO movimento (
+                tipoMovimento,
+                dataMovimento,
+                quantidade,
+                idProduto,
+                idArmazem,
+                idLote
+            ) VALUES (
+                'Saida',
+                DATE(NEW.data_adicao),
+                qtd_restante,
+                NEW.fk_id_produto,
+                NEW.fk_id_armazem,
+                lote_id
+            );
+
+            SET qtd_restante = 0;
+
+        ELSE
+
+            UPDATE lote
+            SET quantidadeAtual = 0,
+                estado = 'Esgotado'
+            WHERE id = lote_id;
+
+            INSERT INTO movimento (
+                tipoMovimento,
+                dataMovimento,
+                quantidade,
+                idProduto,
+                idArmazem,
+                idLote
+            ) VALUES (
+                'Saida',
+                DATE(NEW.data_adicao),
+                qtd_lote,
+                NEW.fk_id_produto,
+                NEW.fk_id_armazem,
+                lote_id
+            );
+
+            SET qtd_restante = qtd_restante - qtd_lote;
+
+        END IF;
+
+    END WHILE;
+
 END//
+
 DELIMITER ;
 
 -- ****************************************************************

@@ -37,24 +37,24 @@ public class ItemDAO implements ItemDAOImpl<Item> {
     public void addEntity(List<Item> items) {
         try {
             for (Item t : items) {
-                sql = "insert into itemfactura (quantidade, subtotal,fk_id_produto,fk_numero,"
-                        + "fk_id_usuario, fk_id_armazem,unidade_vendida,qtd_por_unidade) value (?,?,?,?,?,?,?,?)";
+                sql = "insert into itemfactura (quantidade, subtotal,fk_id_produto, fk_numero,"
+                        + "fk_id_usuario, fk_id_armazem,qtd_por_unidade) value (?,?,?,?,?,?,?)";
                 ps = con.prepareStatement(sql);
                 ps.setInt(1, t.getQuantidade());// ***********
                 ps.setDouble(2, t.getSubtotal());// ***********
                 ps.setInt(3, t.getProduto().getId());// ***********
+                System.out.println("Id do produto teste: "+t.getProduto().getId());
                 ps.setString(4, t.getFactura().getNumero_fac());// ***********
                 ps.setInt(5, t.getUsuario().getId());// ***********
                 ps.setInt(6, t.getArmazem().getId());// ***********
-                ps.setString(7, t.getUnidade_vendida());
-                ps.setInt(8, t.getQtd_por_unidade());
+                ps.setInt(7, t.getQtd_por_unidade());
 
                 ps.execute();
                 ps.close();
             }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: id: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -63,7 +63,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
         try {
             for (Item t : items) {
                 sql = "insert into itemcotacao (quantidade, subtotal,fk_id_produto,fk_numero,"
-                        + "fk_id_usuario, fk_id_armazem,unidade_vendida,qtd_por_unidade) value (?,?,?,?,?,?,?,?)";
+                        + "fk_id_usuario, fk_id_armazem,qtd_por_unidade) value (?,?,?,?,?,?,?)";
                 ps = con.prepareStatement(sql);
                 ps.setInt(1, t.getQuantidade());// ***********
                 ps.setDouble(2, t.getSubtotal());// ***********
@@ -71,8 +71,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 ps.setString(4, t.getFactura().getNumero_fac());// ***********
                 ps.setInt(5, t.getUsuario().getId());// ***********
                 ps.setInt(6, t.getArmazem().getId());// ***********
-                ps.setString(7, t.getUnidade_vendida());
-                ps.setInt(9, t.getQtd_por_unidade());
+                ps.setInt(7, t.getQtd_por_unidade());
 
                 ps.execute();
                 ps.close();
@@ -101,7 +100,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
             }else{
                 sql = "SELECT p.nome, p.descricao,"
                     + "i.quantidade, i.subtotal, "
-                    + "i.unidade_vendida, i.qtd_por_unidade, "
+                    + "i.qtd_por_unidade, "
                     + "ip.nome as descricao_imposto, ip.percentagem AS imposto, "
                     + "f.numero "
                     + "FROM itemfactura i "
@@ -119,7 +118,6 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 
                 i.setQuantidade(result.getInt("quantidade"));
                 i.setSubtotal(result.getDouble("subtotal"));
-                i.setUnidade_vendida(result.getString("unidade_vendida"));
                 i.setQtd_por_unidade(result.getInt("qtd_por_unidade"));
                 Produto p = new Produto();
                 p.setNome(result.getString("nome"));

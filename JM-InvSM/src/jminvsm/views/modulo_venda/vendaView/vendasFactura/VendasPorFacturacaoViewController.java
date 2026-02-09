@@ -204,10 +204,6 @@ public class VendasPorFacturacaoViewController implements Initializable {
     private TextField txtContactoCLiente;
     @FXML
     private TextField txtEmailCLiente;
-    @FXML
-    private RadioButton rdPagamentoVista;
-    @FXML
-    private RadioButton rdPagamentoParcelado;
 
     @FXML
     private ComboBox<String> combTipoDoc;
@@ -402,6 +398,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initTableItems();
+        randNum = new Random();
         LeitorSerialListener leitor = new LeitorSerialListener("COM3", codigo -> {
             System.out.println("Código lido via listener: " + codigo);
         });
@@ -438,64 +435,39 @@ public class VendasPorFacturacaoViewController implements Initializable {
 
     
 
-    public void radioParcelado() {
-        String condicao;
-        rdPagamentoParcelado.setSelected(true);
-        rdPagamentoVista.setSelected(false);
-    }
-
-    public void radioVista() {
-        String condicao;
-        rdPagamentoVista.setSelected(true);
-        rdPagamentoParcelado.setSelected(false);
-    }
-
-    public String radioCondicaoPagamento() {
-        String condicao = "Aberta";
-        if (rdPagamentoParcelado.isSelected()) {
-            condicao = "Parcelado";
-        }
-        if (rdPagamentoVista.isSelected()) {
-            if (combTipoDoc.getValue().equals("Fatura Proforma")) {
-                condicao = "Parcelado";
-            } else {
-                condicao = "A vista";
-            }
-        }
-        if (combTipoDoc.getValue().equals("Fatura Simplificada") && (!rdPagamentoVista.isSelected() || !rdPagamentoParcelado.isSelected())) {
-            condicao = "A vista";
-        }
-        return condicao;
-    }
-
     public void criarFactura(ActionEvent evt) throws SQLException {
         int cli = Integer.parseInt(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
         DocumentosComerciais doc = mapaDocComercial.get(combTipoDoc.getValue());
 
         ServiceFactura service = new ServiceFactura();
         service.criaFactura(labNumeroFactura.getText(), labDataInicial.getText(),
-                labValidade.getText(), Double.valueOf(labTotalGeral.getText()), radioCondicaoPagamento(), doc, cli, empresaData, userData, collectItens());
+                labValidade.getText(), Double.valueOf(labTotalGeral.getText()), combCondPagamento.getValue(), doc, cli, empresaData, userData, collectItens());
         //Se a factura for criada com sucesso, sereta os campos
         if (service.isEstado()) {
             if ("Fatura".equals(combTipoDoc.getValue()) || "Fatura Recibo".equals(combTipoDoc.getValue())) {
-                if (rdPagamentoVista.isSelected()) {
+                if (combCondPagamento.getValue().equals("A vista")) {
                     SysFact.setData(labNumeroFactura.getText());
                     geMiniPagamentoView(evt);
                     resetFactura();
+                    novaFactura(evt);
                 } else {
-                    service.geraRelatorio(labNumeroFactura.getText());
+                    /*
+                    Por enquanto o metodo geraRelatorio e resetFactura nao serao executados
+                     */
+//                    service.geraRelatorio(labNumeroFactura.getText());
                     resetFactura();
                 }
             } else if ("Fatura Simplificada".equals(combTipoDoc.getValue())) {
                 SysFact.setData(labNumeroFactura.getText());
                 geMiniPagamentoView(evt);
-                resetFactura();
+                novaFactura(evt);
+//                resetFactura();
             } else {
                 service.geraRelatorio(labNumeroFactura.getText());
-                resetFactura();
+//                resetFactura();
             }
-            rdPagamentoParcelado.setSelected(false);
-            rdPagamentoVista.setSelected(false);
+//            rdPagamentoParcelado.setSelected(false);
+//            rdPagamentoVista.setSelected(false);
         }
     }
 
@@ -587,28 +559,6 @@ public class VendasPorFacturacaoViewController implements Initializable {
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/miniPagamentoView/MiniPagamentoView.fxml");
 //        }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
     private ObservableList<Stock> listaStock;
     private Map<String, Stock> mapaStock;
@@ -664,9 +614,13 @@ public class VendasPorFacturacaoViewController implements Initializable {
         }
 
     }
+    
+    private Random randNum;
     public void populateTableItems(Stock s) {
         int qtd = 1;
         Item i = new Item();
+        int num = randNum.nextInt(50);
+        i.setId(num);
         i.setQuantidade(qtd);
 //        popular tabela itens
 

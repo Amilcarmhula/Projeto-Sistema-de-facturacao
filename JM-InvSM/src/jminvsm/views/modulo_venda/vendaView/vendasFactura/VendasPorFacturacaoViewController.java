@@ -444,7 +444,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
                 labValidade.getText(), Double.valueOf(labTotalGeral.getText()), combCondPagamento.getValue(), doc, cli, empresaData, userData, collectItens());
         //Se a factura for criada com sucesso, sereta os campos
         if (service.isEstado()) {
-            if ("Fatura".equals(combTipoDoc.getValue()) || "Fatura Recibo".equals(combTipoDoc.getValue())) {
+            if ("Fatura".equals(combTipoDoc.getValue()) || "Fatura Recibo".equals(combTipoDoc.getValue()) || "Fatura Simplificada".equals(combTipoDoc.getValue())) {
                 if (combCondPagamento.getValue().equals("A vista")) {
                     SysFact.setData(labNumeroFactura.getText());
                     geMiniPagamentoView(evt);

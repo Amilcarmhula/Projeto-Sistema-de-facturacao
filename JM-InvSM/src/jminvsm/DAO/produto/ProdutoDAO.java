@@ -8,19 +8,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
-import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.imposto.Imposto;
-import jminvsm.model.preco.PrecoProdutoArmazem;
-import jminvsm.model.stock.Stock;
 import jminvsm.model.unidade_medida.UnidadeMedida;
-import jminvsm.util.AlertUtilities;
 import jminvsm.util.Conexao;
 
 /**
@@ -176,7 +170,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
                     + " p.tipoProduto, p.unidadePorTipo, "
                     + " c.grupo, c.subgrupo, c.familia, "
-                    + "	u.nome as nomeUnidade, "
+                    + "	u.nome as nomeUnidade, u.sigla as siglaUnidade, "
                     + " t.nome as taxa "
                     + " FROM produto p "
                     + " LEFT JOIN categoria c ON c.id = p.idCategoria "
@@ -200,6 +194,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setCategoria(cat);
                 UnidadeMedida u = new UnidadeMedida();
                 u.setNome(result.getString("nomeUnidade"));
+                u.setSigla(result.getString("siglaUnidade"));
                 p.setUnidadeMedida(u);
                 Imposto t = new Imposto();
                 t.setNome(result.getString("taxa"));

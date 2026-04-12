@@ -199,6 +199,12 @@ public class ProdutoController implements Initializable {
     @FXML
     private Label labCategoria;
     @FXML
+    private Label labUnidade;
+    @FXML
+    private Label labTaxa;
+    @FXML
+    private Label labPercentagemTaxa;
+    @FXML
     private Label labFamilia;
     @FXML
     private TextField txtPreco;
@@ -652,6 +658,9 @@ public class ProdutoController implements Initializable {
             combTaxa.setValue(p.getImposto().getNome());
             txtUnidadesPorTipo.setText(String.valueOf(p.getUnidadesPorTipo()));
             labCategoria.setText(p.getCategoria().getGrupo() + " > " + p.getCategoria().getSubgrupo() + " > " + p.getCategoria().getFamilia());
+            labUnidade.setText(p.getUnidadeMedida().getNome()+":"+p.getUnidadeMedida().getSigla());
+            labTaxa.setText(p.getImposto().getNome());
+            labPercentagemTaxa.setText(p.getImposto().getPercentagem()+" %");
             stockControlChecked();
             showResumoStock(x.getId());
             showPrecoProdutoArmazem();

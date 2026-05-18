@@ -15,6 +15,7 @@ import jminvsm.model.categoria.Categoria;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.imposto.Imposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
+import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
 /**
@@ -258,8 +259,8 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             result.close();
             ps.close();
         } catch (SQLException ex) {
-            System.out.println("Erro de contagem: " + ex);
-//            showDialog("Erro de contagem", "Detalhes: " + ex);
+//            System.out.println("Erro de contagem: " + ex);
+            showDialog("Erro de contagem", "Detalhes: " + ex);
 
         }
 

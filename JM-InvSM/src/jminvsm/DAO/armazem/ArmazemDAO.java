@@ -70,7 +70,8 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
         String sql = "update armazem set tipo=?,nome=?,descricao=?"
                 + " where id=?";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, c.getTipo());
             ps.setString(2, c.getNome_arm());

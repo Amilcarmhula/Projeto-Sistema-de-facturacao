@@ -20,22 +20,22 @@ import jminvsm.util.Conexao;
  */
 public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmazem> {
 
-    private final Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public ContactoArmazemDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
+//    private final Connection con;
+//    private PreparedStatement ps;
+//    private String sql;
+//
+//    public ContactoArmazemDAO() throws SQLException {
+//        this.con = Conexao.getConexao();
+//    }
 
     @Override
     public boolean addEntity(ContactoArmazem t) {
         boolean isSuccess = false;
-        try {
-            sql = "insert into contacto_armazem (contacto, email,pessoa_de_contacto, "
+        String sql = "insert into contacto_armazem (contacto, email,pessoa_de_contacto, "
                     + "idArmazem) value (?,?,?,?)";
-
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getContacto_arm());
             ps.setString(2, t.getEmail_arm());
@@ -51,26 +51,18 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
 
         } catch (SQLException ex) {
             showDialog("Erro de persistencia!", "Detalhes: "+ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return isSuccess;
-
     }
 
     @Override
     public boolean updateEntityByID(ContactoArmazem t, int id) {
         boolean isSuccess = false;
-        try {
-            sql = "update contacto_armazem set contacto=?, email=? ,"
+        String sql = "update contacto_armazem set contacto=?, email=? ,"
                     + "pessoa_de_contacto=? where id=?";
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getContacto_arm());
             ps.setString(2, t.getEmail_arm());
@@ -86,25 +78,18 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
 
         } catch (SQLException ex) {
             showDialog("Erro de persistencia!", "Detalhes: "+ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return isSuccess;
     }
 
     @Override
     public ObservableList<ContactoArmazem> listAllEntities() {
         ObservableList<ContactoArmazem> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from contacto_armazem";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
+        String sql = "select * from contacto_armazem";
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
             while (result.next()) {
                 ContactoArmazem c = new ContactoArmazem();
                 c.setId(result.getInt("id"));
@@ -113,8 +98,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
                 c.setResponsavel_arm(result.getString("pessoa_de_contacto"));
                 lista.add(c);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             showDialog("Erro de consulta!", "Detalhes: "+ex);
         }
@@ -124,12 +108,13 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
     @Override
     public ObservableList<ContactoArmazem> searchEntityByCLiente(int idArmazem) {
         ObservableList<ContactoArmazem> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from contacto_armazem where idArmazem=?";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, idArmazem);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        String sql = "select * from contacto_armazem where idArmazem=?";
+        try (
+                Connection con = Conexao.getConexao(); 
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setInt(1, idArmazem);
+                while (result.next()) {
                 ContactoArmazem c = new ContactoArmazem();
                 c.setId(result.getInt("id"));
                 c.setContacto_arm(result.getString("contacto"));
@@ -137,8 +122,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
                 c.setResponsavel_arm(result.getString("pessoa_de_contacto"));
                 lista.add(c);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             showDialog("Erro de consulta!", "Detalhes: "+ex);
         }
@@ -148,9 +132,9 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
     @Override
     public boolean deleteEntity(int x) {
         boolean isSuccess = false;
-        try {
-            sql = "delete from contacto_armazem where id=?";
-            ps = con.prepareStatement(sql);
+        String sql = "delete from contacto_armazem where id=?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, x);
             int rowsAffected = ps.executeUpdate();
@@ -162,15 +146,8 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
             showDialog("Erro de exclusao", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
+        
         return isSuccess;
     }
 }

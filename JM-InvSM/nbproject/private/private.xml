@@ -4,23 +4,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/service/stock/ServiceStock.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/util/LoadAndMoveUtilities.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/transacoes/TransacaoDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/vendas/factura/FacturaDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_venda/clienteView/clienteAdd/AddClienteController.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/service/cliente/contacto/ServiceContacto.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/model/vendas/factura/itens/Item.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/produto/ProdutoDAO.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/util/FilePathFinderUtilities.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/util/Conexao.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/service/produto/fornecido/ServiceProdutoFornecido.java</file>
             <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_venda/vendaView/vendasFactura/VendasPorFacturacaoViewController.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/cliente/contacto/ContactoClienteDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/stock/StockDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_venda/miniPagamentoView/MiniPagamentoViewController.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/service/transacoes/ServiceTransacoes.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/service/produto/ServiceProduto.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/vendas/itens/ItemDAO.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_venda/clienteView/clienteAdd/ContactoController.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/produto/fornecido/ProdutoFornecidoDAO.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/usuario/UsuarioDAO.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/util/TesteConexao.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_inventario/stockView/AddStockController.java</file>
             <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/views/modulo_inventario/produtosView/ProdutoController.java</file>
-            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/service/vendas/factura/ServiceFactura.java</file>
+            <file>file:/C:/Users/JM-Tecnologias/Documents/NetBeansProjects/Projeto%20Sistema%20de%20facturacao/JM-InvSM/src/jminvsm/dao/stock/StockDAO.java</file>
         </group>
     </open-files>
 </project-private>

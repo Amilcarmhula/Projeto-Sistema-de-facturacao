@@ -372,6 +372,8 @@ select * from stock;
 select * from requisicao;
 select * from itemRequisicao;
 
+desc requisicao;
+
 -- Dados base
 INSERT INTO fornecedor (tipo, razaosocial, nuit) VALUES ('Jurídica', 'Fornecedor A', 123456789);
 INSERT INTO armazem (nome, tipo, descricao) VALUES ('Central', 'Principal', 'Armazém Central');

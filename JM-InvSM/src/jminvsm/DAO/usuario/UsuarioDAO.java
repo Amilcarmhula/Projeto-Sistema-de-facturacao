@@ -19,54 +19,110 @@ import static jminvsm.util.AlertUtilities.showDialog;
  *
  * @author JM-Tecnologias
  */
+//public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
+//
+//    private LoadAndMoveUtilities metodosUteis;
+//    private Connection con;
+//    private PreparedStatement ps;
+//    private String sql;
+//
+//    public UsuarioDAO() throws SQLException {
+//        this.con = Conexao.getConexao();
+//    }
+//
+//    public Usuario login(String u, String s) {
+//        Usuario user = null;
+//        try {
+//            sql = "select u.id, u.nome, u.email,u.estado,u.usuario,"
+//                    + "p.tipo,n.descricao "
+//                    + "from usuario u "
+//                    + "LEFT JOIN nivel_acesso n ON u.fk_nivel_acesso=n.id "
+//                    + "LEFT JOIN permissao p ON u.fk_permissao=p.id "
+//                    + "where usuario=? and senha=? and estado=1";
+//            ps = Conexao.getConexao().prepareStatement(sql);
+//            ps.setString(1, u);
+//            ps.setString(2, s);
+//
+//            ResultSet result = ps.executeQuery();
+//            if (result.next()) {
+//                user = new Usuario();
+//                user.setId(result.getInt("id"));
+//                user.setNome(result.getString("nome"));
+//                user.setUsuario(result.getString("usuario"));
+//                user.setEmail(result.getString("email"));
+//                user.setEstado(result.getBoolean("estado"));
+//                NivelAcesso n = new NivelAcesso();
+//                n.setDescricao(result.getString("descricao"));
+//                user.setNivelAcesso(n);
+//                Permissao p = new Permissao();
+//                p.setTipo(result.getString("tipo"));
+//                user.setPermissao(p);
+//            } else {
+//                showDialog("Info", "Usuario nao existe!!");
+//            }
+//            result.close();
+//            ps.close();
+//        } catch (SQLException ex) {
+//            showDialog( "Erro", "Detalhes: " + ex);
+//        }
+//        return user;
+//    }
 public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 
     private LoadAndMoveUtilities metodosUteis;
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
 
-    public UsuarioDAO() throws SQLException {
-        this.con = Conexao.getConexao();
+    public UsuarioDAO() {
     }
 
     public Usuario login(String u, String s) {
+
         Usuario user = null;
-        try {
-            sql = "select u.id, u.nome, u.email,u.estado,u.usuario,"
-                    + "p.tipo,n.descricao "
-                    + "from usuario u "
-                    + "LEFT JOIN nivel_acesso n ON u.fk_nivel_acesso=n.id "
-                    + "LEFT JOIN permissao p ON u.fk_permissao=p.id "
-                    + "where usuario=? and senha=? and estado=1";
-            ps = Conexao.getConexao().prepareStatement(sql);
+        String sql = "select u.id, u.nome, u.email,u.estado,u.usuario,"
+                + "p.tipo,n.descricao "
+                + "from usuario u "
+                + "LEFT JOIN nivel_acesso n ON u.fk_nivel_acesso=n.id "
+                + "LEFT JOIN permissao p ON u.fk_permissao=p.id "
+                + "where usuario=? and senha=? and estado=1";
+
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, u);
             ps.setString(2, s);
 
-            ResultSet result = ps.executeQuery();
-            if (result.next()) {
-                user = new Usuario();
-                user.setId(result.getInt("id"));
-                user.setNome(result.getString("nome"));
-                user.setUsuario(result.getString("usuario"));
-                user.setEmail(result.getString("email"));
-                user.setEstado(result.getBoolean("estado"));
-                NivelAcesso n = new NivelAcesso();
-                n.setDescricao(result.getString("descricao"));
-                user.setNivelAcesso(n);
-                Permissao p = new Permissao();
-                p.setTipo(result.getString("tipo"));
-                user.setPermissao(p);
-            } else {
-                showDialog("Info", "Usuario nao existe!!");
+            try (ResultSet result = ps.executeQuery()) {
+
+                if (result.next()) {
+
+                    user = new Usuario();
+                    user.setId(result.getInt("id"));
+                    user.setNome(result.getString("nome"));
+                    user.setUsuario(result.getString("usuario"));
+                    user.setEmail(result.getString("email"));
+                    user.setEstado(result.getBoolean("estado"));
+
+                    NivelAcesso n = new NivelAcesso();
+                    n.setDescricao(result.getString("descricao"));
+                    user.setNivelAcesso(n);
+
+                    Permissao p = new Permissao();
+                    p.setTipo(result.getString("tipo"));
+                    user.setPermissao(p);
+
+                } else {
+                    showDialog("Info", "Usuario nao existe!!");
+                }
             }
-            result.close();
-            ps.close();
+
         } catch (SQLException ex) {
-            showDialog( "Erro", "Detalhes: " + ex);
+            System.out.println("Erro Detalhes: " + ex.getMessage());
+            showDialog("Erro", "Detalhes: " + ex.getMessage());
         }
+
         return user;
     }
+
+}
 
 //
 //    @Override
@@ -219,4 +275,4 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 //                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
 //        }
 //    }
-}
+//}

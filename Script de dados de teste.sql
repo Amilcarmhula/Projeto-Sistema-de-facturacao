@@ -39,6 +39,10 @@ INSERT INTO usuario (nome, email, usuario, senha, estado, fk_nivel_acesso, fk_pe
 VALUE
 ('Amilcar Mula', 'amilcar.mula@example.com', 'root', 'senha123', 1, 1, 15);
 
+INSERT INTO usuario (nome, email, usuario, senha, estado, fk_nivel_acesso, fk_permissao)
+VALUE
+('Junior Mula', 'jm_mula@jm-tecnologias.co.mz', 'junior', 'senha123', 1, 1, 15);
+
 INSERT INTO fornecedor (tipo, razaosocial, nuit) VALUE
 ('Pessoa Jurídica', 'Fornecedor Padrao.LDA', 100000001);
 

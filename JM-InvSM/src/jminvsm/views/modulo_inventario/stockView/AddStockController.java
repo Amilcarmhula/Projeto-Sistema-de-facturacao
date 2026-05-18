@@ -280,8 +280,8 @@ public class AddStockController implements Initializable {
                 String.valueOf(dataAquisicao.getValue() == null ? "" : dataAquisicao.getValue()),
                 Double.valueOf(txtCustoUnitario.getText().equals("") ? "0" : txtCustoUnitario.getText())
         );
-        showLotes(stock.getProduto().getId());
-        showResumoStock(stock.getProduto().getId());
+        showLotes(prod.getId());
+        showResumoStock(prod.getId());
 
         // Gera codigo do proximo lote
         ProdutoFornecido pf = servicoprodFornecido.getLastCodeLote();

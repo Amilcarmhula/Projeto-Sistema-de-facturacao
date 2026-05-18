@@ -2,6 +2,10 @@ drop database _sysface;
 create database _sysface;
 
 use _sysface;
+-- CREATE USER 'root'@'%' IDENTIFIED BY 'Informatico12';
+-- GRANT ALL PRIVILEGES ON _sysface.* TO 'root'@'%';
+-- FLUSH PRIVILEGES;
+
 
 --  Banco de dados da empresa no sistema Sysface
  create table empresa(

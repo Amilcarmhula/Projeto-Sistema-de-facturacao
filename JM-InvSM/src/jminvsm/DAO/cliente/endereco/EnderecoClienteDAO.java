@@ -22,23 +22,23 @@ import jminvsm.util.Conexao;
  */
 public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoCliente> {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public EnderecoClienteDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
+//    private Connection con;
+//    private PreparedStatement ps;
+//    private String sql;
+//
+//    public EnderecoClienteDAO() throws SQLException {
+//        this.con = Conexao.getConexao();
+//    }
 
     @Override
     public boolean addEntity(EnderecoCliente t) {
         boolean isSuccess = false;
-        try {
-            sql = "insert into endereco_cliente (provincia,cidade,bairro,avenida,"
+        String sql = "insert into endereco_cliente (provincia,cidade,bairro,avenida,"
                     + "rua,codigo_postal,numero, tipo, fk_id_cliente, fk_id_usuario)"
                     + " value (?,?,?,?,?,?,?,?,?,?)";
-
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getProvincia_cli());
             ps.setString(2, t.getCidade_cli());
@@ -59,25 +59,19 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return isSuccess;
     }
 
     @Override
     public boolean updateEntityByID(EnderecoCliente t, int id) {
         boolean isSuccess = false;
-        try {
-            sql = "update endereco_cliente set provincia=?,cidade=?,bairro=?,avenida=?,"
+        String sql = "update endereco_cliente set provincia=?,cidade=?,bairro=?,avenida=?,"
                     + "rua=?,codigo_postal=?,numero=?, tipo=?,fk_id_usuario=? where id=?";
-            ps = con.prepareStatement(sql);
+            
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getProvincia_cli());
             ps.setString(2, t.getCidade_cli());
@@ -98,14 +92,6 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }
@@ -113,10 +99,11 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
     @Override
     public ObservableList<EnderecoCliente> listAllEntities() {
         ObservableList<EnderecoCliente> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from endereco_cliente";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
+        String sql = "select * from endereco_cliente";
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
             while (result.next()) {
                 EnderecoCliente c = new EnderecoCliente();
                 c.setId(result.getInt("id"));
@@ -130,8 +117,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
                 c.setTipo_cli(result.getString("tipo"));
                 lista.add(c);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             showDialog( "Erro de consulta", "Detalhes: " + ex);
         }
@@ -140,11 +126,13 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
     @Override
     public ObservableList<EnderecoCliente> searchEntityByCLiente(int idCliente) {
         ObservableList<EnderecoCliente> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from endereco_cliente where fk_id_cliente=?";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1,idCliente);
-            ResultSet result = ps.executeQuery();
+                    String sql = "select * from endereco_cliente where fk_id_cliente=?";
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setInt(1,idCliente);
+            
             while (result.next()) {
                 EnderecoCliente ed = new EnderecoCliente();
                 ed.setId(result.getInt("id"));
@@ -162,8 +150,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
                 
                 lista.add(ed);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             showDialog( "Erro de consulta", "Detalhes: " + ex);
         }
@@ -173,9 +160,9 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
      @Override
     public boolean deleteEntity(int id) {
         boolean isSuccess = false;
-        try {
-            sql = "delete from endereco_cliente where id=?";
-            ps = con.prepareStatement(sql);
+        String sql = "delete from endereco_cliente where id=?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
         int rowsAffected = ps.executeUpdate();
@@ -186,14 +173,6 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
 
         } catch (SQLException ex) {
             showDialog("Erro de exclusao", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }

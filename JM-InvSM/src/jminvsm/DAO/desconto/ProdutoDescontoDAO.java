@@ -1,35 +1,10 @@
-/*
- * The MIT License
- *
- * Copyright 2025 JM-Tecnologias.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
+
 package jminvsm.dao.desconto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.armazem.Armazem;
@@ -45,22 +20,14 @@ import jminvsm.util.Conexao;
  */
 public class ProdutoDescontoDAO {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public ProdutoDescontoDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
-
     // CREATE
     public boolean addEntity(ProdutoDesconto t) {
         boolean isSuccess = false;
-        try {
-            sql = "INSERT INTO produtodesconto (idProduto, idDesconto, dataInicio, dataFim,idArmazem) "
+        String sql = "INSERT INTO produtodesconto (idProduto, idDesconto, dataInicio, dataFim,idArmazem) "
                     + "VALUES (?, ?, ?, ?, ?)";
-
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, t.getProduto().getId());
             ps.setInt(2, t.getDesconto().getId());
             ps.setString(3, t.getDataInicio());
@@ -72,23 +39,16 @@ public class ProdutoDescontoDAO {
 
         } catch (SQLException ex) {
             System.out.println("Erro ao inserir ProdutoDesconto:: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-            }
-        }
+        } 
         return isSuccess;
     }
     
     public boolean callAplicaDesconto(ProdutoDesconto t) {
         boolean isSuccess = false;
-        try {
-            sql = "CALL sp_aplicar_desconto_ao_preco(?, ?)";
-
-            ps = con.prepareStatement(sql);
+        String sql = "CALL sp_aplicar_desconto_ao_preco(?, ?)";
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, t.getProduto().getId());
             ps.setInt(2, t.getArmazem().getId());
 
@@ -97,14 +57,7 @@ public class ProdutoDescontoDAO {
 
         } catch (SQLException ex) {
             System.out.println("Erro ao inserir: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-            }
-        }
+        } 
         return isSuccess;
     }
 
@@ -112,8 +65,7 @@ public class ProdutoDescontoDAO {
     public ObservableList<ProdutoDesconto> getEntityByID(int idProduto) {
         ObservableList<ProdutoDesconto> lista = FXCollections.observableArrayList();
         ProdutoDesconto pd = null;
-        try {
-            sql = "select p.nome as nomeProduto, p.descricao as descricaoProduto,"
+        String sql = "select p.nome as nomeProduto, p.descricao as descricaoProduto,"
                     + "	a.nome as nomeArmazem, a.tipo as tipoArmazem, a.descricao as descicaoArmazem, "
                     + " d.nome as nomeDesconto, "
                     + " pd.dataInicio, pd.dataFim, d.percentagem "
@@ -122,11 +74,11 @@ public class ProdutoDescontoDAO {
                     + " join desconto d on pd.idDesconto=d.id "
                     + " join armazem a on pd.idArmazem=a.id "
                     + " where idProduto=? ";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1,  idProduto);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                ps.setInt(1, idProduto);
+                while (rs.next()) {
                 pd = new ProdutoDesconto();
                 Produto p = new Produto();
                 p.setNome(rs.getString("nomeProduto"));
@@ -150,8 +102,7 @@ public class ProdutoDescontoDAO {
 
                 lista.add(pd);
             }
-            rs.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             showDialog( "Erro de consulta!", "Detalhes: " + e);
         }
@@ -161,10 +112,9 @@ public class ProdutoDescontoDAO {
     // DELETE
     public boolean delete(ProdutoDesconto t) {
         boolean isSuccess = false;
-        try {
-            sql = "DELETE FROM produtodesconto WHERE idProduto=? AND idDesconto=? AND dataInicio=? AND dataFim=? AND idArmazem=?";
-            ps = con.prepareStatement(sql);
-
+        String sql = "DELETE FROM produtodesconto WHERE idProduto=? AND idDesconto=? AND dataInicio=? AND dataFim=? AND idArmazem=?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, t.getProduto().getId());
             ps.setInt(2, t.getDesconto().getId());
             ps.setString(3, t.getDataInicio());
@@ -176,14 +126,7 @@ public class ProdutoDescontoDAO {
 
         } catch (SQLException ex) {
             System.out.println("Erro ao apagar ProdutoDesconto: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-            }
-        }
+        } 
         return isSuccess;
     }
 

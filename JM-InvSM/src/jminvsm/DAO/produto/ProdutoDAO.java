@@ -23,22 +23,22 @@ import jminvsm.util.Conexao;
  */
 public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public ProdutoDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
+//    private Connection con;
+//    private PreparedStatement ps;
+//    private String sql;
+//
+//    public ProdutoDAO() throws SQLException {
+//        this.con = Conexao.getConexao();
+//    }
 
     @Override
     public boolean addEntity(Produto t) {
         boolean isSuccess = false;
-        try {
-            sql = "insert into produto (nome, codigo_barra, descricao,idCategoria, "
+        String sql = "insert into produto (nome, codigo_barra, descricao,idCategoria, "
                     + "idUnidade,idImposto,controle_stock,nivelstock, tipoProduto, unidadePorTipo) value (?,?,?,?,?,?,?,?,?,?)";
-
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getNome());
             ps.setString(2, t.getCodigo_barra());
@@ -60,14 +60,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
 //            showDialog("Erro persistencia", "Detalhes: " + ex); 
             System.out.println("Erro persistencia:" + ex);
 
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }
@@ -75,11 +67,12 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     @Override
     public boolean updateEntityByID(Produto t, int id) {
         boolean isSuccess = false;
-        try {
-            sql = "update produto set nome=?,codigo_barra=? ,descricao=?,idCategoria=?, "
+        String sql = "update produto set nome=?,codigo_barra=? ,descricao=?,idCategoria=?, "
                     + "idUnidade=?,idImposto=?, nivelstock=?, controle_stock=?, tipoProduto=?,"
                     + " unidadePorTipo=? where id=?";
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getNome());
             ps.setString(2, t.getCodigo_barra());
@@ -102,23 +95,14 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
 //            showDialog("Erro persistencia", "Detalhes: " + ex);
             System.out.println("Erro persistencia Detalhes: " + ex);
 
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return isSuccess;
     }
 
     @Override
     public ObservableList<Produto> getCombinedEntities() {
         ObservableList<Produto> lista = FXCollections.observableArrayList();
-        try {
-            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
+        String sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
                     + "p.tipo, p.unidadePorTipo, "
                     + "		c.id as id_categoria, c.familia as categoria,"
                     + "         u.id as id_unidade, u.identificador, u.sigla,"
@@ -127,8 +111,10 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + "LEFT JOIN categoria c ON c.id = p.idCategoria "
                     + "LEFT JOIN unidade_medida u ON u.id = p.idUnidade "
                     + "LEFT JOIN imposto t ON t.id = p.idImposto ";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
             while (result.next()) {
                 Produto p = new Produto();
                 p.setId(result.getInt("id"));
@@ -155,8 +141,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setControle_stock(result.getBoolean("controle_stock"));
                 lista.add(p);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
@@ -166,8 +151,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     @Override
     public ObservableList<Produto> listAllProducts() {
         ObservableList<Produto> lista = FXCollections.observableArrayList();
-        try {
-            sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
+        String sql = "SELECT p.id, p.nome, p.codigo_barra, p.descricao, p.controle_stock, p.nivelstock, "
                     + " p.tipoProduto, p.unidadePorTipo, "
                     + " c.grupo, c.subgrupo, c.familia, "
                     + "	u.nome as nomeUnidade, u.sigla as siglaUnidade, "
@@ -176,9 +160,11 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + " LEFT JOIN categoria c ON c.id = p.idCategoria "
                     + " LEFT JOIN unidadeMedida u ON u.id = p.idUnidade "
                     + " LEFT JOIN imposto t ON t.id = p.idImposto ";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+            while (result.next()) { 
                 Produto p = new Produto();
                 p.setId(result.getInt("id"));
                 p.setNome(result.getString("nome"));
@@ -202,8 +188,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setControle_stock(result.getBoolean("controle_stock"));
                 lista.add(p);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
@@ -216,10 +201,11 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     @Override
     public Produto getLastEntity() {
         Produto p = null;
-        try {
-            sql = "SELECT * FROM produto ORDER BY id DESC LIMIT 1";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
+        String sql = "SELECT * FROM produto ORDER BY id DESC LIMIT 1";
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
             while (result.next()) {
                 p = new Produto();
                 p.setId(result.getInt("id"));
@@ -241,8 +227,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setControle_stock(result.getBoolean("controle_stock"));
 
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao Bucar armazem: " + e,
                     "Informação", JOptionPane.ERROR_MESSAGE);
@@ -252,11 +237,12 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
 
     public int countProdutos(Integer cat) {
         int total = 0;
-        try {
-            sql = "select count(*) as total_produto from produto p "
+        String sql = "select count(*) as total_produto from produto p "
                     + "LEFT JOIN categoria c ON c.id=p.idCategoria "
                     + "where (? IS NULL OR c.id = ?)";
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             // Se a categoria não for informado, passar valor nulo
             if (cat == null) {
                 ps.setNull(1, java.sql.Types.INTEGER);
@@ -283,9 +269,10 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     @Override
     public boolean deleteEntity(int id) {
         boolean isSuccess = false;
-        try {
-            sql = "delete from produto where id=?";
-            ps = con.prepareStatement(sql);
+        String sql = "delete from produto where id=?";
+        try (
+                Connection con = Conexao.getConexao(); 
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             int rowsAffected = ps.executeUpdate();
@@ -297,14 +284,6 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
 //            showDialog("Erro de exclusao", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }

@@ -28,15 +28,17 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
 //    private String sql;
 //
 //    public ArmazemDAO() throws SQLException {
-//        this.con = Conexao.getConexao();
+//        this. con = Conexao.getConexao();
 //    }
+
     @Override
     public boolean addEntity(Armazem c) {
         boolean isSuccess = false;
         String sql = "insert into armazem (tipo,nome,descricao) value (?,?,?)";
 
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, c.getTipo());
             ps.setString(2, c.getNome_arm());
             ps.setString(3, c.getDescricao_arm());
@@ -105,8 +107,9 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 + "LEFT JOIN contacto_armazem ct ON ct.idArmazem = a.id "
                 + "GROUP BY a.id, a.tipo, a.nome, a.descricao, a.estado";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ResultSet result = ps.executeQuery();
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
             while (result.next()) {
                 Armazem c = new Armazem();
                 c.setId(result.getInt("id"));
@@ -127,8 +130,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 c.setContactoArmazem(listaContactos);
                 lista.add(c);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             showDialog("Erro de consulta!", "Detalhes: " + e);
 
@@ -188,8 +190,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
         String sql = "delete from armazem WHERE id = ?";
 
         try (
-                Connection con = Conexao.getConexao();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, x);
             int rowsAffected = ps.executeUpdate();
@@ -220,17 +221,16 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
         String sql = "select * from armazem";
 
         try (
-                Connection con = Conexao.getConexao();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
-                Armazem c = new Armazem();
-                c.setId(result.getInt("id"));
-                c.setTipo(result.getString("tipo"));
-                c.setNome_arm(result.getString("nome"));
-                c.setDescricao_arm(result.getString("descricao"));
-                lista.add(c);
-            }
+                    Armazem c = new Armazem();
+                    c.setId(result.getInt("id"));
+                    c.setTipo(result.getString("tipo"));
+                    c.setNome_arm(result.getString("nome"));
+                    c.setDescricao_arm(result.getString("descricao"));
+                    lista.add(c);
+                }
             }
         } catch (SQLException e) {
             showDialog("Erro de consulta!", "Detalhes: " + e);

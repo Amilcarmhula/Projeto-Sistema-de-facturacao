@@ -22,22 +22,15 @@ import jminvsm.util.Conexao;
  */
 public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoCliente> {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public ContactoClienteDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
 
     @Override
     public boolean addEntity(ContactoCliente t) {
         boolean isSuccess = false;
-        try {
-            sql = "insert into contacto_cliente (contacto, email,website,pessoa_de_contacto, "
+        String sql = "insert into contacto_cliente (contacto, email,website,pessoa_de_contacto, "
                     + "fk_id_cliente, fk_id_usuario) value (?,?,?,?,?,?)";
-
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getContacto_cli());
             ps.setString(2, t.getEmail_cli());
@@ -54,25 +47,18 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return isSuccess;
     }
 
     @Override
     public boolean updateEntityByID(ContactoCliente t, int id) {
         boolean isSuccess = false;
-        try {
-            sql = "update contacto_cliente set contacto=?, email=? ,website=? ,"
+        String sql = "update contacto_cliente set contacto=?, email=? ,website=? ,"
                     + "pessoa_de_contacto=?, fk_id_usuario=? where id=?";
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getContacto_cli());
             ps.setString(2, t.getEmail_cli());
@@ -89,14 +75,6 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
 
         } catch (SQLException ex) {
             showDialog( "Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }
@@ -104,10 +82,11 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     @Override
     public ObservableList<ContactoCliente> listAllEntities() {
         ObservableList<ContactoCliente> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from contacto_cliente";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
+        String sql = "select * from contacto_cliente";
+         try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
             while (result.next()) {
                 ContactoCliente c = new ContactoCliente();
                 c.setId(result.getInt("id"));
@@ -117,8 +96,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
                 c.setResponsavel(result.getString("pessoa_de_contacto"));
                 lista.add(c);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Buscar Contacto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
@@ -128,12 +106,12 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     @Override
     public ObservableList<ContactoCliente> searchEntityByCLiente(int idCliente) {
         ObservableList<ContactoCliente> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from contacto_cliente where fk_id_cliente=?";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, idCliente);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        String sql = "select * from contacto_cliente where fk_id_cliente=?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setInt(1, idCliente);
+                while (result.next()) {
                 ContactoCliente c = new ContactoCliente();
                 c.setId(result.getInt("id"));
                 c.setContacto_cli(result.getString("contacto"));
@@ -145,8 +123,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
                 c.setCliente(cli);
                 lista.add(c);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao pesquisar Contacto: " + ex,
                     "Informação", JOptionPane.ERROR_MESSAGE);
@@ -157,9 +134,9 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     @Override
     public boolean deleteEntity(int x) {
         boolean isSuccess = false;
-        try {
-            sql = "delete from contacto_cliente where id=?";
-            ps = con.prepareStatement(sql);
+        String sql = "delete from contacto_cliente where id=?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, x);
             int rowsAffected = ps.executeUpdate();
@@ -170,15 +147,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return isSuccess;
     }
 }

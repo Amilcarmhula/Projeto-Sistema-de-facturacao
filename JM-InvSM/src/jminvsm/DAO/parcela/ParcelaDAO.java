@@ -31,11 +31,13 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
     @Override
     public boolean addEntity(Parcela t) {
         boolean isSuccess = false;
-        try {
-            sql = "insert into parcelas (parcelaNumero,taxaJuros,valorParcela,"
+        
+            String sql = "insert into parcelas (parcelaNumero,taxaJuros,valorParcela,"
                     + "dataVencimento,fk_factura,fk_usuario)"
-                    + " value (?,?,?,?,?,?)";
-            ps = con.prepareStatement(sql);
+                    + " values (?,?,?,?,?,?)";
+            try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, t.getParcelaNumero());
             ps.setDouble(2, t.getTaxaJuros());
             ps.setDouble(3, t.getValorParcela());
@@ -52,14 +54,6 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }
@@ -67,16 +61,17 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
     @Override
     public ObservableList<Parcela> getEntities(String fk_numero) {
         ObservableList<Parcela> lista = FXCollections.observableArrayList();
-        try {
+        String 
             sql = "select p.id, p.parcelaNumero, p.taxaJuros, p.taxaDeAtraso, "
                     + "(p.valorParcela*p.taxaDeAtraso)+p.valorParcela as valorParcela, "
                     + "p.valorPagoParcela, p.dataVencimento, p.dataPagamento, p.estado, "
                     + "p.fk_factura, p.fk_usuario "
                     + "from parcelas p where fk_factura=?";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, fk_numero);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+           try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setString(1, fk_numero);
+                while (result.next()) {
                 Parcela p = new Parcela();
                 p.setId_parcela(result.getInt("id"));
                 p.setParcelaNumero(result.getInt("parcelaNumero"));
@@ -89,8 +84,7 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
                 p.setEstado(result.getString("estado"));
                 lista.add(p);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             showDialog("Erro de consulra", "Detalhes: " + ex);
         }

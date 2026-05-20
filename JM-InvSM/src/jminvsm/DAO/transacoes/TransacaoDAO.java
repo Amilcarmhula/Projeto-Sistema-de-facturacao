@@ -22,22 +22,16 @@ import jminvsm.util.Conexao;
  */
 public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public TransacaoDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
 
     @Override
     public boolean addTansacaoAvista(Transacao t) {
         boolean isSuccess = false;
-        try {
-            sql = "insert into transacoes (data_pagamento,valorRecebido,tipo_transacao,"
+        String sql = "insert into transacoes (data_pagamento,valorRecebido,tipo_transacao,"
                     + "descricao,fk_id_contabancaria,"
-                    + "fk_id_metodo_pagamento, fk_numero, fk_id_usuario, valorPago, trocos) value (?,?,?,?,?,?,?,?,?,?)";
-            ps = con.prepareStatement(sql);
+                    + "fk_id_metodo_pagamento, fk_numero, fk_id_usuario, valorPago, trocos) values (?,?,?,?,?,?,?,?,?,?)";
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getData_pagamento());
             ps.setDouble(2, t.getValorRecebido());
             ps.setString(3, t.getTipo_transacao());
@@ -58,25 +52,18 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
         } catch (SQLException ex) {
             System.out.println("Erro: "+ex+" Data: "+t.getData_pagamento());
             showDialog( "Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }
     
     public boolean addTansacaoParcelada(Transacao t) {
         boolean isSuccess = false;
-        try {
-            sql = "insert into transacoes (data_pagamento,valorRecebido,tipo_transacao,"
+            String sql = "insert into transacoes (data_pagamento,valorRecebido,tipo_transacao,"
                     + "descricao,fk_id_contabancaria,"
                     + "fk_id_metodo_pagamento, fk_numero, fk_id_usuario, valorPago, trocos,fk_parcela) value (?,?,?,?,?,?,?,?,?,?,?)";
-            ps = con.prepareStatement(sql);
+            try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getData_pagamento());
             ps.setDouble(2, t.getValorRecebido());
             ps.setString(3, t.getTipo_transacao());
@@ -98,15 +85,7 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
         } catch (SQLException ex) {
             System.out.println("Erro: "+ex+" Data: "+t.getData_pagamento());
             showDialog( "Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return isSuccess;
     }
     
@@ -114,15 +93,15 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
     @Override
     public ObservableList<Transacao> getTransacoes(String numero) {
         ObservableList<Transacao> lista = FXCollections.observableArrayList();
-        try {
-            sql = "SELECT  t.fk_parcela as refParcela,  t.id, t.valorRecebido, t.valorPago, t.trocos, t.data_pagamento, t.data_criacao, t.descricao, m.nome "
+        String sql = "SELECT  t.fk_parcela as refParcela,  t.id, t.valorRecebido, t.valorPago, t.trocos, t.data_pagamento, t.data_criacao, t.descricao, m.nome "
                     + "	from transacoes t "
                     + "	LEFT JOIN metodo_pagamento m ON m.id=t.fk_id_metodo_pagamento "
                     + " where fk_numero=? order by fk_parcela";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, numero);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+            try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setString(1, numero);
+                while (result.next()) {
                 Transacao t = new Transacao();
                 t.setId(result.getInt("id"));
                 t.setValorRecebido(result.getDouble("valorRecebido"));
@@ -139,8 +118,7 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
                 t.setParcela(p);
                 lista.add(t);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             showDialog("Erro de consulta", "Detalhes: " + e);
         }

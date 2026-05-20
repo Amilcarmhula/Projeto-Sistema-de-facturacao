@@ -23,14 +23,6 @@ import jminvsm.util.Conexao;
  */
 public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
 
-//    private Connection con;
-//    private PreparedStatement ps;
-//    private String sql;
-//
-//    public ArmazemDAO() throws SQLException {
-//        this. con = Conexao.getConexao();
-//    }
-
     @Override
     public boolean addEntity(Armazem c) {
         boolean isSuccess = false;
@@ -52,15 +44,6 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
         }
-//        finally {
-//            try {
-//                if (ps != null) {
-//                    ps.close();
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
         return isSuccess;
     }
 
@@ -85,17 +68,8 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro de persistencia", "Detalhes: " + ex);
+            showDialog("Erro actualizacao de Armazem", "Detalhes: " + ex);
         }
-//        finally {
-//            try {
-//                if (ps != null) {
-//                    ps.close();
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
         return isSuccess;
     }
 
@@ -133,7 +107,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta!", "Detalhes: " + e);
+            showDialog("Erro de listagem de Armazem!", "Detalhes: " + e);
 
         }
         return lista;
@@ -157,7 +131,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta!", "Detalhes: " + e);
+            showDialog("Erro de consulta de Armazem!", "Detalhes: " + e);
         }
         return c;
     }
@@ -180,7 +154,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta!", "Detalhes: " + e);
+            showDialog("Erro de consulta de Armazem!", "Detalhes: " + e);
         }
         return c;
     }
@@ -201,17 +175,9 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro de exclusao", "Detalhes: " + ex);
+            showDialog("Erro de exclusao de Armazem", "Detalhes: " + ex);
         }
-//        finally {
-//            try {
-//                if (ps != null) {
-//                    ps.close();
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
+
         return isSuccess;
 
     }
@@ -234,18 +200,11 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta!", "Detalhes: " + e);
+            showDialog("Erro de consulta de Armazem!", "Detalhes: " + e);
 
         }
         return lista;
     }
 
-    public static void main(String[] args) throws SQLException {
-        ArmazemDAO dao = new ArmazemDAO();
-        for (Armazem a : dao.listAllArmazens()) {
-            System.out.println("Arm: " + a.getNome_arm());
-        }
-
-    }
 
 }

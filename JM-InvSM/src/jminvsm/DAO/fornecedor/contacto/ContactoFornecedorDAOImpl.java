@@ -14,7 +14,7 @@ public interface ContactoFornecedorDAOImpl<T> {
     boolean  addEntity(T t);
     boolean updateEntityByID(T t,int id);
     ObservableList<T> listAllEntities();
-    ObservableList<T> searchEntityByCLiente(int t) ;
+    ObservableList<T> searchEntityByFornecedor(int t) ;
 //    T searchEntityByName(String name);
 //    void deleteEntityByROOT(int id);
     boolean deleteEntity(int x);

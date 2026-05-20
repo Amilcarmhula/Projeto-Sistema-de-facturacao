@@ -85,7 +85,7 @@ public class ServiceContacto {
     }
     
     public ObservableList<ContactoFornecedor>  consultaContactoPorFornecedor(int id){
-        return contactoDao.searchEntityByCLiente(id);
+        return contactoDao.searchEntityByFornecedor(id);
     }
 
     public void excluir(int id) {

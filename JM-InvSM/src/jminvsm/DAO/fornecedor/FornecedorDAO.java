@@ -26,21 +26,13 @@ import jminvsm.util.Conexao;
  */
 public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
 
-    private final Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public FornecedorDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
-
     @Override
     public boolean addEntity(Fornecedor c) {
         boolean isSuccess = false;
-
-        try {
-            sql = "insert into fornecedor (tipo,razaosocial,nuit) value (?,?,?)";
-            ps = con.prepareStatement(sql);
+        String sql = "insert into fornecedor (tipo,razaosocial,nuit) value (?,?,?)";
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, c.getTipo_forn());
             ps.setString(2, c.getRazaosocial_forn());
             ps.setInt(3, c.getNuit_forn());
@@ -53,26 +45,18 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return isSuccess;
     }
 
     @Override
     public boolean updateEntityByID(Fornecedor c, int id) {
         boolean isSuccess = false;
-
-        try {
-            sql = "update fornecedor set tipo=?, razaosocial=? ,nuit=?"
+        String sql = "update fornecedor set tipo=?, razaosocial=? ,nuit=?"
                     + " where id=?";
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, c.getTipo_forn());
             ps.setString(2, c.getRazaosocial_forn());
@@ -87,29 +71,23 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return isSuccess;
     }
 
     @Override
     public ObservableList<Fornecedor> listAllEntities() {
         ObservableList<Fornecedor> lista = FXCollections.observableArrayList();
-        try {
-            sql = "SELECT f.id,f.tipo,f.razaosocial,f.nuit, "
+        String sql = "SELECT f.id,f.tipo,f.razaosocial,f.nuit, "
                     + "GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos "
                     + "FROM fornecedor f "
                     + "LEFT JOIN contacto_fornecedor ct ON ct.idFornecedor = f.id "
                     + "GROUP BY f.id, f.tipo, f.razaosocial, f.nuit;";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
+            
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
             while (result.next()) {
                 Fornecedor c = new Fornecedor();
                 c.setId(result.getInt("id"));
@@ -129,8 +107,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
                 c.setContactoFornecedor(listaContactos);
                 lista.add(c);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao Bucar fornecedor: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
 
@@ -141,10 +118,12 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
     @Override
     public Fornecedor getLastEntity() {
         Fornecedor c = null;
-        try {
-            sql = "SELECT id,tipo,razaosocial,nuit FROM fornecedor ORDER BY id DESC LIMIT 1;";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
+        String sql = "SELECT id,tipo,razaosocial,nuit FROM fornecedor ORDER BY id DESC LIMIT 1;";
+            
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
             while (result.next()) {
                 c = new Fornecedor();
                 c.setId(result.getInt("id"));
@@ -152,8 +131,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
                 c.setRazaosocial_forn(result.getString("razaosocial"));
                 c.setNuit_forn(result.getInt("nuit"));
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao Bucar fornecedor: " + e,
                     "Informação", JOptionPane.ERROR_MESSAGE);
@@ -164,20 +142,20 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
     @Override
     public Fornecedor getEntityByID(int id) {
         Fornecedor c = null;
-        try {
-            sql = "SELECT id,tipo,razaosocial,nuit FROM fornecedor where id=?";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        String sql = "SELECT id,tipo,razaosocial,nuit FROM fornecedor where id=?";
+            
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setInt(1, id);
+                while (result.next()) {
                 c = new Fornecedor();
                 c.setId(result.getInt("id"));
                 c.setTipo_forn(result.getString("tipo"));
                 c.setRazaosocial_forn(result.getString("razaosocial"));
                 c.setNuit_forn(result.getInt("nuit"));
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao Bucar fornecedor: " + e,
                     "Informação", JOptionPane.ERROR_MESSAGE);
@@ -188,11 +166,12 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
     @Override
     public ObservableList<Fornecedor> listAllFornecedores() {
         ObservableList<Fornecedor> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from fornecedor";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        String sql = "select * from fornecedor";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            try (ResultSet result = ps.executeQuery()) {
+                while (result.next()) {
                 Fornecedor c = new Fornecedor();
                 c.setId(result.getInt("id"));
                 c.setTipo_forn(result.getString("tipo"));
@@ -200,8 +179,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
                 c.setNuit_forn(result.getInt("nuit"));
                 lista.add(c);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             showDialog("Erro de consulta!", "Detalhes: " + e);
 
@@ -212,10 +190,9 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
     @Override
     public boolean deleteEntity(int x) {
         boolean isSuccess = false;
-
-        try {
-            sql = "delete from fornecedor WHERE id = ?";
-            ps = con.prepareStatement(sql);
+        String sql = "delete from fornecedor WHERE id = ?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, x);
             int rowsAffected = ps.executeUpdate();
@@ -226,32 +203,24 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return isSuccess;
     }
 
     @Override
     public int CountFornecedor() {
         int total = 0;
-        try {
-            sql = "select count(*) as total from fornecedor";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
+        String sql = "select count(*) as total from fornecedor";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            try (ResultSet result = ps.executeQuery()) {
             if (result.next()) { // Verifica se há resultados
                 total = result.getInt("total");
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(FornecedorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            showDialog("Erro de Contagem de Fornecedores!", "Detalhes: " + ex);
         }
 
         return total;

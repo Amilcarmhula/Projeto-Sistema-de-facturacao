@@ -28,8 +28,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.armazem.Armazem;
@@ -44,20 +42,11 @@ import jminvsm.util.Conexao;
  */
 public class PrecoProdutoArmazemDAO {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public PrecoProdutoArmazemDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
-
     public boolean addEntity(PrecoProdutoArmazem x) {
         boolean isSuccess = false;
-        try {
-            sql = "CALL sp_registar_preco(?, ?, ?) ";
-
-            ps = con.prepareStatement(sql);
+        String sql = "CALL sp_registar_preco(?, ?, ?) ";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, x.getProduto().getId());
             ps.setInt(2, x.getArmazem().getId());
 //            ps.setDouble(3, x.getPreco());
@@ -72,13 +61,6 @@ public class PrecoProdutoArmazemDAO {
 
         } catch (SQLException ex) {
             System.out.println("Erro ao inserir: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-            }
         }
         return isSuccess;
     }
@@ -86,31 +68,31 @@ public class PrecoProdutoArmazemDAO {
     public ObservableList<PrecoProdutoArmazem> getEntityByID(int idProduto, int idArmazem) {
         ObservableList<PrecoProdutoArmazem> lista = FXCollections.observableArrayList();
         PrecoProdutoArmazem pv = null;
-        try {
-            sql = "select * from precoProdutoArmazem where idProduto=? and idArmazem=?";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, idProduto);
-            ps.setInt(2, idArmazem);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                //melhorar esta funcao
-                pv = new PrecoProdutoArmazem();
-                pv.setId(result.getInt("id"));
+        String sql = "select * from precoProdutoArmazem where idProduto=? and idArmazem=?";
+
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setInt(1, idProduto);
+                ps.setInt(2, idArmazem);
+                while (result.next()) {
+                    //melhorar esta funcao
+                    pv = new PrecoProdutoArmazem();
+                    pv.setId(result.getInt("id"));
 //                pv.setPrecoNormal(result.getDouble("precoNormal"));
-                pv.setPrecoVenda(result.getDouble("preco"));
-                pv.setPrecoFinal(result.getDouble("precoFinal"));
-                pv.setDataFimVigencia(result.getString("dataValidade"));
+                    pv.setPrecoVenda(result.getDouble("preco"));
+                    pv.setPrecoFinal(result.getDouble("precoFinal"));
+                    pv.setDataFimVigencia(result.getString("dataValidade"));
 //                pv.setEstado(result.getString("estado"));
-                Produto p = new Produto();
-                p.setId(result.getInt("idProduto"));
-                pv.setProduto(p);
-                Armazem a = new Armazem();
-                a.setId(result.getInt("idArmazem"));
-                pv.setArmazem(a);
-                lista.add(pv);
+                    Produto p = new Produto();
+                    p.setId(result.getInt("idProduto"));
+                    pv.setProduto(p);
+                    Armazem a = new Armazem();
+                    a.setId(result.getInt("idArmazem"));
+                    pv.setArmazem(a);
+                    lista.add(pv);
+                }
             }
-            result.close();
-            ps.close();
         } catch (SQLException e) {
             showDialog("Erro de consulta!", "Detalhes: " + e);
         }
@@ -120,32 +102,33 @@ public class PrecoProdutoArmazemDAO {
     public ObservableList<PrecoProdutoArmazem> listAllPrecos(int idProd) {
         ObservableList<PrecoProdutoArmazem> listaPrecos = FXCollections.observableArrayList();
         PrecoProdutoArmazem pr = null;
-        try {
-            sql = "SELECT pr.id, pr.idProduto, pr.idArmazem, pr.precoBase, pr.precoVenda, "
-                    + " pr.precoFinal, pr.dataInicioVigencia, pr.dataFimVigencia, pr.estado "
-                    + " FROM precoProdutoArmazem pr "
-                    + " LEFT JOIN produto p ON p.id = pr.idProduto "
-                    + "where p.id = ?";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, idProd);
-            ResultSet result = ps.executeQuery();
 
-            while (result.next()) {
-                pr = new PrecoProdutoArmazem();
-                pr.setId(result.getInt("id"));
-                Produto produto = new Produto();
-                produto.setId(result.getInt("idProduto"));
-                pr.setProduto(produto);
-                Armazem a = new Armazem();
-                a.setId(result.getInt("idArmazem"));
-                pr.setArmazem(a);
-                pr.setPrecoVenda(result.getDouble("precoVenda"));
-                pr.setPrecoFinal(result.getDouble("precoFinal"));
-                pr.setPrecoBase(result.getDouble("precoBase"));
-                pr.setDataInicioVigencia(result.getString("dataInicioVigencia"));
-                pr.setDataFimVigencia(result.getString("dataFimVigencia"));
-                pr.setEstado(result.getString("estado"));
-                listaPrecos.add(pr);
+        String sql = "SELECT pr.id, pr.idProduto, pr.idArmazem, pr.precoBase, pr.precoVenda, "
+                + " pr.precoFinal, pr.dataInicioVigencia, pr.dataFimVigencia, pr.estado "
+                + " FROM precoProdutoArmazem pr "
+                + " LEFT JOIN produto p ON p.id = pr.idProduto "
+                + "where p.id = ?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setInt(1, idProd);
+                while (result.next()) {
+                    pr = new PrecoProdutoArmazem();
+                    pr.setId(result.getInt("id"));
+                    Produto produto = new Produto();
+                    produto.setId(result.getInt("idProduto"));
+                    pr.setProduto(produto);
+                    Armazem a = new Armazem();
+                    a.setId(result.getInt("idArmazem"));
+                    pr.setArmazem(a);
+                    pr.setPrecoVenda(result.getDouble("precoVenda"));
+                    pr.setPrecoFinal(result.getDouble("precoFinal"));
+                    pr.setPrecoBase(result.getDouble("precoBase"));
+                    pr.setDataInicioVigencia(result.getString("dataInicioVigencia"));
+                    pr.setDataFimVigencia(result.getString("dataFimVigencia"));
+                    pr.setEstado(result.getString("estado"));
+                    listaPrecos.add(pr);
+                }
             }
         } catch (SQLException ex) {
             showDialog("Erro de consulta", "Detalhes: " + ex);
@@ -156,9 +139,10 @@ public class PrecoProdutoArmazemDAO {
 
     public boolean deleteEntityByUSER(int id) {
         boolean isSuccess = false;
-        try {
-            sql = "update precoProdutoArmazem set estado='desactivo' where id=?";
-            ps = con.prepareStatement(sql);
+        String sql = "update precoProdutoArmazem set estado='desactivo' where id=?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setInt(1, id);
 
             int rowsAffected = ps.executeUpdate();
@@ -169,32 +153,7 @@ public class PrecoProdutoArmazemDAO {
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
-    }
-
-    public static void main(String[] args) throws SQLException {
-        PrecoProdutoArmazemDAO dao = new PrecoProdutoArmazemDAO();
-
-        PrecoProdutoArmazem ppa = new PrecoProdutoArmazem();
-//        ppa.setPreco(200.0);
-//        Armazem a = new Armazem();
-//        a.setId(1);
-//        ppa.setArmazem(a);
-//        Produto p = new Produto();
-//        p.setId(6);
-//        ppa.setProduto(p);
-//
-//        dao.addEntity(ppa);
-
-
     }
 }

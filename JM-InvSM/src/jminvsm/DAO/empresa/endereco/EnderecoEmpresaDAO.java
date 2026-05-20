@@ -20,20 +20,13 @@ import jminvsm.util.Conexao;
  */
 public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpresa> {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public EnderecoEmpresaDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
-    
     @Override
     public void addEntity(EnderecoEmpresa t) {
-        try {
-            sql = "insert into endereco_empresa (provincia,cidade,bairro,"
-                    + "avenida,rua,codigo_postal,numero, tipo, fk_id_empresa) value (?,?,?,?,?,?,?,?)";
-            ps = con.prepareStatement(sql);
+        String sql = "insert into endereco_empresa (provincia,cidade,bairro,"
+                + "avenida,rua,codigo_postal,numero, tipo, fk_id_empresa) value (?,?,?,?,?,?,?,?)";
+
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getProvincia_emp());
             ps.setString(2, t.getCidade_emp());
@@ -44,9 +37,6 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
             ps.setInt(7, t.getNumero_emp());
             ps.setString(8, t.getTipo_emp());
 //            ps.setInt(9, t.getFk_id_empresa());
-
-            ps.execute();
-            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Endereco da Empresa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
@@ -55,11 +45,11 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
 
     @Override
     public void updateEntityByID(EnderecoEmpresa t, int id) {
-        try {
-            sql = "update endereco_empresa set provincia=?,cidade=?,bairro=?,"
-                    + "avenida=?,rua=?,codigo_postal=?,numero=?, tipo=?, fk_id_empresa=? where id=?";
-            ps = con.prepareStatement(sql);
+        String sql = "update endereco_empresa set provincia=?,cidade=?,bairro=?,"
+                + "avenida=?,rua=?,codigo_postal=?,numero=?, tipo=?, fk_id_empresa=? where id=?";
 
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getProvincia_emp());
             ps.setString(2, t.getCidade_emp());
             ps.setString(3, t.getBairro_emp());
@@ -70,9 +60,6 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
             ps.setString(8, t.getTipo_emp());
 //            ps.setInt(9, t.getFk_id_empresa());
             ps.setInt(10, id);
-
-            ps.execute();
-            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao actulizar Endereco da Empresa: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
@@ -82,28 +69,27 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
     @Override
     public List<EnderecoEmpresa> listAllEntities() {
         List<EnderecoEmpresa> lista = new ArrayList<>();
-        try {
-            sql = "select * from endereco_empresa";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                EnderecoEmpresa c = new EnderecoEmpresa();
-                c.setId(result.getInt("id"));
-                c.setProvincia_emp(result.getString("provincia"));
-                c.setCidade_emp(result.getString("cidade"));
-                c.setBairro_emp(result.getString("bairro"));
-                c.setAvenida_emp(result.getString("avenida"));
-                c.setRua_emp(result.getString("rua"));
-                c.setCodigoPostal_emp(result.getInt("codigo_postal"));
-                c.setNumero_emp(result.getInt("numero"));
-                c.setData_criacao(result.getString("data_criacao"));
-                c.setTipo_emp(result.getString("tipo"));
+        String sql = "select * from endereco_empresa";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                while (result.next()) {
+                    EnderecoEmpresa c = new EnderecoEmpresa();
+                    c.setId(result.getInt("id"));
+                    c.setProvincia_emp(result.getString("provincia"));
+                    c.setCidade_emp(result.getString("cidade"));
+                    c.setBairro_emp(result.getString("bairro"));
+                    c.setAvenida_emp(result.getString("avenida"));
+                    c.setRua_emp(result.getString("rua"));
+                    c.setCodigoPostal_emp(result.getInt("codigo_postal"));
+                    c.setNumero_emp(result.getInt("numero"));
+                    c.setData_criacao(result.getString("data_criacao"));
+                    c.setTipo_emp(result.getString("tipo"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setActive_or_not(result.getBoolean("active_or_not"));
-                lista.add(c);
+                    lista.add(c);
+                }
             }
-            result.close();
-            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Buscar Endereco da Empresa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
@@ -113,29 +99,27 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
     @Override
     public EnderecoEmpresa searchEntityByName(String contact) {
         EnderecoEmpresa c = null;
-        try {
-            sql = "select * from endereco_empresa where bairro like ?";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, "%" + contact + "%");
-            ResultSet result = ps.executeQuery();
-//            if (result.next()) {
-            while (result.next()) {
-                c = new EnderecoEmpresa();
-                c.setId(result.getInt("id"));
-                c.setProvincia_emp(result.getString("provincia"));
-                c.setCidade_emp(result.getString("cidade"));
-                c.setBairro_emp(result.getString("bairro"));
-                c.setAvenida_emp(result.getString("avenida"));
-                c.setRua_emp(result.getString("rua"));
-                c.setCodigoPostal_emp(result.getInt("codigo_postal"));
-                c.setNumero_emp(result.getInt("numero"));
-                c.setData_criacao(result.getString("data_criacao"));
-                c.setTipo_emp(result.getString("tipo"));
+        String sql = "select * from endereco_empresa where bairro like ?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setString(1, "%" + contact + "%");
+                while (result.next()) {
+                    c = new EnderecoEmpresa();
+                    c.setId(result.getInt("id"));
+                    c.setProvincia_emp(result.getString("provincia"));
+                    c.setCidade_emp(result.getString("cidade"));
+                    c.setBairro_emp(result.getString("bairro"));
+                    c.setAvenida_emp(result.getString("avenida"));
+                    c.setRua_emp(result.getString("rua"));
+                    c.setCodigoPostal_emp(result.getInt("codigo_postal"));
+                    c.setNumero_emp(result.getInt("numero"));
+                    c.setData_criacao(result.getString("data_criacao"));
+                    c.setTipo_emp(result.getString("tipo"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setActive_or_not(result.getBoolean("active_or_not"));
+                }
             }
-            result.close();
-            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao pesquisar Endereco da Empresa: " + ex,
                     "Informação", JOptionPane.ERROR_MESSAGE);
@@ -146,13 +130,12 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
 
     @Override
     public void deleteEntityByROOT(int id) {
-        try {
-            sql = "delete from endereco_empresa where id=?";
-            ps = con.prepareStatement(sql);
+                    String sql = "delete from endereco_empresa where id=?";
+
+         try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
-            ps.execute();
-            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco da Empresa: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
@@ -161,13 +144,12 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
 
     @Override
     public void deleteEntityByUSER(int id) {
-        try {
-            sql = "update endereco_empresa set active_or_not=false where id=?";
-            ps = con.prepareStatement(sql);
+                    String sql = "update endereco_empresa set active_or_not=false where id=?";
+
+         try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
-            ps.execute();
-            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco da Empresa: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);

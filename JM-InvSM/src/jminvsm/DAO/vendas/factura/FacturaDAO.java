@@ -32,22 +32,15 @@ import jminvsm.util.Conexao;
  */
 public class FacturaDAO implements FacturaDAOImpl<Factura> {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public FacturaDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
-
     @Override
     public boolean addEntity(Factura t) {
         boolean isSuccess = false;
-        try {
-            sql = "insert into factura (numero,data_emissao,data_vencimento,total,condicaoPagemento,"
+        String sql = "insert into factura (numero,data_emissao,data_vencimento,total,condicaoPagemento,"
                     + "fk_id_empresa,fk_id_cliente,fk_id_usuario,fk_id_doc,saldoPendente)"
-                    + " value (?,?,?,?,?,?,?,?,?,?)";
-            ps = con.prepareStatement(sql);
+                    + " values (?,?,?,?,?,?,?,?,?,?)";
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getNumero_fac());
             ps.setString(2, t.getData_emissao());
             ps.setString(3, t.getData_vencimento());
@@ -70,28 +63,20 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 
         } catch (SQLException ex) {
             showDialog( "Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }
 
     public Factura getFactura(String numero) {
         Factura factura = null;
-        try {
-            sql = "SELECT f.numero, f.data_emissao, f.data_vencimento, f.total, f.totalPago, f.saldoPendente, f.estado, "
+        String sql = "SELECT f.numero, f.data_emissao, f.data_vencimento, f.total, f.totalPago, f.saldoPendente, f.estado, "
                     + "f.estado, f.fk_id_empresa, f.fk_id_cliente, f.fk_id_usuario, f.fk_id_doc "
                     + "FROM factura f WHERE f.numero = ?";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, numero);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setString(1, numero);
+                while (result.next()) {
                 factura = new Factura();
                 factura.setNumero_fac(result.getString("numero"));
                 factura.setData_emissao(result.getString("data_emissao"));
@@ -113,8 +98,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 u.setId(result.getInt("fk_id_usuario"));
                 factura.setUsuario(u);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             System.out.println("Erro: "+e);
             showDialog( "Erro de consulta", "Detalhes: " + e);
@@ -124,8 +108,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 
     public Factura getFacturaData(String factura) {
         Factura f = null;
-        try {
-            sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, "
+        String sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, "
                     + "f.total, f.totalPago, f.saldoPendente, f.estado, f.condicaoPagemento,"
                     + "sum(t.trocos) as trocosTrans, sum(t.valorRecebido) as valorTrans, "
                     + "GROUP_CONCAT(DISTINCT m.nome SEPARATOR '; ') AS metodoPagamento,"
@@ -151,10 +134,11 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                     + "LEFT JOIN contacto_empresa ce ON e.id = ce.fk_id_empresa "
                     + "LEFT JOIN contabancaria a ON e.id=a.fk_id_empresa "
                     + "WHERE f.numero = ? ";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, factura);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setString(1, factura);
+                while (result.next()) {
                 f = new Factura();
                 f.setNumero_fac(result.getString("numero_factura"));
                 f.setData_emissao(result.getString("data_emissao"));
@@ -218,8 +202,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 e.setContaBancaria(cb);
                 f.setEmpresa(e);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             showDialog( "Erro persistencia", "Detalhes: " + ex);
         }
@@ -228,8 +211,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 
     public ObservableList<Factura> getFacturaToDashboard() {
         ObservableList<Factura> lista = FXCollections.observableArrayList();
-        try {
-            sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, "
+        String sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, "
                     + "f.estado, f.total, f.totalPago, f.saldoPendente, "
                     + "concat(doc.sigla,' - ', doc.nome) as Documento, "
                     + "concat(cli.id,' - ', cli.razaosocial,'/ ', cli.nuit) as cliente "
@@ -241,9 +223,11 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                     + "f.estado, f.total, f.totalPago, f.saldoPendente,"
                     + "doc.sigla, doc.nome, cli.id, cli.razaosocial, cli.nuit "
                     + "ORDER BY f.numero";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            try (ResultSet result = ps.executeQuery()) {
+                while (result.next()) {
                 Factura f = new Factura();
                 f.setNumero_fac(result.getString("numero_factura"));
                 f.setData_emissao(result.getString("data_emissao"));
@@ -260,8 +244,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 f.setCliente(c);
                 lista.add(f);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             showDialog( "Erro de consulta", "Detalhes: " + e);
         }
@@ -270,8 +253,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 
     public ObservableList<Factura> getFacturaToPagamentos(int id) {
         ObservableList<Factura> lista = FXCollections.observableArrayList();
-        try {
-            sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, "
+        String sql = "SELECT f.numero AS numero_factura, f.data_emissao, f.data_vencimento, "
                     + "f.estado, f.total, f.totalPago, f.saldoPendente, f.numeroParcelas, f.condicaoPagemento, "
                     + "CONCAT(doc.sigla, ' - ', doc.nome) AS Documento "
                     + "FROM factura f "
@@ -281,10 +263,11 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                     + "GROUP BY f.numero, f.data_emissao, f.data_vencimento, f.estado,"
                     + "f.total, f.totalPago, f.saldoPendente, f.numeroParcelas, doc.sigla, doc.nome "
                     + "ORDER BY f.numero";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setInt(1, id);
+                while (result.next()) {
                 Factura f = new Factura();
                 f.setNumero_fac(result.getString("numero_factura"));
                 f.setData_emissao(result.getString("data_emissao"));
@@ -300,8 +283,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 f.setDocComerciais(d);
                 lista.add(f);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException e) {
             AlertUtilities.showDialog( "Erro de consulta", "Detalhes: " + e);
         }
@@ -311,15 +293,15 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     @Override
     public int countFactura() {
         int total = 0;
-        try {
-            sql = "select count(*) as total from factura";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
+        String sql = "select count(*) as total from factura";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            try (ResultSet result = ps.executeQuery()) {
             if (result.next()) { // Verifica se há resultados
                 total = result.getInt("total");
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             AlertUtilities.showDialog( "Erro de contagem", "Detalhes: " + ex);
         }

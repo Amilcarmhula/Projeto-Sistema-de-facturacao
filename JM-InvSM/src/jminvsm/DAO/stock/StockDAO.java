@@ -28,18 +28,9 @@ import static jminvsm.util.AlertUtilities.showDialog;
  */
 public class StockDAO implements StockDAOImpl<Stock> {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public StockDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
-
     public Stock getProdutoForStock(int idProduto) {
         Stock s = null;
-        try {
-            sql = "select p.id as idProduto, p.nome as nomeProduto, p.codigo_barra, "
+        String sql = "select p.id as idProduto, p.nome as nomeProduto, p.codigo_barra, "
                     + " p.descricao,p.controle_stock, p.nivelstock, p.tipoProduto, p.unidadePorTipo, "
                     + " c.id as idCategoria,c.grupo, c.subgrupo, c.familia,"
                     + " u.id as idUnidade, u.nome as nomeUnidade, u.sigla as siglaUnidade, "
@@ -48,10 +39,11 @@ public class StockDAO implements StockDAOImpl<Stock> {
                     + " left join stock s on p.id=s.idProduto "
                     + " left join categoria c on p.idCategoria=c.id "
                     + " left join unidadeMedida u on p.idUnidade=u.id where p.id=? ";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, idProduto);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setInt(1, idProduto);
+                while (result.next()) {
                 s = new Stock();
                 Produto p = new Produto();
                 p.setId(result.getInt("idProduto"));
@@ -77,8 +69,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 s.setProduto(p);
 
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
@@ -89,9 +80,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
     public ObservableList<Stock> listStock(Integer idArm) {
 
         ObservableList<Stock> lista = FXCollections.observableArrayList();
-
-        try {
-            sql = "SELECT "
+        String sql = "SELECT "
                     + "    p.id                    AS idProduto,"
                     + "    p.nome                  AS nomeProduto,"
                     + "    p.descricao             AS descricaoProduto,"
@@ -122,7 +111,9 @@ public class StockDAO implements StockDAOImpl<Stock> {
                     + "   AND ppa.idArmazem = s.idArmazem "
                     + "   AND ppa.estado = 'activo'  "
                     + "WHERE (? IS NULL OR s.idArmazem = ?) ";
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
 
             if (idArm == null) {
                 ps.setNull(1, java.sql.Types.INTEGER); // Para ? IS NULL
@@ -131,8 +122,6 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 ps.setInt(1, idArm);  // Para ? IS NULL
                 ps.setInt(2, idArm);  // Para ? IS NULL
             }
-            ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
 
                 Stock stock = new Stock();
@@ -174,8 +163,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 lista.add(stock);
             }
 
-            rs.close();
-            ps.close();
+            }
 
         } catch (SQLException ex) {
             System.out.println("Erro Detalhes: " + ex);
@@ -192,15 +180,16 @@ public class StockDAO implements StockDAOImpl<Stock> {
     @Override
     public ObservableList<Stock> getStock(Integer cat, Integer arm) {
         ObservableList<Stock> lista = FXCollections.observableArrayList();
-        try {
-            sql = "SELECT p.nome AS produto, s.saldo "
+        String sql = "SELECT p.nome AS produto, s.saldo "
                     + "FROM produto p "
                     + "JOIN stock s ON p.id = s.idProduto "
                     + "JOIN categoria c ON p.idCategoria = c.id "
                     + "JOIN armazem a ON s.idArmazem = a.id "
                     + "WHERE (? IS NULL OR c.id = ?) "
                     + "AND (? IS NULL OR a.id = ?) ";
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
 
             // Se a categoria ou armazém não forem informados, passar valores nulos
             if (cat == null) {
@@ -218,7 +207,6 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 ps.setInt(3, arm);  // Para ? IS NULL
                 ps.setInt(4, arm);  // Para a.id = ?
             }
-            ResultSet result = ps.executeQuery();
             while (result.next()) {
                 Stock s = new Stock();
                 Produto p = new Produto();
@@ -227,8 +215,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 s.setProduto(p);
                 lista.add(s);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
         }
@@ -238,20 +225,18 @@ public class StockDAO implements StockDAOImpl<Stock> {
     @Override
     public ObservableList<Stock> getResumoStock(Integer idProduto) {
         ObservableList<Stock> lista = FXCollections.observableArrayList();
-        try {
-            sql = "SELECT "
+        String sql = "SELECT "
                     + "    a.nome AS armazem, "
                     + "    s.saldo "
                     + "FROM stock s "
                     + "JOIN produto p ON p.id = s.idProduto "
                     + "JOIN armazem a ON a.id = s.idArmazem "
                     + "WHERE p.id = ?";
-            ps = con.prepareStatement(sql);
-
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, idProduto);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setInt(1, idProduto);
+                while (result.next()) {
                 Stock s = new Stock();
                 Armazem a = new Armazem();
                 a.setNome_arm(result.getString("armazem"));
@@ -259,8 +244,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 s.setSaldo(result.getInt("saldo"));
                 lista.add(s);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
         }
@@ -273,15 +257,15 @@ public class StockDAO implements StockDAOImpl<Stock> {
     @Override
     public ObservableList<Stock> loadLowStock() {
         ObservableList<Stock> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select p.nome as Produto, a.nome as Armazem, s.saldo "
+        String sql = "select p.nome as Produto, a.nome as Armazem, s.saldo "
                     + "from stock s "
                     + "LEFT JOIN produto p ON p.id=s.idProduto "
                     + "LEFT JOIN armazem a ON a.id=s.idArmazem "
                     + "where s.saldo<=p.nivelstock";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                while (result.next()) {
                 Stock s = new Stock();
                 Produto p = new Produto();
                 p.setNome(result.getString("Produto"));
@@ -292,8 +276,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 s.setSaldo(result.getInt("saldo"));
                 lista.add(s);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
         }
@@ -306,13 +289,14 @@ public class StockDAO implements StockDAOImpl<Stock> {
      */
     public int countStock(Integer cat, Integer arm) {
         int total = 0;
-        try {
-            sql = "select sum(s.saldo) as total_stock from stock s "
+        String sql = "select sum(s.saldo) as total_stock from stock s "
                     + " LEFT JOIN armazem a ON a.id=s.idArmazem "
                     + " LEFT JOIN produto p ON p.id=s.idProduto "
                     + " LEFT JOIN categoria c ON c.id=p.idCategoria "
                     + " where (? IS NULL OR a.id=?) AND (? IS NULL OR c.id=?)";
-            ps = con.prepareStatement(sql);
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
             // Se a categoria não for informado, passar valor nulo
             if (arm == null) {
                 ps.setNull(1, java.sql.Types.INTEGER);
@@ -329,94 +313,14 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 ps.setInt(3, cat);
                 ps.setInt(4, cat);
             }
-            ResultSet result = ps.executeQuery();
             if (result.next()) {
                 total = result.getInt("total_stock");
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             showDialog("Erro de contagem", "Detalhes: " + ex);
         }
 
         return total;
     }
-
-//    public static void main(String[] args) throws SQLException {
-//        StockDAO dao = new StockDAO();
-//
-//        // Executa o método que queremos testar
-//        ObservableList<Stock> inventario = dao.listStock();
-//
-//        System.out.println("=== Teste de Inventário ===");
-//        for (Stock s : inventario) {
-//            System.out.println("ID: " + s.getProduto().getId());
-//            System.out.println("Produto: " + s.getProduto().getNome());
-//            System.out.println("Armazém: " + s.getArmazem().getNome_arm());
-//            System.out.println("Saldo: " + s.getSaldo());
-//
-//            System.out.println("---- Preços encontrados ----");
-//            for (PrecoVenda pv : s.getProduto().getPrecoVenda()) {
-//                System.out.println("   ID Preço: " + pv.getId());
-//                System.out.println("   Preço Normal: " + pv.getPrecoNormal());
-//                System.out.println("   Preço Venda : " + pv.getPrecoVenda());
-//                System.out.println("   Preço Final : " + pv.getPrecoFinal());
-//                System.out.println("   Data Validade: " + pv.getDataValidade());
-//                System.out.println("   Estado: " + pv.getEstado());
-//                System.out.println("----------------------------");
-//            }
-//            System.out.println("========================================\n");
-//        }
-//
-//        if (inventario.isEmpty()) {
-//            System.out.println("⚠ Nenhum produto retornado. Verifique se há dados na tabela stock/precovenda.");
-//        }
-
-// _______________________________________________________________________________________________________  
-//        StockDAO stockDAO = new StockDAO();
-//
-//        // Chamar o método
-//        ObservableList<Stock> inventario = stockDAO.listStock();
-//
-//        // Verificar se veio algo
-//        if (inventario == null || inventario.isEmpty()) {
-//            System.out.println("Nenhum item encontrado no inventário.");
-//        } else {
-//            for (Stock s : inventario) {
-//                System.out.println("=== Produto ===");
-//                System.out.println("ID Produto: " + s.getProduto().getId());
-//                System.out.println("Nome Produto: " + s.getProduto().getNome());
-//                System.out.println("Código de Barra: " + s.getProduto().getCodigo_barra());
-//                System.out.println("Descrição: " + s.getProduto().getDescricao());
-//                System.out.println("Controle Stock: " + s.getProduto().isControle_stock());
-//                System.out.println("Nível Stock: " + s.getProduto().getNivelstock());
-//
-//                System.out.println("=== Preco de Venda ===");
-//                System.out.println("Preco Normal: " + s.getPrecoProdutoArmazem().getPrecoBase());
-//                System.out.println("Preco Venda: " + s.getPrecoProdutoArmazem().getPrecoVenda());
-//                System.out.println("Preco Final: " + s.getPrecoProdutoArmazem().getPrecoFinal());
-//
-//                System.out.println("=== Armazém ===");
-//                System.out.println("ID Armazém: " + s.getArmazem().getId());
-//                System.out.println("Nome Armazém: " + s.getArmazem().getNome_arm());
-//                System.out.println("Tipo Armazém: " + s.getArmazem().getTipo());
-//
-//                System.out.println("=== Categoria ===");
-//                System.out.println("ID Categoria: " + s.getProduto().getCategoria().getId());
-//                System.out.println("Família: " + s.getProduto().getCategoria().getFamilia());
-//
-//                System.out.println("=== Unidade de Medida ===");
-//                System.out.println("ID Unidade: " + s.getProduto().getUnidadeMedida().getId());
-//                System.out.println("Sigla: " + s.getProduto().getUnidadeMedida().getSigla());
-//
-//                System.out.println("=== Imposto ===");
-//                System.out.println("ID Imposto: " + s.getProduto().getImposto().getId());
-//                System.out.println("Nome Imposto: " + s.getProduto().getImposto().getNome());
-//
-//                System.out.println("=== Stock ===");
-//                System.out.println("Saldo: " + s.getSaldo());
-//                System.out.println("----------------------------------");
-//            }
-//        }
-//    }
 }

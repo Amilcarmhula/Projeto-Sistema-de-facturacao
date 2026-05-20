@@ -19,52 +19,37 @@ import jminvsm.util.Conexao;
  *
  * @author JM-Tecnologias
  */
-public class ImpostoDAO  implements ImpostoDAOImpl<Imposto> {
+public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public ImpostoDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
-   @Override
+    @Override
     public boolean addEntity(Imposto t) {
         boolean isSuccess = false;
-        try {
-            sql = "insert into imposto (nome, percentagem, descricao)"
-                    + " value (?,?,?)";
-            ps = con.prepareStatement(sql);
+        String sql = "insert into imposto (nome, percentagem, descricao)"
+                + " values (?,?,?)";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getNome());
             ps.setDouble(2, t.getPercentagem());
             ps.setString(3, t.getDescricao());
 
-           int rowsAffected = ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
                 isSuccess = true;
             }
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }
 
     @Override
-    public boolean updateEntityByID(Imposto  t, int id) {
-                boolean isSuccess = false;
-        try {
-            sql = "update imposto set nome=?, percentagem=?, descricao=?"
-                    + " where id=?";
-            ps = con.prepareStatement(sql);
+    public boolean updateEntityByID(Imposto t, int id) {
+        boolean isSuccess = false;
+        String sql = "update imposto set nome=?, percentagem=?, descricao=?"
+                + " where id=?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getNome());
             ps.setDouble(2, t.getPercentagem());
@@ -78,14 +63,6 @@ public class ImpostoDAO  implements ImpostoDAOImpl<Imposto> {
             }
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }
@@ -93,43 +70,41 @@ public class ImpostoDAO  implements ImpostoDAOImpl<Imposto> {
     @Override
     public ObservableList<Imposto> listAllEntities() {
         ObservableList<Imposto> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from imposto";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                Imposto ti = new Imposto();
-                ti.setId(result.getInt("id"));
-                ti.setNome(result.getString("nome"));
-                ti.setPercentagem(result.getDouble("percentagem"));
-                ti.setDescricao(result.getString("descricao"));
-                lista.add(ti);
+        String sql = "select * from imposto";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                while (result.next()) {
+                    Imposto ti = new Imposto();
+                    ti.setId(result.getInt("id"));
+                    ti.setNome(result.getString("nome"));
+                    ti.setPercentagem(result.getDouble("percentagem"));
+                    ti.setDescricao(result.getString("descricao"));
+                    lista.add(ti);
+                }
             }
-            result.close();
-            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Buscar Taxa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
         return lista;
     }
-    
+
     @Override
     public Imposto getEntityByID(int id) {
         Imposto ti = null;
-        try {
-            sql = "select * from imposto where id=?";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
-            ResultSet result = ps.executeQuery();
-            if (result.next()) {
-                ti = new Imposto();
-                ti.setId(result.getInt("id"));
-                ti.setNome(result.getString("nome"));
-                ti.setPercentagem(result.getDouble("percentagem"));
-                ti.setDescricao(result.getString("descricao"));
+        String sql = "select * from imposto where id=?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                ps.setInt(1, id);
+                while (result.next()) {
+                    ti = new Imposto();
+                    ti.setId(result.getInt("id"));
+                    ti.setNome(result.getString("nome"));
+                    ti.setPercentagem(result.getDouble("percentagem"));
+                    ti.setDescricao(result.getString("descricao"));
+                }
             }
-            result.close();
-            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Buscar Taxa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
@@ -138,10 +113,10 @@ public class ImpostoDAO  implements ImpostoDAOImpl<Imposto> {
 
     @Override
     public boolean deleteEntity(int x) {
-                boolean isSuccess = false;
-        try {
-            sql =  "delete from imposto where id=?";
-            ps = con.prepareStatement(sql);
+        boolean isSuccess = false;
+        String sql = "delete from imposto where id=?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, x);
             int rowsAffected = ps.executeUpdate();
@@ -151,14 +126,6 @@ public class ImpostoDAO  implements ImpostoDAOImpl<Imposto> {
             }
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isSuccess;
     }

@@ -19,23 +19,16 @@ import jminvsm.util.Conexao;
  * @author JM-Tecnologias
  */
 public class DocumentosComerciaisDAO implements DocumentosComerciaisDAOImpl<DocumentosComerciais> {
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public DocumentosComerciaisDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
-    
     
     @Override
     public ObservableList<DocumentosComerciais> listAllEntities() {
         ObservableList<DocumentosComerciais> lista = FXCollections.observableArrayList();
-        try {
-            sql = "select * from documentocomercial";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
+        String sql = "select * from documentocomercial";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            try (ResultSet result = ps.executeQuery()) {
+                while (result.next()) {
                 DocumentosComerciais d = new DocumentosComerciais();
                 d.setId(result.getInt("id"));
                 d.setSigla_doc(result.getString("sigla"));
@@ -44,8 +37,7 @@ public class DocumentosComerciaisDAO implements DocumentosComerciaisDAOImpl<Docu
                 d.setDescricao(result.getString("descricao"));
                 lista.add(d);
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Buscar Documentos: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }

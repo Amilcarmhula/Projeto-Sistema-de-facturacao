@@ -20,22 +20,13 @@ import jminvsm.util.Conexao;
  */
 public class DescontoDAO implements DescontoDAOImpl<Desconto> {
 
-    private final Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public DescontoDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
-
     @Override
     public boolean addEntity(Desconto t) {
         boolean isSuccess = false;
-        try {
-            sql = "insert into desconto (nome,descricao,percentagem)"
-                    + " value (?,?,?)";
-
-            ps = con.prepareStatement(sql);
+        String sql = "insert into desconto (nome,descricao,percentagem)"
+                + " value (?,?,?)";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getNome());
             ps.setString(2, t.getDescricao());
@@ -48,14 +39,6 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia: banco de dados", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                showDialog("Erro persistencia: banco de dados", "Detalhes: " + e);
-            }
         }
         return isSuccess;
     }
@@ -63,9 +46,10 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     @Override
     public boolean updateEntity(Desconto t, int id) {
         boolean isSuccess = false;
-        try {
-            sql = "update desconto set nome=?,descricao=?,percentagem=? where id=?";
-            ps = con.prepareStatement(sql);
+        String sql = "update desconto set nome=?,descricao=?,percentagem=? where id=?";
+
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getNome());
             ps.setString(2, t.getDescricao());
@@ -80,14 +64,6 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                showDialog("Erro de persistencia: banco de dados", "Detalhes: " + e);
-            }
         }
         return isSuccess;
     }
@@ -96,21 +72,20 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     public ObservableList<Desconto> listAllEntities() {
         ObservableList<Desconto> lista = FXCollections.observableArrayList();
         Desconto c;
-        try {
-            sql = "select * from desconto";
-            ps = con.prepareStatement(sql);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                c = new Desconto();
-                c.setId(result.getInt("id"));
-                c.setNome(result.getString("nome"));
-                c.setPercentagem(result.getDouble("percentagem"));
-                c.setDescricao(result.getString("descricao"));
-                c.setData_criacao(result.getString("data_criacao"));
-                lista.add(c);
+        String sql = "select * from desconto";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            try (ResultSet result = ps.executeQuery()) {
+                while (result.next()) {
+                    c = new Desconto();
+                    c.setId(result.getInt("id"));
+                    c.setNome(result.getString("nome"));
+                    c.setPercentagem(result.getDouble("percentagem"));
+                    c.setDescricao(result.getString("descricao"));
+                    c.setData_criacao(result.getString("data_criacao"));
+                    lista.add(c);
+                }
             }
-            result.close();
-            ps.close();
         } catch (SQLException ex) {
             showDialog("Erro de consulta: banco de dados", "Detalhes: " + ex);
         }
@@ -120,9 +95,9 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     @Override
     public boolean deleteEntity(int id) {
         boolean isSuccess = false;
-        try {
-            sql = "delete from desconto where id=?";
-            ps = con.prepareStatement(sql);
+        String sql = "delete from desconto where id=?";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             int rowsAffected = ps.executeUpdate();
@@ -133,19 +108,11 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
 
         } catch (SQLException ex) {
             showDialog("Erro de exclusao: banco de dados", "Detalhes: " + ex);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                showDialog("Erro de exclusao: banco de dados", "Detalhes: " + e);
-            }
         }
         return isSuccess;
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         DescontoDAO dao = new DescontoDAO();
 
         for (Desconto d : dao.listAllEntities()) {

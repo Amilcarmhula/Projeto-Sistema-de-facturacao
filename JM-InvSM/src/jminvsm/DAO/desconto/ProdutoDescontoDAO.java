@@ -1,4 +1,3 @@
-
 package jminvsm.dao.desconto;
 
 import java.sql.Connection;
@@ -24,10 +23,9 @@ public class ProdutoDescontoDAO {
     public boolean addEntity(ProdutoDesconto t) {
         boolean isSuccess = false;
         String sql = "INSERT INTO produtodesconto (idProduto, idDesconto, dataInicio, dataFim,idArmazem) "
-                    + "VALUES (?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?)";
         try (
-                Connection con = Conexao.getConexao();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, t.getProduto().getId());
             ps.setInt(2, t.getDesconto().getId());
             ps.setString(3, t.getDataInicio());
@@ -39,16 +37,15 @@ public class ProdutoDescontoDAO {
 
         } catch (SQLException ex) {
             System.out.println("Erro ao inserir ProdutoDesconto:: " + ex);
-        } 
+        }
         return isSuccess;
     }
-    
+
     public boolean callAplicaDesconto(ProdutoDesconto t) {
         boolean isSuccess = false;
         String sql = "CALL sp_aplicar_desconto_ao_preco(?, ?)";
         try (
-                Connection con = Conexao.getConexao();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, t.getProduto().getId());
             ps.setInt(2, t.getArmazem().getId());
 
@@ -57,7 +54,7 @@ public class ProdutoDescontoDAO {
 
         } catch (SQLException ex) {
             System.out.println("Erro ao inserir: " + ex);
-        } 
+        }
         return isSuccess;
     }
 
@@ -66,45 +63,44 @@ public class ProdutoDescontoDAO {
         ObservableList<ProdutoDesconto> lista = FXCollections.observableArrayList();
         ProdutoDesconto pd = null;
         String sql = "select p.nome as nomeProduto, p.descricao as descricaoProduto,"
-                    + "	a.nome as nomeArmazem, a.tipo as tipoArmazem, a.descricao as descicaoArmazem, "
-                    + " d.nome as nomeDesconto, "
-                    + " pd.dataInicio, pd.dataFim, d.percentagem "
-                    + "	from produtodesconto pd "
-                    + "	join produto p on pd.idProduto=p.id "
-                    + " join desconto d on pd.idDesconto=d.id "
-                    + " join armazem a on pd.idArmazem=a.id "
-                    + " where idProduto=? ";
+                + "	a.nome as nomeArmazem, a.tipo as tipoArmazem, a.descricao as descicaoArmazem, "
+                + " d.nome as nomeDesconto, "
+                + " pd.dataInicio, pd.dataFim, d.percentagem "
+                + "	from produtodesconto pd "
+                + "	join produto p on pd.idProduto=p.id "
+                + " join desconto d on pd.idDesconto=d.id "
+                + " join armazem a on pd.idArmazem=a.id "
+                + " where idProduto=? ";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet rs = ps.executeQuery()) {
                 ps.setInt(1, idProduto);
                 while (rs.next()) {
-                pd = new ProdutoDesconto();
-                Produto p = new Produto();
-                p.setNome(rs.getString("nomeProduto"));
-                p.setDescricao(rs.getString("descricaoProduto"));
-                pd.setProduto(p);
+                    pd = new ProdutoDesconto();
+                    Produto p = new Produto();
+                    p.setNome(rs.getString("nomeProduto"));
+                    p.setDescricao(rs.getString("descricaoProduto"));
+                    pd.setProduto(p);
 
-                Armazem a = new Armazem();
-                a.setNome_arm(rs.getString("nomeArmazem"));
-                a.setDescricao_arm(rs.getString("descicaoArmazem"));
-                a.setTipo(rs.getString("tipoArmazem"));
-                pd.setArmazem(a);
-                
-                Desconto d = new Desconto();
-                d.setNome(rs.getString("nomeDesconto"));
-                d.setPercentagem(rs.getDouble("percentagem"));
-                pd.setDesconto(d);
+                    Armazem a = new Armazem();
+                    a.setNome_arm(rs.getString("nomeArmazem"));
+                    a.setDescricao_arm(rs.getString("descicaoArmazem"));
+                    a.setTipo(rs.getString("tipoArmazem"));
+                    pd.setArmazem(a);
 
-                pd.setDataInicio(rs.getString("dataInicio"));
-                pd.setDataFim(rs.getString("dataFim"));
-                
+                    Desconto d = new Desconto();
+                    d.setNome(rs.getString("nomeDesconto"));
+                    d.setPercentagem(rs.getDouble("percentagem"));
+                    pd.setDesconto(d);
 
-                lista.add(pd);
-            }
+                    pd.setDataInicio(rs.getString("dataInicio"));
+                    pd.setDataFim(rs.getString("dataFim"));
+
+                    lista.add(pd);
+                }
             }
         } catch (SQLException e) {
-            showDialog( "Erro de consulta!", "Detalhes: " + e);
+            showDialog("Erro de consulta!", "Detalhes: " + e);
         }
         return lista;
     }
@@ -126,7 +122,7 @@ public class ProdutoDescontoDAO {
 
         } catch (SQLException ex) {
             System.out.println("Erro ao apagar ProdutoDesconto: " + ex);
-        } 
+        }
         return isSuccess;
     }
 
@@ -146,7 +142,7 @@ public class ProdutoDescontoDAO {
         pd.setDataFim("2025-09-21");
 //        dao.addEntity(pd);
 
-        for(ProdutoDesconto des: dao.getEntityByID(1)){
+        for (ProdutoDesconto des : dao.getEntityByID(1)) {
             System.out.println(des.getDesconto().getPercentagem());
         }
 //        dao.delete(pd);

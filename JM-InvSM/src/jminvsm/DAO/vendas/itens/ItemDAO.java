@@ -11,13 +11,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import jminvsm.model.desconto.Desconto;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.imposto.Imposto;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.model.vendas.factura.itens.Item;
 import jminvsm.util.Conexao;
-import jminvsm.util.AlertUtilities;
+import static jminvsm.util.AlertUtilities.showDialog;
 
 /**
  *
@@ -25,46 +24,35 @@ import jminvsm.util.AlertUtilities;
  */
 public class ItemDAO implements ItemDAOImpl<Item> {
 
-    private Connection con;
-    private PreparedStatement ps;
-    private String sql;
-
-    public ItemDAO() throws SQLException {
-        this.con = Conexao.getConexao();
-    }
-
     @Override
     public void addEntity(List<Item> items) {
-        try {
+        String sql = "insert into itemfactura (quantidade, subtotal,fk_id_produto, fk_numero,"
+                + "fk_id_usuario, fk_id_armazem,qtd_por_unidade) values (?,?,?,?,?,?,?)";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             for (Item t : items) {
-                sql = "insert into itemfactura (quantidade, subtotal,fk_id_produto, fk_numero,"
-                        + "fk_id_usuario, fk_id_armazem,qtd_por_unidade) value (?,?,?,?,?,?,?)";
-                ps = con.prepareStatement(sql);
+
                 ps.setInt(1, t.getQuantidade());// ***********
                 ps.setDouble(2, t.getSubtotal());// ***********
                 ps.setInt(3, t.getProduto().getId());// ***********
-                System.out.println("Id do produto teste: "+t.getProduto().getId());
+                System.out.println("Id do produto teste: " + t.getProduto().getId());
                 ps.setString(4, t.getFactura().getNumero_fac());// ***********
                 ps.setInt(5, t.getUsuario().getId());// ***********
                 ps.setInt(6, t.getArmazem().getId());// ***********
                 ps.setInt(7, t.getQtd_por_unidade());
-
-                ps.execute();
-                ps.close();
             }
-
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: id: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     @Override
     public void addEntityQuotation(List<Item> items) {
-        try {
+        String sql = "insert into itemcotacao (quantidade, subtotal,fk_id_produto,fk_numero,"
+                + "fk_id_usuario, fk_id_armazem,qtd_por_unidade) values (?,?,?,?,?,?,?)";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             for (Item t : items) {
-                sql = "insert into itemcotacao (quantidade, subtotal,fk_id_produto,fk_numero,"
-                        + "fk_id_usuario, fk_id_armazem,qtd_por_unidade) value (?,?,?,?,?,?,?)";
-                ps = con.prepareStatement(sql);
                 ps.setInt(1, t.getQuantidade());// ***********
                 ps.setDouble(2, t.getSubtotal());// ***********
                 ps.setInt(3, t.getProduto().getId());// ***********
@@ -85,9 +73,9 @@ public class ItemDAO implements ItemDAOImpl<Item> {
     public List<Item> getItensData(String factura) {
         List<Item> lista = new ArrayList<>();
         Item i = null;
-        try {
-            if(factura.endsWith("/2")){
-                sql = "SELECT p.nome, p.descricao,"
+        String sql;
+        if (factura.endsWith("/2")) {
+            sql = "SELECT p.nome, p.descricao,"
                     + "i.quantidade, i.subtotal, "
                     + "i.unidade_vendida, i.qtd_por_unidade, "
                     + "ip.nome as descricao_imposto, ip.percentagem AS imposto, "
@@ -97,8 +85,8 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                     + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
                     + "LEFT JOIN imposto ip ON ip.id = p.fk_id_imposto "
                     + "WHERE i.fk_numero = ?";
-            }else{
-                sql = "SELECT p.nome, p.descricao,"
+        } else {
+            sql = "SELECT p.nome, p.descricao,"
                     + "i.quantidade, i.subtotal, "
                     + "i.qtd_por_unidade, "
                     + "ip.nome as descricao_imposto, ip.percentagem AS imposto, "
@@ -108,37 +96,38 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                     + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
                     + "LEFT JOIN imposto ip ON ip.id = p.fk_id_imposto "
                     + "WHERE i.fk_numero = ?";
-            }
-            ps = con.prepareStatement(sql);
+        }
+        try (
+                Connection con = Conexao.getConexao();
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, factura);
-            ResultSet result = ps.executeQuery();
             double sub = 0;
-            while (result.next()) {
-                i = new Item();
-                
-                i.setQuantidade(result.getInt("quantidade"));
-                i.setSubtotal(result.getDouble("subtotal"));
-                i.setQtd_por_unidade(result.getInt("qtd_por_unidade"));
-                Produto p = new Produto();
-                p.setNome(result.getString("nome"));
-                p.setDescricao(result.getString("descricao"));
-                Imposto t = new Imposto();
-                t.setNome(result.getString("descricao_imposto"));
-                t.setPercentagem(result.getDouble("imposto"));
-                p.setImposto(t);
-                i.setProduto(p);
-                Factura f = new Factura();
-                f.setNumero_fac(result.getString("numero"));
-                i.setFactura(f);
-                lista.add(i);
+            try (ResultSet result = ps.executeQuery()) {
+                while (result.next()) {
+                    i = new Item();
+                    i.setQuantidade(result.getInt("quantidade"));
+                    i.setSubtotal(result.getDouble("subtotal"));
+                    i.setQtd_por_unidade(result.getInt("qtd_por_unidade"));
+                    Produto p = new Produto();
+                    p.setNome(result.getString("nome"));
+                    p.setDescricao(result.getString("descricao"));
+                    Imposto t = new Imposto();
+                    t.setNome(result.getString("descricao_imposto"));
+                    t.setPercentagem(result.getDouble("imposto"));
+                    p.setImposto(t);
+                    i.setProduto(p);
+                    Factura f = new Factura();
+                    f.setNumero_fac(result.getString("numero"));
+                    i.setFactura(f);
+                    lista.add(i);
+                }
             }
-            result.close();
-            ps.close();
         } catch (SQLException e) {
-            AlertUtilities.showDialog( "Erro", "Detalhes: " + e);
+            showDialog("Erro", "Detalhes: " + e);
         }
         return lista;
     }
+    
 //
 //    @Override
 //    public void updateEntityByID(Item t, int id) {

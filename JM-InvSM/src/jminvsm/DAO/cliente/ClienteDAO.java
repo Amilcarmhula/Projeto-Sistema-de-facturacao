@@ -199,8 +199,8 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 + "GROUP BY c.id, c.nome, c.razaosocial, c.nuit";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
                 ps.setInt(1, id);
+            try (ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     c = new Cliente();
                     c.setId(result.getInt("id"));
@@ -280,8 +280,8 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         String sql = "SELECT id,tipo,nome,razaosocial,nuit FROM cliente where id=?";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
                 ps.setInt(1, id);
+            try (ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     c = new Cliente();
                     c.setId(result.getInt("id"));

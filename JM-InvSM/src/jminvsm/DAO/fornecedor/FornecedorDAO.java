@@ -10,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
@@ -146,8 +144,8 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
             
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                            ps.setInt(1, id);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setInt(1, id);
                 while (result.next()) {
                 c = new Fornecedor();
                 c.setId(result.getInt("id"));

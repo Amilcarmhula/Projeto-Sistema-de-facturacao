@@ -31,44 +31,44 @@ public class StockDAO implements StockDAOImpl<Stock> {
     public Stock getProdutoForStock(int idProduto) {
         Stock s = null;
         String sql = "select p.id as idProduto, p.nome as nomeProduto, p.codigo_barra, "
-                    + " p.descricao,p.controle_stock, p.nivelstock, p.tipoProduto, p.unidadePorTipo, "
-                    + " c.id as idCategoria,c.grupo, c.subgrupo, c.familia,"
-                    + " u.id as idUnidade, u.nome as nomeUnidade, u.sigla as siglaUnidade, "
-                    + " s.saldo "
-                    + " from  produto p "
-                    + " left join stock s on p.id=s.idProduto "
-                    + " left join categoria c on p.idCategoria=c.id "
-                    + " left join unidadeMedida u on p.idUnidade=u.id where p.id=? ";
+                + " p.descricao,p.controle_stock, p.nivelstock, p.tipoProduto, p.unidadePorTipo, "
+                + " c.id as idCategoria,c.grupo, c.subgrupo, c.familia,"
+                + " u.id as idUnidade, u.nome as nomeUnidade, u.sigla as siglaUnidade, "
+                + " s.saldo "
+                + " from  produto p "
+                + " left join stock s on p.id=s.idProduto "
+                + " left join categoria c on p.idCategoria=c.id "
+                + " left join unidadeMedida u on p.idUnidade=u.id where p.id=? ";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProduto);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setInt(1, idProduto);
                 while (result.next()) {
-                s = new Stock();
-                Produto p = new Produto();
-                p.setId(result.getInt("idProduto"));
-                p.setNome(result.getString("nomeProduto"));
-                p.setCodigo_barra(result.getString("codigo_barra"));
-                p.setDescricao(result.getString("descricao"));
-                p.setControle_stock(result.getBoolean("controle_stock"));
-                p.setNivelstock(result.getInt("nivelstock"));
-                p.setTipoProduto(result.getString("tipoProduto"));
-                p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
-                Categoria cat = new Categoria();
-                cat.setId(result.getInt("idCategoria"));
-                cat.setGrupo(result.getString("grupo"));
-                cat.setSubgrupo(result.getString("subgrupo"));
-                cat.setFamilia(result.getString("familia"));
-                p.setCategoria(cat);
-                UnidadeMedida u = new UnidadeMedida();
-                u.setId(result.getInt("idUnidade"));
-                u.setNome(result.getString("nomeUnidade"));
-                u.setSigla(result.getString("siglaUnidade"));
-                p.setUnidadeMedida(u);
-                s.setSaldo(result.getInt("saldo"));
-                s.setProduto(p);
+                    s = new Stock();
+                    Produto p = new Produto();
+                    p.setId(result.getInt("idProduto"));
+                    p.setNome(result.getString("nomeProduto"));
+                    p.setCodigo_barra(result.getString("codigo_barra"));
+                    p.setDescricao(result.getString("descricao"));
+                    p.setControle_stock(result.getBoolean("controle_stock"));
+                    p.setNivelstock(result.getInt("nivelstock"));
+                    p.setTipoProduto(result.getString("tipoProduto"));
+                    p.setUnidadesPorTipo(result.getInt("unidadePorTipo"));
+                    Categoria cat = new Categoria();
+                    cat.setId(result.getInt("idCategoria"));
+                    cat.setGrupo(result.getString("grupo"));
+                    cat.setSubgrupo(result.getString("subgrupo"));
+                    cat.setFamilia(result.getString("familia"));
+                    p.setCategoria(cat);
+                    UnidadeMedida u = new UnidadeMedida();
+                    u.setId(result.getInt("idUnidade"));
+                    u.setNome(result.getString("nomeUnidade"));
+                    u.setSigla(result.getString("siglaUnidade"));
+                    p.setUnidadeMedida(u);
+                    s.setSaldo(result.getInt("saldo"));
+                    s.setProduto(p);
 
-            }
+                }
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
@@ -81,40 +81,38 @@ public class StockDAO implements StockDAOImpl<Stock> {
 
         ObservableList<Stock> lista = FXCollections.observableArrayList();
         String sql = "SELECT "
-                    + "    p.id                    AS idProduto,"
-                    + "    p.nome                  AS nomeProduto,"
-                    + "    p.descricao             AS descricaoProduto,"
-                    + "    p.unidadePorTipo, "
-                    + "    a.nome as nomeArmazem, "
-                    + "    um.nome                 AS nomeUnidade,"
-                    + "    um.sigla                AS siglaUnidade,"
-                    + "    i.id                    AS idImposto,"
-                    + "    i.nome                  AS nomeImposto,"
-                    + "    i.percentagem           AS percentagemImposto,"
-                    + "    ppa.idArmazem,"
-                    + "    ppa.precoBase,"
-                    + "    ppa.precoVenda,"
-                    + "    ppa.precoFinal,"
-                    + "    ppa.dataInicioVigencia,"
-                    + "    ppa.dataFimVigencia,"
-                    + "    ppa.estado AS estadoPreco,"
-                    + "    s.saldo "
-                    + "FROM stock s "
-                    + "JOIN produto p ON p.id = s.idProduto "
-                    + "JOIN Armazem a ON a.id = s.idArmazem "
-                    + "LEFT JOIN unidadeMedida um "
-                    + "    ON um.id = p.idUnidade "
-                    + "LEFT JOIN imposto i "
-                    + "    ON i.id = p.idImposto "
-                    + "LEFT JOIN precoProdutoArmazem ppa "
-                    + "    ON ppa.idProduto = s.idProduto "
-                    + "   AND ppa.idArmazem = s.idArmazem "
-                    + "   AND ppa.estado = 'activo'  "
-                    + "WHERE (? IS NULL OR s.idArmazem = ?) ";
+                + "    p.id                    AS idProduto,"
+                + "    p.nome                  AS nomeProduto,"
+                + "    p.descricao             AS descricaoProduto,"
+                + "    p.unidadePorTipo, "
+                + "    a.nome as nomeArmazem, "
+                + "    um.nome                 AS nomeUnidade,"
+                + "    um.sigla                AS siglaUnidade,"
+                + "    i.id                    AS idImposto,"
+                + "    i.nome                  AS nomeImposto,"
+                + "    i.percentagem           AS percentagemImposto,"
+                + "    ppa.idArmazem,"
+                + "    ppa.precoBase,"
+                + "    ppa.precoVenda,"
+                + "    ppa.precoFinal,"
+                + "    ppa.dataInicioVigencia,"
+                + "    ppa.dataFimVigencia,"
+                + "    ppa.estado AS estadoPreco,"
+                + "    s.saldo "
+                + "FROM stock s "
+                + "JOIN produto p ON p.id = s.idProduto "
+                + "JOIN Armazem a ON a.id = s.idArmazem "
+                + "LEFT JOIN unidadeMedida um "
+                + "    ON um.id = p.idUnidade "
+                + "LEFT JOIN imposto i "
+                + "    ON i.id = p.idImposto "
+                + "LEFT JOIN precoProdutoArmazem ppa "
+                + "    ON ppa.idProduto = s.idProduto "
+                + "   AND ppa.idArmazem = s.idArmazem "
+                + "   AND ppa.estado = 'activo'  "
+                + "WHERE (? IS NULL OR s.idArmazem = ?) ";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet rs = ps.executeQuery()) {
-
             if (idArm == null) {
                 ps.setNull(1, java.sql.Types.INTEGER); // Para ? IS NULL
                 ps.setNull(2, java.sql.Types.INTEGER); // Para ? IS NULL
@@ -122,46 +120,45 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 ps.setInt(1, idArm);  // Para ? IS NULL
                 ps.setInt(2, idArm);  // Para ? IS NULL
             }
-            while (rs.next()) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Stock stock = new Stock();
+                    Produto p = new Produto();
+                    p.setId(rs.getInt("idProduto"));
+                    p.setNome(rs.getString("nomeProduto"));
+                    p.setDescricao(rs.getString("descricaoProduto"));
+                    p.setUnidadesPorTipo(rs.getInt("unidadePorTipo"));
 
-                Stock stock = new Stock();
+                    UnidadeMedida u = new UnidadeMedida();
+                    u.setNome(rs.getString("nomeUnidade"));
+                    u.setSigla(rs.getString("siglaUnidade"));
+                    p.setUnidadeMedida(u);
 
-                Produto p = new Produto();
-                p.setId(rs.getInt("idProduto"));
-                p.setNome(rs.getString("nomeProduto"));
-                p.setDescricao(rs.getString("descricaoProduto"));
-                p.setUnidadesPorTipo(rs.getInt("unidadePorTipo"));
+                    Imposto i = new Imposto();
+                    i.setId(rs.getInt("idImposto"));
+                    i.setNome(rs.getString("nomeImposto"));
+                    i.setPercentagem(rs.getDouble("percentagemImposto"));
+                    p.setImposto(i);
 
-                UnidadeMedida u = new UnidadeMedida();
-                u.setNome(rs.getString("nomeUnidade"));
-                u.setSigla(rs.getString("siglaUnidade"));
-                p.setUnidadeMedida(u);
+                    Armazem a = new Armazem();
+                    a.setId(rs.getInt("idArmazem"));
+                    a.setNome_arm(rs.getString("nomeArmazem"));
 
-                Imposto i = new Imposto();
-                i.setId(rs.getInt("idImposto"));
-                i.setNome(rs.getString("nomeImposto"));
-                i.setPercentagem(rs.getDouble("percentagemImposto"));
-                p.setImposto(i);
+                    PrecoProdutoArmazem pv = new PrecoProdutoArmazem();
+                    pv.setPrecoBase(rs.getDouble("precoBase"));
+                    pv.setPrecoVenda(rs.getDouble("precoVenda"));
+                    pv.setPrecoFinal(rs.getDouble("precoFinal"));
+                    pv.setDataInicioVigencia(rs.getString("dataInicioVigencia"));
+                    pv.setDataFimVigencia(rs.getString("dataFimVigencia"));
+                    pv.setEstado(rs.getString("estadoPreco"));
 
-                Armazem a = new Armazem();
-                a.setId(rs.getInt("idArmazem"));
-                a.setNome_arm(rs.getString("nomeArmazem"));
+                    stock.setProduto(p);
+                    stock.setArmazem(a);
+                    stock.setPrecoProdutoArmazem(pv);
+                    stock.setSaldo(rs.getInt("saldo"));
 
-                PrecoProdutoArmazem pv = new PrecoProdutoArmazem();
-                pv.setPrecoBase(rs.getDouble("precoBase"));
-                pv.setPrecoVenda(rs.getDouble("precoVenda"));
-                pv.setPrecoFinal(rs.getDouble("precoFinal"));
-                pv.setDataInicioVigencia(rs.getString("dataInicioVigencia"));
-                pv.setDataFimVigencia(rs.getString("dataFimVigencia"));
-                pv.setEstado(rs.getString("estadoPreco"));
-
-                stock.setProduto(p);
-                stock.setArmazem(a);
-                stock.setPrecoProdutoArmazem(pv);
-                stock.setSaldo(rs.getInt("saldo"));
-
-                lista.add(stock);
-            }
+                    lista.add(stock);
+                }
 
             }
 
@@ -181,15 +178,14 @@ public class StockDAO implements StockDAOImpl<Stock> {
     public ObservableList<Stock> getStock(Integer cat, Integer arm) {
         ObservableList<Stock> lista = FXCollections.observableArrayList();
         String sql = "SELECT p.nome AS produto, s.saldo "
-                    + "FROM produto p "
-                    + "JOIN stock s ON p.id = s.idProduto "
-                    + "JOIN categoria c ON p.idCategoria = c.id "
-                    + "JOIN armazem a ON s.idArmazem = a.id "
-                    + "WHERE (? IS NULL OR c.id = ?) "
-                    + "AND (? IS NULL OR a.id = ?) ";
+                + "FROM produto p "
+                + "JOIN stock s ON p.id = s.idProduto "
+                + "JOIN categoria c ON p.idCategoria = c.id "
+                + "JOIN armazem a ON s.idArmazem = a.id "
+                + "WHERE (? IS NULL OR c.id = ?) "
+                + "AND (? IS NULL OR a.id = ?) ";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
 
             // Se a categoria ou armazém não forem informados, passar valores nulos
             if (cat == null) {
@@ -207,17 +203,19 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 ps.setInt(3, arm);  // Para ? IS NULL
                 ps.setInt(4, arm);  // Para a.id = ?
             }
-            while (result.next()) {
-                Stock s = new Stock();
-                Produto p = new Produto();
-                p.setNome(result.getString("produto"));
-                s.setSaldo(result.getInt("saldo"));
-                s.setProduto(p);
-                lista.add(s);
-            }
+
+            try (ResultSet result = ps.executeQuery()) {
+                while (result.next()) {
+                    Stock s = new Stock();
+                    Produto p = new Produto();
+                    p.setNome(result.getString("produto"));
+                    s.setSaldo(result.getInt("saldo"));
+                    s.setProduto(p);
+                    lista.add(s);
+                }
             }
         } catch (SQLException ex) {
-            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
+            showDialog("Erro de consulta", "Detalhes Stock: " + ex);
         }
         return lista;
     }
@@ -226,59 +224,60 @@ public class StockDAO implements StockDAOImpl<Stock> {
     public ObservableList<Stock> getResumoStock(Integer idProduto) {
         ObservableList<Stock> lista = FXCollections.observableArrayList();
         String sql = "SELECT "
-                    + "    a.nome AS armazem, "
-                    + "    s.saldo "
-                    + "FROM stock s "
-                    + "JOIN produto p ON p.id = s.idProduto "
-                    + "JOIN armazem a ON a.id = s.idArmazem "
-                    + "WHERE p.id = ?";
+                + "    a.nome AS armazem, "
+                + "    s.saldo "
+                + "FROM stock s "
+                + "JOIN produto p ON p.id = s.idProduto "
+                + "JOIN armazem a ON a.id = s.idArmazem "
+                + "WHERE p.id = ?";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProduto);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setInt(1, idProduto);
                 while (result.next()) {
-                Stock s = new Stock();
-                Armazem a = new Armazem();
-                a.setNome_arm(result.getString("armazem"));
-                s.setArmazem(a);
-                s.setSaldo(result.getInt("saldo"));
-                lista.add(s);
-            }
+                    Stock s = new Stock();
+                    Armazem a = new Armazem();
+                    a.setNome_arm(result.getString("armazem"));
+                    s.setArmazem(a);
+                    s.setSaldo(result.getInt("saldo"));
+                    lista.add(s);
+                }
             }
         } catch (SQLException ex) {
-            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
+            showDialog("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
 
     /**
      * Este metodo faz a listagem dos produtos com estoque baixo em casa armazem
+     * @return 
      */
     @Override
     public ObservableList<Stock> loadLowStock() {
         ObservableList<Stock> lista = FXCollections.observableArrayList();
         String sql = "select p.nome as Produto, a.nome as Armazem, s.saldo "
-                    + "from stock s "
-                    + "LEFT JOIN produto p ON p.id=s.idProduto "
-                    + "LEFT JOIN armazem a ON a.id=s.idArmazem "
-                    + "where s.saldo<=p.nivelstock";
+                + "from stock s "
+                + "LEFT JOIN produto p ON p.id=s.idProduto "
+                + "LEFT JOIN armazem a ON a.id=s.idArmazem "
+                + "where s.saldo<=p.nivelstock";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
-                Stock s = new Stock();
-                Produto p = new Produto();
-                p.setNome(result.getString("Produto"));
-                s.setProduto(p);
-                Armazem a = new Armazem();
-                a.setNome_arm(result.getString("Armazem"));
-                s.setArmazem(a);
-                s.setSaldo(result.getInt("saldo"));
-                lista.add(s);
-            }
+                    Stock s = new Stock();
+                    Produto p = new Produto();
+                    p.setNome(result.getString("Produto"));
+                    s.setProduto(p);
+                    Armazem a = new Armazem();
+                    a.setNome_arm(result.getString("Armazem"));
+                    s.setArmazem(a);
+                    s.setSaldo(result.getInt("saldo"));
+                    lista.add(s);
+                }
             }
         } catch (SQLException ex) {
-            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
+            showDialog("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -290,32 +289,33 @@ public class StockDAO implements StockDAOImpl<Stock> {
     public int countStock(Integer cat, Integer arm) {
         int total = 0;
         String sql = "select sum(s.saldo) as total_stock from stock s "
-                    + " LEFT JOIN armazem a ON a.id=s.idArmazem "
-                    + " LEFT JOIN produto p ON p.id=s.idProduto "
-                    + " LEFT JOIN categoria c ON c.id=p.idCategoria "
-                    + " where (? IS NULL OR a.id=?) AND (? IS NULL OR c.id=?)";
+                + " LEFT JOIN armazem a ON a.id=s.idArmazem "
+                + " LEFT JOIN produto p ON p.id=s.idProduto "
+                + " LEFT JOIN categoria c ON c.id=p.idCategoria "
+                + " where (? IS NULL OR a.id=?) AND (? IS NULL OR c.id=?)";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
             // Se a categoria não for informado, passar valor nulo
-            if (arm == null) {
-                ps.setNull(1, java.sql.Types.INTEGER);
-                ps.setNull(2, java.sql.Types.INTEGER);
-            } else {
-                ps.setInt(1, arm);
-                ps.setInt(2, arm);
-            }
+                if (arm == null) {
+                    ps.setNull(1, java.sql.Types.INTEGER);
+                    ps.setNull(2, java.sql.Types.INTEGER);
+                } else {
+                    ps.setInt(1, arm);
+                    ps.setInt(2, arm);
+                }
 
-            if (cat == null) {
-                ps.setNull(3, java.sql.Types.INTEGER);
-                ps.setNull(4, java.sql.Types.INTEGER);
-            } else {
-                ps.setInt(3, cat);
-                ps.setInt(4, cat);
-            }
-            if (result.next()) {
-                total = result.getInt("total_stock");
-            }
+                if (cat == null) {
+                    ps.setNull(3, java.sql.Types.INTEGER);
+                    ps.setNull(4, java.sql.Types.INTEGER);
+                } else {
+                    ps.setInt(3, cat);
+                    ps.setInt(4, cat);
+                }
+            try (ResultSet result = ps.executeQuery()) {
+                
+                if (result.next()) {
+                    total = result.getInt("total_stock");
+                }
             }
         } catch (SQLException ex) {
             showDialog("Erro de contagem", "Detalhes: " + ex);

@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import jminvsm.model.empresa.conta.ContaBancaria;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
@@ -92,8 +91,8 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
         String sql = "select * from contabancaria where nome_banco like ?";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
                 ps.setString(1, "%" + name + "%");
+            try (ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     c = new ContaBancaria();
                     c.setId(result.getInt("id"));

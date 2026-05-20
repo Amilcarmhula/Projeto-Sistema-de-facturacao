@@ -20,14 +20,12 @@ import jminvsm.util.Conexao;
  */
 public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpresa> {
 
-
     @Override
     public void addEntity(ContactoEmpresa t) {
         String sql = "insert into contacto_empresa (contacto, email,website, "
-                    + "fk_id_empresa) value (?,?,?,?)";
+                + "fk_id_empresa) value (?,?,?,?)";
         try (
-                Connection con = Conexao.getConexao();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getContacto_emp());
             ps.setString(2, t.getEmail_emp());
@@ -43,12 +41,11 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
     @Override
     public void updateEntityByID(ContactoEmpresa t, int id) {
         String sql = "update contacto_empresa set contacto=?, email=?, "
-                    + "website=?, fk_id_empresa=? where id=?";
+                + "website=?, fk_id_empresa=? where id=?";
         try (
-                Connection con = Conexao.getConexao();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-             ps.setString(1, t.getContacto_emp());
+            ps.setString(1, t.getContacto_emp());
             ps.setString(2, t.getEmail_emp());
             ps.setString(3, t.getWebsite_emp());
             ps.setInt(4, t.getEmpresa().getId());
@@ -65,21 +62,20 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
         List<ContactoEmpresa> lista = new ArrayList<>();
         String sql = "select * from contacto_empresa";
         try (
-                Connection con = Conexao.getConexao();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet result = ps.executeQuery()) {
-            while (result.next()) {
-                ContactoEmpresa c = new ContactoEmpresa();
-                c.setId(result.getInt("id"));
-                c.setContacto_emp(result.getString("contacto"));
-                c.setEmail_emp(result.getString("email"));
-                c.setWebsite_emp(result.getString("website"));
+                while (result.next()) {
+                    ContactoEmpresa c = new ContactoEmpresa();
+                    c.setId(result.getInt("id"));
+                    c.setContacto_emp(result.getString("contacto"));
+                    c.setEmail_emp(result.getString("email"));
+                    c.setWebsite_emp(result.getString("website"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
-                c.setData_criacao(result.getString("data_criacao"));
-                lista.add(c);
+                    c.setData_criacao(result.getString("data_criacao"));
+                    lista.add(c);
+                }
             }
-}
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Buscar Fornecedor: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
@@ -90,20 +86,20 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
     public ContactoEmpresa searchEntityByName(String contact) {
         ContactoEmpresa c = null;
         String sql = "select * from contacto_empresa where contacto like ?";
-try (
+        try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, "%" + contact + "%");
             try (ResultSet result = ps.executeQuery()) {
-                ps.setString(1, "%" + contact + "%");
                 while (result.next()) {
-                c = new ContactoEmpresa();
-                c.setId(result.getInt("id"));
-                c.setContacto_emp(result.getString("contacto"));
-                c.setEmail_emp(result.getString("email"));
+                    c = new ContactoEmpresa();
+                    c.setId(result.getInt("id"));
+                    c.setContacto_emp(result.getString("contacto"));
+                    c.setEmail_emp(result.getString("email"));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
-                c.setData_criacao(result.getString("data_criacao"));
+                    c.setData_criacao(result.getString("data_criacao"));
+                }
             }
-}
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao pesquisar Contacto: " + ex,
                     "Informação", JOptionPane.ERROR_MESSAGE);
@@ -115,7 +111,7 @@ try (
     @Override
     public void deleteEntityByROOT(int id) {
         String sql = "delete from contacto_empresa where id=?";
-       try (
+        try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
@@ -128,7 +124,7 @@ try (
     @Override
     public void deleteEntityByUSER(int id) {
         String sql = "update contacto_empresa set active_or_not=false where id=?";
-            
+
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 

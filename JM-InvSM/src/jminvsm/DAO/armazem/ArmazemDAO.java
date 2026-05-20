@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package jminvsm.dao.armazem;
 
 import java.sql.Connection;
@@ -143,8 +140,8 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
 
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
                 ps.setInt(1, id);
+            try (ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     c = new Armazem();
                     c.setId(result.getInt("id"));

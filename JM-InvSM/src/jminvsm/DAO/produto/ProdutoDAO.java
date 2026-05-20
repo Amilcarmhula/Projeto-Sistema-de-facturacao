@@ -252,12 +252,11 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 ps.setInt(1, cat);
                 ps.setInt(2, cat);
             }
-            ResultSet result = ps.executeQuery();
+            try (ResultSet result = ps.executeQuery()) {
             if (result.next()) {
                 total = result.getInt("total_produto");
             }
-            result.close();
-            ps.close();
+            }
         } catch (SQLException ex) {
 //            System.out.println("Erro de contagem: " + ex);
             showDialog("Erro de contagem", "Detalhes: " + ex);

@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import jminvsm.model.empresa.Empresa;
 import jminvsm.model.empresa.conta.ContaBancaria;
 import jminvsm.model.empresa.contacto.ContactoEmpresa;

@@ -133,8 +133,8 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
         String sql = "select * from endereco_armazem where idArmazem=?";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
                 ps.setInt(1, idCliente);
+            try (ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                 EnderecoArmazem c = new EnderecoArmazem();
                 c.setId(result.getInt("id"));

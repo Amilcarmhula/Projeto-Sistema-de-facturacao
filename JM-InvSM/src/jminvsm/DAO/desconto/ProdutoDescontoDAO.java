@@ -73,8 +73,8 @@ public class ProdutoDescontoDAO {
                 + " where idProduto=? ";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet rs = ps.executeQuery()) {
                 ps.setInt(1, idProduto);
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     pd = new ProdutoDesconto();
                     Produto p = new Produto();
@@ -124,30 +124,5 @@ public class ProdutoDescontoDAO {
             System.out.println("Erro ao apagar ProdutoDesconto: " + ex);
         }
         return isSuccess;
-    }
-
-    public static void main(String[] args) throws SQLException {
-        ProdutoDescontoDAO dao = new ProdutoDescontoDAO();
-        ProdutoDesconto pd = new ProdutoDesconto();
-        Produto p = new Produto();
-        p.setId(6);
-        pd.setProduto(p);
-        Armazem a = new Armazem();
-        a.setId(2);
-        pd.setArmazem(a);
-        Desconto d = new Desconto();
-        d.setId(2);
-        pd.setDesconto(d);
-        pd.setDataInicio("2025-09-03");
-        pd.setDataFim("2025-09-21");
-//        dao.addEntity(pd);
-
-        for (ProdutoDesconto des : dao.getEntityByID(1)) {
-            System.out.println(des.getDesconto().getPercentagem());
-        }
-//        dao.delete(pd);
-//        for(ProdutoDesconto des: dao.listAll()){
-//            System.out.println(des.getPercentagem());
-//        }
     }
 }

@@ -112,8 +112,8 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
         try (
                 Connection con = Conexao.getConexao(); 
                 PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
                 ps.setInt(1, idArmazem);
+            try (ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                 ContactoArmazem c = new ContactoArmazem();
                 c.setId(result.getInt("id"));

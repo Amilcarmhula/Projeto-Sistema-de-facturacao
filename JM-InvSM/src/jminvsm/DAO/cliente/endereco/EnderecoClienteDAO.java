@@ -130,9 +130,8 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
                 ps.setInt(1,idCliente);
-            
+                        try (ResultSet result = ps.executeQuery()) {
             while (result.next()) {
                 EnderecoCliente ed = new EnderecoCliente();
                 ed.setId(result.getInt("id"));

@@ -121,31 +121,30 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 + "ORDER BY ano, mes";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            // Se a categoria ou armazém não forem informados, passar valores nulos
+            if (cat == null) {
+                ps.setNull(1, java.sql.Types.INTEGER); // Para ? IS NULL
+                ps.setNull(2, java.sql.Types.INTEGER); // Para c.id = ?
+            } else {
+                ps.setInt(1, cat);  // Para ? IS NULL
+                ps.setInt(2, cat);  // Para c.id = ?
+            }
+
+            if (arm == null) {
+                ps.setNull(3, java.sql.Types.INTEGER); // Para ? IS NULL
+                ps.setNull(4, java.sql.Types.INTEGER); // Para a.id = ?
+            } else {
+                ps.setInt(3, arm);  // Para ? IS NULL
+                ps.setInt(4, arm);  // Para a.id = ?
+            }
             try (ResultSet result = ps.executeQuery()) {
-
-                // Se a categoria ou armazém não forem informados, passar valores nulos
-                if (cat == null) {
-                    ps.setNull(1, java.sql.Types.INTEGER); // Para ? IS NULL
-                    ps.setNull(2, java.sql.Types.INTEGER); // Para c.id = ?
-                } else {
-                    ps.setInt(1, cat);  // Para ? IS NULL
-                    ps.setInt(2, cat);  // Para c.id = ?
-                }
-
-                if (arm == null) {
-                    ps.setNull(3, java.sql.Types.INTEGER); // Para ? IS NULL
-                    ps.setNull(4, java.sql.Types.INTEGER); // Para a.id = ?
-                } else {
-                    ps.setInt(3, arm);  // Para ? IS NULL
-                    ps.setInt(4, arm);  // Para a.id = ?
-                }
                 while (result.next()) {
                     mapa.put("entradas", result.getInt("entradas"));
                     mapa.put("saidas", result.getInt("saidas"));
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Erro: " + ex);
+            System.out.println("Erro:: " + ex);
             showDialog("Erro Dados", "Erro ao carregar movimentos de produto: " + ex);
         }
         return mapa;

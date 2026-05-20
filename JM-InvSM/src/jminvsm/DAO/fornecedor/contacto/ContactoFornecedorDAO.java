@@ -10,9 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 import jminvsm.model.fornecedor.contacto.ContactoFornecedor;
-import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
 
 /**

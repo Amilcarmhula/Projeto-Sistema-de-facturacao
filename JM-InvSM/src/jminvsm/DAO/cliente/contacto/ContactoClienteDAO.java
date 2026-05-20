@@ -109,8 +109,8 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
         String sql = "select * from contacto_cliente where fk_id_cliente=?";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
                 ps.setInt(1, idCliente);
+            try (ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                 ContactoCliente c = new ContactoCliente();
                 c.setId(result.getInt("id"));

@@ -102,8 +102,8 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
         String sql = "select * from endereco_empresa where bairro like ?";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, "%" + contact + "%");
             try (ResultSet result = ps.executeQuery()) {
-                ps.setString(1, "%" + contact + "%");
                 while (result.next()) {
                     c = new EnderecoEmpresa();
                     c.setId(result.getInt("id"));
@@ -130,9 +130,9 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
 
     @Override
     public void deleteEntityByROOT(int id) {
-                    String sql = "delete from endereco_empresa where id=?";
+        String sql = "delete from endereco_empresa where id=?";
 
-         try (
+        try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
@@ -144,9 +144,9 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
 
     @Override
     public void deleteEntityByUSER(int id) {
-                    String sql = "update endereco_empresa set active_or_not=false where id=?";
+        String sql = "update endereco_empresa set active_or_not=false where id=?";
 
-         try (
+        try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);

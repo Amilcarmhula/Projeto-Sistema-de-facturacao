@@ -111,16 +111,4 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
         }
         return isSuccess;
     }
-
-    public static void main(String[] args) {
-        DescontoDAO dao = new DescontoDAO();
-
-        for (Desconto d : dao.listAllEntities()) {
-            System.out.println("Nome: " + d.getNome());
-            System.out.println("Descricao: " + d.getDescricao());
-            System.out.println("desconto: " + d.getPercentagem());
-
-        }
-
-    }
 }

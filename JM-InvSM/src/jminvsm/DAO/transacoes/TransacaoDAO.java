@@ -99,8 +99,8 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
                     + " where fk_numero=? order by fk_parcela";
             try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                                ps.setString(1, numero);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setString(1, numero);
                 while (result.next()) {
                 Transacao t = new Transacao();
                 t.setId(result.getInt("id"));

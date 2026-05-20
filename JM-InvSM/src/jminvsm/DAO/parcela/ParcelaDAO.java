@@ -69,8 +69,8 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
                     + "from parcelas p where fk_factura=?";
            try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                               ps.setString(1, fk_numero);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setString(1, fk_numero);
                 while (result.next()) {
                 Parcela p = new Parcela();
                 p.setId_parcela(result.getInt("id"));

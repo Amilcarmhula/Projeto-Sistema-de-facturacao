@@ -72,9 +72,10 @@ public class PrecoProdutoArmazemDAO {
 
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProduto);
+            ps.setInt(2, idArmazem);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setInt(1, idProduto);
-                ps.setInt(2, idArmazem);
+
                 while (result.next()) {
                     //melhorar esta funcao
                     pv = new PrecoProdutoArmazem();
@@ -110,8 +111,8 @@ public class PrecoProdutoArmazemDAO {
                 + "where p.id = ?";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                            ps.setInt(1, idProd);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setInt(1, idProd);
                 while (result.next()) {
                     pr = new PrecoProdutoArmazem();
                     pr.setId(result.getInt("id"));

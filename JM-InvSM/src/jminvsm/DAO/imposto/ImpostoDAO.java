@@ -95,8 +95,8 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
         String sql = "select * from imposto where id=?";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                            ps.setInt(1, id);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setInt(1, id);
                 while (result.next()) {
                     ti = new Imposto();
                     ti.setId(result.getInt("id"));

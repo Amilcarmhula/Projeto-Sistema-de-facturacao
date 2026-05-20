@@ -74,8 +74,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                     + "FROM factura f WHERE f.numero = ?";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                            ps.setString(1, numero);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setString(1, numero);
                 while (result.next()) {
                 factura = new Factura();
                 factura.setNumero_fac(result.getString("numero"));
@@ -136,8 +136,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                     + "WHERE f.numero = ? ";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                            ps.setString(1, factura);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setString(1, factura);
                 while (result.next()) {
                 f = new Factura();
                 f.setNumero_fac(result.getString("numero_factura"));
@@ -265,8 +265,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                     + "ORDER BY f.numero";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                            ps.setInt(1, id);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setInt(1, id);
                 while (result.next()) {
                 Factura f = new Factura();
                 f.setNumero_fac(result.getString("numero_factura"));
@@ -303,7 +303,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             }
             }
         } catch (SQLException ex) {
-            AlertUtilities.showDialog( "Erro de contagem", "Detalhes: " + ex);
+            showDialog( "Erro de contagem", "Detalhes: " + ex);
         }
 
         return total;

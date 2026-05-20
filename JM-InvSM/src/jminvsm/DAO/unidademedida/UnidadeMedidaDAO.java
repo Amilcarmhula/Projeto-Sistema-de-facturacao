@@ -95,8 +95,8 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
         String sql = "select * from unidadeMedida where id=?";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                            ps.setInt(1, id);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setInt(1, id);
                 while (result.next()) {
                     u = new UnidadeMedida();
                     u.setId(result.getInt("id"));

@@ -70,8 +70,8 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 + "ORDER BY l.dataEntrada ASC;";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProduto);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setInt(1, idProduto);
                 while (result.next()) {
                     ProdutoFornecido l = new ProdutoFornecido();
                     l.setId(result.getInt("idLote"));
@@ -161,6 +161,9 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 if (result.next()) {
                     pf = new ProdutoFornecido();
                     pf.setCodigoForSave(result.getString("codigo"));
+                }else{
+                    pf = new ProdutoFornecido();
+                    pf.setCodigoForSave("L0");
                 }
             }
         } catch (SQLException ex) {

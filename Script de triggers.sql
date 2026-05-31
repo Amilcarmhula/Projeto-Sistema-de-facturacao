@@ -1,5 +1,5 @@
 use _sysface;
-
+-- drop procedure sp_registar_preco;
 DELIMITER //
 CREATE PROCEDURE sp_registar_preco (
     IN p_idProduto INT,
@@ -32,7 +32,8 @@ BEGIN
     IF imposto_taxa IS NULL THEN
         SET imposto_taxa = 0;
     END IF;
-    set p_Venda = p_precoBase + ((p_precoBase * imposto_taxa) / 100);
+    -- set p_Venda = p_precoBase + ((p_precoBase * imposto_taxa) / 100);
+     set p_Venda = p_precoBase + (p_precoBase * imposto_taxa);
 
     
     -- desconto activo
@@ -62,6 +63,7 @@ END;
 //
 DELIMITER ;
 
+-- drop procedure sp_aplicar_desconto_ao_preco;
 DELIMITER //
 CREATE PROCEDURE sp_aplicar_desconto_ao_preco(
     IN p_idProduto INT,
@@ -124,7 +126,7 @@ BEGIN
       AND estado = 'activo';
 
     -- 5️⃣ Calcular preços
-    SET v_precoVenda = v_precoBase + (v_precoBase * v_imposto / 100);
+    SET v_precoVenda = v_precoBase + (v_precoBase * v_imposto);
     SET v_precoFinal = v_precoVenda - (v_precoVenda * v_desconto / 100);
 
     -- 6️⃣ Inserir novo preço
@@ -136,6 +138,7 @@ BEGIN
 END;
 //
 DELIMITER ;
+
 
 SET GLOBAL event_scheduler = ON;
 CREATE EVENT evt_marcar_expiracao_precos
@@ -181,129 +184,129 @@ END //
 DELIMITER ;
 
 
-DELIMITER //
-CREATE TRIGGER Tg_registaMovimentoEntrada
-AFTER INSERT ON lote
-FOR EACH ROW
-BEGIN
-	-- Registra movimento de entrada de lote
-	INSERT INTO movimento (tipoMovimento, dataMovimento, quantidade,idArmazem,idProduto,idLote) 
-		VALUES ('Entrada', NEW.dataEntrada, NEW.quantidadeAtual,NEW.idArmazem, NEW.idProduto, NEW.id);
-END//
-DELIMITER ;
+-- DELIMITER //
+-- CREATE TRIGGER Tg_registaMovimentoEntrada
+-- AFTER INSERT ON lote
+-- FOR EACH ROW
+-- BEGIN
+-- 	-- Registra movimento de entrada de lote
+-- 	INSERT INTO movimento (tipoMovimento, dataMovimento, quantidade,idArmazem,idProduto,idLote) 
+-- 		VALUES ('Entrada', NEW.dataEntrada, NEW.quantidadeAtual,NEW.idArmazem, NEW.idProduto, NEW.id);
+-- END//
+-- DELIMITER ;
 
 
-DELIMITER //
-CREATE TRIGGER Tg_actualizaStock_IO
-AFTER INSERT ON movimento
-FOR EACH ROW
-BEGIN
-    DECLARE totalMovimentado INT;
-    DECLARE estoque_atual INT;
+-- DELIMITER //
+-- CREATE TRIGGER Tg_actualizaStock_IO
+-- AFTER INSERT ON movimento
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE totalMovimentado INT;
+--     DECLARE estoque_atual INT;
 
-    SET totalMovimentado = NEW.quantidade;
+--     SET totalMovimentado = NEW.quantidade;
 
-    SELECT saldo INTO estoque_atual
-    FROM stock
-    WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem
-    LIMIT 1;
+--     SELECT saldo INTO estoque_atual
+--     FROM stock
+--     WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem
+--     LIMIT 1;
 
-    -- Apenas ENTRADAS
-    IF NEW.tipoMovimento = 'Entrada' THEN
-        UPDATE stock
-        SET saldo = estoque_atual + totalMovimentado
-        WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem;
-    END IF;
-END//
-DELIMITER ;
-
-
-DELIMITER //
-CREATE TRIGGER Tg_RegistaMovimentoSaida
-AFTER INSERT ON itemRequisicao
-FOR EACH ROW
-BEGIN
-    -- Registra movimento de saide de lote
-	INSERT INTO movimento (tipoMovimento, dataMovimento, quantidade,idArmazem,idProduto,idItemRequisicao) 
-		VALUES ('Saida', CURDATE(), NEW.quantidade,NEW.idArmazem, NEW.idProduto, NEW.id);
-        
-	-- update requisicao set estado = 'Em processamento' where idItemRequisicao=NEW.idRequisicao;
-
-END//
-DELIMITER ;
+--     -- Apenas ENTRADAS
+--     IF NEW.tipoMovimento = 'Entrada' THEN
+--         UPDATE stock
+--         SET saldo = estoque_atual + totalMovimentado
+--         WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem;
+--     END IF;
+-- END//
+-- DELIMITER ;
 
 
-DELIMITER //
-CREATE TRIGGER Tg_FIFO
-AFTER INSERT ON movimento
-FOR EACH ROW
-BEGIN
-    DECLARE qtdRestante INT;
-    DECLARE loteID INT;
-    DECLARE qtdLote INT;
-    DECLARE done INT DEFAULT 0;
+-- DELIMITER //
+-- CREATE TRIGGER Tg_RegistaMovimentoSaida
+-- AFTER INSERT ON itemRequisicao
+-- FOR EACH ROW
+-- BEGIN
+--     -- Registra movimento de saide de lote
+-- 	INSERT INTO movimento (tipoMovimento, dataMovimento, quantidade,idArmazem,idProduto,idItemRequisicao) 
+-- 		VALUES ('Saida', CURDATE(), NEW.quantidade,NEW.idArmazem, NEW.idProduto, NEW.id);
+--         
+-- 	-- update requisicao set estado = 'Em processamento' where idItemRequisicao=NEW.idRequisicao;
 
-    DECLARE curLotes CURSOR FOR
-        SELECT id, quantidadeAtual
-        FROM lote
-        WHERE idProduto = NEW.idProduto
-          AND idArmazem = NEW.idArmazem
-          AND quantidadeAtual > 0
-        ORDER BY dataEntrada ASC;
+-- END//
+-- DELIMITER ;
 
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
-    IF NEW.tipoMovimento = 'Saida' THEN
-        SET qtdRestante = NEW.quantidade;
+-- DELIMITER //
+-- CREATE TRIGGER Tg_FIFO
+-- AFTER INSERT ON movimento
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE qtdRestante INT;
+--     DECLARE loteID INT;
+--     DECLARE qtdLote INT;
+--     DECLARE done INT DEFAULT 0;
 
-        OPEN curLotes;
+--     DECLARE curLotes CURSOR FOR
+--         SELECT id, quantidadeAtual
+--         FROM lote
+--         WHERE idProduto = NEW.idProduto
+--           AND idArmazem = NEW.idArmazem
+--           AND quantidadeAtual > 0
+--         ORDER BY dataEntrada ASC;
 
-        read_loop: LOOP
-            FETCH curLotes INTO loteID, qtdLote;
-            IF done = 1 OR qtdRestante <= 0 THEN
-                LEAVE read_loop;
-            END IF;
+--     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
-            IF qtdLote >= qtdRestante THEN
-                -- Retira o restante do lote atual
-                UPDATE lote
-                SET quantidadeAtual = quantidadeAtual - qtdRestante,
-                    estado = CASE WHEN quantidadeAtual - qtdRestante = 0 THEN 'Esgotado' ELSE estado END
-                WHERE id = loteID;
+--     IF NEW.tipoMovimento = 'Saida' THEN
+--         SET qtdRestante = NEW.quantidade;
 
-                -- Registra no log
-                INSERT INTO movimento_lote (idMovimento, idLote, quantidadeRetirada)
-                VALUES (NEW.id, loteID, qtdRestante);
+--         OPEN curLotes;
 
-                SET qtdRestante = 0;
-            ELSE
-                -- Lote esgotado completamente
-                UPDATE lote
-                SET quantidadeAtual = 0,
-                    estado = 'Esgotado'
-                WHERE id = loteID;
+--         read_loop: LOOP
+--             FETCH curLotes INTO loteID, qtdLote;
+--             IF done = 1 OR qtdRestante <= 0 THEN
+--                 LEAVE read_loop;
+--             END IF;
 
-                INSERT INTO movimento_lote (idMovimento, idLote, quantidadeRetirada)
-                VALUES (NEW.id, loteID, qtdLote);
+--             IF qtdLote >= qtdRestante THEN
+--                 -- Retira o restante do lote atual
+--                 UPDATE lote
+--                 SET quantidadeAtual = quantidadeAtual - qtdRestante,
+--                     estado = CASE WHEN quantidadeAtual - qtdRestante = 0 THEN 'Esgotado' ELSE estado END
+--                 WHERE id = loteID;
 
-                SET qtdRestante = qtdRestante - qtdLote;
-            END IF;
-        END LOOP;
+--                 -- Registra no log
+--                 INSERT INTO movimento_lote (idMovimento, idLote, quantidadeRetirada)
+--                 VALUES (NEW.id, loteID, qtdRestante);
 
-        CLOSE curLotes;
+--                 SET qtdRestante = 0;
+--             ELSE
+--                 -- Lote esgotado completamente
+--                 UPDATE lote
+--                 SET quantidadeAtual = 0,
+--                     estado = 'Esgotado'
+--                 WHERE id = loteID;
 
-        -- Atualiza saldo geral no stock
-        UPDATE stock
-        SET saldo = saldo - NEW.quantidade
-        WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem;
+--                 INSERT INTO movimento_lote (idMovimento, idLote, quantidadeRetirada)
+--                 VALUES (NEW.id, loteID, qtdLote);
 
-        IF qtdRestante > 0 THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Stock insuficiente para completar a saída (FIFO).';
-        END IF;
-    END IF;
-END//
-DELIMITER ;
+--                 SET qtdRestante = qtdRestante - qtdLote;
+--             END IF;
+--         END LOOP;
+
+--         CLOSE curLotes;
+
+--         -- Atualiza saldo geral no stock
+--         UPDATE stock
+--         SET saldo = saldo - NEW.quantidade
+--         WHERE idProduto = NEW.idProduto AND idArmazem = NEW.idArmazem;
+
+--         IF qtdRestante > 0 THEN
+--             SIGNAL SQLSTATE '45000'
+--             SET MESSAGE_TEXT = 'Stock insuficiente para completar a saída (FIFO).';
+--         END IF;
+--     END IF;
+-- END//
+-- DELIMITER ;
 
 
 -- Trigger para controlar fluxo de stock(saldo de determinado produto em seu armazarm) quando um movimento de saida e registado na tabela itemfactura

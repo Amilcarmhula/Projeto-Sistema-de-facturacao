@@ -59,6 +59,9 @@ public class ProdutoFornecido {
     }
 
     public void setCodigoForSave(String codigo) {
+//        if (codigo == null || codigo.isEmpty()) {
+//            codigo = "L1";
+//        }
         codigo =  codigo.substring(1);
         this.codigo = "L"+String.valueOf(Integer.parseInt(codigo) + 1);
     }

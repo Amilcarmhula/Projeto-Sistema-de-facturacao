@@ -4,17 +4,16 @@
  */
 package jminvsm.dao.armazem.endereco;
 
-import javafx.collections.ObservableList;
+import jminvsm.dao.AddDAO;
+import jminvsm.dao.DeleteDAO;
+import jminvsm.dao.ListDAO;
+import jminvsm.dao.SearchByOwnerDAO;
+import jminvsm.dao.UpdateByIdDAO;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface EnderecoArmazemDAOImpl<T> {
-
-    boolean addEntity(T t);
-    boolean updateEntityByID(T t, int id);
-    ObservableList<T> listAllEntities();
-    ObservableList<T> searchEntityByCLiente(int t);
-    boolean deleteEntity(int x);
+public interface EnderecoArmazemDAOImpl<T> extends AddDAO<T>, UpdateByIdDAO<T>,
+        ListDAO<T>, SearchByOwnerDAO<T>, DeleteDAO {
 }

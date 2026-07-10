@@ -4,12 +4,11 @@
  */
 package jminvsm.dao.metodoPagamento;
 
-import javafx.collections.ObservableList;
+import jminvsm.dao.ListDAO;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface MetodoImpl<T> {
-    ObservableList<T> listAllEntities();
+public interface MetodoImpl<T> extends ListDAO<T> {
 }

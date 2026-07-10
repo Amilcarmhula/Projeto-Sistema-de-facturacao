@@ -23,7 +23,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
     @Override
     public void addEntity(EnderecoEmpresa t) {
         String sql = "insert into endereco_empresa (provincia,cidade,bairro,"
-                + "avenida,rua,codigo_postal,numero, tipo, fk_id_empresa) value (?,?,?,?,?,?,?,?)";
+                + "avenida,rua,codigo_postal,numero, tipo, fk_id_empresa) value (?,?,?,?,?,?,?,?,?)";
 
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -36,7 +36,12 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
             ps.setInt(6, t.getCodigoPostal_emp());
             ps.setInt(7, t.getNumero_emp());
             ps.setString(8, t.getTipo_emp());
-//            ps.setInt(9, t.getFk_id_empresa());
+            if (t.getEmpresa() != null) {
+                ps.setInt(9, t.getEmpresa().getId());
+            } else {
+                ps.setNull(9, java.sql.Types.INTEGER);
+            }
+            ps.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Endereco da Empresa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
@@ -58,8 +63,13 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
             ps.setInt(6, t.getCodigoPostal_emp());
             ps.setInt(7, t.getNumero_emp());
             ps.setString(8, t.getTipo_emp());
-//            ps.setInt(9, t.getFk_id_empresa());
+            if (t.getEmpresa() != null) {
+                ps.setInt(9, t.getEmpresa().getId());
+            } else {
+                ps.setNull(9, java.sql.Types.INTEGER);
+            }
             ps.setInt(10, id);
+            ps.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao actulizar Endereco da Empresa: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
@@ -136,6 +146,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+            ps.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco da Empresa: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
@@ -150,6 +161,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+            ps.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco da Empresa: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);

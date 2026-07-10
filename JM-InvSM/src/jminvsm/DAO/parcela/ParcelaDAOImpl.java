@@ -4,13 +4,14 @@
  */
 package jminvsm.dao.parcela;
 
+import jminvsm.dao.AddDAO;
 import javafx.collections.ObservableList;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface ParcelaDAOImpl<T> {
-    boolean  addEntity(T t);
+public interface ParcelaDAOImpl<T> extends AddDAO<T> {
+
     ObservableList<T> getEntities(String fk_numero);
 }

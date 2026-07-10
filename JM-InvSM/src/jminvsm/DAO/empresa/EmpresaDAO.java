@@ -25,12 +25,13 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
 
     @Override
     public void addEntity(Empresa c) {
-        String sql = "insert into empresa (nome,razaosocial,nuit,) value (?,?,?)";
+        String sql = "insert into empresa (nome,razaosocial,nuit) value (?,?,?)";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, c.getNome_emp());
             ps.setString(2, c.getRazao_emp());
             ps.setInt(3, c.getNuit_emp());
+            ps.executeUpdate();
         } catch (SQLException e) {
             showDialog("Erro Empresa", "Falha ao adicionar empresa: " + e);
         }
@@ -47,6 +48,7 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
             ps.setString(2, c.getRazao_emp());
             ps.setInt(3, c.getNuit_emp());
             ps.setInt(4, id);
+            ps.executeUpdate();
         } catch (SQLException e) {
             showDialog("Erro Empresa", "Falha ao adicionar empresa: " + e);
         }

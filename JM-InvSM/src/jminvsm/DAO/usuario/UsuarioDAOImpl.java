@@ -4,20 +4,12 @@
  */
 package jminvsm.dao.usuario;
 
-import javafx.collections.ObservableList;
+import jminvsm.dao.AuthDAO;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface UsuarioDAOImpl<T> {
-    T login(String u, String s);
-//     void  addEntity(T t);
-//    void updateEntityByID(T t);
-//    ObservableList<T> listAllEntities();
-//    T searchEntityByName(String name);
-//    void deleteEntityByROOT(int id);
-//    void deleteEntityByUSER(T x);
-//    ObservableList<T> searchListEntityByName(String name);
+public interface UsuarioDAOImpl<T> extends AuthDAO<T> {
 }
 

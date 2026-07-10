@@ -4,15 +4,14 @@
  */
 package jminvsm.dao.empresa;
 
-import java.util.List;
+import jminvsm.dao.VoidAddUpdateDAO;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface EmpresaDAOImpl<T> {
-    void  addEntity(T t);
-    void updateEntityByID(T t, int id);
+public interface EmpresaDAOImpl<T> extends VoidAddUpdateDAO<T> {
+
     T getEmpresaData();
 
 }

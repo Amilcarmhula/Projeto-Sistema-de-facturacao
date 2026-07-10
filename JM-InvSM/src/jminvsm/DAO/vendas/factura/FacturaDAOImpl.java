@@ -4,21 +4,26 @@
  */
 package jminvsm.dao.vendas.factura;
 
+import jminvsm.dao.AddDAO;
+import jminvsm.dao.CountDAO;
 import javafx.collections.ObservableList;
-import jminvsm.model.vendas.factura.Factura;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface FacturaDAOImpl<T> {
+public interface FacturaDAOImpl<T> extends AddDAO<T>, CountDAO {
     
-    boolean addEntity(T x);
     T getFactura(String numero);
     T getFacturaData(String factura);
     ObservableList<T> getFacturaToDashboard();
     ObservableList<T> getFacturaToPagamentos(int id);
     int countFactura();
+
+    @Override
+    default int count() {
+        return countFactura();
+    }
 //    double totalPaidInvoice();
     
 }

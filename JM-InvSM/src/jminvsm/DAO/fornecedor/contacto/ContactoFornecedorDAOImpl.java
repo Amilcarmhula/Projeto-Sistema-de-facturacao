@@ -4,19 +4,16 @@
  */
 package jminvsm.dao.fornecedor.contacto;
 
-import javafx.collections.ObservableList;
+import jminvsm.dao.AddDAO;
+import jminvsm.dao.DeleteDAO;
+import jminvsm.dao.ListDAO;
+import jminvsm.dao.SearchBySupplierDAO;
+import jminvsm.dao.UpdateByIdDAO;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface ContactoFornecedorDAOImpl<T> {
-    boolean  addEntity(T t);
-    boolean updateEntityByID(T t,int id);
-    ObservableList<T> listAllEntities();
-    ObservableList<T> searchEntityByFornecedor(int t) ;
-//    T searchEntityByName(String name);
-//    void deleteEntityByROOT(int id);
-    boolean deleteEntity(int x);
-//    ObservableList<T> searchListEntityByName(String name);
+public interface ContactoFornecedorDAOImpl<T> extends AddDAO<T>, UpdateByIdDAO<T>,
+        ListDAO<T>, SearchBySupplierDAO<T>, DeleteDAO {
 }

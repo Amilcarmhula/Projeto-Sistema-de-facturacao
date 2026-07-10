@@ -4,12 +4,11 @@
  */
 package jminvsm.dao.vendas.documentos;
 
-import javafx.collections.ObservableList;
+import jminvsm.dao.ListDAO;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface DocumentosComerciaisDAOImpl<T> {
-    ObservableList<T> listAllEntities();
+public interface DocumentosComerciaisDAOImpl<T> extends ListDAO<T> {
 }

@@ -4,19 +4,20 @@
  */
 package jminvsm.dao.armazem;
 
+import jminvsm.dao.AddDAO;
+import jminvsm.dao.DeleteDAO;
+import jminvsm.dao.FindByIdDAO;
+import jminvsm.dao.LastEntityDAO;
+import jminvsm.dao.ListDAO;
+import jminvsm.dao.UpdateByIdDAO;
 import javafx.collections.ObservableList;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface ArmazemDAOImpl<T> {
-    boolean  addEntity(T t);
-    boolean updateEntityByID(T t, int id);
-    ObservableList<T> listAllEntities();
+public interface ArmazemDAOImpl<T> extends AddDAO<T>, UpdateByIdDAO<T>, ListDAO<T>,
+        FindByIdDAO<T>, LastEntityDAO<T>, DeleteDAO {
+
     ObservableList<T> listAllArmazens();
-    T getLastEntity();
-    T getEntityByID(int id);
-//    void deleteEntityByROOT(int id);
-    boolean deleteEntity(int x);
 }

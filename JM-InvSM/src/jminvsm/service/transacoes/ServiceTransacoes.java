@@ -86,7 +86,7 @@ public class ServiceTransacoes {
         t.setFactura(factura);
         t.setUsuario(user);
 
-        if (transDao.addTansacaoAvista(t)) {
+        if (transDao.addTransacaoAvista(t)) {
             setOpsSuccess(true);
             showSuccessAlert( "Pagamento Registado com sucesso!");
         }
@@ -145,7 +145,7 @@ public class ServiceTransacoes {
         t.setFactura(factura);
         t.setUsuario(user);
 
-        if (transDao.addTansacaoParcelada(t)) {
+        if (transDao.addTransacaoParcelada(t)) {
             setOpsSuccess(true);
             showSuccessAlert( "Pagamento Registado com sucesso!");
         }

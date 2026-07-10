@@ -11,7 +11,14 @@ import javafx.collections.ObservableList;
  * @author JM-Tecnologias
  */
 public interface TransacaoDAOImpl<T> {
+
+    boolean addTransacaoAvista(T transacao);
+
+    boolean addTransacaoParcelada(T transacao);
+
     boolean addTansacaoAvista(T c);
+
     boolean addTansacaoParcelada(T c);
+
     ObservableList<T> getTransacoes(String numero);
 }

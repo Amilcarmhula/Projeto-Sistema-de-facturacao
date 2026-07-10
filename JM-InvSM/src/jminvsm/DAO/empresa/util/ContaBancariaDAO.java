@@ -31,7 +31,12 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
             ps.setString(2, t.getNumero_conta());
             ps.setString(3, t.getNib());
             ps.setString(4, t.getNuib());
-            ps.setInt(5, t.getEmpresa().getId());
+            if (t.getEmpresa() != null) {
+                ps.setInt(5, t.getEmpresa().getId());
+            } else {
+                ps.setNull(5, java.sql.Types.INTEGER);
+            }
+            ps.executeUpdate();
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
@@ -50,8 +55,13 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
             ps.setString(2, t.getNumero_conta());
             ps.setString(3, t.getNib());
             ps.setString(4, t.getNuib());
-            ps.setInt(5, t.getEmpresa().getId());
+            if (t.getEmpresa() != null) {
+                ps.setInt(5, t.getEmpresa().getId());
+            } else {
+                ps.setNull(5, java.sql.Types.INTEGER);
+            }
             ps.setInt(6, id);
+            ps.executeUpdate();
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
@@ -119,6 +129,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+            ps.executeUpdate();
 
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
@@ -133,6 +144,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+            ps.executeUpdate();
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
         }

@@ -40,8 +40,9 @@ import jminvsm.util.Conexao;
  *
  * @author JM-Tecnologias
  */
-public class PrecoProdutoArmazemDAO {
+public class PrecoProdutoArmazemDAO implements PrecoProdutoArmazemDAOImpl<PrecoProdutoArmazem> {
 
+    @Override
     public boolean addEntity(PrecoProdutoArmazem x) {
         boolean isSuccess = false;
         String sql = "CALL sp_registar_preco(?, ?, ?) ";
@@ -65,6 +66,7 @@ public class PrecoProdutoArmazemDAO {
         return isSuccess;
     }
 
+    @Override
     public ObservableList<PrecoProdutoArmazem> getEntityByID(int idProduto, int idArmazem) {
         ObservableList<PrecoProdutoArmazem> lista = FXCollections.observableArrayList();
         PrecoProdutoArmazem pv = null;
@@ -100,6 +102,7 @@ public class PrecoProdutoArmazemDAO {
         return lista;
     }
 
+    @Override
     public ObservableList<PrecoProdutoArmazem> listAllPrecos(int idProd) {
         ObservableList<PrecoProdutoArmazem> listaPrecos = FXCollections.observableArrayList();
         PrecoProdutoArmazem pr = null;
@@ -138,6 +141,7 @@ public class PrecoProdutoArmazemDAO {
         return listaPrecos;
     }
 
+    @Override
     public boolean deleteEntityByUSER(int id) {
         boolean isSuccess = false;
         String sql = "update precoProdutoArmazem set estado='desactivo' where id=?";

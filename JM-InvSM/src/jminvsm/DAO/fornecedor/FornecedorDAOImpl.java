@@ -4,20 +4,26 @@
  */
 package jminvsm.dao.fornecedor;
 
+import jminvsm.dao.AddDAO;
+import jminvsm.dao.CountDAO;
+import jminvsm.dao.DeleteDAO;
+import jminvsm.dao.FindByIdDAO;
+import jminvsm.dao.LastEntityDAO;
+import jminvsm.dao.ListDAO;
+import jminvsm.dao.UpdateByIdDAO;
 import javafx.collections.ObservableList;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface FornecedorDAOImpl<T> {
-    boolean  addEntity(T t);
-    boolean updateEntityByID(T t, int id);
-    ObservableList<T> listAllEntities();
+public interface FornecedorDAOImpl<T> extends AddDAO<T>, UpdateByIdDAO<T>, ListDAO<T>,
+        FindByIdDAO<T>, LastEntityDAO<T>, DeleteDAO, CountDAO {
+
     ObservableList<T> listAllFornecedores();
-    T getLastEntity();
-    T getEntityByID(int id);
-//    void deleteEntityByROOT(int id);
-    boolean deleteEntity(int x);
     int CountFornecedor();
+
+    default int count() {
+        return CountFornecedor();
+    }
 }

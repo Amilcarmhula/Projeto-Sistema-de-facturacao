@@ -24,6 +24,11 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
 
 
     @Override
+    public boolean addTransacaoAvista(Transacao t) {
+        return addTansacaoAvista(t);
+    }
+
+    @Override
     public boolean addTansacaoAvista(Transacao t) {
         boolean isSuccess = false;
         String sql = "insert into transacoes (data_pagamento,valorRecebido,tipo_transacao,"
@@ -56,6 +61,12 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
         return isSuccess;
     }
     
+    @Override
+    public boolean addTransacaoParcelada(Transacao t) {
+        return addTansacaoParcelada(t);
+    }
+
+    @Override
     public boolean addTansacaoParcelada(Transacao t) {
         boolean isSuccess = false;
             String sql = "insert into transacoes (data_pagamento,valorRecebido,tipo_transacao,"

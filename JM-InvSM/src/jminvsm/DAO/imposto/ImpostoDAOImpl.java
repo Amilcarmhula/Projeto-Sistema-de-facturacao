@@ -4,16 +4,11 @@
  */
 package jminvsm.dao.imposto;
 
-import javafx.collections.ObservableList;
+import jminvsm.dao.CrudDAO;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface ImpostoDAOImpl<T> {
-    boolean  addEntity(T t);
-    boolean updateEntityByID(T t, int id);
-    ObservableList<T> listAllEntities();
-    T getEntityByID(int id);
-    boolean deleteEntity(int x);
+public interface ImpostoDAOImpl<T> extends CrudDAO<T> {
 }

@@ -30,7 +30,12 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
             ps.setString(1, t.getContacto_emp());
             ps.setString(2, t.getEmail_emp());
             ps.setString(3, t.getWebsite_emp());
-            ps.setInt(4, t.getEmpresa().getId());
+            if (t.getEmpresa() != null) {
+                ps.setInt(4, t.getEmpresa().getId());
+            } else {
+                ps.setNull(4, java.sql.Types.INTEGER);
+            }
+            ps.executeUpdate();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Contacto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
@@ -48,8 +53,13 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
             ps.setString(1, t.getContacto_emp());
             ps.setString(2, t.getEmail_emp());
             ps.setString(3, t.getWebsite_emp());
-            ps.setInt(4, t.getEmpresa().getId());
+            if (t.getEmpresa() != null) {
+                ps.setInt(4, t.getEmpresa().getId());
+            } else {
+                ps.setNull(4, java.sql.Types.INTEGER);
+            }
             ps.setInt(5, id);
+            ps.executeUpdate();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao actulizar Contacto: "
@@ -115,6 +125,7 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+            ps.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao deletar Contacto: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
@@ -129,6 +140,7 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+            ps.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao deletar Contacto: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);

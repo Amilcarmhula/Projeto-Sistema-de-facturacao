@@ -4,10 +4,11 @@
  */
 package jminvsm.dao.caixa;
 
+import jminvsm.dao.LastEntityDAO;
+
 /**
  *
  * @author JM-Tecnologias
  */
-public interface CaixaDAOImpl<T> {
-    T getLastEntity();
+public interface CaixaDAOImpl<T> extends LastEntityDAO<T> {
 }

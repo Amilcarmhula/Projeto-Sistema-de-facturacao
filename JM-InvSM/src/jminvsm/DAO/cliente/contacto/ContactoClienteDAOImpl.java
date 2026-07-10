@@ -4,19 +4,16 @@
  */
 package jminvsm.dao.cliente.contacto;
 
-import javafx.collections.ObservableList;
+import jminvsm.dao.AddDAO;
+import jminvsm.dao.DeleteDAO;
+import jminvsm.dao.ListDAO;
+import jminvsm.dao.SearchByOwnerDAO;
+import jminvsm.dao.UpdateByIdDAO;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface ContactoClienteDAOImpl<T> {
-    boolean  addEntity(T t);
-    boolean updateEntityByID(T t,int id);
-    ObservableList<T> listAllEntities();
-    ObservableList<T> searchEntityByCLiente(int t) ;
-//    T searchEntityByName(String name);
-//    void deleteEntityByROOT(int id);
-    boolean deleteEntity(int x);
-//    ObservableList<T> searchListEntityByName(String name);
+public interface ContactoClienteDAOImpl<T> extends AddDAO<T>, UpdateByIdDAO<T>,
+        ListDAO<T>, SearchByOwnerDAO<T>, DeleteDAO {
 }

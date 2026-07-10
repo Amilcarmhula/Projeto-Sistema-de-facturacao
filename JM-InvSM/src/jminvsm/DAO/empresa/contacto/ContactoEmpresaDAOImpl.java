@@ -4,20 +4,11 @@
  */
 package jminvsm.dao.empresa.contacto;
 
-import java.util.List;
+import jminvsm.dao.VoidCrudDAO;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface ContactoEmpresaDAOImpl<T> {
-    void  addEntity(T t);
-    void updateEntityByID(T t, int id);
-    List<T> listAllEntities();
-    T searchEntityByName(String name);
-    void deleteEntityByROOT(int id);
-    void deleteEntityByUSER(int id);
-
-//    List<T> searchListEntityByName(String name);
-
+public interface ContactoEmpresaDAOImpl<T> extends VoidCrudDAO<T> {
 }

@@ -4,6 +4,10 @@
  */
 package jminvsm.dao.desconto;
 
+import jminvsm.dao.AddDAO;
+import jminvsm.dao.DeleteDAO;
+import jminvsm.dao.ListDAO;
+import jminvsm.dao.UpdateByIdDAO;
 import javafx.collections.ObservableList;
 
 /**
@@ -11,9 +15,12 @@ import javafx.collections.ObservableList;
  * @author JM-Tecnologias
  * @param <T>
  */
-public interface DescontoDAOImpl<T> {
-    boolean  addEntity(T t);
-    boolean updateEntity(T t, int x);
-    ObservableList<T> listAllEntities();
-    boolean deleteEntity(int x);
+public interface DescontoDAOImpl<T> extends AddDAO<T>, UpdateByIdDAO<T>, ListDAO<T>, DeleteDAO {
+
+    boolean updateEntity(T entity, int id);
+
+    @Override
+    default boolean updateEntityByID(T entity, int id) {
+        return updateEntity(entity, id);
+    }
 }

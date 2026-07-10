@@ -4,28 +4,19 @@
  */
 package jminvsm.dao.produto;
 
+import jminvsm.dao.AddDAO;
+import jminvsm.dao.DeleteDAO;
+import jminvsm.dao.LastEntityDAO;
+import jminvsm.dao.UpdateByIdDAO;
 import javafx.collections.ObservableList;
-import jminvsm.model.produto.Produto;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface ProdutoDAOImpl<T> {
-    boolean  addEntity(T t);
-    boolean updateEntityByID(T t, int id);
+public interface ProdutoDAOImpl<T> extends AddDAO<T>, UpdateByIdDAO<T>, LastEntityDAO<T>, DeleteDAO {
+
     ObservableList<T> getCombinedEntities();
-    
-    public ObservableList<T> listAllProducts();
-    T getLastEntity();
+    ObservableList<T> listAllProducts();
     int countProdutos(Integer cat);
-    
-    
-    
-//    ObservableList<T> listAllEntities();
-//    ObservableList<T> listAllEntities2();
-//    ObservableList<T> searchEntityByCategoria(T x);
-//    T searchEntityByName(String name);
-//    void deleteEntityByROOT(int id);
-    boolean deleteEntity(int x);
 }

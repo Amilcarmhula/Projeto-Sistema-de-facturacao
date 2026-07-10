@@ -4,17 +4,11 @@
  */
 package jminvsm.dao.unidademedida;
 
-import java.util.Map;
-import javafx.collections.ObservableList;
+import jminvsm.dao.CrudDAO;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface UnidadeMedidaDAOImpl<T> {
-    boolean  addEntity(T t);
-    boolean updateEntityByID(T t, int x);
-    ObservableList<T> listAllEntities();
-    T getEntityByID(int x);
-    boolean deleteEntity(int x);
+public interface UnidadeMedidaDAOImpl<T> extends CrudDAO<T> {
 }

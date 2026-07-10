@@ -4,30 +4,27 @@
  */
 package jminvsm.dao.cliente;
 
+import jminvsm.dao.AddDAO;
+import jminvsm.dao.CountDAO;
+import jminvsm.dao.DeleteDAO;
+import jminvsm.dao.FindByIdDAO;
+import jminvsm.dao.LastEntityDAO;
+import jminvsm.dao.UpdateByIdDAO;
 import javafx.collections.ObservableList;
-import jminvsm.model.cliente.Cliente;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface ClienteDAOImpl<T> {
-
-    boolean addEntity(T t);
-
-    boolean updateEntityByID(T t, int id);
-
-    T getLastEntity();
-
-    T getEntityByID(int id);
+public interface ClienteDAOImpl<T> extends AddDAO<T>, UpdateByIdDAO<T>, FindByIdDAO<T>,
+        LastEntityDAO<T>, DeleteDAO, CountDAO {
 
     ObservableList<T> listAllEntitiesToClienteView();
     ObservableList<T> listClientesForSearch();
     T getFullClieneByID(int id);
-//     getClinteFacturaData(String x);
-
-//    ObservableList<T> listAllEntitiesTypeFornecedor();
-//    void deleteEntityByROOT(int id);
-    boolean deleteEntity(int x);
     int CountClientes();
+
+    default int count() {
+        return CountClientes();
+    }
 }

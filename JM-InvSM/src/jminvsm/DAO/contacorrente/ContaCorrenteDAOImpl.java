@@ -4,10 +4,11 @@
  */
 package jminvsm.dao.contacorrente;
 
+import jminvsm.dao.LastEntityDAO;
+
 /**
  *
  * @author JM-Tecnologias
  */
-public interface ContaCorrenteDAOImpl<T> {
-    T getLastEntity();
+public interface ContaCorrenteDAOImpl<T> extends LastEntityDAO<T> {
 }

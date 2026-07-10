@@ -4,17 +4,22 @@
  */
 package jminvsm.dao.categoria;
 
+import jminvsm.dao.AddDAO;
+import jminvsm.dao.DeleteDAO;
+import jminvsm.dao.ListDAO;
+import jminvsm.dao.UpdateByIdDAO;
 import javafx.collections.ObservableList;
 
 /**
  *
  * @author JM-Tecnologias
  */
-public interface CategoriaDAOImpl<T> {
-    boolean  addEntity(T t);
-    boolean updateEntityByID(T t);
-    ObservableList<T> listAllEntities();
-//    T searchEntityByName(String name);
-//    void deleteEntityByROOT(int id);
-    boolean deleteEntity(int x);
+public interface CategoriaDAOImpl<T> extends AddDAO<T>, UpdateByIdDAO<T>, ListDAO<T>, DeleteDAO {
+
+    boolean updateEntityByID(T entity);
+
+    @Override
+    default boolean updateEntityByID(T entity, int id) {
+        return updateEntityByID(entity);
+    }
 }

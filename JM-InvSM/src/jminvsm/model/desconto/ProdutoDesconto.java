@@ -23,9 +23,11 @@
  */
 package jminvsm.model.desconto;
 
-import java.util.Date;
+import java.time.LocalDate;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.produto.Produto;
+import static jminvsm.model.util.ModelConverters.toDateString;
+import static jminvsm.model.util.ModelConverters.toLocalDate;
 
 /**
  *
@@ -36,8 +38,8 @@ public class ProdutoDesconto {
     private Produto produto;
     private Desconto desconto;   
     private Armazem armazem;
-    private String dataInicio;
-    private String dataFim;
+    private LocalDate dataInicio;
+    private LocalDate dataFim;
 
     public ProdutoDesconto() {
     }
@@ -46,8 +48,8 @@ public class ProdutoDesconto {
         this.produto = produto;
         this.desconto = desconto;
         this.armazem = armazem;
-        this.dataInicio = dataInicio;
-        this.dataFim = dataFim;
+        this.dataInicio = toLocalDate(dataInicio);
+        this.dataFim = toLocalDate(dataFim);
     }
 
     // Getters e Setters
@@ -76,18 +78,34 @@ public class ProdutoDesconto {
     }
 
     public String getDataInicio() {
-        return dataInicio;
+        return toDateString(dataInicio);
     }
 
     public void setDataInicio(String dataInicio) {
+        this.dataInicio = toLocalDate(dataInicio);
+    }
+
+    public LocalDate getDataInicioDate() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(LocalDate dataInicio) {
         this.dataInicio = dataInicio;
     }
 
     public String getDataFim() {
-        return dataFim;
+        return toDateString(dataFim);
     }
 
     public void setDataFim(String dataFim) {
+        this.dataFim = toLocalDate(dataFim);
+    }
+
+    public LocalDate getDataFimDate() {
+        return dataFim;
+    }
+
+    public void setDataFim(LocalDate dataFim) {
         this.dataFim = dataFim;
     }
 }

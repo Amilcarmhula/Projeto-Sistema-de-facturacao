@@ -424,7 +424,7 @@ public class DashboardController implements Initializable {
     public void showInvoice(MouseEvent evt) throws SQLException{
         if (evt.getClickCount() == 2) {
             Factura f = tabelaFactura.getSelectionModel().getSelectedItem();
-            f.criarFactura(f.getNumero_fac());
+            serviceFactura.geraRelatorio(f.getNumero_fac());
         }
 
     }

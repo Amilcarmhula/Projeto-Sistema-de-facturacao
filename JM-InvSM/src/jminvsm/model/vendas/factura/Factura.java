@@ -4,33 +4,26 @@
  */
 package jminvsm.model.vendas.factura;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.stage.Modality;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import jminvsm.model.cliente.Cliente;
+import jminvsm.model.cliente.contacto.ContactoCliente;
+import jminvsm.model.cliente.endereco.EnderecoCliente;
 import jminvsm.model.empresa.Empresa;
+import jminvsm.model.empresa.contacto.ContactoEmpresa;
+import jminvsm.model.empresa.conta.ContaBancaria;
+import jminvsm.model.empresa.endereco.EnderecoEmpresa;
+import jminvsm.model.enums.EstadoFactura;
 import jminvsm.model.transacao.Transacao;
 import jminvsm.model.usuario.Usuario;
+import static jminvsm.model.util.ModelConverters.toBigDecimal;
+import static jminvsm.model.util.ModelConverters.toDateString;
+import static jminvsm.model.util.ModelConverters.toDouble;
+import static jminvsm.model.util.ModelConverters.toLocalDate;
 import jminvsm.model.vendas.documetos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.itens.Item;
-import jminvsm.service.vendas.factura.ServiceFactura;
-import jminvsm.service.vendas.factura.itens.ServiceItem;
-import jminvsm.util.AlertUtilities;
-import jminvsm.util.report.ReportUtilities;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -39,14 +32,14 @@ import net.sf.jasperreports.view.JasperViewer;
 public class Factura {
 
     private String numero_fac;
-    private String data_emissao; // Alterar o fild do jasperreport para que o dado possa refletir no relatorio
-    private String data_vencimento;
-    private double total;
-    private double totalPago;
-    private double saldoPendente;
+    private LocalDate data_emissao; // Alterar o fild do jasperreport para que o dado possa refletir no relatorio
+    private LocalDate data_vencimento;
+    private BigDecimal total = BigDecimal.ZERO;
+    private BigDecimal totalPago = BigDecimal.ZERO;
+    private BigDecimal saldoPendente = BigDecimal.ZERO;
     private int numeroParcelas;
     private String condicaoPagamento;
-    private String estado;
+    private EstadoFactura estado;
     private DocumentosComerciais docComerciais;
     private List<Item> itens;
     private Item item;
@@ -54,22 +47,20 @@ public class Factura {
     private Empresa empresa;
     private Cliente cliente;
     private Usuario usuario;
-    private ServiceFactura serviceFactura;
-    private ServiceItem serviceItens;
 
     public Factura() {
     }
 
     public Factura(String numero_fac, String data_emissao, String data_vencimento, double total, double totalPago, double saldoPendente, int numeroParcelas, String condicaoPagamento, String estado, DocumentosComerciais docComerciais, List<Item> itens, Item item, Transacao transacoes, Empresa empresa, Cliente cliente, Usuario usuario) throws SQLException {
         this.numero_fac = numero_fac;
-        this.data_emissao = data_emissao;
-        this.data_vencimento = data_vencimento;
-        this.total = total;
-        this.totalPago = totalPago;
-        this.saldoPendente = saldoPendente;
+        this.data_emissao = toLocalDate(data_emissao);
+        this.data_vencimento = toLocalDate(data_vencimento);
+        this.total = toBigDecimal(total);
+        this.totalPago = toBigDecimal(totalPago);
+        this.saldoPendente = toBigDecimal(saldoPendente);
         this.numeroParcelas = numeroParcelas;
         this.condicaoPagamento = condicaoPagamento;
-        this.estado = estado;
+        this.estado = EstadoFactura.fromValue(estado);
         this.docComerciais = docComerciais;
         this.itens = itens;
         this.item = item;
@@ -80,96 +71,53 @@ public class Factura {
 
     }
 
-    public void criarFactura(String numeroFactura) throws SQLException {
-        serviceFactura = new ServiceFactura();
-        serviceItens = new ServiceItem();
-        List<Factura> detalhesFactura = new ArrayList<Factura>();
-
-        Factura detalhes = serviceFactura.consultaDadosFactura(numeroFactura);
-        detalhesFactura.add(detalhes);
-        JRBeanCollectionDataSource facturaDetalhesDATASOURCE = new JRBeanCollectionDataSource(detalhesFactura);
-
-        // Configurar o DataSource para os itens
-        JRBeanCollectionDataSource itemDATASOURCE = new JRBeanCollectionDataSource(serviceItens.consultaItensFactura(numeroFactura));
-
-        // Passar parâmetros para o relatório
-        Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("TABLE_DATA_SOURCE", itemDATASOURCE);
-        parametros.put("NOMEFACTURA", numeroFactura);
-
-        String path = "";
-        if (numeroFactura.endsWith("/1") || numeroFactura.endsWith("/2")) {
-            path = "C:\\JM-InvSM\\compiled\\Factura.jasper";
-        } else if (numeroFactura.endsWith("/3")) {
-            path = "C:\\JM-InvSM\\compiled\\FacturaRecibo.jasper";
-        } else {
-            path = "C:\\JM-InvSM\\compiled\\FacturaSimplificada.jasper";
-        }
-
-        try {
-            JasperReport jReport = (JasperReport) JRLoader.loadObjectFromFile(path);
-
-            // Preencher o relatório
-            JasperPrint printableReport = JasperFillManager.fillReport(jReport, parametros, facturaDetalhesDATASOURCE);
-            /*
-            Configura escolha decisao de escolha de visualizacao e impressao ou salvar documento
-             */
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Opcoes de relatorio.");
-            dialog.setContentText("Deseja salvar ou visualizar a Factura?");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-
-            // Configurando o botão View/Save
-            ButtonType btnVisualizar = new ButtonType("Visualizar", ButtonType.OK.getButtonData());
-            ButtonType btnClose = new ButtonType("Close", ButtonType.CANCEL.getButtonData());
-            ButtonType btnSaveView = new ButtonType("Salvar", ButtonType.YES.getButtonData());
-            dialog.getDialogPane().getButtonTypes().addAll(btnVisualizar, btnSaveView, btnClose);
-
-            Optional<ButtonType> result = dialog.showAndWait();
-            if (result.get() == btnVisualizar) {
-                // Apenas exibir o relatório
-                JasperViewer viewer = new JasperViewer(printableReport, false);
-                viewer.setTitle("Relatorio");
-                viewer.setVisible(true);
-            } else if (result.get() == btnSaveView) {
-                //Salva o relatório NOMEFACTURA
-                String numero = (String) parametros.get("NOMEFACTURA");
-                JasperExportManager.exportReportToPdfFile(printableReport, "C:/JM-InvSM/FACTURA-" + numero.replace("/", "-") + ".pdf");
-                // Exibir o relatório
-                JasperViewer viewer = new JasperViewer(printableReport, false);
-                viewer.setTitle("Factura");
-                viewer.setVisible(true);
-            } else if (result.get() == btnClose) {
-                System.out.println("Aqui nao salva nem visualiza; esta associado ao botao close da tela!");
-            }
-        } catch (JRException ex) {
-            AlertUtilities.showDialog("Erro", "Erro ao gerar relatorio de factura: " + ex);
-        }
-
-    }
-
     public String getNumero_fac() {
         return numero_fac;
     }
+
 
     public void setNumero_fac(String numero_fac) {
         this.numero_fac = numero_fac;
     }
 
+    public String getNumeroFactura() {
+        return numero_fac;
+    }
+
+    public void setNumeroFactura(String numeroFactura) {
+        this.numero_fac = numeroFactura;
+    }
+
     public String getData_emissao() {
-        return data_emissao;
+        return toDateString(data_emissao);
     }
 
     public void setData_emissao(String data_emissao) {
-        this.data_emissao = data_emissao;
+        this.data_emissao = toLocalDate(data_emissao);
+    }
+
+    public LocalDate getDataEmissao() {
+        return data_emissao;
+    }
+
+    public void setDataEmissao(LocalDate dataEmissao) {
+        this.data_emissao = dataEmissao;
     }
 
     public String getData_vencimento() {
-        return data_vencimento;
+        return toDateString(data_vencimento);
     }
 
     public void setData_vencimento(String data_vencimento) {
-        this.data_vencimento = data_vencimento;
+        this.data_vencimento = toLocalDate(data_vencimento);
+    }
+
+    public LocalDate getDataVencimento() {
+        return data_vencimento;
+    }
+
+    public void setDataVencimento(LocalDate dataVencimento) {
+        this.data_vencimento = dataVencimento;
     }
 
     public Item getItem() {
@@ -189,22 +137,38 @@ public class Factura {
     }
 
     public String getEstado() {
-        return estado;
+        return estado != null ? estado.getValor() : null;
     }
 
     public double getTotalPago() {
-        return totalPago;
+        return toDouble(totalPago);
     }
 
     public void setTotalPago(double totalPago) {
+        this.totalPago = toBigDecimal(totalPago);
+    }
+
+    public BigDecimal getTotalPagoDecimal() {
+        return totalPago;
+    }
+
+    public void setTotalPago(BigDecimal totalPago) {
         this.totalPago = totalPago;
     }
 
     public double getSaldoPendente() {
-        return saldoPendente;
+        return toDouble(saldoPendente);
     }
 
     public void setSaldoPendente(double saldoPendente) {
+        this.saldoPendente = toBigDecimal(saldoPendente);
+    }
+
+    public BigDecimal getSaldoPendenteDecimal() {
+        return saldoPendente;
+    }
+
+    public void setSaldoPendente(BigDecimal saldoPendente) {
         this.saldoPendente = saldoPendente;
     }
 
@@ -225,6 +189,14 @@ public class Factura {
     }
 
     public void setEstado(String estado) {
+        this.estado = EstadoFactura.fromValue(estado);
+    }
+
+    public EstadoFactura getEstadoEnum() {
+        return estado;
+    }
+
+    public void setEstado(EstadoFactura estado) {
         this.estado = estado;
     }
 
@@ -245,10 +217,18 @@ public class Factura {
     }
 
     public double getTotal() {
-        return total;
+        return toDouble(total);
     }
 
     public void setTotal(double total) {
+        this.total = toBigDecimal(total);
+    }
+
+    public BigDecimal getTotalDecimal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
@@ -277,7 +257,7 @@ public class Factura {
     }
 
     public String getNomePagamento() {
-        if (transacoes != null) {
+        if (transacoes != null && transacoes.getMetodo() != null) {
             return transacoes.getMetodo().getNomePagamento();
         }
         return "";
@@ -319,71 +299,81 @@ public class Factura {
     }
 
     public String getAvenida_emp() {
-        if (empresa != null) {
-            return empresa.getEnderecoEmpresa().getAvenida_emp();//
+        EnderecoEmpresa endereco = getEnderecoEmpresaSafe();
+        if (endereco != null) {
+            return endereco.getAvenida_emp();//
         }
         return null;
     }
 
     public String getBairro_emp() {
-        if (empresa != null) {
-            return empresa.getEnderecoEmpresa().getBairro_emp();//
+        EnderecoEmpresa endereco = getEnderecoEmpresaSafe();
+        if (endereco != null) {
+            return endereco.getBairro_emp();//
         }
         return null;
     }
 
     public String getCidade_emp() {
-        if (empresa != null) {
-            return empresa.getEnderecoEmpresa().getCidade_emp();//
+        EnderecoEmpresa endereco = getEnderecoEmpresaSafe();
+        if (endereco != null) {
+            return endereco.getCidade_emp();//
         }
         return null;
     }
 
     public String getProvincia_emp() {
-        if (empresa != null) {
-            return empresa.getEnderecoEmpresa().getProvincia_emp();//
+        EnderecoEmpresa endereco = getEnderecoEmpresaSafe();
+        if (endereco != null) {
+            return endereco.getProvincia_emp();//
         }
         return null;
     }
 
     public String getRua_emp() {
-        if (empresa != null) {
-            return empresa.getEnderecoEmpresa().getRua_emp();//
+        EnderecoEmpresa endereco = getEnderecoEmpresaSafe();
+        if (endereco != null) {
+            return endereco.getRua_emp();//
         }
         return null;
     }
 
     public int getCodigoPostal_emp() {
-        if (empresa != null) {
-            return empresa.getEnderecoEmpresa().getCodigoPostal_emp();//
+        EnderecoEmpresa endereco = getEnderecoEmpresaSafe();
+        if (endereco != null) {
+            return endereco.getCodigoPostal_emp();//
         }
         return -1;
     }
 
     public int getNumero_emp() {
-        if (empresa != null) {
-            return empresa.getEnderecoEmpresa().getNumero_emp();//
+        EnderecoEmpresa endereco = getEnderecoEmpresaSafe();
+        if (endereco != null) {
+            return endereco.getNumero_emp();//
         }
         return -1;
     }
 
     public String getContacto_emp() {
-        if (empresa != null) {
-            return empresa.getContactoEmpresa().getContacto_emp();//
+        ContactoEmpresa contacto = getContactoEmpresaSafe();
+        if (contacto != null) {
+            return contacto.getContacto_emp();//
         }
         return null;
     }
 
     public String getEmail_emp() {
-        if (empresa != null) {
-            return empresa.getContactoEmpresa().getEmail_emp();//
+        ContactoEmpresa contacto = getContactoEmpresaSafe();
+        if (contacto != null) {
+            return contacto.getEmail_emp();//
         }
         return null;
     }
 
     public String getWebsite_emp() {
-        if (empresa != null) {
-            return empresa.getContactoEmpresa().getWebsite_emp();//
+        ContactoEmpresa contacto = getContactoEmpresaSafe();
+        if (contacto != null) {
+            return contacto.getWebsite_emp();//
         }
         return null;
     }
@@ -403,94 +393,127 @@ public class Factura {
     }
 
     public String getContacto_cli() {
-        if (cliente != null) {
-            return cliente.getContactoCliente().getContacto_cli();//
+        ContactoCliente contacto = getContactoClienteSafe();
+        if (contacto != null) {
+            return contacto.getContacto_cli();//
         }
         return null;
     }
 
     public String getEmail_cli() {
-        if (cliente != null) {
-            return cliente.getContactoCliente().getEmail_cli();//
+        ContactoCliente contacto = getContactoClienteSafe();
+        if (contacto != null) {
+            return contacto.getEmail_cli();//
         }
         return null;
     }
 
     public String getAvenida_cli() {
-        if (cliente != null) {
-            return cliente.getEnderecoCliente().getAvenida_cli();//
+        EnderecoCliente endereco = getEnderecoClienteSafe();
+        if (endereco != null) {
+            return endereco.getAvenida_cli();//
         }
         return null;
     }
 
     public String getBairro_cli() {
-        if (cliente != null) {
-            return cliente.getEnderecoCliente().getBairro_cli();//
+        EnderecoCliente endereco = getEnderecoClienteSafe();
+        if (endereco != null) {
+            return endereco.getBairro_cli();//
         }
         return null;
     }
 
     public String getCidade_cli() {
-        if (cliente != null) {
-            return cliente.getEnderecoCliente().getCidade_cli();//
+        EnderecoCliente endereco = getEnderecoClienteSafe();
+        if (endereco != null) {
+            return endereco.getCidade_cli();//
         }
         return null;
     }
 
     public String getProvincia_cli() {
-        if (cliente != null) {
-            return cliente.getEnderecoCliente().getProvincia_cli();//
+        EnderecoCliente endereco = getEnderecoClienteSafe();
+        if (endereco != null) {
+            return endereco.getProvincia_cli();//
         }
         return null;
     }
 
     public String getRua_cli() {
-        if (cliente != null) {
-            return cliente.getEnderecoCliente().getRua_cli();//
+        EnderecoCliente endereco = getEnderecoClienteSafe();
+        if (endereco != null) {
+            return endereco.getRua_cli();//
         }
         return null;
     }
 
     public int getCodigoPostal_cli() {
-        if (cliente != null) {
-            return cliente.getEnderecoCliente().getCodigoPostal_cli();//
+        EnderecoCliente endereco = getEnderecoClienteSafe();
+        if (endereco != null) {
+            return endereco.getCodigoPostal_cli();//
         }
         return -1;
     }
 
     public int getNumero_cli() {
-        if (cliente != null) {
-            return cliente.getEnderecoCliente().getNumero_cli();//
+        EnderecoCliente endereco = getEnderecoClienteSafe();
+        if (endereco != null) {
+            return endereco.getNumero_cli();//
         }
         return -1;
     }
 
     public String getNome_banco() {
-        if (empresa != null) {
-            return empresa.getContaBancaria().getNome_banco();//
+        ContaBancaria conta = getContaBancariaSafe();
+        if (conta != null) {
+            return conta.getNome_banco();//
         }
         return null;
     }
 
     public String getNib() {
-        if (empresa != null) {
-            return empresa.getContaBancaria().getNib();//
+        ContaBancaria conta = getContaBancariaSafe();
+        if (conta != null) {
+            return conta.getNib();//
         }
         return null;
     }
 
     public String getNuib() {
-        if (empresa != null) {
-            return empresa.getContaBancaria().getNuib();//
+        ContaBancaria conta = getContaBancariaSafe();
+        if (conta != null) {
+            return conta.getNuib();//
         }
         return null;
     }
 
     public String getNumero_conta() {
-        if (empresa != null) {
-            return empresa.getContaBancaria().getNumero_conta();//
+        ContaBancaria conta = getContaBancariaSafe();
+        if (conta != null) {
+            return conta.getNumero_conta();//
         }
         return null;
+    }
+
+    private EnderecoEmpresa getEnderecoEmpresaSafe() {
+        return empresa != null ? empresa.getEnderecoEmpresa() : null;
+    }
+
+    private ContactoEmpresa getContactoEmpresaSafe() {
+        return empresa != null ? empresa.getContactoEmpresa() : null;
+    }
+
+    private ContaBancaria getContaBancariaSafe() {
+        return empresa != null ? empresa.getContaBancaria() : null;
+    }
+
+    private ContactoCliente getContactoClienteSafe() {
+        return cliente != null ? cliente.getContactoCliente() : null;
+    }
+
+    private EnderecoCliente getEnderecoClienteSafe() {
+        return cliente != null ? cliente.getEnderecoCliente() : null;
     }
 
 }

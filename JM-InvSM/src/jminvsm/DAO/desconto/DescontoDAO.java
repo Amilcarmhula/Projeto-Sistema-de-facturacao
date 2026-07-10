@@ -30,11 +30,11 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
 
             ps.setString(1, t.getNome());
             ps.setString(2, t.getDescricao());
-            ps.setDouble(3, t.getPercentagem());
+            ps.setBigDecimal(3, t.getPercentagemDecimal());
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+                isSuccess = true; // Se uma linha foi afetada, a inserÃ§Ã£o foi bem-sucedida
             }
 
         } catch (SQLException ex) {
@@ -53,13 +53,13 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
 
             ps.setString(1, t.getNome());
             ps.setString(2, t.getDescricao());
-            ps.setDouble(3, t.getPercentagem());
+            ps.setBigDecimal(3, t.getPercentagemDecimal());
 
             ps.setInt(4, id);
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+                isSuccess = true; // Se uma linha foi afetada, a inserÃ§Ã£o foi bem-sucedida
             }
 
         } catch (SQLException ex) {
@@ -80,7 +80,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
                     c = new Desconto();
                     c.setId(result.getInt("id"));
                     c.setNome(result.getString("nome"));
-                    c.setPercentagem(result.getDouble("percentagem"));
+                    c.setPercentagem(result.getBigDecimal("percentagem"));
                     c.setDescricao(result.getString("descricao"));
                     c.setData_criacao(result.getString("data_criacao"));
                     lista.add(c);
@@ -103,7 +103,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+                isSuccess = true; // Se uma linha foi afetada, a inserÃ§Ã£o foi bem-sucedida
             }
 
         } catch (SQLException ex) {

@@ -257,7 +257,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
     private ObservableList<DocumentosComerciais> listaDocComercial;
     private Map<String, DocumentosComerciais> mapaDocComercial;
 
-    public void populateComboFactura() throws SQLException {
+    public void populateComboFactura() {
         listaDocComercial = serDocs.getDocumentos();
         mapaDocComercial = new HashMap<>();
         List<String> lista = new ArrayList<>();
@@ -265,6 +265,7 @@ public class VendasPorFacturacaoViewController implements Initializable {
             mapaDocComercial.put(doc.getNome_doc(), doc);
             if (doc.getNome_doc().startsWith("Fatura")) {
                 lista.add(doc.getNome_doc());
+                System.out.println("****"+doc.getNome_doc());
             }
         }
         combTipoDoc.setItems(FXCollections.observableArrayList(lista));
@@ -374,8 +375,8 @@ public class VendasPorFacturacaoViewController implements Initializable {
             public void handle(CellEditEvent<Item, Integer> event) {
                 Item item = event.getRowValue(); // Obtém o objeto da linha
                 item.setQuantidade(event.getNewValue()); // Atualiza a propriedade
-                Item i = new Item();
-                i.calculateSubtotal_onTable(item, tabelaItens);
+                item.calcularSubtotal();
+                tabelaItens.refresh();
                 displayPrice();
             }
         });
@@ -392,16 +393,15 @@ public class VendasPorFacturacaoViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         initTableItems();
         randNum = new Random();
-        LeitorSerialListener leitor = new LeitorSerialListener("COM3", codigo -> {
-            System.out.println("Código lido via listener: " + codigo);
-        });
-
-        leitor.iniciar();
+//        LeitorSerialListener leitor = new LeitorSerialListener("COM3", codigo -> {
+//            System.out.println("Código lido via listener: " + codigo);
+//        });
+//
+//        leitor.iniciar();
         // Aqui você poderia manter a aplicação rodando, ou criar lógica para parar depois
         // leitor.parar(); // Chame quando quiser fechar a porta
 
         this.userData = SysFact.getUserData();
-        System.out.println("User: " + userData.getUsuario());
         this.empresaData = SysFact.getEmpresaData();
         try {
             serviceStock = new ServiceStock();

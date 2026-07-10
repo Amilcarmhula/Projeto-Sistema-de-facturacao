@@ -28,7 +28,7 @@ public class ServiceDesconto {
         this.opsSuccess = opsSuccess;
     }
 
-    public void regista(String nomeDesconto, String descricao) {
+    public void regista(String nomeDesconto, Double percentagem, String descricao) {
         setOpsSuccess(false);
         
         if (nomeDesconto == null || nomeDesconto.isEmpty()) {
@@ -40,8 +40,14 @@ public class ServiceDesconto {
             descricao = "Descricao padrao!";
         }
         
+        if (percentagem == null) {
+            showErroAlert("Taxa de Desconto nao informado!");
+            return;
+        }
+        
         Desconto d = new Desconto();
         d.setNome(nomeDesconto);
+        d.setPercentagem(percentagem);
         d.setDescricao(descricao);
         if (descontoDao.addEntity(d)) {
             setOpsSuccess(true);
@@ -49,7 +55,7 @@ public class ServiceDesconto {
         }
     }
     
-    public void actualizar(Integer id, String nomeDesconto, String descricao) {
+    public void actualizar(Integer id, String nomeDesconto, Double percentagem, String descricao) {
         setOpsSuccess(false);
         
         if (id == null) {
@@ -65,9 +71,15 @@ public class ServiceDesconto {
         if (descricao == null || descricao.isEmpty()) {
             descricao = "Descricao padrao!";
         }
+        if (percentagem == null) {
+            showErroAlert("Taxa de Desconto nao informado!");
+            return;
+        }
+        
         
         Desconto d = new Desconto();
         d.setNome(nomeDesconto);
+        d.setPercentagem(percentagem);
         d.setDescricao(descricao);
         if (descontoDao.updateEntity(d,id)) {
             setOpsSuccess(true);

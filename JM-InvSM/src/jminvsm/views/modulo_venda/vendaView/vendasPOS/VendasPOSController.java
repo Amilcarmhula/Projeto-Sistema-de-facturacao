@@ -300,8 +300,6 @@ public class VendasPOSController implements Initializable {
                 Item item = event.getRowValue(); // Obtém o objeto da linha
                 item.setQuantidade(event.getNewValue()); // Atualiza a propriedade
 
-//                Item i = new Item();
-//                i.calculateSubtotal_onTable(item,tabelaItens);
                 displayPrice();
             }
         });

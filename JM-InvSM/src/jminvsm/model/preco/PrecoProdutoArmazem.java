@@ -23,8 +23,15 @@
  */
 package jminvsm.model.preco;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import jminvsm.model.armazem.Armazem;
+import jminvsm.model.enums.EstadoPreco;
 import jminvsm.model.produto.Produto;
+import static jminvsm.model.util.ModelConverters.toBigDecimal;
+import static jminvsm.model.util.ModelConverters.toDateString;
+import static jminvsm.model.util.ModelConverters.toLocalDate;
+import static jminvsm.model.util.ModelConverters.toNullableDouble;
 
 /**
  *
@@ -34,12 +41,12 @@ public class PrecoProdutoArmazem {
     private int id;
     private Produto produto;
     private Armazem armazem;
-    private Double precoBase;
-    private Double precoVenda;
-    private Double precoFinal;
-    private String dataInicioVigencia;
-    private String dataFimVigencia;
-    private String estado;
+    private BigDecimal precoBase;
+    private BigDecimal precoVenda;
+    private BigDecimal precoFinal;
+    private LocalDate dataInicioVigencia;
+    private LocalDate dataFimVigencia;
+    private EstadoPreco estado;
 
     public PrecoProdutoArmazem() {
     }
@@ -47,12 +54,12 @@ public class PrecoProdutoArmazem {
     public PrecoProdutoArmazem(Produto produto, Armazem armazem, Double preco, Double precoVenda, Double precoFinal, String dataInicioVigencia, String dataFimVigencia, String estado) {
         this.produto = produto;
         this.armazem = armazem;
-        this.precoBase = preco;
-        this.precoVenda = precoVenda;
-        this.precoFinal = precoFinal;
-        this.dataInicioVigencia = dataInicioVigencia;
-        this.dataFimVigencia = dataFimVigencia;
-        this.estado = estado;
+        this.precoBase = toBigDecimal(preco);
+        this.precoVenda = toBigDecimal(precoVenda);
+        this.precoFinal = toBigDecimal(precoFinal);
+        this.dataInicioVigencia = toLocalDate(dataInicioVigencia);
+        this.dataFimVigencia = toLocalDate(dataFimVigencia);
+        this.estado = EstadoPreco.fromValue(estado);
     }
 
     public int getId() {
@@ -80,51 +87,99 @@ public class PrecoProdutoArmazem {
     }
 
     public Double getPrecoBase() {
-        return precoBase;
+        return toNullableDouble(precoBase);
     }
 
     public void setPrecoBase(Double precoBase) {
+        this.precoBase = toBigDecimal(precoBase);
+    }
+
+    public BigDecimal getPrecoBaseDecimal() {
+        return precoBase;
+    }
+
+    public void setPrecoBase(BigDecimal precoBase) {
         this.precoBase = precoBase;
     }
 
     public Double getPrecoVenda() {
-        return precoVenda;
+        return toNullableDouble(precoVenda);
     }
 
     public void setPrecoVenda(Double precoVenda) {
+        this.precoVenda = toBigDecimal(precoVenda);
+    }
+
+    public BigDecimal getPrecoVendaDecimal() {
+        return precoVenda;
+    }
+
+    public void setPrecoVenda(BigDecimal precoVenda) {
         this.precoVenda = precoVenda;
     }
 
     public Double getPrecoFinal() {
-        return precoFinal;
+        return toNullableDouble(precoFinal);
     }
 
     public void setPrecoFinal(Double precoFinal) {
+        this.precoFinal = toBigDecimal(precoFinal);
+    }
+
+    public BigDecimal getPrecoFinalDecimal() {
+        return precoFinal;
+    }
+
+    public void setPrecoFinal(BigDecimal precoFinal) {
         this.precoFinal = precoFinal;
     }
 
     public String getDataInicioVigencia() {
-        return dataInicioVigencia;
+        return toDateString(dataInicioVigencia);
     }
 
     public void setDataInicioVigencia(String dataInicioVigencia) {
+        this.dataInicioVigencia = toLocalDate(dataInicioVigencia);
+    }
+
+    public LocalDate getDataInicioVigenciaDate() {
+        return dataInicioVigencia;
+    }
+
+    public void setDataInicioVigencia(LocalDate dataInicioVigencia) {
         this.dataInicioVigencia = dataInicioVigencia;
     }
-    
+
 
     public String getDataFimVigencia() {
-        return dataFimVigencia;
+        return toDateString(dataFimVigencia);
     }
 
     public void setDataFimVigencia(String dataFimVigencia) {
+        this.dataFimVigencia = toLocalDate(dataFimVigencia);
+    }
+
+    public LocalDate getDataFimVigenciaDate() {
+        return dataFimVigencia;
+    }
+
+    public void setDataFimVigencia(LocalDate dataFimVigencia) {
         this.dataFimVigencia = dataFimVigencia;
     }
 
     public String getEstado() {
-        return estado;
+        return estado != null ? estado.getValor() : null;
     }
 
     public void setEstado(String estado) {
+        this.estado = EstadoPreco.fromValue(estado);
+    }
+
+    public EstadoPreco getEstadoEnum() {
+        return estado;
+    }
+
+    public void setEstado(EstadoPreco estado) {
         this.estado = estado;
     }
 

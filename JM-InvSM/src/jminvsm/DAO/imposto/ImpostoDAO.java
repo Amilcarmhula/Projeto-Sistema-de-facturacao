@@ -29,7 +29,7 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getNome());
-            ps.setDouble(2, t.getPercentagem());
+            ps.setBigDecimal(2, t.getPercentagemDecimal());
             ps.setString(3, t.getDescricao());
 
             int rowsAffected = ps.executeUpdate();
@@ -52,7 +52,7 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, t.getNome());
-            ps.setDouble(2, t.getPercentagem());
+            ps.setBigDecimal(2, t.getPercentagemDecimal());
             ps.setString(3, t.getDescricao());
             ps.setInt(4, id);
 
@@ -78,13 +78,13 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
                     Imposto ti = new Imposto();
                     ti.setId(result.getInt("id"));
                     ti.setNome(result.getString("nome"));
-                    ti.setPercentagem(result.getDouble("percentagem"));
+                    ti.setPercentagem(result.getBigDecimal("percentagem"));
                     ti.setDescricao(result.getString("descricao"));
                     lista.add(ti);
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Taxa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao Buscar Taxa: " + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
         }
         return lista;
     }
@@ -101,12 +101,12 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
                     ti = new Imposto();
                     ti.setId(result.getInt("id"));
                     ti.setNome(result.getString("nome"));
-                    ti.setPercentagem(result.getDouble("percentagem"));
+                    ti.setPercentagem(result.getBigDecimal("percentagem"));
                     ti.setDescricao(result.getString("descricao"));
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Taxa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao Buscar Taxa: " + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
         }
         return ti;
     }

@@ -51,9 +51,9 @@ public class PrecoProdutoArmazemDAO {
             ps.setInt(2, x.getArmazem().getId());
 //            ps.setDouble(3, x.getPreco());
             if (x.getPrecoBase() != null) {
-                ps.setDouble(3, x.getPrecoBase());
+                ps.setBigDecimal(3, x.getPrecoBaseDecimal());
             } else {
-                ps.setNull(3, Types.DOUBLE);
+                ps.setNull(3, Types.DECIMAL);
             }
 
             int rows = ps.executeUpdate();
@@ -81,8 +81,8 @@ public class PrecoProdutoArmazemDAO {
                     pv = new PrecoProdutoArmazem();
                     pv.setId(result.getInt("id"));
 //                pv.setPrecoNormal(result.getDouble("precoNormal"));
-                    pv.setPrecoVenda(result.getDouble("preco"));
-                    pv.setPrecoFinal(result.getDouble("precoFinal"));
+                    pv.setPrecoVenda(result.getBigDecimal("preco"));
+                    pv.setPrecoFinal(result.getBigDecimal("precoFinal"));
                     pv.setDataFimVigencia(result.getString("dataValidade"));
 //                pv.setEstado(result.getString("estado"));
                     Produto p = new Produto();
@@ -122,9 +122,9 @@ public class PrecoProdutoArmazemDAO {
                     Armazem a = new Armazem();
                     a.setId(result.getInt("idArmazem"));
                     pr.setArmazem(a);
-                    pr.setPrecoVenda(result.getDouble("precoVenda"));
-                    pr.setPrecoFinal(result.getDouble("precoFinal"));
-                    pr.setPrecoBase(result.getDouble("precoBase"));
+                    pr.setPrecoVenda(result.getBigDecimal("precoVenda"));
+                    pr.setPrecoFinal(result.getBigDecimal("precoFinal"));
+                    pr.setPrecoBase(result.getBigDecimal("precoBase"));
                     pr.setDataInicioVigencia(result.getString("dataInicioVigencia"));
                     pr.setDataFimVigencia(result.getString("dataFimVigencia"));
                     pr.setEstado(result.getString("estado"));
@@ -149,7 +149,7 @@ public class PrecoProdutoArmazemDAO {
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+                isSuccess = true; // Se uma linha foi afetada, a inserÃ§Ã£o foi bem-sucedida
             }
 
         } catch (SQLException ex) {

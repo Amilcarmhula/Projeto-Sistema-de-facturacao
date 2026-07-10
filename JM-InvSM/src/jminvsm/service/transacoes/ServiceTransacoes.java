@@ -4,9 +4,9 @@
  */
 package jminvsm.service.transacoes;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import javafx.collections.ObservableList;
 import jminvsm.dao.transacoes.TransacaoDAO;
 import jminvsm.model.empresa.conta.ContaBancaria;
@@ -44,8 +44,8 @@ public class ServiceTransacoes {
         Integer id_metodoPagamento, String numeroFactura, Usuario user) {
         setOpsSuccess(false);
         if (data_pagamento == null || data_pagamento.isEmpty() || "null".equalsIgnoreCase(data_pagamento)) {
-            showErroAlert( "Data de pagamento nao pode ser nula. Será usada a data atual!");
-            data_pagamento = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            showErroAlert( "Data de pagamento nao pode ser nula. Sera usada a data atual!");
+            data_pagamento = LocalDate.now().toString();
         }
         
         if (valorRecebido == null || valorRecebido <= 0) {
@@ -70,9 +70,9 @@ public class ServiceTransacoes {
 
         Transacao t = new Transacao();
         t.setData_pagamento(data_pagamento);
-        t.setValorRecebido(valorRecebido);
-        t.setValorPago(valorPago);
-        t.setTrocos(trocos);
+        t.setValorRecebido(BigDecimal.valueOf(valorRecebido));
+        t.setValorPago(BigDecimal.valueOf(valorPago == null ? 0 : valorPago));
+        t.setTrocos(BigDecimal.valueOf(trocos == null ? 0 : trocos));
         t.setTipo_transacao("Entrada");
         t.setDescricao(descricao);
         ContaBancaria contaBancaria = new ContaBancaria();
@@ -97,7 +97,7 @@ public class ServiceTransacoes {
         Integer id_metodoPagamento, String numeroFactura, Usuario user) {
         setOpsSuccess(false);
         if (data_pagamento == null || data_pagamento.isEmpty() || "null".equalsIgnoreCase(data_pagamento)) {
-            data_pagamento = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            data_pagamento = LocalDate.now().toString();
         }
         
         if (valorRecebido == null || valorRecebido <= 0) {
@@ -129,9 +129,9 @@ public class ServiceTransacoes {
         p.setId_parcela(id_parcela);
         t.setParcela(p);
         t.setData_pagamento(data_pagamento);
-        t.setValorRecebido(valorRecebido);
-        t.setValorPago(valorPago);
-        t.setTrocos(trocos);
+        t.setValorRecebido(BigDecimal.valueOf(valorRecebido));
+        t.setValorPago(BigDecimal.valueOf(valorPago == null ? 0 : valorPago));
+        t.setTrocos(BigDecimal.valueOf(trocos == null ? 0 : trocos));
         t.setTipo_transacao("Entrada");
         t.setDescricao(descricao);
         ContaBancaria contaBancaria = new ContaBancaria();

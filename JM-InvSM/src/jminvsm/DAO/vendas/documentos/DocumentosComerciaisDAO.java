@@ -43,4 +43,5 @@ public class DocumentosComerciaisDAO implements DocumentosComerciaisDAOImpl<Docu
         }
         return lista;
     }
+    
 }

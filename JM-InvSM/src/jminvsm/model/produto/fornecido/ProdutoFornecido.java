@@ -4,9 +4,16 @@
  */
 package jminvsm.model.produto.fornecido;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import jminvsm.model.armazem.Armazem;
+import jminvsm.model.enums.EstadoLote;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.produto.Produto;
+import static jminvsm.model.util.ModelConverters.toBigDecimal;
+import static jminvsm.model.util.ModelConverters.toDateString;
+import static jminvsm.model.util.ModelConverters.toDouble;
+import static jminvsm.model.util.ModelConverters.toLocalDate;
 
 
 /**
@@ -20,12 +27,12 @@ public class ProdutoFornecido {
     private Produto produto;
     private Armazem armazem;
     private Fornecedor fornecedor;
-    private String dataEntrada;
+    private LocalDate dataEntrada;
     private int quantidadeInicial;
     private int quantidadeActual;
-    private double custoUnitario;
-    private double valorTotal;
-    private String estado;
+    private BigDecimal custoUnitario = BigDecimal.ZERO;
+    private BigDecimal valorTotal = BigDecimal.ZERO;
+    private EstadoLote estado;
     
     public ProdutoFornecido(){}
 
@@ -35,12 +42,12 @@ public class ProdutoFornecido {
         this.produto = produto;
         this.armazem = armazem;
         this.fornecedor = fornecedor;
-        this.dataEntrada = dataEntrada;
+        this.dataEntrada = toLocalDate(dataEntrada);
         this.quantidadeInicial = quantidadeInicial;
         this.quantidadeActual = quantidadeActual;
-        this.custoUnitario = custoUnitario;
-        this.valorTotal = valorTotal;
-        this.estado = estado;
+        this.custoUnitario = toBigDecimal(custoUnitario);
+        this.valorTotal = toBigDecimal(valorTotal);
+        this.estado = EstadoLote.fromValue(estado);
     }
 
     public int getId() {
@@ -59,8 +66,16 @@ public class ProdutoFornecido {
     }
 
     public void setCodigoForSave(String codigo) {
-        codigo =  codigo.substring(1);
-        this.codigo = "L"+String.valueOf(Integer.parseInt(codigo) + 1);
+        if (codigo == null || codigo.length() <= 1) {
+            this.codigo = "L1";
+            return;
+        }
+
+        try {
+            this.codigo = "L" + (Integer.parseInt(codigo.substring(1)) + 1);
+        } catch (NumberFormatException ex) {
+            this.codigo = "L1";
+        }
     }
 
     public Produto getProduto() {
@@ -88,10 +103,18 @@ public class ProdutoFornecido {
     }
 
     public String getDataEntrada() {
-        return dataEntrada;
+        return toDateString(dataEntrada);
     }
 
     public void setDataEntrada(String dataEntrada) {
+        this.dataEntrada = toLocalDate(dataEntrada);
+    }
+
+    public LocalDate getDataEntradaDate() {
+        return dataEntrada;
+    }
+
+    public void setDataEntrada(LocalDate dataEntrada) {
         this.dataEntrada = dataEntrada;
     }
 
@@ -112,26 +135,50 @@ public class ProdutoFornecido {
     }
 
     public double getCustoUnitario() {
-        return custoUnitario;
+        return toDouble(custoUnitario);
     }
 
     public void setCustoUnitario(double custoUnitario) {
+        this.custoUnitario = toBigDecimal(custoUnitario);
+    }
+
+    public BigDecimal getCustoUnitarioDecimal() {
+        return custoUnitario;
+    }
+
+    public void setCustoUnitario(BigDecimal custoUnitario) {
         this.custoUnitario = custoUnitario;
     }
 
     public double getValorTotal() {
-        return valorTotal;
+        return toDouble(valorTotal);
     }
 
     public void setValorTotal(double valorTotal) {
+        this.valorTotal = toBigDecimal(valorTotal);
+    }
+
+    public BigDecimal getValorTotalDecimal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
     }
 
     public String getEstado() {
-        return estado;
+        return estado != null ? estado.getValor() : null;
     }
 
     public void setEstado(String estado) {
+        this.estado = EstadoLote.fromValue(estado);
+    }
+
+    public EstadoLote getEstadoEnum() {
+        return estado;
+    }
+
+    public void setEstado(EstadoLote estado) {
         this.estado = estado;
     }
 

@@ -44,7 +44,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             ps.setString(1, t.getNumero_fac());
             ps.setString(2, t.getData_emissao());
             ps.setString(3, t.getData_vencimento());
-            ps.setDouble(4, t.getTotal());
+            ps.setBigDecimal(4, t.getTotalDecimal());
 //            ps.setDouble(5, t.getTotalPago());
             ps.setString(5, t.getCondicaoPagamento());
 //            ps.setInt(8, t.getNumeroParcelas());
@@ -53,12 +53,12 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             ps.setInt(7, t.getCliente().getId());
             ps.setInt(8, t.getUsuario().getId());
             ps.setInt(9, t.getDocComerciais().getId());
-            ps.setDouble(10, t.getSaldoPendente());
+            ps.setBigDecimal(10, t.getSaldoPendenteDecimal());
 
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+                isSuccess = true; // Se uma linha foi afetada, a inserÃ§Ã£o foi bem-sucedida
             }
 
         } catch (SQLException ex) {
@@ -81,9 +81,9 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 factura.setNumero_fac(result.getString("numero"));
                 factura.setData_emissao(result.getString("data_emissao"));
                 factura.setData_vencimento(result.getString("data_vencimento"));
-                factura.setTotal(result.getDouble("total"));
-                factura.setTotalPago(result.getDouble("totalPago"));
-                factura.setSaldoPendente(result.getDouble("saldoPendente"));
+                factura.setTotal(result.getBigDecimal("total"));
+                factura.setTotalPago(result.getBigDecimal("totalPago"));
+                factura.setSaldoPendente(result.getBigDecimal("saldoPendente"));
                 factura.setEstado(result.getString("estado"));
                 DocumentosComerciais d = new DocumentosComerciais();
                 d.setId(result.getInt("fk_id_doc"));
@@ -143,16 +143,16 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 f.setNumero_fac(result.getString("numero_factura"));
                 f.setData_emissao(result.getString("data_emissao"));
                 f.setData_vencimento(result.getString("data_vencimento"));
-                f.setTotal(result.getDouble("total"));
-                f.setTotalPago(result.getDouble("totalPago"));
-                f.setSaldoPendente(result.getDouble("saldoPendente"));
+                f.setTotal(result.getBigDecimal("total"));
+                f.setTotalPago(result.getBigDecimal("totalPago"));
+                f.setSaldoPendente(result.getBigDecimal("saldoPendente"));
                 f.setEstado(result.getString("estado"));
                 f.setCondicaoPagamento(result.getString("condicaoPagemento"));
                 MetodoPagamento mt = new MetodoPagamento();
                 mt.setNomePagamento(result.getString("metodoPagamento"));
                 Transacao t = new Transacao();
-                t.setValorRecebido(result.getDouble("valorTrans"));
-                t.setTrocos(result.getDouble("trocosTrans"));
+                t.setValorRecebido(result.getBigDecimal("valorTrans"));
+                t.setTrocos(result.getBigDecimal("trocosTrans"));
                 t.setMetodo(mt);
                 f.setTransacoes(t);
                 DocumentosComerciais d = new DocumentosComerciais();
@@ -233,9 +233,9 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 f.setData_emissao(result.getString("data_emissao"));
                 f.setData_vencimento(result.getString("data_vencimento"));
                 f.setEstado(result.getString("estado"));
-                f.setTotal(result.getDouble("total"));
-                f.setTotalPago(result.getDouble("totalPago"));
-                f.setSaldoPendente(result.getDouble("saldoPendente"));
+                f.setTotal(result.getBigDecimal("total"));
+                f.setTotalPago(result.getBigDecimal("totalPago"));
+                f.setSaldoPendente(result.getBigDecimal("saldoPendente"));
                 DocumentosComerciais d = new DocumentosComerciais();
                 d.setNome_doc(result.getString("Documento"));
                 f.setDocComerciais(d);
@@ -273,9 +273,9 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 f.setData_emissao(result.getString("data_emissao"));
                 f.setData_vencimento(result.getString("data_vencimento"));
                 f.setEstado(result.getString("estado"));
-                f.setTotal(result.getDouble("total"));
-                f.setTotalPago(result.getDouble("totalPago"));
-                f.setSaldoPendente(result.getDouble("saldoPendente"));
+                f.setTotal(result.getBigDecimal("total"));
+                f.setTotalPago(result.getBigDecimal("totalPago"));
+                f.setSaldoPendente(result.getBigDecimal("saldoPendente"));
                 f.setNumeroParcelas(result.getInt("numeroParcelas"));
                 f.setCondicaoPagamento(result.getString("condicaoPagemento"));
                 DocumentosComerciais d = new DocumentosComerciais();
@@ -298,7 +298,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             try (ResultSet result = ps.executeQuery()) {
-            if (result.next()) { // Verifica se há resultados
+            if (result.next()) { // Verifica se hÃ¡ resultados
                 total = result.getInt("total");
             }
             }
@@ -318,7 +318,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //                    + "where f.estado=1";
 //            ps = con.prepareStatement(sql);
 //            ResultSet result = ps.executeQuery();
-//            if (result.next()) { // Verifica se há resultados
+//            if (result.next()) { // Verifica se hÃ¡ resultados
 //                total = result.getInt("total_fatura");
 //            }
 //            result.close();
@@ -373,7 +373,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            result.close();
 //            ps.close();
 //        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
 //
 //        }
 //        return lista;
@@ -408,7 +408,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            result.close();
 //            ps.close();
 //        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
 //
 //        }
 //        return c;
@@ -429,7 +429,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.close();
 //        } catch (SQLException ex) {
 //            JOptionPane.showMessageDialog(null, "Falha ao actulizar  Factura: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//                    + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
 //        }
 //    }
 //
@@ -458,7 +458,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Factura: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Factura: " + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
 //        }
 //        return lista;
 //    }
@@ -489,7 +489,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.close();
 //        } catch (SQLException ex) {
 //            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Factura: " + ex,
-//                    "Informação", JOptionPane.ERROR_MESSAGE);
+//                    "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
 //        }
 //        return u;
 //
@@ -506,7 +506,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.close();
 //        } catch (SQLException ex) {
 //            JOptionPane.showMessageDialog(null, "Erro ao deletar Factura: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//                    + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
 //        }
 //    }
 //    
@@ -521,7 +521,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.close();
 //        } catch (SQLException ex) {
 //            JOptionPane.showMessageDialog(null, "Erro ao deletar Factura: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//                    + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
 //        }
 //    }
 }

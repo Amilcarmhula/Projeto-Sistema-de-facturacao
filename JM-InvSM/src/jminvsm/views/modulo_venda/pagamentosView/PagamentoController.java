@@ -26,7 +26,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -46,10 +45,7 @@ import jminvsm.service.parcela.ServiceParcelas;
 import jminvsm.service.transacoes.ServiceTransacoes;
 import jminvsm.service.vendas.factura.ServiceFactura;
 import jminvsm.util.AlertUtilities;
-import jminvsm.util.FilePathFinderUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
-import jminvsm.views.modulo_venda.vendaView.VendasController;
-import static jminvsm.util.AlertUtilities.showErroAlert;
 
 /**
  * FXML Controller class
@@ -303,7 +299,8 @@ public class PagamentoController implements Initializable {
                             labRazaoCliente.setText(c.getRazao_cli());
                             showFacturas();
                         } catch (SQLException ex) {
-                            Logger.getLogger(VendasController.class.getName()).log(Level.SEVERE, null, ex);
+                            
+                            Logger.getLogger(PagamentoController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }

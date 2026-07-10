@@ -4,13 +4,17 @@
  */
 package jminvsm.model.vendas.factura.itens;
 
-import javafx.scene.control.TableView;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import jminvsm.model.armazem.Armazem;
-import jminvsm.model.desconto.Desconto;
 import jminvsm.model.preco.PrecoProdutoArmazem;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
+import static jminvsm.model.util.ModelConverters.toBigDecimal;
+import static jminvsm.model.util.ModelConverters.toDateString;
+import static jminvsm.model.util.ModelConverters.toDouble;
+import static jminvsm.model.util.ModelConverters.toLocalDate;
 import jminvsm.model.vendas.factura.Factura;
 
 /**
@@ -23,12 +27,12 @@ public class Item {
     private String ref; // referencia do item. e um valor auxiliar
     private int quantidade;
     private int qtd_por_unidade;
-    private double subtotal;
+    private BigDecimal subtotal = BigDecimal.ZERO;
     private Produto produto;
     private Factura factura;
     private Usuario usuario;
     private Armazem armazem;
-    private String data_criacao;
+    private LocalDate data_criacao;
     private String unidade_vendida;
     private PrecoProdutoArmazem precoProdutoArmazem;
 
@@ -40,7 +44,7 @@ public class Item {
         super();
         this.quantidade = quantidade;
         this.qtd_por_unidade = qtd_por_unidade;
-        this.subtotal = subtotal;
+        this.subtotal = toBigDecimal(subtotal);
         this.produto = produto;
         this.factura = factura;
         this.usuario = usuario;
@@ -82,6 +86,14 @@ public class Item {
         this.unidade_vendida = unidade_vendida;
     }
 
+    public String getUnidadeVendida() {
+        return unidade_vendida;
+    }
+
+    public void setUnidadeVendida(String unidadeVendida) {
+        this.unidade_vendida = unidadeVendida;
+    }
+
     public int getQtd_por_unidade() {
         return qtd_por_unidade;
     }
@@ -90,11 +102,27 @@ public class Item {
         this.qtd_por_unidade = qtd_por_unidade;
     }
 
+    public int getQtdPorUnidade() {
+        return qtd_por_unidade;
+    }
+
+    public void setQtdPorUnidade(int qtdPorUnidade) {
+        this.qtd_por_unidade = qtdPorUnidade;
+    }
+
     public double getSubtotal() {
-        return subtotal;
+        return toDouble(subtotal);
     }
 
     public void setSubtotal(double subtotal) {
+        this.subtotal = toBigDecimal(subtotal);
+    }
+
+    public BigDecimal getSubtotalDecimal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }
 
@@ -123,11 +151,19 @@ public class Item {
     }
 
     public String getData_criacao() {
-        return data_criacao;
+        return toDateString(data_criacao);
     }
 
     public void setData_criacao(String data_criacao) {
-        this.data_criacao = data_criacao;
+        this.data_criacao = toLocalDate(data_criacao);
+    }
+
+    public LocalDate getDataCriacao() {
+        return data_criacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.data_criacao = dataCriacao;
     }
 
     public Armazem getArmazem() {
@@ -147,10 +183,10 @@ public class Item {
     }
     
 
-    public void calculateSubtotal_onTable(Item item, TableView table) {
-        double x = item.getQuantidade() * item.getPrecoProdutoArmazem().getPrecoFinal();
-        item.setSubtotal(x);
-        table.refresh();
+    public void calcularSubtotal() {
+        if (precoProdutoArmazem != null && precoProdutoArmazem.getPrecoFinalDecimal() != null) {
+            subtotal = precoProdutoArmazem.getPrecoFinalDecimal().multiply(BigDecimal.valueOf(quantidade));
+        }
     }
     
 
@@ -172,7 +208,7 @@ public class Item {
     }
 
     public Double getPercentagemImposto() {
-        if (produto != null) {
+        if (produto != null && produto.getImposto() != null) {
             return produto.getImposto().getPercentagem();
         }
         return null;
@@ -190,6 +226,10 @@ public class Item {
             return factura.getNumero_fac();
         }
         return null;
+    }
+
+    public String getNumeroFactura() {
+        return getNumero();
     }
 
 }

@@ -4,6 +4,13 @@
  */
 package jminvsm.model.imposto;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import static jminvsm.model.util.ModelConverters.toBigDecimal;
+import static jminvsm.model.util.ModelConverters.toDateString;
+import static jminvsm.model.util.ModelConverters.toDouble;
+import static jminvsm.model.util.ModelConverters.toLocalDate;
+
 /**
  *
  * @author JM-Tecnologias
@@ -12,17 +19,18 @@ public class Imposto {
 
     private int id;
     private String nome;
-    private double percentagem;
+    private BigDecimal percentagem = BigDecimal.ZERO;
     private String descricao;
-    private String data_criacao;
+    private LocalDate data_criacao;
 
     public Imposto() {
     }
 
     public Imposto(String nome, double percentagem, String descricao, String data_criacao) {
         this.nome = nome;
-        this.percentagem = percentagem;
+        this.percentagem = toBigDecimal(percentagem);
         this.descricao = descricao;
+        this.data_criacao = toLocalDate(data_criacao);
     }
 
     public int getId() {
@@ -42,10 +50,18 @@ public class Imposto {
     }
 
     public double getPercentagem() {
-        return percentagem;
+        return toDouble(percentagem);
     }
 
     public void setPercentagem(double percentagem) {
+        this.percentagem = toBigDecimal(percentagem);
+    }
+
+    public BigDecimal getPercentagemDecimal() {
+        return percentagem;
+    }
+
+    public void setPercentagem(BigDecimal percentagem) {
         this.percentagem = percentagem;
     }
 
@@ -58,10 +74,18 @@ public class Imposto {
     }
 
     public String getData_criacao() {
-        return data_criacao;
+        return toDateString(data_criacao);
     }
 
     public void setData_criacao(String data_criacao) {
-        this.data_criacao = data_criacao;
+        this.data_criacao = toLocalDate(data_criacao);
+    }
+
+    public LocalDate getDataCriacao() {
+        return data_criacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.data_criacao = dataCriacao;
     }
 }

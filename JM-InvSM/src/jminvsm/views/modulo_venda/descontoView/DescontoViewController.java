@@ -126,7 +126,8 @@ public class DescontoViewController implements Initializable {
     }
 
     public void addDesconto() {
-        servicoDesconto.regista(txtDesconto.getText(), txtDescricao.getText());
+                double taxa = Double.parseDouble(txtDesconto.getText().equals("")?"0":txtDesconto.getText());
+        servicoDesconto.regista(txtDesconto.getText(),taxa, txtDescricao.getText());
         if (servicoDesconto.isOpsSuccess()) {
             resetCampos();
             showDesconto();
@@ -135,7 +136,8 @@ public class DescontoViewController implements Initializable {
 
     public void updateDesconto() {
         int id = Integer.parseInt(txtID.getText().equals("")?"0":txtID.getText());
-        servicoDesconto.actualizar(id, txtDesconto.getText(), txtDescricao.getText());
+        double taxa = Double.parseDouble(txtDesconto.getText().equals("")?"0":txtDesconto.getText());
+        servicoDesconto.actualizar(id, txtDesconto.getText(),taxa, txtDescricao.getText());
         if (servicoDesconto.isOpsSuccess()) {
             resetCampos();
             showDesconto();

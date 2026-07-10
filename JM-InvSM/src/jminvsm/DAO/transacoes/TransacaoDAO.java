@@ -33,20 +33,20 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getData_pagamento());
-            ps.setDouble(2, t.getValorRecebido());
+            ps.setBigDecimal(2, t.getValorRecebidoDecimal());
             ps.setString(3, t.getTipo_transacao());
             ps.setString(4, t.getDescricao());
             ps.setInt(5, t.getContabancaria().getId());
             ps.setInt(6, t.getMetodo().getId());
             ps.setString(7, t.getFactura().getNumero_fac());
             ps.setInt(8, t.getUsuario().getId());
-            ps.setDouble(9, t.getValorPago());
-            ps.setDouble(10, t.getTrocos());
+            ps.setBigDecimal(9, t.getValorPagoDecimal());
+            ps.setBigDecimal(10, t.getTrocosDecimal());
             // Usando executeUpdate para verificar se uma linha foi inserida
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+                isSuccess = true; // Se uma linha foi afetada, a inserÃ§Ã£o foi bem-sucedida
             }
 
         } catch (SQLException ex) {
@@ -65,21 +65,21 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getData_pagamento());
-            ps.setDouble(2, t.getValorRecebido());
+            ps.setBigDecimal(2, t.getValorRecebidoDecimal());
             ps.setString(3, t.getTipo_transacao());
             ps.setString(4, t.getDescricao());
             ps.setInt(5, t.getContabancaria().getId());
             ps.setInt(6, t.getMetodo().getId());
             ps.setString(7, t.getFactura().getNumero_fac());
             ps.setInt(8, t.getUsuario().getId());
-            ps.setDouble(9, t.getValorPago());
-            ps.setDouble(10, t.getTrocos());
-            ps.setDouble(11, t.getParcela().getId_parcela());
+            ps.setBigDecimal(9, t.getValorPagoDecimal());
+            ps.setBigDecimal(10, t.getTrocosDecimal());
+            ps.setInt(11, t.getParcela().getId_parcela());
             // Usando executeUpdate para verificar se uma linha foi inserida
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+                isSuccess = true; // Se uma linha foi afetada, a inserÃ§Ã£o foi bem-sucedida
             }
 
         } catch (SQLException ex) {
@@ -104,9 +104,9 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
                 while (result.next()) {
                 Transacao t = new Transacao();
                 t.setId(result.getInt("id"));
-                t.setValorRecebido(result.getDouble("valorRecebido"));
-                t.setValorPago(result.getDouble("valorPago"));
-                t.setTrocos(result.getDouble("trocos"));
+                t.setValorRecebido(result.getBigDecimal("valorRecebido"));
+                t.setValorPago(result.getBigDecimal("valorPago"));
+                t.setTrocos(result.getBigDecimal("trocos"));
                 t.setData_pagamento(result.getString("data_pagamento"));
                 t.setData_criacao(result.getString("data_criacao"));
                 t.setDescricao(result.getString("descricao"));

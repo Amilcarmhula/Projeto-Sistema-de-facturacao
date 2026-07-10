@@ -26,7 +26,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
 
     @Override
     public void addEntity(List<Item> items) {
-        String sql = "insert into itemfactura (quantidade, subtotal,fk_id_produto, fk_numero,"
+        String sql = "insert into itemfactura (quantidade, subtotal, fk_id_produto, fk_numero,"
                 + "fk_id_usuario, fk_id_armazem,qtd_por_unidade) values (?,?,?,?,?,?,?)";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -40,7 +40,9 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 ps.setInt(5, t.getUsuario().getId());// ***********
                 ps.setInt(6, t.getArmazem().getId());// ***********
                 ps.setInt(7, t.getQtd_por_unidade());
+                ps.addBatch();
             }
+            ps.executeBatch();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: id: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
         }
@@ -60,10 +62,9 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 ps.setInt(5, t.getUsuario().getId());// ***********
                 ps.setInt(6, t.getArmazem().getId());// ***********
                 ps.setInt(7, t.getQtd_por_unidade());
-
-                ps.execute();
-                ps.close();
+                ps.addBatch();
             }
+            ps.executeBatch();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);

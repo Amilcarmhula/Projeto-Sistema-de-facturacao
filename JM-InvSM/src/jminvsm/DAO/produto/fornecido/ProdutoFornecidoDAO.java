@@ -37,12 +37,12 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             ps.setInt(4, t.getFornecedor().getId());
             ps.setString(5, t.getDataEntrada());
             ps.setInt(6, t.getQuantidadeActual());
-            ps.setDouble(7, t.getCustoUnitario());
+            ps.setBigDecimal(7, t.getCustoUnitarioDecimal());
 
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
+                isSuccess = true; // Se uma linha foi afetada, a inserÃ§Ã£o foi bem-sucedida
             }
 
         } catch (SQLException ex) {
@@ -70,8 +70,8 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 + "ORDER BY l.dataEntrada ASC;";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProduto);
             try (ResultSet result = ps.executeQuery()) {
-                ps.setInt(1, idProduto);
                 while (result.next()) {
                     ProdutoFornecido l = new ProdutoFornecido();
                     l.setId(result.getInt("idLote"));
@@ -82,8 +82,8 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                     l.setDataEntrada(result.getString("dataEntrada"));
                     l.setQuantidadeInicial(result.getInt("quantidadeInicial"));
                     l.setQuantidadeActual(result.getInt("quantidadeAtual"));
-                    l.setCustoUnitario(result.getDouble("custoUnitario"));
-                    l.setValorTotal(result.getDouble("valorTotal"));
+                    l.setCustoUnitario(result.getBigDecimal("custoUnitario"));
+                    l.setValorTotal(result.getBigDecimal("valorTotal"));
                     l.setEstado(result.getString("estado"));
                     lista.add(l);
                 }
@@ -121,7 +121,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 + "ORDER BY ano, mes";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            // Se a categoria ou armazém não forem informados, passar valores nulos
+            // Se a categoria ou armazÃ©m nÃ£o forem informados, passar valores nulos
             if (cat == null) {
                 ps.setNull(1, java.sql.Types.INTEGER); // Para ? IS NULL
                 ps.setNull(2, java.sql.Types.INTEGER); // Para c.id = ?
@@ -161,6 +161,9 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
                 if (result.next()) {
                     pf = new ProdutoFornecido();
                     pf.setCodigoForSave(result.getString("codigo"));
+                }else{
+                    pf = new ProdutoFornecido();
+                    pf.setCodigoForSave("L0");
                 }
             }
         } catch (SQLException ex) {

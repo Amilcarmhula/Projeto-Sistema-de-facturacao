@@ -39,8 +39,8 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, t.getParcelaNumero());
-            ps.setDouble(2, t.getTaxaJuros());
-            ps.setDouble(3, t.getValorParcela());
+            ps.setBigDecimal(2, t.getTaxaJurosDecimal());
+            ps.setBigDecimal(3, t.getValorParcelaDecimal());
             ps.setString(4, t.getDataVencimento());
             ps.setString(5, t.getFactura().getNumero_fac());
             ps.setInt(6, t.getUsuario().getId());
@@ -75,10 +75,10 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
                 Parcela p = new Parcela();
                 p.setId_parcela(result.getInt("id"));
                 p.setParcelaNumero(result.getInt("parcelaNumero"));
-                p.setTaxaJuros(result.getDouble("taxaJuros"));
-                p.setTaxaDeAtraso(result.getDouble("taxaDeAtraso"));
-                p.setValorParcela(result.getDouble("valorParcela"));
-                p.setValorPagoParcela(result.getDouble("valorPagoParcela"));
+                p.setTaxaJuros(result.getBigDecimal("taxaJuros"));
+                p.setTaxaDeAtraso(result.getBigDecimal("taxaDeAtraso"));
+                p.setValorParcela(result.getBigDecimal("valorParcela"));
+                p.setValorPagoParcela(result.getBigDecimal("valorPagoParcela"));
                 p.setDataVencimento(result.getString("dataVencimento"));
                 p.setDataPagamento(result.getString("dataPagamento"));
                 p.setEstado(result.getString("estado"));

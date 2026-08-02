@@ -18,7 +18,6 @@
 --
 -- Execute depois de 00_TABELAS_COMPLETO.sql.
 -- ============================================================
-
 USE _sysface_teste;
 
 -- Limpeza para permitir reexecucao em ambiente de teste.

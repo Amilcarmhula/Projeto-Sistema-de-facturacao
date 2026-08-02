@@ -46,7 +46,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     @Override
     public boolean updateEntity(Desconto t, int id) {
         boolean isSuccess = false;
-        String sql = "update desconto set nome=?,descricao=?,percentagem=? where id=?";
+        String sql = "update desconto set nome=?,descricao=?,percentagem=? where id=? AND deleteStatus=0";
 
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -72,7 +72,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
     public ObservableList<Desconto> listAllEntities() {
         ObservableList<Desconto> lista = FXCollections.observableArrayList();
         Desconto c;
-        String sql = "select * from desconto";
+        String sql = "select * from desconto WHERE deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet result = ps.executeQuery()) {
@@ -94,21 +94,11 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
 
     @Override
     public boolean deleteEntity(int id) {
-        boolean isSuccess = false;
-        String sql = "delete from desconto where id=?";
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserÃ§Ã£o foi bem-sucedida
-            }
-
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("desconto", id);
         } catch (SQLException ex) {
             showDialog("Erro de exclusao: banco de dados", "Detalhes: " + ex);
         }
-        return isSuccess;
+        return false;
     }
 }

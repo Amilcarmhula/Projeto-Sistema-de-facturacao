@@ -179,6 +179,14 @@ Documentação oficial Java, JavaFX, MySQL e iText 7
 
 📈 Preparado para evolução futura e uso empresarial
 
+## 🧾 Comunicação fiscal e SAF-T (Moz)
+
+O projecto inclui uma implementação técnica provisória para exportação mensal
+Excel/CSV e geração de SAF-T XML. O modelo `JM-AT-BASE-1.0` e o XSD incluído
+**não são especificações oficiais nem prova de certificação da Autoridade
+Tributária**. Consulte `DOCUMENTACAO_SAFT_JM_INVSM.md` e execute primeiro
+`07_FISCAL_SAFT_MOZ.sql` numa base de dados de testes.
+
 ## 👨‍💻 Autor
 
 **Amílcar Venâncio Mula**

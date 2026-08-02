@@ -26,12 +26,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.service.ServiceException;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  * FXML Controller class
@@ -83,7 +86,8 @@ public class ArmazemViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.userData = SysFact.getUserData();
+        tabelaCliente.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        this.userData = SessaoAplicacao.getUserData();
         try {
             servArmazem = new ServiceArmazem();
         } catch (SQLException ex) {
@@ -146,7 +150,7 @@ public class ArmazemViewController implements Initializable {
     public void selectedLineCliente(MouseEvent event) {
         Armazem c = tabelaCliente.getSelectionModel().getSelectedItem();
         if (c != null) {
-            SysFact.setData(String.valueOf(c.getId()));
+            SessaoAplicacao.setData(String.valueOf(c.getId()));
             txtIDCliente.setText(String.valueOf(c.getId()));
             deleteItem(event, c);
             ButtonUtilities.buttonChangeText(btnAdd, txtIDCliente);
@@ -166,12 +170,18 @@ public class ArmazemViewController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                servArmazem.excluir(x.getId());
-                if (servArmazem.isOpsSuccess()) {
-                    showClientes();
+                try {
+                    servArmazem.excluir(x.getId());
+                    if (servArmazem.isOpsSuccess()) {
+                        showSuccessAlert("Registo excluido com sucesso!");
+                        showClientes();
+                    }
+                } catch (ServiceException ex) {
+                    showErroAlert(ex.getMessage());
                 }
             } else if (result.get() == btnCancel) {
             }
         }
     }
 }
+

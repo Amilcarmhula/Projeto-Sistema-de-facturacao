@@ -12,8 +12,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import jminvsm.model.categoria.Categoria;
-import jminvsm.model.produto.Produto;
 import jminvsm.model.imposto.Imposto;
+import jminvsm.model.produto.Produto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.Conexao;
@@ -70,7 +70,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         boolean isSuccess = false;
         String sql = "update produto set nome=?,codigo_barra=? ,descricao=?,idCategoria=?, "
                     + "idUnidade=?,idImposto=?, nivelstock=?, controle_stock=?, tipoProduto=?,"
-                    + " unidadePorTipo=? where id=?";
+                    + " unidadePorTipo=? where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -111,7 +111,11 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + "FROM produto p "
                     + "LEFT JOIN categoria c ON c.id = p.idCategoria "
                     + "LEFT JOIN unidade_medida u ON u.id = p.idUnidade "
-                    + "LEFT JOIN imposto t ON t.id = p.idImposto ";
+                    + "LEFT JOIN imposto t ON t.id = p.idImposto "
+                    + "WHERE p.deleteStatus = 0 "
+                    + "AND (c.id IS NULL OR c.deleteStatus = 0) "
+                    + "AND (u.id IS NULL OR u.deleteStatus = 0) "
+                    + "AND (t.id IS NULL OR t.deleteStatus = 0) ";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -156,11 +160,15 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                     + " p.tipoProduto, p.unidadePorTipo, "
                     + " c.grupo, c.subgrupo, c.familia, "
                     + "	u.nome as nomeUnidade, u.sigla as siglaUnidade, "
-                    + " t.nome as taxa "
+                    + " t.nome as taxa, t.percentagem "
                     + " FROM produto p "
                     + " LEFT JOIN categoria c ON c.id = p.idCategoria "
                     + " LEFT JOIN unidadeMedida u ON u.id = p.idUnidade "
-                    + " LEFT JOIN imposto t ON t.id = p.idImposto ";
+                    + " LEFT JOIN imposto t ON t.id = p.idImposto "
+                    + " WHERE p.deleteStatus = 0 "
+                    + " AND (c.id IS NULL OR c.deleteStatus = 0) "
+                    + " AND (u.id IS NULL OR u.deleteStatus = 0) "
+                    + " AND (t.id IS NULL OR t.deleteStatus = 0) ";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -185,6 +193,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
                 p.setUnidadeMedida(u);
                 Imposto t = new Imposto();
                 t.setNome(result.getString("taxa"));
+                t.setPercentagem(result.getDouble("percentagem"));
                 p.setImposto(t);
                 p.setControle_stock(result.getBoolean("controle_stock"));
                 lista.add(p);
@@ -202,7 +211,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
     @Override
     public Produto getLastEntity() {
         Produto p = null;
-        String sql = "SELECT * FROM produto ORDER BY id DESC LIMIT 1";
+        String sql = "SELECT * FROM produto WHERE deleteStatus=0 ORDER BY id DESC LIMIT 1";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -240,7 +249,9 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
         int total = 0;
         String sql = "select count(*) as total_produto from produto p "
                     + "LEFT JOIN categoria c ON c.id=p.idCategoria "
-                    + "where (? IS NULL OR c.id = ?)";
+                    + "where p.deleteStatus=0 "
+                    + "AND (c.id IS NULL OR c.deleteStatus=0) "
+                    + "AND (? IS NULL OR c.id = ?)";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -268,24 +279,13 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
 
     @Override
     public boolean deleteEntity(int id) {
-        boolean isSuccess = false;
-        String sql = "delete from produto where id=?";
-        try (
-                Connection con = Conexao.getConexao(); 
-                PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
-            }
-
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("produto", id);
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
 //            showDialog("Erro de exclusao", "Detalhes: " + ex);
         }
-        return isSuccess;
+        return false;
     }
 
 }

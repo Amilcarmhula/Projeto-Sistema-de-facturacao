@@ -5,6 +5,7 @@
 package jminvsm.model.produto;
 
 import jminvsm.model.categoria.Categoria;
+import jminvsm.model.desconto.ProdutoDesconto;
 import jminvsm.model.imposto.Imposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 
@@ -25,6 +26,7 @@ public class Produto {
     private Categoria categoria;
     private UnidadeMedida unidadeMedida;
     private Imposto imposto;
+    private ProdutoDesconto descontoProduto;
 
     public Produto() {
         super();
@@ -134,6 +136,7 @@ public class Produto {
     public void setImposto(Imposto imposto) {
         this.imposto = imposto;
     }
+    
 //
 //    public PrecoVenda getPrecoVenda() {
 //        return precoVenda;
@@ -142,6 +145,14 @@ public class Produto {
 //    public void setPrecoVenda(PrecoVenda precoVenda) {
 //        this.precoVenda = precoVenda;
 //    }
+
+    public ProdutoDesconto getDescontoProduto() {
+        return descontoProduto;
+    }
+
+    public void setDescontoProduto(ProdutoDesconto descontoProduto) {
+        this.descontoProduto = descontoProduto;
+    }
     
     
 }

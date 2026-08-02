@@ -27,6 +27,7 @@ import java.sql.*;
 import java.util.*;
 import java.lang.reflect.*;
 import jminvsm.util.Conexao;
+import jminvsm.util.SoftDeleteUtils;
 
 /**
  *
@@ -70,7 +71,7 @@ public abstract class GenericDAO<T> {
     // ---------------------------
     public List<T> listAll() throws Exception {
         List<T> list = new ArrayList<>();
-        String sql = "SELECT * FROM " + tableName;
+        String sql = "SELECT * FROM " + tableName + " WHERE deleteStatus = 0";
 
         try (PreparedStatement stmt = con.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -137,7 +138,7 @@ public abstract class GenericDAO<T> {
     // READ BY ID
     // ---------------------------
     public T findById(int id) throws Exception {
-        String sql = "SELECT * FROM " + tableName + " WHERE id = ?";
+        String sql = "SELECT * FROM " + tableName + " WHERE id = ? AND deleteStatus = 0";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -160,7 +161,7 @@ public abstract class GenericDAO<T> {
     // ---------------------------
     public boolean update(T obj, int id) throws Exception {
         String setClause = String.join(" = ?, ", columns) + " = ?";
-        String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE id = ?";
+        String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE id = ? AND deleteStatus = 0";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             for (int i = 0; i < columns.length; i++) {
@@ -177,10 +178,6 @@ public abstract class GenericDAO<T> {
     // DELETE
     // ---------------------------
     public boolean delete(int id) throws SQLException {
-        String sql = "DELETE FROM " + tableName + " WHERE id = ?";
-        try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            return stmt.executeUpdate() > 0;
-        }
+        return SoftDeleteUtils.softDelete(con, tableName, id);
     }
 }

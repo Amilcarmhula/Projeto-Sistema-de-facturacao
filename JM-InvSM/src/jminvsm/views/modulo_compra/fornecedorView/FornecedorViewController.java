@@ -26,12 +26,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.service.ServiceException;
 import jminvsm.service.fornecedor.ServiceFornecedor;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  * FXML Controller class
@@ -57,6 +60,9 @@ public class FornecedorViewController implements Initializable {
 
     @FXML
     private TableColumn<Fornecedor, String> contactotabelaCliente;
+    
+    @FXML
+    private TableColumn<Fornecedor, String> enderecotabelaCliente;
 
     @FXML
     private TableColumn<Fornecedor, String> nometabelaCliente;
@@ -89,7 +95,7 @@ public class FornecedorViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.userData = SysFact.getUserData();
+        this.userData = SessaoAplicacao.getUserData();
         try {
             serFornecedor = new ServiceFornecedor();
             showClientes();
@@ -118,6 +124,10 @@ public class FornecedorViewController implements Initializable {
         nuittabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nuit_forn"));
         contactotabelaCliente.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
+        enderecotabelaCliente.setCellValueFactory(cellData
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().printEnderecos())));
+        
+        
 
         FilteredList<Fornecedor> dadosFiltrados = new FilteredList<>(listaClientes, b -> true);
         txtPesquisa.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -149,7 +159,7 @@ public class FornecedorViewController implements Initializable {
     public void selectedLineCliente(MouseEvent event) {
         Fornecedor c = tabelaCliente.getSelectionModel().getSelectedItem();
         if (c != null) {
-            SysFact.setData(String.valueOf(c.getId()));
+            SessaoAplicacao.setData(String.valueOf(c.getId()));
             txtIDCliente.setText(String.valueOf(c.getId()));
             deleteItem(event, c);
             ButtonUtilities.buttonChangeText(btnAdd, txtIDCliente);
@@ -170,15 +180,23 @@ public class FornecedorViewController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                serFornecedor.excluir(x.getId());
-                showClientes();
-                txtIDCliente.setText("");
-                SysFact.setData("");
+                try {
+                    serFornecedor.excluir(x.getId());
+                    if (serFornecedor.isOpsSuccess()) {
+                        showSuccessAlert("Registo excluido com sucesso.");
+                        showClientes();
+                        txtIDCliente.setText("");
+                        SessaoAplicacao.setData("");
+                    }
+                } catch (ServiceException ex) {
+                    showErroAlert(ex.getMessage());
+                }
 
             } else if (result.get() == btnCancel) {
                 txtIDCliente.setText("");
-                SysFact.setData("");
+                SessaoAplicacao.setData("");
             }
         }
     }
 }
+

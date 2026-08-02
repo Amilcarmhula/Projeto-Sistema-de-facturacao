@@ -57,6 +57,23 @@ public class ProdutoDescontoDAO {
         }
         return isSuccess;
     }
+    
+    public boolean callDesativaDescontoProduto(ProdutoDesconto t) {
+        boolean isSuccess = false;
+        String sql = "CALL sp_desativaDescontoProduto(?, ?)";
+        try (
+                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, t.getProduto().getId());
+            ps.setInt(2, t.getArmazem().getId());
+
+            int rows = ps.executeUpdate();
+            isSuccess = rows > 0;
+
+        } catch (SQLException ex) {
+            System.out.println("Erro ao inserir: " + ex);
+        }
+        return isSuccess;
+    }
 
     // READ ALL
     public ObservableList<ProdutoDesconto> getEntityByID(int idProduto) {
@@ -70,7 +87,11 @@ public class ProdutoDescontoDAO {
                 + "	join produto p on pd.idProduto=p.id "
                 + " join desconto d on pd.idDesconto=d.id "
                 + " join armazem a on pd.idArmazem=a.id "
-                + " where idProduto=? ";
+                + " where idProduto=? "
+                + " AND pd.deleteStatus=0 "
+                + " AND p.deleteStatus=0 "
+                + " AND d.deleteStatus=0 "
+                + " AND a.deleteStatus=0 ";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, idProduto);
@@ -108,14 +129,22 @@ public class ProdutoDescontoDAO {
     // DELETE
     public boolean delete(ProdutoDesconto t) {
         boolean isSuccess = false;
-        String sql = "DELETE FROM produtodesconto WHERE idProduto=? AND idDesconto=? AND dataInicio=? AND dataFim=? AND idArmazem=?";
+        String sql = "UPDATE produtodesconto SET deleteStatus=1, deletedAt=NOW(), deletedBy=? "
+                + "WHERE idProduto=? AND idDesconto=? AND dataInicio=? AND dataFim=? AND idArmazem=? "
+                + "AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, t.getProduto().getId());
-            ps.setInt(2, t.getDesconto().getId());
-            ps.setString(3, t.getDataInicio());
-            ps.setString(4, t.getDataFim());
-            ps.setInt(5, t.getArmazem().getId());
+            Integer idUsuario = jminvsm.util.AuditoriaContext.getUsuarioActualId();
+            if (idUsuario == null) {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(1, idUsuario);
+            }
+            ps.setInt(2, t.getProduto().getId());
+            ps.setInt(3, t.getDesconto().getId());
+            ps.setString(4, t.getDataInicio());
+            ps.setString(5, t.getDataFim());
+            ps.setInt(6, t.getArmazem().getId());
 
             int rows = ps.executeUpdate();
             isSuccess = rows > 0;

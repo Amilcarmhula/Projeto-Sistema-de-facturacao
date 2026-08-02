@@ -23,6 +23,7 @@ public class Empresa {
     private List<ContactoEmpresa> contactosEmpresa;
     private EnderecoEmpresa enderecoEmpresa;
     private ContaBancaria contaBancaria;
+    private List<ContaBancaria> contasBancarias;
     private String data_criacao;
 
     public Empresa() {
@@ -84,6 +85,15 @@ public class Empresa {
     public void setContactosEmpresa(List<ContactoEmpresa> contactosEmpresa) {
         this.contactosEmpresa = contactosEmpresa;
     }
+
+    public List<ContaBancaria> getContasBancarias() {
+        return contasBancarias;
+    }
+
+    public void setContasBancarias(List<ContaBancaria> contasBancarias) {
+        this.contasBancarias = contasBancarias;
+    }
+    
 
     public String printContatos() {
         String contacto = "";

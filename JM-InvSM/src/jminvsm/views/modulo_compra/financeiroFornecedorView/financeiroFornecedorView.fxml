@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="909.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_compra.financeiroFornecedorView.FinanceiroFornecedorViewController">
+    <children>
+        <VBox spacing="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" minHeight="58.0" prefHeight="58.0" spacing="12.0" styleClass="secondary-color">
+                    <padding>
+                        <Insets left="18.0" right="20.0" />
+                    </padding>
+                    <children>
+                        <Label text="Financeiro de fornecedor" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="27.0" />
+                            </font>
+                            <graphic>
+                                <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../image/icons/doc.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="labResumoCabecalho" opacity="0.78" text="Facturas, contas a pagar, pagamentos e movimento financeiro" textFill="WHITE">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+
+                <TabPane fx:id="tabPaneFinanceiro" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                    <tabs>
+                        <Tab text="Factura fornecedor">
+                            <content>
+                                <VBox spacing="12.0">
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="16.0" top="14.0" />
+                                    </padding>
+                                    <children>
+                                        <GridPane hgap="12.0" styleClass="secondary-color" vgap="10.0">
+                                            <padding>
+                                                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                                            </padding>
+                                            <columnConstraints>
+                                                <ColumnConstraints minWidth="130.0" prefWidth="150.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="260.0" />
+                                                <ColumnConstraints minWidth="120.0" prefWidth="130.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="220.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="38.0" />
+                                                <RowConstraints minHeight="38.0" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Recebimento" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <ComboBox fx:id="combRecebimento" maxWidth="1.7976931348623157E308" promptText="Recebimento confirmado" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                                <Label text="N. factura" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <TextField fx:id="txtNumeroFactura" promptText="Numero da factura do fornecedor" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                                <Label text="Emissao" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <DatePicker fx:id="dataEmissaoFactura" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                                <Label text="Vencimento" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <DatePicker fx:id="dataVencimentoFactura" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                            </children>
+                                        </GridPane>
+
+                                        <HBox alignment="CENTER_RIGHT" spacing="8.0">
+                                            <children>
+                                                <TextField fx:id="txtPesquisaFactura" promptText="Pesquisar factura, fornecedor ou estado" HBox.hgrow="ALWAYS" />
+                                                <ComboBox fx:id="combFiltroFactura" prefWidth="190.0" />
+                                                <Button mnemonicParsing="false" onAction="#atualizarDados" prefHeight="36.0" prefWidth="120.0" text="Actualizar" textFill="WHITE">
+                                                    <styleClass>
+                                                        <String fx:value="shadow-efect" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="secondary-color" />
+                                                    </styleClass>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#limparFormularioFactura" prefHeight="36.0" prefWidth="120.0" text="Limpar" textFill="WHITE">
+                                                    <styleClass>
+                                                        <String fx:value="shadow-efect" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="secondary-color" />
+                                                    </styleClass>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#criarFacturaFornecedor" prefHeight="36.0" prefWidth="170.0" text="Criar factura" textFill="WHITE">
+                                                    <styleClass>
+                                                        <String fx:value="shadow-efect" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="secondary-color" />
+                                                    </styleClass>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+
+                                        <TableView fx:id="tabelaFacturas" minHeight="260.0" onMouseClicked="#selecionarFactura" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colFacturaId" prefWidth="70.0" text="ID" />
+                                                <TableColumn fx:id="colFacturaNumero" prefWidth="160.0" text="Numero" />
+                                                <TableColumn fx:id="colFacturaRecebimento" prefWidth="120.0" text="Receb." />
+                                                <TableColumn fx:id="colFacturaFornecedor" prefWidth="260.0" text="Fornecedor" />
+                                                <TableColumn fx:id="colFacturaEmissao" prefWidth="120.0" text="Emissao" />
+                                                <TableColumn fx:id="colFacturaVencimento" prefWidth="120.0" text="Vencimento" />
+                                                <TableColumn fx:id="colFacturaTotal" prefWidth="120.0" text="Total" />
+                                                <TableColumn fx:id="colFacturaSaldo" prefWidth="120.0" text="Saldo" />
+                                                <TableColumn fx:id="colFacturaEstado" prefWidth="140.0" text="Estado" />
+                                            </columns>
+                                        </TableView>
+
+                                        <TableView fx:id="tabelaItensFactura" minHeight="150.0">
+                                            <columns>
+                                                <TableColumn fx:id="colItemProduto" prefWidth="330.0" text="Produto" />
+                                                <TableColumn fx:id="colItemQuantidade" prefWidth="100.0" text="Qtd." />
+                                                <TableColumn fx:id="colItemCusto" prefWidth="140.0" text="Custo" />
+                                                <TableColumn fx:id="colItemSubtotal" prefWidth="140.0" text="Subtotal" />
+                                                <TableColumn fx:id="colItemTotal" prefWidth="140.0" text="Total" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+
+                        <Tab text="Contas a pagar">
+                            <content>
+                                <VBox spacing="12.0">
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="16.0" top="14.0" />
+                                    </padding>
+                                    <children>
+                                        <HBox alignment="CENTER_RIGHT" spacing="8.0">
+                                            <children>
+                                                <TextField fx:id="txtPesquisaConta" promptText="Pesquisar conta, factura, fornecedor ou estado" HBox.hgrow="ALWAYS" />
+                                                <ComboBox fx:id="combFiltroConta" prefWidth="190.0" />
+                                                <Button mnemonicParsing="false" onAction="#atualizarDados" prefHeight="36.0" prefWidth="130.0" text="Actualizar" textFill="WHITE">
+                                                    <styleClass>
+                                                        <String fx:value="shadow-efect" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="secondary-color" />
+                                                    </styleClass>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+
+                                        <TableView fx:id="tabelaContas" minHeight="340.0" onMouseClicked="#selecionarConta" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colContaId" prefWidth="70.0" text="ID" />
+                                                <TableColumn fx:id="colContaFactura" prefWidth="160.0" text="Factura" />
+                                                <TableColumn fx:id="colContaFornecedor" prefWidth="260.0" text="Fornecedor" />
+                                                <TableColumn fx:id="colContaEmissao" prefWidth="120.0" text="Emissao" />
+                                                <TableColumn fx:id="colContaVencimento" prefWidth="120.0" text="Vencimento" />
+                                                <TableColumn fx:id="colContaOriginal" prefWidth="120.0" text="Original" />
+                                                <TableColumn fx:id="colContaPago" prefWidth="120.0" text="Pago" />
+                                                <TableColumn fx:id="colContaSaldo" prefWidth="120.0" text="Saldo" />
+                                                <TableColumn fx:id="colContaEstado" prefWidth="140.0" text="Estado" />
+                                            </columns>
+                                        </TableView>
+
+                                        <GridPane hgap="12.0" styleClass="secondary-color" vgap="8.0">
+                                            <padding>
+                                                <Insets bottom="12.0" left="14.0" right="14.0" top="12.0" />
+                                            </padding>
+                                            <columnConstraints>
+                                                <ColumnConstraints minWidth="120.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="160.0" />
+                                                <ColumnConstraints minWidth="120.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="160.0" />
+                                                <ColumnConstraints minWidth="120.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="160.0" />
+                                            </columnConstraints>
+                                            <children>
+                                                <Label text="Conta" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                <Label fx:id="labContaSelecionada" text="-" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                                <Label text="Fornecedor" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                                <Label fx:id="labFornecedorConta" text="-" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                                                <Label text="Factura" textFill="WHITE" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                                                <Label fx:id="labFacturaConta" text="-" textFill="WHITE" GridPane.columnIndex="5" GridPane.rowIndex="0" />
+                                                <Label text="Estado" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                <Label fx:id="labEstadoConta" text="-" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <Label text="Saldo" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <Label fx:id="labSaldoConta" text="-" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                            </children>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="28.0" />
+                                                <RowConstraints minHeight="28.0" />
+                                            </rowConstraints>
+                                        </GridPane>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+
+                        <Tab text="Pagamento fornecedor">
+                            <content>
+                                <VBox spacing="12.0">
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="16.0" top="14.0" />
+                                    </padding>
+                                    <children>
+                                        <GridPane hgap="12.0" styleClass="secondary-color" vgap="10.0">
+                                            <padding>
+                                                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                                            </padding>
+                                            <columnConstraints>
+                                                <ColumnConstraints minWidth="120.0" prefWidth="140.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="260.0" />
+                                                <ColumnConstraints minWidth="120.0" prefWidth="140.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="220.0" />
+                                            </columnConstraints>
+                                            <children>
+                                                <Label text="Conta" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                <ComboBox fx:id="combContaPagar" maxWidth="1.7976931348623157E308" promptText="Conta aberta ou parcial" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                                <Label text="Data" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                                <DatePicker fx:id="dataPagamento" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                                <Label text="Valor" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                <TextField fx:id="txtValorPago" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <Label text="Metodo" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <ComboBox fx:id="combMetodoPagamento" maxWidth="1.7976931348623157E308" promptText="Metodo de pagamento" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                                                <Label text="Origem" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                                <ComboBox fx:id="combOrigemPagamento" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <Label text="Conta bancaria" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                <ComboBox fx:id="combContaBancaria" maxWidth="1.7976931348623157E308" promptText="Seleccione a conta bancaria" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+
+                                                <Label text="Referencia" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                                <TextField fx:id="txtReferencia" promptText="Referencia do pagamento" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                <Label text="Descricao" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                                <TextArea fx:id="txtDescricaoPagamento" prefRowCount="2" promptText="Descricao do pagamento" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                            </children>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="38.0" />
+                                                <RowConstraints minHeight="38.0" />
+                                                <RowConstraints minHeight="38.0" />
+                                                <RowConstraints minHeight="64.0" />
+                                            </rowConstraints>
+                                        </GridPane>
+
+                                        <HBox alignment="CENTER_RIGHT" spacing="8.0">
+                                            <children>
+                                                <Button mnemonicParsing="false" onAction="#limparFormularioPagamento" prefHeight="36.0" prefWidth="130.0" text="Limpar" textFill="WHITE">
+                                                    <styleClass>
+                                                        <String fx:value="shadow-efect" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="secondary-color" />
+                                                    </styleClass>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#registarPagamentoFornecedor" prefHeight="36.0" prefWidth="190.0" text="Registar pagamento" textFill="WHITE">
+                                                    <styleClass>
+                                                        <String fx:value="shadow-efect" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="secondary-color" />
+                                                    </styleClass>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+
+                                        <TableView fx:id="tabelaPagamentos" minHeight="320.0" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colPagamentoId" prefWidth="70.0" text="ID" />
+                                                <TableColumn fx:id="colPagamentoConta" prefWidth="90.0" text="Conta" />
+                                                <TableColumn fx:id="colPagamentoFornecedor" prefWidth="260.0" text="Fornecedor" />
+                                                <TableColumn fx:id="colPagamentoData" prefWidth="120.0" text="Data" />
+                                                <TableColumn fx:id="colPagamentoValor" prefWidth="120.0" text="Valor" />
+                                                <TableColumn fx:id="colPagamentoMetodo" prefWidth="160.0" text="Metodo" />
+                                                <TableColumn fx:id="colPagamentoOrigem" prefWidth="120.0" text="Origem" />
+                                                <TableColumn fx:id="colPagamentoReferencia" prefWidth="180.0" text="Referencia" />
+                                                <TableColumn fx:id="colPagamentoEstado" prefWidth="120.0" text="Estado" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+                        <Tab text="Movimentos financeiros">
+                            <content>
+                                <VBox spacing="12.0">
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="16.0" top="14.0" />
+                                    </padding>
+                                    <children>
+                                        <HBox alignment="CENTER_RIGHT" spacing="8.0">
+                                            <children>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <ComboBox fx:id="combFiltroMovimentoOrigem" prefWidth="190.0" />
+                                                <Button mnemonicParsing="false" onAction="#atualizarDados" prefHeight="36.0" prefWidth="130.0" text="Actualizar" textFill="WHITE">
+                                                    <styleClass>
+                                                        <String fx:value="shadow-efect" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="secondary-color" />
+                                                    </styleClass>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                                        <TableView fx:id="tabelaMovimentos" minHeight="520.0" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colMovimentoId" prefWidth="70.0" text="ID" />
+                                                <TableColumn fx:id="colMovimentoData" prefWidth="155.0" text="Data" />
+                                                <TableColumn fx:id="colMovimentoTipo" prefWidth="100.0" text="Tipo" />
+                                                <TableColumn fx:id="colMovimentoOrigem" prefWidth="170.0" text="Origem" />
+                                                <TableColumn fx:id="colMovimentoValor" prefWidth="120.0" text="Valor" />
+                                                <TableColumn fx:id="colMovimentoOrigemPagamento" prefWidth="130.0" text="Pagamento" />
+                                                <TableColumn fx:id="colMovimentoPagamento" prefWidth="120.0" text="ID pag." />
+                                                <TableColumn fx:id="colMovimentoSaldoAnterior" prefWidth="130.0" text="Saldo ant." />
+                                                <TableColumn fx:id="colMovimentoSaldoPosterior" prefWidth="130.0" text="Saldo post." />
+                                                <TableColumn fx:id="colMovimentoFornecedor" prefWidth="260.0" text="Fornecedor" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </children>
+        </VBox>
+    </children>
+   <stylesheets>
+      <URL value="@../../../style/dashboard.css" />
+      <URL value="@../../../style/buttonConfig.css" />
+   </stylesheets>
+</AnchorPane>

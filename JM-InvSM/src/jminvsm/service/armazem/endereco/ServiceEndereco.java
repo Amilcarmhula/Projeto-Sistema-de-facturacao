@@ -9,9 +9,7 @@ import javafx.collections.ObservableList;
 import jminvsm.dao.armazem.endereco.EnderecoArmazemDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.armazem.endereco.EnderecoArmazem;
-import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -42,30 +40,25 @@ public class ServiceEndereco {
             avenida = "de Mocambique";
         }
         if (bairro == null || bairro.isEmpty()) {
-            showErroAlert( "Bairro nao pode ser nulo! Informe o bairro");
-            return;
+            throw new ServiceException("Bairro nao pode ser nulo! Informe o bairro");
         }
         if (cidade == null || cidade.isEmpty()) {
-            showErroAlert( "Cidade nao pode ser nula! Informe uma cidade.");
-            return;
+            throw new ServiceException("Cidade nao pode ser nula! Informe uma cidade.");
         }
         if (postalCode == null || postalCode == 0) {
             postalCode = 1111;
         }
         if (numero == null || numero == 0) {
-            showErroAlert( "Numero do endereco nao pode ser nulo!");
-            return;
+            throw new ServiceException("Numero do endereco nao pode ser nulo!");
         }
         if (provincia == null || provincia.isEmpty()) {
-            showErroAlert( "Provincia nao pode ser nula!");
-            return;
+            throw new ServiceException("Provincia nao pode ser nula!");
         }
         if (rua == null || rua.isEmpty()) {
             rua = "Dos Mocambicanos";
         }
         if (id_arm == null || id_arm == 0) {
-            showErroAlert( "Armazem nao selecionado!");
-            return;
+            throw new ServiceException("Armazem nao selecionado!");
         }
 
         EnderecoArmazem x = new EnderecoArmazem();
@@ -82,7 +75,6 @@ public class ServiceEndereco {
 
         if (enderecoArmazemDao.addEntity(x)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Endereco registado com sucesso!");
         }
     }
 
@@ -94,30 +86,25 @@ public class ServiceEndereco {
             avenida = "de Mocambique";
         }
         if (bairro == null || bairro.isEmpty()) {
-            showErroAlert( "Bairro nao pode ser nulo! Informe o bairro");
-            return;
+            throw new ServiceException("Bairro nao pode ser nulo! Informe o bairro");
         }
         if (cidade == null || cidade.isEmpty()) {
-            showErroAlert( "Cidade nao pode ser nula! Informe uma cidade.");
-            return;
+            throw new ServiceException("Cidade nao pode ser nula! Informe uma cidade.");
         }
         if (postalCode == null || postalCode == 0) {
             postalCode = 1111;
         }
         if (numero == null || numero == 0) {
-            showErroAlert( "Numero do endereco nao pode ser nulo!");
-            return;
+            throw new ServiceException("Numero do endereco nao pode ser nulo!");
         }
         if (provincia == null || provincia.isEmpty()) {
-            showErroAlert( "Provincia nao pode ser nula!");
-            return;
+            throw new ServiceException("Provincia nao pode ser nula!");
         }
         if (rua == null || rua.isEmpty()) {
             rua = "Dos Mocambicanos";
         }
         if (id == null || id == 0) {
-            showErroAlert( "Armazem nao selecionado!");
-            return;
+            throw new ServiceException("Endereco nao selecionado!");
         }
 
         EnderecoArmazem x = new EnderecoArmazem();
@@ -131,7 +118,6 @@ public class ServiceEndereco {
 
         if (enderecoArmazemDao.updateEntityByID(x, id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Endereco registado com sucesso!");
         }
     }
     
@@ -148,7 +134,6 @@ public class ServiceEndereco {
         
         if (enderecoArmazemDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Registo excluido com sucesso!");
         }
     }
 }

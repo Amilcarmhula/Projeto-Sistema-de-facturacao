@@ -26,7 +26,7 @@ package jminvsm.service.documentosComerciais;
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import jminvsm.dao.vendas.documentos.DocumentosComerciaisDAO;
-import jminvsm.model.vendas.documetos.DocumentosComerciais;
+import jminvsm.model.vendas.Documentos.DocumentosComerciais;
 
 /**
  *

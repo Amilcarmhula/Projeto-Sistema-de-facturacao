@@ -22,7 +22,6 @@ import jminvsm.util.Conexao;
  */
 public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
 
-
     @Override
     public boolean addTransacaoAvista(Transacao t) {
         return addTansacaoAvista(t);
@@ -32,11 +31,10 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
     public boolean addTansacaoAvista(Transacao t) {
         boolean isSuccess = false;
         String sql = "insert into transacoes (data_pagamento,valorRecebido,tipo_transacao,"
-                    + "descricao,fk_id_contabancaria,"
-                    + "fk_id_metodo_pagamento, fk_numero, fk_id_usuario, valorPago, trocos) values (?,?,?,?,?,?,?,?,?,?)";
+                + "descricao,fk_id_contabancaria,"
+                + "fk_id_metodo_pagamento, fk_numero, fk_id_usuario, valorPago, trocos) values (?,?,?,?,?,?,?,?,?,?)";
         try (
-                Connection con = Conexao.getConexao();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getData_pagamento());
             ps.setBigDecimal(2, t.getValorRecebidoDecimal());
             ps.setString(3, t.getTipo_transacao());
@@ -55,12 +53,12 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
             }
 
         } catch (SQLException ex) {
-            System.out.println("Erro: "+ex+" Data: "+t.getData_pagamento());
-            showDialog( "Erro persistencia", "Detalhes: " + ex);
+            System.out.println("Erro: " + ex + " Data: " + t.getData_pagamento());
+            showDialog("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
-    
+
     @Override
     public boolean addTransacaoParcelada(Transacao t) {
         return addTansacaoParcelada(t);
@@ -69,12 +67,11 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
     @Override
     public boolean addTansacaoParcelada(Transacao t) {
         boolean isSuccess = false;
-            String sql = "insert into transacoes (data_pagamento,valorRecebido,tipo_transacao,"
-                    + "descricao,fk_id_contabancaria,"
-                    + "fk_id_metodo_pagamento, fk_numero, fk_id_usuario, valorPago, trocos,fk_parcela) value (?,?,?,?,?,?,?,?,?,?,?)";
-            try (
-                Connection con = Conexao.getConexao();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+        String sql = "insert into transacoes (data_pagamento,valorRecebido,tipo_transacao,"
+                + "descricao,fk_id_contabancaria,"
+                + "fk_id_metodo_pagamento, fk_numero, fk_id_usuario, valorPago, trocos,fk_parcela) value (?,?,?,?,?,?,?,?,?,?,?)";
+        try (
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getData_pagamento());
             ps.setBigDecimal(2, t.getValorRecebidoDecimal());
             ps.setString(3, t.getTipo_transacao());
@@ -94,46 +91,55 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
             }
 
         } catch (SQLException ex) {
-            System.out.println("Erro: "+ex+" Data: "+t.getData_pagamento());
-            showDialog( "Erro persistencia", "Detalhes: " + ex);
-        } 
+            System.out.println("Erro: " + ex + " Data: " + t.getData_pagamento());
+            showDialog("Erro persistencia", "Detalhes: " + ex);
+        }
         return isSuccess;
     }
-    
 
     @Override
     public ObservableList<Transacao> getTransacoes(String numero) {
         ObservableList<Transacao> lista = FXCollections.observableArrayList();
         String sql = "SELECT  t.fk_parcela as refParcela,  t.id, t.valorRecebido, t.valorPago, t.trocos, t.data_pagamento, t.data_criacao, t.descricao, m.nome "
-                    + "	from transacoes t "
-                    + "	LEFT JOIN metodo_pagamento m ON m.id=t.fk_id_metodo_pagamento "
-                    + " where fk_numero=? order by fk_parcela";
-            try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-                                ps.setString(1, numero);
-            try (ResultSet result = ps.executeQuery()) {
+                + "	from transacoes t "
+                + "	LEFT JOIN metodo_pagamento m ON m.id=t.fk_id_metodo_pagamento "
+                + " where fk_numero=? order by fk_parcela";
+        try (
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, numero);
+            try ( ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
-                Transacao t = new Transacao();
-                t.setId(result.getInt("id"));
-                t.setValorRecebido(result.getBigDecimal("valorRecebido"));
-                t.setValorPago(result.getBigDecimal("valorPago"));
-                t.setTrocos(result.getBigDecimal("trocos"));
-                t.setData_pagamento(result.getString("data_pagamento"));
-                t.setData_criacao(result.getString("data_criacao"));
-                t.setDescricao(result.getString("descricao"));
-                MetodoPagamento m = new MetodoPagamento();
-                m.setNomePagamento(result.getString("nome"));
-                t.setMetodo(m);
-                Parcela p = new Parcela();
-                p.setId_parcela(result.getInt("refParcela"));
-                t.setParcela(p);
-                lista.add(t);
-            }
+                    Transacao t = new Transacao();
+                    t.setId(result.getInt("id"));
+                    t.setValorRecebido(result.getBigDecimal("valorRecebido"));
+                    t.setValorPago(result.getBigDecimal("valorPago"));
+                    t.setTrocos(result.getBigDecimal("trocos"));
+                    t.setData_pagamento(result.getString("data_pagamento"));
+                    t.setData_criacao(result.getString("data_criacao"));
+                    t.setDescricao(result.getString("descricao"));
+                    MetodoPagamento m = new MetodoPagamento();
+                    m.setNomePagamento(result.getString("nome"));
+                    t.setMetodo(m);
+                    Parcela p = new Parcela();
+                    p.setId_parcela(result.getInt("refParcela"));
+                    t.setParcela(p);
+                    lista.add(t);
+                }
             }
         } catch (SQLException e) {
             showDialog("Erro de consulta", "Detalhes: " + e);
         }
         return lista;
+    }
+
+    public static void main(String[] args) {
+        TransacaoDAO dao = new TransacaoDAO();
+//        System.out.println(ModelConverters.toLocalDateTime("2026-07-08 19:26:12"));
+        for (Transacao t : dao.getTransacoes("2026-678/1")) {
+                    System.out.println(t.getData_criacao());
+
+
+        }
     }
 
 }

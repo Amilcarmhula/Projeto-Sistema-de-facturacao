@@ -8,8 +8,7 @@ import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import jminvsm.dao.armazem.ArmazemDAO;
 import jminvsm.model.armazem.Armazem;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -35,12 +34,10 @@ public class ServiceArmazem {
     public void registar(String tipo, String nome, String descricao) {
         setOpsSuccess(false);
         if (tipo == null || tipo.isEmpty()) {
-            showErroAlert( "Tipo nao definido!");
-            return;
+            throw new ServiceException("Tipo nao definido!");
         }
         if (nome == null || nome.isEmpty()) {
-            showErroAlert( "nome nao pode ser nulo!");
-            return;
+            throw new ServiceException("Nome nao pode ser nulo!");
         }
         if (descricao == null || descricao.isEmpty()) {
             descricao = "Descricao de armazem padrao";
@@ -52,26 +49,21 @@ public class ServiceArmazem {
         a.setDescricao_arm(descricao);
         if (armazemDao.addEntity(a)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Armazem adicionado com sucesso!");
         }
     }
 
     public void actualizar(Integer id, String tipo, String nome, String descricao) {
         setOpsSuccess(false);
         if (id == null) {
-            showErroAlert("Armazem nao selecionado!");
-            return;
+            throw new ServiceException("Armazem nao selecionado!");
         }
         if (tipo == null || tipo.isEmpty()) {
-            showErroAlert( "Tipo nao definido!");
-            return;
+            throw new ServiceException("Tipo nao definido!");
         }
         if (nome == null || nome.isEmpty()) {
-            showErroAlert( "nome nao pode ser nulo!");
-            return;
+            throw new ServiceException("Nome nao pode ser nulo!");
         }
         if (descricao == null || descricao.isEmpty()) {
-            showErroAlert( "Descricao nula, sera definida uma descricao padrao!");
             descricao = "Descricao de armazem padrao";
         }
 
@@ -81,7 +73,6 @@ public class ServiceArmazem {
         a.setDescricao_arm(descricao);
         if (armazemDao.updateEntityByID(a, id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Armazem actualizado com sucesso!");
         }
     }
     public ObservableList<Armazem> listaArmazens(){
@@ -105,7 +96,6 @@ public class ServiceArmazem {
         
         if (armazemDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo excluido com sucesso!");
         }
     }
 

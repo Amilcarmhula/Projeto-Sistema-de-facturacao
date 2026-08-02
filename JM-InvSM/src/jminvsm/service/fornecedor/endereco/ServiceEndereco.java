@@ -10,8 +10,7 @@ import jminvsm.dao.fornecedor.endereco.EnderecoFornecedorDAO;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.fornecedor.endereco.EnderecoFornecedor;
 import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -42,31 +41,25 @@ public class ServiceEndereco {
             avenida = "de Mocambique";
         }
         if (bairro == null || bairro.isEmpty()) {
-            showErroAlert( "Bairro nao pode ser nulo! Informe o bairro");
-            return;
+            throw new ServiceException("Bairro nao pode ser nulo! Informe o bairro");
         }
         if (cidade == null || cidade.isEmpty()) {
-            showErroAlert( "Cidade nao pode ser nula! Informe uma cidade.");
-            return;
+            throw new ServiceException("Cidade nao pode ser nula! Informe uma cidade.");
         }
         if (postalCode == null || postalCode <= 0) {
-            showErroAlert( "Codigo postal nao informado. Sera criado um codigo postal padrao!");
             postalCode = 1111;
         }
         if (numero == null || numero == 0) {
-            showErroAlert( "Numero do endereco nao pode ser nulo!");
-            return;
+            throw new ServiceException("Numero do endereco nao pode ser nulo!");
         }
         if (provincia == null || provincia.isEmpty()) {
-            showErroAlert( "Provincia nao pode ser nula!");
-            return;
+            throw new ServiceException("Provincia nao pode ser nula!");
         }
         if (rua == null || rua.isEmpty()) {
             rua = "Dos Mocambicanos";
         }
         if (id_Forn == null || id_Forn == 0) {
-            showErroAlert( "Cliente nao selecionado ou definido!");
-            return;
+            throw new ServiceException("Fornecedor nao selecionado ou definido!");
         }
 
         EnderecoFornecedor endereco = new EnderecoFornecedor();
@@ -84,7 +77,6 @@ public class ServiceEndereco {
 
         if (enderecoDao.addEntity(endereco)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo adicionado com sucesso.");
         }
     }
 
@@ -93,38 +85,31 @@ public class ServiceEndereco {
             Integer id_Forn, Usuario user) {
         setOpsSuccess(false);
         if (id == null || id == 0) {
-            showErroAlert( "Endereco nao selecionado ou definido!");
-            return;
+            throw new ServiceException("Endereco nao selecionado ou definido!");
         }
         if (avenida == null || avenida.isEmpty()) {
             avenida = "de Mocambique";
         }
         if (bairro == null || bairro.isEmpty()) {
-            showErroAlert( "Bairro nao pode ser nulo! Informe o bairro");
-            return;
+            throw new ServiceException("Bairro nao pode ser nulo! Informe o bairro");
         }
         if (cidade == null || cidade.isEmpty()) {
-            showErroAlert( "Cidade nao pode ser nula! Informe uma cidade.");
-            return;
+            throw new ServiceException("Cidade nao pode ser nula! Informe uma cidade.");
         }
         if (postalCode == null || postalCode == 0) {
-            showErroAlert( "Codigo postal nao informado. Sera criado um codigo postal padrao!");
             postalCode = 1111;
         }
         if (numero == null || numero == 0) {
-            showErroAlert( "Numero do endereco nao pode ser nulo!");
-            return;
+            throw new ServiceException("Numero do endereco nao pode ser nulo!");
         }
         if (provincia == null || provincia.isEmpty()) {
-            showErroAlert( "Provincia nao pode ser nula!");
-            return;
+            throw new ServiceException("Provincia nao pode ser nula!");
         }
         if (rua == null || rua.isEmpty()) {
             rua = "Dos Mocambicanos";
         }
         if (id_Forn == null || id_Forn == 0) {
-            showErroAlert( "Cliente nao selecionado ou definido!");
-            return;
+            throw new ServiceException("Fornecedor nao selecionado ou definido!");
         }
 
         EnderecoFornecedor endereco = new EnderecoFornecedor();
@@ -142,7 +127,6 @@ public class ServiceEndereco {
 
         if (enderecoDao.updateEntityByID(endereco, id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Registo actualizado com sucesso.");
         }
     }
 
@@ -158,7 +142,6 @@ public class ServiceEndereco {
         setOpsSuccess(false);
         if (enderecoDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo excluido com sucesso.");
         }
     }
 }

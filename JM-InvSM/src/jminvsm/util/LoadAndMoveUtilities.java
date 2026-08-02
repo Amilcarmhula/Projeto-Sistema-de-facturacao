@@ -77,7 +77,10 @@ public class LoadAndMoveUtilities {
     removida ou ocultada
      */
     private static AnchorPane baseAnchorPane;
+//    private static Parent baseAnchorPane;
+     
     private static AnchorPane anchorPaneAux;
+//    private static Parent anchorPaneAux;
     private static boolean estadoPopUP;
 
     /*

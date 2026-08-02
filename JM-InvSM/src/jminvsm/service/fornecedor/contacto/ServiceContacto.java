@@ -9,9 +9,7 @@ import javafx.collections.ObservableList;
 import jminvsm.dao.fornecedor.contacto.ContactoFornecedorDAO;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.fornecedor.contacto.ContactoFornecedor;
-import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -43,8 +41,7 @@ public class ServiceContacto {
             responsavel = forn.getRazaosocial_forn();
         }
         if (numero == null || numero.isEmpty()) {
-            showErroAlert( "Numero nao pode ser nulo!");
-            return;
+            throw new ServiceException("Numero nao pode ser nulo!");
         }
         ContactoFornecedor contacto = new ContactoFornecedor();
         contacto.setEmail_forn(email);
@@ -55,7 +52,6 @@ public class ServiceContacto {
 
         if (contactoDao.addEntity(contacto)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo adicionado com sucesso.");
         }
     }
 
@@ -66,8 +62,7 @@ public class ServiceContacto {
         }
 
         if (numero == null || numero.isEmpty()) {
-            showErroAlert( "Numero nao pode ser nulo!");
-            return;
+            throw new ServiceException("Numero nao pode ser nulo!");
         }
         ContactoFornecedor contacto = new ContactoFornecedor();
         contacto.setEmail_forn(email);
@@ -77,7 +72,6 @@ public class ServiceContacto {
 
         if (contactoDao.updateEntityByID(contacto, id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo actualizado com sucesso.");
         }
     }
     public ObservableList<ContactoFornecedor> getContactos(){
@@ -92,7 +86,6 @@ public class ServiceContacto {
         setOpsSuccess(false);
         if (contactoDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo excluido com sucesso.");
         }
     }
 }

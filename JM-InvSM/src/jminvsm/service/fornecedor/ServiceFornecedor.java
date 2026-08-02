@@ -8,9 +8,7 @@ import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import jminvsm.dao.fornecedor.FornecedorDAO;
 import jminvsm.model.fornecedor.Fornecedor;
-import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -37,8 +35,7 @@ public class ServiceFornecedor {
         setOpsSuccess(false);
 
         if (razaosocial == null || razaosocial.isEmpty()) {
-            showErroAlert( "Razao Social Nao pode ser nula!");
-            return;
+            throw new ServiceException("Razao Social nao pode ser nula!");
         }
         if (tipo == null || tipo.isEmpty()) {
             tipo = "Pessoa Física";
@@ -52,20 +49,17 @@ public class ServiceFornecedor {
         f.setTipo_forn(tipo);
         if (fornecedor.addEntity(f)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo adicionado com sucesso.");
         }
     }
 
     public void actualizar(Integer id, String razaosocial, String tipo, Integer nuit) {
         setOpsSuccess(false);
         if (id == null || id <= 0) {
-            showErroAlert( "Fornecedor nao selecionado!");
-            return;
+            throw new ServiceException("Fornecedor nao selecionado!");
         }
 
         if (razaosocial == null || razaosocial.isEmpty()) {
-            showErroAlert( "Razao Social Nao pode ser nula!");
-            return;
+            throw new ServiceException("Razao Social nao pode ser nula!");
         }
         if (tipo == null || tipo.isEmpty()) {
             tipo = "Pessoa Física";
@@ -79,7 +73,6 @@ public class ServiceFornecedor {
         f.setTipo_forn(tipo);
         if (fornecedor.updateEntityByID(f, id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo actualizado com sucesso.");
         }
     }
     
@@ -108,7 +101,6 @@ public class ServiceFornecedor {
         setOpsSuccess(false);
         if (fornecedor.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo excluido com sucesso.");
         }
 
     }

@@ -26,7 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
@@ -97,7 +97,7 @@ public class ClienteSearchController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.userData = SysFact.getUserData();
+        this.userData = SessaoAplicacao.getUserData();
         try {
             servCliente = new ServiceCliente();
             showClientes();
@@ -169,10 +169,11 @@ public class ClienteSearchController implements Initializable {
         Cliente x = tabelaCliente.getSelectionModel().getSelectedItem();
         if (x != null) {
             Cliente c = mapaCliente.get(x.getId());
-            SysFact.setData(x);
+            SessaoAplicacao.setData(x);
             txtIDCliente.setText(String.valueOf(x.getId()));
             ButtonUtilities.buttonChangeText(btnAdd, txtIDCliente);
         }
 
     }
 }
+

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="urn:jm-invsm:saft-moz:provisional:1.0"
+           xmlns="urn:jm-invsm:saft-moz:provisional:1.0"
+           elementFormDefault="qualified">
+
+  <!-- MODELO PROVISÓRIO. NÃO É O XSD OFICIAL DA AT DE MOÇAMBIQUE. -->
+
+  <xs:simpleType name="TextType">
+    <xs:restriction base="xs:string"><xs:maxLength value="255"/></xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MoneyType">
+    <xs:restriction base="xs:decimal"><xs:fractionDigits value="6"/></xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="AuditFile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Header" type="HeaderType"/>
+        <xs:element name="MasterFiles" type="MasterFilesType"/>
+        <xs:element name="SourceDocuments" type="SourceDocumentsType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="HeaderType">
+    <xs:sequence>
+      <xs:element name="AuditFileVersion" type="TextType"/>
+      <xs:element name="ModelStatus" type="TextType"/>
+      <xs:element name="CompanyID" type="TextType"/>
+      <xs:element name="TaxRegistrationNumber" type="TextType"/>
+      <xs:element name="CompanyName" type="TextType"/>
+      <xs:element name="FiscalYear" type="xs:positiveInteger"/>
+      <xs:element name="StartDate" type="xs:date"/>
+      <xs:element name="EndDate" type="xs:date"/>
+      <xs:element name="CurrencyCode" type="TextType"/>
+      <xs:element name="DateCreated" type="xs:date"/>
+      <xs:element name="TaxEntity" type="TextType"/>
+      <xs:element name="ProductCompanyTaxID" type="TextType"/>
+      <xs:element name="SoftwareCertificateNumber" type="TextType"/>
+      <xs:element name="ProductID" type="TextType"/>
+      <xs:element name="ProductVersion" type="TextType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="MasterFilesType">
+    <xs:sequence>
+      <xs:element name="Customers"><xs:complexType><xs:sequence>
+        <xs:element name="Customer" type="CustomerType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence></xs:complexType></xs:element>
+      <xs:element name="Products"><xs:complexType><xs:sequence>
+        <xs:element name="Product" type="ProductType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence></xs:complexType></xs:element>
+      <xs:element name="TaxTable"><xs:complexType><xs:sequence>
+        <xs:element name="TaxTableEntry" type="TaxTableEntryType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence></xs:complexType></xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CustomerType"><xs:sequence>
+    <xs:element name="CustomerID" type="TextType"/><xs:element name="AccountID" type="TextType"/>
+    <xs:element name="CustomerTaxID" type="TextType"/><xs:element name="CompanyName" type="TextType"/>
+    <xs:element name="BillingAddress" type="TextType"/><xs:element name="SelfBillingIndicator" type="xs:nonNegativeInteger"/>
+  </xs:sequence></xs:complexType>
+
+  <xs:complexType name="ProductType"><xs:sequence>
+    <xs:element name="ProductType" type="TextType"/><xs:element name="ProductCode" type="TextType"/>
+    <xs:element name="ProductGroup" type="TextType"/><xs:element name="ProductDescription" type="TextType"/>
+    <xs:element name="ProductNumberCode" type="TextType"/>
+  </xs:sequence></xs:complexType>
+
+  <xs:complexType name="TaxTableEntryType"><xs:sequence>
+    <xs:element name="TaxType" type="TextType"/><xs:element name="TaxCountryRegion" type="TextType"/>
+    <xs:element name="TaxCode" type="TextType"/><xs:element name="Description" type="TextType"/>
+    <xs:element name="TaxPercentage" type="MoneyType"/>
+  </xs:sequence></xs:complexType>
+
+  <xs:complexType name="SourceDocumentsType"><xs:sequence>
+    <xs:element name="SalesInvoices" type="SalesInvoicesType"/>
+  </xs:sequence></xs:complexType>
+
+  <xs:complexType name="SalesInvoicesType"><xs:sequence>
+    <xs:element name="NumberOfEntries" type="xs:nonNegativeInteger"/>
+    <xs:element name="TotalDebit" type="MoneyType"/><xs:element name="TotalCredit" type="MoneyType"/>
+    <xs:element name="Invoice" type="InvoiceType" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence></xs:complexType>
+
+  <xs:complexType name="InvoiceType"><xs:sequence>
+    <xs:element name="InvoiceNo" type="TextType"/><xs:element name="DocumentStatus" type="DocumentStatusType"/>
+    <xs:element name="Hash" type="TextType"/><xs:element name="HashControl" type="TextType"/>
+    <xs:element name="Period" type="xs:positiveInteger"/><xs:element name="InvoiceDate" type="xs:date"/>
+    <xs:element name="InvoiceType" type="TextType"/><xs:element name="SystemEntryDate" type="xs:dateTime"/>
+    <xs:element name="CustomerID" type="TextType"/><xs:element name="SourceDocumentID" type="TextType" minOccurs="0"/>
+    <xs:element name="Line" type="LineType" minOccurs="1" maxOccurs="unbounded"/>
+    <xs:element name="DocumentTotals" type="DocumentTotalsType"/>
+  </xs:sequence></xs:complexType>
+
+  <xs:complexType name="DocumentStatusType"><xs:sequence>
+    <xs:element name="InvoiceStatus" type="TextType"/><xs:element name="InvoiceStatusDate" type="xs:dateTime"/>
+    <xs:element name="SourceID" type="TextType"/><xs:element name="SourceBilling" type="TextType"/>
+    <xs:element name="Reason" type="TextType" minOccurs="0"/>
+  </xs:sequence></xs:complexType>
+
+  <xs:complexType name="LineType"><xs:sequence>
+    <xs:element name="LineNumber" type="xs:positiveInteger"/><xs:element name="ProductCode" type="TextType"/>
+    <xs:element name="ProductDescription" type="TextType"/><xs:element name="Quantity" type="MoneyType"/>
+    <xs:element name="UnitOfMeasure" type="TextType"/><xs:element name="UnitPrice" type="MoneyType"/>
+    <xs:element name="TaxPointDate" type="xs:date"/><xs:element name="Description" type="TextType"/>
+    <xs:element name="CreditAmount" type="MoneyType"/><xs:element name="SettlementAmount" type="MoneyType"/>
+    <xs:element name="Tax" type="TaxType"/><xs:element name="TaxExemptionReason" type="TextType" minOccurs="0"/>
+  </xs:sequence></xs:complexType>
+
+  <xs:complexType name="TaxType"><xs:sequence>
+    <xs:element name="TaxType" type="TextType"/><xs:element name="TaxCountryRegion" type="TextType"/>
+    <xs:element name="TaxCode" type="TextType"/><xs:element name="TaxPercentage" type="MoneyType"/>
+    <xs:element name="TaxAmount" type="MoneyType"/>
+  </xs:sequence></xs:complexType>
+
+  <xs:complexType name="DocumentTotalsType"><xs:sequence>
+    <xs:element name="TaxPayable" type="MoneyType"/><xs:element name="NetTotal" type="MoneyType"/>
+    <xs:element name="GrossTotal" type="MoneyType"/><xs:element name="CurrencyCode" type="TextType"/>
+    <xs:element name="CurrencyAmount" type="MoneyType"/>
+  </xs:sequence></xs:complexType>
+</xs:schema>
+

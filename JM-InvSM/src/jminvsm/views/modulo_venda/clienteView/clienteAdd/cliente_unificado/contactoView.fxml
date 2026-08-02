@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="330.0" prefWidth="790.0" spacing="10.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.clienteView.clienteAdd.AddClienteController">
+   <padding><Insets bottom="14.0" left="14.0" right="14.0" top="14.0" /></padding>
+   <children>
+      <HBox alignment="CENTER_LEFT"><children><Label fx:id="labHeadTitle" text="Contactos"><font><Font name="System Bold" size="20.0" /></font></Label><Region HBox.hgrow="ALWAYS" /><Button fx:id="btnContactoView" mnemonicParsing="false" onAction="#addConAddView" text="+ Novo contacto" /></children></HBox>
+      <Separator />
+      <SplitPane dividerPositions="0.37" VBox.vgrow="ALWAYS">
+         <items>
+            <ListView fx:id="listaContactosView" onMouseClicked="#selecionaContacto" />
+            <VBox spacing="10.0">
+               <children>
+                  <GridPane hgap="10.0" vgap="10.0">
+                     <columnConstraints><ColumnConstraints minWidth="130.0" /><ColumnConstraints hgrow="ALWAYS" /></columnConstraints>
+                     <children>
+                        <Label text="ID" GridPane.rowIndex="0" /><TextField fx:id="txtIDContacto" alignment="CENTER" editable="false" maxWidth="110.0" promptText="ID" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <Label text="Pessoa de contacto" GridPane.rowIndex="1" /><TextField fx:id="txtResponsavel" promptText="Responsável" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="Telefone" GridPane.rowIndex="2" /><TextField fx:id="txtContacto" promptText="Número de telefone" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="E-mail" GridPane.rowIndex="3" /><TextField fx:id="txtEmail" promptText="E-mail" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="Website" GridPane.rowIndex="4" /><TextField fx:id="txtSite" promptText="Website" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     </children>
+                  </GridPane>
+                  <HBox alignment="CENTER_RIGHT" spacing="8.0"><children><Button fx:id="btnDelete" onAction="#deleteContacto" text="Remover" /><Button fx:id="btnAddContacto" onAction="#addORupdateContacto" styleClass="secondary-color" text="Guardar contacto" textFill="WHITE" /></children></HBox>
+               </children>
+            </VBox>
+         </items>
+      </SplitPane>
+   </children>
+</VBox>

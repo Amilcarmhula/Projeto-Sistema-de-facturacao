@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -10,86 +11,114 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="660.0" style="-fx-border-color: #17b5c3; -fx-border-width: 5px;" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.descontoView.DescontoViewController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="760.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.descontoView.DescontoViewController">
    <children>
-      <AnchorPane layoutX="116.0" layoutY="14.0" prefHeight="50.0" prefWidth="600.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="66.0" spacing="12.0" styleClass="secondary-color">
+         <padding><Insets bottom="10.0" left="20.0" right="12.0" top="10.0" /></padding>
          <children>
-            <Label layoutX="75.0" layoutY="10.0" text="Registo de descontos" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <font>
-                  <Font size="40.0" />
-               </font>
-               <padding>
-                  <Insets left="30.0" />
-               </padding>
-            </Label>
-            <Button fx:id="btnClose" layoutX="509.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <styleClass>
-                  <String fx:value="gray-bg" />
-                  <String fx:value="close-categoria" />
-               </styleClass>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../image/icons/cross.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
+            <VBox spacing="2.0">
+               <children>
+                  <Label text="Descontos" textFill="WHITE">
+                     <font><Font name="System Bold" size="24.0" /></font>
+                  </Label>
+                  <Label opacity="0.85" text="Gestão de dados auxiliares do sistema" textFill="WHITE" />
+               </children>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnClose" mnemonicParsing="false" onAction="#close" prefHeight="38.0" prefWidth="74.0" textFill="WHITE">
+               <styleClass><String fx:value="secondary-color" /><String fx:value="shadow-efect" />
+                        <String fx:value="hand-efect" /></styleClass>
+                     <graphic>
+                        <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../image/icons/cross.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
             </Button>
          </children>
-      </AnchorPane>
-      <TableView fx:id="tabelaDesconto" layoutX="15.0" layoutY="174.0" onMouseClicked="#linhaSelecionadaDesconto" prefHeight="219.0" prefWidth="780.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-        <columns>
-          <TableColumn fx:id="ID" prefWidth="50.0" text="ID" />
-          <TableColumn fx:id="nomeDesconto" prefWidth="239.0" text="Desconto" />
-            <TableColumn fx:id="descricao" prefWidth="348.0" text="Descricao" />
-        </columns>
-      </TableView>
-      <AnchorPane layoutY="49.0" prefHeight="110.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
-         <children>
-            <Button layoutX="356.0" layoutY="55.0" mnemonicParsing="false" onAction="#resetCampos" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../style/dashboard.css" text="Limpar" textFill="WHITE">
-               <styleClass>
-                  <String fx:value="hand-efect" />
-                  <String fx:value="secondary-color" />
-                  <String fx:value="shadow-efect" />
-               </styleClass>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-            <TextField fx:id="txtID" alignment="CENTER" disable="true" layoutX="12.0" layoutY="13.0" prefHeight="25.0" prefWidth="74.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </TextField>
-            <TextField fx:id="txtDesconto" layoutX="98.0" layoutY="13.0" prefHeight="25.0" prefWidth="163.0" promptText="Tipo de Taxa/Imposto" stylesheets="@../../../style/dashboard.css">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </TextField>
-            <TextField fx:id="txtDescricao" layoutX="272.0" layoutY="13.0" prefHeight="25.0" prefWidth="361.0" promptText="Descricao" stylesheets="@../../../style/dashboard.css">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </TextField>
-            <Button fx:id="btnAdd" layoutX="497.0" layoutY="55.0" mnemonicParsing="false" onAction="#addORupdateTaxa" prefWidth="130.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
-               <styleClass>
-                  <String fx:value="hand-efect" />
-                  <String fx:value="secondary-color" />
-                  <String fx:value="shadow-efect" />
-               </styleClass>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-         </children>
-      </AnchorPane>
+      </HBox>
+         </top>
+         <center>
+            <VBox spacing="16.0">
+               <padding><Insets bottom="18.0" left="20.0" right="20.0" top="18.0" /></padding>
+               <children>
+                  <VBox spacing="12.0" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #dfe7ea; -fx-border-radius: 8;">
+                     <padding><Insets bottom="16.0" left="16.0" right="16.0" top="14.0" /></padding>
+                     <children>
+                        <Label text="Dados do desconto"><font><Font name="System Bold" size="18.0" /></font></Label>
+                        <GridPane hgap="14.0" vgap="8.0">
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="100.0" prefWidth="120.0" />
+                              <ColumnConstraints hgrow="ALWAYS" minWidth="180.0" />
+                              <ColumnConstraints minWidth="100.0" prefWidth="120.0" />
+                              <ColumnConstraints hgrow="ALWAYS" minWidth="150.0" />
+                           </columnConstraints>
+                           <children>
+                              <Label text="ID" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <TextField fx:id="txtID" editable="false" focusTraversable="false" promptText="Automático" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              <Label text="Percentagem *" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                              <HBox alignment="CENTER_LEFT" spacing="6.0" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                                 <children>
+                                    <TextField fx:id="txtPercentagem" promptText="Ex.: 16" HBox.hgrow="ALWAYS" />
+                                    <Label text="Tax(%)" />
+                                 </children>
+                              </HBox>
+                              <Label text="Nome do desconto *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtDesconto" promptText="Ex.: IVA normal" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+                              <Label text="Descrição" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <TextField fx:id="txtDescricao" promptText="Descrição da taxa ou imposto" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" />
+                           </children>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
+                        </GridPane>
+            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#resetCampos" prefHeight="38.0" prefWidth="100.0" text="Limpar">
+                     <styleClass><String fx:value="gray-bg" /><String fx:value="shadow-efect" /></styleClass>
+                  </Button>
+                  <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addORupdateTaxa" prefHeight="38.0" prefWidth="145.0" text="Guardar desconto" textFill="WHITE">
+                     <styleClass><String fx:value="secondary-color" /><String fx:value="shadow-efect" /></styleClass>
+                  </Button>
+               </children>
+            </HBox>
+                     </children>
+                  </VBox>
+                  <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label text="Descontos cadastrados"><font><Font name="System Bold" size="18.0" /></font></Label>
+                        <Label opacity="0.7" text="Clique numa linha para editar. Use o botão direito para remover." />
+                        <TableView fx:id="tabelaDesconto" onMouseClicked="#linhaSelecionadaDesconto">
+                           <columns>
+                              <TableColumn fx:id="ID" minWidth="55.0" prefWidth="65.0" text="ID" />
+                              <TableColumn fx:id="nomeDesconto" minWidth="160.0" prefWidth="210.0" text="Desconto" />
+                              <TableColumn fx:id="percentagem" minWidth="100.0" prefWidth="120.0" text="Percentagem" />
+                              <TableColumn fx:id="descricao" minWidth="240.0" prefWidth="324.0" text="Descrição" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
    </children>
+   <stylesheets>
+      <URL value="@../../../style/dashboard.css" />
+      <URL value="@../../../style/buttonConfig.css" />
+   </stylesheets>
 </AnchorPane>

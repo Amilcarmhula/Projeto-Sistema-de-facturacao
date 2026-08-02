@@ -70,7 +70,11 @@ public class PrecoProdutoArmazemDAO implements PrecoProdutoArmazemDAOImpl<PrecoP
     public ObservableList<PrecoProdutoArmazem> getEntityByID(int idProduto, int idArmazem) {
         ObservableList<PrecoProdutoArmazem> lista = FXCollections.observableArrayList();
         PrecoProdutoArmazem pv = null;
-        String sql = "select * from precoProdutoArmazem where idProduto=? and idArmazem=?";
+        String sql = "SELECT id, idProduto, idArmazem, precoBase, precoVenda, precoFinal, "
+                + "dataInicioVigencia, dataFimVigencia, estado "
+                + "FROM precoProdutoArmazem "
+                + "WHERE idProduto=? AND idArmazem=? AND deleteStatus=0 "
+                + "ORDER BY id DESC";
 
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -79,14 +83,14 @@ public class PrecoProdutoArmazemDAO implements PrecoProdutoArmazemDAOImpl<PrecoP
             try (ResultSet result = ps.executeQuery()) {
 
                 while (result.next()) {
-                    //melhorar esta funcao
                     pv = new PrecoProdutoArmazem();
                     pv.setId(result.getInt("id"));
-//                pv.setPrecoNormal(result.getDouble("precoNormal"));
-                    pv.setPrecoVenda(result.getBigDecimal("preco"));
+                    pv.setPrecoBase(result.getBigDecimal("precoBase"));
+                    pv.setPrecoVenda(result.getBigDecimal("precoVenda"));
                     pv.setPrecoFinal(result.getBigDecimal("precoFinal"));
-                    pv.setDataFimVigencia(result.getString("dataValidade"));
-//                pv.setEstado(result.getString("estado"));
+                    pv.setDataInicioVigencia(result.getString("dataInicioVigencia"));
+                    pv.setDataFimVigencia(result.getString("dataFimVigencia"));
+                    pv.setEstado(result.getString("estado"));
                     Produto p = new Produto();
                     p.setId(result.getInt("idProduto"));
                     pv.setProduto(p);
@@ -111,7 +115,9 @@ public class PrecoProdutoArmazemDAO implements PrecoProdutoArmazemDAOImpl<PrecoP
                 + " pr.precoFinal, pr.dataInicioVigencia, pr.dataFimVigencia, pr.estado "
                 + " FROM precoProdutoArmazem pr "
                 + " LEFT JOIN produto p ON p.id = pr.idProduto "
-                + "where p.id = ?";
+                + "where p.id = ? "
+                + "AND pr.deleteStatus=0 "
+                + "AND p.deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
                             ps.setInt(1, idProd);
@@ -144,7 +150,7 @@ public class PrecoProdutoArmazemDAO implements PrecoProdutoArmazemDAOImpl<PrecoP
     @Override
     public boolean deleteEntityByUSER(int id) {
         boolean isSuccess = false;
-        String sql = "update precoProdutoArmazem set estado='desactivo' where id=?";
+        String sql = "update precoProdutoArmazem set estado='desactivo' where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 

@@ -11,8 +11,7 @@ import jminvsm.model.categoria.Categoria;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.imposto.Imposto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -41,32 +40,27 @@ public class ServiceProduto {
         setOpsSuccess(false);
         // Validações básicas antes de registrar a categoria
         if (id_cat == null || id_cat <= 0) {
-            showErroAlert("Categoria não definida!");
-            return;
+            throw new ServiceException("Categoria nao definida!");
         }
 
         if (id_uni == null || id_uni <= 0) {
-            showErroAlert("Unidade de medida não definida!");
-            return;
+            throw new ServiceException("Unidade de medida nao definida!");
         }
 
         if (id_tax == null || id_tax <= 0) {
-            showErroAlert("Taxa/Imposto não definida!");
-            return;
+            throw new ServiceException("Taxa/Imposto nao definida!");
         }
 
         if (nome == null || nome.isEmpty()) {
-            showErroAlert("Nome do produto não pode ser null!");
-            return;
+            throw new ServiceException("Nome do produto nao pode ser nulo!");
         }
 
         if (codBarras == null || codBarras.isEmpty()) {
             codBarras = "1000000000001";
         }
 
-        if (controleStock == true && nivelstock < 0) {
-            showErroAlert("Nivel de stock minimo nao informado!");
-            return;
+        if (Boolean.TRUE.equals(controleStock) && (nivelstock == null || nivelstock < 0)) {
+            throw new ServiceException("Nivel de stock minimo nao informado!");
         }
 
         if (descricao == null || descricao.isEmpty()) {
@@ -93,7 +87,6 @@ public class ServiceProduto {
 
         if (produtoDao.addEntity(p)) {
             setOpsSuccess(true);
-            showSuccessAlert("Produto registado com sucesso!");
         }
     }
 
@@ -103,32 +96,27 @@ public class ServiceProduto {
 
         // Validações básicas antes de registrar a categoria
         if (id_cat == null || id_cat <= 0) {
-            showErroAlert("Categoria não definida!");
-            return;
+            throw new ServiceException("Categoria nao definida!");
         }
 
         if (id_uni == null || id_uni <= 0) {
-            showErroAlert("Unidade de medida não definida!");
-            return;
+            throw new ServiceException("Unidade de medida nao definida!");
         }
 
         if (id_tax == null || id_tax <= 0) {
-            showErroAlert("Taxa/Imposto não definida!");
-            return;
+            throw new ServiceException("Taxa/Imposto nao definida!");
         }
 
         if (nome == null || nome.isEmpty()) {
-            showErroAlert("Nome do produto não pode ser null!");
-            return;
+            throw new ServiceException("Nome do produto nao pode ser nulo!");
         }
 
         if (codBarras == null || codBarras.isEmpty()) {
             codBarras = "1000000000001";
         }
 
-        if (controleStock == true && nivelstock < 0) {
-            showErroAlert("Nivel de stock minimo nao informado!");
-            return;
+        if (Boolean.TRUE.equals(controleStock) && (nivelstock == null || nivelstock < 0)) {
+            throw new ServiceException("Nivel de stock minimo nao informado!");
         }
 
         Produto p = new Produto();
@@ -151,7 +139,6 @@ public class ServiceProduto {
 
         if (produtoDao.updateEntityByID(p, id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Produto actualizado com sucesso.");
         }
     }
     //
@@ -174,7 +161,6 @@ public class ServiceProduto {
         setOpsSuccess(false);
         if(produtoDao.deleteEntity(id)){
             setOpsSuccess(true);
-            showSuccessAlert("Produto excluido com sucesso.");
         }
     }
 

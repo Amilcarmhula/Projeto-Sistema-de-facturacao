@@ -40,6 +40,7 @@ public class ProdutoDesconto {
     private Armazem armazem;
     private LocalDate dataInicio;
     private LocalDate dataFim;
+    private boolean estado;
 
     public ProdutoDesconto() {
     }
@@ -108,4 +109,14 @@ public class ProdutoDesconto {
     public void setDataFim(LocalDate dataFim) {
         this.dataFim = dataFim;
     }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+    
+    
 }

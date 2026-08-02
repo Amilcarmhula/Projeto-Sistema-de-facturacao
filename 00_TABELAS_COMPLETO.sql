@@ -67,10 +67,12 @@ create table contacto_empresa(
     numero varchar(100),
     nib varchar(100),
     nuib varchar(100),
+    descricao_tipo VARCHAR(100) NULL,
     fk_id_empresa integer not null,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (fk_id_empresa) references empresa(id)
 );
+
 create table nivel_acesso(
 	id integer primary key auto_increment,
     descricao varchar(50) not null
@@ -242,6 +244,7 @@ create table itemRequisicao(
     foreign key(idProduto) references produto(id),
     foreign key(idArmazem) references armazem(id)
 );
+
 create table movimento(
 	id integer primary key auto_increment,
     tipoOrigem ENUM(
@@ -271,8 +274,6 @@ create table movimento(
     ))
 )
 );
-ALTER TABLE movimento
-CHANGE COLUMN tipoOrigem tipoOrigem ENUM('Compra', 'Requisicao', 'Transferencia', 'Ajuste', 'Devolucao', 'Venda') NOT NULL ;
 
 CREATE TABLE movimento_lote (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -351,6 +352,26 @@ CREATE TABLE stock_transito(
         'Recebido'
     ),
     FOREIGN KEY(idTransferencia) REFERENCES transferencia_stock(id)
+);
+
+CREATE TABLE transferencia_lote (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idTransferencia INT NOT NULL,
+    idProduto INT NOT NULL,
+    idLoteOrigem INT NOT NULL,
+    idLoteDestino INT NULL,
+    idMovimentoSaida INT NULL,
+    quantidade INT NOT NULL,
+    idFornecedor INT NOT NULL,
+    custoUnitario DECIMAL(10,2) NOT NULL DEFAULT 0,
+    estado ENUM('Em Transito','Recebido') NOT NULL DEFAULT 'Em Transito',
+    dataCriacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idTransferencia) REFERENCES transferencia_stock(id),
+    FOREIGN KEY (idProduto) REFERENCES produto(id),
+    FOREIGN KEY (idLoteOrigem) REFERENCES lote(id),
+    FOREIGN KEY (idLoteDestino) REFERENCES lote(id),
+    FOREIGN KEY (idMovimentoSaida) REFERENCES movimento(id),
+    FOREIGN KEY (idFornecedor) REFERENCES fornecedor(id)
 );
 
 
@@ -555,12 +576,16 @@ create table produtodesconto(
 	idProduto integer not null,
     idDesconto integer not null,
     idArmazem integer not null,
+    estado boolean default true,
     dataInicio date not null,
     dataFim date not null,
     foreign key (idProduto) references produto(id) on delete cascade,
     foreign key (idDesconto) references desconto(id) on delete cascade,
     foreign key (idArmazem) references armazem(id)on delete cascade
 );
+
+
+
 
 
 -- Armazena as siglas das facturas e o numero de dias uteis
@@ -602,30 +627,25 @@ create table itemfactura(
     fk_numero varchar(20) not null,
     fk_id_usuario integer not null,
     fk_id_armazem integer not null,
-    data_adicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_adicao date default (current_date),
     foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_produto) references produto(id),
     foreign key (fk_numero) references factura(numero)
 );
 
-
 create table itemcotacao(
 	id integer primary key auto_increment,
-    preco decimal(10,2) not null,
     quantidade decimal(10,2) not null,
     subtotal decimal(10,2) not null,
     qtd_por_unidade integer DEFAULT 1,
-    unidade_vendida varchar(50),
-    fk_id_desconto integer,
     fk_id_produto integer not null,
     fk_numero varchar(20) not null,
     fk_id_usuario integer not null,
     fk_id_armazem integer not null,
-    data_adicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_adicao date default (current_date),
     foreign key (fk_id_armazem) references armazem(id),
     foreign key (fk_id_usuario) references usuario(id),
-    foreign key (fk_id_desconto) references desconto(id),
     foreign key (fk_id_produto) references produto(id),
     foreign key (fk_numero) references factura(numero)
 );
@@ -666,7 +686,7 @@ create table transacoes(
     fk_numero varchar(20),
     fk_parcela integer,
     fk_id_usuario integer not null,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_criacao  date default (current_date),
     foreign key (fk_id_contabancaria) references contabancaria(id),
     foreign key (fk_id_usuario) references usuario(id),
     foreign key (fk_id_metodo_pagamento) references metodo_pagamento(id),

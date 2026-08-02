@@ -23,7 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.imposto.Imposto;
 import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
 import jminvsm.util.LoadAndMoveUtilities;
@@ -125,7 +125,7 @@ public class CalculaPrecoController implements Initializable {
         if (x != null) {
             txtID.setText(String.valueOf(x.getId()));
             percentagemImposto = x.getPercentagem();
-            SysFact.setData(x);
+            SessaoAplicacao.setData(x);
         }
     }
 
@@ -133,7 +133,7 @@ public class CalculaPrecoController implements Initializable {
         double precoVenda = 0;
         double preco = Double.parseDouble(txtPreco.getText().equals("") ? "0" : txtPreco.getText());
         precoVenda = preco - preco * percentagemImposto;
-        SysFact.setData(precoVenda);
+        SessaoAplicacao.setData(precoVenda);
         labPrecoSistema.setText(precoVenda + " Mt");
         if (precoVenda != 0) {
             if (LoadAndMoveUtilities.returnToStage()) {
@@ -148,3 +148,4 @@ public class CalculaPrecoController implements Initializable {
         }
     }
 }
+

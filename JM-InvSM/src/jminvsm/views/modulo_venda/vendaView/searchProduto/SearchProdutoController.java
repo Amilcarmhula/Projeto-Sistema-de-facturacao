@@ -26,7 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.stock.ServiceStock;
@@ -94,7 +94,7 @@ public class SearchProdutoController implements Initializable {
    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.userData = SysFact.getUserData();
+        this.userData = SessaoAplicacao.getUserData();
         try {
 
             serStock = new ServiceStock();
@@ -109,7 +109,7 @@ public class SearchProdutoController implements Initializable {
     private Map<String, Stock> mapaProdutos;
 
     public void showInvenarioProdutos() {
-        listaProduto = serStock.listaStockProdutos(1);
+        listaProduto = serStock.listaProdutosParaVenda(1);
         mapaProdutos = new HashMap<>();
         for (Stock s : listaProduto) {
             mapaProdutos.put(s.getProduto().getId() + "," + s.getArmazem().getId(), s);
@@ -163,7 +163,8 @@ public class SearchProdutoController implements Initializable {
         if (x != null) {
             Stock s = mapaProdutos.get(x.getProduto().getId() + "," + x.getArmazem().getId());
             System.out.println("ID: "+s.getProduto().getId() + "," + s.getArmazem().getId()+" - PV: "+s.getPrecoProdutoArmazem().getPrecoVenda());
-            SysFact.setData(s);
+            SessaoAplicacao.setData(s);
         }
     }
 }
+

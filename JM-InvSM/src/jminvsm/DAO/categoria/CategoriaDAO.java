@@ -59,7 +59,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
     public boolean updateEntityByID(Categoria t) {
         boolean isSuccess = false;
         String sql = "update categoria set grupo=?, subgrupo=?, familia=?,"
-                    + " descricao=? where id=?";
+                    + " descricao=? where id=? AND deleteStatus=0";
         
         try (
                 Connection con = Conexao.getConexao();
@@ -87,7 +87,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
     @Override
     public ObservableList<Categoria> listAllEntities() {
         ObservableList<Categoria> lista = FXCollections.observableArrayList();
-        String sql = "select * from categoria";
+        String sql = "select * from categoria WHERE deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -110,21 +110,11 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
 
     @Override
     public boolean deleteEntity(int x) {
-        boolean isSuccess = false;
-        String sql = "delete from categoria where id=?";
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, x);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
-            }
-
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("categoria", x);
         } catch (SQLException ex) {
             showDialog("Erro de exclusao", "Detalhes: " + ex);
         } 
-        return isSuccess;
+        return false;
     }
 }

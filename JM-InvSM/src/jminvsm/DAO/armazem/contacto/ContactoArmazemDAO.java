@@ -59,7 +59,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
     public boolean updateEntityByID(ContactoArmazem t, int id) {
         boolean isSuccess = false;
         String sql = "update contacto_armazem set contacto=?, email=? ,"
-                    + "pessoa_de_contacto=? where id=?";
+                    + "pessoa_de_contacto=? where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -85,7 +85,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
     @Override
     public ObservableList<ContactoArmazem> listAllEntities() {
         ObservableList<ContactoArmazem> lista = FXCollections.observableArrayList();
-        String sql = "select * from contacto_armazem";
+        String sql = "select * from contacto_armazem WHERE deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -108,7 +108,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
     @Override
     public ObservableList<ContactoArmazem> searchEntityByCLiente(int idArmazem) {
         ObservableList<ContactoArmazem> lista = FXCollections.observableArrayList();
-        String sql = "select * from contacto_armazem where idArmazem=?";
+        String sql = "select * from contacto_armazem where idArmazem=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); 
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -131,23 +131,12 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
 
     @Override
     public boolean deleteEntity(int x) {
-        boolean isSuccess = false;
-        String sql = "delete from contacto_armazem where id=?";
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, x);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
-            }
-
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("contacto_armazem", x);
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
             showDialog("Erro de exclusao", "Detalhes: " + ex);
         } 
-        
-        return isSuccess;
+        return false;
     }
 }

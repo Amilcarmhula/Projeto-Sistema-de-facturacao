@@ -18,6 +18,7 @@ public interface FacturaDAOImpl<T> extends AddDAO<T>, CountDAO {
     T getFacturaData(String factura);
     ObservableList<T> getFacturaToDashboard();
     ObservableList<T> getFacturaToPagamentos(int id);
+    boolean converterCotacaoEmFactura(String numeroCotacao, T facturaDestino);
     int countFactura();
 
     @Override

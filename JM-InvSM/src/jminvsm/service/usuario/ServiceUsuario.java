@@ -7,8 +7,7 @@ package jminvsm.service.usuario;
 import java.sql.SQLException;
 import jminvsm.dao.usuario.UsuarioDAO;
 import jminvsm.model.usuario.Usuario;
-import jminvsm.util.AlertUtilities;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -25,19 +24,17 @@ public class ServiceUsuario {
     public Usuario authLogin(String user, String pwd) {
         Usuario usuario = null;
         if (user == null || user.isEmpty()) {
-            AlertUtilities.showDialog("Erro", "Usuario nao pode ser nula!");
-            return null;
+            throw new ServiceException("Usuario nao pode ser nulo!");
         }
         if (pwd == null || pwd.isEmpty()) {
-            AlertUtilities.showDialog("Erro", "Senha nao pode ser nula!");
-            return null;
+            throw new ServiceException("Senha nao pode ser nula!");
         }
 
         try {
             usuario = usuarioDAO.login(user, pwd);
             
         } catch (Exception e) {
-            showDialog( "Erro", "Detalhes: "+e);
+            throw new ServiceException("Erro ao autenticar usuario.", e);
         }
 
         return usuario;

@@ -47,7 +47,7 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
     public boolean updateEntityByID(Imposto t, int id) {
         boolean isSuccess = false;
         String sql = "update imposto set nome=?, percentagem=?, descricao=?"
-                + " where id=?";
+                + " where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -70,7 +70,7 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
     @Override
     public ObservableList<Imposto> listAllEntities() {
         ObservableList<Imposto> lista = FXCollections.observableArrayList();
-        String sql = "select * from imposto";
+        String sql = "select * from imposto WHERE deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet result = ps.executeQuery()) {
@@ -92,7 +92,7 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
     @Override
     public Imposto getEntityByID(int id) {
         Imposto ti = null;
-        String sql = "select * from imposto where id=?";
+        String sql = "select * from imposto where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
                             ps.setInt(1, id);
@@ -113,20 +113,11 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
 
     @Override
     public boolean deleteEntity(int x) {
-        boolean isSuccess = false;
-        String sql = "delete from imposto where id=?";
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, x);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true;
-            }
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("imposto", x);
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
         }
-        return isSuccess;
+        return false;
     }
 }

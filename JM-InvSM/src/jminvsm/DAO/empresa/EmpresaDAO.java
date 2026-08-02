@@ -27,7 +27,7 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
     public void addEntity(Empresa c) {
         String sql = "insert into empresa (nome,razaosocial,nuit) value (?,?,?)";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, c.getNome_emp());
             ps.setString(2, c.getRazao_emp());
             ps.setInt(3, c.getNuit_emp());
@@ -42,7 +42,7 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
         String sql = "update empresa set nome=? ,razaosocial=? ,nuit=?"
                 + " where id=?";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, c.getNome_emp());
             ps.setString(2, c.getRazao_emp());
@@ -61,15 +61,15 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
                 + "en.provincia, en.cidade, en.bairro, en.avenida, en.rua, en.codigo_postal, en.numero, en.tipo,"
                 + "GROUP_CONCAT(DISTINCT c.contacto SEPARATOR ' ') AS contatos, "
                 + "c.email, c.website,"
-                + "a.id as id_conta, a.nome_banco, a.numero as numeroConta, a.nib, a.nuib "
+                + "GROUP_CONCAT(DISTINCT a.id,'-', a.nome_banco,'-', a.numero,'-', a.nib,'-', a.nuib  SEPARATOR ';') AS contas_bancarias "
                 + "FROM empresa e "
                 + "LEFT JOIN endereco_empresa en ON e.id = en.fk_id_empresa "
                 + "LEFT JOIN contacto_empresa c ON e.id = c.fk_id_empresa "
                 + "LEFT JOIN contabancaria a ON e.id=a.fk_id_empresa";
 
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
+            try ( ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     empresa = new Empresa();
                     empresa.setId(result.getInt("id"));
@@ -101,20 +101,28 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
                         }
                     }
                     empresa.setContactosEmpresa(listaContactos);
-
-                    ContaBancaria conta = new ContaBancaria();
-                    conta.setId(result.getInt("id_conta"));
-                    conta.setNome_banco(result.getString("nome_banco"));
-                    conta.setNib(result.getString("nib"));
-                    conta.setNuib(result.getString("nuib"));
-                    conta.setNumero_conta(result.getString("numeroConta"));
-                    empresa.setContaBancaria(conta);
+                    ContaBancaria conta;
+                    List<ContaBancaria> listaContas = new ArrayList<>();
+                    String contas = result.getString("contas_bancarias");
+                    if (contas != null && !contas.trim().isEmpty()) {
+                        String[] split_one = contas.split(";");
+                            for (String split_two : split_one) {
+                                conta = new ContaBancaria();
+                                String[] split_three = split_two.split("-");
+                                conta.setId(Integer.parseInt(split_three[0]));
+                                conta.setNome_banco(split_three[1]);
+                                conta.setNumero_conta(split_three[2]);
+                                conta.setNib(split_three[3]);
+                                conta.setNuib(split_three[4]);
+                                listaContas.add(conta);
+                            }
+                    }
+                    empresa.setContasBancarias(listaContas);
 
                 }
             }
         } catch (SQLException e) {
             showDialog("Erro Empresa", "Falha ao adicionar empresa: " + e);
-
 
         }
         return empresa;

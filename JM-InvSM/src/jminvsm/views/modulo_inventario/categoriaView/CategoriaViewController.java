@@ -30,7 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.service.categoria.ServicoCategoria;
 import jminvsm.util.ButtonUtilities;
@@ -81,12 +81,12 @@ public class CategoriaViewController implements Initializable {
     
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
-            SysFact.setData("");
+            SessaoAplicacao.setData("");
             LoadAndMoveUtilities.setEstadoStage(false);
             LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
-            SysFact.setData("");
+            SessaoAplicacao.setData("");
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
@@ -103,11 +103,11 @@ public class CategoriaViewController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Configura o TextArea para quebra automática de linha
+        // Configura o TextArea para quebra automÃ¡tica de linha
         ps_txtdescricaoCategoria.setWrapText(true);
 
-        // Opcional: configurar a largura máxima do texto
-        //ps_txtdescricaoProduto.setPrefColumnCount(30); // Ajuste conforme necessário
+        // Opcional: configurar a largura mÃ¡xima do texto
+        //ps_txtdescricaoProduto.setPrefColumnCount(30); // Ajuste conforme necessÃ¡rio
         try {
             showCategoria();
         } catch (SQLException ex) {
@@ -171,7 +171,7 @@ public class CategoriaViewController implements Initializable {
     public void selectedLineCategoria(MouseEvent event) throws SQLException {
         Categoria x = tabelaCategoria.getSelectionModel().getSelectedItem();
         
-        SysFact.setData(x);
+        SessaoAplicacao.setData(x);
         if (x != null) {
             ps_txtIDCategoria.setText(String.valueOf(x.getId()));
             ps_txtgrupoCategoria.setText(x.getGrupo());
@@ -252,3 +252,4 @@ public class CategoriaViewController implements Initializable {
     }
     
 }
+

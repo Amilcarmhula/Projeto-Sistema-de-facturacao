@@ -148,33 +148,53 @@ SELECT
 FROM picking p
 WHERE p.idRequisicao = 1;
 
+-- 3. Iniciar picking muda a requisicao para EmPicking.
+UPDATE picking
+SET estado = 'Separando',
+    operador = 1,
+    dataInicio = COALESCE(dataInicio, NOW()),
+    dataFim = NULL
+WHERE idRequisicao = 1;
+
+UPDATE requisicao
+SET estado = 'EmPicking'
+WHERE id = 1;
+
+SELECT
+    'TESTE 3 - Picking iniciado' AS teste,
+    r.id,
+    r.estado AS estadoRequisicao,
+    p.estado AS estadoPicking
+FROM requisicao r
+JOIN picking p ON p.idRequisicao = r.id
+WHERE r.id = 1;
 
 -- 4. Confirmar picking deve consumir reserva, baixar stock e lotes.
 CALL ConfirmarPicking(1);
 
 SELECT
-    'TESTE 3 - Requisicao finalizada' AS teste,
+    'TESTE 4 - Requisicao finalizada' AS teste,
     r.id,
     r.estado
 FROM requisicao r
 WHERE r.id = 1;
 
 SELECT
-    'TESTE 3 - Reserva consumida' AS teste,
+    'TESTE 4 - Reserva consumida' AS teste,
     rs.quantidade,
     rs.estado
 FROM reserva_stock rs
 WHERE rs.idRequisicao = 1;
 
 SELECT
-    'TESTE 3 - Picking confirmado' AS teste,
+    'TESTE 4 - Picking confirmado' AS teste,
     p.estado,
     p.dataFim
 FROM picking p
 WHERE p.idRequisicao = 1;
 
 SELECT
-    'TESTE 3 - Movimento de saida' AS teste,
+    'TESTE 4 - Movimento de saida' AS teste,
     m.tipoOrigem,
     m.tipoMovimento,
     m.quantidade,
@@ -187,7 +207,7 @@ LIMIT 1;
 
 
 SELECT
-    'TESTE 3 - Movimento/lote FIFO' AS teste,
+    'TESTE 4 - Movimento/lote FIFO' AS teste,
     ml.idMovimento,
     ml.idLote,
     ml.quantidadeRetirada
@@ -198,7 +218,7 @@ ORDER BY ml.id DESC
 LIMIT 1;
 
 SELECT
-    'TESTE 3 - Lote apos requisicao' AS teste,
+    'TESTE 4 - Lote apos requisicao' AS teste,
     l.codigo,
     l.quantidadeAtual,
     l.estado
@@ -206,7 +226,51 @@ FROM lote l
 WHERE l.codigo = 'REQ-LOTE-001';
 
 SELECT
-    'TESTE 3 - Stock final' AS teste,
+    'TESTE 4 - Stock final' AS teste,
+    s.saldo,
+    s.reservado,
+    s.disponivel
+FROM stock s
+WHERE s.idProduto = 1 AND s.idArmazem = 1;
+
+-- 5. Cancelar uma requisicao aprovada antes de finalizar deve libertar reserva.
+INSERT INTO requisicao (id, dataNecessidade, estado, motivo)
+VALUES (2, DATE_ADD(CURDATE(), INTERVAL 2 DAY), 'Pendente', 'Teste de cancelamento com reserva');
+
+INSERT INTO itemRequisicao (quantidade, idRequisicao, idProduto, idArmazem)
+VALUES (20, 2, 1, 1);
+
+CALL AprovarRequisicao(2);
+
+SELECT
+    'TESTE 4 - Antes de cancelar' AS teste,
+    r.id,
+    r.estado,
+    s.saldo,
+    s.reservado,
+    s.disponivel
+FROM requisicao r
+JOIN stock s ON s.idProduto = 1 AND s.idArmazem = 1
+WHERE r.id = 2;
+
+CALL CancelarRequisicao(2);
+
+SELECT
+    'TESTE 4 - Requisicao cancelada' AS teste,
+    r.id,
+    r.estado
+FROM requisicao r
+WHERE r.id = 2;
+
+SELECT
+    'TESTE 4 - Reserva cancelada' AS teste,
+    rs.quantidade,
+    rs.estado
+FROM reserva_stock rs
+WHERE rs.idRequisicao = 2;
+
+SELECT
+    'TESTE 4 - Stock reservado revertido' AS teste,
     s.saldo,
     s.reservado,
     s.disponivel
@@ -220,3 +284,4 @@ WHERE s.idProduto = 1 AND s.idArmazem = 1;
 -- Stock: saldo 70, reservado 0, disponivel 70
 -- Lote: quantidadeAtual 70
 -- Movimento: Requisicao/Saida com quantidade 30
+-- Cancelamento: requisicao 2 Cancelada, reserva Cancelado, stock.reservado 0

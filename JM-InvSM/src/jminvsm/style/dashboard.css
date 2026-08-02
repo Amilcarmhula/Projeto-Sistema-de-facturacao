@@ -8,9 +8,6 @@
 .secondary-color{
     -fx-background-color: #000000b3;
 }
-.base-color{
-    -fx-background-color: #fff;
-}
 
 .white-bg{
     -fx-background-color: #fff;
@@ -39,10 +36,16 @@
 /*
  * textField degsin
  */
+/*
 .text-field:focused{
     -fx-border-color:#17b5c3;
     -fx-border-width:0px 0px 5px 0px;
 }
+.text-field{
+    -fx-border-color:#17b5c3;
+    -fx-border-width:0px 0px 5px 0px;
+}
+*/
 
 .text-field{
     -fx-font-family: 'Berlin Sans FB';
@@ -138,7 +141,7 @@
 }
 
 .table-view {
-    -fx-border-color: #17b5c3;
+    /*-fx-border-color: #17b5c3;*/
     -fx-background-color: transparent;
     /*-fx-border-radius: 10px 10px 0px 0px;*/
     -fx-border-width: 3px;

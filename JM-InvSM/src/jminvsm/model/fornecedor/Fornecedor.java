@@ -7,7 +7,6 @@ package jminvsm.model.fornecedor;
 import java.util.List;
 import jminvsm.model.fornecedor.contacto.ContactoFornecedor;
 import jminvsm.model.fornecedor.endereco.EnderecoFornecedor;
-import jminvsm.model.usuario.Usuario;
 
 
 
@@ -23,18 +22,19 @@ public class Fornecedor {
     private int nuit_forn;
     private String data_criacao;
     private List<ContactoFornecedor> contactoFornecedor;
-    private List<EnderecoFornecedor> enderecoFornecedor;
+    private List<EnderecoFornecedor> enderecosFornecedor;
+    private EnderecoFornecedor enderecoFornecedor;
     
 
     public Fornecedor() {
     }
 
-    public Fornecedor(String tipo, String razaosocial, int nuit, List<ContactoFornecedor> contactoFornecedor, List<EnderecoFornecedor> enderecoFornecedor) {
+    public Fornecedor(String tipo, String razaosocial, int nuit, List<ContactoFornecedor> contactoFornecedor, List<EnderecoFornecedor> enderecosFornecedor) {
         this.tipo_forn = tipo;
         this.razaosocial_forn = razaosocial;
         this.nuit_forn = nuit;
         this.contactoFornecedor = contactoFornecedor;
-        this.enderecoFornecedor = enderecoFornecedor;
+        this.enderecosFornecedor = enderecosFornecedor;
     }
 
     
@@ -93,16 +93,36 @@ public class Fornecedor {
         return contacto;
     }
 
+    public EnderecoFornecedor getEnderecoFornecedor() {
+        return enderecoFornecedor;
+    }
+
+    public void setEnderecoFornecedor(EnderecoFornecedor enderecoFornecedor) {
+        this.enderecoFornecedor = enderecoFornecedor;
+    }
+    
+    
+    public String printEnderecos() {
+        String endereco = "";
+        if (enderecoFornecedor != null) {
+            endereco = "Av. " + enderecoFornecedor.getAvenida_forn()+ ", Rua " + enderecoFornecedor.getRua_forn()
+                    + ", Nr." + enderecoFornecedor.getNumero_forn()+ "; Bairro " + enderecoFornecedor.getBairro_forn()
+                    + ", Cidade De(a) " + enderecoFornecedor.getCidade_forn()+ ", " + enderecoFornecedor.getProvincia_forn()
+                    + "-" + enderecoFornecedor.getCodigoPostal_forn();
+        }
+        return endereco;
+    }
+
     public void setContactoFornecedor(List<ContactoFornecedor> contactoFornecedor) {
         this.contactoFornecedor = contactoFornecedor;
     }
 
-    public List<EnderecoFornecedor> getEnderecoFornecedor() {
-        return enderecoFornecedor;
+    public List<EnderecoFornecedor> getEnderecosFornecedor() {
+        return enderecosFornecedor;
     }
 
-    public void setEnderecoFornecedor(List<EnderecoFornecedor> enderecoFornecedor) {
-        this.enderecoFornecedor = enderecoFornecedor;
+    public void setEnderecosFornecedor(List<EnderecoFornecedor> enderecosFornecedor) {
+        this.enderecosFornecedor = enderecosFornecedor;
     }
    
 }

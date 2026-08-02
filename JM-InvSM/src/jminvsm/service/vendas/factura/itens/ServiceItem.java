@@ -6,11 +6,10 @@ package jminvsm.service.vendas.factura.itens;
 
 import java.sql.SQLException;
 import java.util.List;
-import javafx.scene.control.TableView;
 import jminvsm.dao.vendas.itens.ItemDAO;
 import jminvsm.model.vendas.factura.itens.Item;
-import static jminvsm.util.AlertUtilities.showDialog;
-import static jminvsm.util.AlertUtilities.showErroAlert;
+import jminvsm.service.ServiceException;
+import jminvsm.service.configuracao.ServiceConfiguracaoSistema;
 
 /**
  *
@@ -18,40 +17,69 @@ import static jminvsm.util.AlertUtilities.showErroAlert;
  */
 public class ServiceItem {
     private ItemDAO itemDao;
+    private final ServiceConfiguracaoSistema serviceConfiguracao;
 
     public ServiceItem() throws SQLException {
         this.itemDao = new ItemDAO();
+        this.serviceConfiguracao = new ServiceConfiguracaoSistema();
     }
     public void registaItens(List<Item> itens){
+        registaItens(itens, serviceConfiguracao.isModuloStockActivo());
+    }
+
+    public void registaItens(List<Item> itens, boolean modoFacturacaoStock){
         if(itens == null || itens.isEmpty()){
-            showErroAlert( "Nao pode ser emitida factura sem itens!");
-            return;
+            throw new ServiceException("Nao pode ser emitida factura sem itens!");
         }
         
         try {
             itemDao.addEntity(itens);
-//            showSuccessAlert( "Itens adicionados a factura com sucesso!");
         } catch (Exception ex) {
-            showDialog( "Erro", "Erro ao emitir factura!");
+            throw new ServiceException("Erro ao emitir factura!", ex);
         }
     }
     
     public void registaCotacao(List<Item> itens){
         if(itens == null || itens.isEmpty()){
-            showErroAlert( "Nao pode ser emitida factura sem itens!");
-            return;
+            throw new ServiceException("Nao pode ser emitida factura sem itens!");
         }
         
         try {
             itemDao.addEntityQuotation(itens);
-//            showSuccessAlert( "Itens adicionados a factura com sucesso!");
         } catch (Exception ex) {
-            showDialog( "Erro", "Erro ao emitir factura!");
+            throw new ServiceException("Erro ao emitir factura!", ex);
         }
     }
     
     public List<Item>  consultaItensFactura(String numero){
         return itemDao.getItensData(numero);
+    }
+
+    public List<Item> carregarItensCotacaoEditaveis(String numeroCotacao) {
+        if (numeroCotacao == null || numeroCotacao.trim().isEmpty()) {
+            throw new ServiceException("Cotacao nao informada!");
+        }
+        return itemDao.getItensCotacaoEditaveis(numeroCotacao);
+    }
+
+    public boolean guardarItensCotacao(String numeroCotacao, List<Item> itens) {
+        if (numeroCotacao == null || numeroCotacao.trim().isEmpty()) {
+            throw new ServiceException("Cotacao nao informada!");
+        }
+        if (itens == null || itens.isEmpty()) {
+            throw new ServiceException("A cotacao deve possuir pelo menos um item!");
+        }
+        return itemDao.substituirItensCotacao(numeroCotacao, itens);
+    }
+
+    public boolean converterCotacaoParaFactura(String numeroCotacao, String numeroFactura) {
+        if (numeroCotacao == null || numeroCotacao.trim().isEmpty()) {
+            throw new ServiceException("Cotacao nao informada!");
+        }
+        if (numeroFactura == null || numeroFactura.trim().isEmpty()) {
+            throw new ServiceException("Factura destino nao informada!");
+        }
+        return itemDao.converterCotacaoParaFactura(numeroCotacao, numeroFactura);
     }
     
 }

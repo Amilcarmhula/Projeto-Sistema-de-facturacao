@@ -1,411 +1,314 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="726.0" prefWidth="1342.0" style="-fx-border-width: 5px; -fx-border-color: #000000b3;" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.stockView.AddStockController">
-   <children>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Entrada de Stock por Lote" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <font>
-                  <Font size="40.0" />
-               </font>
-               <padding>
-                  <Insets left="30.0" />
-               </padding>
-            </Label>
-            <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <styleClass>
-                  <String fx:value="close-categoria" />
-                  <String fx:value="gray-bg" />
-               </styleClass>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="39.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../image/icons/left-arrow.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="5.0" layoutY="55.0" prefHeight="264.0" prefWidth="565.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css">
-         <children>
-            <VBox layoutX="10.0" layoutY="38.0" prefHeight="220.0" prefWidth="552.0">
-               <children>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
-                     <children>
-                        <TextField fx:id="txtIDProduto" alignment="CENTER" disable="true" prefHeight="26.0" prefWidth="87.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox prefHeight="30.0" prefWidth="332.0">
-                     <children>
-                        <Label prefHeight="30.0" text="Produto:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
+<BorderPane prefHeight="1013.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.stockView.AddStockController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" minHeight="68.0" prefHeight="68.0" spacing="12.0" styleClass="secondary-color">
+            <padding>
+                <Insets left="22.0" right="12.0" />
+            </padding>
+            <children>
+                <VBox spacing="2.0">
+                    <children>
+                        <Label text="Entrada de stock por lote" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="25.0" />
+                            </font>
                         </Label>
-                        <TextField fx:id="txtNomeProduto" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="379.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-                           <HBox.margin>
-                              <Insets left="85.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox prefHeight="30.0" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" text="Codigo de Barras:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtCodigoBarrasProduto" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="254.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-                           <HBox.margin>
-                              <Insets left="11.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox prefHeight="30.0" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" text="Categoria:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtCategoriaProduto" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="190.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-                           <HBox.margin>
-                              <Insets left="71.0" />
-                           </HBox.margin>
-                        </TextField>
-                        <Label fx:id="labGrupoProduto" prefHeight="35.0" prefWidth="195.0" text="Tipo(Regional...)" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <padding>
-                              <Insets left="5.0" />
-                           </padding>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox prefHeight="30.0" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" text="Unidade:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtUnidadeProduto" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="190.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-                           <HBox.margin>
-                              <Insets left="81.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox prefHeight="30.0" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" text="Controlo de Stock:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <CheckBox fx:id="chkControloStockProduto" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="8.0" right="13.0" />
-                           </HBox.margin>
-                        </CheckBox>
-                        <Label fx:id="labControloStock" prefHeight="30.0" text="Nao" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-               </children>
-            </VBox>
-            <Label alignment="CENTER" layoutX="-12.0" layoutY="8.0" text="Detalhes do Produto" textFill="WHITE">
-               <font>
-                  <Font size="25.0" />
-               </font>
-               <padding>
-                  <Insets left="30.0" />
-               </padding>
-            </Label>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="5.0" layoutY="324.0" prefHeight="359.0" prefWidth="565.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css">
-         <children>
-            <VBox layoutX="10.0" layoutY="38.0" minHeight="-Infinity" prefHeight="322.0" prefWidth="552.0">
-               <children>
-                  <HBox prefHeight="0.0" prefWidth="445.0">
-                     <children>
-                        <TextField fx:id="txtIDLote" alignment="CENTER" disable="true" prefHeight="26.0" prefWidth="87.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="332.0">
-                     <children>
-                        <Label prefHeight="30.0" prefWidth="130.0" text="Cod do Lote:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtLoteCode" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="161.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-                           <HBox.margin>
-                              <Insets left="32.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" prefWidth="187.0" text="Armazem:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cBoxArmazem" prefHeight="30.0" prefWidth="188.0">
-                           <HBox.margin>
-                              <Insets left="-16.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                        <Label fx:id="labTipoArmazem" prefHeight="30.0" prefWidth="216.0" text="..." textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <padding>
-                              <Insets left="5.0" />
-                           </padding>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" text="Fornecedor:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cBoxFornecedor" prefHeight="30.0" prefWidth="272.0">
-                           <HBox.margin>
-                              <Insets left="65.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" text="Data de Entrada:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <DatePicker fx:id="dataAquisicao" prefHeight="26.0" prefWidth="148.0">
-                           <HBox.margin>
-                              <Insets left="17.0" />
-                           </HBox.margin>
-                        </DatePicker>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" text="Quantidade Inicial:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtQtInicial" alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                        <Label prefHeight="30.0" text="Quantidade Actual:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <TextField fx:id="txtQtActual" alignment="CENTER" prefHeight="30.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" text="Custo Unitario:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtCustoUnitario" alignment="CENTER" prefHeight="30.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                        </TextField>
-                        <Label prefHeight="30.0" text="MT" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox minHeight="-Infinity" prefHeight="30.0" prefWidth="445.0">
-                     <children>
-                        <Label prefHeight="30.0" text="Valor Total:" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <TextField alignment="CENTER" editable="false" prefHeight="30.0" prefWidth="100.0" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css">
-                           <HBox.margin>
-                              <Insets left="66.0" />
-                           </HBox.margin>
-                        </TextField>
-                        <Label prefHeight="30.0" text="MT" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-               </children>
-            </VBox>
-            <Label alignment="CENTER" layoutX="-12.0" layoutY="8.0" text="Detalhes do Lote" textFill="WHITE">
-               <font>
-                  <Font size="25.0" />
-               </font>
-               <padding>
-                  <Insets left="30.0" />
-               </padding>
-            </Label>
-         </children>
-      </AnchorPane>
-      <Button fx:id="btnAdd" layoutX="320.0" layoutY="688.0" mnemonicParsing="false" onAction="#addProdutoFornecido" prefHeight="20.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-         <styleClass>
-            <String fx:value="secondary-color" />
-            <String fx:value="hand-efect" />
-            <String fx:value="shadow-efect" />
-         </styleClass>
-      </Button>
-      <Button layoutX="163.0" layoutY="688.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="148.0" stylesheets="@../../../style/dashboard.css" text="Limpar" textFill="WHITE">
-         <styleClass>
-            <String fx:value="secondary-color" />
-            <String fx:value="hand-efect" />
-            <String fx:value="shadow-efect" />
-         </styleClass>
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Button>
-      <Label alignment="CENTER" layoutX="570.0" layoutY="56.0" text="Estado do Stock do Produto">
-         <font>
-            <Font size="25.0" />
-         </font>
-         <padding>
-            <Insets left="10.0" />
-         </padding>
-      </Label>
-      <Label alignment="CENTER" layoutX="553.0" layoutY="277.0" prefHeight="29.0" prefWidth="767.0" text="Lotes do Produto" AnchorPane.rightAnchor="0.0">
-         <font>
-            <Font size="25.0" />
-         </font>
-         <padding>
-            <Insets left="10.0" />
-         </padding>
-      </Label>
-      <TableView fx:id="tableLote" layoutX="570.0" layoutY="302.0" prefHeight="415.0" prefWidth="762.0" style="-fx-border-color: transparent;">
-         <columns>
-            <TableColumn fx:id="IDLote" prefWidth="38.0" text="ID" />
-            <TableColumn fx:id="codeLote" prefWidth="64.0" text="Lote" />
-            <TableColumn fx:id="armazemLote" prefWidth="162.0" text="Armazem" />
-            <TableColumn fx:id="entredaLote" prefWidth="90.0" text="Entrada" />
-            <TableColumn fx:id="qtdInicialLote" prefWidth="73.0" text="QT. Inicial" />
-            <TableColumn fx:id="qtdActualLote" prefWidth="101.0" text="Qt. Actual" />
-            <TableColumn fx:id="custoUnitarioLote" prefWidth="63.0" text="Custo Uni." />
-            <TableColumn fx:id="totalLote" prefWidth="93.0" text="Total" />
-            <TableColumn fx:id="estadoLote" prefWidth="74.0" text="Estado" />
-         </columns>
-      </TableView>
-      <TableView fx:id="tableResumoStock" layoutX="570.0" layoutY="92.0" prefHeight="182.0" prefWidth="762.0" style="-fx-border-color: transparent;">
-        <columns>
-          <TableColumn fx:id="armazemResumoStock" prefWidth="539.0" text="Armazem" />
-            <TableColumn fx:id="saldoResumoStock" prefWidth="212.0" text="Qt. Em Stock" />
-        </columns>
-      </TableView>
-   </children>
-</AnchorPane>
+                        <Label style="-fx-text-fill: rgba(255,255,255,0.78);" text="Registe um novo lote para o produto seleccionado" />
+                    </children>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnClose" mnemonicParsing="false" onAction="#close" prefHeight="44.0" prefWidth="58.0" styleClass="close-categoria" stylesheets="@../../../style/dashboard.css">
+                    <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../image/icons/cross.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true" prefHeight="808.0" prefWidth="1280.0">
+            <content>
+                <VBox prefHeight="935.0" prefWidth="1265.0" spacing="16.0">
+                    <padding>
+                        <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+                    </padding>
+
+                    <children>
+                        <!-- Produto seleccionado -->
+                        <VBox spacing="12.0" style="-fx-background-color: white; -fx-border-color: #d9e2ec; -fx-border-radius: 7; -fx-background-radius: 7;">
+                            <padding>
+                                <Insets bottom="16.0" left="18.0" right="18.0" top="14.0" />
+                            </padding>
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <children>
+                                        <Label text="Produto seleccionado">
+                                            <font>
+                                                <Font name="System Bold" size="18.0" />
+                                            </font>
+                                        </Label>
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label text="Controlo de stock:" />
+                                        <CheckBox fx:id="chkControloStockProduto" disable="true" focusTraversable="false" mnemonicParsing="false" />
+                                        <Label fx:id="labControloStock" text="Não">
+                                            <font>
+                                                <Font name="System Bold" size="13.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <Separator />
+                                <GridPane hgap="14.0" vgap="9.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="RIGHT" minWidth="110.0" prefWidth="125.0" />
+                                        <ColumnConstraints hgrow="ALWAYS" minWidth="160.0" />
+                                        <ColumnConstraints halignment="RIGHT" minWidth="115.0" prefWidth="135.0" />
+                                        <ColumnConstraints hgrow="ALWAYS" minWidth="160.0" />
+                                    </columnConstraints>
+                                    <children>
+                                        <Label text="ID" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <TextField fx:id="txtIDProduto" editable="false" focusTraversable="false" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                        <Label text="Nome do produto" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                        <TextField fx:id="txtNomeProduto" editable="false" focusTraversable="false" styleClass="text-squared-border" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                        <Label text="Código de barras" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                        <TextField fx:id="txtCodigoBarrasProduto" editable="false" focusTraversable="false" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                        <Label text="Categoria" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <TextField fx:id="txtCategoriaProduto" editable="false" focusTraversable="false" styleClass="text-squared-border" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                                        <Label text="Grupo" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                        <Label fx:id="labGrupoProduto" style="-fx-font-weight: bold;" text="—" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                        <Label text="Unidade" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                        <TextField fx:id="txtUnidadeProduto" editable="false" focusTraversable="false" styleClass="text-squared-border" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                    </children>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
+                                </GridPane>
+                            </children>
+                        </VBox>
+
+                        <!-- Novo lote -->
+                        <VBox spacing="12.0" style="-fx-background-color: white; -fx-border-color: #d9e2ec; -fx-border-radius: 7; -fx-background-radius: 7;">
+                            <padding>
+                                <Insets bottom="18.0" left="18.0" right="18.0" top="14.0" />
+                            </padding>
+                            <children>
+                                <Label text="Novo lote">
+                                    <font>
+                                        <Font name="System Bold" size="18.0" />
+                                    </font>
+                                </Label>
+                                <Separator />
+                                <GridPane hgap="14.0" vgap="10.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="RIGHT" minWidth="125.0" prefWidth="145.0" />
+                                        <ColumnConstraints hgrow="ALWAYS" minWidth="180.0" />
+                                        <ColumnConstraints halignment="RIGHT" minWidth="125.0" prefWidth="145.0" />
+                                        <ColumnConstraints hgrow="ALWAYS" minWidth="180.0" />
+                                    </columnConstraints>
+                                    <children>
+                                        <Label text="Código do lote *" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <TextField fx:id="txtLoteCode" promptText="Código do lote" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                        <Label text="Data de entrada *" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                        <DatePicker fx:id="dataAquisicao" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                        <Label text="Armazém *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                        <ComboBox fx:id="cBoxArmazem" maxWidth="1.7976931348623157E308" promptText="Seleccione o armazém" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                        <Label text="Fornecedor *" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <ComboBox fx:id="cBoxFornecedor" maxWidth="1.7976931348623157E308" promptText="Seleccione o fornecedor" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                                        <Label text="Tipo de armazém" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                        <Label fx:id="labTipoArmazem" style="-fx-font-weight: bold;" text="—" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                        <Label text="Stock actual" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                        <TextField fx:id="txtQtInicial" editable="false" focusTraversable="false" styleClass="text-squared-border" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+
+                                        <Label text="Quantidade de entrada *" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                        <TextField fx:id="txtQtActual" alignment="CENTER_RIGHT" promptText="0" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                        <Label text="Custo unitário *" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                        <TextField fx:id="txtCustoUnitario" alignment="CENTER_RIGHT" promptText="0,00" styleClass="text-squared-border" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+
+                                        <Label text="Valor total estimado" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                        <TextField fx:id="txtValorTotal" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" promptText="0,00 MZN" style="-fx-font-size: 17px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="4" />
+                                    </children>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
+                                </GridPane>
+
+                                <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                    <children>
+                                        <Button mnemonicParsing="false" onAction="#resetCampos" prefWidth="150.0" styleClass="text-squared-border" text="Limpar" />
+                                        <Button fx:id="btnAdd" defaultButton="true" mnemonicParsing="false" onAction="#addProdutoFornecido" prefWidth="150.0" styleClass="primary-color" text="Registar entrada" textFill="WHITE">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Button>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                        <!-- Transferencia entre armazens -->
+                        <VBox spacing="12.0" style="-fx-background-color: white; -fx-border-color: #d9e2ec; -fx-border-radius: 7; -fx-background-radius: 7;">
+                            <padding>
+                                <Insets bottom="18.0" left="18.0" right="18.0" top="14.0" />
+                            </padding>
+                            <children>
+                                <Label text="Transferencia entre armazens">
+                                    <font>
+                                        <Font name="System Bold" size="18.0" />
+                                    </font>
+                                </Label>
+                                <Separator />
+                                <GridPane hgap="14.0" vgap="10.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="RIGHT" minWidth="125.0" prefWidth="145.0" />
+                                        <ColumnConstraints hgrow="ALWAYS" minWidth="180.0" />
+                                        <ColumnConstraints halignment="RIGHT" minWidth="125.0" prefWidth="145.0" />
+                                        <ColumnConstraints hgrow="ALWAYS" minWidth="180.0" />
+                                    </columnConstraints>
+                                    <children>
+                                        <Label text="Origem *" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <ComboBox fx:id="cBoxArmazemOrigemTransferencia" maxWidth="1.7976931348623157E308" promptText="Armazem de origem" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                        <Label text="Destino *" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                        <ComboBox fx:id="cBoxArmazemDestinoTransferencia" maxWidth="1.7976931348623157E308" promptText="Armazem de destino" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                        <Label text="Quantidade *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                        <TextField fx:id="txtQuantidadeTransferencia" alignment="CENTER_RIGHT" promptText="0" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                        <HBox alignment="CENTER_RIGHT" spacing="10.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                                            <children>
+                                                <Button fx:id="btnTransferirStock" mnemonicParsing="false" onAction="#transferirStock" prefWidth="170.0" styleClass="primary-color" text="Transferir stock" textFill="WHITE">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                    <rowConstraints>
+                                        <RowConstraints />
+                                        <RowConstraints />
+                                    </rowConstraints>
+                                </GridPane>
+                            </children>
+                        </VBox>
+
+                        <!-- Resumo e lotes -->
+                        <SplitPane dividerPositions="0.3" prefHeight="161.0" prefWidth="1229.0" style="-fx-background-color: s;" VBox.vgrow="ALWAYS">
+                            <items>
+                                <VBox spacing="9.0">
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                    <children>
+                                        <Label text="Stock por armazém">
+                                            <font>
+                                                <Font name="System Bold" size="17.0" />
+                                            </font>
+                                        </Label>
+                                        <TableView fx:id="tableResumoStock" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="armazemResumoStock" minWidth="135.0" prefWidth="242.0" text="Armazém" />
+                                                <TableColumn fx:id="saldoResumoStock" minWidth="80.0" prefWidth="106.0" text="Saldo" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+
+                                <VBox spacing="9.0">
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                    <children>
+                                        <Label text="Histórico de lotes">
+                                            <font>
+                                                <Font name="System Bold" size="17.0" />
+                                            </font>
+                                        </Label>
+                                        <TableView fx:id="tableLote" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="IDLote" minWidth="48.0" prefWidth="55.0" text="ID" />
+                                                <TableColumn fx:id="codeLote" minWidth="90.0" prefWidth="105.0" text="Lote" />
+                                                <TableColumn fx:id="armazemLote" minWidth="110.0" prefWidth="135.0" text="Armazém" />
+                                                <TableColumn fx:id="entredaLote" minWidth="100.0" prefWidth="115.0" text="Entrada" />
+                                                <TableColumn fx:id="qtdInicialLote" minWidth="85.0" prefWidth="95.0" text="Qtd. inicial" />
+                                                <TableColumn fx:id="qtdActualLote" minWidth="85.0" prefWidth="95.0" text="Qtd. actual" />
+                                                <TableColumn fx:id="custoUnitarioLote" minWidth="100.0" prefWidth="115.0" text="Custo unit." />
+                                                <TableColumn fx:id="totalLote" minWidth="100.0" prefWidth="115.0" text="Total" />
+                                                <TableColumn fx:id="estadoLote" minWidth="80.0" prefWidth="90.0" text="Estado" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+                            </items>
+                        </SplitPane>
+
+                        <!-- Componentes legados preservados para compatibilidade -->
+                        <AnchorPane managed="false" visible="false">
+                            <children>
+                                <TextField fx:id="txtIDLote" />
+                                <TextField fx:id="txtIDArmazem" />
+                                <TextField fx:id="txtIDFornecedor" />
+                                <TextField fx:id="txtPesquisaArmazem" />
+                                <TextField fx:id="txtPesquisafrnecedor" />
+                                <TextField fx:id="txtQuantidade" />
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+   <stylesheets>
+      <URL value="@../../../style/dashboard.css" />
+      <URL value="@../../../style/buttonConfig.css" />
+   </stylesheets>
+</BorderPane>

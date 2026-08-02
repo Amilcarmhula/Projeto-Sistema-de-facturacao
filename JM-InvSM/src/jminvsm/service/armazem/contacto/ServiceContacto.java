@@ -9,9 +9,7 @@ import javafx.collections.ObservableList;
 import jminvsm.dao.armazem.contacto.ContactoArmazemDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.armazem.contacto.ContactoArmazem;
-import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -36,19 +34,16 @@ public class ServiceContacto {
     public void registar(String responsavel, String contacto, String email, Integer id_arm) {
         setOpsSuccess(false);
         if (responsavel == null || responsavel.isEmpty()) {
-            showErroAlert("Responsavel nao pode ser nulo!");
-            return;
+            throw new ServiceException("Responsavel nao pode ser nulo!");
         }
         if (contacto == null || contacto.isEmpty()) {
-            showErroAlert( "Numero de contacto nao introduzido!");
-            return;
+            throw new ServiceException("Numero de contacto nao introduzido!");
         }
         if (email == null || email.isEmpty()) {
             email = "armazem.sem.email@sememail.com";
         }
         if (id_arm == null) {
-            showErroAlert( "Armazem nao selecionado!");
-            return;
+            throw new ServiceException("Armazem nao selecionado!");
         }
 
         ContactoArmazem x = new ContactoArmazem();
@@ -61,26 +56,22 @@ public class ServiceContacto {
 
         if (contatoArmazemDao.addEntity(x)) {
             setOpsSuccess(true);
-            showSuccessAlert("Contacto adicionado com sucesso!");
         }
     }
     
     public void actualizar(String responsavel, String contacto, String email, Integer id_contacto) {
         setOpsSuccess(false);
         if (responsavel == null || responsavel.isEmpty()) {
-            showErroAlert( "Responsavel nao pode ser nulo!");
-            return;
+            throw new ServiceException("Responsavel nao pode ser nulo!");
         }
         if (contacto == null || contacto.isEmpty()) {
-            showErroAlert( "Numero de contacto nao introduzido!");
-            return;
+            throw new ServiceException("Numero de contacto nao introduzido!");
         }
         if (email == null || email.isEmpty()) {
             email = "armazem.sem.email@sememail.com";
         }
         if (id_contacto == null) {
-            showErroAlert( "Armazem nao selecionado!");
-            return;
+            throw new ServiceException("Contacto nao selecionado!");
         }
 
         ContactoArmazem x = new ContactoArmazem();
@@ -90,7 +81,6 @@ public class ServiceContacto {
 
         if (contatoArmazemDao.updateEntityByID(x, id_contacto)) {
             setOpsSuccess(true);
-            showSuccessAlert("Contacto actualizado com sucesso!");
         }
     }
     
@@ -107,7 +97,6 @@ public class ServiceContacto {
         
         if (contatoArmazemDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo excluido com sucesso!");
         }
     }
 }

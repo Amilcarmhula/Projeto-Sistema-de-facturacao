@@ -92,7 +92,9 @@ public class ServiceProdutoDesconto {
         pd.setDataInicio(dataInicio);
         pd.setDataFim(dataFim);
         if (dao.addEntity(pd)) {
+//            dao.addEntity(pd);
             dao.callAplicaDesconto(pd);
+            dao.callDesativaDescontoProduto(pd);
             setOpsSuccess(true);
             showSuccessAlert("Desconto registado com sucesso!");
         }

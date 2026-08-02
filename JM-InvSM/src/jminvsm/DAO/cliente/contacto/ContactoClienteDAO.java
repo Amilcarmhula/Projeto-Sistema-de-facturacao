@@ -55,7 +55,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     public boolean updateEntityByID(ContactoCliente t, int id) {
         boolean isSuccess = false;
         String sql = "update contacto_cliente set contacto=?, email=? ,website=? ,"
-                    + "pessoa_de_contacto=?, fk_id_usuario=? where id=?";
+                    + "pessoa_de_contacto=?, fk_id_usuario=? where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -82,7 +82,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     @Override
     public ObservableList<ContactoCliente> listAllEntities() {
         ObservableList<ContactoCliente> lista = FXCollections.observableArrayList();
-        String sql = "select * from contacto_cliente";
+        String sql = "select * from contacto_cliente WHERE deleteStatus=0";
          try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -106,7 +106,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
     @Override
     public ObservableList<ContactoCliente> searchEntityByCLiente(int idCliente) {
         ObservableList<ContactoCliente> lista = FXCollections.observableArrayList();
-        String sql = "select * from contacto_cliente where fk_id_cliente=?";
+        String sql = "select * from contacto_cliente where fk_id_cliente=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, idCliente);
@@ -133,21 +133,11 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
 
     @Override
     public boolean deleteEntity(int x) {
-        boolean isSuccess = false;
-        String sql = "delete from contacto_cliente where id=?";
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, x);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
-            }
-
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("contacto_cliente", x);
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
         } 
-        return isSuccess;
+        return false;
     }
 }

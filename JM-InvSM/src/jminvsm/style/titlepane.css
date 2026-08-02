@@ -1,0 +1,47 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jun 25, 2026, 4:05:09 PM
+    Author     : JM-Tecnologias
+*/
+
+.glass-effect {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(255, 255, 255, 0.30);
+    /* sombra */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0.2, 0, 4);
+}
+
+.title-pane{
+    -fx-background-color: transparent;
+    -fx-control-inner-background:  transparent;
+}
+
+.title-pane .title-header-background {
+    -fx-background-color: rgba(255, 255, 255, 0.08); /* glass leve */
+    -fx-background-insets: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.2, 0, 2);
+}
+
+.title {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-background-radius: 8 8 0 0;
+    -fx-padding: 6 14 6 14;
+}
+
+
+.tile .title-label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.title:hover {
+    -fx-background-color: #4a4a4a;
+}
+
+.title:selected {
+    -fx-background-color: #0f75bb;
+}

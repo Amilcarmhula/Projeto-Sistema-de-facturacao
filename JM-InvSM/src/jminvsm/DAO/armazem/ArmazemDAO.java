@@ -48,7 +48,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
     public boolean updateEntityByID(Armazem c, int id) {
         boolean isSuccess = false;
         String sql = "update armazem set tipo=?,nome=?,descricao=?"
-                + " where id=?";
+                + " where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -76,7 +76,8 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
         String sql = "SELECT a.id, a.tipo, a.nome, a.descricao, a.estado, "
                 + "GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos "
                 + "FROM armazem a "
-                + "LEFT JOIN contacto_armazem ct ON ct.idArmazem = a.id "
+                + "LEFT JOIN contacto_armazem ct ON ct.idArmazem = a.id AND ct.deleteStatus = 0 "
+                + "WHERE a.deleteStatus = 0 "
                 + "GROUP BY a.id, a.tipo, a.nome, a.descricao, a.estado";
         try (
                 Connection con = Conexao.getConexao();
@@ -113,7 +114,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
     @Override
     public Armazem getLastEntity() {
         Armazem c = null;
-        String sql = "SELECT id,tipo,nome,descricao FROM armazem ORDER BY id DESC LIMIT 1;";
+        String sql = "SELECT id,tipo,nome,descricao FROM armazem WHERE deleteStatus=0 ORDER BY id DESC LIMIT 1;";
 
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -136,7 +137,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
     @Override
     public Armazem getEntityByID(int id) {
         Armazem c = null;
-        String sql = "SELECT id,tipo,nome,descricao FROM armazem where id=?";
+        String sql = "SELECT id,tipo,nome,descricao FROM armazem where id=? AND deleteStatus=0";
 
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -158,31 +159,18 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
 
     @Override
     public boolean deleteEntity(int x) {
-        boolean isSuccess = false;
-        String sql = "delete from armazem WHERE id = ?";
-
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, x);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
-            }
-
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("armazem", x);
         } catch (SQLException ex) {
             showDialog("Erro de exclusao de Armazem", "Detalhes: " + ex);
         }
-
-        return isSuccess;
-
+        return false;
     }
 
     @Override
     public ObservableList<Armazem> listAllArmazens() {
         ObservableList<Armazem> lista = FXCollections.observableArrayList();
-        String sql = "select * from armazem";
+        String sql = "select * from armazem WHERE deleteStatus=0";
 
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {

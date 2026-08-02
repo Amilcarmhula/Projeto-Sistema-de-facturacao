@@ -47,7 +47,7 @@ public class ServiceTaxaImpostos {
         }
         Imposto t = new Imposto();
         t.setNome(identificador);
-        t.setPercentagem(percentagem/100);
+        t.setPercentagem(percentagem);
         t.setDescricao(descricao);
         
         if(taxaDao.addEntity(t)){
@@ -78,7 +78,7 @@ public class ServiceTaxaImpostos {
         }
         Imposto t = new Imposto();
         t.setNome(identificador);
-        t.setPercentagem(percentagem/100);
+        t.setPercentagem(percentagem);
         t.setDescricao(descricao);
         
         if(taxaDao.updateEntityByID(t, id)){

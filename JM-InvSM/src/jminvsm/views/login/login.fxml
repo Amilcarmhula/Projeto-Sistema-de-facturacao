@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.login.LoginController">
+   <right>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: transparent;">
+               <children>
+                  <Button fx:id="btnlogin" layoutX="85.0" layoutY="445.0" mnemonicParsing="false" onAction="#log" prefHeight="20.0" prefWidth="230.0" stylesheets="@../../style/dashboard.css" text="Entrar">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="primary-color" />
+                        <String fx:value="hand-efect" />
+                        <String fx:value="shadow-efect" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="btnClose" mnemonicParsing="false" onAction="#close" prefHeight="23.0" prefWidth="41.0" styleClass="close" stylesheets="@../../style/loginStyle.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+                     <graphic>
+                        <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../image/icons/close_17879231.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <PasswordField fx:id="txtpassword" layoutX="70.0" layoutY="380.0" onKeyPressed="#callLog" prefHeight="35.0" prefWidth="260.0" promptText="Senha" style="-fx-background-color: transparent; -fx-border-color: #17b5c3; -fx-border-width: 0px 0px 2px 0px;" text="senha123">
+                     <font>
+                        <Font name="Berlin Sans FB" size="16.0" />
+                     </font>
+                  </PasswordField>
+                  <TextField fx:id="txtusarname" layoutX="70.0" layoutY="327.0" onKeyPressed="#callLog" prefHeight="35.0" prefWidth="260.0" promptText="Usuário" style="-fx-background-color: transparent; -fx-border-color: #17b5c3; -fx-border-width: 0px 0px 2px 0px;" text="root">
+                     <font>
+                        <Font name="Berlin Sans FB" size="16.0" />
+                     </font>
+                  </TextField>
+                  <Label alignment="CENTER" layoutX="16.0" layoutY="61.0" prefHeight="35.0" prefWidth="400.0" styleClass="texttitle" stylesheets="@../../style/loginStyle.css" text="Login" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="50.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </right>
+   <left>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane prefHeight="600.0" prefWidth="400.0" styleClass="primary-color" stylesheets="@../../style/dashboard.css">
+               <children>
+                  <Label alignment="CENTER" layoutY="345.0" text="JM-Invoice Stock Master" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="295.0" fitWidth="357.0" layoutX="22.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../image/LOGOTIPO.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </left>
+</BorderPane>

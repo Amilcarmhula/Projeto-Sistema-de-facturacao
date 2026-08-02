@@ -39,7 +39,6 @@ DROP TRIGGER IF EXISTS _updateCaixa_ContaCorrente;
 DROP TRIGGER IF EXISTS _updateFacturaPagamento_Avista;
 
 
-
 DELIMITER //
 CREATE TRIGGER Tg_reservaStock_validar
 BEFORE INSERT ON reserva_stock

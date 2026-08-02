@@ -25,8 +25,10 @@ package jminvsm.service.stock;
 
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 import jminvsm.dao.stock.StockDAO;
 import jminvsm.model.stock.Stock;
+import jminvsm.service.configuracao.ServiceConfiguracaoSistema;
 
 /**
  *
@@ -34,33 +36,60 @@ import jminvsm.model.stock.Stock;
  */
 public class ServiceStock {
     private final StockDAO stockDao;
+    private final ServiceConfiguracaoSistema serviceConfiguracao;
     
     public ServiceStock() throws SQLException{
         this.stockDao = new StockDAO();
+        this.serviceConfiguracao = new ServiceConfiguracaoSistema();
     }
     
     // metodo que buscao produtos mara mostrar na tabela de inventarios. CORRIGIR
     public ObservableList<Stock> listaStockProdutos(Integer idArm){
+        if (!serviceConfiguracao.isModuloStockActivo()) {
+            return FXCollections.observableArrayList();
+        }
         return stockDao.listStock(idArm);
+    }
+
+    public ObservableList<Stock> listaProdutosParaVenda(Integer idArm) {
+        if (serviceConfiguracao.isModuloStockActivo()) {
+            return stockDao.listStock(idArm);
+        }
+        return stockDao.listProdutosParaVendaSemStock(idArm);
     }
     
     public ObservableList<Stock> stockBaixo(){
+        if (!serviceConfiguracao.isModuloStockActivo()) {
+            return FXCollections.observableArrayList();
+        }
         return stockDao.loadLowStock();
     }
     
     public ObservableList<Stock> consultaStock(Integer idCat, Integer idArm){
+        if (!serviceConfiguracao.isModuloStockActivo()) {
+            return FXCollections.observableArrayList();
+        }
         return stockDao.getStock(idCat, idArm);
     }
     
     public Stock consultaDetalhesProduto(Integer id){
+        if (!serviceConfiguracao.isModuloStockActivo()) {
+            return null;
+        }
         return stockDao.getProdutoForStock(id);
     }
     
     public ObservableList<Stock> getResumo(Integer idPro){
+        if (!serviceConfiguracao.isModuloStockActivo()) {
+            return FXCollections.observableArrayList();
+        }
         return stockDao.getResumoStock(idPro);
     }
     
     public int contaSaldoStock(Integer idCat, Integer idArm){
+        if (!serviceConfiguracao.isModuloStockActivo()) {
+            return 0;
+        }
         return stockDao.countStock(idCat, idArm);
     }
     

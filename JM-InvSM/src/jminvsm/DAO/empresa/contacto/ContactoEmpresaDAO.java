@@ -46,7 +46,7 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
     @Override
     public void updateEntityByID(ContactoEmpresa t, int id) {
         String sql = "update contacto_empresa set contacto=?, email=?, "
-                + "website=?, fk_id_empresa=? where id=?";
+                + "website=?, fk_id_empresa=? where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -70,7 +70,7 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
     @Override
     public List<ContactoEmpresa> listAllEntities() {
         List<ContactoEmpresa> lista = new ArrayList<>();
-        String sql = "select * from contacto_empresa";
+        String sql = "select * from contacto_empresa WHERE deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet result = ps.executeQuery()) {
@@ -95,7 +95,7 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
     @Override
     public ContactoEmpresa searchEntityByName(String contact) {
         ContactoEmpresa c = null;
-        String sql = "select * from contacto_empresa where contacto like ?";
+        String sql = "select * from contacto_empresa where contacto like ? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, "%" + contact + "%");
@@ -120,12 +120,8 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
 
     @Override
     public void deleteEntityByROOT(int id) {
-        String sql = "delete from contacto_empresa where id=?";
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            ps.executeUpdate();
+        try {
+            jminvsm.util.SoftDeleteUtils.softDelete("contacto_empresa", id);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao deletar Contacto: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
@@ -134,13 +130,8 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
 
     @Override
     public void deleteEntityByUSER(int id) {
-        String sql = "update contacto_empresa set active_or_not=false where id=?";
-
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            ps.executeUpdate();
+        try {
+            jminvsm.util.SoftDeleteUtils.softDelete("contacto_empresa", id);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao deletar Contacto: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);

@@ -51,7 +51,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
     @Override
     public void updateEntityByID(EnderecoEmpresa t, int id) {
         String sql = "update endereco_empresa set provincia=?,cidade=?,bairro=?,"
-                + "avenida=?,rua=?,codigo_postal=?,numero=?, tipo=?, fk_id_empresa=? where id=?";
+                + "avenida=?,rua=?,codigo_postal=?,numero=?, tipo=?, fk_id_empresa=? where id=? AND deleteStatus=0";
 
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -79,7 +79,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
     @Override
     public List<EnderecoEmpresa> listAllEntities() {
         List<EnderecoEmpresa> lista = new ArrayList<>();
-        String sql = "select * from endereco_empresa";
+        String sql = "select * from endereco_empresa WHERE deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet result = ps.executeQuery()) {
@@ -109,7 +109,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
     @Override
     public EnderecoEmpresa searchEntityByName(String contact) {
         EnderecoEmpresa c = null;
-        String sql = "select * from endereco_empresa where bairro like ?";
+        String sql = "select * from endereco_empresa where bairro like ? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, "%" + contact + "%");
@@ -140,13 +140,8 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
 
     @Override
     public void deleteEntityByROOT(int id) {
-        String sql = "delete from endereco_empresa where id=?";
-
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            ps.executeUpdate();
+        try {
+            jminvsm.util.SoftDeleteUtils.softDelete("endereco_empresa", id);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco da Empresa: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);
@@ -155,13 +150,8 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
 
     @Override
     public void deleteEntityByUSER(int id) {
-        String sql = "update endereco_empresa set active_or_not=false where id=?";
-
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            ps.executeUpdate();
+        try {
+            jminvsm.util.SoftDeleteUtils.softDelete("endereco_empresa", id);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco da Empresa: "
                     + ex, "Informação", JOptionPane.ERROR_MESSAGE);

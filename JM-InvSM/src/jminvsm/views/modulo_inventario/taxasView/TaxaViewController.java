@@ -14,8 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,7 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.imposto.Imposto;
 import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
 import jminvsm.util.ButtonUtilities;
@@ -82,12 +80,12 @@ public class TaxaViewController implements Initializable {
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
-            SysFact.setData("");
+            SessaoAplicacao.setData("");
             LoadAndMoveUtilities.setEstadoStage(false);
             LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
-            SysFact.setData("");
+            SessaoAplicacao.setData("");
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
@@ -123,7 +121,7 @@ public class TaxaViewController implements Initializable {
             t.setId(t.getId());
             t.setDescricao(t.getDescricao());
             t.setNome(t.getNome());
-            t.setPercentagem(t.getPercentagem()*100);
+            t.setPercentagem(t.getPercentagem());
             lista.add(t);
         }
         listaTaxas = FXCollections.observableArrayList(lista);
@@ -133,28 +131,28 @@ public class TaxaViewController implements Initializable {
         percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagem"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
-        FilteredList<Imposto> dadosFiltrados = new FilteredList<>(listaTaxas, b -> true);
-        txtTaxa.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
+//        FilteredList<Imposto> dadosFiltrados = new FilteredList<>(listaTaxas, b -> true);
+//        txtTaxa.textProperty().addListener((observable, oldValue, newValue) -> {
+//            dadosFiltrados.setPredicate(x -> {
+//
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//                String filtroCaixaBaixa = newValue.toLowerCase();
+//                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+//                    return true;
+//                } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//
+//            });
+//        });
+//        SortedList<Imposto> sortedData = new SortedList<>(dadosFiltrados);
+//        sortedData.comparatorProperty().bind(tabelaTaxa.comparatorProperty());
 
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else {
-                    return false;
-                }
-
-            });
-        });
-        SortedList<Imposto> sortedData = new SortedList<>(dadosFiltrados);
-        sortedData.comparatorProperty().bind(tabelaTaxa.comparatorProperty());
-
-        tabelaTaxa.setItems(sortedData);
+        tabelaTaxa.setItems(listaTaxas);
     }
 
     public void addTaxa() {
@@ -185,7 +183,7 @@ public class TaxaViewController implements Initializable {
             txtTaxa.setText(x.getNome());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
             deleteItem(event, x);
-            SysFact.setData(x);
+            SessaoAplicacao.setData(x);
         }
     }
 
@@ -225,3 +223,4 @@ public class TaxaViewController implements Initializable {
     }
 
 }
+

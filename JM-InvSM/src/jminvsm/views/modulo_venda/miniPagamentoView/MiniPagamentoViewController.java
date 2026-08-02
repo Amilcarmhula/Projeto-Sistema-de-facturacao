@@ -25,16 +25,18 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.empresa.Empresa;
 import jminvsm.model.metodo_pagamento.MetodoPagamento;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
+import jminvsm.service.ServiceException;
 import jminvsm.service.metodoPagamento.ServiceMetodoPagamento;
 import jminvsm.service.transacoes.ServiceTransacoes;
 import jminvsm.service.vendas.factura.ServiceFactura;
 import jminvsm.util.LoadAndMoveUtilities;
 import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  * FXML Controller class
@@ -77,29 +79,28 @@ public class MiniPagamentoViewController implements Initializable {
         if (f.getEstado().equals("Paga") || f.getEstado().equals("Cancelada")) {
             
             if (LoadAndMoveUtilities.returnToStage()) {
-                SysFact.setData(null);
+                SessaoAplicacao.setData(null);
                 LoadAndMoveUtilities.setEstadoStage(false);
                 LoadAndMoveUtilities.showStage(null, null);
                 ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
             }
             if (LoadAndMoveUtilities.returnToBaseAnchor()) {
-                SysFact.setData(null);
+                SessaoAplicacao.setData(null);
                 LoadAndMoveUtilities.setEstadoPopUP(false);
                 LoadAndMoveUtilities.showAsPopUP(null, null);
                 ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
             }
-//            service.geraRelatorio(labNumeroFactura.getText());
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         valorRecebidoListener();
-        this.userData = SysFact.getUserData();
-        this.empresaData = SysFact.getEmpresaData();
+        this.userData = SessaoAplicacao.getUserData();
+        this.empresaData = SessaoAplicacao.getEmpresaData();
         try {
             service = new ServiceFactura();
-            labNumeroFactura.setText((String) SysFact.getData());
+            labNumeroFactura.setText((String) SessaoAplicacao.getData());
             populateComboMetodoPagamento();
             showTotalFactura();
             // TODO
@@ -191,10 +192,16 @@ public class MiniPagamentoViewController implements Initializable {
         }else{
             valorPago = valorRecebido;
         }
-        st.registapagamentoFacturaAvista(dataPagamento, valorRecebido, valorPago, getTroco(),
-                txtDescricao.getText(), empresaData.getContaBancaria().getId(),
-                metodo.getId(), labNumeroFactura.getText(), userData);
+        try {
+            st.registapagamentoFacturaAvista(dataPagamento, valorRecebido, valorPago, getTroco(),
+                    txtDescricao.getText(), empresaData.getContaBancaria().getId(),
+                    metodo.getId(), labNumeroFactura.getText(), userData);
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (st.isOpsSuccess()) {
+            showSuccessAlert("Pagamento registado com sucesso!");
             txtDescricao.setText("");
             txtValorRecebido.setText("");
             showTotalFactura();
@@ -209,3 +216,4 @@ public class MiniPagamentoViewController implements Initializable {
     }
 
 }
+

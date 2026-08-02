@@ -26,12 +26,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.service.ServiceException;
 import jminvsm.service.cliente.ServiceCliente;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  * FXML Controller class
@@ -59,6 +62,9 @@ public class ClienteViewController implements Initializable {
     private TableColumn<Cliente, String> contactotabelaCliente;
 
     @FXML
+    private TableColumn<Cliente, String> enderecotabelaCliente;
+
+    @FXML
     private TableColumn<Cliente, String> nometabelaCliente;
 
     @FXML
@@ -84,12 +90,13 @@ public class ClienteViewController implements Initializable {
         /* O caminho para o FXML a ser carregado deve considerar o pacote 
         onde se encontra o metodo estatico LoadAndMoveUtilities.loadFXML(path)
          */
-        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/clienteView/clienteAdd/addCliente.fxml");
+        LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/clienteView/clienteAdd/cliente_unificado/addCliente.fxml");
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.userData = SysFact.getUserData();
+        tabelaCliente.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        this.userData = SessaoAplicacao.getUserData();
         try {
             serviceCliente = new ServiceCliente();
             showClientes();
@@ -118,6 +125,8 @@ public class ClienteViewController implements Initializable {
         nuittabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nuit_cli"));
         contactotabelaCliente.setCellValueFactory(cellData
                 -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
+        enderecotabelaCliente.setCellValueFactory(cellData
+                -> new SimpleStringProperty(String.valueOf(cellData.getValue().printEnderecos())));
 
         FilteredList<Cliente> dadosFiltrados = new FilteredList<>(listaClientes, b -> true);
         txtPesquisa.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -154,7 +163,7 @@ public class ClienteViewController implements Initializable {
             txtIDCliente.setText(String.valueOf(c.getId()));
             deleteItem(event, c);
             Cliente cc = serviceCliente.consultaClienteByID(Integer.valueOf(txtIDCliente.getText()));
-            SysFact.setData(cc);
+            SessaoAplicacao.setData(cc);
             ButtonUtilities.buttonChangeText(btnAdd, txtIDCliente);
 //            btnAdd.setText("Actualizar");
         }
@@ -173,10 +182,18 @@ public class ClienteViewController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                serviceCliente.excluir(x.getId());
-                showClientes();
+                try {
+                    serviceCliente.excluir(x.getId());
+                    if (serviceCliente.isOpsSuccess()) {
+                        showSuccessAlert("Exclusao de registo com sucesso.");
+                        showClientes();
+                    }
+                } catch (ServiceException ex) {
+                    showErroAlert(ex.getMessage());
+                }
             } else if (result.get() == btnCancel) {
             }
         }
     }
 }
+

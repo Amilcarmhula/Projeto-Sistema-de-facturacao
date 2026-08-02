@@ -58,7 +58,6 @@ public class FilePathFinderUtilities {
                     if (file.getName().equalsIgnoreCase(searchName)) {
                         String foundPath;
                         if (!file.getAbsolutePath().contains("build")) {
-//                            foundPath = file.getAbsolutePath().replace(System.getProperty("user.dir")+"\\src\\sysfact\\reports\\", "../");
                             foundPath = file.getAbsolutePath();
                             System.out.println(foundPath);
 //                            return foundPath.replace("\\", "/"); // Retorna o caminho do arquivo encontrado
@@ -81,6 +80,6 @@ public class FilePathFinderUtilities {
     }
 
     public static void main(String[] args) {
-        System.out.println(FilePathFinderUtilities.fxmlPathBuilder(new File(System.getProperty("user.dir")), "MiniPagamentoView.fxml"));
+        System.out.println(FilePathFinderUtilities.absolutePathBuilder(new File(System.getProperty("user.dir")), "LOGOTIPO.png"));
     }
 }

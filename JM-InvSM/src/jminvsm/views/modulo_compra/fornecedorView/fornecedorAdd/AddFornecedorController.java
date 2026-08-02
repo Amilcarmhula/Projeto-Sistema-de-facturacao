@@ -24,19 +24,23 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.fornecedor.contacto.ContactoFornecedor;
 import jminvsm.model.fornecedor.endereco.EnderecoFornecedor;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.service.ServiceException;
 import jminvsm.service.fornecedor.ServiceFornecedor;
 import jminvsm.service.fornecedor.contacto.ServiceContacto;
 import jminvsm.service.fornecedor.endereco.ServiceEndereco;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  * FXML Controller class
@@ -148,7 +152,7 @@ public class AddFornecedorController implements Initializable {
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToBaseAnchor()) {
-            SysFact.setData(null);
+            SessaoAplicacao.setData(null);
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
@@ -184,8 +188,11 @@ public class AddFornecedorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.userData = SysFact.getUserData();
-        combTipoCliente.setItems(FXCollections.observableArrayList("Pessoa Física", "Jurídica"));
+        this.userData = SessaoAplicacao.getUserData();
+        // Aplicado no controlador para compatibilidade com Scene Builder/JavaFX.
+        tabelaContacto.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabelaEndereco.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        combTipoCliente.setItems(FXCollections.observableArrayList("Pessoa FÃ­sica", "JurÃ­dica"));
         combProvincia.setItems(FXCollections.observableArrayList(
                 "Maputo(Cidade)",
                 "Maputo(Provincia)",
@@ -200,9 +207,9 @@ public class AddFornecedorController implements Initializable {
                 "Cabo Delgado"
         )
         );
-        if (SysFact.getData() != null) {
-            if (SysFact.getData() instanceof String) {
-                txtIDCliente.setText((String) SysFact.getData());
+        if (SessaoAplicacao.getData() != null) {
+            if (SessaoAplicacao.getData() instanceof String) {
+                txtIDCliente.setText((String) SessaoAplicacao.getData());
             }
         }
 
@@ -219,6 +226,7 @@ public class AddFornecedorController implements Initializable {
         }
         ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
         ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
+        ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
 
     }
 
@@ -251,7 +259,7 @@ public class AddFornecedorController implements Initializable {
 
     public void showEndereco() {
         if ("".equals(txtIDCliente.getText())) {
-            listaEndereco = serviceEndereco.getEnderecos();
+            listaEndereco = FXCollections.observableArrayList();
         } else {
             listaEndereco = serviceEndereco.consultaEnderecosPorFornecedor(Integer.parseInt(txtIDCliente.getText()));
         }
@@ -272,7 +280,7 @@ public class AddFornecedorController implements Initializable {
 
     public void showContactos() {
         if ("".equals(txtIDCliente.getText())) {
-            listaContactos = serviceContacto.getContactos();
+            listaContactos = FXCollections.observableArrayList();
         } else {
             listaContactos = serviceContacto.consultaContactoPorFornecedor(Integer.parseInt(txtIDCliente.getText()));
         }
@@ -290,28 +298,54 @@ public class AddFornecedorController implements Initializable {
     Funcoes de Adicao de registros
      */
     public void addFornecedor() {
-        serviceFornecedor.registar(txtRazao.getText(), combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText().equals("")?"0":txtNuit.getText()));
+        try {
+            serviceFornecedor.registar(txtRazao.getText(), combTipoCliente.getValue(), numeroOuZero(txtNuit.getText()));
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceFornecedor.isOpsSuccess()) {
+            showSuccessAlert("Registo adicionado com sucesso.");
             showCliente();
             ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
         }
     }
 
     public void addContacto() {
-        Fornecedor forn = serviceFornecedor.consultaFornecedor(Integer.parseInt(txtIDCliente.getText().equals("")?"0":txtIDCliente.getText()));
-        serviceContacto.registar(txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText(), forn);
+        if (!fornecedorGuardado()) {
+            mostrarAviso("Guarde primeiro os dados gerais do fornecedor.");
+            return;
+        }
+        Fornecedor forn = serviceFornecedor.consultaFornecedor(Integer.parseInt(txtIDCliente.getText()));
+        try {
+            serviceContacto.registar(txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText(), forn);
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceContacto.isOpsSuccess()) {
+            showSuccessAlert("Registo adicionado com sucesso.");
             showContactos();
             restContacto();
         }
     }
 
     public void addEndereco() {
-        serviceEndereco.registar(txtAvenida.getText(), txtBairro.getText(),
-                txtCidade.getText(), Integer.valueOf(txtCodigooPostal.getText().equals("")?"0":txtCodigooPostal.getText()),
-                Integer.valueOf(txtNumeroEndereco.getText().equals("")?"0":txtNumeroEndereco.getText()),
-                combProvincia.getValue(), txtRua.getText(), Integer.valueOf(txtIDCliente.getText().equals("")?"0":txtIDCliente.getText()), userData);
+        if (!fornecedorGuardado()) {
+            mostrarAviso("Guarde primeiro os dados gerais do fornecedor.");
+            return;
+        }
+        try {
+            serviceEndereco.registar(txtAvenida.getText(), txtBairro.getText(),
+                    txtCidade.getText(), numeroOuZero(txtCodigooPostal.getText()),
+                    numeroOuZero(txtNumeroEndereco.getText()),
+                    combProvincia.getValue(), txtRua.getText(), Integer.valueOf(txtIDCliente.getText().equals("")?"0":txtIDCliente.getText()), userData);
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceEndereco.isOpsSuccess()) {
+            showSuccessAlert("Registo adicionado com sucesso.");
             showEndereco();
             resetEndereco();
         }
@@ -321,8 +355,14 @@ public class AddFornecedorController implements Initializable {
     Funcoes para Actualizar registros
      */
     public void updateFornecedor() {
-        serviceFornecedor.actualizar(Integer.parseInt(txtIDCliente.getText()), txtRazao.getText(), combTipoCliente.getValue(), Integer.valueOf(txtNuit.getText()));
+        try {
+            serviceFornecedor.actualizar(Integer.parseInt(txtIDCliente.getText()), txtRazao.getText(), combTipoCliente.getValue(), numeroOuZero(txtNuit.getText()));
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceFornecedor.isOpsSuccess()) {
+            showSuccessAlert("Registo actualizado com sucesso.");
             showCliente();
             showContactos();
             showEndereco();
@@ -330,18 +370,30 @@ public class AddFornecedorController implements Initializable {
     }
 
     public void updateContacto(){
-        serviceContacto.actualizar(Integer.parseInt(txtIDContacto.getText()), txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText());
+        try {
+            serviceContacto.actualizar(Integer.parseInt(txtIDContacto.getText()), txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceContacto.isOpsSuccess()) {
+            showSuccessAlert("Registo actualizado com sucesso.");
             showContactos();
             restContacto();
         }
     }
 
     public void updateEndereco() {
-        serviceEndereco.actualizar(Integer.parseInt(txtIDEndereco.getText()), txtAvenida.getText(), txtBairro.getText(),
-                txtCidade.getText(), Integer.parseInt(txtCodigooPostal.getText()), Integer.parseInt(txtNumeroEndereco.getText()),
-                combProvincia.getValue(), txtRua.getText(), Integer.parseInt(txtIDCliente.getText()), userData);
+        try {
+            serviceEndereco.actualizar(Integer.parseInt(txtIDEndereco.getText()), txtAvenida.getText(), txtBairro.getText(),
+                    txtCidade.getText(), numeroOuZero(txtCodigooPostal.getText()), numeroOuZero(txtNumeroEndereco.getText()),
+                    combProvincia.getValue(), txtRua.getText(), Integer.parseInt(txtIDCliente.getText()), userData);
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceEndereco.isOpsSuccess()) {
+            showSuccessAlert("Registo actualizado com sucesso.");
             showEndereco();
             resetEndereco();
         }
@@ -364,7 +416,7 @@ public class AddFornecedorController implements Initializable {
     }
 
     public void deleteContacto(MouseEvent event, ContactoFornecedor x) {
-        if (event.getButton().name().equals("SECONDARY")) {
+        if (event.getButton() == MouseButton.SECONDARY) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
             dialog.setContentText("Deseja excluir o item?");
@@ -375,11 +427,19 @@ public class AddFornecedorController implements Initializable {
             dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
 
             Optional<ButtonType> result = dialog.showAndWait();
+            if (!result.isPresent()) {
+                return;
+            }
             if (result.get() == btnDelete) {
-                serviceContacto.excluir(x.getId());
-                if (serviceContacto.isOpsSuccess()) {
-                    showContactos();
-                    restContacto();
+                try {
+                    serviceContacto.excluir(x.getId());
+                    if (serviceContacto.isOpsSuccess()) {
+                        showSuccessAlert("Registo excluido com sucesso.");
+                        showContactos();
+                        restContacto();
+                    }
+                } catch (ServiceException ex) {
+                    showErroAlert(ex.getMessage());
                 }
 
             } else if (result.get() == btnCancel) {
@@ -405,7 +465,7 @@ public class AddFornecedorController implements Initializable {
     }
 
     public void deleteEndereco(MouseEvent event, EnderecoFornecedor x) {
-        if (event.getButton().name().equals("SECONDARY")) {
+        if (event.getButton() == MouseButton.SECONDARY) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
             dialog.setContentText("Deseja excluir o item?");
@@ -416,11 +476,19 @@ public class AddFornecedorController implements Initializable {
             dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
 
             Optional<ButtonType> result = dialog.showAndWait();
+            if (!result.isPresent()) {
+                return;
+            }
             if (result.get() == btnDelete) {
-                serviceEndereco.excluir(x.getId());
-                if (serviceEndereco.isOpsSuccess()) {
-                    showEndereco();
-                    resetEndereco();
+                try {
+                    serviceEndereco.excluir(x.getId());
+                    if (serviceEndereco.isOpsSuccess()) {
+                        showSuccessAlert("Registo excluido com sucesso.");
+                        showEndereco();
+                        resetEndereco();
+                    }
+                } catch (ServiceException ex) {
+                    showErroAlert(ex.getMessage());
                 }
             } else if (result.get() == btnCancel) {
                 resetEndereco();
@@ -433,7 +501,8 @@ public class AddFornecedorController implements Initializable {
      */
     public void resetCliente() {
         txtIDCliente.setText("");
-        combTipoCliente.setPromptText("Tipo de cliente");
+        combTipoCliente.setValue(null);
+        combTipoCliente.setPromptText("Tipo de fornecedor");
         txtRazao.setText("");
         txtNuit.setText("");
         ButtonUtilities.buttonChangeText(btnAddCliente, txtIDCliente);
@@ -460,10 +529,37 @@ public class AddFornecedorController implements Initializable {
         txtCidade.setText("");
         txtCodigooPostal.setText("");
         txtNumeroEndereco.setText("");
-        combProvincia.setPromptText("Provincia");
+        combProvincia.setValue(null);
+        combProvincia.setPromptText("ProvÃ­ncia");
         txtRua.setText("");
         ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
 
     }
 
+    private boolean fornecedorGuardado() {
+        return txtIDCliente.getText() != null && !txtIDCliente.getText().trim().isEmpty();
+    }
+
+    private int numeroOuZero(String valor) {
+        if (valor == null || valor.trim().isEmpty()) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(valor.trim());
+        } catch (NumberFormatException ex) {
+            mostrarAviso("Introduza apenas nÃºmeros nos campos NUIT, cÃ³digo postal e nÃºmero do endereÃ§o.");
+            return 0;
+        }
+    }
+
+    private void mostrarAviso(String mensagem) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Aviso");
+        dialog.setContentText(mensagem);
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.showAndWait();
+    }
+
 }
+

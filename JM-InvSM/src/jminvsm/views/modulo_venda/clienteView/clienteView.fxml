@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -8,25 +9,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancharClientes" prefHeight="909.0" prefWidth="1400.0" styleClass="tranp-bg" stylesheets="@../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.clienteView.ClienteViewController">
+<AnchorPane fx:id="ancharClientes" prefHeight="909.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.clienteView.ClienteViewController">
    <children>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane layoutY="7.0" prefHeight="36.0" prefWidth="438.0" AnchorPane.leftAnchor="0.0">
                <children>
                   <Button layoutX="11.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="191.0" stylesheets="@../../../style/dashboard.css" text="Detalhes de Cliente" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="secondary-color" />
-                        <String fx:value="shadow-efect" />
-                        <String fx:value="hand-efect" />
-                     </styleClass>
-                  </Button>
-                  <Button layoutX="213.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="212.0" stylesheets="@../../../style/dashboard.css" text="Relatorio de Clientes" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <font>
-                        <Font name="Berlin Sans FB" size="20.0" />
+                        <Font name="Berlin Sans FB" size="16.0" />
                      </font>
                      <styleClass>
                         <String fx:value="secondary-color" />
@@ -38,17 +29,17 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane layoutY="50.0" prefHeight="110.0" prefWidth="1405.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane layoutY="50.0" prefHeight="60.0" prefWidth="1400.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <TextField fx:id="txtPesquisa" alignment="CENTER" layoutX="10.0" layoutY="15.0" prefHeight="25.0" prefWidth="621.0" promptText="Pesquisar por cliente" stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtPesquisa" alignment="CENTER" layoutX="150.0" prefHeight="25.0" prefWidth="621.0" promptText="Pesquisar por cliente" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="17.0" AnchorPane.topAnchor="17.0">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <Button fx:id="btnAdd" layoutX="1118.0" layoutY="15.0" mnemonicParsing="false" onAction="#getViewAddCliente" prefHeight="30.0" prefWidth="247.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
+            <Button fx:id="btnAdd" layoutX="1118.0" mnemonicParsing="false" onAction="#getViewAddCliente" prefHeight="38.0" prefWidth="247.0" stylesheets="@../../../style/dashboard.css" text="Adicionar" textFill="WHITE" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="11.0">
                <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font name="Berlin Sans FB" size="16.0" />
                </font>
                <styleClass>
                   <String fx:value="secondary-color" />
@@ -56,23 +47,23 @@
                   <String fx:value="shadow-efect" />
                </styleClass>
             </Button>
-            <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="10.0" layoutY="55.0" prefHeight="25.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" />
+            <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="10.0" prefHeight="25.0" prefWidth="114.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../style/dashboard.css" AnchorPane.bottomAnchor="17.0" AnchorPane.topAnchor="17.0" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutY="160.0" prefHeight="670.0" prefWidth="1425.0" stylesheets="@../../../style/dashboard.css" translateZ="-18.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <TableView fx:id="tabelaCliente" layoutX="332.0" layoutY="312.0" onMouseClicked="#selectedLineCliente" prefHeight="487.0" prefWidth="1365.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
-               <columns>
-                  <TableColumn fx:id="IDtabelaCliente" prefWidth="29.0" text="ID" />
-                  <TableColumn fx:id="tipotabelaCliente" prefWidth="174.0" text="Tipo" />
-                  <TableColumn fx:id="nometabelaCliente" prefWidth="331.0" text="Nome" />
-                  <TableColumn fx:id="razaotabelaCliente" prefWidth="410.0" text="Razao Social" />
-                  <TableColumn fx:id="nuittabelaCliente" prefWidth="109.0" text="Nuit" />
-                  <TableColumn fx:id="contactotabelaCliente" minWidth="0.0" prefWidth="325.0" text="Contacto" />
-                  <TableColumn fx:id="btntabelaCliente" prefWidth="44.0" />
-               </columns>
-            </TableView>
-         </children>
-      </AnchorPane>
+      <TableView fx:id="tabelaCliente" onMouseClicked="#selectedLineCliente" prefHeight="632.0" prefWidth="1400.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
+         <columns>
+            <TableColumn fx:id="IDtabelaCliente" prefWidth="76.0" text="ID" />
+            <TableColumn fx:id="tipotabelaCliente" prefWidth="138.0" text="Tipo" />
+            <TableColumn fx:id="nometabelaCliente" prefWidth="192.0" text="Nome" />
+            <TableColumn fx:id="razaotabelaCliente" prefWidth="254.0" text="Razao Social" />
+            <TableColumn fx:id="nuittabelaCliente" prefWidth="126.0" text="Nuit" />
+            <TableColumn fx:id="contactotabelaCliente" minWidth="0.0" prefWidth="168.0" text="Contacto" />
+            <TableColumn fx:id="enderecotabelaCliente" prefWidth="437.0" text="Endereco" />
+         </columns>
+      </TableView>
    </children>
+   <stylesheets>
+      <URL value="@../../../style/dashboard.css" />
+      <URL value="@../../../style/buttonConfig.css" />
+   </stylesheets>
 </AnchorPane>

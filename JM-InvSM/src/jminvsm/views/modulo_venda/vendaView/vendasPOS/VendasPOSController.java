@@ -15,9 +15,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -39,25 +36,25 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.util.converter.IntegerStringConverter;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.empresa.Empresa;
-import jminvsm.model.produto.Produto;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
-import jminvsm.model.vendas.documetos.DocumentosComerciais;
+import jminvsm.model.vendas.Documentos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.model.vendas.factura.itens.Item;
 import jminvsm.service.cliente.ServiceCliente;
 import jminvsm.service.desconto.ServiceDesconto;
 import jminvsm.service.documentosComerciais.ServiceDocumentos;
+import jminvsm.service.ServiceException;
 import jminvsm.service.vendas.factura.ServiceFactura;
 import jminvsm.util.AlertUtilities;
-import jminvsm.util.InvoiceUtilities;
-import jminvsm.util.LoadAndMoveUtilities;
 import static jminvsm.util.AlertUtilities.showErroAlert;
+import jminvsm.util.InvoiceUtilities;
 import jminvsm.util.LeitorSerialListener;
+import jminvsm.util.LoadAndMoveUtilities;
 
 /**
  * FXML Controller class
@@ -177,20 +174,20 @@ public class VendasPOSController implements Initializable {
     private Random randNum;
 
     public void getTaxasView(ActionEvent e) {
-        SysFact.setData(null);
+        SessaoAplicacao.setData(null);
         LoadAndMoveUtilities.showAsPopUP(e, null);
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_inventario/taxasView/taxaView.fxml");
     }
 
     public void getDescontoView(ActionEvent e) {
-        SysFact.setData(null);
+        SessaoAplicacao.setData(null);
         LoadAndMoveUtilities.showAsPopUP(e, null);
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/descontoView/descontoView.fxml");
     }
 
     public void getSearchCliente(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
-            SysFact.setData(null);
+            SessaoAplicacao.setData(null);
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/vendaView/searchCliente/clienteSearch.fxml");
         }
@@ -198,7 +195,7 @@ public class VendasPOSController implements Initializable {
 
     public void getSearchProduto(MouseEvent mouseEvt) {
         if (mouseEvt.getClickCount() == 1) {
-            SysFact.setData(null);
+            SessaoAplicacao.setData(null);
             LoadAndMoveUtilities.showAsPopUP(null, mouseEvt);
             LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/vendaView/searchProduto/searchProduto.fxml");
         }
@@ -243,8 +240,8 @@ public class VendasPOSController implements Initializable {
 //            @Override
 //            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 //                if (!oldValue && newValue) {
-//                    if (SysFact.getData() instanceof Cliente) {
-//                        Cliente c = (Cliente) SysFact.getData();
+//                    if (SessaoAplicacao.getData() instanceof Cliente) {
+//                        Cliente c = (Cliente) SessaoAplicacao.getData();
 //                        Cliente x = serviceCliente.getClienteCompletoByID(c.getId());
 //                        if (x != null) {
 //                            txtIDCliente.setText(x.getId() + "");
@@ -263,8 +260,8 @@ public class VendasPOSController implements Initializable {
 //            @Override
 //            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 //                if (!oldValue && newValue) {
-//                    if (SysFact.getData() instanceof Stock && SysFact.getData() != null) {
-//                        Stock x = (Stock) SysFact.getData();
+//                    if (SessaoAplicacao.getData() instanceof Stock && SessaoAplicacao.getData() != null) {
+//                        Stock x = (Stock) SessaoAplicacao.getData();
 //                        if (x.getPrecoProdutoArmazem().getPrecoBase() != null) {
 //                            int num = randNum.nextInt(50);
 //                            mapaProdutos.put(num, x);
@@ -297,7 +294,7 @@ public class VendasPOSController implements Initializable {
         quantidadetabelaItens.setOnEditCommit(new EventHandler<CellEditEvent<Item, Integer>>() {
             @Override
             public void handle(CellEditEvent<Item, Integer> event) {
-                Item item = event.getRowValue(); // Obtém o objeto da linha
+                Item item = event.getRowValue(); // ObtÃ©m o objeto da linha
                 item.setQuantidade(event.getNewValue()); // Atualiza a propriedade
 
                 displayPrice();
@@ -317,17 +314,18 @@ public class VendasPOSController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        tabelaItens.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         initTableItems();
         LeitorSerialListener leitor = new LeitorSerialListener("COM3", codigo -> {
-            System.out.println("Código lido via listener: " + codigo);
+            System.out.println("CÃ³digo lido via listener: " + codigo);
         });
 
         leitor.iniciar();
-        // Aqui você poderia manter a aplicação rodando, ou criar lógica para parar depois
+        // Aqui vocÃª poderia manter a aplicaÃ§Ã£o rodando, ou criar lÃ³gica para parar depois
         // leitor.parar(); // Chame quando quiser fechar a porta
 
-        this.userData = SysFact.getUserData();
-        this.empresaData = SysFact.getEmpresaData();
+        this.userData = SessaoAplicacao.getUserData();
+        this.empresaData = SessaoAplicacao.getEmpresaData();
         try {
             serDesconto = new ServiceDesconto();
             serviceCliente = new ServiceCliente();
@@ -452,25 +450,29 @@ public class VendasPOSController implements Initializable {
         DocumentosComerciais doc = mapaDocComercial.get(combTipoDoc.getValue());
 
         ServiceFactura service = new ServiceFactura();
-        service.criaFactura(labNumeroFactura.getText(), labDataInicial.getText(),
-                labValidade.getText(), Double.valueOf(labTotalGeral.getText()), radioCondicaoPagamento(), doc, cli, empresaData, userData, collectItens());
+        try {
+            service.criaFactura(labNumeroFactura.getText(), labDataInicial.getText(),
+                    labValidade.getText(), Double.valueOf(labTotalGeral.getText()), radioCondicaoPagamento(), doc, cli, empresaData, userData, collectItens());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         //Se a factura for criada com sucesso, sereta os campos
         if (service.isEstado()) {
+            AlertUtilities.showSuccessAlert("Factura adicionada com sucesso!");
             if ("Fatura".equals(combTipoDoc.getValue()) || "Fatura Recibo".equals(combTipoDoc.getValue())) {
                 if (rdPagamentoVista.isSelected()) {
-                    SysFact.setData(labNumeroFactura.getText());
+                    SessaoAplicacao.setData(labNumeroFactura.getText());
                     geMiniPagamentoView(evt);
                     resetFactura();
                 } else {
-                    service.geraRelatorio(labNumeroFactura.getText());
                     resetFactura();
                 }
             } else if ("Fatura Simplificada".equals(combTipoDoc.getValue())) {
-                SysFact.setData(labNumeroFactura.getText());
+                SessaoAplicacao.setData(labNumeroFactura.getText());
                 geMiniPagamentoView(evt);
                 resetFactura();
             } else {
-                service.geraRelatorio(labNumeroFactura.getText());
                 resetFactura();
             }
             rdPagamentoParcelado.setSelected(false);
@@ -485,7 +487,7 @@ public class VendasPOSController implements Initializable {
         for (Item item : itens) {
             i = new Item();
             Stock p = mapaProdutos.get(item.getId());
-            
+
             i.setQuantidade(item.getQuantidade());
             i.setSubtotal(item.getSubtotal());
             i.setUnidade_vendida(item.getUnidade_vendida());
@@ -561,7 +563,7 @@ public class VendasPOSController implements Initializable {
     }
 
     public void geMiniPagamentoView(ActionEvent evt) {
-//        SysFact.setData("2024-1022/3");
+//        SessaoAplicacao.setData("2024-1022/3");
 //        if (evt.getClickCount() == 1) {
         LoadAndMoveUtilities.showAsPopUP(evt, null);
         LoadAndMoveUtilities.loadFXML(Modality.APPLICATION_MODAL, "/jminvsm/views/modulo_venda/miniPagamentoView/MiniPagamentoView.fxml");
@@ -569,3 +571,4 @@ public class VendasPOSController implements Initializable {
     }
 
 }
+

@@ -26,6 +26,7 @@ USE _sysface_teste;
 DROP PROCEDURE IF EXISTS EnviarTransferencia;
 DROP PROCEDURE IF EXISTS ReceberTransferencia;
 DROP PROCEDURE IF EXISTS AprovarRequisicao;
+DROP PROCEDURE IF EXISTS CancelarRequisicao;
 DROP PROCEDURE IF EXISTS ConfirmarPicking;
 DROP PROCEDURE IF EXISTS sp_registar_preco;
 DROP PROCEDURE IF EXISTS sp_aplicar_desconto_ao_preco;
@@ -259,6 +260,59 @@ DELIMITER ;
 
 
 DELIMITER //
+CREATE PROCEDURE CancelarRequisicao(p_id INT)
+BEGIN
+    DECLARE v_estado VARCHAR(30);
+    DECLARE v_existe INT DEFAULT 0;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    SELECT COUNT(*), COALESCE(MAX(estado), '')
+    INTO v_existe, v_estado
+    FROM requisicao
+    WHERE id = p_id;
+
+    IF v_existe = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Requisicao inexistente';
+    END IF;
+
+    IF v_estado = 'Finalizada' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Requisicao finalizada nao pode ser cancelada';
+    END IF;
+
+    IF v_estado = 'Cancelada' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Requisicao ja esta cancelada';
+    END IF;
+
+    UPDATE reserva_stock
+    SET estado = 'Cancelado'
+    WHERE idRequisicao = p_id
+      AND estado = 'Reservado';
+
+    UPDATE picking
+    SET dataFim = COALESCE(dataFim, NOW())
+    WHERE idRequisicao = p_id
+      AND estado <> 'Confirmado';
+
+    UPDATE requisicao
+    SET estado = 'Cancelada'
+    WHERE id = p_id;
+
+    COMMIT;
+END//
+DELIMITER ;
+
+
+DELIMITER //
 CREATE PROCEDURE ConfirmarPicking(p_requisicao INT)
 BEGIN
     DECLARE v_estado VARCHAR(30);
@@ -278,9 +332,9 @@ BEGIN
     WHERE id = p_requisicao
     LIMIT 1;
 
-    IF v_estado <> 'Aprovada' THEN
+    IF v_estado NOT IN ('Aprovada', 'EmPicking') THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Apenas requisicoes aprovadas podem confirmar picking';
+        SET MESSAGE_TEXT = 'Apenas requisicoes aprovadas ou em picking podem confirmar picking';
     END IF;
 
     SELECT COUNT(*)
@@ -329,6 +383,19 @@ BEGIN
     WHERE idRequisicao = p_requisicao;
 
     COMMIT;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE procedure sp_desativaDescontoProduto(
+	IN d_idProduto INT,
+    IN d_idArmazem INT
+)
+BEGIN    
+    UPDATE produtodesconto
+    SET estado = false, dataFim = CURRENT_DATE
+    WHERE idProduto = d_idProduto
+      AND idArmazem = d_idArmazem AND estado=true AND id<>(Select id from produtodesconto order by id DESC LIMIT 1);
 END//
 DELIMITER ;
 

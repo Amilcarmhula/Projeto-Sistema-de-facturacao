@@ -65,7 +65,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
     public boolean updateEntityByID(EnderecoArmazem t, int id) {
         boolean isSuccess = false;
         String sql = "update endereco_armazem set provincia=?,cidade=?,bairro=?,avenida=?,"
-                    + "rua=?,codigo_postal=?,numero=? where id=?";
+                    + "rua=?,codigo_postal=?,numero=? where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -104,7 +104,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
     @Override
     public ObservableList<EnderecoArmazem> listAllEntities() {
         ObservableList<EnderecoArmazem> lista = FXCollections.observableArrayList();
-        String sql = "select * from endereco_armazem";
+        String sql = "select * from endereco_armazem WHERE deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet result = ps.executeQuery()) {
@@ -130,7 +130,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
     @Override
     public ObservableList<EnderecoArmazem> searchEntityByCLiente(int idCliente) {
         ObservableList<EnderecoArmazem> lista = FXCollections.observableArrayList();
-        String sql = "select * from endereco_armazem where idArmazem=?";
+        String sql = "select * from endereco_armazem where idArmazem=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, idCliente);
@@ -156,22 +156,12 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
 
     @Override
     public boolean deleteEntity(int id) {
-        boolean isSuccess = false;
-        String sql = "delete from endereco_armazem where id=?";
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
-            }
-
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("endereco_armazem", id);
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
             showDialog("Erro de exclusao", "Detalhes: " + ex);
         }
-        return isSuccess;
+        return false;
     }
 }

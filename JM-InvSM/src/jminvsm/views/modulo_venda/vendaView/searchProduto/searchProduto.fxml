@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
@@ -12,9 +13,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorProduto" minWidth="-Infinity" prefHeight="740.0" prefWidth="1107.0" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.vendaView.searchProduto.SearchProdutoController">
+<AnchorPane fx:id="anchorProduto" minWidth="-Infinity" prefHeight="740.0" prefWidth="1107.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.vendaView.searchProduto.SearchProdutoController">
    <children>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="638.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane layoutY="7.0" prefHeight="36.0" prefWidth="438.0" />
             <Button mnemonicParsing="false" onAction="#close" prefWidth="75.0" stylesheets="@../../../../style/dashboard.css" textFill="WHITE" AnchorPane.rightAnchor="0.0">
@@ -47,14 +48,14 @@
             <TableColumn fx:id="quantidade" prefWidth="55.0" resizable="false" text="Qtd." />
          </columns>
       </TableView>
-      <AnchorPane prefHeight="61.0" prefWidth="1400.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <AnchorPane prefHeight="61.0" prefWidth="1400.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
             <Label fx:id="labIDPreco" layoutX="448.0" layoutY="19.0" prefHeight="30.0" prefWidth="82.0" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtPesquisar" layoutX="597.0" layoutY="18.0" prefHeight="26.0" prefWidth="490.0" promptText="Pesquisar produto" stylesheets="@../../../style/dashboard.css">
+            <TextField fx:id="txtPesquisar" layoutX="597.0" layoutY="18.0" prefHeight="26.0" prefWidth="490.0" promptText="Pesquisar produto" stylesheets="@../../../../style/dashboard.css">
                <styleClass>
                   <String fx:value="text-squared-border" />
                   <String fx:value="shadow" />
@@ -68,4 +69,8 @@
          </children>
       </AnchorPane>
    </children>
+   <stylesheets>
+      <URL value="@../../../../style/dashboard.css" />
+      <URL value="@../../../../style/buttonConfig.css" />
+   </stylesheets>
 </AnchorPane>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="909.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.transferenciaView.RequisicaoTransferenciaController">
+    <children>
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" minHeight="58.0" prefHeight="58.0" spacing="12.0" styleClass="secondary-color">
+                    <padding>
+                        <Insets left="18.0" right="20.0" />
+                    </padding>
+                    <children>
+                        <Label text="Requisicao de transferencia" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="27.0" />
+                            </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="labResumoCabecalho" opacity="0.78" text="Pedido, aprovacao, envio, transito e recepcao" textFill="WHITE">
+                            <font>
+                                <Font name="Berlin Sans FB" size="16.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+
+                <TabPane fx:id="tabPaneTransferencias" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                    <tabs>
+                        <Tab text="Novo pedido">
+                            <content>
+                                <VBox spacing="12.0">
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="16.0" top="14.0" />
+                                    </padding>
+                                    <children>
+                                        <GridPane hgap="12.0" styleClass="secondary-color" vgap="10.0">
+                                            <padding>
+                                                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                                            </padding>
+                                            <columnConstraints>
+                                                <ColumnConstraints minWidth="120.0" prefWidth="150.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="240.0" />
+                                                <ColumnConstraints minWidth="120.0" prefWidth="150.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="240.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="38.0" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Armazem origem" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <ComboBox fx:id="combArmazemOrigem" maxWidth="1.7976931348623157E308" promptText="Seleccione a origem" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                                <Label text="Armazem destino" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <ComboBox fx:id="combArmazemDestino" maxWidth="1.7976931348623157E308" promptText="Seleccione o destino" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                                            </children>
+                                        </GridPane>
+
+                                        <GridPane hgap="12.0" vgap="10.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="48.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="17.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="35.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints />
+                                            </rowConstraints>
+                                            <children>
+                                                <VBox spacing="6.0" GridPane.columnIndex="0">
+                                                    <children>
+                                                        <Label text="Produto">
+                                                            <font>
+                                                                <Font name="Berlin Sans FB" size="16.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <ComboBox fx:id="combProduto" maxWidth="1.7976931348623157E308" promptText="Seleccione o produto" />
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="6.0" GridPane.columnIndex="1">
+                                                    <children>
+                                                        <Label text="Quantidade">
+                                                            <font>
+                                                                <Font name="Berlin Sans FB" size="16.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <TextField fx:id="txtQuantidade" promptText="0" />
+                                                    </children>
+                                                </VBox>
+                                                <HBox alignment="BOTTOM_RIGHT" spacing="8.0" GridPane.columnIndex="2">
+                                                    <children>
+                                                        <Button mnemonicParsing="false" onAction="#adicionarItem" prefHeight="40.0" prefWidth="150.0" text="Adicionar item" textFill="WHITE">
+                                                            <font>
+                                                                <Font name="Berlin Sans FB" size="14.0" />
+                                                            </font>
+                                                            <styleClass>
+                                                                <String fx:value="secondary-color" />
+                                                                <String fx:value="hand-efect" />
+                                                                <String fx:value="shadow-efect" />
+                                                            </styleClass>
+                                                        </Button>
+                                                        <Button mnemonicParsing="false" onAction="#removerItem" prefHeight="40.0" prefWidth="120.0" text="Remover" textFill="WHITE">
+                                                            <font>
+                                                                <Font name="Berlin Sans FB" size="14.0" />
+                                                            </font>
+                                                            <styleClass>
+                                                                <String fx:value="secondary-color" />
+                                                                <String fx:value="hand-efect" />
+                                                                <String fx:value="shadow-efect" />
+                                                            </styleClass>
+                                                        </Button>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </GridPane>
+
+                                        <TableView fx:id="tabelaItensNova" minHeight="320.0" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colNovoProduto" prefWidth="1120.0" text="Produto" />
+                                                <TableColumn fx:id="colNovoQuantidade" prefWidth="220.0" text="Quantidade" />
+                                            </columns>
+                                        </TableView>
+
+                                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                            <children>
+                                                <Button mnemonicParsing="false" onAction="#limparFormulario" prefHeight="40.0" prefWidth="130.0" text="Limpar" textFill="WHITE">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="14.0" />
+                                                    </font>
+                                                    <styleClass>
+                                                        <String fx:value="secondary-color" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="shadow-efect" />
+                                                    </styleClass>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#guardarRequisicao" prefHeight="40.0" prefWidth="190.0" text="Guardar pedido" textFill="WHITE">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="14.0" />
+                                                    </font>
+                                                    <styleClass>
+                                                        <String fx:value="primary-color" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="shadow-efect" />
+                                                    </styleClass>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+
+                        <Tab text="Gestao do fluxo">
+                            <content>
+                                <VBox spacing="12.0">
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="16.0" top="14.0" />
+                                    </padding>
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                            <children>
+                                                <TextField fx:id="txtPesquisa" prefWidth="940.0" promptText="Pesquisar por ID, estado, origem ou destino" HBox.hgrow="ALWAYS" />
+                                                <ComboBox fx:id="combFiltroEstado" prefWidth="220.0" promptText="Estado" />
+                                                <Button mnemonicParsing="false" onAction="#atualizarDados" prefWidth="150.0" text="Actualizar" textFill="WHITE">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="16.0" />
+                                                    </font>
+                                                    <styleClass>
+                                                        <String fx:value="secondary-color" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="shadow-efect" />
+                                                    </styleClass>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+
+                                        <TableView fx:id="tabelaTransferencias" onMouseClicked="#selecionarTransferencia" prefHeight="390.0" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colTransId" prefWidth="90.0" text="ID" />
+                                                <TableColumn fx:id="colTransData" prefWidth="190.0" text="Data" />
+                                                <TableColumn fx:id="colTransOrigem" prefWidth="360.0" text="Origem" />
+                                                <TableColumn fx:id="colTransDestino" prefWidth="360.0" text="Destino" />
+                                                <TableColumn fx:id="colTransEstado" prefWidth="180.0" text="Estado" />
+                                            </columns>
+                                        </TableView>
+
+                                        <VBox spacing="10.0" styleClass="secondary-color">
+                                            <padding>
+                                                <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+                                            </padding>
+                                            <children>
+                                                <Label text="Detalhe da transferencia" textFill="WHITE">
+                                                    <font>
+                                                        <Font name="System Bold" size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <GridPane hgap="10.0" vgap="8.0">
+                                                    <columnConstraints>
+                                                        <ColumnConstraints minWidth="80.0" />
+                                                        <ColumnConstraints hgrow="ALWAYS" />
+                                                        <ColumnConstraints minWidth="80.0" />
+                                                        <ColumnConstraints hgrow="ALWAYS" />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints />
+                                                        <RowConstraints />
+                                                        <RowConstraints />
+                                                    </rowConstraints>
+                                                    <children>
+                                                        <Label text="ID:" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                        <Label fx:id="labTransId" text="-" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                                        <Label text="Estado:" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                                        <Label fx:id="labTransEstado" text="-" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                                        <Label text="Origem:" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                        <Label fx:id="labTransOrigem" text="-" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                        <Label text="Destino:" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                        <Label fx:id="labTransDestino" text="-" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                                                        <Label text="Data:" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                                        <Label fx:id="labTransData" text="-" textFill="WHITE" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" />
+                                                    </children>
+                                                </GridPane>
+
+                                                <HBox spacing="8.0">
+                                                    <children>
+                                                        <Button mnemonicParsing="false" onAction="#aprovarTransferencia" prefHeight="42.0" prefWidth="150.0" text="Aprovar" textFill="WHITE">
+                                                            <styleClass>
+                                                                <String fx:value="secondary-color" />
+                                                                <String fx:value="hand-efect" />
+                                                            </styleClass>
+                                                        </Button>
+                                                        <Button mnemonicParsing="false" onAction="#enviarTransferencia" prefHeight="42.0" prefWidth="150.0" text="Enviar" textFill="WHITE">
+                                                            <styleClass>
+                                                                <String fx:value="secondary-color" />
+                                                                <String fx:value="hand-efect" />
+                                                            </styleClass>
+                                                        </Button>
+                                                        <Button mnemonicParsing="false" onAction="#receberTransferencia" prefHeight="42.0" prefWidth="150.0" text="Receber" textFill="WHITE">
+                                                            <styleClass>
+                                                                <String fx:value="primary-color" />
+                                                                <String fx:value="hand-efect" />
+                                                            </styleClass>
+                                                        </Button>
+                                                        <Button mnemonicParsing="false" onAction="#cancelarTransferencia" prefHeight="42.0" prefWidth="150.0" text="Cancelar" textFill="WHITE">
+                                                            <styleClass>
+                                                                <String fx:value="secondary-color" />
+                                                                <String fx:value="hand-efect" />
+                                                            </styleClass>
+                                                        </Button>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+
+                        <Tab text="Itens">
+                            <content>
+                                <VBox spacing="12.0">
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="16.0" top="14.0" />
+                                    </padding>
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                            <children>
+                                                <Label text="Transferencia seleccionada:" />
+                                                <Label fx:id="labTransSelecionadaAux" text="-" />
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Button mnemonicParsing="false" onAction="#carregarDetalhesSelecionados" text="Recarregar detalhes" textFill="WHITE">
+                                                    <styleClass>
+                                                        <String fx:value="secondary-color" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="shadow-efect" />
+                                                    </styleClass>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+
+                                        <TableView fx:id="tabelaItensDetalhe" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colDetalheProduto" prefWidth="880.0" text="Produto" />
+                                                <TableColumn fx:id="colDetalheQuantidade" prefWidth="220.0" text="Quantidade solicitada" />
+                                                <TableColumn fx:id="colDetalheRecebida" prefWidth="220.0" text="Quantidade recebida" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </children>
+        </VBox>
+    </children>
+    <stylesheets>
+        <URL value="@../../../style/dashboard.css" />
+        <URL value="@../../../style/buttonConfig.css" />
+    </stylesheets>
+</AnchorPane>

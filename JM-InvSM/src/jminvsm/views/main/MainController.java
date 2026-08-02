@@ -13,11 +13,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.usuario.Usuario;
 
 /**
@@ -48,6 +50,14 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btn_fornecedor;
+    @FXML
+    private Button btn_requisicoes;
+    @FXML
+    private Button btn_ordemCompra;
+    @FXML
+    private Button btn_recebimentoCompra;
+    @FXML
+    private Button btn_contasPagar;
 
     @FXML
     private Button btn_armazem;
@@ -62,13 +72,14 @@ public class MainController implements Initializable {
     @FXML
     private Button btn_vendasFactura;
 
-    /*Butoes do modulo de configuracao*/
     @FXML
     private Button btn_setup;
     @FXML
     private Button btn_pagamento;
     @FXML
     private Button btn_stock;
+    @FXML
+    private Button btn_fiscal;
     @FXML
     private Label labNotification;
 
@@ -86,85 +97,109 @@ public class MainController implements Initializable {
     @FXML
     public void maximize() {
         Stage stage = (Stage) anchorMain.getScene().getWindow();
-        // Verifica se a janela já está maximizada, para alternar entre maximizar e restaurar. EXPAND
         stage.setMaximized(!stage.isMaximized());
     }
 
-    
-
     @FXML
-    public void switchForm(ActionEvent e) throws IOException {
-        SysFact.setData(null);
-        String path = "";
-        if (e.getSource() == btn_dashboard) {
-            
-            path = "/jminvsm/views/dashboard/dashboard.fxml";
-        } else if (e.getSource() == btn_artigos) {
-            path = "/jminvsm/views/modulo_inventario/produtosView/produtoAdd.fxml";
-        } else if (e.getSource() == btn_cliente) {
-            path = "/jminvsm/views/modulo_venda/clienteView/clienteView.fxml";
-        } else if (e.getSource() == btn_fornecedor) {
-            path = "/jminvsm/views/modulo_compra/fornecedorView/fornecedorView.fxml";
-        } else if (e.getSource() == btn_armazem) {
-            path = "/jminvsm/views/modulo_inventario/armazemView/armazemView.fxml";
-        } else if (e.getSource() == btn_vendas) {
-            path = "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
-//            path = "/jminvsm/views/modulo_venda/vendaView/vendasFactura/vendasPorFacturacaoView.fxml";
-        } else if (e.getSource() == btn_vendasPOS) {
-//            path = "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
-            path = "/jminvsm/views/modulo_venda/vendaView/vendasPOS/vendasPOSView.fxml";
-        } else if (e.getSource() == btn_vendasFactura) {
-//            path = "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
-            path = "/jminvsm/views/modulo_venda/vendaView/vendasFactura/vendasPorFacturacaoView.fxml";
-        } else if (e.getSource() == btn_pagamento) {
-            path = "/jminvsm/views/modulo_venda/pagamentosView/pagamentoView.fxml";
+    public void switchForm(ActionEvent event) throws IOException {
+        SessaoAplicacao.setData(null);
+
+        String path = resolveViewPath(event.getSource());
+        if (path == null || path.trim().isEmpty()) {
+            labNotification.setText("Esta funcionalidade ainda nÃ£o possui uma vista configurada.");
+            return;
         }
-        AnchorPane pane = FXMLLoader.load(getClass().getResource(path));
+
+        loadView(path);
+        labNotification.setText("");
+    }
+
+    private String resolveViewPath(Object source) {
+        if (source == btn_dashboard) {
+            return "/jminvsm/views/dashboard/dashboard.fxml";
+        } else if (source == btn_artigos) {
+            return "/jminvsm/views/modulo_inventario/produtosView/produtoAdd.fxml";
+        } else if (source == btn_cliente) {
+            return "/jminvsm/views/modulo_venda/clienteView/clienteView.fxml";
+        } else if (source == btn_fornecedor) {
+            return "/jminvsm/views/modulo_compra/fornecedorView/fornecedorView.fxml";
+        } else if (source == btn_requisicoes) {
+            return "/jminvsm/views/modulo_compra/requisicaoView/requisicaoView.fxml";
+        } else if (source == btn_ordemCompra) {
+            return "/jminvsm/views/modulo_compra/ordemCompraView/ordemCompraView.fxml";
+        } else if (source == btn_recebimentoCompra) {
+            return "/jminvsm/views/modulo_compra/recebimentoCompraView/recebimentoCompraView.fxml";
+        } else if (source == btn_contasPagar) {
+            return "/jminvsm/views/modulo_compra/financeiroFornecedorView/financeiroFornecedorView.fxml";
+        } else if (source == btn_armazem) {
+            return "/jminvsm/views/modulo_inventario/armazemView/armazemView.fxml";
+        } else if (source == btn_stock) {
+            return "/jminvsm/views/modulo_inventario/transferenciaView/requisicaoTransferenciaView.fxml";
+        } else if (source == btn_vendas) {
+            return "/jminvsm/views/modulo_venda/vendaView/vendasView.fxml";
+        } else if (source == btn_vendasPOS) {
+            return "/jminvsm/views/modulo_venda/vendaView/vendasPOS/vendasPOSView.fxml";
+        } else if (source == btn_vendasFactura) {
+            return "/jminvsm/views/modulo_venda/vendaView/vendasFactura/vendasPorFacturacaoView_moderno.fxml";
+        } else if (source == btn_pagamento) {
+            return "/jminvsm/views/modulo_venda/pagamentosView/pagamentoView_moderno.fxml";
+        } else if (source == btn_setup) {
+            return "/jminvsm/views/configuracaoSistemaView/configuracaoSistemaView.fxml";
+        } else if (source == btn_fiscal) {
+            return "/jminvsm/views/modulo_fiscal/saft/fiscalExportView.fxml";
+        }
+
+        return null;
+    }
+
+    private void loadView(String path) throws IOException {
+        URL resource = getClass().getResource(path);
+        if (resource == null) {
+            throw new IOException("FXML nÃ£o encontrado: " + path);
+        }
+
+        Parent pane = FXMLLoader.load(resource);
+
+        AnchorPane.setTopAnchor(pane, 0.0);
+        AnchorPane.setRightAnchor(pane, 0.0);
+        AnchorPane.setBottomAnchor(pane, 0.0);
+        AnchorPane.setLeftAnchor(pane, 0.0);
+
+        if (pane instanceof Region) {
+            Region region = (Region) pane;
+            region.setMinSize(0.0, 0.0);
+            region.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            region.prefWidthProperty().bind(anchorMain.widthProperty());
+            region.prefHeightProperty().bind(anchorMain.heightProperty());
+        }
+
         anchorMain.getChildren().setAll(pane);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.user = SysFact.getUserData();
-        labUserName.setText(user.getNome());
-        labEmail.setText(user.getEmail());
-        labNivel.setText(user.getNivelAcesso().getDescricao());
-        AnchorPane pane;
+        this.user = SessaoAplicacao.getUserData();
+        anchorMain.setMinSize(0.0, 0.0);
+        anchorMain.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        if (user != null) {
+            labUserName.setText(user.getNome());
+            labEmail.setText(user.getEmail());
+            if (user.getNivelAcesso() != null) {
+                labNivel.setText(user.getNivelAcesso().getDescricao());
+            }
+        } else {
+            labUserName.setText("Utilizador");
+            labEmail.setText("");
+            labNivel.setText("");
+        }
+
         try {
-            pane = FXMLLoader.load(getClass().getResource("/jminvsm/views/dashboard/dashboard.fxml"));
-            anchorMain.getChildren().setAll(pane);
+            loadView("/jminvsm/views/dashboard/dashboard.fxml");
         } catch (IOException ex) {
+            labNotification.setText("NÃ£o foi possÃ­vel carregar o dashboard.");
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        minhaFuncao();
     }
-
-//    public void minhaFuncao() {
-//        Thread x = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                for (int i = 0; i < 5; i++) {
-//                    // Imprime o número i no console de erro
-//                    System.out.print(i + " ");
-////                    pensar como acessar os metodos de consultas pertecentes a 
-////                    janela(anchorPane) que estara aberta no memonto para que sejam feitos updates
-////                    Os metodos de consulta nao podem chamar os metodos de reset de campos
-//                    try {
-//                        // A thread dorme por 1 segundo
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException ex) {
-//                        // Trata uma possível interrupção da thread
-//                        System.out.println("Erro: " + ex);
-//                    }
-//                }
-//                minhaFuncao();
-//
-//                // Imprime a mensagem "Fim" após o término do loop
-//                System.out.println("\nFim");
-//            }
-//        });
-//
-//        // Inicia a execução da thread
-//        x.start();
-//    }
 }
+

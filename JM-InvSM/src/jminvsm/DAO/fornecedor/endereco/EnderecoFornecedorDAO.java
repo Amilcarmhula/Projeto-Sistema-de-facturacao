@@ -231,7 +231,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
 
         String sql = "update endereco_fornecedor set "
                 + "provincia=?,cidade=?,bairro=?,avenida=?,rua=?,"
-                + "codigo_postal=?,numero=? where id=?";
+                + "codigo_postal=?,numero=? where id=? AND deleteStatus=0";
 
         try (
                 Connection con = Conexao.getConexao();
@@ -265,7 +265,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
         ObservableList<EnderecoFornecedor> lista =
                 FXCollections.observableArrayList();
 
-        String sql = "select * from endereco_fornecedor";
+        String sql = "select * from endereco_fornecedor WHERE deleteStatus=0";
 
         try (
                 Connection con = Conexao.getConexao();
@@ -301,7 +301,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
         ObservableList<EnderecoFornecedor> lista =
                 FXCollections.observableArrayList();
 
-        String sql = "select * from endereco_fornecedor where idFornecedor=?";
+        String sql = "select * from endereco_fornecedor where idFornecedor=? AND deleteStatus=0";
 
         try (
                 Connection con = Conexao.getConexao();
@@ -338,26 +338,12 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
     @Override
     public boolean deleteEntity(int id) {
 
-        boolean isSuccess = false;
-
-        String sql = "delete from endereco_fornecedor where id=?";
-
-        try (
-                Connection con = Conexao.getConexao();
-                PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true;
-            }
-
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("endereco_fornecedor", id);
         } catch (SQLException ex) {
             showDialog("Erro exclusao EnderecoFornecedor", "Detalhes: " + ex);
         }
 
-        return isSuccess;
+        return false;
     }
 }

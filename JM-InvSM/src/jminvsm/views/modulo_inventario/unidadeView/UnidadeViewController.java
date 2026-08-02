@@ -11,8 +11,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,7 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.service.unidadeMedida.ServiceUnidadeMedida;
 import jminvsm.util.ButtonUtilities;
@@ -79,13 +77,13 @@ public class UnidadeViewController implements Initializable {
     private TableColumn<UnidadeMedida, String> unidade;
 
     public void close(ActionEvent event) {
-        SysFact.setData("");
+        SessaoAplicacao.setData("");
         if (LoadAndMoveUtilities.returnToStage()) {
             LoadAndMoveUtilities.setEstadoStage(false);
             LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
-            SysFact.setData("");
+            SessaoAplicacao.setData("");
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
@@ -123,30 +121,30 @@ public class UnidadeViewController implements Initializable {
         sigla.setCellValueFactory(new PropertyValueFactory<>("sigla"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
-        FilteredList<UnidadeMedida> dadosFiltrados = new FilteredList<>(listaUnidade, b -> true);
-        txtUnidade.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
+//        FilteredList<UnidadeMedida> dadosFiltrados = new FilteredList<>(listaUnidade, b -> true);
+//        txtUnidade.textProperty().addListener((observable, oldValue, newValue) -> {
+//            dadosFiltrados.setPredicate(x -> {
+//
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//                String filtroCaixaBaixa = newValue.toLowerCase();
+//                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+//                    return true;
+//                } else if (x.getSigla().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+//                    return true;
+//                } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//
+//            });
+//        });
+//        SortedList<UnidadeMedida> sortedData = new SortedList<>(dadosFiltrados);
+//        sortedData.comparatorProperty().bind(tabelaUnidade.comparatorProperty());
 
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (x.getSigla().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (x.getDescricao().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else {
-                    return false;
-                }
-
-            });
-        });
-        SortedList<UnidadeMedida> sortedData = new SortedList<>(dadosFiltrados);
-        sortedData.comparatorProperty().bind(tabelaUnidade.comparatorProperty());
-
-        tabelaUnidade.setItems(sortedData);
+        tabelaUnidade.setItems(listaUnidade);
     }
 
     public void addUnidade() {
@@ -176,7 +174,7 @@ public class UnidadeViewController implements Initializable {
             txtDescricao.setText(x.getDescricao());
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
             deleteItem(event, x);
-            SysFact.setData(x);
+            SessaoAplicacao.setData(x);
         }
     }
 
@@ -215,3 +213,4 @@ public class UnidadeViewController implements Initializable {
     }
 
 }
+

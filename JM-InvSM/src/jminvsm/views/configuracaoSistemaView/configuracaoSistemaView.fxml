@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="900.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.configuracaoSistemaView.ConfiguracaoSistemaViewController">
+    <children>
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" minHeight="58.0" prefHeight="58.0" spacing="12.0" styleClass="secondary-color">
+                    <padding>
+                        <Insets left="18.0" right="18.0" />
+                    </padding>
+                    <children>
+                        <Label text="Configuracao do sistema" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="27.0" />
+                            </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="labModoActual" text="-" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+
+                <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                    <tabs>
+                        <Tab text="Modo de operacao &amp; Auditoria">
+                            <content>
+                                <VBox spacing="14.0">
+                                    <padding>
+                                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                    </padding>
+                                    <children>
+                                        <GridPane hgap="14.0" styleClass="secondary-color" vgap="12.0">
+                                            <padding>
+                                                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                            </padding>
+                                            <columnConstraints>
+                                                <ColumnConstraints maxWidth="215.0" minWidth="118.0" prefWidth="118.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" maxWidth="608.0" minWidth="260.0" prefWidth="608.0" />
+                                                <ColumnConstraints minWidth="190.0" prefWidth="220.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="260.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="36.0" minHeight="25.0" prefHeight="29.0" />
+                                                <RowConstraints maxHeight="36.0" minHeight="25.0" prefHeight="29.0" />
+                                                <RowConstraints maxHeight="125.0" minHeight="100.0" prefHeight="120.0" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Modo" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <ComboBox fx:id="combModoOperacao" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                                <CheckBox fx:id="checkControlarStock" text="Controlar stock global" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                                <CheckBox fx:id="checkPermitirVendaSemStock" text="Permitir venda sem stock" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                                <Label text="Descricao" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label fx:id="labDescricaoModo" text="-" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+
+                                                <Label text="Observacao" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <TextArea fx:id="txtObservacaoConfig" prefRowCount="4" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" />
+                                            </children>
+                                        </GridPane>
+
+                                        <HBox alignment="CENTER_RIGHT">
+                                            <children>
+                                                <Button mnemonicParsing="false" onAction="#guardarConfiguracao" prefHeight="42.0" prefWidth="190.0" text="Guardar configuracao" textFill="WHITE">
+                                                    <styleClass>
+                                                        <String fx:value="secondary-color" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="shadow-efect" />
+                                                    </styleClass>
+                                                    <font>
+                                                        <Font name="Berlin Sans FB" size="15.0" />
+                                                    </font>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                              <ScrollPane>
+                                 <content>
+                                    <VBox prefHeight="732.0" prefWidth="1347.0" spacing="10.0">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                       <children>
+                                          <GridPane hgap="10.0" minWidth="-Infinity" prefHeight="33.0" prefWidth="1288.0" vgap="8.0">
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="10.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="10.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="16.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="16.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="10.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="10.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="28.0" />
+                                             </columnConstraints>
+                                             <children>
+                                                <DatePicker fx:id="dataInicioPicker" maxWidth="1.7976931348623157E308" promptText="Data inicial" GridPane.columnIndex="0" />
+                                                <DatePicker fx:id="dataFimPicker" maxWidth="1.7976931348623157E308" promptText="Data final" GridPane.columnIndex="1" />
+                                                <ComboBox fx:id="combTabelaAuditoria" maxWidth="1.7976931348623157E308" promptText="Tabela" GridPane.columnIndex="2" />
+                                                <ComboBox fx:id="combOperacaoAuditoria" maxWidth="1.7976931348623157E308" promptText="Operacao" GridPane.columnIndex="3" />
+                                                <TextField fx:id="txtUsuarioAuditoria" prefHeight="26.0" prefWidth="147.0" promptText="ID usuario" GridPane.columnIndex="4" />
+                                                <TextField fx:id="txtRegistoAuditoria" promptText="ID registo" GridPane.columnIndex="5" />
+                                                <HBox alignment="TOP_RIGHT" spacing="6.0" GridPane.columnIndex="6">
+                                                   <children>
+                                                      <Button mnemonicParsing="false" onAction="#pesquisarAuditoria" prefHeight="33.0" prefWidth="150.0" text="Filtrar" textFill="WHITE">
+                                                         <styleClass>
+                                                            <String fx:value="secondary-color" />
+                                                            <String fx:value="hand-efect" />
+                                                         </styleClass>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" onAction="#limparFiltrosAuditoria" prefWidth="150.0" text="Limpar" textFill="WHITE">
+                                                         <styleClass>
+                                                            <String fx:value="secondary-color" />
+                                                            <String fx:value="hand-efect" />
+                                                         </styleClass>
+                                                      </Button>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                             <rowConstraints>
+                                                <RowConstraints />
+                                             </rowConstraints>
+                                          </GridPane>
+                                          <TableView fx:id="tabelaAuditoria" minHeight="420.0" prefHeight="429.0" prefWidth="1318.0" VBox.vgrow="ALWAYS">
+                                             <columns>
+                                                <TableColumn fx:id="colAudId" prefWidth="70.0" text="ID" />
+                                                <TableColumn fx:id="colAudData" prefWidth="155.0" text="Data" />
+                                                <TableColumn fx:id="colAudUsuario" prefWidth="160.0" text="Usuario" />
+                                                <TableColumn fx:id="colAudOperacao" prefWidth="100.0" text="Operacao" />
+                                                <TableColumn fx:id="colAudTabela" prefWidth="160.0" text="Tabela" />
+                                                <TableColumn fx:id="colAudRegisto" prefWidth="150.0" text="Registo" />
+                                                <TableColumn fx:id="colAudColunas" prefWidth="500.0" text="Colunas alteradas" />
+                                             </columns>
+                                          </TableView>
+                                          <GridPane hgap="12.0" prefHeight="231.0" prefWidth="1226.0" vgap="8.0" VBox.vgrow="ALWAYS">
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                                             </columnConstraints>
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="28.0" />
+                                                <RowConstraints vgrow="ALWAYS" />
+                                             </rowConstraints>
+                                             <children>
+                                                <Label text="Valores anteriores" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                                   <font>
+                                                      <Font name="System Bold" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Valores novos" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                                   <font>
+                                                      <Font name="System Bold" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <TextArea fx:id="txtValoresAnteriores" editable="false" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                <TextArea fx:id="txtValoresNovos" editable="false" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                             </children>
+                                          </GridPane>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+
+                        <Tab text="Extra" />
+                    </tabs>
+                </TabPane>
+            </children>
+        </VBox>
+    </children>
+    <stylesheets>
+        <URL value="@../../style/dashboard.css" />
+        <URL value="@../../style/buttonConfig.css" />
+    </stylesheets>
+</AnchorPane>

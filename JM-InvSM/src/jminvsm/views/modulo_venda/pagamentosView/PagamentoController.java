@@ -32,7 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.empresa.Empresa;
 import jminvsm.model.metodo_pagamento.MetodoPagamento;
@@ -40,6 +40,7 @@ import jminvsm.model.parcelas.Parcela;
 import jminvsm.model.transacao.Transacao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
+import jminvsm.service.ServiceException;
 import jminvsm.service.metodoPagamento.ServiceMetodoPagamento;
 import jminvsm.service.parcela.ServiceParcelas;
 import jminvsm.service.transacoes.ServiceTransacoes;
@@ -292,9 +293,9 @@ public class PagamentoController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!oldValue && newValue) {
-                    if (SysFact.getData() instanceof Cliente && SysFact.getData() != null) {
+                    if (SessaoAplicacao.getData() instanceof Cliente && SessaoAplicacao.getData() != null) {
                         try {
-                            Cliente c = (Cliente) SysFact.getData();
+                            Cliente c = (Cliente) SessaoAplicacao.getData();
                             txtIDCliente.setText(c.getId() + "");
                             labRazaoCliente.setText(c.getRazao_cli());
                             showFacturas();
@@ -325,8 +326,11 @@ public class PagamentoController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.userData = SysFact.getUserData();
-        this.empresaData = SysFact.getEmpresaData();
+        tabelaFactura.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabelaParcelas.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabelaTransacoes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        this.userData = SessaoAplicacao.getUserData();
+        this.empresaData = SessaoAplicacao.getEmpresaData();
         valorRecebidoListener();
         initIntervalMap();
         try {
@@ -384,10 +388,16 @@ public class PagamentoController implements Initializable {
             valorPago = valorRecebido;
         }
 
-        st.registapagamentoFacturaParcelada(id_parcela, String.valueOf(dataPagamento.getValue()), valorRecebido, valorPago, getTroco(),
-                txtDescricao.getText(), empresaData.getContaBancaria().getId(),
-                metodo.getId(), labNumeroFactura.getText(), userData);
+        try {
+            st.registapagamentoFacturaParcelada(id_parcela, String.valueOf(dataPagamento.getValue()), valorRecebido, valorPago, getTroco(),
+                    txtDescricao.getText(), empresaData.getContaBancaria().getId(),
+                    metodo.getId(), labNumeroFactura.getText(), userData);
+        } catch (ServiceException ex) {
+            AlertUtilities.showErroAlert(ex.getMessage());
+            return;
+        }
         if (st.isOpsSuccess()) {
+            AlertUtilities.showSuccessAlert("Pagamento registado com sucesso!");
             showTransacoes();
             showParcelas();
             showFacturas();
@@ -427,22 +437,11 @@ public class PagamentoController implements Initializable {
         tabelaFactura.setItems(listaFacturasCliente);
     }
 
-    public void genarateReport() throws SQLException {
-        Factura f = tabelaFactura.getSelectionModel().getSelectedItem();
-        if (f != null) {
-            serviceParcela.geraRelatorio(f.getNumero_fac());
-            selecionaFactura();
-        }else{
-            AlertUtilities.showErroAlert("Factura nao selecionada!");
-        }
-    }
-
     public void selecionaFactura() throws SQLException {
         Factura f = tabelaFactura.getSelectionModel().getSelectedItem();
 
         if (f != null) {
             labNumeroFactura.setText(f.getNumero_fac());
-            System.out.print(labNumeroFactura.getText());
             labValorPorPagar.setText(f.getSaldoPendente() + "");
             if (f.getEstado().equals("Paga") || f.getEstado().equals("Cancelada") || f.getNumeroParcelas() >= 1) {
                 btnFinalizar.setDisable(true);
@@ -488,3 +487,4 @@ public class PagamentoController implements Initializable {
 //        }
 //    }
 }
+

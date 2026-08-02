@@ -19,6 +19,7 @@ public class ContaBancaria {
     private String numero_conta;
     private String nib;
     private String nuib;
+    private String descricaoTipo;
     private Empresa empresa;
     private String data_criacao;
 
@@ -71,6 +72,14 @@ public class ContaBancaria {
 
     public void setNuib(String nuib) {
         this.nuib = nuib;
+    }
+
+    public String getDescricaoTipo() {
+        return descricaoTipo;
+    }
+
+    public void setDescricaoTipo(String descricaoTipo) {
+        this.descricaoTipo = descricaoTipo;
     }
 
     public Empresa getEmpresa() {

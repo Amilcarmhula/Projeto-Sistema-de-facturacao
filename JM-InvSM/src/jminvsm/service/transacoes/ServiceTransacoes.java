@@ -15,8 +15,7 @@ import jminvsm.model.parcelas.Parcela;
 import jminvsm.model.transacao.Transacao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -44,28 +43,23 @@ public class ServiceTransacoes {
         Integer id_metodoPagamento, String numeroFactura, Usuario user) {
         setOpsSuccess(false);
         if (data_pagamento == null || data_pagamento.isEmpty() || "null".equalsIgnoreCase(data_pagamento)) {
-            showErroAlert( "Data de pagamento nao pode ser nula. Sera usada a data atual!");
             data_pagamento = LocalDate.now().toString();
         }
         
         if (valorRecebido == null || valorRecebido <= 0) {
-            showErroAlert( "Valor de pagamento nao informado!");
-            return;
+            throw new ServiceException("Valor de pagamento nao informado!");
         }
         
         if (descricao == null || descricao.isEmpty()) {
-            showErroAlert( "Pagamento sem descricao. Sera gerada uma descricao padrao!");
             descricao = "Pagamento de factura";
         }
         
         if (id_metodoPagamento == null) {
-            showErroAlert( "Metodo de pagamento nao selecionado. Por favor, selecione um metodo de pagamento!");
-            return;
+            throw new ServiceException("Metodo de pagamento nao selecionado. Por favor, selecione um metodo de pagamento!");
         }
         
         if (numeroFactura == null || numeroFactura.isEmpty()) {
-            showErroAlert( "Factura nao selecionada!");
-            return;
+            throw new ServiceException("Factura nao selecionada!");
         }
 
         Transacao t = new Transacao();
@@ -88,7 +82,6 @@ public class ServiceTransacoes {
 
         if (transDao.addTransacaoAvista(t)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Pagamento Registado com sucesso!");
         }
     }
     
@@ -101,8 +94,7 @@ public class ServiceTransacoes {
         }
         
         if (valorRecebido == null || valorRecebido <= 0) {
-            showErroAlert( "Valor de pagamento nao informado!");
-            return;
+            throw new ServiceException("Valor de pagamento nao informado!");
         }
         
         if (descricao == null || descricao.isEmpty()) {
@@ -110,18 +102,15 @@ public class ServiceTransacoes {
         }
         
         if (id_metodoPagamento == null) {
-            showErroAlert( "Metodo de pagamento nao selecionado. Por favor, selecione um metodo de pagamento!");
-            return;
+            throw new ServiceException("Metodo de pagamento nao selecionado. Por favor, selecione um metodo de pagamento!");
         }
         
         if (id_parcela == null || id_parcela <= 0) {
-            showErroAlert( "Parcela nao selecionada!");
-            return;
+            throw new ServiceException("Parcela nao selecionada!");
         }
         
         if (numeroFactura == null || numeroFactura.isEmpty()) {
-            showErroAlert( "Factura nao selecionada!");
-            return;
+            throw new ServiceException("Factura nao selecionada!");
         }
 
         Transacao t = new Transacao();
@@ -147,7 +136,6 @@ public class ServiceTransacoes {
 
         if (transDao.addTransacaoParcelada(t)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Pagamento Registado com sucesso!");
         }
     }
 

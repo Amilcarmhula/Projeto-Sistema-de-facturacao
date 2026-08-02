@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="760.0" prefWidth="1180.0"
+            xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="jminvsm.views.modulo_fiscal.saft.FiscalExportController">
+    <children>
+        <VBox spacing="16.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="28.0"
+              AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="24.0">
+            <Label text="Comunicação Fiscal e SAF-T (Moz)" textFill="#173F5F">
+                <font><Font name="System Bold" size="28.0"/></font>
+            </Label>
+            <Label fx:id="labEmpresa" text="Empresa" textFill="#506274">
+                <font><Font size="15.0"/></font>
+            </Label>
+            <Label text="O exportador usa o modelo técnico JM-AT-BASE-1.0. Não representa certificação nem substitui a especificação oficial da Autoridade Tributária."
+                   textFill="#B42318" wrapText="true">
+                <font><Font name="System Bold" size="13.0"/></font>
+            </Label>
+            <Separator/>
+
+            <GridPane hgap="12.0" vgap="12.0">
+                <Label text="Início do período:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <DatePicker fx:id="dpInicio" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label text="Fim do período:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                <DatePicker fx:id="dpFim" prefWidth="190.0" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                <Label text="Pasta de destino:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="txtDestino" prefWidth="650.0" GridPane.columnIndex="1"
+                           GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1"/>
+                <Button mnemonicParsing="false" onAction="#escolherDestino" text="Escolher…"
+                        GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+            </GridPane>
+
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <Button mnemonicParsing="false" onAction="#validar" prefHeight="42.0"
+                        text="1. Validar dados"/>
+                <Button mnemonicParsing="false" onAction="#exportarFase1" prefHeight="42.0"
+                        style="-fx-background-color: #16A6A1; -fx-text-fill: white;"
+                        text="2. Exportar Fase 1 — Excel/CSV"/>
+                <Button mnemonicParsing="false" onAction="#exportarFase2" prefHeight="42.0"
+                        style="-fx-background-color: #173F5F; -fx-text-fill: white;"
+                        text="3. Exportar Fase 2 — SAF-T XML"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="labEstado" text="Pronto" textFill="#506274"/>
+            </HBox>
+
+            <Label text="Resultado da validação/exportação" textFill="#173F5F">
+                <font><Font name="System Bold" size="15.0"/></font>
+            </Label>
+            <TextArea fx:id="txtResultado" editable="false" prefHeight="430.0"
+                      promptText="Os erros, avisos, hashes e caminhos dos ficheiros serão apresentados aqui."
+                      wrapText="false" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </children>
+</AnchorPane>
+

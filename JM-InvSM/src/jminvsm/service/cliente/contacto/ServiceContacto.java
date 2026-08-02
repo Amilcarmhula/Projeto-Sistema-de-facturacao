@@ -10,8 +10,7 @@ import jminvsm.dao.cliente.contacto.ContactoClienteDAO;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.contacto.ContactoCliente;
 import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -43,8 +42,7 @@ public class ServiceContacto {
             responsavel = cli.getNome_cli();
         }
         if (numero == null || numero.isEmpty()) {
-            showErroAlert( "Numero nao pode ser nulo!");
-            return;
+            throw new ServiceException("Numero nao pode ser nulo!");
         }
         ContactoCliente contacto = new ContactoCliente();
         contacto.setEmail_cli(email);
@@ -56,7 +54,6 @@ public class ServiceContacto {
 
         if (contactoDao.addEntity(contacto)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo adicionado com sucesso.");
         }
     }
 
@@ -67,8 +64,7 @@ public class ServiceContacto {
         }
 
         if (numero == null || numero.isEmpty()) {
-            showErroAlert( "Numero nao pode ser nulo!");
-            return;
+            throw new ServiceException("Numero nao pode ser nulo!");
         }
         ContactoCliente contacto = new ContactoCliente();
         contacto.setEmail_cli(email);
@@ -79,7 +75,6 @@ public class ServiceContacto {
 
         if (contactoDao.updateEntityByID(contacto, id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo actualizado com sucesso.");
         }
     }
     public ObservableList<ContactoCliente> listaContactos(){
@@ -94,7 +89,6 @@ public class ServiceContacto {
         setOpsSuccess(false);
         if (contactoDao.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo excluido com sucesso.");
         }
     }
 }

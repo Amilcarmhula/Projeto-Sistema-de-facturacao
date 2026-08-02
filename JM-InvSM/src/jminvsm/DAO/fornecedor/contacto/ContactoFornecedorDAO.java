@@ -208,7 +208,7 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
     public boolean updateEntityByID(ContactoFornecedor t, int id) {
 
         String sql = "update contacto_fornecedor set contacto=?, email=? ,website=? ,"
-                    + "pessoa_de_contacto=? where id=?";
+                    + "pessoa_de_contacto=? where id=? AND deleteStatus=0";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -232,7 +232,7 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
         ObservableList<ContactoFornecedor> lista
                 = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM contacto_fornecedor";
+        String sql = "SELECT * FROM contacto_fornecedor WHERE deleteStatus=0";
 
         try (PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
@@ -255,7 +255,7 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
                 = FXCollections.observableArrayList();
 
         String sql
-                = "SELECT * FROM contacto_fornecedor WHERE idFornecedor=?";
+                = "SELECT * FROM contacto_fornecedor WHERE idFornecedor=? AND deleteStatus=0";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -278,13 +278,8 @@ public class ContactoFornecedorDAO implements ContactoFornecedorDAOImpl<Contacto
     @Override
     public boolean deleteEntity(int id) {
 
-        String sql
-                = "DELETE FROM contacto_fornecedor WHERE id=?";
-
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            return ps.executeUpdate() > 0;
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete(con, "contacto_fornecedor", id);
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao eliminar contacto", e);

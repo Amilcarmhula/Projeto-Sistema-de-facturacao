@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
-import jminvsm.model.vendas.documetos.DocumentosComerciais;
+import jminvsm.model.vendas.Documentos.DocumentosComerciais;
 import jminvsm.util.Conexao;
 
 /**

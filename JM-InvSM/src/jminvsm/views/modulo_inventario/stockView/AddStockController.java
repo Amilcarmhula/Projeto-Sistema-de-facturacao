@@ -20,18 +20,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.produto.Produto;
@@ -40,11 +40,13 @@ import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.fornecedor.ServiceFornecedor;
+import jminvsm.service.ServiceException;
 import jminvsm.service.produto.fornecido.ServiceProdutoFornecido;
 import jminvsm.service.stock.ServiceStock;
-import jminvsm.util.ButtonUtilities;
+import jminvsm.service.transferencia.ServiceTransferenciaStock;
 import jminvsm.util.LoadAndMoveUtilities;
-//import sysfact.views.modulo_venda.vendaView.searchCliente.ClienteSearchController;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  * FXML Controller class
@@ -58,6 +60,7 @@ public class AddStockController implements Initializable {
     private ServiceFornecedor servicoFornecedor;
     private ServiceProdutoFornecido servicoprodFornecido;
     private ServiceStock serviceStock;
+    private ServiceTransferenciaStock serviceTransferenciaStock;
 
     private Usuario userData;
     private Stock stock;
@@ -144,6 +147,18 @@ public class AddStockController implements Initializable {
 
     @FXML
     private TextField txtQtActual;
+    @FXML
+    private TextField txtValorTotal;
+    @FXML
+    private TextField txtIDLote;
+    @FXML
+    private ComboBox<String> cBoxArmazemOrigemTransferencia;
+    @FXML
+    private ComboBox<String> cBoxArmazemDestinoTransferencia;
+    @FXML
+    private TextField txtQuantidadeTransferencia;
+    @FXML
+    private Button btnTransferirStock;
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
@@ -162,30 +177,55 @@ public class AddStockController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        priceFormaterProduto();
-        prod = (Produto) SysFact.getData();
+        tableLote.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableResumoStock.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        Object data = SessaoAplicacao.getData();
+        if (!(data instanceof Produto)) {
+            showWarning("Produto nÃ£o seleccionado",
+                    "Abra esta janela a partir de um produto vÃ¡lido.");
+            return;
+        }
+
+        prod = (Produto) data;
         txtIDProduto.setText(String.valueOf(prod.getId()));
+
         try {
             service = new ServiceProdutoFornecido();
             serviceArmazem = new ServiceArmazem();
             servicoFornecedor = new ServiceFornecedor();
             servicoprodFornecido = new ServiceProdutoFornecido();
             serviceStock = new ServiceStock();
-            this.userData = SysFact.getUserData();
+            serviceTransferenciaStock = new ServiceTransferenciaStock();
+            this.userData = SessaoAplicacao.getUserData();
+
             showLotes(prod.getId());
             showResumoStock(prod.getId());
-
             setDetalhesProduto();
-            ButtonUtilities.buttonChangeText(btnAdd, txtIDProduto);
+            populateComb_ArmazemFornecedor();
+
+            cBoxArmazem.setOnAction(evt -> {
+                String nomeArmazem = cBoxArmazem.getValue();
+                Armazem armazem = nomeArmazem == null ? null : mapaArmazens.get(nomeArmazem);
+                labTipoArmazem.setText(armazem == null ? "â€”" : armazem.getTipo());
+                txtIDArmazem.setText(armazem == null ? "" : String.valueOf(armazem.getId()));
+            });
+
+            cBoxFornecedor.setOnAction(evt -> {
+                String nomeFornecedor = cBoxFornecedor.getValue();
+                Fornecedor fornecedor = nomeFornecedor == null ? null : mapaFornecedor.get(nomeFornecedor);
+                txtIDFornecedor.setText(fornecedor == null ? "" : String.valueOf(fornecedor.getId()));
+            });
+
+            txtQtActual.textProperty().addListener((obs, oldValue, newValue) -> actualizarValorTotal());
+            txtCustoUnitario.textProperty().addListener((obs, oldValue, newValue) -> actualizarValorTotal());
+
+            btnAdd.setText("Registar entrada");
+            btnTransferirStock.setText("Transferir stock");
         } catch (SQLException ex) {
             Logger.getLogger(AddStockController.class.getName()).log(Level.SEVERE, null, ex);
+            showWarning("Erro de inicializaÃ§Ã£o",
+                    "NÃ£o foi possÃ­vel carregar os dados necessÃ¡rios para a entrada de stock.");
         }
-        populateComb_ArmazemFornecedor();
-        cBoxArmazem.setOnAction(evt -> {
-            String data = cBoxArmazem.getSelectionModel().getSelectedItem();
-
-            labTipoArmazem.setText(mapaArmazens.get(data).getTipo());
-        });
     }
 
     private ObservableList<ProdutoFornecido> listaFornecedoress;
@@ -208,7 +248,7 @@ public class AddStockController implements Initializable {
 
     public void setDetalhesProduto() {
         // Carega detalhes do produto
-        
+
         Stock s = serviceStock.consultaDetalhesProduto(prod.getId());
         txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
         txtNomeProduto.setText(s.getProduto().getNome());
@@ -223,13 +263,13 @@ public class AddStockController implements Initializable {
             labControloStock.setStyle("-fx-text-fill: green;");
         } else {
             chkControloStockProduto.setSelected(false);
-            labControloStock.setText("NAO");
+            labControloStock.setText("NÃƒO");
             labControloStock.setStyle("-fx-text-fill: red;");
         }
 
         // Gera codigo do proximo lote
         ProdutoFornecido pf = servicoprodFornecido.getLastCodeLote();
-        txtLoteCode.setText("" + pf.getCodigo());
+        txtLoteCode.setText(pf == null ? "" : String.valueOf(pf.getCodigo()));
 
     }
 
@@ -259,6 +299,8 @@ public class AddStockController implements Initializable {
             mapaArmazens.put(a.getNome_arm(), a);
         }
         cBoxArmazem.setItems(FXCollections.observableArrayList(listaArm));
+        cBoxArmazemOrigemTransferencia.setItems(FXCollections.observableArrayList(listaArm));
+        cBoxArmazemDestinoTransferencia.setItems(FXCollections.observableArrayList(listaArm));
 
         fornecedorList = servicoFornecedor.listaTodosFornecedores();
         List<String> listaForne = new ArrayList<>();
@@ -270,21 +312,187 @@ public class AddStockController implements Initializable {
         cBoxFornecedor.setItems(FXCollections.observableArrayList(listaForne));
     }
 
-    public void addProdutoFornecido(ActionEvent e) throws SQLException {
-//        INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
-        service.registraProdutoFornecido(txtLoteCode.getText(),
-                Integer.valueOf(txtIDProduto.getText()),
-                Integer.valueOf(mapaArmazens.get(cBoxArmazem.getValue()).getId()),
-                Integer.valueOf(mapaFornecedor.get(cBoxFornecedor.getValue()).getId()),
-                Integer.valueOf(txtQtActual.getText().equals("") ? "1" : txtQtActual.getText()),
-                String.valueOf(dataAquisicao.getValue() == null ? "" : dataAquisicao.getValue()),
-                Double.valueOf(txtCustoUnitario.getText().equals("") ? "0" : txtCustoUnitario.getText())
-        );
-        showLotes(prod.getId());
-        showResumoStock(prod.getId());
+    public void transferirStock(ActionEvent e) throws SQLException {
+        if (!validarTransferencia()) {
+            return;
+        }
 
-        // Gera codigo do proximo lote
-        ProdutoFornecido pf = servicoprodFornecido.getLastCodeLote();
-        txtLoteCode.setText("" + pf.getCodigo());
+        Armazem origem = mapaArmazens.get(cBoxArmazemOrigemTransferencia.getValue());
+        Armazem destino = mapaArmazens.get(cBoxArmazemDestinoTransferencia.getValue());
+        int quantidade = Integer.parseInt(txtQuantidadeTransferencia.getText().trim());
+
+        serviceTransferenciaStock.transferirProduto(prod.getId(), origem.getId(), destino.getId(), quantidade);
+        if (serviceTransferenciaStock.isOpsSuccess()) {
+            showLotes(prod.getId());
+            showResumoStock(prod.getId());
+            setDetalhesProduto();
+            resetTransferencia();
+        }
+    }
+
+    public void addProdutoFornecido(ActionEvent e) throws SQLException {
+        if (!validarEntrada()) {
+            return;
+        }
+
+        int quantidade = Integer.parseInt(txtQtActual.getText().trim());
+        double custoUnitario = parseDecimal(txtCustoUnitario.getText());
+
+        try {
+            service.registraProdutoFornecido(
+                    txtLoteCode.getText().trim(),
+                    Integer.parseInt(txtIDProduto.getText()),
+                    mapaArmazens.get(cBoxArmazem.getValue()).getId(),
+                    mapaFornecedor.get(cBoxFornecedor.getValue()).getId(),
+                    quantidade,
+                    String.valueOf(dataAquisicao.getValue()),
+                    custoUnitario
+            );
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
+
+        if (service.isOpsSuccess()) {
+            showSuccessAlert("Stock actualizado com sucesso!");
+            showLotes(prod.getId());
+            showResumoStock(prod.getId());
+            setDetalhesProduto();
+            resetCampos(null);
+        }
+    }
+
+    @FXML
+    public void resetCampos(ActionEvent event) {
+        cBoxArmazem.getSelectionModel().clearSelection();
+        cBoxFornecedor.getSelectionModel().clearSelection();
+        dataAquisicao.setValue(null);
+        txtQtActual.clear();
+        txtCustoUnitario.clear();
+        txtValorTotal.clear();
+        txtIDArmazem.clear();
+        txtIDFornecedor.clear();
+        labTipoArmazem.setText("â€”");
+
+        ProdutoFornecido pf = servicoprodFornecido == null
+                ? null
+                : servicoprodFornecido.getLastCodeLote();
+        txtLoteCode.setText(pf == null ? "" : String.valueOf(pf.getCodigo()));
+    }
+
+    private boolean validarEntrada() {
+        if (txtLoteCode.getText() == null || txtLoteCode.getText().trim().isEmpty()) {
+            showWarning("CÃ³digo do lote obrigatÃ³rio",
+                    "Informe ou gere o cÃ³digo do lote.");
+            txtLoteCode.requestFocus();
+            return false;
+        }
+        if (cBoxArmazem.getValue() == null || mapaArmazens.get(cBoxArmazem.getValue()) == null) {
+            showWarning("ArmazÃ©m obrigatÃ³rio",
+                    "Seleccione o armazÃ©m de destino.");
+            cBoxArmazem.requestFocus();
+            return false;
+        }
+        if (cBoxFornecedor.getValue() == null || mapaFornecedor.get(cBoxFornecedor.getValue()) == null) {
+            showWarning("Fornecedor obrigatÃ³rio",
+                    "Seleccione o fornecedor do lote.");
+            cBoxFornecedor.requestFocus();
+            return false;
+        }
+        if (dataAquisicao.getValue() == null) {
+            showWarning("Data obrigatÃ³ria",
+                    "Informe a data de entrada do lote.");
+            dataAquisicao.requestFocus();
+            return false;
+        }
+
+        try {
+            int quantidade = Integer.parseInt(txtQtActual.getText().trim());
+            if (quantidade <= 0) {
+                throw new NumberFormatException();
+            }
+        } catch (Exception ex) {
+            showWarning("Quantidade invÃ¡lida",
+                    "Informe uma quantidade inteira maior que zero.");
+            txtQtActual.requestFocus();
+            return false;
+        }
+
+        try {
+            double custo = parseDecimal(txtCustoUnitario.getText());
+            if (custo < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (Exception ex) {
+            showWarning("Custo unitÃ¡rio invÃ¡lido",
+                    "Informe um custo unitÃ¡rio numÃ©rico vÃ¡lido.");
+            txtCustoUnitario.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validarTransferencia() {
+        if (cBoxArmazemOrigemTransferencia.getValue() == null
+                || mapaArmazens.get(cBoxArmazemOrigemTransferencia.getValue()) == null) {
+            showWarning("Origem obrigatoria", "Seleccione o armazem de origem da transferencia.");
+            cBoxArmazemOrigemTransferencia.requestFocus();
+            return false;
+        }
+        if (cBoxArmazemDestinoTransferencia.getValue() == null
+                || mapaArmazens.get(cBoxArmazemDestinoTransferencia.getValue()) == null) {
+            showWarning("Destino obrigatorio", "Seleccione o armazem de destino da transferencia.");
+            cBoxArmazemDestinoTransferencia.requestFocus();
+            return false;
+        }
+        if (cBoxArmazemOrigemTransferencia.getValue().equals(cBoxArmazemDestinoTransferencia.getValue())) {
+            showWarning("Armazens iguais", "A origem e o destino devem ser armazens diferentes.");
+            cBoxArmazemDestinoTransferencia.requestFocus();
+            return false;
+        }
+        try {
+            int quantidade = Integer.parseInt(txtQuantidadeTransferencia.getText().trim());
+            if (quantidade <= 0) {
+                throw new NumberFormatException();
+            }
+        } catch (Exception ex) {
+            showWarning("Quantidade invalida", "Informe uma quantidade inteira maior que zero.");
+            txtQuantidadeTransferencia.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private void resetTransferencia() {
+        cBoxArmazemOrigemTransferencia.getSelectionModel().clearSelection();
+        cBoxArmazemDestinoTransferencia.getSelectionModel().clearSelection();
+        txtQuantidadeTransferencia.clear();
+    }
+
+    private void actualizarValorTotal() {
+        try {
+            int quantidade = Integer.parseInt(txtQtActual.getText().trim());
+            double custo = parseDecimal(txtCustoUnitario.getText());
+            txtValorTotal.setText(String.format("%,.2f MZN", quantidade * custo));
+        } catch (Exception ex) {
+            txtValorTotal.clear();
+        }
+    }
+
+    private double parseDecimal(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return 0.0;
+        }
+        return Double.parseDouble(value.trim().replace(" ", "").replace(",", "."));
+    }
+
+    private void showWarning(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
+

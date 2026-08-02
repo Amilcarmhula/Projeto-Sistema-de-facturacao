@@ -39,7 +39,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         boolean isSuccess = false;
         String sql = "insert into cliente (tipo,nome,razaosocial,nuit,fk_id_usuario) value (?,?,?,?,?)";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, c.getTipo());
             ps.setString(2, c.getNome_cli());
             ps.setString(3, c.getRazao_cli());
@@ -61,9 +61,9 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     public boolean updateEntityByID(Cliente c, int id) {
         boolean isSuccess = false;
         String sql = "update cliente set tipo=?, nome=? ,razaosocial=? ,nuit=?, fk_id_usuario=?"
-                + " where id=?";
+                + " where id=? AND deleteStatus=0";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, c.getTipo());
             ps.setString(2, c.getNome_cli());
@@ -87,13 +87,17 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     public ObservableList<Cliente> listAllEntitiesToClienteView() {
         ObservableList<Cliente> lista = FXCollections.observableArrayList();
         String sql = "SELECT c.id,c.tipo,c.nome,c.razaosocial ,c.nuit, "
-                + "GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos "
+                + "GROUP_CONCAT(CONCAT(ct.contacto) SEPARATOR ' ') AS contatos, "
+                + "GROUP_CONCAT(DISTINCT CONCAT(e.id, ';', e.avenida, ';',e.rua, ';',e.numero, ';',e.bairro, ';',e.cidade, ';',e.provincia, ';',e.codigo_postal, '.' )) AS address "
                 + "FROM cliente c "
-                + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id "
+                + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id AND ct.deleteStatus = 0 "
+                + "LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id AND e.tipo = 'Facturação' "
+                + "AND e.deleteStatus = 0 "
+                + "WHERE c.deleteStatus = 0 "
                 + "GROUP BY c.id, c.nome, c.razaosocial, c.nuit;";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
+            try ( ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     Cliente c = new Cliente();
                     c.setId(result.getInt("id"));
@@ -110,8 +114,27 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                             listaContactos.add(cc);
                         }
                     }
-
                     c.setContactosCliente(listaContactos);
+
+                    String enderecos = result.getString("address");
+                    
+                    EnderecoCliente end = null;
+                    if (enderecos != null && !enderecos.trim().isEmpty()) {
+                        for (String splited : enderecos.split("\\.")) {
+                            String[] split = splited.split(";");
+                            end = new EnderecoCliente();
+                            end.setId(Integer.parseInt(split[0]));
+                            end.setAvenida_cli(split[1]);
+                            end.setRua_cli(split[2]);
+                            end.setNumero_cli(Integer.parseInt(split[3]));
+                            end.setBairro_cli(split[4]);
+                            end.setCidade_cli(split[5]);
+                            end.setProvincia_cli(split[6]);
+                            end.setCodigoPostal_cli(Integer.parseInt(split[7]));
+                            c.setEnderecoCliente(end);
+                        }
+                    }
+//                    c.setEnderecoCliente(end);
                     lista.add(c);
                 }
             }
@@ -130,12 +153,14 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 + "ct.email as email, "
                 + "GROUP_CONCAT(DISTINCT CONCAT(e.id, '- ', e.avenida, '- ',e.rua, '- ',e.numero, '- ',e.bairro, '- ',e.cidade, '- ',e.provincia, '- ',e.codigo_postal )) AS endereco "
                 + "FROM cliente c "
-                + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id "
+                + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id AND ct.deleteStatus = 0 "
                 + "LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id AND e.tipo = 'Facturação' "
+                + "AND e.deleteStatus = 0 "
+                + "WHERE c.deleteStatus = 0 "
                 + "GROUP BY c.id, c.nome, c.razaosocial, c.nuit";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
+            try ( ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     Cliente c = new Cliente();
                     c.setId(result.getInt("id"));
@@ -193,14 +218,15 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 + "ct.email as email, "
                 + "GROUP_CONCAT(DISTINCT CONCAT(e.id, '- ', e.avenida, '- ',e.rua, '- ',e.numero, '- ',e.bairro, '- ',e.cidade, '- ',e.provincia, '- ',e.codigo_postal )) AS endereco "
                 + "FROM cliente c "
-                + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id "
+                + "LEFT JOIN contacto_cliente ct ON ct.fk_id_cliente = c.id AND ct.deleteStatus = 0 "
                 + "LEFT JOIN endereco_cliente e ON e.fk_id_cliente = c.id AND e.tipo = 'Facturação' "
-                + "where c.id=? "
+                + "AND e.deleteStatus = 0 "
+                + "where c.id=? AND c.deleteStatus = 0 "
                 + "GROUP BY c.id, c.nome, c.razaosocial, c.nuit";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-                ps.setInt(1, id);
-            try (ResultSet result = ps.executeQuery()) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try ( ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     c = new Cliente();
                     c.setId(result.getInt("id"));
@@ -253,11 +279,11 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     @Override
     public Cliente getLastEntity() {
         Cliente c = null;
-        String sql = "SELECT id,tipo,nome,razaosocial,nuit FROM cliente ORDER BY id DESC LIMIT 1;";
+        String sql = "SELECT id,tipo,nome,razaosocial,nuit FROM cliente WHERE deleteStatus=0 ORDER BY id DESC LIMIT 1;";
 
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-            try (ResultSet result = ps.executeQuery()) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
+            try ( ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     c = new Cliente();
                     c.setId(result.getInt("id"));
@@ -277,11 +303,11 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
     @Override
     public Cliente getEntityByID(int id) {
         Cliente c = null;
-        String sql = "SELECT id,tipo,nome,razaosocial,nuit FROM cliente where id=?";
+        String sql = "SELECT id,tipo,nome,razaosocial,nuit FROM cliente where id=? AND deleteStatus=0";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-                ps.setInt(1, id);
-            try (ResultSet result = ps.executeQuery()) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try ( ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     c = new Cliente();
                     c.setId(result.getInt("id"));
@@ -300,32 +326,22 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
 
     @Override
     public boolean deleteEntity(int x) {
-        boolean isSuccess = false;
-        String sql = "delete from cliente WHERE id = ?";
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, x);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserção foi bem-sucedida
-            }
-
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("cliente", x);
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
         }
-        return isSuccess;
+        return false;
     }
 
     @Override
     public int CountClientes() {
         int total = 0;
-        String sql = "select count(*) as total from cliente";
+        String sql = "select count(*) as total from cliente WHERE deleteStatus=0";
         try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
+                 Connection con = Conexao.getConexao();  PreparedStatement ps = con.prepareStatement(sql)) {
 
-            try (ResultSet result = ps.executeQuery()) {
+            try ( ResultSet result = ps.executeQuery()) {
                 if (result.next()) { // Verifica se há resultados
                     total = result.getInt("total");
                 }
@@ -335,6 +351,14 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         }
 
         return total;
+    }
+
+    public static void main(String[] args) {
+        ClienteDAO dao = new ClienteDAO();
+        for (Cliente c : dao.listAllEntitiesToClienteView()) {
+            System.out.println("End: " + c.printEnderecos());
+        }
+
     }
 
 }

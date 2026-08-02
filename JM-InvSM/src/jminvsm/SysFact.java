@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import jminvsm.model.empresa.Empresa;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.util.SessaoAplicacao;
 
 /**
  *
@@ -20,16 +21,12 @@ import jminvsm.model.usuario.Usuario;
  */
 public class SysFact extends Application {
 
-    private static Usuario userData;
-    private static Object data;
-    private static Empresa empresaData;
-
     public static Empresa getEmpresaData() {
-        return empresaData;
+        return SessaoAplicacao.getEmpresaData();
     }
 
     public static void setEmpresaData(Empresa empresaData) {
-        SysFact.empresaData = empresaData;
+        SessaoAplicacao.setEmpresaData(empresaData);
     }
 
     public double getX() {
@@ -49,19 +46,19 @@ public class SysFact extends Application {
     }
 
     public static Object getData() {
-        return data;
+        return SessaoAplicacao.getData();
     }
 
     public static void setData(Object data) {
-        SysFact.data = data;
+        SessaoAplicacao.setData(data);
     }
 
     public static Usuario getUserData() {
-        return userData;
+        return SessaoAplicacao.getUserData();
     }
 
     public static void setUserData(Usuario userData) {
-        SysFact.userData = userData;
+        SessaoAplicacao.setUserData(userData);
     }
 
     private double x = 0;
@@ -69,7 +66,7 @@ public class SysFact extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/jminvsm/views/login/login.fxml"));
 //        Parent root = FXMLLoader.load(getClass().getResource("../sysfact/views/modulo_venda/clienteView/clienteView.fxml"));
 
         Scene scene = new Scene(root);

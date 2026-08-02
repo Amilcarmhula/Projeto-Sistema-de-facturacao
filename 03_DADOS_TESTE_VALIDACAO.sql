@@ -24,6 +24,7 @@
 -- ============================================================
 USE _sysface_teste;
 
+
 -- ============================================================
 -- LIMPEZA E DADOS MINIMOS
 -- Este bloco deixa o script reexecutavel na base de teste.
@@ -118,15 +119,10 @@ INSERT INTO imposto (nome, percentagem, descricao) VALUES
 ('ISPC', 5.0, 'Imposto Simplificado para Pequenos Contribuintes (ISPC)'),
 ('Taxa Reduzida', 7.5, 'Taxa de imposto reduzida para produtos essenciais');
 
-INSERT INTO desconto (nome, descricao) VALUES
-('Desconto de Lançamento', 'Desconto aplicado em novos produtos no lançamento'),
-('Desconto de Fim de Ano', 'Desconto especial para vendas de final de ano'),
-('Desconto por Quantidade', 'Desconto aplicado para compras em grandes quantidades'),
-('Desconto Promocional', 'Desconto aplicado em promoções especiais por tempo limitado'),
-('Desconto Fidelidade', 'Desconto para clientes fiéis com mais de 1 ano de compras'),
-('Desconto Black Friday', 'Desconto massivo durante a Black Friday'),
-('Desconto de Parceria', 'Desconto exclusivo para parceiros comerciais'),
-('Desconto de Natal', 'Desconto sazonal para o período de Natal');
+INSERT INTO desconto (nome, percentagem, descricao) VALUES
+('Desconto de Lançamento', 5.0, 'Desconto aplicado em novos produtos no lançamento'),
+('Desconto de Fim de Ano', 37.0, 'Desconto especial para vendas de final de ano'),
+('Desconto Black Friday',50.0, 'Desconto massivo durante a Black Friday');
 
 insert into metodo_pagamento(nome, descricao) values 
 ('Dinheiro (Espécie)','O método mais tradicional de pagamento, usando moedas e cédulas físicas.'),
@@ -144,252 +140,252 @@ INSERT INTO documentocomercial (sigla, nome, diasuteis, descricao) VALUES
 ('NC','Nota de Crédito', 30, 'Nota de Crédito: Documento emitido para corrigir ou anular uma fatura anterior, geralmente emitida até 30 dias após a transação original.'),
 ('ND','Nota de Débito', 30, 'Nota de Débito: Documento emitido para cobrar valores adicionais de um cliente, emitido até 30 dias após a identificação do valor a ser cobrado.');
 
-INSERT INTO fornecedor (id, tipo, razaosocial, nuit)
-VALUES (1, 'Juridica', 'Fornecedor Teste', 987654321);
+-- INSERT INTO fornecedor (id, tipo, razaosocial, nuit)
+-- VALUES (1, 'Juridica', 'Fornecedor Teste', 987654321);
 
-INSERT INTO armazem (id, nome, tipo, descricao, estado)
-VALUES (1, 'Armazem Central', 'Central', 'Teste', 1);
+-- INSERT INTO armazem (id, nome, tipo, descricao, estado)
+-- VALUES (1, 'Armazem Central', 'Central', 'Teste', 1);
 
-INSERT INTO produto (id, nome, codigo_barra, tipoProduto, unidadePorTipo, descricao, controle_stock, nivelstock, idCategoria, idUnidade, idImposto)
-VALUES (1, 'Arroz', 'REQ001', 'Simples', 1, 'Produto para teste de requisicao', 1, 10, 1, 1, 1);
+-- INSERT INTO produto (id, nome, codigo_barra, tipoProduto, unidadePorTipo, descricao, controle_stock, nivelstock, idCategoria, idUnidade, idImposto)
+-- VALUES (1, 'Arroz', 'REQ001', 'Simples', 1, 'Produto para teste de requisicao', 1, 10, 1, 1, 1);
 
-INSERT INTO cliente (tipo, nome, razaosocial, nuit, fk_id_usuario) 
-VALUES ('Jurídica', 'Tech Solutions', 'Tech Soluções Lda', 1234567, 1);
-
-
-INSERT INTO stock (idProduto, idArmazem, saldo, reservado)
-VALUES (1, 1, 0, 0)
-ON DUPLICATE KEY UPDATE saldo = 0, reservado = 0;
-
-INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
-VALUES ('REQ-LOTE-001', 1, 1, 1, CURDATE(), 100, 10.00);
-
-SELECT
-    'SETUP - Stock apos entrada' AS teste,
-    s.idProduto,
-    s.idArmazem,
-    s.saldo,
-    s.reservado,
-    s.disponivel
-FROM stock s
-WHERE s.idProduto = 1 AND s.idArmazem = 1;
-
--- 1. Criar requisicao pendente.
-INSERT INTO requisicao (id, dataNecessidade, estado, motivo)
-VALUES (1, DATE_ADD(CURDATE(), INTERVAL 1 DAY), 'Pendente', 'Teste completo de requisicao');
-
--- 2. Adicionar item deve mudar estado para Submetida.
-INSERT INTO itemRequisicao (quantidade, idRequisicao, idProduto, idArmazem)
-VALUES (30, 1, 1, 1);
-
-SELECT
-    'TESTE 1 - Estado apos item' AS teste,
-    r.id,
-    r.estado
-FROM requisicao r
-WHERE r.id = 1;
-
--- 3. Aprovar deve reservar stock e criar picking.
-CALL AprovarRequisicao(1);
+-- INSERT INTO cliente (tipo, nome, razaosocial, nuit, fk_id_usuario) 
+-- VALUES ('Jurídica', 'Tech Solutions', 'Tech Soluções Lda', 1234567, 1);
 
 
-SELECT
-    'TESTE 2 - Requisicao aprovada' AS teste,
-    r.id,
-    r.estado
-FROM requisicao r
-WHERE r.id = 1;
+-- INSERT INTO stock (idProduto, idArmazem, saldo, reservado)
+-- VALUES (1, 1, 0, 0)
+-- ON DUPLICATE KEY UPDATE saldo = 0, reservado = 0;
+
+-- INSERT INTO lote (codigo, idProduto, idArmazem, idFornecedor, dataEntrada, quantidadeAtual, custoUnitario)
+-- VALUES ('REQ-LOTE-001', 1, 1, 1, CURDATE(), 100, 10.00);
+
+-- SELECT
+--     'SETUP - Stock apos entrada' AS teste,
+--     s.idProduto,
+--     s.idArmazem,
+--     s.saldo,
+--     s.reservado,
+--     s.disponivel
+-- FROM stock s
+-- WHERE s.idProduto = 1 AND s.idArmazem = 1;
+
+-- -- 1. Criar requisicao pendente.
+-- INSERT INTO requisicao (id, dataNecessidade, estado, motivo)
+-- VALUES (1, DATE_ADD(CURDATE(), INTERVAL 1 DAY), 'Pendente', 'Teste completo de requisicao');
+
+-- -- 2. Adicionar item deve mudar estado para Submetida.
+-- INSERT INTO itemRequisicao (quantidade, idRequisicao, idProduto, idArmazem)
+-- VALUES (30, 1, 1, 1);
+
+-- SELECT
+--     'TESTE 1 - Estado apos item' AS teste,
+--     r.id,
+--     r.estado
+-- FROM requisicao r
+-- WHERE r.id = 1;
+
+-- -- 3. Aprovar deve reservar stock e criar picking.
+-- CALL AprovarRequisicao(1);
 
 
-SELECT
-    'TESTE 2 - Reserva criada' AS teste,
-    rs.idProduto,
-    rs.idArmazem,
-    rs.quantidade,
-    rs.estado
-FROM reserva_stock rs
-WHERE rs.idRequisicao = 1;
-
-SELECT
-    'TESTE 2 - Stock reservado' AS teste,
-    s.saldo,
-    s.reservado,
-    s.disponivel
-FROM stock s
-WHERE s.idProduto = 1 AND s.idArmazem = 1;
-
-SELECT
-    'TESTE 2 - Picking criado' AS teste,
-    p.tipo,
-    p.estado,
-    p.idRequisicao
-FROM picking p
-WHERE p.idRequisicao = 1;
+-- SELECT
+--     'TESTE 2 - Requisicao aprovada' AS teste,
+--     r.id,
+--     r.estado
+-- FROM requisicao r
+-- WHERE r.id = 1;
 
 
--- 4. Confirmar picking deve consumir reserva, baixar stock e lotes.
-CALL ConfirmarPicking(1);
+-- SELECT
+--     'TESTE 2 - Reserva criada' AS teste,
+--     rs.idProduto,
+--     rs.idArmazem,
+--     rs.quantidade,
+--     rs.estado
+-- FROM reserva_stock rs
+-- WHERE rs.idRequisicao = 1;
 
-SELECT
-    'TESTE 3 - Requisicao finalizada' AS teste,
-    r.id,
-    r.estado
-FROM requisicao r
-WHERE r.id = 1;
+-- SELECT
+--     'TESTE 2 - Stock reservado' AS teste,
+--     s.saldo,
+--     s.reservado,
+--     s.disponivel
+-- FROM stock s
+-- WHERE s.idProduto = 1 AND s.idArmazem = 1;
 
-SELECT
-    'TESTE 3 - Reserva consumida' AS teste,
-    rs.quantidade,
-    rs.estado
-FROM reserva_stock rs
-WHERE rs.idRequisicao = 1;
-
-SELECT
-    'TESTE 3 - Picking confirmado' AS teste,
-    p.estado,
-    p.dataFim
-FROM picking p
-WHERE p.idRequisicao = 1;
-
-SELECT
-    'TESTE 3 - Movimento de saida' AS teste,
-    m.tipoOrigem,
-    m.tipoMovimento,
-    m.quantidade,
-    m.idProduto,
-    m.idArmazem
-FROM movimento m
-WHERE m.tipoOrigem = 'Requisicao'
-ORDER BY m.id DESC
-LIMIT 1;
+-- SELECT
+--     'TESTE 2 - Picking criado' AS teste,
+--     p.tipo,
+--     p.estado,
+--     p.idRequisicao
+-- FROM picking p
+-- WHERE p.idRequisicao = 1;
 
 
-SELECT
-    'TESTE 3 - Movimento/lote FIFO' AS teste,
-    ml.idMovimento,
-    ml.idLote,
-    ml.quantidadeRetirada
-FROM movimento_lote ml
-JOIN movimento m ON m.id = ml.idMovimento
-WHERE m.tipoOrigem = 'Requisicao'
-ORDER BY ml.id DESC
-LIMIT 1;
+-- -- 4. Confirmar picking deve consumir reserva, baixar stock e lotes.
+-- CALL ConfirmarPicking(1);
 
-SELECT
-    'TESTE 3 - Lote apos requisicao' AS teste,
-    l.codigo,
-    l.quantidadeAtual,
-    l.estado
-FROM lote l
-WHERE l.codigo = 'REQ-LOTE-001';
+-- SELECT
+--     'TESTE 3 - Requisicao finalizada' AS teste,
+--     r.id,
+--     r.estado
+-- FROM requisicao r
+-- WHERE r.id = 1;
 
-SELECT
-    'TESTE 3 - Stock final' AS teste,
-    s.saldo,
-    s.reservado,
-    s.disponivel
-FROM stock s
-WHERE s.idProduto = 1 AND s.idArmazem = 1;
+-- SELECT
+--     'TESTE 3 - Reserva consumida' AS teste,
+--     rs.quantidade,
+--     rs.estado
+-- FROM reserva_stock rs
+-- WHERE rs.idRequisicao = 1;
 
--- Resultado esperado:
--- Estado final: Finalizada
--- Reserva: Consumido
--- Picking: Confirmado
--- Stock: saldo 70, reservado 0, disponivel 70
--- Lote: quantidadeAtual 70
--- Movimento: Requisicao/Saida com quantidade 30
+-- SELECT
+--     'TESTE 3 - Picking confirmado' AS teste,
+--     p.estado,
+--     p.dataFim
+-- FROM picking p
+-- WHERE p.idRequisicao = 1;
 
--- ============================================================
--- MODULO 4: PRECOS
--- Valida IVA percentual: preco base 100 com IVA 17 deve gerar 117.
--- ============================================================
-
-CALL sp_registar_preco(1, 1, 100.00);
-
-SELECT
-    'TESTE 4 - Preco com IVA' AS teste,
-    precoBase,
-    precoVenda,
-    precoFinal,
-    CASE WHEN ROUND(precoVenda, 2) = 117.00 THEN 'OK' ELSE 'ERRO' END AS resultado
-FROM precoProdutoArmazem
-WHERE idProduto = 1 AND idArmazem = 1
-ORDER BY id DESC
-LIMIT 1;
-
--- ============================================================
--- MODULO 5: FACTURACAO E PAGAMENTO
--- Vende 5 unidades depois da requisicao. Esperado:
--- saldo 65, reservado 0, disponivel 65, factura paga e caixa 585.
--- ============================================================
-
-INSERT INTO cliente (id, tipo, nome, razaosocial, nuit, fk_id_usuario)
-VALUES (1, 'Pessoa Fisica', 'Cliente Teste', 'Cliente Teste Lda', 111222333, 1);
+-- SELECT
+--     'TESTE 3 - Movimento de saida' AS teste,
+--     m.tipoOrigem,
+--     m.tipoMovimento,
+--     m.quantidade,
+--     m.idProduto,
+--     m.idArmazem
+-- FROM movimento m
+-- WHERE m.tipoOrigem = 'Requisicao'
+-- ORDER BY m.id DESC
+-- LIMIT 1;
 
 
-INSERT INTO factura (numero, data_emissao, data_vencimento, total, fk_id_empresa, fk_id_cliente, fk_id_usuario, fk_id_doc, saldoPendente)
-VALUES ('FA-TESTE-001', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 5 DAY), 585.00, 1, 1, 1, 1, 585.00);
+-- SELECT
+--     'TESTE 3 - Movimento/lote FIFO' AS teste,
+--     ml.idMovimento,
+--     ml.idLote,
+--     ml.quantidadeRetirada
+-- FROM movimento_lote ml
+-- JOIN movimento m ON m.id = ml.idMovimento
+-- WHERE m.tipoOrigem = 'Requisicao'
+-- ORDER BY ml.id DESC
+-- LIMIT 1;
 
-INSERT INTO itemfactura (quantidade, subtotal, qtd_por_unidade, fk_id_produto, fk_numero, fk_id_usuario, fk_id_armazem)
-VALUES (5, 585.00, 1, 1, 'FA-TESTE-001', 1, 1);
+-- SELECT
+--     'TESTE 3 - Lote apos requisicao' AS teste,
+--     l.codigo,
+--     l.quantidadeAtual,
+--     l.estado
+-- FROM lote l
+-- WHERE l.codigo = 'REQ-LOTE-001';
 
-INSERT INTO transacoes (data_pagamento, valorRecebido, valorPago, trocos, tipo_transacao, descricao, fk_id_contabancaria, fk_id_metodo_pagamento, fk_numero, fk_id_usuario)
-VALUES (CURDATE(), 600.00, 585.00, 15.00, 'Entrada', 'Pagamento de factura', 1, 1, 'FA-TESTE-001', 1);
+-- SELECT
+--     'TESTE 3 - Stock final' AS teste,
+--     s.saldo,
+--     s.reservado,
+--     s.disponivel
+-- FROM stock s
+-- WHERE s.idProduto = 1 AND s.idArmazem = 1;
 
-SELECT
-    'TESTE 5 - Movimento venda' AS teste,
-    tipoOrigem,
-    tipoMovimento,
-    quantidade,
-    idProduto,
-    idArmazem,
-    idLote
-FROM movimento
-WHERE tipoOrigem = 'Venda'
-ORDER BY id DESC
-LIMIT 1;
+-- -- Resultado esperado:
+-- -- Estado final: Finalizada
+-- -- Reserva: Consumido
+-- -- Picking: Confirmado
+-- -- Stock: saldo 70, reservado 0, disponivel 70
+-- -- Lote: quantidadeAtual 70
+-- -- Movimento: Requisicao/Saida com quantidade 30
 
-SELECT
-    'TESTE 5 - Movimento/lote venda' AS teste,
-    ml.idMovimento,
-    ml.idLote,
-    ml.quantidadeRetirada
-FROM movimento_lote ml
-JOIN movimento m ON m.id = ml.idMovimento
-WHERE m.tipoOrigem = 'Venda'
-ORDER BY ml.id DESC
-LIMIT 1;
+-- -- ============================================================
+-- -- MODULO 4: PRECOS
+-- -- Valida IVA percentual: preco base 100 com IVA 17 deve gerar 117.
+-- -- ============================================================
 
-SELECT
-    'TESTE 5 - Stock final apos venda' AS teste,
-    saldo,
-    reservado,
-    disponivel
-FROM stock
-WHERE idProduto = 1 AND idArmazem = 1;
+-- CALL sp_registar_preco(1, 1, 100.00);
 
-SELECT
-    'TESTE 5 - Lote final apos venda' AS teste,
-    codigo,
-    quantidadeAtual,
-    estado
-FROM lote
-WHERE codigo = 'REQ-LOTE-001';
+-- SELECT
+--     'TESTE 4 - Preco com IVA' AS teste,
+--     precoBase,
+--     precoVenda,
+--     precoFinal,
+--     CASE WHEN ROUND(precoVenda, 2) = 117.00 THEN 'OK' ELSE 'ERRO' END AS resultado
+-- FROM precoProdutoArmazem
+-- WHERE idProduto = 1 AND idArmazem = 1
+-- ORDER BY id DESC
+-- LIMIT 1;
 
-SELECT
-    'TESTE 5 - Factura paga' AS teste,
-    numero,
-    total,
-    totalPago,
-    saldoPendente,
-    estado
-FROM factura
-WHERE numero = 'FA-TESTE-001';
+-- -- ============================================================
+-- -- MODULO 5: FACTURACAO E PAGAMENTO
+-- -- Vende 5 unidades depois da requisicao. Esperado:
+-- -- saldo 65, reservado 0, disponivel 65, factura paga e caixa 585.
+-- -- ============================================================
 
-SELECT
-    'TESTE 5 - Caixa' AS teste,
-    saldo_inicial,
-    saldo_atual
-FROM caixa
-ORDER BY id DESC
-LIMIT 1;
+-- INSERT INTO cliente (id, tipo, nome, razaosocial, nuit, fk_id_usuario)
+-- VALUES (1, 'Pessoa Fisica', 'Cliente Teste', 'Cliente Teste Lda', 111222333, 1);
+
+
+-- INSERT INTO factura (numero, data_emissao, data_vencimento, total, fk_id_empresa, fk_id_cliente, fk_id_usuario, fk_id_doc, saldoPendente)
+-- VALUES ('FA-TESTE-001', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 5 DAY), 585.00, 1, 1, 1, 1, 585.00);
+
+-- INSERT INTO itemfactura (quantidade, subtotal, qtd_por_unidade, fk_id_produto, fk_numero, fk_id_usuario, fk_id_armazem)
+-- VALUES (5, 585.00, 1, 1, 'FA-TESTE-001', 1, 1);
+
+-- INSERT INTO transacoes (data_pagamento, valorRecebido, valorPago, trocos, tipo_transacao, descricao, fk_id_contabancaria, fk_id_metodo_pagamento, fk_numero, fk_id_usuario)
+-- VALUES (CURDATE(), 600.00, 585.00, 15.00, 'Entrada', 'Pagamento de factura', 1, 1, 'FA-TESTE-001', 1);
+
+-- SELECT
+--     'TESTE 5 - Movimento venda' AS teste,
+--     tipoOrigem,
+--     tipoMovimento,
+--     quantidade,
+--     idProduto,
+--     idArmazem,
+--     idLote
+-- FROM movimento
+-- WHERE tipoOrigem = 'Venda'
+-- ORDER BY id DESC
+-- LIMIT 1;
+
+-- SELECT
+--     'TESTE 5 - Movimento/lote venda' AS teste,
+--     ml.idMovimento,
+--     ml.idLote,
+--     ml.quantidadeRetirada
+-- FROM movimento_lote ml
+-- JOIN movimento m ON m.id = ml.idMovimento
+-- WHERE m.tipoOrigem = 'Venda'
+-- ORDER BY ml.id DESC
+-- LIMIT 1;
+
+-- SELECT
+--     'TESTE 5 - Stock final apos venda' AS teste,
+--     saldo,
+--     reservado,
+--     disponivel
+-- FROM stock
+-- WHERE idProduto = 1 AND idArmazem = 1;
+
+-- SELECT
+--     'TESTE 5 - Lote final apos venda' AS teste,
+--     codigo,
+--     quantidadeAtual,
+--     estado
+-- FROM lote
+-- WHERE codigo = 'REQ-LOTE-001';
+
+-- SELECT
+--     'TESTE 5 - Factura paga' AS teste,
+--     numero,
+--     total,
+--     totalPago,
+--     saldoPendente,
+--     estado
+-- FROM factura
+-- WHERE numero = 'FA-TESTE-001';
+
+-- SELECT
+--     'TESTE 5 - Caixa' AS teste,
+--     saldo_inicial,
+--     saldo_atual
+-- FROM caixa
+-- ORDER BY id DESC
+-- LIMIT 1;

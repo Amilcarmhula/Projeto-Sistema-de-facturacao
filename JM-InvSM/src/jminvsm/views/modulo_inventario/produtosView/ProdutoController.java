@@ -16,8 +16,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -35,26 +33,27 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.util.Callback;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
+import jminvsm.model.configuracao.ConfiguracaoSistema;
 import jminvsm.model.desconto.Desconto;
 import jminvsm.model.desconto.ProdutoDesconto;
-import jminvsm.model.fornecedor.Fornecedor;
-import jminvsm.model.produto.Produto;
 import jminvsm.model.imposto.Imposto;
 import jminvsm.model.preco.PrecoProdutoArmazem;
+import jminvsm.model.produto.Produto;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.categoria.ServicoCategoria;
+import jminvsm.service.ServiceException;
+import jminvsm.service.configuracao.ServiceConfiguracaoSistema;
 import jminvsm.service.desconto.ServiceDesconto;
 import jminvsm.service.desconto.ServiceProdutoDesconto;
 import jminvsm.service.precoProdutoArmazem.ServicePrecoProdutoArmazem;
@@ -63,6 +62,7 @@ import jminvsm.service.stock.ServiceStock;
 import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
 import jminvsm.service.unidadeMedida.ServiceUnidadeMedida;
 import jminvsm.util.AlertUtilities;
+import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.FilePathFinderUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
@@ -76,6 +76,7 @@ public class ProdutoController implements Initializable {
 
     private Usuario userData;
     private ServicePrecoProdutoArmazem serPrecosProduArm;
+    private ServiceConfiguracaoSistema serviceConfiguracao;
     private ServicoCategoria serCategoria;
     private ServiceTaxaImpostos serTaxa;
     private ServiceUnidadeMedida serUnidade;
@@ -205,8 +206,6 @@ public class ProdutoController implements Initializable {
     @FXML
     private Label labPercentagemTaxa;
     @FXML
-    private Label labFamilia;
-    @FXML
     private TextField txtPreco;
     @FXML
     private TextField txtUnidadesPorTipo;
@@ -240,7 +239,7 @@ public class ProdutoController implements Initializable {
 
     @FXML
     public void getViews(ActionEvent e) {
-        SysFact.setData(null);
+        SessaoAplicacao.setData(null);
         String path = "";
         if (e.getSource() == btn_taxas) {
             path = "/jminvsm/views/modulo_inventario/taxasView/taxaView.fxml";
@@ -308,18 +307,17 @@ public class ProdutoController implements Initializable {
 //            @Override
 //            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 //                if (!oldValue && newValue) {
-//                    if (SysFact.getData() instanceof Double) {
-//                        txtPreco.setText(SysFact.getData() + "");
+//                    if (SessaoAplicacao.getData() instanceof Double) {
+//                        txtPreco.setText(SessaoAplicacao.getData() + "");
 //                    }
 //                }
 //            }
 //        });
 //    }
-
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.userData = SysFact.getUserData();
+        serviceConfiguracao = new ServiceConfiguracaoSistema();
+        this.userData = SessaoAplicacao.getUserData();
         try {
             serPrecosProduArm = new ServicePrecoProdutoArmazem();
             serCategoria = new ServicoCategoria();
@@ -341,19 +339,33 @@ public class ProdutoController implements Initializable {
         populateCombos();
         cBoxArmazem.setOnAction(evt -> {
             String data = cBoxArmazem.getSelectionModel().getSelectedItem();
-            idArmazem = mapaArmazens.get(data).getId();
-            showProdutoDesconto();
+            Armazem armazem = data == null ? null : mapaArmazens.get(data);
+            if (armazem != null) {
+                idArmazem = armazem.getId();
+            }
         });
         cBoxArmazemDesconto.setOnAction(evt -> {
             String data = cBoxArmazemDesconto.getSelectionModel().getSelectedItem();
-            idArmazemDesconto = mapaArmazens.get(data).getId();
-            showProdutoDesconto();
+            Armazem armazem = data == null ? null : mapaArmazens.get(data);
+            if (armazem != null) {
+                idArmazemDesconto = armazem.getId();
+            }
         });
         cBoxDesconto.setOnAction(evt -> {
             String data = cBoxDesconto.getSelectionModel().getSelectedItem();
-            idDescontoComb = mapaDesconto.get(data).getId();
-            labDescricaoDesconto.setText(mapaDesconto.get(data).getDescricao());
+            Desconto desconto = data == null ? null : mapaDesconto.get(data);
+            if (desconto != null) {
+                idDescontoComb = desconto.getId();
+                labDescricaoDesconto.setText(desconto.getDescricao());
+                txtIDDesconto.setText(String.valueOf(desconto.getId()));
+                txtPercentagemDesconto.setText(String.valueOf(desconto.getPercentagem()));
+            }
         });
+
+        tabelaProduto.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabelaPrecos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableResumoStock.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabelaprodutodesconto.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 //        precoListener();
         ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
 
@@ -488,18 +500,34 @@ public class ProdutoController implements Initializable {
         String tipo = combTipo.getValue();
         Integer uniPorTipo = Integer.valueOf(txtUnidadesPorTipo.getText().equals("") ? "0" : txtUnidadesPorTipo.getText());
 
-        productService.regista(id_cat, id_uni,
-                id_tax, txtNomeProduto.getText(),
-                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), tipo, uniPorTipo,
-                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("") ? "0" : txtNivelStock.getText()));
+        try {
+            productService.regista(id_cat, id_uni,
+                    id_tax, txtNomeProduto.getText(),
+                    txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), tipo, uniPorTipo,
+                    checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("") ? "0" : txtNivelStock.getText()));
+        } catch (ServiceException ex) {
+            AlertUtilities.showErroAlert(ex.getMessage());
+            return;
+        }
+        if (productService.isOpsSuccess()) {
+            AlertUtilities.showSuccessAlert("Produto registado com sucesso!");
+        }
         showProdutos();
         resetCampos();
         stockControlChecked();
     }
 
     public void addPrecoProdutoArmazem(ActionEvent e) {
-        double precoNorm = Double.parseDouble(txtPreco.getText().equals("") ? "0" : txtPreco.getText());
-        Integer idProd = Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText());
+        if (txtIDProduto.getText() == null || txtIDProduto.getText().isEmpty()) {
+            AlertUtilities.showErroAlert("Seleccione primeiro um produto.");
+            return;
+        }
+        if (cBoxArmazem.getValue() == null) {
+            AlertUtilities.showErroAlert("Seleccione o armazÃ©m.");
+            return;
+        }
+        double precoNorm = Double.parseDouble(txtPreco.getText().isEmpty() ? "0" : txtPreco.getText());
+        Integer idProd = Integer.valueOf(txtIDProduto.getText());
 
         serPrecosProduArm.registraPreco(idProd, idArmazem, precoNorm);
         showPrecoProdutoArmazem();
@@ -508,9 +536,19 @@ public class ProdutoController implements Initializable {
     }
 
     public void addProdutoDesconto(ActionEvent e) {
-        //Double percentagem = Double.valueOf(txtPercentagemDesconto.getText().equals("") ? "0" : txtPercentagemDesconto.getText());
-        Integer idProd = Integer.valueOf(txtIDProduto.getText().equals("") ? "0" : txtIDProduto.getText());
-        Integer idDesc = idDescontoComb;
+        if (txtIDProduto.getText() == null || txtIDProduto.getText().isEmpty()) {
+            AlertUtilities.showErroAlert("Seleccione primeiro um produto.");
+            return;
+        }
+        if (cBoxDesconto.getValue() == null || cBoxArmazemDesconto.getValue() == null) {
+            AlertUtilities.showErroAlert("Seleccione o desconto e o armazÃ©m.");
+            return;
+        }
+        if (dataInicioDesconto.getValue() == null || dataFimDesconto.getValue() == null) {
+            AlertUtilities.showErroAlert("Informe as datas de inÃ­cio e fim.");
+            return;
+        }
+        Integer idProd = Integer.valueOf(txtIDProduto.getText());
 
         serProDesconto.regista(idProd, idDescontoComb, idArmazemDesconto,
                 String.valueOf(dataInicioDesconto.getValue()),
@@ -530,9 +568,17 @@ public class ProdutoController implements Initializable {
         String tipo = combTipo.getValue();
         Integer uniPorTipo = Integer.valueOf(txtUnidadesPorTipo.getText().equals("") ? "0" : txtUnidadesPorTipo.getText());
 
-        productService.actualiza(id_pro, id_cat, id_uni, id_tax, txtNomeProduto.getText(),
-                txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), tipo, uniPorTipo,
-                checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
+        try {
+            productService.actualiza(id_pro, id_cat, id_uni, id_tax, txtNomeProduto.getText(),
+                    txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), tipo, uniPorTipo,
+                    checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
+        } catch (ServiceException ex) {
+            AlertUtilities.showErroAlert(ex.getMessage());
+            return;
+        }
+        if (productService.isOpsSuccess()) {
+            AlertUtilities.showSuccessAlert("Produto actualizado com sucesso.");
+        }
 
         showProdutos();
 //        resetCampos();
@@ -602,6 +648,7 @@ public class ProdutoController implements Initializable {
         mapaDesconto = new HashMap<>();
         for (Desconto d : descontoList) {
             listaDesconto.add(d.getNome());
+            System.out.println(d.getNome());
             mapaDesconto.put(d.getNome(), d);
         }
         cBoxDesconto.setItems(FXCollections.observableArrayList(listaDesconto));
@@ -658,17 +705,24 @@ public class ProdutoController implements Initializable {
             combTaxa.setValue(p.getImposto().getNome());
             txtUnidadesPorTipo.setText(String.valueOf(p.getUnidadesPorTipo()));
             labCategoria.setText(p.getCategoria().getGrupo() + " > " + p.getCategoria().getSubgrupo() + " > " + p.getCategoria().getFamilia());
-            labUnidade.setText(p.getUnidadeMedida().getNome()+":"+p.getUnidadeMedida().getSigla());
+            labUnidade.setText(p.getUnidadeMedida().getNome() + ":" + p.getUnidadeMedida().getSigla());
             labTaxa.setText(p.getImposto().getNome());
-            labPercentagemTaxa.setText(p.getImposto().getPercentagem()+" %");
+            labPercentagemTaxa.setText(p.getImposto().getPercentagem() + " %");
+//            labFamilia.setText(p.getCategoria().getFamilia());
             stockControlChecked();
             showResumoStock(x.getId());
             showPrecoProdutoArmazem();
             showProdutoDesconto();
-
+            ConfiguracaoSistema configuracao = serviceConfiguracao.getConfiguracaoActual();
+//            System.out.println("modo: "+configuracao.getModoOperacao());
             if (event.getClickCount() == 2 && p.isControle_stock()) {
-                SysFact.setData(p);
-                getStockView(event);
+                if (configuracao.getModoOperacao().equals("FACTURACAO_STOCK")) {
+                    SessaoAplicacao.setData(p);
+                    getStockView(event);
+                } else {
+                    showDialog("Notificacao", "Controlo de stock insdiponivel no modo de Facturacao");
+                }
+
             }
             deleteProduto(event, x);
 //            ButtonUtilities.buttonChangeText(btnAddProduto, txtIDProduto);
@@ -678,7 +732,7 @@ public class ProdutoController implements Initializable {
 
     private ObservableList<Stock> listaResumoStock;
 
-    public void showResumoStock(int id)  {
+    public void showResumoStock(int id) {
         listaResumoStock = serviceStock.getResumo(id);
 
         armazemResumoStock.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
@@ -706,11 +760,18 @@ public class ProdutoController implements Initializable {
             dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
 
             Optional<ButtonType> result = dialog.showAndWait();
-            if (result.get() == btnDelete) {
-                productService.excluir(x.getId());
-                showProdutos();
-                resetCampos();
-            } else if (result.get() == btnCancel) {
+            if (result.orElse(btnCancel) == btnDelete) {
+                try {
+                    productService.excluir(x.getId());
+                    if (productService.isOpsSuccess()) {
+                        AlertUtilities.showSuccessAlert("Produto excluido com sucesso.");
+                        showProdutos();
+                        resetCampos();
+                    }
+                } catch (ServiceException ex) {
+                    AlertUtilities.showErroAlert(ex.getMessage());
+                }
+            } else {
                 resetCampos();
             }
         }
@@ -741,14 +802,14 @@ public class ProdutoController implements Initializable {
             dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
 
             Optional<ButtonType> result = dialog.showAndWait();
-            if (result.get() == btnDelete) {
+            if (result.orElse(btnCancel) == btnDelete) {
 //                servicePrecos.deletePreco(x.getId());
                 if (serPrecosProduArm.isOpsSuccess()) {
                     showProdutos();
 //                    showPrecoProdutoArmazem();
                     resetCampos();
                 }
-            } else if (result.get() == btnCancel) {
+            } else {
                 resetCampos();
             }
         }
@@ -782,6 +843,10 @@ public class ProdutoController implements Initializable {
     private ObservableList<ProdutoDesconto> listaprodutodesconto;
 
     public void showProdutoDesconto() {
+        if (txtIDProduto.getText() == null || txtIDProduto.getText().isEmpty()) {
+            tabelaprodutodesconto.setItems(FXCollections.observableArrayList());
+            return;
+        }
         listaprodutodesconto = serProDesconto.consultaProdutoDesconto(Integer.parseInt(txtIDProduto.getText()));
 
         pdProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
@@ -813,3 +878,4 @@ public class ProdutoController implements Initializable {
     }
 
 }
+

@@ -4,7 +4,6 @@
  */
 package jminvsm.model.cliente;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -166,7 +165,7 @@ public class Cliente {
         if (enderecoCliente != null) {
             endereco = "Av. " + enderecoCliente.getAvenida_cli() + ", Rua " + enderecoCliente.getRua_cli()
                     + ", Nr." + enderecoCliente.getNumero_cli() + "; Bairro " + enderecoCliente.getBairro_cli()
-                    + ", " + enderecoCliente.getCidade_cli() + ", " + enderecoCliente.getProvincia_cli()
+                    + ", Cidade De(a) " + enderecoCliente.getCidade_cli() + ", " + enderecoCliente.getProvincia_cli()
                     + "-" + enderecoCliente.getCodigoPostal_cli();
         }
         return endereco;

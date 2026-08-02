@@ -166,18 +166,25 @@ public class DashboardController implements Initializable {
             serviceContaCorrente = new ServiceContaCorrente();
             serviceProduto = new ServiceProduto();
             
+            mapCategorias();
+            mapArmazens();
+
+            tabelaStock.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            tabelaFactura.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
             showStock();
             showMovimentos();
             showCountCliente();
             showCountFornecedor();
-            mapCategorias();
-            mapArmazens();
             showFacturas();
             showCountProdutos();
             showCountStock();
+            showCountInvoice();
+            showTotalInvoicePaid();
             loadLowStockBalance();
+
             labArmazem.setText(combArmazem.getValue() == null ? "Todos..." : combArmazem.getValue());
-            labCategoria.setText(combCategoria.getValue() == null ? "Todas..." : combArmazem.getValue());
+            labCategoria.setText(combCategoria.getValue() == null ? "Todas..." : combCategoria.getValue());
         } catch (SQLException ex) {
             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -191,32 +198,33 @@ public class DashboardController implements Initializable {
     }
 
     public void updadeLowStock() {
-        Thread x = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 5; i++) {
-                    for (Stock stock : listaLowStock) {
+        if (listaLowStock == null || listaLowStock.isEmpty()) {
+            labArmazemStock.setText("—");
+            labProdutoStock.setText("Nenhum produto com stock baixo");
+            labSaldo.setText("0");
+            return;
+        }
 
-                        try {
-                            Platform.runLater(() -> {
+        Thread x = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                for (Stock stockItem : listaLowStock) {
+                    Platform.runLater(() -> {
+                        labArmazemStock.setText(stockItem.getArmazem().getNome_arm());
+                        labProdutoStock.setText(stockItem.getProduto().getNome());
+                        labSaldo.setText(String.valueOf(stockItem.getSaldo()));
+                    });
 
-                                labArmazemStock.setText(stock.getArmazem().getNome_arm());
-                                labProdutoStock.setText(stock.getProduto().getNome());
-                                labSaldo.setText(stock.getSaldo() + "");
-                            });
-                            // A thread dorme por 5 segundo
-                            Thread.sleep(5000);
-                        } catch (InterruptedException ex) {
-                            // Trata uma possível interrupção da thread
-                            System.out.println("Erro: " + ex);
-                        }
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                        return;
                     }
                 }
-//                System.out.println("\nFim");
-//                updadeLowStock();
             }
-        });
-        // Inicia a execução da thread
+        }, "dashboard-low-stock");
+
+        x.setDaemon(true);
         x.start();
     }
     private ObservableList<Categoria> listaFamilias;
@@ -421,80 +429,30 @@ public class DashboardController implements Initializable {
         showCountStock();
     }
 
-    public void showInvoice(MouseEvent evt) throws SQLException{
-        if (evt.getClickCount() == 2) {
-            Factura f = tabelaFactura.getSelectionModel().getSelectedItem();
-            serviceFactura.geraRelatorio(f.getNumero_fac());
-        }
-
-    }
-
-//    public void autoUpdade() {
-//        Thread x = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                for (int i = 0; i < 5; i++) {
-//                    try {
-//                        // Actualiza os dados a cada 10 segundos
-//                        showStock();
-//                        showMovimentos();
-//                        showCountCliente();
-//                        showCountFornecedor();
-//                        mapCategorias();
-//                        mapArmazens();
-//                    } catch (SQLException ex) {
-//                        Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//
-//                    try {
-//                        // A thread dorme por 1 segundo
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException ex) {
-//                        // Trata uma possível interrupção da thread
-//                        System.out.println("Erro: " + ex);
-//                    }
-//                }
-//                autoUpdade();
-//                // Imprime a mensagem "Fim" após o término do loop
-//                System.out.println("\nFim");
-//            }
-//        });
-//
-//        // Inicia a execução da thread
-//        x.start();
-//    }
     public void autoUpdade() {
-        Thread x = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 5; i++) {
+        Thread x = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
                 try {
-                    // Actualiza os dados a cada 10 segundos
-                    Platform.runLater(() -> { //To update UI elements from a background thread
-                            showStock(); // This as an UI component
-                            showMovimentos();
-                            showCountCliente();
-                            showCountFornecedor();
-                            showCountInvoice();
-                            showTotalInvoicePaid();
-                            mapCategorias();
-                            mapArmazens();
-                    });
-
-                    // A thread dorme por 1 minuto
                     Thread.sleep(60000);
                 } catch (InterruptedException ex) {
-                    // Trata uma possível interrupção da thread
-                    System.out.println("Erro: " + ex);
+                    Thread.currentThread().interrupt();
+                    return;
                 }
-                }
-//                autoUpdade();
-                // Imprime a mensagem "Fim" após o término do loop
-//                System.out.println("\nFim");
-            }
-        });
 
-        // Inicia a execução da thread
+                Platform.runLater(() -> {
+                    showStock();
+                    showMovimentos();
+                    showCountCliente();
+                    showCountFornecedor();
+                    showCountInvoice();
+                    showTotalInvoicePaid();
+                    showCountProdutos();
+                    showCountStock();
+                });
+            }
+        }, "dashboard-auto-update");
+
+        x.setDaemon(true);
         x.start();
     }
 

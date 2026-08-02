@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="909.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_compra.requisicaoView.RequisicaoViewController">
+    <children>
+        <VBox spacing="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" minHeight="58.0" prefHeight="58.0" spacing="12.0" styleClass="secondary-color">
+                    <padding>
+                        <Insets left="18.0" right="20.0" />
+                    </padding>
+                    <children>
+                        <Label text="Modulo de requisicoes" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="27.0" />
+                            </font>
+                            <graphic>
+                                <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../image/icons/doc.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="labResumoCabecalho" opacity="0.78" text="Criacao, aprovacao, reservas e picking" textFill="WHITE">
+                            <font>
+                                <Font name="Berlin Sans FB" size="16.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+
+                <TabPane fx:id="tabPaneRequisicoes" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                    <tabs>
+                        <Tab text="Nova requisicao">
+                            <content>
+                                <VBox spacing="12.0">
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="16.0" top="14.0" />
+                                    </padding>
+                                    <children>
+                                        <GridPane hgap="12.0" styleClass="secondary-color" vgap="10.0">
+                                            <padding>
+                                                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                                            </padding>
+                                            <columnConstraints>
+                                                <ColumnConstraints minWidth="135.0" prefWidth="150.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="230.0" />
+                                                <ColumnConstraints minWidth="135.0" prefWidth="150.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="230.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="38.0" />
+                                                <RowConstraints minHeight="86.0" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Data necessaria" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                       <font>
+                                          <Font name="Berlin Sans FB" size="16.0" />
+                                       </font></Label>
+                                                <DatePicker fx:id="dataNecessidadePicker" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                                <Label text="Estado inicial" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                       <font>
+                                          <Font name="Berlin Sans FB" size="16.0" />
+                                       </font></Label>
+                                                <Label text="Pendente" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                                                    <font>
+                                                        <Font name="System Bold" size="15.0" />
+                                                    </font>
+                                                </Label>
+
+                                                <Label text="Motivo" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font name="Berlin Sans FB" size="16.0" />
+                                       </font></Label>
+                                                <TextArea fx:id="txtMotivo" prefRowCount="3" promptText="Motivo da requisicao" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+                                            </children>
+                                        </GridPane>
+
+                                        <GridPane hgap="12.0" vgap="10.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="34.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="26.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="26.0" />
+                                            </columnConstraints>
+                                            <children>
+                                                <VBox spacing="6.0" GridPane.columnIndex="0">
+                                                    <children>
+                                                        <Label text="Produto">
+                                             <font>
+                                                <Font name="Berlin Sans FB" size="16.0" />
+                                             </font></Label>
+                                                        <ComboBox fx:id="combProduto" maxWidth="1.7976931348623157E308" promptText="Seleccione o produto" />
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="6.0" GridPane.columnIndex="1">
+                                                    <children>
+                                                        <Label text="Armazem">
+                                             <font>
+                                                <Font name="Berlin Sans FB" size="16.0" />
+                                             </font></Label>
+                                                        <ComboBox fx:id="combArmazem" maxWidth="1.7976931348623157E308" promptText="Seleccione o armazem" />
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="6.0" GridPane.columnIndex="2">
+                                                    <children>
+                                                        <Label text="Quantidade">
+                                             <font>
+                                                <Font name="Berlin Sans FB" size="16.0" />
+                                             </font></Label>
+                                                        <TextField fx:id="txtQuantidade" promptText="0" />
+                                                    </children>
+                                                </VBox>
+                                                <HBox alignment="BOTTOM_RIGHT" spacing="8.0" GridPane.columnIndex="3">
+                                                    <children>
+                                                        <Button mnemonicParsing="false" onAction="#adicionarItem" prefHeight="40.0" prefWidth="130.0" text="Adicionar item" textFill="WHITE">
+                                                            <styleClass>
+                                                                <String fx:value="secondary-color" />
+                                                                <String fx:value="hand-efect" />
+                                                                <String fx:value="shadow-efect" />
+                                                            </styleClass>
+                                             <font>
+                                                <Font name="Berlin Sans FB" size="14.0" />
+                                             </font>
+                                                        </Button>
+                                                        <Button mnemonicParsing="false" onAction="#removerItem" prefHeight="40.0" prefWidth="130.0" text="Remover" textFill="WHITE">
+                                             <styleClass>
+                                                <String fx:value="hand-efect" />
+                                                <String fx:value="secondary-color" />
+                                                <String fx:value="shadow-efect" />
+                                             </styleClass>
+                                             <font>
+                                                <Font name="Berlin Sans FB" size="14.0" />
+                                             </font></Button>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                 </rowConstraints>
+                                        </GridPane>
+
+                                        <TableView fx:id="tabelaItensNova" minHeight="260.0" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colItemProduto" prefWidth="593.0" text="Produto" />
+                                                <TableColumn fx:id="colItemArmazem" prefWidth="663.0" text="Armazem" />
+                                                <TableColumn fx:id="colItemQuantidade" prefWidth="102.0" text="Quantidade" />
+                                            </columns>
+                                        </TableView>
+
+                                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                            <children>
+                                                <Button mnemonicParsing="false" onAction="#limparFormulario" prefHeight="40.0" prefWidth="130.0" text="Limpar" textFill="WHITE">
+                                       <styleClass>
+                                          <String fx:value="hand-efect" />
+                                          <String fx:value="secondary-color" />
+                                          <String fx:value="shadow-efect" />
+                                       </styleClass>
+                                       <font>
+                                          <Font name="Berlin Sans FB" size="14.0" />
+                                       </font></Button>
+                                                <Button mnemonicParsing="false" onAction="#guardarRequisicao" prefHeight="40.0" prefWidth="130.0" text="Guardar requisicao" textFill="WHITE">
+                                                    <styleClass>
+                                                        <String fx:value="secondary-color" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="shadow-efect" />
+                                                    </styleClass>
+                                       <font>
+                                          <Font name="Berlin Sans FB" size="14.0" />
+                                       </font>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+
+                        <Tab text="Gestao e fluxo">
+                            <content>
+                                <VBox spacing="12.0">
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="16.0" top="14.0" />
+                                    </padding>
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                            <children>
+                                                <TextField fx:id="txtPesquisa" prefHeight="26.0" prefWidth="980.0" promptText="Pesquisar por ID, estado ou motivo" HBox.hgrow="ALWAYS" />
+                                                <ComboBox fx:id="combFiltroEstado" prefWidth="220.0" promptText="Estado" />
+                                                <Button mnemonicParsing="false" onAction="#atualizarDados" prefWidth="150.0" text="Actualizar" textFill="WHITE">
+                                       <font>
+                                          <Font name="Berlin Sans FB" size="16.0" />
+                                       </font>
+                                       <styleClass>
+                                          <String fx:value="hand-efect" />
+                                          <String fx:value="secondary-color" />
+                                          <String fx:value="shadow-efect" />
+                                       </styleClass></Button>
+                                            </children>
+                                        </HBox>
+                              <VBox prefHeight="765.0" prefWidth="1362.0">
+                                 <children>
+                                    <VBox prefHeight="471.0" prefWidth="1362.0" spacing="8.0">
+                                       <children>
+                                          <Label text="Requisicoes">
+                                             <font>
+                                                <Font name="System Bold" size="17.0" />
+                                             </font>
+                                          </Label>
+                                          <TableView fx:id="tabelaRequisicoes" onMouseClicked="#selecionarRequisicao" VBox.vgrow="ALWAYS">
+                                             <columns>
+                                                <TableColumn fx:id="colReqId" prefWidth="102.0" text="ID" />
+                                                <TableColumn fx:id="colReqData" prefWidth="146.33334350585938" text="Data" />
+                                                <TableColumn fx:id="colReqNecessidade" prefWidth="351.6666259765625" text="Necessidade" />
+                                                <TableColumn fx:id="colReqEstado" prefWidth="151.0" text="Estado" />
+                                                <TableColumn fx:id="colReqMotivo" prefWidth="706.0" text="Motivo" />
+                                             </columns>
+                                          </TableView>
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="262.0" prefWidth="1362.0" spacing="10.0" styleClass="secondary-color">
+                                       <padding>
+                                          <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+                                       </padding>
+                                       <children>
+                                          <Label text="Detalhe da requisicao" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <HBox prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <Label text="ID:" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="labReqId" prefHeight="19.0" prefWidth="1203.0" text="-" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <Label text="Estado:" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="labReqEstado" prefWidth="1203.0" text="-" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <Label text="Data:" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="labReqData" prefWidth="1203.0" text="-" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <Label text="Necessidade:" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="labReqNecessidade" prefWidth="1203.0" text="-" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <Label text="Motivo:" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="labReqMotivo" prefWidth="1203.0" text="-" textFill="WHITE" wrapText="true">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox spacing="8.0">
+                                             <children>
+                                                <Button mnemonicParsing="false" onAction="#submeterRequisicao" prefHeight="50.0" prefWidth="150.0" text="Submeter" textFill="WHITE">
+                                                   <styleClass>
+                                                      <String fx:value="hand-efect" />
+                                                      <String fx:value="secondary-color" />
+                                                   </styleClass>
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#aprovarRequisicao" prefHeight="50.0" prefWidth="150.0" text="Aprovar" textFill="WHITE">
+                                                   <styleClass>
+                                                      <String fx:value="secondary-color" />
+                                                      <String fx:value="hand-efect" />
+                                                   </styleClass>
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#iniciarPicking" prefHeight="50.0" prefWidth="150.0" text="Iniciar picking" textFill="WHITE">
+                                                   <styleClass>
+                                                      <String fx:value="hand-efect" />
+                                                      <String fx:value="secondary-color" />
+                                                   </styleClass>
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#confirmarPicking" prefHeight="50.0" prefWidth="150.0" text="Confirmar picking" textFill="WHITE">
+                                                   <styleClass>
+                                                      <String fx:value="secondary-color" />
+                                                      <String fx:value="hand-efect" />
+                                                   </styleClass>
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#cancelarRequisicao" prefHeight="50.0" prefWidth="150.0" text="Cancelar" textFill="WHITE">
+                                                   <styleClass>
+                                                      <String fx:value="hand-efect" />
+                                                      <String fx:value="secondary-color" />
+                                                   </styleClass>
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+
+                        <Tab text="Itens, reservas e movimentos">
+                            <content>
+                                <VBox spacing="12.0">
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="16.0" top="14.0" />
+                                    </padding>
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                            <children>
+                                                <Label text="Requisicao seleccionada:">
+                                       <font>
+                                          <Font name="Berlin Sans FB" size="16.0" />
+                                       </font></Label>
+                                                <Label fx:id="labReqSelecionadaAux" text="-">
+                                       <font>
+                                          <Font name="Berlin Sans FB" size="16.0" />
+                                       </font></Label>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Button mnemonicParsing="false" onAction="#carregarDetalhesSelecionados" text="Recarregar detalhes" textFill="WHITE">
+                                       <font>
+                                          <Font name="Berlin Sans FB" size="16.0" />
+                                       </font>
+                                       <styleClass>
+                                          <String fx:value="secondary-color" />
+                                          <String fx:value="hand-efect" />
+                                          <String fx:value="shadow-efect" />
+                                       </styleClass></Button>
+                                            </children>
+                                        </HBox>
+
+                                        <GridPane hgap="12.0" vgap="12.0" VBox.vgrow="ALWAYS">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints percentHeight="50.0" vgrow="ALWAYS" />
+                                                <RowConstraints percentHeight="50.0" vgrow="ALWAYS" />
+                                            </rowConstraints>
+                                            <children>
+                                                <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                                    <children>
+                                                        <Label text="Itens solicitados">
+                                                            <font>
+                                                                <Font name="System Bold" size="16.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <TableView fx:id="tabelaItensDetalhe" VBox.vgrow="ALWAYS">
+                                                            <columns>
+                                                                <TableColumn fx:id="colDetalheProduto" prefWidth="367.0" text="Produto" />
+                                                                <TableColumn fx:id="colDetalheArmazem" prefWidth="304.0" text="Armazem" />
+                                                                <TableColumn fx:id="colDetalheQuantidade" minWidth="0.0" prefWidth="0.0" text="Qtd." />
+                                                            </columns>
+                                                        </TableView>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                                    <children>
+                                                        <Label text="Reservas de stock">
+                                                            <font>
+                                                                <Font name="System Bold" size="16.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <TableView fx:id="tabelaReservas" VBox.vgrow="ALWAYS">
+                                                            <columns>
+                                                                <TableColumn fx:id="colReservaProduto" prefWidth="324.0" text="Produto" />
+                                                                <TableColumn fx:id="colReservaArmazem" prefWidth="216.0" text="Armazem" />
+                                                                <TableColumn fx:id="colReservaQuantidade" minWidth="0.0" prefWidth="71.0" text="Qtd." />
+                                                                <TableColumn fx:id="colReservaEstado" prefWidth="100.0" text="Estado" />
+                                                            </columns>
+                                                        </TableView>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                                            <children>
+                                                                <Label text="Picking e movimentos">
+                                                                    <font>
+                                                                        <Font name="System Bold" size="16.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <Label fx:id="labPickingInfo" text="Sem picking carregado">
+                                                   <font>
+                                                      <Font name="Berlin Sans FB" size="16.0" />
+                                                   </font></Label>
+                                                            </children>
+                                                        </HBox>
+                                                        <TableView fx:id="tabelaMovimentos" VBox.vgrow="ALWAYS">
+                                                            <columns>
+                                                                <TableColumn fx:id="colMovData" prefWidth="120.0" text="Data" />
+                                                                <TableColumn fx:id="colMovOrigem" prefWidth="265.0" text="Origem" />
+                                                                <TableColumn fx:id="colMovTipo" prefWidth="227.0" text="Movimento" />
+                                                                <TableColumn fx:id="colMovProduto" prefWidth="287.0" text="Produto" />
+                                                                <TableColumn fx:id="colMovArmazem" prefWidth="398.0" text="Armazem" />
+                                                                <TableColumn fx:id="colMovQuantidade" prefWidth="64.0" text="Qtd." />
+                                                            </columns>
+                                                        </TableView>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </GridPane>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </children>
+        </VBox>
+    </children>
+   <stylesheets>
+      <URL value="@../../../style/dashboard.css" />
+      <URL value="@../../../style/buttonConfig.css" />
+   </stylesheets>
+</AnchorPane>

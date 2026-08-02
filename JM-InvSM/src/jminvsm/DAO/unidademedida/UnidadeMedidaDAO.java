@@ -47,7 +47,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
     public boolean updateEntityByID(UnidadeMedida t, int id) {
         boolean isSuccess = false;
         String sql = "update unidadeMedida set nome=?, sigla=?, descricao=?"
-                + " where id=?";
+                + " where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -70,7 +70,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
     @Override
     public ObservableList<UnidadeMedida> listAllEntities() {
         ObservableList<UnidadeMedida> lista = FXCollections.observableArrayList();
-        String sql = "select * from unidadeMedida";
+        String sql = "select * from unidadeMedida WHERE deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet result = ps.executeQuery()) {
@@ -92,7 +92,7 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
     @Override
     public UnidadeMedida getEntityByID(int id) {
         UnidadeMedida u = null;
-        String sql = "select * from unidadeMedida where id=?";
+        String sql = "select * from unidadeMedida where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
                             ps.setInt(1, id);
@@ -131,20 +131,11 @@ public class UnidadeMedidaDAO implements UnidadeMedidaDAOImpl<UnidadeMedida> {
 //    }
     @Override
     public boolean deleteEntity(int x) {
-        boolean isSuccess = false;
-        String sql = "delete from unidadeMedida  where id=?";
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, x);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true;
-            }
+        try {
+            return jminvsm.util.SoftDeleteUtils.softDelete("unidadeMedida", x);
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
         }
-        return isSuccess;
+        return false;
     }
 }

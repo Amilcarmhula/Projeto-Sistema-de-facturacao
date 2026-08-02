@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="344.0" styleClass="tranp-bg" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.produtosView.calculaPreco.CalculaPrecoController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="344.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.produtosView.calculaPreco.CalculaPrecoController">
    <children>
-      <AnchorPane layoutX="116.0" layoutY="14.0" prefHeight="50.0" prefWidth="600.0" styleClass="primary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="116.0" layoutY="14.0" prefHeight="50.0" prefWidth="600.0" styleClass="secondary-color" stylesheets="@../../../style/dashboard.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label layoutX="63.0" text="Calcula Preco com taxa Incluida" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
@@ -43,7 +43,7 @@
             <TableColumn fx:id="percentagem" prefWidth="114.0" resizable="false" text="\%" />
         </columns>
       </TableView>
-      <AnchorPane layoutY="49.0" prefHeight="110.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <AnchorPane layoutY="49.0" prefHeight="110.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
             <TextField fx:id="txtID" alignment="CENTER" disable="true" layoutX="40.0" layoutY="7.0" prefHeight="25.0" prefWidth="74.0" promptText="ID" stylesheets="@../../../style/dashboard.css">
                <styleClass>
@@ -63,7 +63,7 @@
                   <String fx:value="shadow" />
                </styleClass>
             </TextField>
-            <Button fx:id="btnAdd" layoutX="222.0" layoutY="39.0" mnemonicParsing="false" onAction="#calculaPreco" stylesheets="@../../../style/dashboard.css" text="Calcular" textFill="WHITE">
+            <Button fx:id="btnAdd" layoutY="39.0" mnemonicParsing="false" onAction="#calculaPreco" prefWidth="150.0" stylesheets="@../../../style/dashboard.css" text="Calcular" textFill="WHITE" AnchorPane.rightAnchor="40.0">
                <styleClass>
                   <String fx:value="hand-efect" />
                   <String fx:value="secondary-color" />
@@ -82,7 +82,7 @@
       </AnchorPane>
    </children>
    <stylesheets>
-      <URL value="@../../../style/dashboard.css" />
       <URL value="@../../../../style/dashboard.css" />
+      <URL value="@../../../../style/buttonConfig.css" />
    </stylesheets>
 </AnchorPane>

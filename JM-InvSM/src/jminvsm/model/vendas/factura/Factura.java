@@ -12,8 +12,8 @@ import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.contacto.ContactoCliente;
 import jminvsm.model.cliente.endereco.EnderecoCliente;
 import jminvsm.model.empresa.Empresa;
-import jminvsm.model.empresa.contacto.ContactoEmpresa;
 import jminvsm.model.empresa.conta.ContaBancaria;
+import jminvsm.model.empresa.contacto.ContactoEmpresa;
 import jminvsm.model.empresa.endereco.EnderecoEmpresa;
 import jminvsm.model.enums.EstadoFactura;
 import jminvsm.model.transacao.Transacao;
@@ -22,7 +22,7 @@ import static jminvsm.model.util.ModelConverters.toBigDecimal;
 import static jminvsm.model.util.ModelConverters.toDateString;
 import static jminvsm.model.util.ModelConverters.toDouble;
 import static jminvsm.model.util.ModelConverters.toLocalDate;
-import jminvsm.model.vendas.documetos.DocumentosComerciais;
+import jminvsm.model.vendas.Documentos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.itens.Item;
 
 /**
@@ -32,7 +32,7 @@ import jminvsm.model.vendas.factura.itens.Item;
 public class Factura {
 
     private String numero_fac;
-    private LocalDate data_emissao; // Alterar o fild do jasperreport para que o dado possa refletir no relatorio
+    private LocalDate data_emissao;
     private LocalDate data_vencimento;
     private BigDecimal total = BigDecimal.ZERO;
     private BigDecimal totalPago = BigDecimal.ZERO;

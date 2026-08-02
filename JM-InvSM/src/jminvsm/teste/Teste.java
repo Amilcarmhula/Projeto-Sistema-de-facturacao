@@ -27,21 +27,14 @@ import javax.imageio.ImageIO;
 //import javafx.collections.ObservableList;
 //import javafx.scene.control.Alert;
 //import javafx.scene.control.ButtonType;
-//import net.sf.jasperreports.engine.JRException;
-//import net.sf.jasperreports.engine.JRExporterParameter;
-//import net.sf.jasperreports.engine.JasperExportManager;
-//import net.sf.jasperreports.engine.JasperFillManager;
-//import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-//import net.sf.jasperreports.engine.export.JRXlsExporter;
-//import sysfact.dao.cliente.ClienteDAO;
-//import sysfact.dao.stock.StockDAO;
-//import sysfact.dao.vendas.factura.FacturaDAO;
-//import sysfact.dao.vendas.itens.ItemDAO;
-//import sysfact.model.stock.Stock;
-//import sysfact.model.vendas.factura.Factura;
-//import sysfact.model.vendas.factura.itens.Item;
-//import sysfact.reports.facturas.ClienteData;
-//import sysfact.util.ValidationUtilities;
+//import SessaoAplicacao.dao.cliente.ClienteDAO;
+//import SessaoAplicacao.dao.stock.StockDAO;
+//import SessaoAplicacao.dao.vendas.factura.FacturaDAO;
+//import SessaoAplicacao.dao.vendas.itens.ItemDAO;
+//import SessaoAplicacao.model.stock.Stock;
+//import SessaoAplicacao.model.vendas.factura.Factura;
+//import SessaoAplicacao.model.vendas.factura.itens.Item;
+//import SessaoAplicacao.util.ValidationUtilities;
 
 import com.google.zxing.*;
 //import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
@@ -96,7 +89,7 @@ public class Teste {
 
     public static void main(String[] args) throws IOException {
 //        try {
-//            // Caminho da imagem com o código de barras
+//            // Caminho da imagem com o cÃ³digo de barras
 //            File file = new File("codigo_de_barras.png");
 //
 //            // Ler a imagem como BufferedImage
@@ -106,20 +99,20 @@ public class Teste {
 //            LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
 //            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 //
-//            // Configuração para o decodificador
+//            // ConfiguraÃ§Ã£o para o decodificador
 //            MultiFormatReader reader = new MultiFormatReader();
 //            Result result = reader.decode(bitmap);
 //
-//            // Exibir o conteúdo do código de barras
-//            System.out.println("Código de barras lido: " + result.getText());
+//            // Exibir o conteÃºdo do cÃ³digo de barras
+//            System.out.println("CÃ³digo de barras lido: " + result.getText());
 //            System.out.println("Formato: " + result.getBarcodeFormat());
 //        } catch (NotFoundException e) {
-//            System.err.println("Nenhum código de barras foi encontrado na imagem.");
+//            System.err.println("Nenhum cÃ³digo de barras foi encontrado na imagem.");
 //        } catch (IOException e) {
 //            System.err.println("Erro ao carregar a imagem: " + e.getMessage());
 //        }
         
-//        LocalDate currentDate = LocalDate.now(); // Get the current date +"\\src\\sysfact\\reports\\", "../"
+//        LocalDate currentDate = LocalDate.now();
 //        DateTimeFormatter df = DateTimeFormatter.ofPattern("+ dd - MMM - yyyy");
 //        System.out.println(currentDate.format(df).replace("+", "Maputo, aos ").replace("-", "de"));
 //        System.out.println(LocalDate.now().format(DateTimeFormatter.ofPattern("+ dd - MMM - yyyy")).replace("+", "Maputo, aos ").replace("-", "de"));
@@ -193,7 +186,7 @@ public class Teste {
 //        f.setNuit(999888777);
 //        fd.addEntity(f);
 //        CategoriaDAO cd = new CategoriaDAO();
-//        Categoria c = cd.searchEntityByName("Sofás");
+//        Categoria c = cd.searchEntityByName("SofÃ¡s");
 //        System.out.println("ID: " + c.getId());
 //        System.out.println("Nome: " + c.getTipo());
 //        System.out.println("");
@@ -316,3 +309,4 @@ public class Teste {
 //        System.out.println("");
 //    }
 }
+

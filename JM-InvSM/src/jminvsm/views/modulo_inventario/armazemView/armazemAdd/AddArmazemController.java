@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.input.MouseButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,16 +29,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.armazem.contacto.ContactoArmazem;
 import jminvsm.model.armazem.endereco.EnderecoArmazem;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.service.ServiceException;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.armazem.contacto.ServiceContacto;
 import jminvsm.service.armazem.endereco.ServiceEndereco;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  * FXML Controller class
@@ -148,12 +153,12 @@ public class AddArmazemController implements Initializable {
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
-            SysFact.setData(null);
+            SessaoAplicacao.setData(null);
             LoadAndMoveUtilities.setEstadoStage(false);
             LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
-            SysFact.setData(null);
+            SessaoAplicacao.setData(null);
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
@@ -189,7 +194,7 @@ public class AddArmazemController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.userData = SysFact.getUserData();
+        this.userData = SessaoAplicacao.getUserData();
 //        txtDescricao.setWrapText(true);
         combTipoCliente.setItems(FXCollections.observableArrayList("Central", "Regional", "Loga", "..."));
         combProvincia.setItems(FXCollections.observableArrayList(
@@ -206,9 +211,9 @@ public class AddArmazemController implements Initializable {
                 "Cabo Delgado"
         )
         );
-        if (SysFact.getData() != null) {
-            if (SysFact.getData() instanceof String) {
-                txtIDCliente.setText((String) SysFact.getData());
+        if (SessaoAplicacao.getData() != null) {
+            if (SessaoAplicacao.getData() instanceof String) {
+                txtIDCliente.setText((String) SessaoAplicacao.getData());
             }
         }
 
@@ -227,6 +232,9 @@ public class AddArmazemController implements Initializable {
             
         ButtonUtilities.buttonChangeText(btnAddArmazem, txtIDCliente);
         ButtonUtilities.buttonChangeText(btnAddContacto, txtIDContacto);
+        ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
+        tabelaContacto.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabelaEndereco.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
 //    
@@ -251,6 +259,7 @@ public class AddArmazemController implements Initializable {
             txtNome.setText(c.getNome_arm());
             txtDescricao.setText(c.getDescricao_arm());
             showContactos();
+            showEndereco();
         }
 
     }
@@ -259,7 +268,7 @@ public class AddArmazemController implements Initializable {
 
     public void showEndereco(){
         if ("".equals(txtIDCliente.getText())) {
-            listaEndereco = serviceEndereco.listaEnderecos();
+            listaEndereco = FXCollections.observableArrayList();
         } else {
             listaEndereco = serviceEndereco.consultaEnderecosPorArmazem(Integer.parseInt(txtIDCliente.getText()));
         }
@@ -280,7 +289,7 @@ public class AddArmazemController implements Initializable {
 
     public void showContactos() {
         if ("".equals(txtIDCliente.getText())) {
-            listaContactos = serviceContacto.listaContactos();
+            listaContactos = FXCollections.observableArrayList();
         } else {
             listaContactos = serviceContacto.consultaContactoPorArmazem(Integer.parseInt(txtIDCliente.getText()));
         }
@@ -296,8 +305,14 @@ public class AddArmazemController implements Initializable {
     Funcoes de Adicao de registros
      */
     public void addArmazem(ActionEvent e) {
-        serviceArmazem.registar(combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
+        try {
+            serviceArmazem.registar(combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceArmazem.isOpsSuccess()) {
+            showSuccessAlert("Armazem adicionado com sucesso!");
             ButtonUtilities.buttonChangeText(btnAddArmazem, txtIDCliente);
             showLastStoreAdded();
             serviceArmazem.setOpsSuccess(false);
@@ -306,23 +321,42 @@ public class AddArmazemController implements Initializable {
     }
 
     public void addContacto(ActionEvent e) {
+        if (!armazemGuardado()) {
+            mostrarAviso("Guarde primeiro os dados do armazÃ©m antes de adicionar contactos.");
+            return;
+        }
         Integer id = Integer.valueOf(txtIDCliente.getText());
-        serviceContacto.registar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id);
+        try {
+            serviceContacto.registar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id);
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceContacto.isOpsSuccess()) {
-            
+            showSuccessAlert("Contacto adicionado com sucesso!");
             showContactos();
             restContacto();
         }
     }
 
     public void addEndereco(ActionEvent e)  {
+        if (!armazemGuardado()) {
+            mostrarAviso("Guarde primeiro os dados do armazÃ©m antes de adicionar endereÃ§os.");
+            return;
+        }
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         Integer id = Integer.valueOf(txtIDCliente.getText().equals("") ? "0" : txtIDCliente.getText());
-        serviceEndereco.registar(txtAvenida.getText(), txtBairro.getText(),
-                txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(), id);
+        try {
+            serviceEndereco.registar(txtAvenida.getText(), txtBairro.getText(),
+                    txtCidade.getText(), postal, numero, combProvincia.getValue(),
+                    txtRua.getText(), id);
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceEndereco.isOpsSuccess()) {
+            showSuccessAlert("Endereco registado com sucesso!");
             showEndereco();
             resetEndereco();
         }
@@ -333,9 +367,15 @@ public class AddArmazemController implements Initializable {
      */
     public void updateArmazem(ActionEvent e) {
         Integer id = Integer.valueOf(txtIDCliente.getText());
-        serviceArmazem.actualizar(id, combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
+        try {
+            serviceArmazem.actualizar(id, combTipoCliente.getValue(), txtNome.getText(), txtDescricao.getText());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
 
         if (serviceArmazem.isOpsSuccess()) {
+            showSuccessAlert("Armazem actualizado com sucesso!");
             showContactos();
             serviceArmazem.setOpsSuccess(false);
         }
@@ -343,8 +383,14 @@ public class AddArmazemController implements Initializable {
 
     public void updateContacto(ActionEvent e) {
         Integer id = Integer.valueOf(txtIDContacto.getText());
-        serviceContacto.actualizar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id);
+        try {
+            serviceContacto.actualizar(txtResponsavel.getText(), txtContacto.getText(), txtEmail.getText(), id);
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceContacto.isOpsSuccess()) {
+            showSuccessAlert("Contacto actualizado com sucesso!");
             showContactos();
             restContacto();
         }
@@ -354,10 +400,16 @@ public class AddArmazemController implements Initializable {
         Integer postal = Integer.valueOf(txtCodigooPostal.getText().equals("") ? "0" : txtCodigooPostal.getText());
         Integer numero = Integer.valueOf(txtNumeroEndereco.getText().equals("") ? "0" : txtNumeroEndereco.getText());
         Integer id = Integer.valueOf(txtIDEndereco.getText().equals("") ? "0" : txtIDEndereco.getText());
-        serviceEndereco.actualizar(txtAvenida.getText(), txtBairro.getText(),
-                txtCidade.getText(), postal, numero, combProvincia.getValue(),
-                txtRua.getText(), id);
+        try {
+            serviceEndereco.actualizar(txtAvenida.getText(), txtBairro.getText(),
+                    txtCidade.getText(), postal, numero, combProvincia.getValue(),
+                    txtRua.getText(), id);
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceEndereco.isOpsSuccess()) {
+            showSuccessAlert("Endereco actualizado com sucesso!");
             showEndereco();
             resetEndereco();
         }
@@ -380,7 +432,7 @@ public class AddArmazemController implements Initializable {
     }
 
     public void deleteContacto(MouseEvent event, ContactoArmazem x){
-        if (event.getButton().name().equals("SECONDARY")) {
+        if (event.getButton() == MouseButton.SECONDARY) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
             dialog.setContentText("Deseja excluir o item?");
@@ -391,13 +443,18 @@ public class AddArmazemController implements Initializable {
             dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
 
             Optional<ButtonType> result = dialog.showAndWait();
-            if (result.get() == btnDelete) {
-                serviceContacto.excluir(x.getId());
-                if (serviceContacto.isOpsSuccess()) {
-                    showContactos();
-                    restContacto();
+            if (result.isPresent() && result.get() == btnDelete) {
+                try {
+                    serviceContacto.excluir(x.getId());
+                    if (serviceContacto.isOpsSuccess()) {
+                        showSuccessAlert("Registo excluido com sucesso!");
+                        showContactos();
+                        restContacto();
+                    }
+                } catch (ServiceException ex) {
+                    showErroAlert(ex.getMessage());
                 }
-            } else if (result.get() == btnCancel) {
+            } else if (result.isPresent() && result.get() == btnCancel) {
                 restContacto();
             }
         }
@@ -420,7 +477,7 @@ public class AddArmazemController implements Initializable {
     }
 
     public void deleteEndereco(MouseEvent event, EnderecoArmazem x){
-        if (event.getButton().name().equals("SECONDARY")) {
+        if (event.getButton() == MouseButton.SECONDARY) {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Aviso.");
             dialog.setContentText("Deseja excluir o item?");
@@ -431,13 +488,18 @@ public class AddArmazemController implements Initializable {
             dialog.getDialogPane().getButtonTypes().addAll(btnDelete, btnCancel);
 
             Optional<ButtonType> result = dialog.showAndWait();
-            if (result.get() == btnDelete) {
-                serviceEndereco.excluir(x.getId());
-                if (serviceEndereco.isOpsSuccess()) {
-                    showEndereco();
-                    resetEndereco();
+            if (result.isPresent() && result.get() == btnDelete) {
+                try {
+                    serviceEndereco.excluir(x.getId());
+                    if (serviceEndereco.isOpsSuccess()) {
+                        showSuccessAlert("Registo excluido com sucesso!");
+                        showEndereco();
+                        resetEndereco();
+                    }
+                } catch (ServiceException ex) {
+                    showErroAlert(ex.getMessage());
                 }
-            } else if (result.get() == btnCancel) {
+            } else if (result.isPresent() && result.get() == btnCancel) {
                 resetEndereco();
             }
         }
@@ -448,7 +510,8 @@ public class AddArmazemController implements Initializable {
      */
     public void resetCliente() {
         txtIDCliente.setText("");
-        combTipoCliente.setPromptText("Tipo de cliente");
+        combTipoCliente.setValue(null);
+        combTipoCliente.setPromptText("Tipo de armazÃ©m");
         txtDescricao.setText("");
         txtNome.setText("");
         ButtonUtilities.buttonChangeText(btnAddArmazem, txtIDCliente);
@@ -473,9 +536,24 @@ public class AddArmazemController implements Initializable {
         txtCidade.setText("");
         txtCodigooPostal.setText("");
         txtNumeroEndereco.setText("");
-        combProvincia.setPromptText("Provincia");
+        combProvincia.setValue(null);
+        combProvincia.setPromptText("ProvÃ­ncia");
         txtRua.setText("");
         ButtonUtilities.buttonChangeText(btnAddEndereco, txtIDEndereco);
     }
 
+
+    private boolean armazemGuardado() {
+        return txtIDCliente.getText() != null && !txtIDCliente.getText().trim().isEmpty();
+    }
+
+    private void mostrarAviso(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Dados do armazÃ©m");
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
+    }
+
 }
+

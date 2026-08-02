@@ -12,8 +12,7 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -49,17 +48,14 @@ public class ServiceProdutoFornecido {
             id_for = 1;
         }
         if (qtdActual <= 0) {
-            showErroAlert("Quantidade não definida!");
-            return;
+            throw new ServiceException("Quantidade nao definida!");
         }
         if (custo <= 0) {
-            showErroAlert("Preco não pode ser nulo!");
-            return;
+            throw new ServiceException("Preco nao pode ser nulo!");
         }
 
         if (data_fornecida.isEmpty()) {
-            showErroAlert("Data de fornecimento não pode ser nula!");
-            return;
+            throw new ServiceException("Data de fornecimento nao pode ser nula!");
         }
         ProdutoFornecido pf = new ProdutoFornecido();
         Armazem a = new Armazem();
@@ -79,7 +75,6 @@ public class ServiceProdutoFornecido {
 
         if (produtoFornecidoDao.addEntity(pf)) {
             setOpsSuccess(true);
-            showSuccessAlert("Stock actualizado com sucesso!");
         }
     }
     
@@ -95,13 +90,4 @@ public class ServiceProdutoFornecido {
         return produtoFornecidoDao.getLastCodeLote();
     }
     
-    public static void main(String[] args) throws SQLException {
-        ServiceProdutoFornecido dao = new ServiceProdutoFornecido();
-        ObservableList<ProdutoFornecido> lista = dao.getLotes(1);
-        for (ProdutoFornecido x : lista) {
-            System.out.println("Lotes: "+ x.getDataEntrada());
-        }
-    }
-    
-
 }

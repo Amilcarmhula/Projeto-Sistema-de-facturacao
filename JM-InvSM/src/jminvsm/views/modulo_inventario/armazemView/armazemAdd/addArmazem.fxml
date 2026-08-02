@@ -1,190 +1,287 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="623.0" prefWidth="788.0" style="-fx-border-width: 5px; -fx-border-color: #17b5c3;" styleClass="tranp-bg" stylesheets="@../../../../style/dashboard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.armazemView.armazemAdd.AddArmazemController">
-   <children>
-      <AnchorPane layoutX="615.0" layoutY="36.0" prefHeight="50.0" prefWidth="996.0" styleClass="primary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label alignment="CENTER" layoutX="75.0" layoutY="10.0" text="Registo de Armazens" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <font>
-                  <Font size="40.0" />
-               </font>
-               <padding>
-                  <Insets left="30.0" />
-               </padding>
-            </Label>
-            <Button fx:id="btnClose" layoutX="722.0" layoutY="13.0" mnemonicParsing="false" onAction="#close" prefWidth="75.0" styleClass="close-categoria" stylesheets="@../../../../style/dashboard.css" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="39.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../image/icons/left-arrow.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-         </children>
-      </AnchorPane>
-      <AnchorPane prefHeight="110.0" prefWidth="1003.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
-         <children>
-            <TextField fx:id="txtIDCliente" alignment="CENTER" disable="true" layoutX="96.0" layoutY="11.0" prefHeight="26.0" prefWidth="96.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" />
-            <TextField fx:id="txtNome" layoutX="364.0" layoutY="11.0" prefHeight="25.0" prefWidth="310.0" promptText="Nomde do armazem" stylesheets="@../../../../style/dashboard.css">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </TextField>
-            <ComboBox fx:id="combTipoCliente" layoutX="198.0" layoutY="9.0" prefHeight="30.0" prefWidth="159.0" promptText="Tipo de armazem" />
-            <Button fx:id="btnAddArmazem" layoutX="543.0" layoutY="77.0" mnemonicParsing="false" onAction="#addORupdateCliente" prefHeight="20.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <styleClass>
-                  <String fx:value="secondary-color" />
-                  <String fx:value="shadow-efect" />
-                  <String fx:value="hand-efect" />
-               </styleClass>
-            </Button>
-            <Button layoutX="403.0" layoutY="77.0" mnemonicParsing="false" onAction="#resetCliente" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Limpar" textFill="WHITE">
-               <styleClass>
-                  <String fx:value="secondary-color" />
-                  <String fx:value="hand-efect" />
-                  <String fx:value="shadow-efect" />
-               </styleClass>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-            <TextField fx:id="txtDescricao" layoutX="96.0" layoutY="45.0" prefHeight="25.0" prefWidth="577.0" promptText="Descricao">
-               <styleClass>
-                  <String fx:value="text-squared-border" />
-                  <String fx:value="shadow" />
-               </styleClass>
-            </TextField>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutY="161.0" minHeight="0.0" minWidth="0.0" prefHeight="456.0" prefWidth="788.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <AnchorPane layoutY="8.0" prefHeight="209.0" prefWidth="782.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <TextField fx:id="txtIDContacto" disable="true" layoutX="10.0" layoutY="2.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" />
-                  <TextField fx:id="txtContacto" layoutX="309.0" layoutY="2.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="181.0" promptText="Numero de telefone" stylesheets="@../../../../style/dashboard.css">
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <TextField fx:id="txtEmail" layoutX="495.0" layoutY="2.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="257.0" promptText="E-mail" stylesheets="@../../../../style/dashboard.css">
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <TableView fx:id="tabelaContacto" layoutY="70.0" onMouseClicked="#selecionaContacto" prefHeight="141.0" prefWidth="782.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                     <columns>
-                        <TableColumn fx:id="IDtabelaContacto" prefWidth="50.0" text="ID" />
-                        <TableColumn fx:id="responsaveltabelaContacto" prefWidth="205.0" text="Pessoa de Contacto" />
-                        <TableColumn fx:id="contactotabelaContacto" prefWidth="170.0" text="Numero" />
-                        <TableColumn fx:id="emailtabelaContacto" prefWidth="351.0" text="Email" />
-                     </columns>
-                  </TableView>
-                  <TextField fx:id="txtResponsavel" layoutX="105.0" layoutY="2.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="197.0" promptText="Reponsavel" stylesheets="@../../../../style/dashboard.css">
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <Button fx:id="btnAddContacto" layoutX="623.0" layoutY="36.0" mnemonicParsing="false" onAction="#addORupdateContacto" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="hand-efect" />
-                        <String fx:value="secondary-color" />
-                        <String fx:value="shadow-efect" />
-                     </styleClass>
-                  </Button>
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutY="226.0" prefHeight="230.0" prefWidth="788.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <TextField fx:id="txtIDEndereco" disable="true" layoutX="10.0" layoutY="2.0" prefHeight="25.0" prefWidth="86.0" promptText="ID" styleClass="text-squared-border" stylesheets="@../../../../style/dashboard.css" />
-                  <TextField fx:id="txtCidade" layoutX="246.0" layoutY="2.0" prefHeight="25.0" prefWidth="122.0" promptText="Cidade" stylesheets="@../../../../style/dashboard.css">
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <ComboBox fx:id="combProvincia" layoutX="101.0" layoutY="2.0" prefHeight="27.0" prefWidth="137.0" promptText="Provincia" />
-                  <TextField fx:id="txtBairro" layoutX="375.0" layoutY="2.0" prefHeight="25.0" prefWidth="241.0" promptText="Bairro" stylesheets="@../../../../style/dashboard.css">
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <TextField fx:id="txtAvenida" layoutX="14.0" layoutY="38.0" prefHeight="25.0" prefWidth="261.0" promptText="Avenida" stylesheets="@../../../../style/dashboard.css">
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <TextField fx:id="txtCodigooPostal" layoutX="279.0" layoutY="38.0" prefHeight="25.0" prefWidth="122.0" promptText="Codigo postal" stylesheets="@../../../../style/dashboard.css">
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <TextField fx:id="txtRua" layoutX="625.0" layoutY="2.0" prefHeight="25.0" prefWidth="130.0" promptText="Rua" stylesheets="@../../../../style/dashboard.css">
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <TextField fx:id="txtNumeroEndereco" layoutX="411.0" layoutY="38.0" prefHeight="25.0" prefWidth="103.0" promptText="Numero" stylesheets="@../../../../style/dashboard.css">
-                     <styleClass>
-                        <String fx:value="text-squared-border" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </TextField>
-                  <TableView fx:id="tabelaEndereco" layoutY="76.0" onMouseClicked="#selecionaEndereco" prefHeight="151.0" prefWidth="788.0" style="-fx-border-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                     <columns>
-                        <TableColumn fx:id="IDtabelaEndereco" prefWidth="48.0" text="ID" />
-                        <TableColumn fx:id="provinciatabelaEndereco" prefWidth="118.0" text="Provincia" />
-                        <TableColumn fx:id="cidadetabelaEndereco" prefWidth="113.0" text="Cidade" />
-                        <TableColumn fx:id="bairrotabelaEndereco" prefWidth="115.0" text="Bairro" />
-                        <TableColumn fx:id="avenidatabelaEndereco" prefWidth="127.0" text="Avenida" />
-                        <TableColumn fx:id="codigopostaltabelaEndereco" prefWidth="111.0" text="Codigo Postal" />
-                        <TableColumn fx:id="ruatabelaEndereco" prefWidth="83.0" text="Rua" />
-                        <TableColumn fx:id="numerotabelaEndereco" prefWidth="61.0" text="Nr" />
-                     </columns>
-                  </TableView>
-                  <Button fx:id="btnAddEndereco" layoutX="626.0" layoutY="40.0" mnemonicParsing="false" onAction="#addORupdateEndereco" prefHeight="30.0" prefWidth="130.0" stylesheets="@../../../../style/dashboard.css" text="Adicionar" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="secondary-color" />
-                        <String fx:value="hand-efect" />
-                        <String fx:value="shadow-efect" />
-                     </styleClass>
-                  </Button>
-               </children>
-            </AnchorPane>
-         </children>
-      </AnchorPane>
-   </children>
+<AnchorPane prefHeight="760.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_inventario.armazemView.armazemAdd.AddArmazemController">
+    <children>
+        <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <top>
+                <HBox alignment="CENTER_LEFT" minHeight="66.0" prefHeight="66.0" spacing="12.0" styleClass="secondary-color">
+                    <padding>
+                        <Insets left="20.0" right="10.0" />
+                    </padding>
+                    <children>
+                        <VBox alignment="CENTER_LEFT" spacing="2.0">
+                            <children>
+                                <Label text="Registo de armazéns" textFill="WHITE">
+                                    <font><Font name="System Bold" size="25.0" /></font>
+                                </Label>
+                                <Label opacity="0.85" text="Gerencie os dados gerais, contactos e endereços do armazém" textFill="WHITE" />
+                            </children>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnClose" mnemonicParsing="false" onAction="#close" prefHeight="44.0" prefWidth="54.0" styleClass="close-categoria" stylesheets="@../../../../style/dashboard.css" textFill="WHITE">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <image><Image url="@../../../../image/icons/left-arrow.png" /></image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </children>
+                </HBox>
+            </top>
+
+            <center>
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" pannable="true">
+                    <content>
+                        <VBox spacing="16.0">
+                            <padding><Insets bottom="20.0" left="20.0" right="20.0" top="18.0" /></padding>
+                            <children>
+                                <!-- DADOS GERAIS -->
+                                <VBox spacing="12.0" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #dfe7ea; -fx-border-radius: 8;">
+                                    <padding><Insets bottom="16.0" left="18.0" right="18.0" top="14.0" /></padding>
+                                    <children>
+                                        <Label text="Dados gerais">
+                                            <font><Font name="System Bold" size="18.0" /></font>
+                                        </Label>
+                                        <Separator />
+                                        <GridPane hgap="14.0" vgap="7.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints minWidth="90.0" prefWidth="110.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="180.0" prefWidth="260.0" />
+                                                <ColumnConstraints minWidth="105.0" prefWidth="130.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="220.0" prefWidth="360.0" />
+                                            </columnConstraints>
+                                            <children>
+                                                <Label text="ID" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                <TextField fx:id="txtIDCliente" alignment="CENTER" editable="false" focusTraversable="false" promptText="Automático" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                                <Label text="Tipo de armazém" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                                <ComboBox fx:id="combTipoCliente" maxWidth="1.7976931348623157E308" promptText="Seleccione o tipo" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                                <Label text="Nome" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                <TextField fx:id="txtNome" promptText="Nome do armazém" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+
+                                                <Label text="Descrição" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                                <TextField fx:id="txtDescricao" promptText="Descrição ou observações do armazém" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" />
+                                            </children>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                 </rowConstraints>
+                                        </GridPane>
+                                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                            <children>
+                                                <Button mnemonicParsing="false" onAction="#resetCliente" prefHeight="36.0" prefWidth="120.0" text="Limpar">
+                                                    <styleClass>
+                                                        <String fx:value="secondary-color" />
+                                                        <String fx:value="hand-efect" />
+                                                        <String fx:value="shadow-efect" />
+                                                    </styleClass>
+                                                </Button>
+                                                <Button fx:id="btnAddArmazem" mnemonicParsing="false" onAction="#addORupdateCliente" prefHeight="38.0" prefWidth="170.0" text="Guardar armazém" textFill="WHITE">
+                                                    <font><Font name="System Bold" size="14.0" /></font>
+                                                    <styleClass>
+                                                        <String fx:value="secondary-color" />
+                                                        <String fx:value="shadow-efect" />
+                                                        <String fx:value="hand-efect" />
+                                                    </styleClass>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+
+                                <!-- CONTACTOS -->
+                                <VBox spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #dfe7ea; -fx-border-radius: 8;">
+                                    <padding><Insets bottom="16.0" left="18.0" right="18.0" top="14.0" /></padding>
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT">
+                                            <children>
+                                                <VBox spacing="2.0">
+                                                    <children>
+                                                        <Label text="Contactos do armazém">
+                                                            <font><Font name="System Bold" size="18.0" /></font>
+                                                        </Label>
+                                                        <Label opacity="0.7" text="Seleccione uma linha para editar; clique com o botão direito para remover." />
+                                                    </children>
+                                                </VBox>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Button mnemonicParsing="false" onAction="#restContacto" text="Novo contacto" />
+                                            </children>
+                                        </HBox>
+                                        <Separator />
+                                        <SplitPane dividerPositions="0.61" prefHeight="216.0" prefWidth="1019.0">
+                                            <items>
+                                                <TableView fx:id="tabelaContacto" onMouseClicked="#selecionaContacto" prefHeight="220.0" style="-fx-border-color: transparent;">
+                                                    <columns>
+                                                        <TableColumn fx:id="IDtabelaContacto" minWidth="45.0" prefWidth="55.0" text="ID" />
+                                                        <TableColumn fx:id="responsaveltabelaContacto" minWidth="130.0" prefWidth="180.0" text="Responsável" />
+                                                        <TableColumn fx:id="contactotabelaContacto" minWidth="115.0" prefWidth="150.0" text="Número" />
+                                                        <TableColumn fx:id="emailtabelaContacto" minWidth="170.0" prefWidth="240.0" text="E-mail" />
+                                                    </columns>
+                                                </TableView>
+                                                <VBox spacing="10.0">
+                                                    <padding><Insets bottom="5.0" left="5.0" right="5.0" /></padding>
+                                                    <children>
+                                                        <Label text="Formulário do contacto">
+                                                            <font><Font name="System Bold" size="15.0" /></font>
+                                                        </Label>
+                                                        <GridPane hgap="10.0" vgap="7.0">
+                                                            <columnConstraints>
+                                                                <ColumnConstraints minWidth="85.0" prefWidth="95.0" />
+                                                                <ColumnConstraints hgrow="ALWAYS" minWidth="170.0" />
+                                                            </columnConstraints>
+                                                            <children>
+                                                                <Label text="ID" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                                <TextField fx:id="txtIDContacto" editable="false" focusTraversable="false" promptText="Automático" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                                                <Label text="Responsável" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                                <TextField fx:id="txtResponsavel" promptText="Pessoa de contacto" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                <Label text="Telefone" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                                                <TextField fx:id="txtContacto" promptText="Número de telefone" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                                <Label text="E-mail" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                                                <TextField fx:id="txtEmail" promptText="email@empresa.co.mz" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                            </children>
+                                             <rowConstraints>
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                             </rowConstraints>
+                                                        </GridPane>
+                                                        <Button fx:id="btnAddContacto" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addORupdateContacto" prefHeight="38.0" text="Guardar contacto" textFill="WHITE">
+                                                            <font><Font name="System Bold" size="14.0" /></font>
+                                                            <styleClass>
+                                                                <String fx:value="secondary-color" />
+                                                                <String fx:value="shadow-efect" />
+                                                                <String fx:value="hand-efect" />
+                                                            </styleClass>
+                                                        </Button>
+                                                    </children>
+                                                </VBox>
+                                            </items>
+                                        </SplitPane>
+                                    </children>
+                                </VBox>
+
+                                <!-- ENDEREÇOS -->
+                                <VBox spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #dfe7ea; -fx-border-radius: 8;">
+                                    <padding><Insets bottom="16.0" left="18.0" right="18.0" top="14.0" /></padding>
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT">
+                                            <children>
+                                                <VBox spacing="2.0">
+                                                    <children>
+                                                        <Label text="Endereços do armazém">
+                                                            <font><Font name="System Bold" size="18.0" /></font>
+                                                        </Label>
+                                                        <Label opacity="0.7" text="Seleccione uma linha para editar; clique com o botão direito para remover." />
+                                                    </children>
+                                                </VBox>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Button mnemonicParsing="false" onAction="#resetEndereco" text="Novo endereço" />
+                                            </children>
+                                        </HBox>
+                                        <Separator />
+                                        <SplitPane dividerPositions="0.61" prefHeight="240.0" prefWidth="1019.0">
+                                            <items>
+                                                <TableView fx:id="tabelaEndereco" onMouseClicked="#selecionaEndereco" prefHeight="285.0" style="-fx-border-color: transparent;">
+                                                    <columns>
+                                                        <TableColumn fx:id="IDtabelaEndereco" minWidth="42.0" prefWidth="48.0" text="ID" />
+                                                        <TableColumn fx:id="provinciatabelaEndereco" minWidth="105.0" prefWidth="130.0" text="Província" />
+                                                        <TableColumn fx:id="cidadetabelaEndereco" minWidth="90.0" prefWidth="115.0" text="Cidade" />
+                                                        <TableColumn fx:id="bairrotabelaEndereco" minWidth="95.0" prefWidth="125.0" text="Bairro" />
+                                                        <TableColumn fx:id="avenidatabelaEndereco" minWidth="95.0" prefWidth="125.0" text="Avenida" />
+                                                        <TableColumn fx:id="ruatabelaEndereco" minWidth="80.0" prefWidth="105.0" text="Rua" />
+                                                        <TableColumn fx:id="codigopostaltabelaEndereco" minWidth="90.0" prefWidth="105.0" text="Cód. postal" />
+                                                        <TableColumn fx:id="numerotabelaEndereco" minWidth="62.0" prefWidth="75.0" text="Número" />
+                                                    </columns>
+                                                </TableView>
+                                                <VBox spacing="10.0">
+                                                    <padding><Insets bottom="5.0" left="5.0" right="5.0" /></padding>
+                                                    <children>
+                                                        <Label text="Formulário do endereço">
+                                                            <font><Font name="System Bold" size="15.0" /></font>
+                                                        </Label>
+                                                        <GridPane hgap="10.0" vgap="7.0">
+                                                            <columnConstraints>
+                                                                <ColumnConstraints minWidth="85.0" prefWidth="95.0" />
+                                                                <ColumnConstraints hgrow="ALWAYS" minWidth="120.0" />
+                                                                <ColumnConstraints minWidth="68.0" prefWidth="78.0" />
+                                                                <ColumnConstraints hgrow="ALWAYS" minWidth="95.0" />
+                                                            </columnConstraints>
+                                                            <children>
+                                                                <Label text="ID" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                                <TextField fx:id="txtIDEndereco" editable="false" focusTraversable="false" promptText="Automático" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                                                <Label text="Província" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                                <ComboBox fx:id="combProvincia" maxWidth="1.7976931348623157E308" promptText="Seleccione" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+                                                                <Label text="Cidade" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                                                <TextField fx:id="txtCidade" promptText="Cidade" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                                <Label text="Bairro" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                                <TextField fx:id="txtBairro" promptText="Bairro" styleClass="text-squared-border" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                                <Label text="Avenida" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                                                <TextField fx:id="txtAvenida" promptText="Avenida" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                                <Label text="Rua" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                                                <TextField fx:id="txtRua" promptText="Rua" styleClass="text-squared-border" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                                                <Label text="Cód. postal" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                                                <TextField fx:id="txtCodigooPostal" promptText="0" styleClass="text-squared-border" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                                                <Label text="Número" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                                                <TextField fx:id="txtNumeroEndereco" promptText="0" styleClass="text-squared-border" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                                                            </children>
+                                             <rowConstraints>
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                             </rowConstraints>
+                                                        </GridPane>
+                                                        <Button fx:id="btnAddEndereco" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addORupdateEndereco" prefHeight="38.0" text="Guardar endereço" textFill="WHITE">
+                                                            <font><Font name="System Bold" size="14.0" /></font>
+                                                            <styleClass>
+                                                                <String fx:value="secondary-color" />
+                                                                <String fx:value="shadow-efect" />
+                                                                <String fx:value="hand-efect" />
+                                                            </styleClass>
+                                                        </Button>
+                                                    </children>
+                                                </VBox>
+                                            </items>
+                                        </SplitPane>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </center>
+        </BorderPane>
+    </children>
+   <stylesheets>
+      <URL value="@../../../../style/dashboard.css" />
+      <URL value="@../../../../style/buttonConfig.css" />
+   </stylesheets>
 </AnchorPane>

@@ -28,9 +28,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jminvsm.SysFact;
+import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.desconto.Desconto;
-import jminvsm.model.imposto.Imposto;
 import jminvsm.service.desconto.ServiceDesconto;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
@@ -43,17 +42,21 @@ import jminvsm.util.LoadAndMoveUtilities;
 public class DescontoViewController implements Initializable {
 
     private ServiceDesconto servicoDesconto;
-    @FXML
-    private TableColumn<Imposto, Integer> ID;
-
+ 
     @FXML
     private Button btnAdd;
 
     @FXML
     private TableColumn<Desconto, String> btnTabela;
+    
+    @FXML
+    private TableColumn<Desconto, Integer> ID;
 
     @FXML
     private TableColumn<Desconto, String> descricao;
+    
+    @FXML
+    private TableColumn<Desconto, Double> percentagem;
 
     @FXML
     private TableView<Desconto> tabelaDesconto;
@@ -63,6 +66,9 @@ public class DescontoViewController implements Initializable {
 
     @FXML
     private TextField txtDescricao;
+    
+    @FXML
+    private TextField txtPercentagem;
 
     @FXML
     private TextField txtID;
@@ -72,12 +78,12 @@ public class DescontoViewController implements Initializable {
 
     public void close(ActionEvent event) {
         if (LoadAndMoveUtilities.returnToStage()) {
-            SysFact.setData(null);
+            SessaoAplicacao.setData(null);
             LoadAndMoveUtilities.setEstadoStage(false);
             LoadAndMoveUtilities.showStage(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         } else if (LoadAndMoveUtilities.returnToBaseAnchor()) {
-            SysFact.setData(null);
+            SessaoAplicacao.setData(null);
             LoadAndMoveUtilities.setEstadoPopUP(false);
             LoadAndMoveUtilities.showAsPopUP(null, null);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
@@ -121,12 +127,13 @@ public class DescontoViewController implements Initializable {
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         nomeDesconto.setCellValueFactory(new PropertyValueFactory<>("nome"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+        percentagem.setCellValueFactory(new PropertyValueFactory<>("percentagem"));
 
         tabelaDesconto.setItems(listaDesconto);
     }
 
     public void addDesconto() {
-                double taxa = Double.parseDouble(txtDesconto.getText().equals("")?"0":txtDesconto.getText());
+                double taxa = Double.parseDouble(txtPercentagem.getText().equals("")?"0":txtPercentagem.getText());
         servicoDesconto.regista(txtDesconto.getText(),taxa, txtDescricao.getText());
         if (servicoDesconto.isOpsSuccess()) {
             resetCampos();
@@ -136,7 +143,7 @@ public class DescontoViewController implements Initializable {
 
     public void updateDesconto() {
         int id = Integer.parseInt(txtID.getText().equals("")?"0":txtID.getText());
-        double taxa = Double.parseDouble(txtDesconto.getText().equals("")?"0":txtDesconto.getText());
+        double taxa = Double.parseDouble(txtPercentagem.getText().equals("")?"0":txtPercentagem.getText());
         servicoDesconto.actualizar(id, txtDesconto.getText(),taxa, txtDescricao.getText());
         if (servicoDesconto.isOpsSuccess()) {
             resetCampos();
@@ -150,9 +157,10 @@ public class DescontoViewController implements Initializable {
             txtID.setText(String.valueOf(x.getId()));
             txtDescricao.setText(x.getDescricao());
             txtDesconto.setText(x.getNome());
+            txtPercentagem.setText(String.valueOf(x.getPercentagem()));
             ButtonUtilities.buttonChangeText(btnAdd, txtID);
             deleteItem(event, x);
-            SysFact.setData(x);
+            SessaoAplicacao.setData(x);
         }
     }
 
@@ -185,9 +193,11 @@ public class DescontoViewController implements Initializable {
         txtID.setText("");
         txtDescricao.setText("");
         txtDesconto.setText("");
+        txtPercentagem.setText("");
         ButtonUtilities.buttonChangeText(btnAdd, txtID);
         showDesconto();
 
     }
 
 }
+

@@ -47,7 +47,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
     @Override
     public void updateEntityByID(ContaBancaria t, int id) {
         String sql = "update contabancaria set nome_banco=?,numero=?,nib=?,nuib=?,"
-                + "fk_id_empresa=? where id=?";
+                + "fk_id_empresa=? where id=? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -71,7 +71,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
     @Override
     public List<ContaBancaria> listAllEntities() {
         List<ContaBancaria> lista = new ArrayList<>();
-        String sql = "select * from contabancaria";
+        String sql = "select * from contabancaria WHERE deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
             try (ResultSet result = ps.executeQuery()) {
@@ -82,6 +82,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
                     c.setNumero_conta(result.getString("numero"));
                     c.setNib(result.getString("nib"));
                     c.setNuib(result.getString("nuib"));
+                    c.setDescricaoTipo(readDescricaoTipo(result));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                     c.setData_criacao(result.getString("data_criacao"));
@@ -98,7 +99,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
     public ContaBancaria searchEntityByName(String name) {
         ContaBancaria c = null;
 
-        String sql = "select * from contabancaria where nome_banco like ?";
+        String sql = "select * from contabancaria where nome_banco like ? AND deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setString(1, "%" + name + "%");
@@ -110,6 +111,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
                     c.setNumero_conta(result.getString("numero"));
                     c.setNib(result.getString("nib"));
                     c.setNuib(result.getString("nuib"));
+                    c.setDescricaoTipo(readDescricaoTipo(result));
 //                c.setFk_id_empresa(result.getInt("fk_id_empresa"));
 //                c.setFk_id_usuario(result.getInt("fk_id_usuario"));
                     c.setData_criacao(result.getString("data_criacao"));
@@ -124,13 +126,8 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
 
     @Override
     public void deleteEntityByROOT(int id) {
-        String sql = "delete from contabancaria where id=?";
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            ps.executeUpdate();
-
+        try {
+            jminvsm.util.SoftDeleteUtils.softDelete("contabancaria", id);
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
         }
@@ -138,15 +135,27 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
 
     @Override
     public void deleteEntityByUSER(int id) {
-        String sql = "update contabancaria set active_or_not=false where id=?";
-
-        try (
-                Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            ps.executeUpdate();
+        try {
+            jminvsm.util.SoftDeleteUtils.softDelete("contabancaria", id);
         } catch (SQLException ex) {
             showDialog("Erro persistencia", "Detalhes: " + ex);
         }
+    }
+
+    private String readDescricaoTipo(ResultSet result) {
+        String[] nomesPossiveis = {"descricao_tipo", "tipo", "descricao", "descricao/tipo"};
+        try {
+            java.sql.ResultSetMetaData metaData = result.getMetaData();
+            for (String nome : nomesPossiveis) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    if (nome.equalsIgnoreCase(metaData.getColumnLabel(i))) {
+                        return result.getString(i);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            return null;
+        }
+        return null;
     }
 }

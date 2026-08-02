@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="909.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jminvsm.views.modulo_venda.pagamentosView.PagamentoController">
+   <children>
+      <VBox spacing="10.0" styleClass="secondary-color" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="14.0" left="18.0" right="18.0" top="14.0" />
+         </padding>
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="12.0">
+               <children>
+                  <VBox spacing="2.0">
+                     <children>
+                        <Label text="Pagamentos e liquidação de facturas" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Label>
+                        <Label opacity="0.85" text="Seleccione o cliente e a factura para registar ou consultar pagamentos" textFill="WHITE">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" text="Detalhes da factura" textFill="WHITE">
+                     <styleClass>
+                        <String fx:value="secondary-color" />
+                        <String fx:value="shadow-efect" />
+                        <String fx:value="hand-efect" />
+                     </styleClass>
+                  </Button>
+               </children>
+            </HBox>
+            <GridPane hgap="12.0">
+               <columnConstraints>
+                  <ColumnConstraints minWidth="130.0" prefWidth="160.0" />
+                  <ColumnConstraints hgrow="ALWAYS" />
+                  <ColumnConstraints minWidth="190.0" prefWidth="240.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+               <children>
+                  <Label text="Razão social / nome" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="RIGHT" text="Factura seleccionada" textAlignment="RIGHT" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="823.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField fx:id="txtIDCliente" alignment="CENTER" onMouseClicked="#getSearchCliente" promptText="ID do cliente" styleClass="text-squared-border" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <Label fx:id="labRazaoCliente" minHeight="30.0" prefHeight="30.0" prefWidth="221.0" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="110.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="labNumeroFactura" minHeight="30.0" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </GridPane>
+         </children>
+      </VBox>
+      <VBox prefWidth="1400.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="116.0">
+         <children>
+            <Label text="Facturas do cliente">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </Label>
+            <TableView fx:id="tabelaFactura" onMouseClicked="#selecionaFactura" prefHeight="235.0" style="-fx-border-color: transparent;">
+               <columns>
+                  <TableColumn fx:id="numero" minWidth="95.0" prefWidth="151.0" text="Número" />
+                  <TableColumn fx:id="tipo" minWidth="119.0" prefWidth="119.0" text="Tipo" />
+                  <TableColumn fx:id="numeroParcelas" minWidth="95.0" prefWidth="124.0" text="N.º de parcelas" />
+                  <TableColumn fx:id="dataemissao" minWidth="115.0" prefWidth="164.0" text="Data de emissão" />
+                  <TableColumn fx:id="datavencimento" minWidth="125.0" prefWidth="164.0" text="Data de vencimento" />
+                  <TableColumn fx:id="total" minWidth="115.0" prefWidth="179.0" text="Total" />
+                  <TableColumn fx:id="totalPago" minWidth="115.0" prefWidth="182.0" text="Total pago" />
+                  <TableColumn fx:id="saldoPendente" minWidth="115.0" prefWidth="162.0" text="Saldo" />
+                  <TableColumn fx:id="estado" minWidth="92.0" prefWidth="107.0" text="Estado" />
+               </columns>
+            </TableView>
+            <Label text="Parcelas da factura seleccionada">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="861.0" spacing="10.0">
+               <children>
+                  <Label text="N.º de parcelas" />
+                  <TextField fx:id="txtnumeroDeParcelas" alignment="CENTER" prefWidth="85.0" promptText="0" />
+                  <Label contentDisplay="CENTER" text="Juros (%)" />
+                  <TextField fx:id="txtjurosParcela" alignment="CENTER" prefWidth="85.0" promptText="0,00" />
+                  <Label text="Intervalo" />
+                  <ComboBox fx:id="combIntervaloParcelas" prefWidth="165.0" promptText="Seleccione" />
+                  <Button fx:id="btnSimularParcelas" mnemonicParsing="false" onAction="#simulaParcelas" text="Simular parcelas" textFill="WHITE">
+                     <styleClass>
+                        <String fx:value="secondary-color" />
+                        <String fx:value="hand-efect" />
+                        <String fx:value="shadow-efect" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="btnParcelas" mnemonicParsing="false" onAction="#geraParcelas" text="Gerar parcelas" textFill="WHITE">
+                     <styleClass>
+                        <String fx:value="secondary-color" />
+                        <String fx:value="hand-efect" />
+                        <String fx:value="shadow-efect" />
+                     </styleClass>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+            <SplitPane dividerPositions="0.6396267049533381" style="-fx-background-color: transparent;">
+               <items>
+                  <TableView fx:id="tabelaParcelas" minHeight="205.0" onMouseClicked="#selecionaParcela" prefHeight="286.0" prefWidth="858.0" style="-fx-border-color: transparent;">
+                     <columns>
+                        <TableColumn fx:id="IDParcela" minWidth="48.0" prefWidth="58.0" text="ID" />
+                        <TableColumn fx:id="refParcela" minWidth="41.0" prefWidth="41.0" text="Ref." />
+                        <TableColumn fx:id="jurosParcela" minWidth="64.0" prefWidth="67.0" text="Juros (%)" />
+                        <TableColumn fx:id="jurosAtrasoParcela" minWidth="75.0" prefWidth="84.0" text="Atraso (%)" />
+                        <TableColumn fx:id="valorParcela" minWidth="105.0" prefWidth="112.0" text="Valor da parcela" />
+                        <TableColumn fx:id="valorParcelaPago" minWidth="100.0" prefWidth="112.0" text="Valor pago" />
+                        <TableColumn fx:id="dataVencimentoParcela" minWidth="125.0" prefWidth="112.0" text="Vencimento" />
+                        <TableColumn fx:id="dataPagamentoParcela" minWidth="125.0" prefWidth="112.0" text="Pagamento" />
+                        <TableColumn fx:id="estadoParcela" minWidth="97.0" prefWidth="126.0" text="Estado" />
+                     </columns>
+                  </TableView>
+                  <AnchorPane prefHeight="283.0" prefWidth="529.0" styleClass="secondary-color">
+                     <children>
+                        <Label layoutX="29.0" layoutY="10.0" opacity="0.85" text="Valor por pagar" textFill="WHITE" />
+                        <HBox alignment="BASELINE_LEFT" layoutX="5.0" layoutY="29.0" spacing="8.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="15.0">
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                           <children>
+                              <Label fx:id="labValorPorPagar" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="28.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="labValorPorPagar_Aux" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Separator layoutX="10.0" layoutY="74.0" prefWidth="500.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                        <GridPane hgap="10.0" layoutX="29.0" vgap="10.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="20.0">
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="105.0" prefWidth="125.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Data" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <DatePicker fx:id="dataPagamento" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              <Label text="Método" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <ComboBox fx:id="combmetodoPagamento" maxWidth="Infinity" promptText="Método de pagamento" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="Valor recebido" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <TextField fx:id="txtValorRecebido" alignment="CENTER_RIGHT" promptText="0,00" style="-fx-font-size: 18;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label text="Descrição" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                              <TextField fx:id="txtDescricao" promptText="Descrição do pagamento" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                        </GridPane>
+                        <HBox alignment="CENTER_LEFT" layoutX="18.0" layoutY="225.0" spacing="8.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0">
+                           <children>
+                              <Label fx:id="labTrocos1" text="Troco:" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="labTrocos" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnFinalizar" mnemonicParsing="false" onAction="#addTransacao" prefHeight="42.0" text="Confirmar pagamento" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="secondary-color" />
+                                    <String fx:value="hand-efect" />
+                                    <String fx:value="shadow-efect" />
+                                 </styleClass>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+               </items>
+            </SplitPane>
+            <Label text="Histórico de pagamentos">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </Label>
+            <TableView fx:id="tabelaTransacoes" prefHeight="220.0" style="-fx-border-color: transparent;">
+               <columns>
+                  <TableColumn fx:id="idTrans" minWidth="48.0" prefWidth="58.0" text="ID" />
+                  <TableColumn fx:id="valorTransRecebido" minWidth="110.0" prefWidth="130.0" text="Valor recebido" />
+                  <TableColumn fx:id="valorTransPago" minWidth="100.0" prefWidth="120.0" text="Valor pago" />
+                  <TableColumn fx:id="valorTransTrocos" minWidth="90.0" prefWidth="110.0" text="Troco" />
+                  <TableColumn fx:id="metodoPagamentoTrans" minWidth="170.0" prefWidth="210.0" text="Método de pagamento" />
+                  <TableColumn fx:id="dataPagamentoTrans" minWidth="130.0" prefWidth="150.0" text="Data do pagamento" />
+                  <TableColumn fx:id="descricaoTrans" minWidth="230.0" prefWidth="421.0" text="Descrição" />
+                  <TableColumn fx:id="dataRegistoTrans" minWidth="145.0" prefWidth="153.0" text="Data de registo" />
+               </columns>
+            </TableView>
+         </children>
+      </VBox>
+   </children>
+   <stylesheets>
+      <URL value="@../../../style/dashboard.css" />
+      <URL value="@../../../style/buttonConfig.css" />
+   </stylesheets>
+</AnchorPane>

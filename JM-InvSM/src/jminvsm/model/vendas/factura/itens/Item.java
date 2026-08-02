@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.preco.PrecoProdutoArmazem;
 import jminvsm.model.produto.Produto;
-import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
 import static jminvsm.model.util.ModelConverters.toBigDecimal;
 import static jminvsm.model.util.ModelConverters.toDateString;
@@ -100,14 +99,6 @@ public class Item {
 
     public void setQtd_por_unidade(int qtd_por_unidade) {
         this.qtd_por_unidade = qtd_por_unidade;
-    }
-
-    public int getQtdPorUnidade() {
-        return qtd_por_unidade;
-    }
-
-    public void setQtdPorUnidade(int qtdPorUnidade) {
-        this.qtd_por_unidade = qtdPorUnidade;
     }
 
     public double getSubtotal() {

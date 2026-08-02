@@ -4,12 +4,15 @@
  */
 package jminvsm.dao.vendas.factura;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import jminvsm.fiscal.service.FiscalSnapshotCalculator;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.contacto.ContactoCliente;
 import jminvsm.model.cliente.endereco.EnderecoCliente;
@@ -20,7 +23,7 @@ import jminvsm.model.empresa.endereco.EnderecoEmpresa;
 import jminvsm.model.metodo_pagamento.MetodoPagamento;
 import jminvsm.model.transacao.Transacao;
 import jminvsm.model.usuario.Usuario;
-import jminvsm.model.vendas.documetos.DocumentosComerciais;
+import jminvsm.model.vendas.Documentos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.util.AlertUtilities;
 import static jminvsm.util.AlertUtilities.showDialog;
@@ -35,30 +38,40 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     @Override
     public boolean addEntity(Factura t) {
         boolean isSuccess = false;
-        String sql = "insert into factura (numero,data_emissao,data_vencimento,total,condicaoPagemento,"
-                    + "fk_id_empresa,fk_id_cliente,fk_id_usuario,fk_id_doc,saldoPendente)"
-                    + " values (?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into factura (numero,serie,data_emissao,data_vencimento,total,"
+                    + "total_liquido,total_imposto,moeda,taxa_cambio,hash_documento,"
+                    + "condicaoPagemento,fk_id_empresa,fk_id_cliente,fk_id_usuario,fk_id_doc,saldoPendente)"
+                    + " values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (
                 Connection con = Conexao.getConexao();
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, t.getNumero_fac());
-            ps.setString(2, t.getData_emissao());
-            ps.setString(3, t.getData_vencimento());
-            ps.setBigDecimal(4, t.getTotalDecimal());
+            FiscalSnapshotCalculator.Totals fiscal = FiscalSnapshotCalculator.totals(t);
+            BigDecimal gross = fiscal.getGrossTotal().compareTo(BigDecimal.ZERO) > 0
+                    ? fiscal.getGrossTotal() : t.getTotalDecimal();
+            ps.setString(2, FiscalSnapshotCalculator.deriveSeries(t.getNumero_fac()));
+            ps.setString(3, t.getData_emissao());
+            ps.setString(4, t.getData_vencimento());
+            ps.setBigDecimal(5, gross);
+            ps.setBigDecimal(6, fiscal.getNetTotal());
+            ps.setBigDecimal(7, fiscal.getTaxAmount());
+            ps.setString(8, "MZN");
+            ps.setBigDecimal(9, BigDecimal.ONE);
+            ps.setString(10, FiscalSnapshotCalculator.internalHash(t, fiscal));
 //            ps.setDouble(5, t.getTotalPago());
-            ps.setString(5, t.getCondicaoPagamento());
+            ps.setString(11, t.getCondicaoPagamento());
 //            ps.setInt(8, t.getNumeroParcelas());
 //            ps.setString(9, t.getEstado());
-            ps.setInt(6, t.getEmpresa().getId());
-            ps.setInt(7, t.getCliente().getId());
-            ps.setInt(8, t.getUsuario().getId());
-            ps.setInt(9, t.getDocComerciais().getId());
-            ps.setBigDecimal(10, t.getSaldoPendenteDecimal());
+            ps.setInt(12, t.getEmpresa().getId());
+            ps.setInt(13, t.getCliente().getId());
+            ps.setInt(14, t.getUsuario().getId());
+            ps.setInt(15, t.getDocComerciais().getId());
+            ps.setBigDecimal(16, t.getSaldoPendenteDecimal());
 
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                isSuccess = true; // Se uma linha foi afetada, a inserÃ§Ã£o foi bem-sucedida
+                isSuccess = true; // Se uma linha foi afetada, a inserÃƒÂ§ÃƒÂ£o foi bem-sucedida
             }
 
         } catch (SQLException ex) {
@@ -71,7 +84,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
         Factura factura = null;
         String sql = "SELECT f.numero, f.data_emissao, f.data_vencimento, f.total, f.totalPago, f.saldoPendente, f.estado, "
                     + "f.estado, f.fk_id_empresa, f.fk_id_cliente, f.fk_id_usuario, f.fk_id_doc "
-                    + "FROM factura f WHERE f.numero = ?";
+                    + "FROM factura f WHERE f.numero = ? AND f.deleteStatus = 0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
                             ps.setString(1, numero);
@@ -123,17 +136,17 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                     + "ce.email as email_empresa, ce.website,"
                     + "a.nome_banco, a.numero as numeroConta, a.nib, a.nuib "
                     + "FROM factura f "
-                    + "LEFT JOIN transacoes t ON t.fk_numero = f.numero " 
+                    + "LEFT JOIN transacoes t ON t.fk_numero = f.numero AND t.deleteStatus = 0 " 
                     + "LEFT JOIN metodo_pagamento m ON m.id = t.fk_id_metodo_pagamento "
                     + "LEFT JOIN documentocomercial doc ON f.fk_id_doc = doc.id "
-                    + "LEFT JOIN cliente cli ON cli.id = f.fk_id_cliente "
-                    + "LEFT JOIN contacto_cliente cc ON cc.fk_id_cliente = cli.id "
-                    + "LEFT JOIN endereco_cliente ec ON ec.fk_id_cliente = cli.id "
+                    + "LEFT JOIN cliente cli ON cli.id = f.fk_id_cliente AND cli.deleteStatus = 0 "
+                    + "LEFT JOIN contacto_cliente cc ON cc.fk_id_cliente = cli.id AND cc.deleteStatus = 0 "
+                    + "LEFT JOIN endereco_cliente ec ON ec.fk_id_cliente = cli.id AND ec.deleteStatus = 0 "
                     + "LEFT JOIN empresa e ON f.fk_id_empresa=e.id "
-                    + "LEFT JOIN endereco_empresa en ON e.id = en.fk_id_empresa "
-                    + "LEFT JOIN contacto_empresa ce ON e.id = ce.fk_id_empresa "
-                    + "LEFT JOIN contabancaria a ON e.id=a.fk_id_empresa "
-                    + "WHERE f.numero = ? ";
+                    + "LEFT JOIN endereco_empresa en ON e.id = en.fk_id_empresa AND en.deleteStatus = 0 "
+                    + "LEFT JOIN contacto_empresa ce ON e.id = ce.fk_id_empresa AND ce.deleteStatus = 0 "
+                    + "LEFT JOIN contabancaria a ON e.id=a.fk_id_empresa AND a.deleteStatus = 0 "
+                    + "WHERE f.numero = ? AND f.deleteStatus = 0 ";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
                             ps.setString(1, factura);
@@ -217,8 +230,9 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                     + "concat(cli.id,' - ', cli.razaosocial,'/ ', cli.nuit) as cliente "
                     + "FROM factura f "
                     + "LEFT JOIN documentocomercial doc ON f.fk_id_doc = doc.id "
-                    + "LEFT JOIN cliente cli ON cli.id = f.fk_id_cliente "
-                    + "LEFT JOIN itemfactura i ON i.fk_numero = f.numero "
+                    + "LEFT JOIN cliente cli ON cli.id = f.fk_id_cliente AND cli.deleteStatus = 0 "
+                    + "LEFT JOIN itemfactura i ON i.fk_numero = f.numero AND i.deleteStatus = 0 "
+                    + "WHERE f.deleteStatus = 0 "
                     + "GROUP BY f.numero, f.data_emissao, f.data_vencimento, "
                     + "f.estado, f.total, f.totalPago, f.saldoPendente,"
                     + "doc.sigla, doc.nome, cli.id, cli.razaosocial, cli.nuit "
@@ -258,8 +272,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                     + "CONCAT(doc.sigla, ' - ', doc.nome) AS Documento "
                     + "FROM factura f "
                     + "LEFT JOIN documentocomercial doc ON f.fk_id_doc = doc.id "
-                    + "LEFT JOIN cliente cli ON cli.id = f.fk_id_cliente "
-                    + "WHERE cli.id = ? "
+                    + "LEFT JOIN cliente cli ON cli.id = f.fk_id_cliente AND cli.deleteStatus = 0 "
+                    + "WHERE cli.id = ? AND f.deleteStatus = 0 "
                     + "GROUP BY f.numero, f.data_emissao, f.data_vencimento, f.estado,"
                     + "f.total, f.totalPago, f.saldoPendente, f.numeroParcelas, doc.sigla, doc.nome "
                     + "ORDER BY f.numero";
@@ -291,14 +305,134 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     }
 
     @Override
+    public boolean converterCotacaoEmFactura(String numeroCotacao, Factura facturaDestino) {
+        if (numeroCotacao == null || numeroCotacao.trim().isEmpty()) {
+            showDialog("Erro de conversao", "Numero da cotacao nao informado.");
+            return false;
+        }
+        if (facturaDestino == null || facturaDestino.getNumero_fac() == null || facturaDestino.getNumero_fac().trim().isEmpty()) {
+            showDialog("Erro de conversao", "Numero da factura destino nao informado.");
+            return false;
+        }
+        if (getIdDocumento(facturaDestino) <= 0) {
+            showDialog("Erro de conversao", "Documento comercial da factura destino nao informado.");
+            return false;
+        }
+
+        String sqlCotacao = "SELECT numero, data_emissao, data_vencimento, total, condicaoPagemento, "
+                + "fk_id_empresa, fk_id_cliente, fk_id_usuario "
+                + "FROM factura WHERE numero = ? AND deleteStatus = 0 FOR UPDATE";
+        String sqlExisteFactura = "SELECT COUNT(*) AS total FROM factura WHERE numero = ?";
+        String sqlContaItensCotacao = "SELECT COUNT(*) AS total, COALESCE(SUM(subtotal), 0) AS total_itens "
+                + "FROM itemcotacao WHERE fk_numero = ? AND deleteStatus = 0";
+        String sqlInserirFactura = "INSERT INTO factura "
+                + "(numero, data_emissao, data_vencimento, total, condicaoPagemento, "
+                + "fk_id_empresa, fk_id_cliente, fk_id_usuario, fk_id_doc, saldoPendente) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?)";
+        String sqlInserirItens = "INSERT INTO itemfactura "
+                + "(quantidade, subtotal, fk_id_produto, fk_numero, fk_id_usuario, fk_id_armazem, "
+                + "qtd_por_unidade, numero_linha, unidade_vendida, preco_unitario, desconto_linha, "
+                + "codigo_imposto, taxa_imposto, motivo_isencao, valor_liquido, base_tributavel, "
+                + "valor_imposto, valor_bruto, total_linha) "
+                + "SELECT ic.quantidade, ic.subtotal, ic.fk_id_produto, ?, ic.fk_id_usuario, "
+                + "ic.fk_id_armazem, COALESCE(ic.qtd_por_unidade, 1), "
+                + "ROW_NUMBER() OVER (ORDER BY ic.id), COALESCE(um.sigla,'UN'), "
+                + "ROUND((ic.subtotal / (1 + COALESCE(ip.percentagem,0)/100)) / NULLIF(ic.quantidade,0), 6), "
+                + "0, CASE WHEN COALESCE(ip.percentagem,0)>0 THEN 'IVA' "
+                + "WHEN UPPER(COALESCE(ip.nome,'')) LIKE '%ISENT%' THEN 'ISENTO' ELSE 'SEM_IMPOSTO' END, "
+                + "COALESCE(ip.percentagem,0), CASE WHEN COALESCE(ip.percentagem,0)=0 THEN ip.descricao ELSE NULL END, "
+                + "ROUND(ic.subtotal / (1 + COALESCE(ip.percentagem,0)/100), 2), "
+                + "ROUND(ic.subtotal / (1 + COALESCE(ip.percentagem,0)/100), 2), "
+                + "ic.subtotal - ROUND(ic.subtotal / (1 + COALESCE(ip.percentagem,0)/100), 2), "
+                + "ic.subtotal, ic.subtotal "
+                + "FROM itemcotacao ic JOIN produto p ON p.id=ic.fk_id_produto "
+                + "LEFT JOIN imposto ip ON ip.id=p.idImposto "
+                + "LEFT JOIN unidadeMedida um ON um.id=p.idUnidade "
+                + "WHERE ic.fk_numero = ? AND ic.deleteStatus = 0";
+        String sqlAtualizarFiscal = "UPDATE factura f SET "
+                + "f.serie=?, f.total_liquido=(SELECT COALESCE(SUM(i.valor_liquido),0) FROM itemfactura i WHERE i.fk_numero=f.numero AND i.deleteStatus=0), "
+                + "f.total_imposto=(SELECT COALESCE(SUM(i.valor_imposto),0) FROM itemfactura i WHERE i.fk_numero=f.numero AND i.deleteStatus=0), "
+                + "f.moeda='MZN', f.taxa_cambio=1, "
+                + "f.hash_documento=SHA2(CONCAT_WS('|',f.numero,f.data_emissao,f.fk_id_empresa,f.fk_id_cliente,FORMAT(f.total,2)),256) "
+                + "WHERE f.numero=?";
+
+        try (Connection con = Conexao.getConexao()) {
+            con.setAutoCommit(false);
+            try {
+                if (countByNumero(con, sqlExisteFactura, facturaDestino.getNumero_fac()) > 0) {
+                    throw new SQLException("Ja existe uma factura com o numero informado.");
+                }
+
+                Factura cotacao = getCotacaoHeader(con, sqlCotacao, numeroCotacao);
+                if (cotacao == null) {
+                    throw new SQLException("Cotacao nao encontrada.");
+                }
+
+                ItemCotacaoResumo resumo = getResumoItensCotacao(con, sqlContaItensCotacao, numeroCotacao);
+                if (resumo.quantidadeItens == 0) {
+                    throw new SQLException("A cotacao nao possui itens para converter.");
+                }
+
+                BigDecimal total = resumo.totalItens;
+                String dataEmissao = valorOuPadrao(facturaDestino.getData_emissao(), LocalDate.now().toString());
+                String dataVencimento = valorOuPadrao(facturaDestino.getData_vencimento(), cotacao.getData_vencimento());
+                String condicao = valorOuPadrao(facturaDestino.getCondicaoPagamento(), cotacao.getCondicaoPagamento());
+                int idEmpresa = idOuPadrao(getIdEmpresa(facturaDestino), getIdEmpresa(cotacao));
+                int idCliente = idOuPadrao(getIdCliente(facturaDestino), getIdCliente(cotacao));
+                int idUsuario = idOuPadrao(getIdUsuario(facturaDestino), getIdUsuario(cotacao));
+
+                try (PreparedStatement ps = con.prepareStatement(sqlInserirFactura)) {
+                    ps.setString(1, facturaDestino.getNumero_fac());
+                    ps.setString(2, dataEmissao);
+                    ps.setString(3, dataVencimento);
+                    ps.setBigDecimal(4, total);
+                    ps.setString(5, condicao);
+                    ps.setInt(6, idEmpresa);
+                    ps.setInt(7, idCliente);
+                    ps.setInt(8, idUsuario);
+                    ps.setInt(9, getIdDocumento(facturaDestino));
+                    ps.setBigDecimal(10, total);
+                    ps.executeUpdate();
+                }
+
+                try (PreparedStatement ps = con.prepareStatement(sqlInserirItens)) {
+                    ps.setString(1, facturaDestino.getNumero_fac());
+                    ps.setString(2, numeroCotacao);
+                    int itensCopiados = ps.executeUpdate();
+                    if (itensCopiados == 0) {
+                        throw new SQLException("Nenhum item foi copiado para a factura.");
+                    }
+                }
+
+                try (PreparedStatement ps = con.prepareStatement(sqlAtualizarFiscal)) {
+                    ps.setString(1, FiscalSnapshotCalculator.deriveSeries(facturaDestino.getNumero_fac()));
+                    ps.setString(2, facturaDestino.getNumero_fac());
+                    ps.executeUpdate();
+                }
+
+                con.commit();
+                return true;
+            } catch (SQLException ex) {
+                con.rollback();
+                showDialog("Erro de conversao", "Detalhes: " + ex.getMessage());
+            } finally {
+                con.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            showDialog("Erro de conversao", "Detalhes: " + ex);
+        }
+        return false;
+    }
+
+    @Override
     public int countFactura() {
         int total = 0;
-        String sql = "select count(*) as total from factura";
+        String sql = "select count(*) as total from factura WHERE deleteStatus=0";
         try (
                 Connection con = Conexao.getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             try (ResultSet result = ps.executeQuery()) {
-            if (result.next()) { // Verifica se hÃ¡ resultados
+            if (result.next()) { // Verifica se hÃƒÂ¡ resultados
                 total = result.getInt("total");
             }
             }
@@ -307,6 +441,104 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
         }
 
         return total;
+    }
+
+    private Factura getCotacaoHeader(Connection con, String sql, String numeroCotacao) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, numeroCotacao);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Factura factura = new Factura();
+                    factura.setNumero_fac(rs.getString("numero"));
+                    factura.setData_emissao(rs.getString("data_emissao"));
+                    factura.setData_vencimento(rs.getString("data_vencimento"));
+                    factura.setTotal(rs.getBigDecimal("total"));
+                    factura.setSaldoPendente(rs.getBigDecimal("total"));
+                    factura.setCondicaoPagamento(rs.getString("condicaoPagemento"));
+
+                    Empresa empresa = new Empresa();
+                    empresa.setId(rs.getInt("fk_id_empresa"));
+                    factura.setEmpresa(empresa);
+
+                    Cliente cliente = new Cliente();
+                    cliente.setId(rs.getInt("fk_id_cliente"));
+                    factura.setCliente(cliente);
+
+                    Usuario usuario = new Usuario();
+                    usuario.setId(rs.getInt("fk_id_usuario"));
+                    factura.setUsuario(usuario);
+
+                    return factura;
+                }
+            }
+        }
+        return null;
+    }
+
+    private ItemCotacaoResumo getResumoItensCotacao(Connection con, String sql, String numeroCotacao) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, numeroCotacao);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new ItemCotacaoResumo(rs.getInt("total"), rs.getBigDecimal("total_itens"));
+                }
+            }
+        }
+        return new ItemCotacaoResumo(0, BigDecimal.ZERO);
+    }
+
+    private int countByNumero(Connection con, String sql, String numero) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, numero);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total");
+                }
+            }
+        }
+        return 0;
+    }
+
+    private String valorOuPadrao(String valor, String padrao) {
+        if (valor != null && !valor.trim().isEmpty()) {
+            return valor;
+        }
+        return padrao;
+    }
+
+    private int idOuPadrao(int valor, int padrao) throws SQLException {
+        int id = valor > 0 ? valor : padrao;
+        if (id <= 0) {
+            throw new SQLException("Dados obrigatorios da factura nao informados.");
+        }
+        return id;
+    }
+
+    private int getIdEmpresa(Factura factura) {
+        return factura != null && factura.getEmpresa() != null ? factura.getEmpresa().getId() : 0;
+    }
+
+    private int getIdCliente(Factura factura) {
+        return factura != null && factura.getCliente() != null ? factura.getCliente().getId() : 0;
+    }
+
+    private int getIdUsuario(Factura factura) {
+        return factura != null && factura.getUsuario() != null ? factura.getUsuario().getId() : 0;
+    }
+
+    private int getIdDocumento(Factura factura) {
+        return factura != null && factura.getDocComerciais() != null ? factura.getDocComerciais().getId() : 0;
+    }
+
+    private static class ItemCotacaoResumo {
+
+        private final int quantidadeItens;
+        private final BigDecimal totalItens;
+
+        private ItemCotacaoResumo(int quantidadeItens, BigDecimal totalItens) {
+            this.quantidadeItens = quantidadeItens;
+            this.totalItens = totalItens != null ? totalItens : BigDecimal.ZERO;
+        }
     }
 
 //    @Override
@@ -318,7 +550,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //                    + "where f.estado=1";
 //            ps = con.prepareStatement(sql);
 //            ResultSet result = ps.executeQuery();
-//            if (result.next()) { // Verifica se hÃ¡ resultados
+//            if (result.next()) { // Verifica se hÃƒÂ¡ resultados
 //                total = result.getInt("total_fatura");
 //            }
 //            result.close();
@@ -329,91 +561,6 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //
 //        return total;
 //    }
-    /*
-    Metodo abaixo obsoleto
-     */
-//    public List<itensFacturaData> getItensFacturaData(String factura) {
-//        List<itensFacturaData> lista = new ArrayList<>();
-//        itensFacturaData c = null;
-//        try {
-//            sql = "SELECT "
-//                    + "p.nome, "
-//                    + "p.descricao, "
-//                    + "i.quantidade, "
-//                    + "pv.preco, "
-//                    + "ip.identificador, "
-//                    + "ip.percentagem AS taxa_imposto, "
-//                    + "d.nome AS titulo_desconto, "
-//                    + "d.percentagem AS percentagem_desconto,"
-//                    + "i.subtotal "
-//                    + "FROM factura f "
-//                    + "LEFT JOIN itemfactura i ON i.fk_numero = f.numero "
-//                    + "LEFT JOIN desconto d ON d.id = i.fk_id_desconto "
-//                    + "LEFT JOIN produto p ON p.id = i.fk_id_produto "
-//                    + "LEFT JOIN precovenda pv ON pv.fk_id_produto = p.id "
-//                    + "LEFT JOIN taxa_imposto ip ON ip.id = p.fk_id_taxa_imposto "
-//                    + "WHERE f.numero = ?";
-//            ps = con.prepareStatement(sql);
-//            ps.setString(1, factura);
-//            ResultSet result = ps.executeQuery();
-//            double sub = 0;
-//            while (result.next()) {
-//                c = new itensFacturaData();
-//                c.setNomeProduto(result.getString("nome"));
-//                c.setDescricaoProduto(result.getString("descricao"));
-//                c.setQuantidadeProduto(result.getInt("quantidade"));
-//                c.setPrecoProduto(result.getDouble("preco"));
-//                c.setTaxaProduto(result.getDouble("taxa_imposto"));
-//                c.setDescontoProduto(result.getDouble("percentagem_desconto"));
-//                c.setTotaProduto(result.getDouble("subtotal"));
-//                sub += c.getQuantidadeProduto() * c.getPrecoProduto();
-//                c.setSubtotal(sub);
-//                lista.add(c);
-//            }
-//            result.close();
-//            ps.close();
-//        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
-//
-//        }
-//        return lista;
-//    }
-//    public itensFacturaData getTotaisFacturaData(String factura) {
-//        itensFacturaData c = null;
-//        try {
-//            sql = "SELECT "
-//                    + "sum(ii.quantidade * pv2.preco) as subtotal,"
-//                    + "sum((((ii.quantidade * pv2.preco) * ip2.percentagem)+ii.quantidade * pv2.preco) * dd.percentagem) AS desconto,"
-//                    + "sum(ii.quantidade * pv2.preco * ip2.percentagem) AS taxas,"
-//                    + "sum(ii.subtotal) as total_geral "
-//                    + "FROM factura ff "
-//                    + "    LEFT JOIN itemfactura ii ON ii.fk_numero = ff.numero "
-//                    + "    LEFT JOIN desconto dd ON dd.id = ii.fk_id_desconto "
-//                    + "    LEFT JOIN produto pp ON pp.id = ii.fk_id_produto "
-//                    + "    LEFT JOIN precovenda pv2 ON pv2.fk_id_produto = pp.id "
-//                    + "    LEFT JOIN taxa_imposto ip2 ON ip2.id = pp.fk_id_taxa_imposto "
-//                    + "WHERE ff.numero = ?";
-//            ps = con.prepareStatement(sql);
-//            ps.setString(1, factura);
-//            ResultSet result = ps.executeQuery();
-//            double sub = 0;
-//            while (result.next()) {
-//                c = new itensFacturaData();
-//                c.setSubtotal(result.getDouble("subtotal"));
-//                c.setDesconto(result.getDouble("desconto"));
-//                c.setTaxas(result.getDouble("taxas"));
-//                c.setTotal_geral(result.getDouble("total_geral"));
-//
-//            }
-//            result.close();
-//            ps.close();
-//        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
-//
-//        }
-//        return c;
-//    }
-//
 //    @Override
 //    public void updateEntityByID(Factura t, int id) {
 //        try {
@@ -429,7 +576,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.close();
 //        } catch (SQLException ex) {
 //            JOptionPane.showMessageDialog(null, "Falha ao actulizar  Factura: "
-//                    + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
+//                    + ex, "InformaÃƒÂ§ÃƒÂ£o", JOptionPane.ERROR_MESSAGE);
 //        }
 //    }
 //
@@ -458,7 +605,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Factura: " + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Factura: " + ex, "InformaÃƒÂ§ÃƒÂ£o", JOptionPane.ERROR_MESSAGE);
 //        }
 //        return lista;
 //    }
@@ -489,7 +636,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.close();
 //        } catch (SQLException ex) {
 //            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Factura: " + ex,
-//                    "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
+//                    "InformaÃƒÂ§ÃƒÂ£o", JOptionPane.ERROR_MESSAGE);
 //        }
 //        return u;
 //
@@ -506,7 +653,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.close();
 //        } catch (SQLException ex) {
 //            JOptionPane.showMessageDialog(null, "Erro ao deletar Factura: "
-//                    + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
+//                    + ex, "InformaÃƒÂ§ÃƒÂ£o", JOptionPane.ERROR_MESSAGE);
 //        }
 //    }
 //    
@@ -521,7 +668,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.close();
 //        } catch (SQLException ex) {
 //            JOptionPane.showMessageDialog(null, "Erro ao deletar Factura: "
-//                    + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
+//                    + ex, "InformaÃƒÂ§ÃƒÂ£o", JOptionPane.ERROR_MESSAGE);
 //        }
 //    }
 }
+

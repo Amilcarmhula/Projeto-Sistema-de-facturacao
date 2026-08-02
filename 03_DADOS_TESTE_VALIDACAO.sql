@@ -24,7 +24,6 @@
 -- ============================================================
 USE _sysface_teste;
 
-
 -- ============================================================
 -- LIMPEZA E DADOS MINIMOS
 -- Este bloco deixa o script reexecutavel na base de teste.

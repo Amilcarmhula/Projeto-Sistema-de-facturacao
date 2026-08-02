@@ -19,6 +19,7 @@
 
 USE _sysface_teste;
 
+
 -- 1) Quantos triggers de auditoria existem neste schema?
 SELECT COUNT(*) AS TRIGGERS_AUDITORIA_CRIADOS
 FROM information_schema.TRIGGERS

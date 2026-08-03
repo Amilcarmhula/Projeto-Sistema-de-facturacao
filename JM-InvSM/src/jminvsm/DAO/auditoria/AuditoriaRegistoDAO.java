@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.auditoria.AuditoriaRegisto;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 public class AuditoriaRegistoDAO {
@@ -49,7 +49,7 @@ public class AuditoriaRegistoDAO {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de auditoria", "Erro ao pesquisar auditoria: " + ex);
+            DaoErrorHandler.log("Erro de auditoria", "Erro ao pesquisar auditoria: " + ex);
         }
         return lista;
     }
@@ -64,7 +64,7 @@ public class AuditoriaRegistoDAO {
                 lista.add(rs.getString("tabela"));
             }
         } catch (SQLException ex) {
-            showDialog("Erro de auditoria", "Erro ao listar tabelas auditadas: " + ex);
+            DaoErrorHandler.log("Erro de auditoria", "Erro ao listar tabelas auditadas: " + ex);
         }
         return lista;
     }

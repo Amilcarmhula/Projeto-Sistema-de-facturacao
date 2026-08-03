@@ -7,9 +7,6 @@ package jminvsm.views.modulo_inventario.produtosView;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -41,7 +38,6 @@ import javafx.util.Callback;
 import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
-import jminvsm.model.configuracao.ConfiguracaoSistema;
 import jminvsm.model.desconto.Desconto;
 import jminvsm.model.desconto.ProdutoDesconto;
 import jminvsm.model.imposto.Imposto;
@@ -50,17 +46,13 @@ import jminvsm.model.produto.Produto;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.usuario.Usuario;
-import jminvsm.service.armazem.ServiceArmazem;
-import jminvsm.service.categoria.ServicoCategoria;
 import jminvsm.service.ServiceException;
-import jminvsm.service.configuracao.ServiceConfiguracaoSistema;
-import jminvsm.service.desconto.ServiceDesconto;
-import jminvsm.service.desconto.ServiceProdutoDesconto;
-import jminvsm.service.precoProdutoArmazem.ServicePrecoProdutoArmazem;
-import jminvsm.service.produto.ServiceProduto;
+import jminvsm.service.produto.OpcoesProdutoCadastro;
+import jminvsm.service.produto.ServicePesquisaProduto;
+import jminvsm.service.produto.ServiceProdutoCadastro;
+import jminvsm.service.produto.ServiceProdutoConfiguracao;
+import jminvsm.service.produto.ServiceProdutoPreco;
 import jminvsm.service.stock.ServiceStock;
-import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
-import jminvsm.service.unidadeMedida.ServiceUnidadeMedida;
 import jminvsm.util.AlertUtilities;
 import static jminvsm.util.AlertUtilities.showDialog;
 import jminvsm.util.ButtonUtilities;
@@ -75,20 +67,11 @@ import jminvsm.util.LoadAndMoveUtilities;
 public class ProdutoController implements Initializable {
 
     private Usuario userData;
-    private ServicePrecoProdutoArmazem serPrecosProduArm;
-    private ServiceConfiguracaoSistema serviceConfiguracao;
-    private ServicoCategoria serCategoria;
-    private ServiceTaxaImpostos serTaxa;
-    private ServiceUnidadeMedida serUnidade;
-    private ServiceProduto productService;
-    private ServiceArmazem serviceArmazem;
+    private ServiceProdutoCadastro serviceProdutoCadastro;
+    private ServiceProdutoPreco serviceProdutoPreco;
+    private ServiceProdutoConfiguracao serviceProdutoConfiguracao;
+    private ServicePesquisaProduto servicePesquisaProduto;
     private ServiceStock serviceStock;
-    private ServiceDesconto serDesconto;
-    private ServiceProdutoDesconto serProDesconto;
-
-    private int idArmazem;
-    private int idArmazemDesconto;
-    private int idDescontoComb;
 
     @FXML
     private TableView<ProdutoDesconto> tabelaprodutodesconto;
@@ -316,18 +299,13 @@ public class ProdutoController implements Initializable {
 //    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        serviceConfiguracao = new ServiceConfiguracaoSistema();
         this.userData = SessaoAplicacao.getUserData();
         try {
-            serPrecosProduArm = new ServicePrecoProdutoArmazem();
-            serCategoria = new ServicoCategoria();
-            serTaxa = new ServiceTaxaImpostos();
-            serUnidade = new ServiceUnidadeMedida();
-            productService = new ServiceProduto();
-            serviceArmazem = new ServiceArmazem();
+            serviceProdutoCadastro = new ServiceProdutoCadastro();
+            serviceProdutoPreco = new ServiceProdutoPreco();
+            serviceProdutoConfiguracao = new ServiceProdutoConfiguracao();
+            servicePesquisaProduto = new ServicePesquisaProduto();
             serviceStock = new ServiceStock();
-            serDesconto = new ServiceDesconto();
-            serProDesconto = new ServiceProdutoDesconto();
 
 //            getData();
             showProdutos();
@@ -337,25 +315,10 @@ public class ProdutoController implements Initializable {
         }
 
         populateCombos();
-        cBoxArmazem.setOnAction(evt -> {
-            String data = cBoxArmazem.getSelectionModel().getSelectedItem();
-            Armazem armazem = data == null ? null : mapaArmazens.get(data);
-            if (armazem != null) {
-                idArmazem = armazem.getId();
-            }
-        });
-        cBoxArmazemDesconto.setOnAction(evt -> {
-            String data = cBoxArmazemDesconto.getSelectionModel().getSelectedItem();
-            Armazem armazem = data == null ? null : mapaArmazens.get(data);
-            if (armazem != null) {
-                idArmazemDesconto = armazem.getId();
-            }
-        });
         cBoxDesconto.setOnAction(evt -> {
             String data = cBoxDesconto.getSelectionModel().getSelectedItem();
             Desconto desconto = data == null ? null : mapaDesconto.get(data);
             if (desconto != null) {
-                idDescontoComb = desconto.getId();
                 labDescricaoDesconto.setText(desconto.getDescricao());
                 txtIDDesconto.setText(String.valueOf(desconto.getId()));
                 txtPercentagemDesconto.setText(String.valueOf(desconto.getPercentagem()));
@@ -405,11 +368,8 @@ public class ProdutoController implements Initializable {
     private Map<Integer, Produto> mapaProdutos;
 
     public void showProdutos() {
-        listaProduto = productService.listaTodosProdutos();
-        mapaProdutos = new HashMap<>();
-        for (Produto p : listaProduto) {
-            mapaProdutos.put(p.getId(), p);
-        }
+        listaProduto = serviceProdutoCadastro.listaTodosProdutos();
+        mapaProdutos = servicePesquisaProduto.mapearProdutosPorId(listaProduto);
 
         ID.setCellValueFactory(new PropertyValueFactory<>("id"));
         artigo.setCellValueFactory(new PropertyValueFactory<>("nome"));
@@ -449,21 +409,7 @@ public class ProdutoController implements Initializable {
 
         txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
             dadosFiltrados.setPredicate(x -> {
-
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getCodigo_barra().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getDescricao().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else {
-                    return false;
-                }
-
+                return servicePesquisaProduto.produtoContemTermo(x, newValue);
             });
         });
         SortedList<Produto> sortedData = new SortedList<>(dadosFiltrados);
@@ -482,34 +428,20 @@ public class ProdutoController implements Initializable {
 
 //  ############################################################################
     public void addProduto(ActionEvent e) {
-        if (combCategoria.getValue() == null) {
-            AlertUtilities.showErroAlert("Categoria nao selecionada!");
-            return;
-        }
-        if (combUnidade.getValue() == null) {
-            AlertUtilities.showErroAlert("Unidade de medida nao selecionada!");
-            return;
-        }
-        if (combTaxa.getValue() == null) {
-            AlertUtilities.showErroAlert("Taxa/Imposto nao selecionada!");
-            return;
-        }
-        int id_cat = mapaCategorias.get(combCategoria.getValue()).getId();
-        int id_uni = mapaUnidades.get(combUnidade.getValue()).getId();
-        int id_tax = mapaTaxas.get(combTaxa.getValue()).getId();
         String tipo = combTipo.getValue();
         Integer uniPorTipo = Integer.valueOf(txtUnidadesPorTipo.getText().equals("") ? "0" : txtUnidadesPorTipo.getText());
 
         try {
-            productService.regista(id_cat, id_uni,
-                    id_tax, txtNomeProduto.getText(),
+            serviceProdutoCadastro.registar(mapaCategorias.get(combCategoria.getValue()),
+                    mapaUnidades.get(combUnidade.getValue()), mapaTaxas.get(combTaxa.getValue()),
+                    txtNomeProduto.getText(),
                     txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), tipo, uniPorTipo,
                     checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText().equals("") ? "0" : txtNivelStock.getText()));
         } catch (ServiceException ex) {
             AlertUtilities.showErroAlert(ex.getMessage());
             return;
         }
-        if (productService.isOpsSuccess()) {
+        if (serviceProdutoCadastro.isOpsSuccess()) {
             AlertUtilities.showSuccessAlert("Produto registado com sucesso!");
         }
         showProdutos();
@@ -527,12 +459,19 @@ public class ProdutoController implements Initializable {
             return;
         }
         double precoNorm = Double.parseDouble(txtPreco.getText().isEmpty() ? "0" : txtPreco.getText());
-        Integer idProd = Integer.valueOf(txtIDProduto.getText());
-
-        serPrecosProduArm.registraPreco(idProd, idArmazem, precoNorm);
-        showPrecoProdutoArmazem();
-        showProdutoDesconto();
-        showPrecoProdutoArmazem();
+        try {
+            serviceProdutoPreco.registarPreco(produtoSelecionadoFormulario(),
+                    mapaArmazens.get(cBoxArmazem.getValue()), precoNorm);
+        } catch (ServiceException ex) {
+            AlertUtilities.showErroAlert(ex.getMessage());
+            return;
+        }
+        if (serviceProdutoPreco.isPrecoOpsSuccess()) {
+            AlertUtilities.showSuccessAlert("Preco registado com sucesso!");
+            showPrecoProdutoArmazem();
+            showProdutoDesconto();
+            showPrecoProdutoArmazem();
+        }
     }
 
     public void addProdutoDesconto(ActionEvent e) {
@@ -548,35 +487,41 @@ public class ProdutoController implements Initializable {
             AlertUtilities.showErroAlert("Informe as datas de inÃ­cio e fim.");
             return;
         }
-        Integer idProd = Integer.valueOf(txtIDProduto.getText());
+        try {
+            serviceProdutoPreco.registarDesconto(produtoSelecionadoFormulario(),
+                    mapaDesconto.get(cBoxDesconto.getValue()), mapaArmazens.get(cBoxArmazemDesconto.getValue()),
+                    String.valueOf(dataInicioDesconto.getValue()),
+                    String.valueOf(dataFimDesconto.getValue()));
+        } catch (ServiceException ex) {
+            AlertUtilities.showErroAlert(ex.getMessage());
+            return;
+        }
 
-        serProDesconto.regista(idProd, idDescontoComb, idArmazemDesconto,
-                String.valueOf(dataInicioDesconto.getValue()),
-                String.valueOf(dataFimDesconto.getValue()));
-
-        showPrecoProdutoArmazem();
-        showProdutoDesconto();
-        showProdutoDesconto();
+        if (serviceProdutoPreco.isDescontoOpsSuccess()) {
+            AlertUtilities.showSuccessAlert("Desconto registado com sucesso!");
+            showPrecoProdutoArmazem();
+            showProdutoDesconto();
+            showProdutoDesconto();
+        }
 //        resetCampos();
     }
 
     public void updateProduto(ActionEvent e) {
         int id_pro = Integer.parseInt(txtIDProduto.getText());
-        int id_cat = mapaCategorias.get(combCategoria.getValue().equals("") ? "0" : combCategoria.getValue()).getId();
-        int id_uni = mapaUnidades.get(combUnidade.getValue().equals("") ? "0" : combUnidade.getValue()).getId();
-        int id_tax = mapaTaxas.get(combTaxa.getValue().equals("") ? "0" : combTaxa.getValue()).getId();
         String tipo = combTipo.getValue();
         Integer uniPorTipo = Integer.valueOf(txtUnidadesPorTipo.getText().equals("") ? "0" : txtUnidadesPorTipo.getText());
 
         try {
-            productService.actualiza(id_pro, id_cat, id_uni, id_tax, txtNomeProduto.getText(),
+            serviceProdutoCadastro.actualizar(id_pro, mapaCategorias.get(combCategoria.getValue()),
+                    mapaUnidades.get(combUnidade.getValue()), mapaTaxas.get(combTaxa.getValue()),
+                    txtNomeProduto.getText(),
                     txtcodigobarrasProduto.getText(), txtdescricaoProduto.getText(), tipo, uniPorTipo,
                     checkControle.isSelected(), Integer.valueOf(txtNivelStock.getText()));
         } catch (ServiceException ex) {
             AlertUtilities.showErroAlert(ex.getMessage());
             return;
         }
-        if (productService.isOpsSuccess()) {
+        if (serviceProdutoCadastro.isOpsSuccess()) {
             AlertUtilities.showSuccessAlert("Produto actualizado com sucesso.");
         }
 
@@ -617,72 +562,25 @@ public class ProdutoController implements Initializable {
 //    }
 //  ############################################################################
     private Map<String, Categoria> mapaCategorias;
-    private ObservableList<Categoria> listaCategorias;
-
     private Map<String, UnidadeMedida> mapaUnidades;
-    private ObservableList<UnidadeMedida> listaUnidades;
-
     private Map<String, Imposto> mapaTaxas;
-    private ObservableList<Imposto> listaTaxa;
-
-    private ObservableList<Armazem> storeList;
     private Map<String, Armazem> mapaArmazens;
-
-    private ObservableList<Desconto> descontoList;
     private Map<String, Desconto> mapaDesconto;
 
     public void populateCombos() {
-        storeList = serviceArmazem.listaTodosArmazens();
-        List<String> listaArm = new ArrayList<>();
-        mapaArmazens = new HashMap<>();
-        for (Armazem a : storeList) {
-            listaArm.add(a.getNome_arm());
-            mapaArmazens.put(a.getNome_arm(), a);
-        }
-        cBoxArmazem.setItems(FXCollections.observableArrayList(listaArm));
-        cBoxArmazemDesconto.setItems(FXCollections.observableArrayList(listaArm));
+        OpcoesProdutoCadastro opcoes = serviceProdutoCadastro.carregarOpcoesCadastro();
+        mapaArmazens = opcoes.getMapaArmazens();
+        mapaDesconto = opcoes.getMapaDescontos();
+        mapaCategorias = opcoes.getMapaCategorias();
+        mapaUnidades = opcoes.getMapaUnidades();
+        mapaTaxas = opcoes.getMapaTaxas();
 
-//        descontos
-        descontoList = serDesconto.listDescontos();
-        List<String> listaDesconto = new ArrayList<>();
-        mapaDesconto = new HashMap<>();
-        for (Desconto d : descontoList) {
-            listaDesconto.add(d.getNome());
-            System.out.println(d.getNome());
-            mapaDesconto.put(d.getNome(), d);
-        }
-        cBoxDesconto.setItems(FXCollections.observableArrayList(listaDesconto));
-
-        listaCategorias = serCategoria.listaCategorias();
-        listaTaxa = serTaxa.getTaxas();
-        listaUnidades = serUnidade.getUnidades();
-
-        List<String> listaCat = new ArrayList<>();
-        listaCat.add("Todas...");
-        mapaCategorias = new HashMap<>();
-        for (Categoria c : listaCategorias) {
-            listaCat.add(c.getFamilia());
-            mapaCategorias.put(c.getFamilia(), c);
-        }
-
-        List<String> listaUni = new ArrayList<>();
-        listaUni.add("Todas...");
-        mapaUnidades = new HashMap<>();
-        for (UnidadeMedida u : listaUnidades) {
-            listaUni.add(u.getNome());
-            mapaUnidades.put(u.getNome(), u);
-        }
-
-        List<String> listaTax = new ArrayList<>();
-        listaTax.add("Todas...");
-        mapaTaxas = new HashMap<>();
-        for (Imposto t : listaTaxa) {
-            listaTax.add(t.getNome());
-            mapaTaxas.put(t.getNome(), t);
-        }
-        combCategoria.setItems(FXCollections.observableArrayList(listaCat));
-        combUnidade.setItems(FXCollections.observableArrayList(listaUni));
-        combTaxa.setItems(FXCollections.observableArrayList(listaTax));
+        cBoxArmazem.setItems(FXCollections.observableArrayList(opcoes.getNomesArmazens()));
+        cBoxArmazemDesconto.setItems(FXCollections.observableArrayList(opcoes.getNomesArmazens()));
+        cBoxDesconto.setItems(FXCollections.observableArrayList(opcoes.getNomesDescontos()));
+        combCategoria.setItems(FXCollections.observableArrayList(opcoes.getNomesCategorias()));
+        combUnidade.setItems(FXCollections.observableArrayList(opcoes.getNomesUnidades()));
+        combTaxa.setItems(FXCollections.observableArrayList(opcoes.getNomesTaxas()));
         combTipo.setItems(FXCollections.observableArrayList("Simples", "Composto"));
 
     }
@@ -713,10 +611,8 @@ public class ProdutoController implements Initializable {
             showResumoStock(x.getId());
             showPrecoProdutoArmazem();
             showProdutoDesconto();
-            ConfiguracaoSistema configuracao = serviceConfiguracao.getConfiguracaoActual();
-//            System.out.println("modo: "+configuracao.getModoOperacao());
             if (event.getClickCount() == 2 && p.isControle_stock()) {
-                if (configuracao.getModoOperacao().equals("FACTURACAO_STOCK")) {
+                if (serviceProdutoConfiguracao.devePermitirAbrirStock(p)) {
                     SessaoAplicacao.setData(p);
                     getStockView(event);
                 } else {
@@ -762,8 +658,8 @@ public class ProdutoController implements Initializable {
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.orElse(btnCancel) == btnDelete) {
                 try {
-                    productService.excluir(x.getId());
-                    if (productService.isOpsSuccess()) {
+                    serviceProdutoCadastro.excluir(x.getId());
+                    if (serviceProdutoCadastro.isOpsSuccess()) {
                         AlertUtilities.showSuccessAlert("Produto excluido com sucesso.");
                         showProdutos();
                         resetCampos();
@@ -804,7 +700,7 @@ public class ProdutoController implements Initializable {
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.orElse(btnCancel) == btnDelete) {
 //                servicePrecos.deletePreco(x.getId());
-                if (serPrecosProduArm.isOpsSuccess()) {
+                if (serviceProdutoPreco.isPrecoOpsSuccess()) {
                     showProdutos();
 //                    showPrecoProdutoArmazem();
                     resetCampos();
@@ -822,8 +718,8 @@ public class ProdutoController implements Initializable {
         Produto x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
 
-            listaPrecos = serPrecosProduArm.listaTodosPrecos(x.getId());
-            mapaPrecoProdutoArmazem = new HashMap<>();
+            listaPrecos = serviceProdutoPreco.listaPrecos(x);
+            mapaPrecoProdutoArmazem = new java.util.HashMap<>();
             for (PrecoProdutoArmazem ppa : listaPrecos) {
                 mapaPrecoProdutoArmazem.put(ppa.getId(), ppa);
             }
@@ -847,7 +743,7 @@ public class ProdutoController implements Initializable {
             tabelaprodutodesconto.setItems(FXCollections.observableArrayList());
             return;
         }
-        listaprodutodesconto = serProDesconto.consultaProdutoDesconto(Integer.parseInt(txtIDProduto.getText()));
+        listaprodutodesconto = serviceProdutoPreco.listaDescontosProduto(Integer.parseInt(txtIDProduto.getText()));
 
         pdProduto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
         pdArmazem.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
@@ -860,6 +756,15 @@ public class ProdutoController implements Initializable {
 
     }
 //  ############################################################################
+
+    private Produto produtoSelecionadoFormulario() {
+        if (txtIDProduto.getText() == null || txtIDProduto.getText().isEmpty()) {
+            return null;
+        }
+        Produto produto = new Produto();
+        produto.setId(Integer.parseInt(txtIDProduto.getText()));
+        return produto;
+    }
 
     public void resetCampos() {
         labIDPreco.setText("");

@@ -12,7 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.endereco.EnderecoCliente;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 
@@ -58,7 +58,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         } 
         return isSuccess;
     }
@@ -91,7 +91,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -119,7 +119,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             }
             }
         } catch (SQLException ex) {
-            showDialog( "Erro de consulta", "Detalhes: " + ex);
+            DaoErrorHandler.log( "Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -151,7 +151,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
             }
             }
         } catch (SQLException ex) {
-            showDialog( "Erro de consulta", "Detalhes: " + ex);
+            DaoErrorHandler.log( "Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -161,7 +161,7 @@ public class EnderecoClienteDAO implements EnderecoClienteDAOImpl<EnderecoClient
         try {
             return jminvsm.util.SoftDeleteUtils.softDelete("endereco_cliente", id);
         } catch (SQLException ex) {
-            showDialog("Erro de exclusao", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de exclusao", "Detalhes: " + ex);
         }
         return false;
     }

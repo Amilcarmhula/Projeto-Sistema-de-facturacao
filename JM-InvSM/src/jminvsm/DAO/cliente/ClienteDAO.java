@@ -14,11 +14,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.contacto.ContactoCliente;
 import jminvsm.model.cliente.endereco.EnderecoCliente;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -52,7 +51,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -78,7 +77,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -139,7 +138,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao Bucar cliente: " + e);
 
         }
         return lista;
@@ -204,7 +203,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao Bucar cliente: " + e);
 
         }
         return lista;
@@ -270,7 +269,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao Bucar cliente: " + e);
 
         }
         return c;
@@ -294,8 +293,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao Bucar cliente: " + e);
         }
         return c;
     }
@@ -318,8 +316,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar cliente: " + e,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao Bucar cliente: " + e);
         }
         return c;
     }
@@ -329,7 +326,7 @@ public class ClienteDAO implements ClienteDAOImpl<Cliente> {
         try {
             return jminvsm.util.SoftDeleteUtils.softDelete("cliente", x);
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return false;
     }

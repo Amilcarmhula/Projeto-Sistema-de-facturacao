@@ -33,7 +33,7 @@ import javafx.collections.ObservableList;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.preco.PrecoProdutoArmazem;
 import jminvsm.model.produto.Produto;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -101,7 +101,7 @@ public class PrecoProdutoArmazemDAO implements PrecoProdutoArmazemDAOImpl<PrecoP
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta!", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro de consulta!", "Detalhes: " + e);
         }
         return lista;
     }
@@ -141,7 +141,7 @@ public class PrecoProdutoArmazemDAO implements PrecoProdutoArmazemDAOImpl<PrecoP
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Detalhes: " + ex);
         }
 
         return listaPrecos;
@@ -163,7 +163,7 @@ public class PrecoProdutoArmazemDAO implements PrecoProdutoArmazemDAOImpl<PrecoP
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }

@@ -118,7 +118,12 @@ public class ConfiguracaoSistemaViewController implements Initializable {
         String operacao = combOperacaoAuditoria.getSelectionModel().getSelectedItem();
         Integer idUsuario = parseInteger(txtUsuarioAuditoria.getText());
         String idRegisto = txtRegistoAuditoria.getText();
-        tabelaAuditoria.setItems(serviceAuditoria.pesquisar(dataInicio, dataFim, tabela, operacao, idUsuario, idRegisto));
+        try {
+            tabelaAuditoria.setItems(serviceAuditoria.pesquisar(dataInicio, dataFim, tabela, operacao, idUsuario, idRegisto));
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         limparDetalheAuditoria();
     }
 

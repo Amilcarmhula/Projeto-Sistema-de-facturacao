@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import jminvsm.fiscal.service.FiscalSnapshotCalculator;
 import jminvsm.fiscal.service.FiscalSnapshotCalculator.LineSnapshot;
 import jminvsm.model.armazem.Armazem;
@@ -23,7 +22,7 @@ import jminvsm.model.produto.Produto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.model.vendas.factura.itens.Item;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -69,7 +68,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
             }
             ps.executeBatch();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: id: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao adicionar Item: id: " + ex);
         }
     }
 
@@ -92,18 +91,18 @@ public class ItemDAO implements ItemDAOImpl<Item> {
             ps.executeBatch();
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Item: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao adicionar Item: " + ex);
         }
     }
 
     @Override
     public boolean converterCotacaoParaFactura(String numeroCotacao, String numeroFactura) {
         if (numeroCotacao == null || numeroCotacao.trim().isEmpty()) {
-            showDialog("Erro", "Numero da cotacao nao informado.");
+            DaoErrorHandler.log("Erro", "Numero da cotacao nao informado.");
             return false;
         }
         if (numeroFactura == null || numeroFactura.trim().isEmpty()) {
-            showDialog("Erro", "Numero da factura destino nao informado.");
+            DaoErrorHandler.log("Erro", "Numero da factura destino nao informado.");
             return false;
         }
 
@@ -137,12 +136,12 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 return true;
             } catch (SQLException ex) {
                 con.rollback();
-                showDialog("Erro de conversao", "Detalhes: " + ex.getMessage());
+                DaoErrorHandler.log("Erro de conversao", "Detalhes: " + ex.getMessage());
             } finally {
                 con.setAutoCommit(true);
             }
         } catch (SQLException ex) {
-            showDialog("Erro de conversao", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de conversao", "Detalhes: " + ex);
         }
         return false;
     }
@@ -151,7 +150,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
     public List<Item> getItensCotacaoEditaveis(String numeroCotacao) {
         List<Item> lista = new ArrayList<>();
         if (numeroCotacao == null || numeroCotacao.trim().isEmpty()) {
-            showDialog("Erro", "Numero da cotacao nao informado.");
+            DaoErrorHandler.log("Erro", "Numero da cotacao nao informado.");
             return lista;
         }
 
@@ -182,7 +181,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -190,11 +189,11 @@ public class ItemDAO implements ItemDAOImpl<Item> {
     @Override
     public boolean substituirItensCotacao(String numeroCotacao, List<Item> itens) {
         if (numeroCotacao == null || numeroCotacao.trim().isEmpty()) {
-            showDialog("Erro", "Numero da cotacao nao informado.");
+            DaoErrorHandler.log("Erro", "Numero da cotacao nao informado.");
             return false;
         }
         if (itens == null || itens.isEmpty()) {
-            showDialog("Erro", "A cotacao deve possuir pelo menos um item.");
+            DaoErrorHandler.log("Erro", "A cotacao deve possuir pelo menos um item.");
             return false;
         }
 
@@ -253,12 +252,12 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 return true;
             } catch (SQLException ex) {
                 con.rollback();
-                showDialog("Erro ao guardar cotacao", "Detalhes: " + ex.getMessage());
+                DaoErrorHandler.log("Erro ao guardar cotacao", "Detalhes: " + ex.getMessage());
             } finally {
                 con.setAutoCommit(true);
             }
         } catch (SQLException ex) {
-            showDialog("Erro ao guardar cotacao", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro ao guardar cotacao", "Detalhes: " + ex);
         }
         return false;
     }
@@ -404,7 +403,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro", "Detalhes: " + e);
         }
         return lista;
     }
@@ -517,8 +516,8 @@ public class ItemDAO implements ItemDAOImpl<Item> {
 //            ps.execute();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Falha ao actulizar  Item: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("Informação", "Falha ao actulizar  Item: "
+//                    + ex);
 //        }
 //    }
 //
@@ -548,7 +547,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Factura: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("Informação", "Erro ao Buscar Factura: " + ex);
 //        }
 //        return lista;
 //    }
@@ -579,8 +578,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Item: " + ex,
-//                    "Informação", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("Informação", "Erro ao pesquisar Item: " + ex,
 //        }
 //        return u;
 //
@@ -596,8 +594,7 @@ public class ItemDAO implements ItemDAOImpl<Item> {
 //            ps.execute();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao deletar Item: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//                    + ex);
 //        }
 //    }
 //
@@ -611,8 +608,8 @@ public class ItemDAO implements ItemDAOImpl<Item> {
 //            ps.execute();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao deletar Item: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("Informação", "Erro ao deletar Item: "
+//                    + ex);
 //        }
 //    }
 }

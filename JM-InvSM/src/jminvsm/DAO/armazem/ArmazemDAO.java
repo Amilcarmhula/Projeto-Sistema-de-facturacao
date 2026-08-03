@@ -11,7 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.armazem.contacto.ContactoArmazem;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -39,7 +39,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -65,7 +65,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro actualizacao de Armazem", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro actualizacao de Armazem", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -105,7 +105,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
             }
             }
         } catch (SQLException e) {
-            showDialog("Erro de listagem de Armazem!", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro de listagem de Armazem!", "Detalhes: " + e);
 
         }
         return lista;
@@ -129,7 +129,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta de Armazem!", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro de consulta de Armazem!", "Detalhes: " + e);
         }
         return c;
     }
@@ -152,7 +152,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta de Armazem!", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro de consulta de Armazem!", "Detalhes: " + e);
         }
         return c;
     }
@@ -162,7 +162,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
         try {
             return jminvsm.util.SoftDeleteUtils.softDelete("armazem", x);
         } catch (SQLException ex) {
-            showDialog("Erro de exclusao de Armazem", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de exclusao de Armazem", "Detalhes: " + ex);
         }
         return false;
     }
@@ -185,7 +185,7 @@ public class ArmazemDAO implements ArmazemDAOImpl<Armazem> {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta de Armazem!", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro de consulta de Armazem!", "Detalhes: " + e);
 
         }
         return lista;

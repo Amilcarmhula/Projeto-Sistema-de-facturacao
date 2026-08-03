@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,15 +29,15 @@ import jminvsm.model.compra.ItemRecebimentoCompra;
 import jminvsm.model.compra.OrdemCompra;
 import jminvsm.model.compra.RecebimentoCompra;
 import jminvsm.model.fornecedor.Fornecedor;
-import jminvsm.model.preco.PrecoProdutoArmazem;
 import jminvsm.model.produto.Produto;
-import jminvsm.model.produto.fornecido.ProdutoFornecido;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.ServiceException;
 import jminvsm.service.compra.ServiceOrdemCompra;
 import jminvsm.service.compra.ServiceRecebimentoCompra;
+import jminvsm.service.compra.ServiceRecebimentoCompraFormulario;
 import jminvsm.service.fornecedor.ServiceFornecedor;
+import jminvsm.service.listagem.ServicePesquisaListagem;
 import jminvsm.service.precoProdutoArmazem.ServicePrecoProdutoArmazem;
 import jminvsm.service.produto.ServiceProduto;
 import jminvsm.service.produto.fornecido.ServiceProdutoFornecido;
@@ -54,6 +53,8 @@ public class RecebimentoCompraViewController implements Initializable {
     private ServiceProduto serviceProduto;
     private ServiceArmazem serviceArmazem;
     private ServicePrecoProdutoArmazem servicePrecoProdutoArmazem;
+    private ServiceRecebimentoCompraFormulario serviceFormulario;
+    private final ServicePesquisaListagem servicePesquisaListagem = new ServicePesquisaListagem();
     private Usuario userData;
     private boolean sincronizandoItemOrdem;
 
@@ -191,8 +192,6 @@ public class RecebimentoCompraViewController implements Initializable {
         if (itemOrdem == null) {
             return;
         }
-        System.out.println("Custo double: " + itemOrdem.getCustoUnitario() + " custo bigdecimal: " + itemOrdem.getCustoUnitarioDecimal());
-
         preencherCamposPeloItemOrdem(itemOrdem, false);
     }
 
@@ -201,27 +200,16 @@ public class RecebimentoCompraViewController implements Initializable {
         Produto produto = combProduto.getSelectionModel().getSelectedItem();
         Armazem armazem = combArmazem.getSelectionModel().getSelectedItem();
         ItemOrdemCompra itemOrdem = combItemOrdem.getSelectionModel().getSelectedItem();
-        Integer quantidade = parseInteger(txtQuantidade.getText());
-        Double custo = parseDouble(txtCustoUnitario.getText());
-        if (produto == null || armazem == null || quantidade == null || quantidade <= 0 || custo == null || custo < 0) {
-            showErroAlert("Seleccione produto, armazem, quantidade e custo validos!");
-            return;
+        try {
+            itensNovoRecebimento.add(serviceFormulario.montarItem(produto, armazem, itemOrdem,
+                    txtQuantidade.getText(), txtCustoUnitario.getText(), txtCodigoLote.getText()));
+            txtQuantidade.clear();
+            txtCustoUnitario.clear();
+            txtCodigoLote.clear();
+            combItemOrdem.getSelectionModel().clearSelection();
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
         }
-        ItemRecebimentoCompra item = serviceRecebimentoCompra.novoItem(produto.getId(), armazem.getId(),
-                quantidade, custo, txtCodigoLote.getText(), itemOrdem != null ? itemOrdem.getId() : null);
-        if (item == null) {
-            showErroAlert("Dados do item invalidos!");
-            return;
-        }
-        item.setProduto(produto);
-        item.setArmazem(armazem);
-        item.setItemOrdemCompra(itemOrdem);
-        item.setSubtotal(quantidade * custo);
-        itensNovoRecebimento.add(item);
-        txtQuantidade.clear();
-        txtCustoUnitario.clear();
-        txtCodigoLote.clear();
-        combItemOrdem.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -241,7 +229,7 @@ public class RecebimentoCompraViewController implements Initializable {
             return;
         }
         RecebimentoCompra recebimento = new RecebimentoCompra();
-        recebimento.setNumero(numeroRecebimento());
+        recebimento.setNumero(serviceFormulario.numeroRecebimento(txtNumero.getText()));
         recebimento.setOrdemCompra(ordem);
         recebimento.setFornecedor(fornecedor);
         recebimento.setDataRecebimento(LocalDateTime.now());
@@ -345,6 +333,8 @@ public class RecebimentoCompraViewController implements Initializable {
             serviceProduto = new ServiceProduto();
             serviceArmazem = new ServiceArmazem();
             servicePrecoProdutoArmazem = new ServicePrecoProdutoArmazem();
+            serviceFormulario = new ServiceRecebimentoCompraFormulario(
+                    serviceRecebimentoCompra, servicePrecoProdutoArmazem, servicoprodFornecido);
         } catch (SQLException ex) {
             Logger.getLogger(RecebimentoCompraViewController.class.getName()).log(Level.SEVERE, null, ex);
             showErroAlert("Erro ao iniciar servicos de recebimento!");
@@ -360,7 +350,8 @@ public class RecebimentoCompraViewController implements Initializable {
         combOrdemCompra.setConverter(new StringConverter<OrdemCompra>() {
             @Override
             public String toString(OrdemCompra ordem) {
-                return ordem == null ? "" : "#" + ordem.getId() + " - " + safe(ordem.getNumero()) + " - " + nomeFornecedor(ordem);
+                return ordem == null ? "" : "#" + ordem.getId() + " - " + safe(ordem.getNumero())
+                        + " - " + servicePesquisaListagem.nomeFornecedor(ordem);
             }
 
             @Override
@@ -382,7 +373,8 @@ public class RecebimentoCompraViewController implements Initializable {
         combItemOrdem.setConverter(new StringConverter<ItemOrdemCompra>() {
             @Override
             public String toString(ItemOrdemCompra item) {
-                return item == null ? "" : "#" + item.getId() + " - " + nomeProduto(item) + " | pendente: " + item.getQuantidadePendente();
+                return item == null ? "" : "#" + item.getId() + " - "
+                        + servicePesquisaListagem.nomeProduto(item) + " | pendente: " + item.getQuantidadePendente();
             }
 
             @Override
@@ -431,8 +423,8 @@ public class RecebimentoCompraViewController implements Initializable {
     }
 
     private void configurarTabelas() {
-        colItemProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
-        colItemArmazem.setCellValueFactory(cell -> new SimpleStringProperty(nomeArmazem(cell.getValue())));
+        colItemProduto.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeProduto(cell.getValue())));
+        colItemArmazem.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeArmazem(cell.getValue())));
         colItemQuantidade.setCellValueFactory(new PropertyValueFactory<ItemRecebimentoCompra, Integer>("quantidadeRecebida"));
         colItemCusto.setCellValueFactory(new PropertyValueFactory<ItemRecebimentoCompra, Double>("custoUnitario"));
         colItemLote.setCellValueFactory(new PropertyValueFactory<ItemRecebimentoCompra, String>("codigoLote"));
@@ -441,14 +433,14 @@ public class RecebimentoCompraViewController implements Initializable {
 
         colRcId.setCellValueFactory(new PropertyValueFactory<RecebimentoCompra, Integer>("id"));
         colRcNumero.setCellValueFactory(new PropertyValueFactory<RecebimentoCompra, String>("numero"));
-        colRcOrdem.setCellValueFactory(cell -> new SimpleStringProperty(numeroOrdem(cell.getValue())));
-        colRcFornecedor.setCellValueFactory(cell -> new SimpleStringProperty(nomeFornecedor(cell.getValue())));
+        colRcOrdem.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.numeroOrdem(cell.getValue())));
+        colRcFornecedor.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeFornecedor(cell.getValue())));
         colRcDocumento.setCellValueFactory(new PropertyValueFactory<RecebimentoCompra, String>("documentoFornecedor"));
         colRcEstado.setCellValueFactory(new PropertyValueFactory<RecebimentoCompra, String>("estado"));
         colRcTotal.setCellValueFactory(new PropertyValueFactory<RecebimentoCompra, Double>("totalRecebido"));
 
-        colDetalheProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
-        colDetalheArmazem.setCellValueFactory(cell -> new SimpleStringProperty(nomeArmazem(cell.getValue())));
+        colDetalheProduto.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeProduto(cell.getValue())));
+        colDetalheArmazem.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeArmazem(cell.getValue())));
         colDetalheQuantidade.setCellValueFactory(new PropertyValueFactory<ItemRecebimentoCompra, Integer>("quantidadeRecebida"));
         colDetalheCusto.setCellValueFactory(new PropertyValueFactory<ItemRecebimentoCompra, Double>("custoUnitario"));
         colDetalheLote.setCellValueFactory(new PropertyValueFactory<ItemRecebimentoCompra, String>("codigoLote"));
@@ -460,24 +452,11 @@ public class RecebimentoCompraViewController implements Initializable {
         if (tabelaRecebimentos == null || listaRecebimentos == null) {
             return;
         }
-        FilteredList<RecebimentoCompra> dadosFiltrados = new FilteredList<RecebimentoCompra>(listaRecebimentos, rec -> true);
         String filtro = txtPesquisa != null ? txtPesquisa.getText() : null;
-        if (filtro != null && !filtro.trim().isEmpty()) {
-            final String termo = filtro.trim().toLowerCase();
-            dadosFiltrados.setPredicate(rec -> recebimentoContem(rec, termo));
-        }
-        SortedList<RecebimentoCompra> sortedData = new SortedList<RecebimentoCompra>(dadosFiltrados);
+        SortedList<RecebimentoCompra> sortedData = new SortedList<RecebimentoCompra>(
+                servicePesquisaListagem.filtrarRecebimentosCompra(listaRecebimentos, filtro));
         sortedData.comparatorProperty().bind(tabelaRecebimentos.comparatorProperty());
         tabelaRecebimentos.setItems(sortedData);
-    }
-
-    private boolean recebimentoContem(RecebimentoCompra recebimento, String termo) {
-        return String.valueOf(recebimento.getId()).contains(termo)
-                || contains(recebimento.getNumero(), termo)
-                || contains(recebimento.getEstado(), termo)
-                || contains(recebimento.getDocumentoFornecedor(), termo)
-                || contains(numeroOrdem(recebimento), termo)
-                || contains(nomeFornecedor(recebimento), termo);
     }
 
     private void setRecebimentoSelecionado(RecebimentoCompra recebimento) {
@@ -488,8 +467,8 @@ public class RecebimentoCompraViewController implements Initializable {
         }
         labRcId.setText(String.valueOf(recebimento.getId()));
         labRcNumero.setText(safe(recebimento.getNumero()));
-        labRcOrdem.setText(numeroOrdem(recebimento));
-        labRcFornecedor.setText(nomeFornecedor(recebimento));
+        labRcOrdem.setText(servicePesquisaListagem.numeroOrdem(recebimento));
+        labRcFornecedor.setText(servicePesquisaListagem.nomeFornecedor(recebimento));
         labRcEstado.setText(safe(recebimento.getEstado()));
         labRcTotal.setText(String.valueOf(recebimento.getTotalRecebido()));
         labRcSelecionadoAux.setText("#" + recebimento.getId() + " - " + safe(recebimento.getNumero()));
@@ -533,29 +512,13 @@ public class RecebimentoCompraViewController implements Initializable {
             preencherCustoProdutoArmazem();
             return;
         }
-        ItemOrdemCompra itemOrdem = localizarItemOrdem(produto, combArmazem.getSelectionModel().getSelectedItem());
+        ItemOrdemCompra itemOrdem = serviceFormulario.localizarItemOrdem(combItemOrdem.getItems(),
+                produto, combArmazem.getSelectionModel().getSelectedItem());
         if (itemOrdem != null) {
             preencherCamposPeloItemOrdem(itemOrdem, true);
             return;
         }
         preencherCustoProdutoArmazem();
-    }
-
-    private ItemOrdemCompra localizarItemOrdem(Produto produto, Armazem armazem) {
-        ItemOrdemCompra primeiroProduto = null;
-        for (ItemOrdemCompra item : combItemOrdem.getItems()) {
-            if (item == null || item.getProduto() == null || item.getProduto().getId() != produto.getId()) {
-                continue;
-            }
-            if (primeiroProduto == null && item.getQuantidadePendente() > 0) {
-                primeiroProduto = item;
-            }
-            if (armazem != null && item.getArmazem() != null && item.getArmazem().getId() == armazem.getId()
-                    && item.getQuantidadePendente() > 0) {
-                return item;
-            }
-        }
-        return primeiroProduto;
     }
 
     private void preencherCamposPeloItemOrdem(ItemOrdemCompra itemOrdem, boolean selecionarItemOrdem) {
@@ -569,13 +532,11 @@ public class RecebimentoCompraViewController implements Initializable {
             txtQuantidade.setText(String.valueOf(Math.max(0, itemOrdem.getQuantidadePendente())));
 
             double custo = itemOrdem.getCustoUnitario();
-//            System.out.println("Custo double: "+itemOrdem.getCustoUnitario()+" custo bigdecimal: "+itemOrdem.getCustoUnitarioDecimal());
             if (custo <= 0) {
-                custo = custoProdutoArmazem(itemOrdem.getProduto(), itemOrdem.getArmazem());
+                custo = serviceFormulario.custoProdutoArmazem(itemOrdem.getProduto(), itemOrdem.getArmazem());
             }
             txtCustoUnitario.setText(String.valueOf(custo));
-            ProdutoFornecido pf = servicoprodFornecido.getLastCodeLote();
-            txtCodigoLote.setText(pf == null ? "" : String.valueOf(pf.getCodigo()));
+            txtCodigoLote.setText(serviceFormulario.proximoCodigoLote());
         } finally {
             sincronizandoItemOrdem = false;
         }
@@ -584,22 +545,10 @@ public class RecebimentoCompraViewController implements Initializable {
     private void preencherCustoProdutoArmazem() {
         Produto produto = combProduto.getSelectionModel().getSelectedItem();
         Armazem armazem = combArmazem.getSelectionModel().getSelectedItem();
-        double custo = custoProdutoArmazem(produto, armazem);
+        double custo = serviceFormulario.custoProdutoArmazem(produto, armazem);
         if (custo > 0) {
             txtCustoUnitario.setText(String.valueOf(custo));
         }
-    }
-
-    private double custoProdutoArmazem(Produto produto, Armazem armazem) {
-        if (produto == null || armazem == null || servicePrecoProdutoArmazem == null) {
-            return 0.0;
-        }
-        ObservableList<PrecoProdutoArmazem> precos = servicePrecoProdutoArmazem.consultaPrecosVendas(produto.getId(), armazem.getId());
-        if (precos == null || precos.isEmpty()) {
-            return 0.0;
-        }
-        PrecoProdutoArmazem preco = precos.get(0);
-        return preco != null && preco.getPrecoBase() != null ? preco.getPrecoBase() : 0.0;
     }
 
     private void limparCamposItemRecebimento() {
@@ -648,60 +597,8 @@ public class RecebimentoCompraViewController implements Initializable {
         }
     }
 
-    private String numeroRecebimento() {
-        String numero = txtNumero.getText();
-        if (numero == null || numero.trim().isEmpty()) {
-            return "RC-" + System.currentTimeMillis();
-        }
-        return numero.trim();
-    }
-
-    private Integer parseInteger(String value) {
-        try {
-            return value == null || value.trim().isEmpty() ? null : Integer.valueOf(value.trim());
-        } catch (NumberFormatException ex) {
-            return null;
-        }
-    }
-
-    private Double parseDouble(String value) {
-        try {
-            return value == null || value.trim().isEmpty() ? null : Double.valueOf(value.trim().replace(',', '.'));
-        } catch (NumberFormatException ex) {
-            return null;
-        }
-    }
-
-    private boolean contains(String value, String termo) {
-        return value != null && value.toLowerCase().contains(termo);
-    }
-
-    private String numeroOrdem(RecebimentoCompra recebimento) {
-        return recebimento != null && recebimento.getOrdemCompra() != null ? safe(recebimento.getOrdemCompra().getNumero()) : "";
-    }
-
-    private String nomeFornecedor(OrdemCompra ordem) {
-        return ordem != null && ordem.getFornecedor() != null ? safe(ordem.getFornecedor().getRazaosocial_forn()) : "";
-    }
-
-    private String nomeFornecedor(RecebimentoCompra recebimento) {
-        return recebimento != null && recebimento.getFornecedor() != null ? safe(recebimento.getFornecedor().getRazaosocial_forn()) : "";
-    }
-
-    private String nomeProduto(ItemOrdemCompra item) {
-        return item != null && item.getProduto() != null ? safe(item.getProduto().getNome()) : "";
-    }
-
-    private String nomeProduto(ItemRecebimentoCompra item) {
-        return item != null && item.getProduto() != null ? safe(item.getProduto().getNome()) : "";
-    }
-
-    private String nomeArmazem(ItemRecebimentoCompra item) {
-        return item != null && item.getArmazem() != null ? safe(item.getArmazem().getNome_arm()) : "";
-    }
-
     private String safe(String value) {
-        return value == null ? "" : value;
+        return servicePesquisaListagem.safeText(value);
     }
 }
 

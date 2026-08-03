@@ -41,10 +41,8 @@ import jminvsm.model.transacao.Transacao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.service.ServiceException;
-import jminvsm.service.metodoPagamento.ServiceMetodoPagamento;
 import jminvsm.service.parcela.ServiceParcelas;
-import jminvsm.service.transacoes.ServiceTransacoes;
-import jminvsm.service.vendas.factura.ServiceFactura;
+import jminvsm.service.transacoes.ServiceFluxoPagamento;
 import jminvsm.util.AlertUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -58,6 +56,7 @@ public class PagamentoController implements Initializable {
     private Empresa empresaData;
     private Usuario userData;
     private ServiceParcelas serviceParcela;
+    private ServiceFluxoPagamento serviceFluxoPagamento;
 
     @FXML
     private TextField txtIDCliente;
@@ -180,9 +179,15 @@ public class PagamentoController implements Initializable {
         int numParcelas = Integer.parseInt(txtnumeroDeParcelas.getText().equals("") ? "1" : txtnumeroDeParcelas.getText());
         double taxaJuros = Double.parseDouble(txtjurosParcela.getText().equals("") ? "0" : txtjurosParcela.getText());
         double saldo = Double.parseDouble(labValorPorPagar.getText().equals("") ? "0" : labValorPorPagar.getText());
-        serviceParcela.regista(numParcelas, intervalo, taxaJuros,
-                saldo, labNumeroFactura.getText(), userData);
+        try {
+            serviceParcela.regista(numParcelas, intervalo, taxaJuros,
+                    saldo, labNumeroFactura.getText(), userData);
+        } catch (ServiceException ex) {
+            AlertUtilities.showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceParcela.isOpsSuccess()) {
+            AlertUtilities.showSuccessAlert("Parcelas geradas com sucesso!");
             showParcelas();
             showFacturas();
 
@@ -229,8 +234,13 @@ public class PagamentoController implements Initializable {
         int numParcelas = Integer.parseInt(txtnumeroDeParcelas.getText().equals("") ? "1" : txtnumeroDeParcelas.getText());
         double taxaJuros = Double.parseDouble(txtjurosParcela.getText().equals("") ? "0" : txtjurosParcela.getText());
         double saldo = Double.parseDouble(labValorPorPagar.getText().equals("") ? "0" : labValorPorPagar.getText());
-        listaParcelas = serviceParcela.simulaParcelas(numParcelas, intervalo, taxaJuros,
-                saldo, labNumeroFactura.getText(), userData);
+        try {
+            listaParcelas = serviceParcela.simulaParcelas(numParcelas, intervalo, taxaJuros,
+                    saldo, labNumeroFactura.getText(), userData);
+        } catch (ServiceException ex) {
+            AlertUtilities.showErroAlert(ex.getMessage());
+            return;
+        }
         showParcelasSimuladas();
 
     }
@@ -312,12 +322,10 @@ public class PagamentoController implements Initializable {
     private Map<String, MetodoPagamento> mapaMetodos;
 
     public void populateComboMetodoPagamento() throws SQLException {
-        ServiceMetodoPagamento sm = new ServiceMetodoPagamento();
-        listaMetodosPagamento = sm.listaMetodos();
-        mapaMetodos = new HashMap<>();
+        listaMetodosPagamento = serviceFluxoPagamento.listarMetodos();
+        mapaMetodos = serviceFluxoPagamento.mapearMetodosPorNome(listaMetodosPagamento);
         List<String> lista = new ArrayList<>();
         for (MetodoPagamento metodoPagamento : listaMetodosPagamento) {
-            mapaMetodos.put(metodoPagamento.getNomePagamento(), metodoPagamento);
             lista.add(metodoPagamento.getNomePagamento());
         }
         combmetodoPagamento.setItems(FXCollections.observableList(lista));
@@ -335,6 +343,7 @@ public class PagamentoController implements Initializable {
         initIntervalMap();
         try {
             this.serviceParcela = new ServiceParcelas();
+            this.serviceFluxoPagamento = new ServiceFluxoPagamento();
             getDataOnFocus();
             populateComboMetodoPagamento();
         } catch (SQLException ex) {
@@ -358,19 +367,13 @@ public class PagamentoController implements Initializable {
                 valorRecebido = Double.parseDouble(newVal);
             }
 
-            if (metodo != null && metodo.getId() == 1 && total < valorRecebido) {
-                troco = valorRecebido - total;
-                labTrocos.setText(troco + " Mt");
-            } else {
-                troco = 0;
-                labTrocos.setText(troco + " Mt");
-            }
+            troco = serviceFluxoPagamento.calcularTroco(total, valorRecebido, metodo);
+            labTrocos.setText(troco + " Mt");
         }));
         return troco;
     }
 
     public void addTransacao(ActionEvent event) throws SQLException {
-        ServiceTransacoes st = new ServiceTransacoes();
         if (combmetodoPagamento.getValue() == null) {
             AlertUtilities.showErroAlert("Metodo de pagamento nao selecionado!");
             return;
@@ -379,33 +382,26 @@ public class PagamentoController implements Initializable {
         if (dataPagamento.getValue() == null) {
             dataPagamento.setValue(LocalDate.now());
         }
-        double total = Double.parseDouble(labValorPorPagar.getText());
-        double valorRecebido = Double.parseDouble(txtValorRecebido.getText().equals("") ? "0" : txtValorRecebido.getText());
-        double valorPago;
-        if (metodo.getId() == 1 && total < valorRecebido) {
-            valorPago = valorRecebido - getTroco();
-        } else {
-            valorPago = valorRecebido;
-        }
 
         try {
-            st.registapagamentoFacturaParcelada(id_parcela, String.valueOf(dataPagamento.getValue()), valorRecebido, valorPago, getTroco(),
-                    txtDescricao.getText(), empresaData.getContaBancaria().getId(),
-                    metodo.getId(), labNumeroFactura.getText(), userData);
+            boolean registado = serviceFluxoPagamento.registarPagamentoParcelado(id_parcela,
+                    labNumeroFactura.getText(), String.valueOf(dataPagamento.getValue()),
+                    labValorPorPagar.getText(), txtValorRecebido.getText(), getTroco(),
+                    txtDescricao.getText(), metodo, empresaData, userData);
+            if (!registado) {
+                return;
+            }
         } catch (ServiceException ex) {
             AlertUtilities.showErroAlert(ex.getMessage());
             return;
         }
-        if (st.isOpsSuccess()) {
-            AlertUtilities.showSuccessAlert("Pagamento registado com sucesso!");
-            showTransacoes();
-            showParcelas();
-            showFacturas();
-//            actualizaLabelSaldo();
-            txtDescricao.setText("");
-            txtValorRecebido.setText("");
-            dataPagamento.setValue(null);
-        }
+        AlertUtilities.showSuccessAlert("Pagamento registado com sucesso!");
+        showTransacoes();
+        showParcelas();
+        showFacturas();
+        txtDescricao.setText("");
+        txtValorRecebido.setText("");
+        dataPagamento.setValue(null);
     }
 
 //    public void actualizaLabelSaldo() {
@@ -419,8 +415,7 @@ public class PagamentoController implements Initializable {
     private ObservableList<Factura> listaFacturasCliente;
 
     public void showFacturas() throws SQLException {
-        ServiceFactura sf = new ServiceFactura();
-        listaFacturasCliente = sf.exibeFacturaPorCliente(Integer.parseInt(txtIDCliente.getText()));
+        listaFacturasCliente = serviceFluxoPagamento.listarFacturasCliente(Integer.parseInt(txtIDCliente.getText()));
 
         numero.setCellValueFactory(new PropertyValueFactory<>("numero_fac"));
         tipo.setCellValueFactory(cellData
@@ -461,8 +456,7 @@ public class PagamentoController implements Initializable {
     private ObservableList<Transacao> listaTransacoes;
 
     public void showTransacoes() throws SQLException {
-        ServiceTransacoes st = new ServiceTransacoes();
-        listaTransacoes = st.consultaTransacoes(labNumeroFactura.getText());
+        listaTransacoes = serviceFluxoPagamento.listarTransacoes(labNumeroFactura.getText());
         idTrans.setCellValueFactory(new PropertyValueFactory<>("id"));
         valorTransRecebido.setCellValueFactory(new PropertyValueFactory<>("valorRecebido"));
         valorTransPago.setCellValueFactory(new PropertyValueFactory<>("valorPago"));

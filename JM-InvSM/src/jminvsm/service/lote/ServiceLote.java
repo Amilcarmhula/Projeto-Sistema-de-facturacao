@@ -8,8 +8,7 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.lote.Lote;
 import jminvsm.model.produto.Produto;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 public class ServiceLote {
 
@@ -34,15 +33,13 @@ public class ServiceLote {
         if (codigo == null || codigo.trim().isEmpty() || idProduto == null || idProduto <= 0
                 || idArmazem == null || idArmazem <= 0 || dataEntrada == null || dataEntrada.trim().isEmpty()
                 || quantidadeAtual == null || quantidadeAtual <= 0 || custoUnitario == null || custoUnitario.compareTo(BigDecimal.ZERO) <= 0) {
-            showErroAlert("Dados do lote invalidos!");
-            return;
+            throw new ServiceException("Dados do lote invalidos!");
         }
 
         Lote lote = montaLote(codigo, idProduto, idArmazem, idFornecedor, dataEntrada,
                 quantidadeInicial, quantidadeAtual, custoUnitario, "Ativo");
         if (loteDao.addEntity(lote)) {
             setOpsSuccess(true);
-            showSuccessAlert("Lote registado com sucesso!");
         }
     }
 
@@ -65,12 +62,10 @@ public class ServiceLote {
     public boolean atualizaQuantidadeAtual(int idLote, int quantidadeAtual) {
         setOpsSuccess(false);
         if (idLote <= 0 || quantidadeAtual < 0) {
-            showErroAlert("Dados para atualizar lote invalidos!");
-            return false;
+            throw new ServiceException("Dados para atualizar lote invalidos!");
         }
         if (loteDao.updateQuantidadeAtual(idLote, quantidadeAtual)) {
             setOpsSuccess(true);
-            showSuccessAlert("Saldo do lote atualizado com sucesso!");
         }
         return isOpsSuccess();
     }

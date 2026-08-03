@@ -25,8 +25,7 @@ import jminvsm.model.transacao.Transacao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.Documentos.DocumentosComerciais;
 import jminvsm.model.vendas.factura.Factura;
-import jminvsm.util.AlertUtilities;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -75,7 +74,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             }
 
         } catch (SQLException ex) {
-            showDialog( "Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log( "Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -114,7 +113,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             }
         } catch (SQLException e) {
             System.out.println("Erro: "+e);
-            showDialog( "Erro de consulta", "Detalhes: " + e);
+            DaoErrorHandler.log( "Erro de consulta", "Detalhes: " + e);
         }
         return factura;
     }
@@ -217,7 +216,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             }
             }
         } catch (SQLException ex) {
-            showDialog( "Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log( "Erro persistencia", "Detalhes: " + ex);
         }
         return f;
     }
@@ -260,7 +259,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             }
             }
         } catch (SQLException e) {
-            showDialog( "Erro de consulta", "Detalhes: " + e);
+            DaoErrorHandler.log( "Erro de consulta", "Detalhes: " + e);
         }
         return lista;
     }
@@ -299,7 +298,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             }
             }
         } catch (SQLException e) {
-            AlertUtilities.showDialog( "Erro de consulta", "Detalhes: " + e);
+            DaoErrorHandler.log( "Erro de consulta", "Detalhes: " + e);
         }
         return lista;
     }
@@ -307,15 +306,15 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
     @Override
     public boolean converterCotacaoEmFactura(String numeroCotacao, Factura facturaDestino) {
         if (numeroCotacao == null || numeroCotacao.trim().isEmpty()) {
-            showDialog("Erro de conversao", "Numero da cotacao nao informado.");
+            DaoErrorHandler.log("Erro de conversao", "Numero da cotacao nao informado.");
             return false;
         }
         if (facturaDestino == null || facturaDestino.getNumero_fac() == null || facturaDestino.getNumero_fac().trim().isEmpty()) {
-            showDialog("Erro de conversao", "Numero da factura destino nao informado.");
+            DaoErrorHandler.log("Erro de conversao", "Numero da factura destino nao informado.");
             return false;
         }
         if (getIdDocumento(facturaDestino) <= 0) {
-            showDialog("Erro de conversao", "Documento comercial da factura destino nao informado.");
+            DaoErrorHandler.log("Erro de conversao", "Documento comercial da factura destino nao informado.");
             return false;
         }
 
@@ -414,12 +413,12 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
                 return true;
             } catch (SQLException ex) {
                 con.rollback();
-                showDialog("Erro de conversao", "Detalhes: " + ex.getMessage());
+                DaoErrorHandler.log("Erro de conversao", "Detalhes: " + ex.getMessage());
             } finally {
                 con.setAutoCommit(true);
             }
         } catch (SQLException ex) {
-            showDialog("Erro de conversao", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de conversao", "Detalhes: " + ex);
         }
         return false;
     }
@@ -437,7 +436,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
             }
             }
         } catch (SQLException ex) {
-            showDialog( "Erro de contagem", "Detalhes: " + ex);
+            DaoErrorHandler.log( "Erro de contagem", "Detalhes: " + ex);
         }
 
         return total;
@@ -556,7 +555,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            AlertUtilities.showDialog(FontAwesomeIcon.TIMES, "Erro de somatorio de facturas", "Detalhes: " + ex);
+//            DaoErrorHandler.log(FontAwesomeIcon.TIMES, "Erro de somatorio de facturas", "Detalhes: " + ex);
 //        }
 //
 //        return total;
@@ -575,8 +574,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.execute();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Falha ao actulizar  Factura: "
-//                    + ex, "InformaÃƒÂ§ÃƒÂ£o", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("InformaÃƒÂ§ÃƒÂ£o", "Falha ao actulizar  Factura: "
+//                    + ex);
 //        }
 //    }
 //
@@ -605,7 +604,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Factura: " + ex, "InformaÃƒÂ§ÃƒÂ£o", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("InformaÃƒÂ§ÃƒÂ£o", "Erro ao Buscar Factura: " + ex);
 //        }
 //        return lista;
 //    }
@@ -635,8 +634,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Factura: " + ex,
-//                    "InformaÃƒÂ§ÃƒÂ£o", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("InformaÃƒÂ§ÃƒÂ£o", "Erro ao pesquisar Factura: " + ex,
 //        }
 //        return u;
 //
@@ -652,8 +650,7 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.execute();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao deletar Factura: "
-//                    + ex, "InformaÃƒÂ§ÃƒÂ£o", JOptionPane.ERROR_MESSAGE);
+//                    + ex);
 //        }
 //    }
 //    
@@ -667,8 +664,8 @@ public class FacturaDAO implements FacturaDAOImpl<Factura> {
 //            ps.execute();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao deletar Factura: "
-//                    + ex, "InformaÃƒÂ§ÃƒÂ£o", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("InformaÃƒÂ§ÃƒÂ£o", "Erro ao deletar Factura: "
+//                    + ex);
 //        }
 //    }
 }

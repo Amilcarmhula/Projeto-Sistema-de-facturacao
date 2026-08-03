@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,6 +27,7 @@ import jminvsm.model.transferencia.TransferenciaStock;
 import jminvsm.service.ServiceException;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.produto.ServiceProduto;
+import jminvsm.service.transferencia.ServiceTransferenciaConsulta;
 import jminvsm.service.transferencia.ServiceTransferenciaStock;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
@@ -35,6 +35,7 @@ import static jminvsm.util.AlertUtilities.showSuccessAlert;
 public class RequisicaoTransferenciaController implements Initializable {
 
     private ServiceTransferenciaStock serviceTransferencia;
+    private ServiceTransferenciaConsulta serviceConsulta;
     private ServiceProduto serviceProduto;
     private ServiceArmazem serviceArmazem;
 
@@ -115,9 +116,11 @@ public class RequisicaoTransferenciaController implements Initializable {
     @FXML
     private void adicionarItem() {
         Produto produto = combProduto.getSelectionModel().getSelectedItem();
-        Integer quantidade = parseInteger(txtQuantidade.getText());
-        if (produto == null || quantidade == null || quantidade <= 0) {
-            showErroAlert("Seleccione produto e quantidade valida!");
+        int quantidade;
+        try {
+            quantidade = serviceConsulta.quantidadeObrigatoria(txtQuantidade.getText());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
             return;
         }
         ItemTransferencia item = serviceTransferencia.novoItem(produto, quantidade);
@@ -238,6 +241,7 @@ public class RequisicaoTransferenciaController implements Initializable {
     private void inicializarServices() {
         try {
             serviceTransferencia = new ServiceTransferenciaStock();
+            serviceConsulta = new ServiceTransferenciaConsulta();
             serviceProduto = new ServiceProduto();
             serviceArmazem = new ServiceArmazem();
         } catch (SQLException ex) {
@@ -257,7 +261,7 @@ public class RequisicaoTransferenciaController implements Initializable {
         StringConverter<Armazem> armazemConverter = new StringConverter<Armazem>() {
             @Override
             public String toString(Armazem armazem) {
-                return armazem == null ? "" : armazem.getId() + " - " + safe(armazem.getNome_arm());
+                return serviceConsulta.rotuloArmazem(armazem);
             }
 
             @Override
@@ -270,7 +274,7 @@ public class RequisicaoTransferenciaController implements Initializable {
         combProduto.setConverter(new StringConverter<Produto>() {
             @Override
             public String toString(Produto produto) {
-                return produto == null ? "" : produto.getId() + " - " + safe(produto.getNome());
+                return serviceConsulta.rotuloProduto(produto);
             }
 
             @Override
@@ -290,16 +294,16 @@ public class RequisicaoTransferenciaController implements Initializable {
     }
 
     private void configurarTabelas() {
-        colNovoProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
+        colNovoProduto.setCellValueFactory(cell -> new SimpleStringProperty(serviceConsulta.nomeProduto(cell.getValue())));
         colNovoQuantidade.setCellValueFactory(new PropertyValueFactory<ItemTransferencia, Integer>("quantidade"));
 
         colTransId.setCellValueFactory(new PropertyValueFactory<TransferenciaStock, Integer>("id"));
         colTransData.setCellValueFactory(new PropertyValueFactory<TransferenciaStock, String>("dataCriacao"));
-        colTransOrigem.setCellValueFactory(cell -> new SimpleStringProperty(nomeArmazemOrigem(cell.getValue())));
-        colTransDestino.setCellValueFactory(cell -> new SimpleStringProperty(nomeArmazemDestino(cell.getValue())));
+        colTransOrigem.setCellValueFactory(cell -> new SimpleStringProperty(serviceConsulta.nomeArmazemOrigem(cell.getValue())));
+        colTransDestino.setCellValueFactory(cell -> new SimpleStringProperty(serviceConsulta.nomeArmazemDestino(cell.getValue())));
         colTransEstado.setCellValueFactory(new PropertyValueFactory<TransferenciaStock, String>("estado"));
 
-        colDetalheProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
+        colDetalheProduto.setCellValueFactory(cell -> new SimpleStringProperty(serviceConsulta.nomeProduto(cell.getValue())));
         colDetalheQuantidade.setCellValueFactory(new PropertyValueFactory<ItemTransferencia, Integer>("quantidade"));
         colDetalheRecebida.setCellValueFactory(new PropertyValueFactory<ItemTransferencia, Integer>("quantidadeRecebida"));
     }
@@ -308,23 +312,11 @@ public class RequisicaoTransferenciaController implements Initializable {
         if (tabelaTransferencias == null || listaTransferencias == null) {
             return;
         }
-        FilteredList<TransferenciaStock> filtradas = new FilteredList<TransferenciaStock>(listaTransferencias, item -> true);
         String filtro = txtPesquisa != null ? txtPesquisa.getText() : null;
-        if (filtro != null && !filtro.trim().isEmpty()) {
-            final String termo = filtro.trim().toLowerCase();
-            filtradas.setPredicate(item -> transferenciaContem(item, termo));
-        }
+        ObservableList<TransferenciaStock> filtradas = serviceConsulta.filtrar(listaTransferencias, filtro);
         SortedList<TransferenciaStock> ordenadas = new SortedList<TransferenciaStock>(filtradas);
         ordenadas.comparatorProperty().bind(tabelaTransferencias.comparatorProperty());
         tabelaTransferencias.setItems(ordenadas);
-    }
-
-    private boolean transferenciaContem(TransferenciaStock transferencia, String termo) {
-        return String.valueOf(transferencia.getId()).contains(termo)
-                || contains(transferencia.getEstado(), termo)
-                || contains(nomeArmazemOrigem(transferencia), termo)
-                || contains(nomeArmazemDestino(transferencia), termo)
-                || contains(transferencia.getDataCriacao(), termo);
     }
 
     private void setTransferenciaSelecionada(TransferenciaStock transferencia) {
@@ -334,12 +326,12 @@ public class RequisicaoTransferenciaController implements Initializable {
             return;
         }
         labTransId.setText(String.valueOf(transferencia.getId()));
-        labTransEstado.setText(safe(transferencia.getEstado()));
-        labTransOrigem.setText(nomeArmazemOrigem(transferencia));
-        labTransDestino.setText(nomeArmazemDestino(transferencia));
-        labTransData.setText(safe(transferencia.getDataCriacao()));
-        labTransSelecionadaAux.setText("#" + transferencia.getId() + " - " + safe(transferencia.getEstado()));
-        labResumoCabecalho.setText("Transferencia #" + transferencia.getId() + " seleccionada");
+        labTransEstado.setText(texto(transferencia.getEstado()));
+        labTransOrigem.setText(serviceConsulta.nomeArmazemOrigem(transferencia));
+        labTransDestino.setText(serviceConsulta.nomeArmazemDestino(transferencia));
+        labTransData.setText(texto(transferencia.getDataCriacao()));
+        labTransSelecionadaAux.setText(serviceConsulta.rotuloTransferencia(transferencia));
+        labResumoCabecalho.setText(serviceConsulta.textoResumoSelecionada(transferencia));
         tabelaItensDetalhe.setItems(transferencia.getItens() != null
                 ? FXCollections.observableArrayList(transferencia.getItens())
                 : FXCollections.<ItemTransferencia>observableArrayList());
@@ -369,33 +361,7 @@ public class RequisicaoTransferenciaController implements Initializable {
         tabelaItensDetalhe.setItems(FXCollections.<ItemTransferencia>observableArrayList());
     }
 
-    private Integer parseInteger(String value) {
-        try {
-            return value == null || value.trim().isEmpty() ? null : Integer.valueOf(value.trim());
-        } catch (NumberFormatException ex) {
-            return null;
-        }
-    }
-
-    private boolean contains(String value, String termo) {
-        return value != null && value.toLowerCase().contains(termo);
-    }
-
-    private String nomeProduto(ItemTransferencia item) {
-        return item != null && item.getProduto() != null ? safe(item.getProduto().getNome()) : "";
-    }
-
-    private String nomeArmazemOrigem(TransferenciaStock transferencia) {
-        return transferencia != null && transferencia.getArmazemOrigem() != null
-                ? safe(transferencia.getArmazemOrigem().getNome_arm()) : "";
-    }
-
-    private String nomeArmazemDestino(TransferenciaStock transferencia) {
-        return transferencia != null && transferencia.getArmazemDestino() != null
-                ? safe(transferencia.getArmazemDestino().getNome_arm()) : "";
-    }
-
-    private String safe(String value) {
+    private String texto(String value) {
         return value == null ? "" : value;
     }
 }

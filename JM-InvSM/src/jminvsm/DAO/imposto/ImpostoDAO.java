@@ -10,9 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 import jminvsm.model.imposto.Imposto;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -38,7 +37,7 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
                 isSuccess = true;
             }
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -62,7 +61,7 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
                 isSuccess = true;
             }
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -84,7 +83,7 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Taxa: " + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("InformaÃ§Ã£o", "Erro ao Buscar Taxa: " + ex);
         }
         return lista;
     }
@@ -106,7 +105,7 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Taxa: " + ex, "InformaÃ§Ã£o", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("InformaÃ§Ã£o", "Erro ao Buscar Taxa: " + ex);
         }
         return ti;
     }
@@ -116,7 +115,7 @@ public class ImpostoDAO implements ImpostoDAOImpl<Imposto> {
         try {
             return jminvsm.util.SoftDeleteUtils.softDelete("imposto", x);
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return false;
     }

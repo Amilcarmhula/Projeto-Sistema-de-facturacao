@@ -22,9 +22,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import jminvsm.dao.empresa.EmpresaDAO;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.ServiceException;
+import jminvsm.service.empresa.ServiceEmpresa;
 import jminvsm.service.usuario.ServiceUsuario;
 import jminvsm.util.SessaoAplicacao;
 import jminvsm.util.LoadAndMoveUtilities;
@@ -37,6 +37,7 @@ import static jminvsm.util.AlertUtilities.showErroAlert;
 public class LoginController implements Initializable {
 
     private ServiceUsuario service;
+    private ServiceEmpresa serviceEmpresa;
 
     @FXML
     private Button btnlogin;
@@ -71,8 +72,7 @@ public class LoginController implements Initializable {
         if (user != null) {
             /*Dados de login a serem armazenados*/
             SessaoAplicacao.setUserData(user);
-            EmpresaDAO empresaData = new EmpresaDAO();
-            SessaoAplicacao.setEmpresaData(empresaData.getEmpresaData());
+            SessaoAplicacao.setEmpresaData(serviceEmpresa.getEmpresaData());
             btnlogin.getScene().getWindow().hide();
 
 //                Parent root = FXMLLoader.load(getClass().getResource("../jminvsm/views/main/main.fxml"));
@@ -93,6 +93,7 @@ public class LoginController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             service = new ServiceUsuario();
+            serviceEmpresa = new ServiceEmpresa();
             // TODO
         } catch (SQLException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);

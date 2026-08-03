@@ -68,12 +68,20 @@ public class ServiceRecebimentoCompra {
         item.setCustoUnitario(custoUnitario);
         item.setCodigoLote(codigoLote);
         item.setEstado("Pendente");
+        actualizarSubtotalItem(item);
         if (idItemOrdemCompra != null && idItemOrdemCompra > 0) {
             ItemOrdemCompra itemOrdem = new ItemOrdemCompra();
             itemOrdem.setId(idItemOrdemCompra);
             item.setItemOrdemCompra(itemOrdem);
         }
         return item;
+    }
+
+    public void actualizarSubtotalItem(ItemRecebimentoCompra item) {
+        if (item == null) {
+            return;
+        }
+        item.setSubtotal(item.getQuantidadeRecebida() * item.getCustoUnitario());
     }
 
     public boolean confirmarRecebimento(int idRecebimento) {

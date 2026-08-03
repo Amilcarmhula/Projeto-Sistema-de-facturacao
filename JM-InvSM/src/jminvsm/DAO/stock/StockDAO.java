@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.imposto.Imposto;
@@ -19,9 +18,7 @@ import jminvsm.model.produto.Produto;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.unidade_medida.UnidadeMedida;
 import jminvsm.util.Conexao;
-import jminvsm.util.AlertUtilities;
-import static jminvsm.util.AlertUtilities.showDialog;
-
+import jminvsm.dao.DaoErrorHandler;
 /**
  *
  * @author JM-Tecnologias
@@ -71,7 +68,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao Buscar Produto: " + ex);
         }
         return s;
     }
@@ -186,7 +183,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
 
         } catch (SQLException ex) {
             System.out.println("Erro Detalhes: " + ex);
-            AlertUtilities.showDialog("Erro de consulta", ex.getMessage());
+            DaoErrorHandler.log("Erro de consulta", ex.getMessage());
         }
 
         return lista;
@@ -294,7 +291,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
             }
         } catch (SQLException ex) {
             System.out.println("Erro Detalhes: " + ex);
-            AlertUtilities.showDialog("Erro de consulta", ex.getMessage());
+            DaoErrorHandler.log("Erro de consulta", ex.getMessage());
         }
         return lista;
     }
@@ -348,7 +345,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Detalhes Stock: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Detalhes Stock: " + ex);
         }
         return lista;
     }
@@ -380,7 +377,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -416,7 +413,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -461,7 +458,7 @@ public class StockDAO implements StockDAOImpl<Stock> {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de contagem", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de contagem", "Detalhes: " + ex);
         }
 
         return total;

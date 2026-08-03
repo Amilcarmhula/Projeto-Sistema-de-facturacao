@@ -11,8 +11,7 @@ import jminvsm.model.produto.Produto;
 import jminvsm.model.requisicao.Requisicao;
 import jminvsm.model.reserva.ReservaStock;
 import jminvsm.util.Conexao;
-import static jminvsm.util.AlertUtilities.showDialog;
-
+import jminvsm.dao.DaoErrorHandler;
 public class ReservaStockDAO implements ReservaStockDAOImpl {
 
     @Override
@@ -23,7 +22,7 @@ public class ReservaStockDAO implements ReservaStockDAOImpl {
             fillStatement(ps, entity);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Erro ao adicionar reserva de stock: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Erro ao adicionar reserva de stock: " + ex);
             return false;
         }
     }
@@ -36,7 +35,7 @@ public class ReservaStockDAO implements ReservaStockDAOImpl {
             ps.setInt(7, id);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Erro ao atualizar reserva de stock: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Erro ao atualizar reserva de stock: " + ex);
             return false;
         }
     }
@@ -52,7 +51,7 @@ public class ReservaStockDAO implements ReservaStockDAOImpl {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao consultar reserva de stock: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao consultar reserva de stock: " + ex);
         }
         return null;
     }
@@ -69,7 +68,7 @@ public class ReservaStockDAO implements ReservaStockDAOImpl {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao listar reservas da requisicao: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao listar reservas da requisicao: " + ex);
         }
         return lista;
     }
@@ -90,7 +89,7 @@ public class ReservaStockDAO implements ReservaStockDAOImpl {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao listar reservas ativas: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao listar reservas ativas: " + ex);
         }
         return lista;
     }
@@ -103,7 +102,7 @@ public class ReservaStockDAO implements ReservaStockDAOImpl {
             ps.setInt(2, idRequisicao);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Erro ao atualizar estado das reservas: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Erro ao atualizar estado das reservas: " + ex);
             return false;
         }
     }

@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,6 +30,7 @@ import jminvsm.model.cliente.Cliente;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.ServiceException;
 import jminvsm.service.cliente.ServiceCliente;
+import jminvsm.service.listagem.ServicePesquisaListagem;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 import static jminvsm.util.AlertUtilities.showErroAlert;
@@ -45,6 +45,7 @@ public class ClienteViewController implements Initializable {
 
     private Usuario userData;
     private ServiceCliente serviceCliente;
+    private ServicePesquisaListagem servicePesquisa;
 
     @FXML
     private TableColumn<Cliente, Integer> IDtabelaCliente;
@@ -99,6 +100,7 @@ public class ClienteViewController implements Initializable {
         this.userData = SessaoAplicacao.getUserData();
         try {
             serviceCliente = new ServiceCliente();
+            servicePesquisa = new ServicePesquisaListagem();
             showClientes();
         } catch (SQLException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -114,6 +116,7 @@ public class ClienteViewController implements Initializable {
         Funcoes para fazer pesquisas no banco de dados buscando todos dados
      */
     private ObservableList<Cliente> listaClientes;
+    private boolean pesquisaConfigurada;
 
     public void showClientes() throws SQLException {
         listaClientes = serviceCliente.listaClienteView();
@@ -124,31 +127,24 @@ public class ClienteViewController implements Initializable {
         razaotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("razao_cli"));
         nuittabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nuit_cli"));
         contactotabelaCliente.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
+                -> new SimpleStringProperty(servicePesquisa.contactosCliente(cellData.getValue())));
         enderecotabelaCliente.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().printEnderecos())));
+                -> new SimpleStringProperty(servicePesquisa.enderecosCliente(cellData.getValue())));
 
-        FilteredList<Cliente> dadosFiltrados = new FilteredList<>(listaClientes, b -> true);
-        txtPesquisa.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
+        configurarPesquisa();
+        aplicarPesquisa();
+    }
 
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome_cli().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getRazao_cli().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (String.valueOf(x.getNuit_cli()).toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else {
-                    return false;
-                }
+    private void configurarPesquisa() {
+        if (!pesquisaConfigurada) {
+            txtPesquisa.textProperty().addListener((observable, oldValue, newValue) -> aplicarPesquisa());
+            pesquisaConfigurada = true;
+        }
+    }
 
-            });
-        });
-        SortedList<Cliente> sortedData = new SortedList<>(dadosFiltrados);
+    private void aplicarPesquisa() {
+        SortedList<Cliente> sortedData = new SortedList<>(
+                servicePesquisa.filtrarClientes(listaClientes, txtPesquisa.getText()));
         sortedData.comparatorProperty().bind(tabelaCliente.comparatorProperty());
 
         tabelaCliente.setItems(sortedData);

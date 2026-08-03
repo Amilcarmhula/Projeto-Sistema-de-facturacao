@@ -34,9 +34,9 @@ import jminvsm.model.fornecedor.contacto.ContactoFornecedor;
 import jminvsm.model.fornecedor.endereco.EnderecoFornecedor;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.ServiceException;
-import jminvsm.service.fornecedor.ServiceFornecedor;
-import jminvsm.service.fornecedor.contacto.ServiceContacto;
-import jminvsm.service.fornecedor.endereco.ServiceEndereco;
+import jminvsm.service.fornecedor.ServiceContactoFornecedor;
+import jminvsm.service.fornecedor.ServiceEnderecoFornecedor;
+import jminvsm.service.fornecedor.ServiceFornecedorCadastro;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 import static jminvsm.util.AlertUtilities.showErroAlert;
@@ -50,9 +50,10 @@ import static jminvsm.util.AlertUtilities.showSuccessAlert;
 public class AddFornecedorController implements Initializable {
 
     private Usuario userData;
-    private ServiceFornecedor serviceFornecedor;
-    private ServiceContacto serviceContacto;
-    private ServiceEndereco serviceEndereco;
+    private Fornecedor fornecedor;
+    private ServiceFornecedorCadastro serviceFornecedor;
+    private ServiceContactoFornecedor serviceContacto;
+    private ServiceEnderecoFornecedor serviceEndereco;
 
     @FXML
     private Button btnAddCliente;
@@ -214,9 +215,9 @@ public class AddFornecedorController implements Initializable {
         }
 
         try {
-            serviceFornecedor = new ServiceFornecedor();
-            serviceContacto = new ServiceContacto();
-            serviceEndereco = new ServiceEndereco();
+            serviceFornecedor = new ServiceFornecedorCadastro();
+            serviceContacto = new ServiceContactoFornecedor();
+            serviceEndereco = new ServiceEnderecoFornecedor();
             showContactos();
             showClienteByID();
             showEndereco();
@@ -234,7 +235,14 @@ public class AddFornecedorController implements Initializable {
     Funcoes de Consultas
      */
     public void showCliente() {
-        Fornecedor c = serviceFornecedor.ultimoFornecedor();
+        Fornecedor c = fornecedor;
+        if (c == null && fornecedorGuardado()) {
+            c = serviceFornecedor.consultaPorId(valor(txtIDCliente));
+        }
+        if (c == null) {
+            return;
+        }
+        fornecedor = c;
         txtIDCliente.setText(String.valueOf(c.getId()));
         combTipoCliente.setValue(c.getTipo_forn());
         txtRazao.setText(c.getRazaosocial_forn());
@@ -244,8 +252,9 @@ public class AddFornecedorController implements Initializable {
     }
 
     public void showClienteByID() {
-        if (!"".equals(txtIDCliente.getText())) {
-            Fornecedor c = serviceFornecedor.consultaFornecedor(Integer.parseInt(txtIDCliente.getText()));
+        if (fornecedorGuardado()) {
+            Fornecedor c = serviceFornecedor.consultaPorId(valor(txtIDCliente));
+            fornecedor = c;
             combTipoCliente.setValue(c.getTipo_forn());
             txtRazao.setText(c.getRazaosocial_forn());
             txtNuit.setText(String.valueOf(c.getNuit_forn()));
@@ -258,10 +267,13 @@ public class AddFornecedorController implements Initializable {
     private ObservableList<EnderecoFornecedor> listaEndereco;
 
     public void showEndereco() {
-        if ("".equals(txtIDCliente.getText())) {
+        if (fornecedor == null && fornecedorGuardado()) {
+            fornecedor = serviceFornecedor.consultaPorId(valor(txtIDCliente));
+        }
+        if (fornecedor == null) {
             listaEndereco = FXCollections.observableArrayList();
         } else {
-            listaEndereco = serviceEndereco.consultaEnderecosPorFornecedor(Integer.parseInt(txtIDCliente.getText()));
+            listaEndereco = serviceEndereco.consultaPorFornecedor(fornecedor);
         }
 
         IDtabelaEndereco.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -279,10 +291,13 @@ public class AddFornecedorController implements Initializable {
     private ObservableList<ContactoFornecedor> listaContactos;
 
     public void showContactos() {
-        if ("".equals(txtIDCliente.getText())) {
+        if (fornecedor == null && fornecedorGuardado()) {
+            fornecedor = serviceFornecedor.consultaPorId(valor(txtIDCliente));
+        }
+        if (fornecedor == null) {
             listaContactos = FXCollections.observableArrayList();
         } else {
-            listaContactos = serviceContacto.consultaContactoPorFornecedor(Integer.parseInt(txtIDCliente.getText()));
+            listaContactos = serviceContacto.consultaPorFornecedor(fornecedor);
         }
 
         IDtabelaContacto.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -299,7 +314,7 @@ public class AddFornecedorController implements Initializable {
      */
     public void addFornecedor() {
         try {
-            serviceFornecedor.registar(txtRazao.getText(), combTipoCliente.getValue(), numeroOuZero(txtNuit.getText()));
+            fornecedor = serviceFornecedor.registar(valor(txtRazao), valor(combTipoCliente), valor(txtNuit));
         } catch (ServiceException ex) {
             showErroAlert(ex.getMessage());
             return;
@@ -316,9 +331,9 @@ public class AddFornecedorController implements Initializable {
             mostrarAviso("Guarde primeiro os dados gerais do fornecedor.");
             return;
         }
-        Fornecedor forn = serviceFornecedor.consultaFornecedor(Integer.parseInt(txtIDCliente.getText()));
         try {
-            serviceContacto.registar(txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText(), forn);
+            fornecedor = serviceFornecedor.consultaPorId(valor(txtIDCliente));
+            serviceContacto.registar(valor(txtEmail), valor(txtContacto), valor(txtSite), valor(txtResponsavel), fornecedor);
         } catch (ServiceException ex) {
             showErroAlert(ex.getMessage());
             return;
@@ -336,10 +351,10 @@ public class AddFornecedorController implements Initializable {
             return;
         }
         try {
-            serviceEndereco.registar(txtAvenida.getText(), txtBairro.getText(),
-                    txtCidade.getText(), numeroOuZero(txtCodigooPostal.getText()),
-                    numeroOuZero(txtNumeroEndereco.getText()),
-                    combProvincia.getValue(), txtRua.getText(), Integer.valueOf(txtIDCliente.getText().equals("")?"0":txtIDCliente.getText()), userData);
+            fornecedor = serviceFornecedor.consultaPorId(valor(txtIDCliente));
+            serviceEndereco.registar(valor(txtAvenida), valor(txtBairro), valor(txtCidade),
+                    valor(txtCodigooPostal), valor(txtNumeroEndereco), valor(combProvincia),
+                    valor(txtRua), fornecedor, userData);
         } catch (ServiceException ex) {
             showErroAlert(ex.getMessage());
             return;
@@ -356,7 +371,7 @@ public class AddFornecedorController implements Initializable {
      */
     public void updateFornecedor() {
         try {
-            serviceFornecedor.actualizar(Integer.parseInt(txtIDCliente.getText()), txtRazao.getText(), combTipoCliente.getValue(), numeroOuZero(txtNuit.getText()));
+            fornecedor = serviceFornecedor.actualizar(valor(txtIDCliente), valor(txtRazao), valor(combTipoCliente), valor(txtNuit));
         } catch (ServiceException ex) {
             showErroAlert(ex.getMessage());
             return;
@@ -371,7 +386,7 @@ public class AddFornecedorController implements Initializable {
 
     public void updateContacto(){
         try {
-            serviceContacto.actualizar(Integer.parseInt(txtIDContacto.getText()), txtEmail.getText(), txtContacto.getText(), txtSite.getText(), txtResponsavel.getText());
+            serviceContacto.actualizar(valor(txtIDContacto), valor(txtEmail), valor(txtContacto), valor(txtSite), valor(txtResponsavel));
         } catch (ServiceException ex) {
             showErroAlert(ex.getMessage());
             return;
@@ -385,9 +400,10 @@ public class AddFornecedorController implements Initializable {
 
     public void updateEndereco() {
         try {
-            serviceEndereco.actualizar(Integer.parseInt(txtIDEndereco.getText()), txtAvenida.getText(), txtBairro.getText(),
-                    txtCidade.getText(), numeroOuZero(txtCodigooPostal.getText()), numeroOuZero(txtNumeroEndereco.getText()),
-                    combProvincia.getValue(), txtRua.getText(), Integer.parseInt(txtIDCliente.getText()), userData);
+            fornecedor = serviceFornecedor.consultaPorId(valor(txtIDCliente));
+            serviceEndereco.actualizar(valor(txtIDEndereco), valor(txtAvenida), valor(txtBairro),
+                    valor(txtCidade), valor(txtCodigooPostal), valor(txtNumeroEndereco),
+                    valor(combProvincia), valor(txtRua), fornecedor, userData);
         } catch (ServiceException ex) {
             showErroAlert(ex.getMessage());
             return;
@@ -500,6 +516,7 @@ public class AddFornecedorController implements Initializable {
     Funcoes de Reset Campos
      */
     public void resetCliente() {
+        fornecedor = null;
         txtIDCliente.setText("");
         combTipoCliente.setValue(null);
         combTipoCliente.setPromptText("Tipo de fornecedor");
@@ -540,16 +557,12 @@ public class AddFornecedorController implements Initializable {
         return txtIDCliente.getText() != null && !txtIDCliente.getText().trim().isEmpty();
     }
 
-    private int numeroOuZero(String valor) {
-        if (valor == null || valor.trim().isEmpty()) {
-            return 0;
-        }
-        try {
-            return Integer.parseInt(valor.trim());
-        } catch (NumberFormatException ex) {
-            mostrarAviso("Introduza apenas nÃºmeros nos campos NUIT, cÃ³digo postal e nÃºmero do endereÃ§o.");
-            return 0;
-        }
+    private static String valor(TextField campo) {
+        return campo == null || campo.getText() == null ? "" : campo.getText().trim();
+    }
+
+    private static String valor(ComboBox<String> combo) {
+        return combo == null || combo.getValue() == null ? null : combo.getValue();
     }
 
     private void mostrarAviso(String mensagem) {

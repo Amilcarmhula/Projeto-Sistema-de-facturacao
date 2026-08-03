@@ -113,6 +113,15 @@ public class ServiceTransferenciaStock {
         }
     }
 
+    public void transferirProduto(Produto produto, Armazem origem, Armazem destino, String quantidade) {
+        int qtd = quantidadeInteira(quantidade);
+        transferirProduto(
+                produto == null ? 0 : produto.getId(),
+                origem == null ? 0 : origem.getId(),
+                destino == null ? 0 : destino.getId(),
+                qtd);
+    }
+
     private boolean executarFluxo(int idTransferencia, String acao) {
         opsSuccess = false;
         serviceConfiguracao.exigirModuloStockActivo("O fluxo de transferencia");
@@ -158,5 +167,20 @@ public class ServiceTransferenciaStock {
             throw new ServiceException("Quantidade do item deve ser maior que zero!");
         }
         return true;
+    }
+
+    private int quantidadeInteira(String quantidade) {
+        if (quantidade == null || quantidade.trim().isEmpty()) {
+            throw new ServiceException("Informe uma quantidade inteira maior que zero.");
+        }
+        try {
+            int result = Integer.parseInt(quantidade.trim());
+            if (result <= 0) {
+                throw new NumberFormatException();
+            }
+            return result;
+        } catch (NumberFormatException ex) {
+            throw new ServiceException("Informe uma quantidade inteira maior que zero.", ex);
+        }
     }
 }

@@ -8,8 +8,7 @@ import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import jminvsm.dao.unidademedida.UnidadeMedidaDAO;
 import jminvsm.model.unidade_medida.UnidadeMedida;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
-import static jminvsm.util.AlertUtilities.showErroAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -37,13 +36,11 @@ public class ServiceUnidadeMedida {
         setOpsSuccess(false);
 
         if (identificador == null || identificador.isEmpty()) {
-            showErroAlert("Nome da unidade de medida nao pode ser nulo!");
-            return;
+            throw new ServiceException("Nome da unidade de medida nao pode ser nulo!");
         }
 
         if (sigla == null || sigla.isEmpty()) {
-            showErroAlert("Sigla da unidade de medida nao pode ser nulo!");
-            return;
+            throw new ServiceException("Sigla da unidade de medida nao pode ser nula!");
         }
 
         if (descricao == null || descricao.isEmpty()) {
@@ -57,7 +54,6 @@ public class ServiceUnidadeMedida {
 
         if (unidadeDao.addEntity(u)) {
             setOpsSuccess(true);
-            showSuccessAlert("Registo adicionado com sucesso");
         }
     }
 
@@ -66,18 +62,15 @@ public class ServiceUnidadeMedida {
         setOpsSuccess(false);
 
         if (id == null || id <= 0) {
-            showErroAlert("Unidade de medida nao selecionada!");
-            return;
+            throw new ServiceException("Unidade de medida nao selecionada!");
         }
 
         if (identificador == null || identificador.isEmpty()) {
-            showErroAlert("Nome da unidade de medida nao pode ser nulo!");
-            return;
+            throw new ServiceException("Nome da unidade de medida nao pode ser nulo!");
         }
 
         if (sigla == null || sigla.isEmpty()) {
-            showErroAlert("Sigla da unidade de medida nao pode ser nulo!");
-            return;
+            throw new ServiceException("Sigla da unidade de medida nao pode ser nula!");
         }
 
         if (descricao == null || descricao.isEmpty()) {
@@ -91,7 +84,6 @@ public class ServiceUnidadeMedida {
 
         if (unidadeDao.updateEntityByID(u, id)) {
             setOpsSuccess(true);
-            showSuccessAlert("Registo actualizada com sucesso");
         }
     }
 
@@ -103,7 +95,6 @@ public class ServiceUnidadeMedida {
         setOpsSuccess(false);
         if(unidadeDao.deleteEntity(id)){
             setOpsSuccess(true);
-            showSuccessAlert("Unidade de medida excluida com sucesso.");
         }
     }
 }

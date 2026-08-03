@@ -10,10 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 import jminvsm.model.cliente.Cliente;
 import jminvsm.model.cliente.contacto.ContactoCliente;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -46,7 +45,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         } 
         return isSuccess;
     }
@@ -74,7 +73,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             }
 
         } catch (SQLException ex) {
-            showDialog( "Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log( "Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -98,7 +97,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Contacto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao Buscar Contacto: " + ex);
         }
         return lista;
     }
@@ -125,8 +124,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
             }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Contacto: " + ex,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao pesquisar Contacto: " + ex);
         }
         return lista;
     }
@@ -136,7 +134,7 @@ public class ContactoClienteDAO implements ContactoClienteDAOImpl<ContactoClient
         try {
             return jminvsm.util.SoftDeleteUtils.softDelete("contacto_cliente", x);
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         } 
         return false;
     }

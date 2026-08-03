@@ -14,8 +14,7 @@ import jminvsm.dao.parcela.ParcelaDAO;
 import jminvsm.model.parcelas.Parcela;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -40,25 +39,21 @@ public class ServiceParcelas {
 
     public void regista(Integer numeroDeParcelas, Integer intervaloDePagamentos, Double juros, Double saldoFactura,
             String numeroFactura, Usuario user) {
+        setOpsSuccess(false);
         if (numeroDeParcelas == null || numeroDeParcelas <= 0) {
-            showErroAlert("Numero de parcelas nao informado!");
-            return;
+            throw new ServiceException("Numero de parcelas nao informado!");
         }
-//        if (intervaloDePagamentos == null || intervaloDePagamentos <= 0) {
-//            showErroAlert("Erro", "Intervalo de pagamento das parcelas nao informado!");
-//            return;
-//        }
+        if (intervaloDePagamentos == null || intervaloDePagamentos <= 0) {
+            throw new ServiceException("Intervalo de pagamento das parcelas nao informado!");
+        }
         if (juros == null) {
-            showErroAlert("Taxa de juros nao informado!");
-            return;
+            throw new ServiceException("Taxa de juros nao informada!");
         }
         if (saldoFactura == null) {
-            showErroAlert("Saldo da factura nao informado!");
-            return;
+            throw new ServiceException("Saldo da factura nao informado!");
         }
         if (numeroFactura == null || numeroFactura.isEmpty()) {
-            showErroAlert("Factura nao definida!");
-            return;
+            throw new ServiceException("Factura nao definida!");
         }
 
         Parcela p = new Parcela();
@@ -108,30 +103,26 @@ public class ServiceParcelas {
                 setOpsSuccess(true);
             }
         }
-        if (isOpsSuccess()) {
-            showSuccessAlert("Parcelas Geradas com sucesso!");
-        }
     }
 
     public ObservableList<Parcela> simulaParcelas(Integer numeroDeParcelas, Integer intervaloDePagamentos, Double juros, Double saldoFactura,
             String numeroFactura, Usuario user) {
         ObservableList<Parcela> lista = FXCollections.observableArrayList();
         if (numeroDeParcelas == null || numeroDeParcelas <= 0) {
-            showErroAlert("Numero de parcelas nao informado!");
-            return null;
+            throw new ServiceException("Numero de parcelas nao informado!");
+        }
+        if (intervaloDePagamentos == null || intervaloDePagamentos <= 0) {
+            throw new ServiceException("Intervalo de pagamento das parcelas nao informado!");
         }
 
         if (juros == null) {
-            showErroAlert("Taxa de juros nao informado!");
-            return null;
+            throw new ServiceException("Taxa de juros nao informada!");
         }
         if (saldoFactura == null) {
-            showErroAlert("Saldo da factura nao informado!");
-            return null;
+            throw new ServiceException("Saldo da factura nao informado!");
         }
         if (numeroFactura == null || numeroFactura.isEmpty()) {
-            showErroAlert("Factura nao definida!");
-            return null;
+            throw new ServiceException("Factura nao definida!");
         }
 
         Parcela p = null;

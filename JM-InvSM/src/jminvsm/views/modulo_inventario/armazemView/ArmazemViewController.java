@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,6 +30,7 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.ServiceException;
 import jminvsm.service.armazem.ServiceArmazem;
+import jminvsm.service.listagem.ServicePesquisaListagem;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 import static jminvsm.util.AlertUtilities.showErroAlert;
@@ -45,6 +45,7 @@ public class ArmazemViewController implements Initializable {
 
     private Usuario userData;
     private ServiceArmazem servArmazem;
+    private ServicePesquisaListagem servicePesquisa;
 
     @FXML
     private TableColumn<Armazem, Integer> IDtabelaCliente;
@@ -90,6 +91,7 @@ public class ArmazemViewController implements Initializable {
         this.userData = SessaoAplicacao.getUserData();
         try {
             servArmazem = new ServiceArmazem();
+            servicePesquisa = new ServicePesquisaListagem();
         } catch (SQLException ex) {
             Logger.getLogger(ArmazemViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -105,6 +107,7 @@ public class ArmazemViewController implements Initializable {
         Funcoes para fazer pesquisas no banco de dados buscando todos dados
      */
     private ObservableList<Armazem> listaClientes;
+    private boolean pesquisaConfigurada;
 
     public void showClientes() {
 
@@ -116,29 +119,22 @@ public class ArmazemViewController implements Initializable {
         descricaotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("descricao_arm"));
         estadotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("estado"));
         contactotabelaCliente.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
+                -> new SimpleStringProperty(servicePesquisa.contactosArmazem(cellData.getValue())));
 
-        FilteredList<Armazem> dadosFiltrados = new FilteredList<>(listaClientes, b -> true);
-        txtPesquisa.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
+        configurarPesquisa();
+        aplicarPesquisa();
+    }
 
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNome_arm().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getDescricao_arm().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getTipo().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else {
-                    return false;
-                }
+    private void configurarPesquisa() {
+        if (!pesquisaConfigurada) {
+            txtPesquisa.textProperty().addListener((observable, oldValue, newValue) -> aplicarPesquisa());
+            pesquisaConfigurada = true;
+        }
+    }
 
-            });
-        });
-        SortedList<Armazem> sortedData = new SortedList<>(dadosFiltrados);
+    private void aplicarPesquisa() {
+        SortedList<Armazem> sortedData = new SortedList<>(
+                servicePesquisa.filtrarArmazens(listaClientes, txtPesquisa.getText()));
         sortedData.comparatorProperty().bind(tabelaCliente.comparatorProperty());
 
         tabelaCliente.setItems(sortedData);

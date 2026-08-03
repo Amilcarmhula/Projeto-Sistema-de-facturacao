@@ -27,9 +27,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.unidade_medida.UnidadeMedida;
+import jminvsm.service.ServiceException;
 import jminvsm.service.unidadeMedida.ServiceUnidadeMedida;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  * FXML Controller class
@@ -148,8 +151,14 @@ public class UnidadeViewController implements Initializable {
     }
 
     public void addUnidade() {
-        serviceUnidade.regista(txtUnidade.getText(), txtSigla.getText(), txtDescricao.getText());
+        try {
+            serviceUnidade.regista(txtUnidade.getText(), txtSigla.getText(), txtDescricao.getText());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceUnidade.isOpsSuccess()) {
+            showSuccessAlert("Registo adicionado com sucesso");
             resetCampos();
             showUnidades();
         }
@@ -158,8 +167,14 @@ public class UnidadeViewController implements Initializable {
 
     public void updateUnidade() {
         int id = Integer.parseInt(txtID.getText().equals("") ? "0" : txtID.getText());
-        serviceUnidade.actualizar(id, txtUnidade.getText(), txtSigla.getText(), txtDescricao.getText());
+        try {
+            serviceUnidade.actualizar(id, txtUnidade.getText(), txtSigla.getText(), txtDescricao.getText());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceUnidade.isOpsSuccess()) {
+            showSuccessAlert("Registo actualizado com sucesso");
             resetCampos();
             showUnidades();
         }
@@ -191,10 +206,15 @@ public class UnidadeViewController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                serviceUnidade.excluir(x.getId());
-                if (serviceUnidade.isOpsSuccess()) {
-                    showUnidades();
-                    resetCampos();
+                try {
+                    serviceUnidade.excluir(x.getId());
+                    if (serviceUnidade.isOpsSuccess()) {
+                        showSuccessAlert("Unidade de medida excluida com sucesso.");
+                        showUnidades();
+                        resetCampos();
+                    }
+                } catch (ServiceException ex) {
+                    showErroAlert(ex.getMessage());
                 }
             } else if (result.get() == btnCancel) {
                 resetCampos();

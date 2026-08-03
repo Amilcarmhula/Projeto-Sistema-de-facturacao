@@ -10,8 +10,7 @@ import jminvsm.model.lote.Lote;
 import jminvsm.model.movimento.Movimento;
 import jminvsm.model.movimento.MovimentoLote;
 import jminvsm.util.Conexao;
-import static jminvsm.util.AlertUtilities.showDialog;
-
+import jminvsm.dao.DaoErrorHandler;
 public class MovimentoLoteDAO implements MovimentoLoteDAOImpl {
 
     @Override
@@ -23,7 +22,7 @@ public class MovimentoLoteDAO implements MovimentoLoteDAOImpl {
             ps.setInt(3, entity.getQuantidadeRetirada());
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Erro ao adicionar movimento por lote: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Erro ao adicionar movimento por lote: " + ex);
             return false;
         }
     }
@@ -55,7 +54,7 @@ public class MovimentoLoteDAO implements MovimentoLoteDAOImpl {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao listar movimentos por lote: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao listar movimentos por lote: " + ex);
         }
         return lista;
     }

@@ -14,7 +14,7 @@ import jminvsm.model.empresa.Empresa;
 import jminvsm.model.empresa.conta.ContaBancaria;
 import jminvsm.model.empresa.contacto.ContactoEmpresa;
 import jminvsm.model.empresa.endereco.EnderecoEmpresa;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -33,7 +33,7 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
             ps.setInt(3, c.getNuit_emp());
             ps.executeUpdate();
         } catch (SQLException e) {
-            showDialog("Erro Empresa", "Falha ao adicionar empresa: " + e);
+            DaoErrorHandler.log("Erro Empresa", "Falha ao adicionar empresa: " + e);
         }
     }
 
@@ -50,7 +50,7 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
             ps.setInt(4, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            showDialog("Erro Empresa", "Falha ao adicionar empresa: " + e);
+            DaoErrorHandler.log("Erro Empresa", "Falha ao adicionar empresa: " + e);
         }
     }
 
@@ -122,7 +122,7 @@ public class EmpresaDAO implements EmpresaDAOImpl<Empresa> {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro Empresa", "Falha ao adicionar empresa: " + e);
+            DaoErrorHandler.log("Erro Empresa", "Falha ao adicionar empresa: " + e);
 
         }
         return empresa;

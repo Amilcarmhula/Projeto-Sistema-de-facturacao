@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,6 +40,7 @@ import jminvsm.service.compra.ServiceMovimentoFinanceiro;
 import jminvsm.service.compra.ServicePagamentoFornecedor;
 import jminvsm.service.compra.ServiceRecebimentoCompra;
 import jminvsm.service.empresa.ServiceContaBancaria;
+import jminvsm.service.listagem.ServicePesquisaListagem;
 import jminvsm.service.metodoPagamento.ServiceMetodoPagamento;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
@@ -54,6 +54,7 @@ public class FinanceiroFornecedorViewController implements Initializable {
     private ServiceMovimentoFinanceiro serviceMovimentoFinanceiro;
     private ServiceContaBancaria serviceContaBancaria;
     private ServiceMetodoPagamento serviceMetodoPagamento;
+    private final ServicePesquisaListagem servicePesquisaListagem = new ServicePesquisaListagem();
     private Usuario userData;
 
     private ObservableList<FacturaFornecedor> listaFacturas = FXCollections.observableArrayList();
@@ -233,22 +234,10 @@ public class FinanceiroFornecedorViewController implements Initializable {
             return;
         }
         RecebimentoCompra recebimento = combRecebimento.getSelectionModel().getSelectedItem();
-        if (recebimento == null) {
-            showErroAlert("Seleccione um recebimento confirmado!");
-            return;
-        }
-        if (txtNumeroFactura.getText() == null || txtNumeroFactura.getText().trim().isEmpty()) {
-            showErroAlert("Informe o numero da factura do fornecedor!");
-            return;
-        }
-        if (dataEmissaoFactura.getValue() == null) {
-            showErroAlert("Informe a data de emissao da factura!");
-            return;
-        }
         int idUsuario = userData != null ? userData.getId() : 0;
         try {
-            boolean criado = serviceFacturaFornecedor.criarDeRecebimento(txtNumeroFactura.getText().trim(),
-                    recebimento.getId(), dataEmissaoFactura.getValue().toString(),
+            boolean criado = serviceFacturaFornecedor.criarDeRecebimento(recebimento, txtNumeroFactura.getText(),
+                    dataEmissaoFactura.getValue() != null ? dataEmissaoFactura.getValue().toString() : null,
                     dataVencimentoFactura.getValue() != null ? dataVencimentoFactura.getValue().toString() : null,
                     idUsuario);
             if (criado) {
@@ -274,38 +263,13 @@ public class FinanceiroFornecedorViewController implements Initializable {
         }
         MetodoPagamento metodo = combMetodoPagamento.getSelectionModel().getSelectedItem();
         String origem = combOrigemPagamento.getSelectionModel().getSelectedItem();
-        Double valor = parseDouble(txtValorPago.getText());
-        if (conta == null || conta.getId() <= 0) {
-            showErroAlert("Seleccione uma conta a pagar!");
-            return;
-        }
-        if (valor == null || valor <= 0) {
-            showErroAlert("Informe um valor pago valido!");
-            return;
-        }
-        if (valor > conta.getSaldoPendente()) {
-            showErroAlert("O valor pago nao pode ser maior que o saldo pendente!");
-            return;
-        }
-        if (metodo == null || metodo.getId() <= 0) {
-            showErroAlert("Seleccione o metodo de pagamento!");
-            return;
-        }
-        if (origem == null || origem.trim().isEmpty()) {
-            showErroAlert("Seleccione a origem do pagamento!");
-            return;
-        }
+        Double valor = servicePesquisaListagem.parseDouble(txtValorPago.getText());
         ContaBancaria contaBancaria = combContaBancaria.getSelectionModel().getSelectedItem();
-        Integer idContaBancaria = "Banco".equalsIgnoreCase(origem) && contaBancaria != null ? contaBancaria.getId() : null;
-        if ("Banco".equalsIgnoreCase(origem) && (idContaBancaria == null || idContaBancaria <= 0)) {
-            showErroAlert("Seleccione a conta bancaria para pagamento por banco!");
-            return;
-        }
         int idUsuario = userData != null ? userData.getId() : 0;
         try {
-            boolean pago = servicePagamentoFornecedor.registarPagamento(conta.getId(),
-                    dataPagamento.getValue() != null ? dataPagamento.getValue().toString() : LocalDate.now().toString(),
-                    valor, metodo.getId(), origem, idContaBancaria, txtReferencia.getText(),
+            boolean pago = servicePagamentoFornecedor.registarPagamento(conta,
+                    dataPagamento.getValue() != null ? dataPagamento.getValue().toString() : null,
+                    valor, metodo, origem, contaBancaria, txtReferencia.getText(),
                     txtDescricaoPagamento.getText(), idUsuario);
             if (pago) {
                 showSuccessAlert("Pagamento ao fornecedor registado com sucesso!");
@@ -404,7 +368,8 @@ public class FinanceiroFornecedorViewController implements Initializable {
         combRecebimento.setConverter(new StringConverter<RecebimentoCompra>() {
             @Override
             public String toString(RecebimentoCompra rec) {
-                return rec == null ? "" : "#" + rec.getId() + " - " + safe(rec.getNumero()) + " - " + nomeFornecedor(rec);
+                return rec == null ? "" : "#" + rec.getId() + " - " + safe(rec.getNumero())
+                        + " - " + servicePesquisaListagem.nomeFornecedor(rec);
             }
 
             @Override
@@ -415,7 +380,8 @@ public class FinanceiroFornecedorViewController implements Initializable {
         combContaPagar.setConverter(new StringConverter<ContaPagar>() {
             @Override
             public String toString(ContaPagar conta) {
-                return conta == null ? "" : "#" + conta.getId() + " - " + numeroFactura(conta) + " - saldo " + conta.getSaldoPendente();
+                return conta == null ? "" : "#" + conta.getId() + " - "
+                        + servicePesquisaListagem.numeroFactura(conta) + " - saldo " + conta.getSaldoPendente();
             }
 
             @Override
@@ -437,7 +403,7 @@ public class FinanceiroFornecedorViewController implements Initializable {
         combContaBancaria.setConverter(new StringConverter<ContaBancaria>() {
             @Override
             public String toString(ContaBancaria conta) {
-                return textoContaBancaria(conta);
+                return servicePesquisaListagem.textoContaBancaria(conta);
             }
 
             @Override
@@ -450,23 +416,23 @@ public class FinanceiroFornecedorViewController implements Initializable {
     private void configurarTabelas() {
         colFacturaId.setCellValueFactory(new PropertyValueFactory<FacturaFornecedor, Integer>("id"));
         colFacturaNumero.setCellValueFactory(new PropertyValueFactory<FacturaFornecedor, String>("numero"));
-        colFacturaRecebimento.setCellValueFactory(cell -> new SimpleStringProperty(numeroRecebimento(cell.getValue())));
-        colFacturaFornecedor.setCellValueFactory(cell -> new SimpleStringProperty(nomeFornecedor(cell.getValue())));
+        colFacturaRecebimento.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.numeroRecebimento(cell.getValue())));
+        colFacturaFornecedor.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeFornecedor(cell.getValue())));
         colFacturaEmissao.setCellValueFactory(new PropertyValueFactory<FacturaFornecedor, String>("dataEmissao"));
         colFacturaVencimento.setCellValueFactory(new PropertyValueFactory<FacturaFornecedor, String>("dataVencimento"));
         colFacturaTotal.setCellValueFactory(new PropertyValueFactory<FacturaFornecedor, Double>("total"));
         colFacturaSaldo.setCellValueFactory(new PropertyValueFactory<FacturaFornecedor, Double>("saldoPendente"));
         colFacturaEstado.setCellValueFactory(new PropertyValueFactory<FacturaFornecedor, String>("estado"));
 
-        colItemProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
+        colItemProduto.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeProduto(cell.getValue())));
         colItemQuantidade.setCellValueFactory(new PropertyValueFactory<ItemFacturaFornecedor, Integer>("quantidade"));
         colItemCusto.setCellValueFactory(new PropertyValueFactory<ItemFacturaFornecedor, Double>("custoUnitario"));
         colItemSubtotal.setCellValueFactory(new PropertyValueFactory<ItemFacturaFornecedor, Double>("subtotal"));
         colItemTotal.setCellValueFactory(new PropertyValueFactory<ItemFacturaFornecedor, Double>("totalLinha"));
 
         colContaId.setCellValueFactory(new PropertyValueFactory<ContaPagar, Integer>("id"));
-        colContaFactura.setCellValueFactory(cell -> new SimpleStringProperty(numeroFactura(cell.getValue())));
-        colContaFornecedor.setCellValueFactory(cell -> new SimpleStringProperty(nomeFornecedor(cell.getValue())));
+        colContaFactura.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.numeroFactura(cell.getValue())));
+        colContaFornecedor.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeFornecedor(cell.getValue())));
         colContaEmissao.setCellValueFactory(new PropertyValueFactory<ContaPagar, String>("dataEmissao"));
         colContaVencimento.setCellValueFactory(new PropertyValueFactory<ContaPagar, String>("dataVencimento"));
         colContaOriginal.setCellValueFactory(new PropertyValueFactory<ContaPagar, Double>("valorOriginal"));
@@ -475,11 +441,11 @@ public class FinanceiroFornecedorViewController implements Initializable {
         colContaEstado.setCellValueFactory(new PropertyValueFactory<ContaPagar, String>("estado"));
 
         colPagamentoId.setCellValueFactory(new PropertyValueFactory<PagamentoFornecedor, Integer>("id"));
-        colPagamentoConta.setCellValueFactory(cell -> new SimpleStringProperty(numeroConta(cell.getValue())));
-        colPagamentoFornecedor.setCellValueFactory(cell -> new SimpleStringProperty(nomeFornecedor(cell.getValue())));
+        colPagamentoConta.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.numeroConta(cell.getValue())));
+        colPagamentoFornecedor.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeFornecedor(cell.getValue())));
         colPagamentoData.setCellValueFactory(new PropertyValueFactory<PagamentoFornecedor, String>("dataPagamento"));
         colPagamentoValor.setCellValueFactory(new PropertyValueFactory<PagamentoFornecedor, Double>("valorPago"));
-        colPagamentoMetodo.setCellValueFactory(cell -> new SimpleStringProperty(nomeMetodo(cell.getValue())));
+        colPagamentoMetodo.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeMetodo(cell.getValue())));
         colPagamentoOrigem.setCellValueFactory(new PropertyValueFactory<PagamentoFornecedor, String>("origemPagamento"));
         colPagamentoReferencia.setCellValueFactory(new PropertyValueFactory<PagamentoFornecedor, String>("referencia"));
         colPagamentoEstado.setCellValueFactory(new PropertyValueFactory<PagamentoFornecedor, String>("estado"));
@@ -527,7 +493,7 @@ public class FinanceiroFornecedorViewController implements Initializable {
         if (serviceFacturaFornecedor == null) {
             return;
         }
-        String estado = estadoSelecionado(combFiltroFactura);
+        String estado = servicePesquisaListagem.estadoSelecionado(combFiltroFactura.getSelectionModel().getSelectedItem());
         listaFacturas = estado == null ? serviceFacturaFornecedor.listaFacturas() : serviceFacturaFornecedor.listaFacturasPorEstado(estado);
         aplicarFiltroFacturas();
         setFacturaSelecionada(null);
@@ -537,10 +503,10 @@ public class FinanceiroFornecedorViewController implements Initializable {
         if (serviceContaPagar == null) {
             return;
         }
-        String estado = estadoSelecionado(combFiltroConta);
+        String estado = servicePesquisaListagem.estadoSelecionado(combFiltroConta.getSelectionModel().getSelectedItem());
         listaContas = estado == null ? serviceContaPagar.listaContasPagar() : serviceContaPagar.listaContasPagarPorEstado(estado);
         aplicarFiltroContas();
-        combContaPagar.setItems(contasPagaveis(listaContas));
+        combContaPagar.setItems(serviceContaPagar.contasPagaveis(listaContas));
         setContaSelecionada(null);
     }
 
@@ -558,7 +524,7 @@ public class FinanceiroFornecedorViewController implements Initializable {
         if (serviceMovimentoFinanceiro == null) {
             return;
         }
-        String origem = estadoSelecionado(combFiltroMovimentoOrigem);
+        String origem = servicePesquisaListagem.estadoSelecionado(combFiltroMovimentoOrigem.getSelectionModel().getSelectedItem());
         listaMovimentos = origem == null
                 ? serviceMovimentoFinanceiro.listaMovimentos()
                 : serviceMovimentoFinanceiro.listaMovimentosPorOrigemPagamento(origem);
@@ -566,25 +532,17 @@ public class FinanceiroFornecedorViewController implements Initializable {
     }
 
     private void aplicarFiltroFacturas() {
-        FilteredList<FacturaFornecedor> dados = new FilteredList<FacturaFornecedor>(listaFacturas, factura -> true);
         String termo = txtPesquisaFactura != null ? txtPesquisaFactura.getText() : null;
-        if (termo != null && !termo.trim().isEmpty()) {
-            final String filtro = termo.trim().toLowerCase();
-            dados.setPredicate(factura -> facturaContem(factura, filtro));
-        }
-        SortedList<FacturaFornecedor> ordenado = new SortedList<FacturaFornecedor>(dados);
+        SortedList<FacturaFornecedor> ordenado = new SortedList<FacturaFornecedor>(
+                servicePesquisaListagem.filtrarFacturasFornecedor(listaFacturas, termo));
         ordenado.comparatorProperty().bind(tabelaFacturas.comparatorProperty());
         tabelaFacturas.setItems(ordenado);
     }
 
     private void aplicarFiltroContas() {
-        FilteredList<ContaPagar> dados = new FilteredList<ContaPagar>(listaContas, conta -> true);
         String termo = txtPesquisaConta != null ? txtPesquisaConta.getText() : null;
-        if (termo != null && !termo.trim().isEmpty()) {
-            final String filtro = termo.trim().toLowerCase();
-            dados.setPredicate(conta -> contaContem(conta, filtro));
-        }
-        SortedList<ContaPagar> ordenado = new SortedList<ContaPagar>(dados);
+        SortedList<ContaPagar> ordenado = new SortedList<ContaPagar>(
+                servicePesquisaListagem.filtrarContasPagar(listaContas, termo));
         ordenado.comparatorProperty().bind(tabelaContas.comparatorProperty());
         tabelaContas.setItems(ordenado);
     }
@@ -613,8 +571,8 @@ public class FinanceiroFornecedorViewController implements Initializable {
 
     private void atualizarCamposConta(ContaPagar conta) {
         labContaSelecionada.setText(conta != null ? "#" + conta.getId() : "-");
-        labFornecedorConta.setText(conta != null ? nomeFornecedor(conta) : "-");
-        labFacturaConta.setText(conta != null ? numeroFactura(conta) : "-");
+        labFornecedorConta.setText(conta != null ? servicePesquisaListagem.nomeFornecedor(conta) : "-");
+        labFacturaConta.setText(conta != null ? servicePesquisaListagem.numeroFactura(conta) : "-");
         labEstadoConta.setText(conta != null ? safe(conta.getEstado()) : "-");
         labSaldoConta.setText(conta != null ? String.valueOf(conta.getSaldoPendente()) : "-");
     }
@@ -649,131 +607,13 @@ public class FinanceiroFornecedorViewController implements Initializable {
         }
     }
 
-    private ObservableList<ContaPagar> contasPagaveis(ObservableList<ContaPagar> contas) {
-        ObservableList<ContaPagar> pagaveis = FXCollections.observableArrayList();
-        if (contas == null) {
-            return pagaveis;
-        }
-        for (ContaPagar conta : contas) {
-            if (conta != null && conta.getSaldoPendente() > 0
-                    && !"Liquidada".equalsIgnoreCase(conta.getEstado())
-                    && !"Cancelada".equalsIgnoreCase(conta.getEstado())) {
-                pagaveis.add(conta);
-            }
-        }
-        return pagaveis;
-    }
-
     private void atualizarResumoCabecalho() {
-        double saldo = 0.0;
-        for (ContaPagar conta : listaContas) {
-            if (conta != null && conta.getSaldoPendente() > 0) {
-                saldo += conta.getSaldoPendente();
-            }
-        }
+        double saldo = serviceContaPagar.calcularSaldoAberto(listaContas);
         labResumoCabecalho.setText("Facturas, contas a pagar, pagamentos e movimento financeiro | Saldo aberto: " + saldo);
     }
 
-    private boolean facturaContem(FacturaFornecedor factura, String termo) {
-        return String.valueOf(factura.getId()).contains(termo)
-                || contains(factura.getNumero(), termo)
-                || contains(factura.getEstado(), termo)
-                || contains(nomeFornecedor(factura), termo)
-                || contains(numeroRecebimento(factura), termo);
-    }
-
-    private boolean contaContem(ContaPagar conta, String termo) {
-        return String.valueOf(conta.getId()).contains(termo)
-                || contains(conta.getEstado(), termo)
-                || contains(nomeFornecedor(conta), termo)
-                || contains(numeroFactura(conta), termo);
-    }
-
-    private String estadoSelecionado(ComboBox<String> combo) {
-        String estado = combo.getSelectionModel().getSelectedItem();
-        return estado == null || "Todos".equalsIgnoreCase(estado) ? null : estado;
-    }
-
-    private Integer parseInteger(String value) {
-        try {
-            return value == null || value.trim().isEmpty() ? null : Integer.valueOf(value.trim());
-        } catch (NumberFormatException ex) {
-            return null;
-        }
-    }
-
-    private Double parseDouble(String value) {
-        try {
-            return value == null || value.trim().isEmpty() ? null : Double.valueOf(value.trim().replace(',', '.'));
-        } catch (NumberFormatException ex) {
-            return null;
-        }
-    }
-
-    private boolean contains(String value, String termo) {
-        return value != null && value.toLowerCase().contains(termo);
-    }
-
-    private String numeroRecebimento(FacturaFornecedor factura) {
-        return factura != null && factura.getRecebimentoCompra() != null
-                ? String.valueOf(factura.getRecebimentoCompra().getId()) : "";
-    }
-
-    private String nomeFornecedor(RecebimentoCompra recebimento) {
-        return recebimento != null && recebimento.getFornecedor() != null
-                ? safe(recebimento.getFornecedor().getRazaosocial_forn()) : "";
-    }
-
-    private String nomeFornecedor(FacturaFornecedor factura) {
-        return factura != null && factura.getFornecedor() != null
-                ? safe(factura.getFornecedor().getRazaosocial_forn()) : "";
-    }
-
-    private String nomeFornecedor(ContaPagar conta) {
-        return conta != null && conta.getFornecedor() != null
-                ? safe(conta.getFornecedor().getRazaosocial_forn()) : "";
-    }
-
-    private String nomeFornecedor(PagamentoFornecedor pagamento) {
-        return pagamento != null && pagamento.getFornecedor() != null
-                ? safe(pagamento.getFornecedor().getRazaosocial_forn()) : "";
-    }
-
-    private String numeroFactura(ContaPagar conta) {
-        return conta != null && conta.getFacturaFornecedor() != null ? safe(conta.getFacturaFornecedor().getNumero()) : "";
-    }
-
-    private String numeroConta(PagamentoFornecedor pagamento) {
-        return pagamento != null && pagamento.getContaPagar() != null
-                ? String.valueOf(pagamento.getContaPagar().getId()) : "";
-    }
-
-    private String nomeProduto(ItemFacturaFornecedor item) {
-        return item != null && item.getProduto() != null ? safe(item.getProduto().getNome()) : "";
-    }
-
-    private String nomeMetodo(PagamentoFornecedor pagamento) {
-        return pagamento != null && pagamento.getMetodoPagamento() != null
-                ? safe(pagamento.getMetodoPagamento().getNomePagamento()) : "";
-    }
-
-    private String textoContaBancaria(ContaBancaria conta) {
-        if (conta == null) {
-            return "";
-        }
-        StringBuilder texto = new StringBuilder();
-        texto.append(safe(conta.getNome_banco()));
-        if (conta.getNumero_conta() != null && !conta.getNumero_conta().trim().isEmpty()) {
-            texto.append(" - ").append(conta.getNumero_conta());
-        }
-        if (conta.getDescricaoTipo() != null && !conta.getDescricaoTipo().trim().isEmpty()) {
-            texto.append(" - ").append(conta.getDescricaoTipo());
-        }
-        return texto.toString();
-    }
-
     private String safe(String value) {
-        return value == null ? "" : value;
+        return servicePesquisaListagem.safeText(value);
     }
 }
 

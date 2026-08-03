@@ -4,7 +4,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import javafx.collections.ObservableList;
 import jminvsm.dao.compra.PagamentoFornecedorDAO;
+import jminvsm.model.compra.ContaPagar;
 import jminvsm.model.compra.PagamentoFornecedor;
+import jminvsm.model.empresa.conta.ContaBancaria;
+import jminvsm.model.metodo_pagamento.MetodoPagamento;
 import jminvsm.service.ServiceException;
 
 public class ServicePagamentoFornecedor {
@@ -54,6 +57,31 @@ public class ServicePagamentoFornecedor {
             setOpsSuccess(true);
         }
         return isOpsSuccess();
+    }
+
+    public boolean registarPagamento(ContaPagar conta, String dataPagamento, Double valorPago,
+            MetodoPagamento metodoPagamento, String origemPagamento, ContaBancaria contaBancaria,
+            String referencia, String descricao, int idUsuario) {
+        if (conta == null || conta.getId() <= 0) {
+            throw new ServiceException("Conta a pagar nao selecionada!");
+        }
+        if (valorPago == null || valorPago <= 0) {
+            throw new ServiceException("Valor pago deve ser maior que zero!");
+        }
+        if (valorPago > conta.getSaldoPendente()) {
+            throw new ServiceException("O valor pago nao pode ser maior que o saldo pendente!");
+        }
+        if (metodoPagamento == null || metodoPagamento.getId() <= 0) {
+            throw new ServiceException("Metodo de pagamento nao informado!");
+        }
+
+        Integer idContaBancaria = null;
+        if ("Banco".equalsIgnoreCase(origemPagamento)) {
+            idContaBancaria = contaBancaria != null ? contaBancaria.getId() : null;
+        }
+        return registarPagamento(conta.getId(), dataPagamento, valorPago,
+                metodoPagamento.getId(), origemPagamento, idContaBancaria,
+                referencia, descricao, idUsuario);
     }
 
     public ObservableList<PagamentoFornecedor> listaPagamentos() {

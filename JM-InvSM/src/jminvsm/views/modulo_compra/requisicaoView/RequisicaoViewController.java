@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,6 +39,7 @@ import jminvsm.service.picking.ServicePicking;
 import jminvsm.service.produto.ServiceProduto;
 import jminvsm.service.requisicao.ServiceRequisicao;
 import jminvsm.service.reserva.ServiceReservaStock;
+import jminvsm.service.listagem.ServicePesquisaListagem;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
@@ -51,6 +51,7 @@ public class RequisicaoViewController implements Initializable {
     private ServiceReservaStock serviceReservaStock;
     private ServicePicking servicePicking;
     private ServiceMovimento serviceMovimento;
+    private final ServicePesquisaListagem servicePesquisaListagem = new ServicePesquisaListagem();
     private Usuario userData;
 
     private final ObservableList<ItemRequisicao> itensNovaRequisicao = FXCollections.observableArrayList();
@@ -167,7 +168,7 @@ public class RequisicaoViewController implements Initializable {
     private void adicionarItem() {
         Produto produto = combProduto.getSelectionModel().getSelectedItem();
         Armazem armazem = combArmazem.getSelectionModel().getSelectedItem();
-        Integer quantidade = parseInteger(txtQuantidade.getText());
+        Integer quantidade = servicePesquisaListagem.parseInteger(txtQuantidade.getText());
         if (produto == null || armazem == null || quantidade == null || quantidade <= 0) {
             showErroAlert("Seleccione produto, armazem e quantidade valida!");
             return;
@@ -387,8 +388,8 @@ public class RequisicaoViewController implements Initializable {
     }
 
     private void configurarTabelas() {
-        colItemProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
-        colItemArmazem.setCellValueFactory(cell -> new SimpleStringProperty(nomeArmazem(cell.getValue())));
+        colItemProduto.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeProduto(cell.getValue())));
+        colItemArmazem.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeArmazem(cell.getValue())));
         colItemQuantidade.setCellValueFactory(new PropertyValueFactory<ItemRequisicao, Integer>("quantidade"));
 
         colReqId.setCellValueFactory(new PropertyValueFactory<Requisicao, Integer>("id"));
@@ -397,20 +398,20 @@ public class RequisicaoViewController implements Initializable {
         colReqEstado.setCellValueFactory(new PropertyValueFactory<Requisicao, String>("estado"));
         colReqMotivo.setCellValueFactory(new PropertyValueFactory<Requisicao, String>("motivo"));
 
-        colDetalheProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
-        colDetalheArmazem.setCellValueFactory(cell -> new SimpleStringProperty(nomeArmazem(cell.getValue())));
+        colDetalheProduto.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeProduto(cell.getValue())));
+        colDetalheArmazem.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeArmazem(cell.getValue())));
         colDetalheQuantidade.setCellValueFactory(new PropertyValueFactory<ItemRequisicao, Integer>("quantidade"));
 
-        colReservaProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
-        colReservaArmazem.setCellValueFactory(cell -> new SimpleStringProperty(nomeArmazem(cell.getValue())));
+        colReservaProduto.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeProduto(cell.getValue())));
+        colReservaArmazem.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeArmazem(cell.getValue())));
         colReservaQuantidade.setCellValueFactory(new PropertyValueFactory<ReservaStock, Integer>("quantidade"));
         colReservaEstado.setCellValueFactory(new PropertyValueFactory<ReservaStock, String>("estado"));
 
         colMovData.setCellValueFactory(new PropertyValueFactory<Movimento, String>("dataMovimento"));
         colMovOrigem.setCellValueFactory(new PropertyValueFactory<Movimento, String>("tipoOrigem"));
         colMovTipo.setCellValueFactory(new PropertyValueFactory<Movimento, String>("tipoMovimento"));
-        colMovProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
-        colMovArmazem.setCellValueFactory(cell -> new SimpleStringProperty(nomeArmazem(cell.getValue())));
+        colMovProduto.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeProduto(cell.getValue())));
+        colMovArmazem.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeArmazem(cell.getValue())));
         colMovQuantidade.setCellValueFactory(new PropertyValueFactory<Movimento, Integer>("quantidade"));
     }
 
@@ -418,23 +419,10 @@ public class RequisicaoViewController implements Initializable {
         if (tabelaRequisicoes == null || listaRequisicoes == null) {
             return;
         }
-        FilteredList<Requisicao> dadosFiltrados = new FilteredList<Requisicao>(listaRequisicoes, req -> true);
         String filtro = txtPesquisa != null ? txtPesquisa.getText() : null;
-        if (filtro != null && !filtro.trim().isEmpty()) {
-            final String termo = filtro.trim().toLowerCase();
-            dadosFiltrados.setPredicate(req -> requisicaoContem(req, termo));
-        }
-        SortedList<Requisicao> sortedData = new SortedList<Requisicao>(dadosFiltrados);
+        SortedList<Requisicao> sortedData = new SortedList<Requisicao>(servicePesquisaListagem.filtrarRequisicoes(listaRequisicoes, filtro));
         sortedData.comparatorProperty().bind(tabelaRequisicoes.comparatorProperty());
         tabelaRequisicoes.setItems(sortedData);
-    }
-
-    private boolean requisicaoContem(Requisicao req, String termo) {
-        return String.valueOf(req.getId()).contains(termo)
-                || contains(req.getEstado(), termo)
-                || contains(req.getMotivo(), termo)
-                || contains(req.getDataRequisicao(), termo)
-                || contains(req.getDataNecessidade(), termo);
     }
 
     private void setRequisicaoSelecionada(Requisicao requisicao) {
@@ -507,44 +495,8 @@ public class RequisicaoViewController implements Initializable {
         tabelaMovimentos.setItems(FXCollections.<Movimento>observableArrayList());
     }
 
-    private Integer parseInteger(String value) {
-        try {
-            return value == null || value.trim().isEmpty() ? null : Integer.valueOf(value.trim());
-        } catch (NumberFormatException ex) {
-            return null;
-        }
-    }
-
-    private boolean contains(String value, String termo) {
-        return value != null && value.toLowerCase().contains(termo);
-    }
-
-    private String nomeProduto(ItemRequisicao item) {
-        return item != null && item.getProduto() != null ? safe(item.getProduto().getNome()) : "";
-    }
-
-    private String nomeProduto(ReservaStock reserva) {
-        return reserva != null && reserva.getProduto() != null ? safe(reserva.getProduto().getNome()) : "";
-    }
-
-    private String nomeProduto(Movimento movimento) {
-        return movimento != null && movimento.getProduto() != null ? safe(movimento.getProduto().getNome()) : "";
-    }
-
-    private String nomeArmazem(ItemRequisicao item) {
-        return item != null && item.getArmazem() != null ? safe(item.getArmazem().getNome_arm()) : "";
-    }
-
-    private String nomeArmazem(ReservaStock reserva) {
-        return reserva != null && reserva.getArmazem() != null ? safe(reserva.getArmazem().getNome_arm()) : "";
-    }
-
-    private String nomeArmazem(Movimento movimento) {
-        return movimento != null && movimento.getArmazem() != null ? safe(movimento.getArmazem().getNome_arm()) : "";
-    }
-
     private String safe(String value) {
-        return value == null ? "" : value;
+        return servicePesquisaListagem.safeText(value);
     }
 }
 

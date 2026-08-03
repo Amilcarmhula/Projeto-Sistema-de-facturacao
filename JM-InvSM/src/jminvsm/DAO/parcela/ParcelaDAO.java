@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.parcelas.Parcela;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -53,7 +53,7 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -86,7 +86,7 @@ public class ParcelaDAO implements ParcelaDAOImpl<Parcela> {
             }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulra", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulra", "Detalhes: " + ex);
         }
         return lista;
     }

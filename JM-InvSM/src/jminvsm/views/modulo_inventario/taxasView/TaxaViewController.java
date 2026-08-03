@@ -30,9 +30,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.imposto.Imposto;
+import jminvsm.service.ServiceException;
 import jminvsm.service.taxaimposto.ServiceTaxaImpostos;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  * FXML Controller class
@@ -157,8 +160,14 @@ public class TaxaViewController implements Initializable {
 
     public void addTaxa() {
         double taxa = Double.parseDouble(txtPercentagem.getText().equals("") ? "0" : txtPercentagem.getText());
-        servicoTaxa.regista(txtTaxa.getText(), taxa, txtDescricao.getText());
+        try {
+            servicoTaxa.regista(txtTaxa.getText(), taxa, txtDescricao.getText());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (servicoTaxa.isOpsSuccess()) {
+            showSuccessAlert("Registo adicionado com sucesso");
             resetCampos();
             showTaxas();
         }
@@ -167,8 +176,14 @@ public class TaxaViewController implements Initializable {
     public void updateTaxa() {
         int id = Integer.parseInt(txtID.getText().equals("") ? "0" : txtID.getText());
         double taxa = Double.parseDouble(txtPercentagem.getText().equals("") ? "0" : txtPercentagem.getText());
-        servicoTaxa.actualizar(id, txtTaxa.getText(), taxa, txtDescricao.getText());
+        try {
+            servicoTaxa.actualizar(id, txtTaxa.getText(), taxa, txtDescricao.getText());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (servicoTaxa.isOpsSuccess()) {
+            showSuccessAlert("Registo actualizado com sucesso");
             resetCampos();
             showTaxas();
         }
@@ -200,10 +215,15 @@ public class TaxaViewController implements Initializable {
 
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                servicoTaxa.excluir(x.getId());
-                if (servicoTaxa.isOpsSuccess()) {
-                    showTaxas();
-                    resetCampos();
+                try {
+                    servicoTaxa.excluir(x.getId());
+                    if (servicoTaxa.isOpsSuccess()) {
+                        showSuccessAlert("Registo excluido com sucesso");
+                        showTaxas();
+                        resetCampos();
+                    }
+                } catch (ServiceException ex) {
+                    showErroAlert(ex.getMessage());
                 }
 
             } else if (result.get() == btnCancel) {

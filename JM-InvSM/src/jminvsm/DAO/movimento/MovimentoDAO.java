@@ -13,8 +13,7 @@ import jminvsm.model.produto.Produto;
 import jminvsm.model.requisicao.ItemRequisicao;
 import jminvsm.model.requisicao.Requisicao;
 import jminvsm.util.Conexao;
-import static jminvsm.util.AlertUtilities.showDialog;
-
+import jminvsm.dao.DaoErrorHandler;
 public class MovimentoDAO implements MovimentoDAOImpl {
 
     @Override
@@ -25,7 +24,7 @@ public class MovimentoDAO implements MovimentoDAOImpl {
             fillStatement(ps, entity);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Erro ao adicionar movimento: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Erro ao adicionar movimento: " + ex);
             return false;
         }
     }
@@ -41,7 +40,7 @@ public class MovimentoDAO implements MovimentoDAOImpl {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao consultar movimento: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao consultar movimento: " + ex);
         }
         return null;
     }
@@ -58,7 +57,7 @@ public class MovimentoDAO implements MovimentoDAOImpl {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao listar movimentos da requisicao: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao listar movimentos da requisicao: " + ex);
         }
         return lista;
     }
@@ -77,7 +76,7 @@ public class MovimentoDAO implements MovimentoDAOImpl {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao listar movimentos por produto: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao listar movimentos por produto: " + ex);
         }
         return lista;
     }

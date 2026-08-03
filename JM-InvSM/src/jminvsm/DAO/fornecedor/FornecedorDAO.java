@@ -12,11 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.fornecedor.contacto.ContactoFornecedor;
 import jminvsm.model.fornecedor.endereco.EnderecoFornecedor;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -42,7 +41,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -67,7 +66,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -127,7 +126,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar fornecedor: " + e, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao Bucar fornecedor: " + e);
 
         }
         return lista;
@@ -150,8 +149,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar fornecedor: " + e,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao Bucar fornecedor: " + e);
         }
         return c;
     }
@@ -174,8 +172,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar fornecedor: " + e,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao Bucar fornecedor: " + e);
         }
         return c;
     }
@@ -198,7 +195,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta!", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro de consulta!", "Detalhes: " + e);
 
         }
         return lista;
@@ -210,7 +207,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
             return jminvsm.util.SoftDeleteUtils.softDelete("fornecedor", x);
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return false;
     }
@@ -228,7 +225,7 @@ public class FornecedorDAO implements FornecedorDAOImpl<Fornecedor> {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de Contagem de Fornecedores!", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de Contagem de Fornecedores!", "Detalhes: " + ex);
         }
 
         return total;

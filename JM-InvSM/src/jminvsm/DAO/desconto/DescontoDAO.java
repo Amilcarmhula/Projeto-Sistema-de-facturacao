@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.desconto.Desconto;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -38,7 +38,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia: banco de dados", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia: banco de dados", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -63,7 +63,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -87,7 +87,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta: banco de dados", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta: banco de dados", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -97,7 +97,7 @@ public class DescontoDAO implements DescontoDAOImpl<Desconto> {
         try {
             return jminvsm.util.SoftDeleteUtils.softDelete("desconto", id);
         } catch (SQLException ex) {
-            showDialog("Erro de exclusao: banco de dados", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de exclusao: banco de dados", "Detalhes: " + ex);
         }
         return false;
     }

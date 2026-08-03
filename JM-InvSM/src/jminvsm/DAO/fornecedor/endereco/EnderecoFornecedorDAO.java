@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.fornecedor.endereco.EnderecoFornecedor;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 
@@ -55,7 +55,7 @@ import jminvsm.util.Conexao;
 //            }
 //
 //        } catch (SQLException ex) {
-//            showDialog("Erro persistencia", "Detalhes: " + ex);
+//            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
 //        } finally {
 //            try {
 //                if (ps != null) {
@@ -92,7 +92,7 @@ import jminvsm.util.Conexao;
 //            }
 //
 //        } catch (SQLException ex) {
-//            showDialog("Erro persistencia", "Detalhes: " + ex);
+//            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
 //        } finally {
 //            try {
 //                if (ps != null) {
@@ -127,7 +127,7 @@ import jminvsm.util.Conexao;
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Endereco: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("Informação", "Erro ao Buscar Endereco: " + ex);
 //        }
 //        return lista;
 //    }
@@ -154,7 +154,7 @@ import jminvsm.util.Conexao;
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao Buscar Endereco: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("Informação", "Erro ao Buscar Endereco: " + ex);
 //        }
 //        return lista;
 //    }
@@ -174,7 +174,7 @@ import jminvsm.util.Conexao;
 //            }
 //
 //        } catch (SQLException ex) {
-//            showDialog("Erro persistencia", "Detalhes: " + ex);
+//            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
 //        } finally {
 //            try {
 //                if (ps != null) {
@@ -219,7 +219,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia EnderecoFornecedor", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia EnderecoFornecedor", "Detalhes: " + ex);
         }
 
         return isSuccess;
@@ -253,7 +253,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro actualizacao EnderecoFornecedor", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro actualizacao EnderecoFornecedor", "Detalhes: " + ex);
         }
 
         return isSuccess;
@@ -289,7 +289,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
             }
 
         } catch (SQLException e) {
-            showDialog("Erro de listagem EnderecoFornecedor!", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro de listagem EnderecoFornecedor!", "Detalhes: " + e);
         }
 
         return lista;
@@ -329,7 +329,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
             }
 
         } catch (SQLException e) {
-            showDialog("Erro de consulta EnderecoFornecedor!", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro de consulta EnderecoFornecedor!", "Detalhes: " + e);
         }
 
         return lista;
@@ -341,7 +341,7 @@ public class EnderecoFornecedorDAO implements EnderecoFornecedorDAOImpl<Endereco
         try {
             return jminvsm.util.SoftDeleteUtils.softDelete("endereco_fornecedor", id);
         } catch (SQLException ex) {
-            showDialog("Erro exclusao EnderecoFornecedor", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro exclusao EnderecoFornecedor", "Detalhes: " + ex);
         }
 
         return false;

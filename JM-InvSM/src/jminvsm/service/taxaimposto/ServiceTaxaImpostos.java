@@ -8,8 +8,7 @@ import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import jminvsm.dao.imposto.ImpostoDAO;
 import jminvsm.model.imposto.Imposto;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -33,13 +32,11 @@ public class ServiceTaxaImpostos {
     public void regista(String identificador, Double percentagem, String descricao){
         setOpsSuccess(false);
         if(identificador == null || identificador.isEmpty()){
-            showErroAlert("Sigla da unidade de medida nao pode ser nulo!");
-            return;
+            throw new ServiceException("Sigla da taxa/imposto nao pode ser nula!");
         }
         
         if(percentagem == null || percentagem <=0){
-            showErroAlert("Percentagem nao pode ser nulo!");
-            return;
+            throw new ServiceException("Percentagem nao pode ser nula!");
         }
         
         if(descricao == null || descricao.isEmpty()){
@@ -52,25 +49,21 @@ public class ServiceTaxaImpostos {
         
         if(taxaDao.addEntity(t)){
             setOpsSuccess(true);
-            showSuccessAlert("Registo adicionado com sucesso");
         }
     }
     
     public void actualizar(Integer id, String identificador, Double percentagem, String descricao){
         setOpsSuccess(false);
         if (id == null || id <= 0) {
-            showErroAlert("Taxa/Imposto nao selecionada!");
-            return;
+            throw new ServiceException("Taxa/Imposto nao selecionada!");
         }
         
         if(identificador == null || identificador.isEmpty()){
-            showErroAlert("Sigla da unidade de medida nao pode ser nulo!");
-            return;
+            throw new ServiceException("Sigla da taxa/imposto nao pode ser nula!");
         }
         
         if(percentagem == null || percentagem <=0){
-            showErroAlert("Percentagem nao pode ser nulo!");
-            return;
+            throw new ServiceException("Percentagem nao pode ser nula!");
         }
         
         if(descricao == null || descricao.isEmpty()){
@@ -83,7 +76,6 @@ public class ServiceTaxaImpostos {
         
         if(taxaDao.updateEntityByID(t, id)){
             setOpsSuccess(true);
-            showSuccessAlert("Registo adicionado com sucesso");
         }
     }
     
@@ -92,7 +84,6 @@ public class ServiceTaxaImpostos {
         
         if(taxaDao.deleteEntity(id)){
             setOpsSuccess(true);
-            showSuccessAlert("Registo excluido com sucesso");
         }
     }
     public ObservableList<Imposto> getTaxas(){

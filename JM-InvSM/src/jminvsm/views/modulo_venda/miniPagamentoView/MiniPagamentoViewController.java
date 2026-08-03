@@ -6,9 +6,7 @@ package jminvsm.views.modulo_venda.miniPagamentoView;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +29,7 @@ import jminvsm.model.metodo_pagamento.MetodoPagamento;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.model.vendas.factura.Factura;
 import jminvsm.service.ServiceException;
-import jminvsm.service.metodoPagamento.ServiceMetodoPagamento;
-import jminvsm.service.transacoes.ServiceTransacoes;
-import jminvsm.service.vendas.factura.ServiceFactura;
+import jminvsm.service.transacoes.ServiceFluxoPagamento;
 import jminvsm.util.LoadAndMoveUtilities;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
@@ -47,7 +43,7 @@ public class MiniPagamentoViewController implements Initializable {
 
     private Empresa empresaData;
     private Usuario userData;
-    private ServiceFactura service;
+    private ServiceFluxoPagamento serviceFluxoPagamento;
 
     @FXML
     private Label labNumeroFactura;
@@ -71,10 +67,10 @@ public class MiniPagamentoViewController implements Initializable {
      * @throws java.sql.SQLException
      */
     public void processaPagamento(ActionEvent event) throws SQLException {
-        Factura f = service.consultaFactura(labNumeroFactura.getText());
+        Factura f = serviceFluxoPagamento.consultarFactura(labNumeroFactura.getText());
         if (!f.getEstado().equals("Paga") || !f.getEstado().equals("Cancelada")) {
             addTransacao(event);
-            f = service.consultaFactura(labNumeroFactura.getText());
+            f = serviceFluxoPagamento.consultarFactura(labNumeroFactura.getText());
         }
         if (f.getEstado().equals("Paga") || f.getEstado().equals("Cancelada")) {
             
@@ -99,7 +95,7 @@ public class MiniPagamentoViewController implements Initializable {
         this.userData = SessaoAplicacao.getUserData();
         this.empresaData = SessaoAplicacao.getEmpresaData();
         try {
-            service = new ServiceFactura();
+            serviceFluxoPagamento = new ServiceFluxoPagamento();
             labNumeroFactura.setText((String) SessaoAplicacao.getData());
             populateComboMetodoPagamento();
             showTotalFactura();
@@ -112,43 +108,16 @@ public class MiniPagamentoViewController implements Initializable {
     private Map<String, MetodoPagamento> mapaMetodos;
 
     public void populateComboMetodoPagamento() throws SQLException {
-        ServiceMetodoPagamento sm = new ServiceMetodoPagamento();
-        listaMetodosPagamento = sm.listaMetodos();
-        mapaMetodos = new HashMap<>();
+        listaMetodosPagamento = serviceFluxoPagamento.listarMetodos();
+        mapaMetodos = serviceFluxoPagamento.mapearMetodosPorNome(listaMetodosPagamento);
         List<String> lista = new ArrayList<>();
         for (MetodoPagamento metodoPagamento : listaMetodosPagamento) {
-            mapaMetodos.put(metodoPagamento.getNomePagamento(), metodoPagamento);
             lista.add(metodoPagamento.getNomePagamento());
         }
         combmetodoPagamento.setItems(FXCollections.observableList(lista));
 
     }
 
-    
-
-//    public double valorRecebidoListener() {
-//        txtValorRecebido.textProperty().addListener((new ChangeListener<String>() {
-//            @Override
-//            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-//                MetodoPagamento metodo = mapaMetodos.get(combmetodoPagamento.getValue());
-//
-//                double total = Double.parseDouble(labTotal.getText());
-//                double valorRecebido = 0;
-//                if (!newValue.isEmpty()) {
-//                    valorRecebido = Double.parseDouble(newValue);
-//                }
-//
-//                if (metodo != null && metodo.getId() == 1 && total < valorRecebido) {
-//                    troco = valorRecebido - total;
-//                    labTrocos.setText(troco + " Mt");
-//                } else {
-//                    troco = 0;
-//                    labTrocos.setText(troco + " Mt");
-//                }
-//            }
-//        }));
-//        return troco;
-//    }
     private double troco;
 
     public double getTroco() {
@@ -164,54 +133,36 @@ public class MiniPagamentoViewController implements Initializable {
                 valorRecebido = Double.parseDouble(newVal);
             }
 
-            if (metodo != null && metodo.getId() == 1 && total < valorRecebido) {
-                troco = valorRecebido - total;
-                labTrocos.setText(troco+" Mt");
-            } else {
-                troco = 0;
-                labTrocos.setText(troco+" Mt");
-            }
+            troco = serviceFluxoPagamento.calcularTroco(total, valorRecebido, metodo);
+            labTrocos.setText(troco+" Mt");
         }));
         return troco;
     }
 
     public void addTransacao(ActionEvent e) throws SQLException {
-        ServiceTransacoes st = new ServiceTransacoes();
         if (combmetodoPagamento.getValue() == null) {
             showErroAlert( "Metodo de pagamento nao selecionado!");
             return;
         }
         MetodoPagamento metodo = mapaMetodos.get(combmetodoPagamento.getValue());
-        String dataPagamento = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-
-        double total = Double.parseDouble(labTotal.getText());
-        double valorRecebido = Double.parseDouble(txtValorRecebido.getText().equals("") ? "0" : txtValorRecebido.getText());
-        double valorPago;
-        if (metodo.getId() == 1 && total < valorRecebido) {
-            valorPago = valorRecebido - getTroco();
-        }else{
-            valorPago = valorRecebido;
-        }
         try {
-            st.registapagamentoFacturaAvista(dataPagamento, valorRecebido, valorPago, getTroco(),
-                    txtDescricao.getText(), empresaData.getContaBancaria().getId(),
-                    metodo.getId(), labNumeroFactura.getText(), userData);
+            boolean registado = serviceFluxoPagamento.registarPagamentoAvista(labNumeroFactura.getText(),
+                    txtValorRecebido.getText(), getTroco(), txtDescricao.getText(), metodo, empresaData, userData);
+            if (!registado) {
+                return;
+            }
         } catch (ServiceException ex) {
             showErroAlert(ex.getMessage());
             return;
         }
-        if (st.isOpsSuccess()) {
-            showSuccessAlert("Pagamento registado com sucesso!");
-            txtDescricao.setText("");
-            txtValorRecebido.setText("");
-            showTotalFactura();
-        }
+        showSuccessAlert("Pagamento registado com sucesso!");
+        txtDescricao.setText("");
+        txtValorRecebido.setText("");
+        showTotalFactura();
     }
 
     public void showTotalFactura() throws SQLException {
-        Factura f = service.consultaFactura(labNumeroFactura.getText());
-        double total = f.getTotal() - f.getTotalPago();
-        labTotal.setText(total + "");
+        labTotal.setText(serviceFluxoPagamento.saldoFactura(labNumeroFactura.getText()) + "");
 
     }
 

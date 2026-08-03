@@ -10,7 +10,7 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.desconto.Desconto;
 import jminvsm.model.desconto.ProdutoDesconto;
 import jminvsm.model.produto.Produto;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -121,7 +121,7 @@ public class ProdutoDescontoDAO {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta!", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro de consulta!", "Detalhes: " + e);
         }
         return lista;
     }

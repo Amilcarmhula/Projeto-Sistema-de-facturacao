@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.armazem.endereco.EnderecoArmazem;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -55,7 +55,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro de persistencia!", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de persistencia!", "Detalhes: " + ex);
         } 
         return isSuccess;
 
@@ -87,7 +87,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro de persistencia!", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de persistencia!", "Detalhes: " + ex);
         } 
 //        finally {
 //            try {
@@ -122,7 +122,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta!", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta!", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -149,7 +149,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta!", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta!", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -160,7 +160,7 @@ public class EnderecoArmazemDAO implements EnderecoArmazemDAOImpl<EnderecoArmaze
             return jminvsm.util.SoftDeleteUtils.softDelete("endereco_armazem", id);
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
-            showDialog("Erro de exclusao", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de exclusao", "Detalhes: " + ex);
         }
         return false;
     }

@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,6 +30,7 @@ import jminvsm.model.vendas.factura.Factura;
 import jminvsm.service.caixa.ServiceCaixa;
 import jminvsm.service.cliente.ServiceCliente;
 import jminvsm.service.contacorrente.ServiceContaCorrente;
+import jminvsm.service.listagem.ServicePesquisaListagem;
 import jminvsm.service.vendas.factura.ServiceFactura;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -45,6 +45,7 @@ public class SearchFacturaController implements Initializable {
     private ServiceCliente serviceCliente;
     private ServiceCaixa serviceCaixa;
     private ServiceContaCorrente serviceContaCorrente;
+    private ServicePesquisaListagem servicePesquisa;
 
     @FXML
     private TableView<Factura> tabelaFactura;
@@ -117,6 +118,7 @@ public class SearchFacturaController implements Initializable {
             serviceCliente = new ServiceCliente();
             serviceCaixa = new ServiceCaixa();
             serviceContaCorrente = new ServiceContaCorrente();
+            servicePesquisa = new ServicePesquisaListagem();
 
             showCountCliente();
 
@@ -132,15 +134,16 @@ public class SearchFacturaController implements Initializable {
     }
 
     private ObservableList<Factura> listaFacturas;
+    private boolean pesquisaConfigurada;
 
     public void showFacturas() {
         listaFacturas = serviceFactura.exibeFactura();
 
         numero.setCellValueFactory(new PropertyValueFactory<>("numero_fac"));
         tipo.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getDocComerciais().getNome_doc()));
+                -> new SimpleStringProperty(servicePesquisa.tipoFactura(cellData.getValue())));
         cliente.setCellValueFactory(cellData
-                -> new SimpleStringProperty(cellData.getValue().getCliente().getRazao_cli()));
+                -> new SimpleStringProperty(servicePesquisa.clienteFactura(cellData.getValue())));
         dataemissao.setCellValueFactory(new PropertyValueFactory<>("data_emissao"));
         datavencimento.setCellValueFactory(new PropertyValueFactory<>("data_vencimento"));
         total.setCellValueFactory(new PropertyValueFactory<>("total"));
@@ -148,33 +151,20 @@ public class SearchFacturaController implements Initializable {
         saldoPendente.setCellValueFactory(new PropertyValueFactory<>("saldoPendente"));
         estado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
-        FilteredList<Factura> dadosFiltrados = new FilteredList<>(listaFacturas, b -> true);
-        txtFilter.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
+        configurarPesquisa();
+        aplicarPesquisa();
+    }
 
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getNumero_fac().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getCliente().getRazao_cli().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getData_emissao().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getData_vencimento().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getEstado().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getDocComerciais().getNome_doc().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else {
-                    return false;
-                }
+    private void configurarPesquisa() {
+        if (!pesquisaConfigurada) {
+            txtFilter.textProperty().addListener((observable, oldValue, newValue) -> aplicarPesquisa());
+            pesquisaConfigurada = true;
+        }
+    }
 
-            });
-        });
-        SortedList<Factura> sortedData = new SortedList<>(dadosFiltrados);
+    private void aplicarPesquisa() {
+        SortedList<Factura> sortedData = new SortedList<>(
+                servicePesquisa.filtrarFacturas(listaFacturas, txtFilter.getText()));
         sortedData.comparatorProperty().bind(tabelaFactura.comparatorProperty());
 
         tabelaFactura.setItems(sortedData);

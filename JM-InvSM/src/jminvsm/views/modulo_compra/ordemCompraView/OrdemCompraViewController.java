@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,8 +36,10 @@ import jminvsm.model.requisicao.Requisicao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.armazem.ServiceArmazem;
 import jminvsm.service.compra.ServiceOrdemCompra;
+import jminvsm.service.compra.ServiceOrdemCompraFormulario;
 import jminvsm.service.ServiceException;
 import jminvsm.service.fornecedor.ServiceFornecedor;
+import jminvsm.service.listagem.ServicePesquisaListagem;
 import jminvsm.service.produto.ServiceProduto;
 import jminvsm.service.requisicao.ServiceRequisicao;
 import static jminvsm.util.AlertUtilities.showErroAlert;
@@ -51,6 +52,8 @@ public class OrdemCompraViewController implements Initializable {
     private ServiceFornecedor serviceFornecedor;
     private ServiceProduto serviceProduto;
     private ServiceArmazem serviceArmazem;
+    private ServiceOrdemCompraFormulario serviceFormulario;
+    private final ServicePesquisaListagem servicePesquisaListagem = new ServicePesquisaListagem();
     private Usuario userData;
 
     private final ObservableList<ItemOrdemCompra> itensNovaOrdem = FXCollections.observableArrayList();
@@ -165,26 +168,15 @@ public class OrdemCompraViewController implements Initializable {
     private void adicionarItem() {
         Produto produto = combProduto.getSelectionModel().getSelectedItem();
         Armazem armazem = combArmazem.getSelectionModel().getSelectedItem();
-        Integer quantidade = parseInteger(txtQuantidade.getText());
-        Double custo = parseDouble(txtCustoUnitario.getText());
-        if (produto == null || armazem == null || quantidade == null || quantidade <= 0 || custo == null || custo < 0) {
-            showErroAlert("Seleccione produto, armazem, quantidade e custo validos!");
-            return;
+        try {
+            itensNovaOrdem.add(serviceFormulario.montarItemManual(produto, armazem,
+                    txtQuantidade.getText(), txtCustoUnitario.getText()));
+            txtQuantidade.clear();
+            txtCustoUnitario.clear();
+            combProduto.requestFocus();
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
         }
-        ItemOrdemCompra item = serviceOrdemCompra.novoItem(produto.getId(), armazem.getId(), quantidade, custo, null);
-        if (item == null) {
-            showErroAlert("Dados do item invalidos!");
-            return;
-        }
-        item.setProduto(produto);
-        item.setArmazem(armazem);
-        item.setCustoUnitario(custo);
-        item.setSubtotal(quantidade * custo);
-        item.setTotalLinha(quantidade * custo);
-        itensNovaOrdem.add(item);
-        txtQuantidade.clear();
-        txtCustoUnitario.clear();
-        combProduto.requestFocus();
     }
 
     @FXML
@@ -207,7 +199,7 @@ public class OrdemCompraViewController implements Initializable {
             return;
         }
         OrdemCompra ordem = new OrdemCompra();
-        ordem.setNumero(numeroOrdem());
+        ordem.setNumero(serviceFormulario.numeroOrdem(txtNumero.getText()));
         ordem.setFornecedor(fornecedor);
         ordem.setRequisicao(combRequisicao.getSelectionModel().getSelectedItem());
         ordem.setDataEmissao(LocalDate.now());
@@ -253,7 +245,7 @@ public class OrdemCompraViewController implements Initializable {
         }
 
         OrdemCompra ordem = new OrdemCompra();
-        ordem.setNumero(numeroOrdem());
+        ordem.setNumero(serviceFormulario.numeroOrdem(txtNumero.getText()));
         ordem.setFornecedor(fornecedor);
         ordem.setRequisicao(requisicao);
         ordem.setDataEmissao(LocalDate.now());
@@ -351,6 +343,7 @@ public class OrdemCompraViewController implements Initializable {
     private void inicializarServices() {
         try {
             serviceOrdemCompra = new ServiceOrdemCompra();
+            serviceFormulario = new ServiceOrdemCompraFormulario(serviceOrdemCompra);
             serviceRequisicao = new ServiceRequisicao();
             serviceFornecedor = new ServiceFornecedor();
             serviceProduto = new ServiceProduto();
@@ -431,8 +424,8 @@ public class OrdemCompraViewController implements Initializable {
 
     private void configurarTabelas() {
         tabelaItensNova.setEditable(true);
-        colItemProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
-        colItemArmazem.setCellValueFactory(cell -> new SimpleStringProperty(nomeArmazem(cell.getValue())));
+        colItemProduto.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeProduto(cell.getValue())));
+        colItemArmazem.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeArmazem(cell.getValue())));
         colItemQuantidade.setCellValueFactory(new PropertyValueFactory<ItemOrdemCompra, Integer>("quantidadeSolicitada"));
         colItemCusto.setCellValueFactory(new PropertyValueFactory<ItemOrdemCompra, Double>("custoUnitario"));
         colItemCusto.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
@@ -444,7 +437,7 @@ public class OrdemCompraViewController implements Initializable {
                 return;
             }
             item.setCustoUnitario(custo);
-            actualizarTotaisItem(item);
+            serviceOrdemCompra.actualizarTotaisItem(item);
             tabelaItensNova.refresh();
         });
         colItemTotal.setCellValueFactory(new PropertyValueFactory<ItemOrdemCompra, Double>("totalLinha"));
@@ -452,14 +445,14 @@ public class OrdemCompraViewController implements Initializable {
 
         colOcId.setCellValueFactory(new PropertyValueFactory<OrdemCompra, Integer>("id"));
         colOcNumero.setCellValueFactory(new PropertyValueFactory<OrdemCompra, String>("numero"));
-        colOcFornecedor.setCellValueFactory(cell -> new SimpleStringProperty(nomeFornecedor(cell.getValue())));
+        colOcFornecedor.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeFornecedor(cell.getValue())));
         colOcEmissao.setCellValueFactory(new PropertyValueFactory<OrdemCompra, String>("dataEmissao"));
         colOcEntrega.setCellValueFactory(new PropertyValueFactory<OrdemCompra, String>("dataPrevistaEntrega"));
         colOcEstado.setCellValueFactory(new PropertyValueFactory<OrdemCompra, String>("estado"));
         colOcTotal.setCellValueFactory(new PropertyValueFactory<OrdemCompra, Double>("total"));
 
-        colDetalheProduto.setCellValueFactory(cell -> new SimpleStringProperty(nomeProduto(cell.getValue())));
-        colDetalheArmazem.setCellValueFactory(cell -> new SimpleStringProperty(nomeArmazem(cell.getValue())));
+        colDetalheProduto.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeProduto(cell.getValue())));
+        colDetalheArmazem.setCellValueFactory(cell -> new SimpleStringProperty(servicePesquisaListagem.nomeArmazem(cell.getValue())));
         colDetalheSolicitada.setCellValueFactory(new PropertyValueFactory<ItemOrdemCompra, Integer>("quantidadeSolicitada"));
         colDetalheRecebida.setCellValueFactory(new PropertyValueFactory<ItemOrdemCompra, Integer>("quantidadeRecebida"));
         colDetalhePendente.setCellValueFactory(new PropertyValueFactory<ItemOrdemCompra, Integer>("quantidadePendente"));
@@ -472,24 +465,10 @@ public class OrdemCompraViewController implements Initializable {
         if (tabelaOrdens == null || listaOrdens == null) {
             return;
         }
-        FilteredList<OrdemCompra> dadosFiltrados = new FilteredList<OrdemCompra>(listaOrdens, ordem -> true);
         String filtro = txtPesquisa != null ? txtPesquisa.getText() : null;
-        if (filtro != null && !filtro.trim().isEmpty()) {
-            final String termo = filtro.trim().toLowerCase();
-            dadosFiltrados.setPredicate(ordem -> ordemContem(ordem, termo));
-        }
-        SortedList<OrdemCompra> sortedData = new SortedList<OrdemCompra>(dadosFiltrados);
+        SortedList<OrdemCompra> sortedData = new SortedList<OrdemCompra>(servicePesquisaListagem.filtrarOrdensCompra(listaOrdens, filtro));
         sortedData.comparatorProperty().bind(tabelaOrdens.comparatorProperty());
         tabelaOrdens.setItems(sortedData);
-    }
-
-    private boolean ordemContem(OrdemCompra ordem, String termo) {
-        return String.valueOf(ordem.getId()).contains(termo)
-                || contains(ordem.getNumero(), termo)
-                || contains(ordem.getEstado(), termo)
-                || contains(nomeFornecedor(ordem), termo)
-                || contains(ordem.getDataEmissao(), termo)
-                || contains(ordem.getDataPrevistaEntrega(), termo);
     }
 
     private void setOrdemSelecionada(OrdemCompra ordem) {
@@ -500,7 +479,7 @@ public class OrdemCompraViewController implements Initializable {
         }
         labOcId.setText(String.valueOf(ordem.getId()));
         labOcNumero.setText(safe(ordem.getNumero()));
-        labOcFornecedor.setText(nomeFornecedor(ordem));
+        labOcFornecedor.setText(servicePesquisaListagem.nomeFornecedor(ordem));
         labOcEstado.setText(safe(ordem.getEstado()));
         labOcTotal.setText(String.valueOf(ordem.getTotal()));
         labOcSelecionadaAux.setText("#" + ordem.getId() + " - " + safe(ordem.getNumero()));
@@ -522,68 +501,32 @@ public class OrdemCompraViewController implements Initializable {
             itensNovaOrdem.clear();
             return;
         }
-        ObservableList<ItemRequisicao> itensRequisicao = serviceRequisicao.consultaItens(requisicao.getId());
         itensNovaOrdem.clear();
-        for (ItemRequisicao itemRequisicao : itensRequisicao) {
-            ItemOrdemCompra item = serviceOrdemCompra.novoItem(
-                    itemRequisicao.getProduto().getId(),
-                    itemRequisicao.getArmazem().getId(),
-                    itemRequisicao.getQuantidade(),
-                    0.00,
-                    itemRequisicao.getId());
-            if (item != null) {
-                item.setProduto(itemRequisicao.getProduto());
-                item.setArmazem(itemRequisicao.getArmazem());
-                item.setItemRequisicao(itemRequisicao);
-                actualizarTotaisItem(item);
-                itensNovaOrdem.add(item);
-            }
-        }
+        itensNovaOrdem.addAll(serviceFormulario.montarItensDaRequisicao(serviceRequisicao.consultaItens(requisicao.getId())));
     }
 
     private boolean garantirItensDaRequisicaoCarregados(Requisicao requisicao) {
         if (itensNovaOrdem.isEmpty()) {
             carregarItensRequisicaoSelecionada();
         }
-        if (itensNovaOrdem.isEmpty()) {
-            showErroAlert("A requisicao seleccionada nao possui itens para ordem de compra!");
+        try {
+            serviceFormulario.validarItensDaRequisicao(itensNovaOrdem, requisicao);
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
             return false;
-        }
-        for (ItemOrdemCompra item : itensNovaOrdem) {
-            if (item.getItemRequisicao() == null || item.getItemRequisicao().getId() <= 0) {
-                showErroAlert("Os itens da ordem devem estar vinculados aos itens da requisicao!");
-                return false;
-            }
-            if (item.getItemRequisicao().getRequisicao() == null
-                    || item.getItemRequisicao().getRequisicao().getId() != requisicao.getId()) {
-                showErroAlert("Existem itens que nao pertencem a requisicao seleccionada!");
-                return false;
-            }
         }
         return true;
     }
 
     private boolean validarCustosItensRequisicao() {
-        for (ItemOrdemCompra item : itensNovaOrdem) {
-            if (item.getCustoUnitario() <= 0) {
-                showErroAlert("Informe custo unitario maior que zero para todos os itens da requisicao!");
-                tabelaItensNova.getSelectionModel().select(item);
-                tabelaItensNova.scrollTo(item);
-                return false;
-            }
-            actualizarTotaisItem(item);
+        try {
+            serviceFormulario.validarItensDaRequisicao(itensNovaOrdem, combRequisicao.getSelectionModel().getSelectedItem());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return false;
         }
         tabelaItensNova.refresh();
         return true;
-    }
-
-    private void actualizarTotaisItem(ItemOrdemCompra item) {
-        if (item == null) {
-            return;
-        }
-        double subtotal = item.getQuantidadeSolicitada() * item.getCustoUnitario();
-        item.setSubtotal(subtotal);
-        item.setTotalLinha(subtotal - item.getDesconto() + item.getImposto());
     }
 
     private boolean hasOrdemSelecionada() {
@@ -604,48 +547,8 @@ public class OrdemCompraViewController implements Initializable {
         tabelaItensDetalhe.setItems(FXCollections.<ItemOrdemCompra>observableArrayList());
     }
 
-    private String numeroOrdem() {
-        String numero = txtNumero.getText();
-        if (numero == null || numero.trim().isEmpty()) {
-            return "OC-" + System.currentTimeMillis();
-        }
-        return numero.trim();
-    }
-
-    private Integer parseInteger(String value) {
-        try {
-            return value == null || value.trim().isEmpty() ? null : Integer.valueOf(value.trim());
-        } catch (NumberFormatException ex) {
-            return null;
-        }
-    }
-
-    private Double parseDouble(String value) {
-        try {
-            return value == null || value.trim().isEmpty() ? null : Double.valueOf(value.trim().replace(',', '.'));
-        } catch (NumberFormatException ex) {
-            return null;
-        }
-    }
-
-    private boolean contains(String value, String termo) {
-        return value != null && value.toLowerCase().contains(termo);
-    }
-
-    private String nomeFornecedor(OrdemCompra ordem) {
-        return ordem != null && ordem.getFornecedor() != null ? safe(ordem.getFornecedor().getRazaosocial_forn()) : "";
-    }
-
-    private String nomeProduto(ItemOrdemCompra item) {
-        return item != null && item.getProduto() != null ? safe(item.getProduto().getNome()) : "";
-    }
-
-    private String nomeArmazem(ItemOrdemCompra item) {
-        return item != null && item.getArmazem() != null ? safe(item.getArmazem().getNome_arm()) : "";
-    }
-
     private String safe(String value) {
-        return value == null ? "" : value;
+        return servicePesquisaListagem.safeText(value);
     }
 }
 

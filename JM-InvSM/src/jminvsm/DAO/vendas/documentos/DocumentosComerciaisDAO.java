@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.model.vendas.Documentos.DocumentosComerciais;
 import jminvsm.util.Conexao;
 
@@ -39,7 +39,7 @@ public class DocumentosComerciaisDAO implements DocumentosComerciaisDAOImpl<Docu
             }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Documentos: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao Buscar Documentos: " + ex);
         }
         return lista;
     }

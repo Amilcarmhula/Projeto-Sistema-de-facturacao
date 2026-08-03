@@ -31,6 +31,37 @@ Organizar o projecto por responsabilidades claras, mantendo o comportamento actu
 15. Services antigos de configuracao, usuario, cliente, fornecedor, armazem, produto, vendas e transacoes deixaram de abrir alertas directamente.
 16. Subservices de contactos/enderecos de cliente, fornecedor e armazem tambem passaram a lancar `ServiceException`.
 17. Controllers afectados passaram a capturar `ServiceException` e concentrar mensagens de sucesso/erro na camada `views`.
+18. Services auxiliares de categoria, desconto, taxa/imposto, unidade de medida, parcela, lote, movimento, reserva, preco por produto/armazem e auditoria tambem deixaram de abrir alertas directamente.
+19. Controllers de categoria, desconto, taxas, unidade, produto, pagamentos e configuracao/auditoria foram ajustados para tratar `ServiceException` na camada visual.
+20. O login deixou de instanciar `EmpresaDAO` directamente e passou a obter dados da empresa por `ServiceEmpresa`.
+21. Foi criado `ServiceCalculoPagamento` para centralizar o calculo de troco e valor pago, removendo regra de negocio duplicada dos controllers de pagamento.
+22. `ServiceOrdemCompra` passou a calcular subtotal/total dos itens de ordem de compra, incluindo edicoes de custo feitas na tela.
+23. `ServiceRecebimentoCompra` passou a calcular subtotal dos itens recebidos, retirando essa regra do controller de recebimento.
+24. `ServiceContaPagar` passou a centralizar a regra de contas pagaveis e o calculo do saldo aberto.
+25. `ServiceFacturaFornecedor` e `ServicePagamentoFornecedor` receberam metodos orientados ao fluxo da interface, validando objectos seleccionados e reduzindo validacoes de negocio nos controllers.
+26. `VendasPorFacturacaoViewController` passou a delegar emissao/conversao de factura, preparacao de itens, regras de cotacao/proforma, calculo de totais e criterio de pesquisa de produtos para services de venda.
+27. Foram criados `ServiceVendaFacturacao`, `ServiceCotacao`, `ServiceCalculoFactura` e `ServiceItemFactura` para reduzir responsabilidades de negocio dentro da interface de venda por facturacao.
+28. `ProdutoController` passou a delegar cadastro/actualizacao/exclusao, preparacao de opcoes de combos, criterio de pesquisa, regras de preco/desconto e validacao de abertura de stock para services de produto.
+29. Foram criados `ServiceProdutoCadastro`, `ServiceProdutoPreco`, `ServiceProdutoConfiguracao`, `ServicePesquisaProduto` e `OpcoesProdutoCadastro` para reduzir responsabilidades de inventario/produto dentro da interface.
+30. `AddClienteController` passou a delegar cadastro/actualizacao de cliente, contactos e enderecos para services especificos, mantendo a interface focada em eventos, preenchimento visual e mensagens.
+31. Foram criados `ServiceClienteCadastro`, `ServiceContactoCliente` e `ServiceEnderecoCliente` para centralizar validacoes, conversao de IDs/numeros, consultas auxiliares e chamadas aos services antigos de cliente.
+32. `AddFornecedorController` passou a delegar cadastro/actualizacao de fornecedor, contactos e enderecos para services especificos, seguindo o mesmo padrao aplicado ao cadastro composto de cliente.
+33. Foram criados `ServiceFornecedorCadastro`, `ServiceContactoFornecedor` e `ServiceEnderecoFornecedor` para concentrar conversao de campos da interface, validacao de fornecedor guardado e consultas auxiliares do modulo de fornecedor.
+34. `AddArmazemController` passou a delegar cadastro/actualizacao de armazem, contactos e enderecos para services especificos, retirando conversoes de IDs/numeros e consultas auxiliares da interface.
+35. Foram criados `ServiceArmazemCadastro`, `ServiceContactoArmazem` e `ServiceEnderecoArmazem` para aplicar o mesmo padrao de cadastro composto usado em cliente e fornecedor.
+36. `AddStockController` passou a delegar entrada manual de stock, consulta de lotes/resumo/detalhes, listagem de armazens/fornecedores e calculo de valor total para `ServiceEntradaStock`.
+37. `ServiceTransferenciaStock` recebeu uma sobrecarga orientada a interface para transferencia directa administrativa usando produto, armazens e quantidade textual, retirando parse/validacao do controller.
+38. `DashboardController` passou a apresentar um resumo pronto do dashboard, deixando de agregar directamente services de factura, cliente, fornecedor, produto, stock, armazem, caixa e conta corrente.
+39. Foram criados `ServiceDashboard`, `DashboardResumo` e `DashboardIndicadores` para centralizar consultas, filtros de categoria/armazem, movimentos, totais financeiros e textos dos indicadores.
+40. `RequisicaoTransferenciaController` passou a delegar pesquisa, formatação de produtos/armazens/transferencias e conversao de quantidade para um service auxiliar.
+41. Foi criado `ServiceTransferenciaConsulta` para concentrar filtros textuais, rotulos de apresentacao e validacao textual da quantidade na requisicao de transferencia.
+42. Telas de pesquisa/listagem de produto, factura, cliente, fornecedor, armazem e categoria passaram a delegar filtros textuais e textos seguros de apresentacao para um service comum.
+43. Foi criado `ServicePesquisaListagem` para concentrar filtros e formatacao de colunas em listagens, reduzindo duplicacao de predicados e acessos encadeados dentro dos controllers.
+44. DAOs antigos de cliente, fornecedor, produto, stock, factura, itens, empresa, armazem, categoria, imposto, unidade, desconto, parcela, caixa, conta corrente, lotes, movimentos, reservas, configuracao e auditoria deixaram de abrir alertas JavaFX/Swing.
+45. Chamadas de `AlertUtilities`, `JOptionPane` e blocos comentados antigos com UI foram removidos da camada DAO; erros tecnicos passaram a ser registados por `DaoErrorHandler.log`.
+46. Controllers de requisicao, ordem de compra, recebimento e financeiro do fornecedor passaram a delegar filtros, textos seguros e formatacao de listagens para `ServicePesquisaListagem`.
+47. Foram criados `ServiceOrdemCompraFormulario` e `ServiceRecebimentoCompraFormulario` para centralizar montagem de itens, conversao de valores textuais, validacao de itens vinculados a requisicao/ordem e consulta de custo/lote no fluxo de compra.
+48. `PagamentoController` e `MiniPagamentoViewController` passaram a usar `ServiceFluxoPagamento`, removendo instanciacoes de services dentro dos metodos de pagamento, consulta de factura, transacoes e metodos de pagamento.
 
 ## Regras de dependencia
 
@@ -38,13 +69,15 @@ Organizar o projecto por responsabilidades claras, mantendo o comportamento actu
 - `dao` deve depender de `model` e `util` de infraestrutura, mas nao deve chamar controllers/FXML.
 - `service` deve depender de `dao`, `model` e `util`, mas nao deve carregar telas nem abrir alertas.
 - `views` pode chamar `service` e adaptar mensagens para o utilizador.
+- `views` nao deve importar ou instanciar DAOs; qualquer consulta, persistencia ou regra operacional deve passar por `service`.
+- `views` deve limitar-se a eventos, preenchimento de campos, configuracao visual de tabelas/combos e apresentacao de mensagens.
 - Regras de negocio devem comunicar falhas por `ServiceException`.
 - DAOs devem registar erro tecnico por logging e nao por JavaFX/Swing.
 - `SysFact` deve continuar como bootstrap da aplicacao e nao como deposito de estado de negocio.
 
 ## Pendencias recomendadas
 
-1. Aplicar o mesmo padrao aos services auxiliares ainda fora dos modulos tratados, como categoria, desconto, imposto, unidade de medida, parcela, lote, movimento e reserva.
+1. Fazer uma varredura final em todos os services restantes para confirmar se algum modulo nao listado ainda usa `AlertUtilities` ou Swing.
 2. Padronizar resultados de service em objectos de resultado quando for necessario devolver mensagens de sucesso, avisos e dados juntos.
 3. Rever o pacote `jminvsm.reports` para decidir se ele permanece como modulo documental ou se sera integrado ao modulo fiscal/documentos.
 4. Remover classes em `teste` do build principal quando houver estrutura formal de testes.

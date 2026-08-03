@@ -7,8 +7,7 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.requisicao.Requisicao;
 import jminvsm.model.reserva.ReservaStock;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 public class ServiceReservaStock {
 
@@ -31,8 +30,7 @@ public class ServiceReservaStock {
         setOpsSuccess(false);
         if (idProduto == null || idProduto <= 0 || idArmazem == null || idArmazem <= 0
                 || idRequisicao == null || idRequisicao <= 0 || quantidade == null || quantidade <= 0) {
-            showErroAlert("Dados da reserva invalidos!");
-            return;
+            throw new ServiceException("Dados da reserva invalidos!");
         }
 
         Produto produto = new Produto();
@@ -53,7 +51,6 @@ public class ServiceReservaStock {
 
         if (reservaStockDao.addEntity(reserva)) {
             setOpsSuccess(true);
-            showSuccessAlert("Reserva registada com sucesso!");
         }
     }
 
@@ -72,12 +69,10 @@ public class ServiceReservaStock {
     public boolean alteraEstadoReservasRequisicao(int idRequisicao, String estado) {
         setOpsSuccess(false);
         if (idRequisicao <= 0 || estado == null || estado.trim().isEmpty()) {
-            showErroAlert("Dados para alterar reservas invalidos!");
-            return false;
+            throw new ServiceException("Dados para alterar reservas invalidos!");
         }
         if (reservaStockDao.updateEstadoByRequisicao(idRequisicao, estado)) {
             setOpsSuccess(true);
-            showSuccessAlert("Reservas atualizadas com sucesso!");
         }
         return isOpsSuccess();
     }

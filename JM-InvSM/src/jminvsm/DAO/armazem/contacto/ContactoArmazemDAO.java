@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.armazem.contacto.ContactoArmazem;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -50,7 +50,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro de persistencia!", "Detalhes: "+ex);
+            DaoErrorHandler.log("Erro de persistencia!", "Detalhes: "+ex);
         } 
         return isSuccess;
     }
@@ -77,7 +77,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro de persistencia!", "Detalhes: "+ex);
+            DaoErrorHandler.log("Erro de persistencia!", "Detalhes: "+ex);
         } 
         return isSuccess;
     }
@@ -100,7 +100,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
             }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta!", "Detalhes: "+ex);
+            DaoErrorHandler.log("Erro de consulta!", "Detalhes: "+ex);
         }
         return lista;
     }
@@ -124,7 +124,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
             }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta!", "Detalhes: "+ex);
+            DaoErrorHandler.log("Erro de consulta!", "Detalhes: "+ex);
         }
         return lista;
     }
@@ -135,7 +135,7 @@ public class ContactoArmazemDAO implements ContactoArmazemDAOImpl<ContactoArmaze
             return jminvsm.util.SoftDeleteUtils.softDelete("contacto_armazem", x);
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
-            showDialog("Erro de exclusao", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de exclusao", "Detalhes: " + ex);
         } 
         return false;
     }

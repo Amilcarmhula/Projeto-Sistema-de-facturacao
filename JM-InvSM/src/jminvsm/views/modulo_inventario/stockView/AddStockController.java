@@ -5,6 +5,7 @@
 package jminvsm.views.modulo_inventario.stockView;
 
 import java.net.URL;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,11 +39,8 @@ import jminvsm.model.produto.Produto;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
-import jminvsm.service.armazem.ServiceArmazem;
-import jminvsm.service.fornecedor.ServiceFornecedor;
 import jminvsm.service.ServiceException;
-import jminvsm.service.produto.fornecido.ServiceProdutoFornecido;
-import jminvsm.service.stock.ServiceStock;
+import jminvsm.service.stock.ServiceEntradaStock;
 import jminvsm.service.transferencia.ServiceTransferenciaStock;
 import jminvsm.util.LoadAndMoveUtilities;
 import static jminvsm.util.AlertUtilities.showErroAlert;
@@ -55,15 +53,10 @@ import static jminvsm.util.AlertUtilities.showSuccessAlert;
  */
 public class AddStockController implements Initializable {
 
-    private ServiceProdutoFornecido service;
-    private ServiceArmazem serviceArmazem;
-    private ServiceFornecedor servicoFornecedor;
-    private ServiceProdutoFornecido servicoprodFornecido;
-    private ServiceStock serviceStock;
+    private ServiceEntradaStock serviceEntradaStock;
     private ServiceTransferenciaStock serviceTransferenciaStock;
 
     private Usuario userData;
-    private Stock stock;
     private Produto prod;
     @FXML
     private Button btnAdd;
@@ -190,11 +183,7 @@ public class AddStockController implements Initializable {
         txtIDProduto.setText(String.valueOf(prod.getId()));
 
         try {
-            service = new ServiceProdutoFornecido();
-            serviceArmazem = new ServiceArmazem();
-            servicoFornecedor = new ServiceFornecedor();
-            servicoprodFornecido = new ServiceProdutoFornecido();
-            serviceStock = new ServiceStock();
+            serviceEntradaStock = new ServiceEntradaStock();
             serviceTransferenciaStock = new ServiceTransferenciaStock();
             this.userData = SessaoAplicacao.getUserData();
 
@@ -231,7 +220,7 @@ public class AddStockController implements Initializable {
     private ObservableList<ProdutoFornecido> listaFornecedoress;
 
     public void showLotes(int id) throws SQLException {
-        listaFornecedoress = servicoprodFornecido.getLotes(id);
+        listaFornecedoress = serviceEntradaStock.listaLotes(prod);
 
         IDLote.setCellValueFactory(new PropertyValueFactory<>("id"));
         codeLote.setCellValueFactory(new PropertyValueFactory<>("codigo"));
@@ -249,7 +238,12 @@ public class AddStockController implements Initializable {
     public void setDetalhesProduto() {
         // Carega detalhes do produto
 
-        Stock s = serviceStock.consultaDetalhesProduto(prod.getId());
+        Stock s = serviceEntradaStock.consultaDetalhesProduto(prod);
+        if (s == null || s.getProduto() == null) {
+            showWarning("Stock indisponivel",
+                    "Nao foi possivel carregar os detalhes de stock deste produto.");
+            return;
+        }
         txtIDProduto.setText(String.valueOf(s.getProduto().getId()));
         txtNomeProduto.setText(s.getProduto().getNome());
         txtCodigoBarrasProduto.setText(s.getProduto().getCodigo_barra());
@@ -268,7 +262,7 @@ public class AddStockController implements Initializable {
         }
 
         // Gera codigo do proximo lote
-        ProdutoFornecido pf = servicoprodFornecido.getLastCodeLote();
+        ProdutoFornecido pf = serviceEntradaStock.proximoCodigoLote();
         txtLoteCode.setText(pf == null ? "" : String.valueOf(pf.getCodigo()));
 
     }
@@ -276,7 +270,7 @@ public class AddStockController implements Initializable {
     private ObservableList<Stock> listaResumoStock;
 
     public void showResumoStock(int id) throws SQLException {
-        listaResumoStock = serviceStock.getResumo(id);
+        listaResumoStock = serviceEntradaStock.resumoStock(prod);
 
         armazemResumoStock.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArmazem().getNome_arm()));
         saldoResumoStock.setCellValueFactory(new PropertyValueFactory<>("saldo"));
@@ -291,7 +285,7 @@ public class AddStockController implements Initializable {
     private Map<String, Fornecedor> mapaFornecedor;
 
     public void populateComb_ArmazemFornecedor() {
-        storeList = serviceArmazem.listaTodosArmazens();
+        storeList = serviceEntradaStock.listaArmazens();
         List<String> listaArm = new ArrayList<>();
         mapaArmazens = new HashMap<>();
         for (Armazem a : storeList) {
@@ -302,7 +296,7 @@ public class AddStockController implements Initializable {
         cBoxArmazemOrigemTransferencia.setItems(FXCollections.observableArrayList(listaArm));
         cBoxArmazemDestinoTransferencia.setItems(FXCollections.observableArrayList(listaArm));
 
-        fornecedorList = servicoFornecedor.listaTodosFornecedores();
+        fornecedorList = serviceEntradaStock.listaFornecedores();
         List<String> listaForne = new ArrayList<>();
         mapaFornecedor = new HashMap<>();
         for (Fornecedor a : fornecedorList) {
@@ -313,16 +307,17 @@ public class AddStockController implements Initializable {
     }
 
     public void transferirStock(ActionEvent e) throws SQLException {
-        if (!validarTransferencia()) {
-            return;
-        }
-
         Armazem origem = mapaArmazens.get(cBoxArmazemOrigemTransferencia.getValue());
         Armazem destino = mapaArmazens.get(cBoxArmazemDestinoTransferencia.getValue());
-        int quantidade = Integer.parseInt(txtQuantidadeTransferencia.getText().trim());
 
-        serviceTransferenciaStock.transferirProduto(prod.getId(), origem.getId(), destino.getId(), quantidade);
+        try {
+            serviceTransferenciaStock.transferirProduto(prod, origem, destino, valor(txtQuantidadeTransferencia));
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         if (serviceTransferenciaStock.isOpsSuccess()) {
+            showSuccessAlert("Stock transferido com sucesso!");
             showLotes(prod.getId());
             showResumoStock(prod.getId());
             setDetalhesProduto();
@@ -331,29 +326,21 @@ public class AddStockController implements Initializable {
     }
 
     public void addProdutoFornecido(ActionEvent e) throws SQLException {
-        if (!validarEntrada()) {
-            return;
-        }
-
-        int quantidade = Integer.parseInt(txtQtActual.getText().trim());
-        double custoUnitario = parseDecimal(txtCustoUnitario.getText());
-
         try {
-            service.registraProdutoFornecido(
-                    txtLoteCode.getText().trim(),
-                    Integer.parseInt(txtIDProduto.getText()),
-                    mapaArmazens.get(cBoxArmazem.getValue()).getId(),
-                    mapaFornecedor.get(cBoxFornecedor.getValue()).getId(),
-                    quantidade,
-                    String.valueOf(dataAquisicao.getValue()),
-                    custoUnitario
-            );
+            serviceEntradaStock.registarEntrada(
+                    valor(txtLoteCode),
+                    prod,
+                    mapaArmazens.get(cBoxArmazem.getValue()),
+                    mapaFornecedor.get(cBoxFornecedor.getValue()),
+                    valor(txtQtActual),
+                    dataEntradaSeleccionada(),
+                    valor(txtCustoUnitario));
         } catch (ServiceException ex) {
             showErroAlert(ex.getMessage());
             return;
         }
 
-        if (service.isOpsSuccess()) {
+        if (serviceEntradaStock.isOpsSuccess()) {
             showSuccessAlert("Stock actualizado com sucesso!");
             showLotes(prod.getId());
             showResumoStock(prod.getId());
@@ -374,94 +361,10 @@ public class AddStockController implements Initializable {
         txtIDFornecedor.clear();
         labTipoArmazem.setText("â€”");
 
-        ProdutoFornecido pf = servicoprodFornecido == null
+        ProdutoFornecido pf = serviceEntradaStock == null
                 ? null
-                : servicoprodFornecido.getLastCodeLote();
+                : serviceEntradaStock.proximoCodigoLote();
         txtLoteCode.setText(pf == null ? "" : String.valueOf(pf.getCodigo()));
-    }
-
-    private boolean validarEntrada() {
-        if (txtLoteCode.getText() == null || txtLoteCode.getText().trim().isEmpty()) {
-            showWarning("CÃ³digo do lote obrigatÃ³rio",
-                    "Informe ou gere o cÃ³digo do lote.");
-            txtLoteCode.requestFocus();
-            return false;
-        }
-        if (cBoxArmazem.getValue() == null || mapaArmazens.get(cBoxArmazem.getValue()) == null) {
-            showWarning("ArmazÃ©m obrigatÃ³rio",
-                    "Seleccione o armazÃ©m de destino.");
-            cBoxArmazem.requestFocus();
-            return false;
-        }
-        if (cBoxFornecedor.getValue() == null || mapaFornecedor.get(cBoxFornecedor.getValue()) == null) {
-            showWarning("Fornecedor obrigatÃ³rio",
-                    "Seleccione o fornecedor do lote.");
-            cBoxFornecedor.requestFocus();
-            return false;
-        }
-        if (dataAquisicao.getValue() == null) {
-            showWarning("Data obrigatÃ³ria",
-                    "Informe a data de entrada do lote.");
-            dataAquisicao.requestFocus();
-            return false;
-        }
-
-        try {
-            int quantidade = Integer.parseInt(txtQtActual.getText().trim());
-            if (quantidade <= 0) {
-                throw new NumberFormatException();
-            }
-        } catch (Exception ex) {
-            showWarning("Quantidade invÃ¡lida",
-                    "Informe uma quantidade inteira maior que zero.");
-            txtQtActual.requestFocus();
-            return false;
-        }
-
-        try {
-            double custo = parseDecimal(txtCustoUnitario.getText());
-            if (custo < 0) {
-                throw new NumberFormatException();
-            }
-        } catch (Exception ex) {
-            showWarning("Custo unitÃ¡rio invÃ¡lido",
-                    "Informe um custo unitÃ¡rio numÃ©rico vÃ¡lido.");
-            txtCustoUnitario.requestFocus();
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean validarTransferencia() {
-        if (cBoxArmazemOrigemTransferencia.getValue() == null
-                || mapaArmazens.get(cBoxArmazemOrigemTransferencia.getValue()) == null) {
-            showWarning("Origem obrigatoria", "Seleccione o armazem de origem da transferencia.");
-            cBoxArmazemOrigemTransferencia.requestFocus();
-            return false;
-        }
-        if (cBoxArmazemDestinoTransferencia.getValue() == null
-                || mapaArmazens.get(cBoxArmazemDestinoTransferencia.getValue()) == null) {
-            showWarning("Destino obrigatorio", "Seleccione o armazem de destino da transferencia.");
-            cBoxArmazemDestinoTransferencia.requestFocus();
-            return false;
-        }
-        if (cBoxArmazemOrigemTransferencia.getValue().equals(cBoxArmazemDestinoTransferencia.getValue())) {
-            showWarning("Armazens iguais", "A origem e o destino devem ser armazens diferentes.");
-            cBoxArmazemDestinoTransferencia.requestFocus();
-            return false;
-        }
-        try {
-            int quantidade = Integer.parseInt(txtQuantidadeTransferencia.getText().trim());
-            if (quantidade <= 0) {
-                throw new NumberFormatException();
-            }
-        } catch (Exception ex) {
-            showWarning("Quantidade invalida", "Informe uma quantidade inteira maior que zero.");
-            txtQuantidadeTransferencia.requestFocus();
-            return false;
-        }
-        return true;
     }
 
     private void resetTransferencia() {
@@ -472,19 +375,21 @@ public class AddStockController implements Initializable {
 
     private void actualizarValorTotal() {
         try {
-            int quantidade = Integer.parseInt(txtQtActual.getText().trim());
-            double custo = parseDecimal(txtCustoUnitario.getText());
-            txtValorTotal.setText(String.format("%,.2f MZN", quantidade * custo));
+            BigDecimal total = serviceEntradaStock.calcularValorTotal(valor(txtQtActual), valor(txtCustoUnitario));
+            txtValorTotal.setText(String.format("%,.2f MZN", total.doubleValue()));
         } catch (Exception ex) {
             txtValorTotal.clear();
         }
     }
 
-    private double parseDecimal(String value) {
-        if (value == null || value.trim().isEmpty()) {
-            return 0.0;
-        }
-        return Double.parseDouble(value.trim().replace(" ", "").replace(",", "."));
+    private String dataEntradaSeleccionada() {
+        return dataAquisicao == null || dataAquisicao.getValue() == null
+                ? null
+                : String.valueOf(dataAquisicao.getValue());
+    }
+
+    private static String valor(TextField campo) {
+        return campo == null || campo.getText() == null ? "" : campo.getText().trim();
     }
 
     private void showWarning(String title, String message) {

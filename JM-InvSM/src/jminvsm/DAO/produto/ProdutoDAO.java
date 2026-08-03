@@ -10,12 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 import jminvsm.model.categoria.Categoria;
 import jminvsm.model.imposto.Imposto;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.unidade_medida.UnidadeMedida;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -58,7 +57,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             }
 
         } catch (SQLException ex) {
-//            showDialog("Erro persistencia", "Detalhes: " + ex); 
+//            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex); 
             System.out.println("Erro persistencia:" + ex);
 
         }
@@ -93,7 +92,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             }
 
         } catch (SQLException ex) {
-//            showDialog("Erro persistencia", "Detalhes: " + ex);
+//            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
             System.out.println("Erro persistencia Detalhes: " + ex);
 
         } 
@@ -148,7 +147,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao Buscar Produto: " + ex);
         }
         return lista;
     }
@@ -200,7 +199,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Produto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao Buscar Produto: " + ex);
         }
         return lista;
     }
@@ -239,8 +238,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Falha ao Bucar armazem: " + e,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao Bucar armazem: " + e);
         }
         return p;
     }
@@ -270,7 +268,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             }
         } catch (SQLException ex) {
 //            System.out.println("Erro de contagem: " + ex);
-            showDialog("Erro de contagem", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de contagem", "Detalhes: " + ex);
 
         }
 
@@ -283,7 +281,7 @@ public class ProdutoDAO implements ProdutoDAOImpl<Produto> {
             return jminvsm.util.SoftDeleteUtils.softDelete("produto", id);
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
-//            showDialog("Erro de exclusao", "Detalhes: " + ex);
+//            DaoErrorHandler.log("Erro de exclusao", "Detalhes: " + ex);
         }
         return false;
     }

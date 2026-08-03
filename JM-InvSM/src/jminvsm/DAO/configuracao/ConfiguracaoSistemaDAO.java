@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import jminvsm.model.configuracao.ConfiguracaoSistema;
 import jminvsm.model.usuario.Usuario;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 public class ConfiguracaoSistemaDAO {
@@ -23,7 +23,7 @@ public class ConfiguracaoSistemaDAO {
                 return mapConfiguracao(rs);
             }
         } catch (SQLException ex) {
-            showDialog("Erro de configuracao", "Erro ao consultar configuracao do sistema: " + ex);
+            DaoErrorHandler.log("Erro de configuracao", "Erro ao consultar configuracao do sistema: " + ex);
         }
         return configuracaoPadrao();
     }
@@ -45,7 +45,7 @@ public class ConfiguracaoSistemaDAO {
             }
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            showDialog("Erro de configuracao", "Erro ao actualizar configuracao do sistema: " + ex);
+            DaoErrorHandler.log("Erro de configuracao", "Erro ao actualizar configuracao do sistema: " + ex);
         }
         return false;
     }

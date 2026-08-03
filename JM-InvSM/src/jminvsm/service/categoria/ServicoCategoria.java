@@ -6,11 +6,9 @@ package jminvsm.service.categoria;
 
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import jminvsm.dao.categoria.CategoriaDAO;
 import jminvsm.model.categoria.Categoria;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -39,19 +37,15 @@ public class ServicoCategoria {
 
         // Validações básicas antes de registrar a categoria
         if (grupo == null || grupo.isEmpty()) {
-            showErroAlert( "Grupo nao pode ser nulo!");
-            return;
+            throw new ServiceException("Grupo nao pode ser nulo!");
         }
         if (subgrupo == null || subgrupo.isEmpty()) {
-            showErroAlert( "Subgrupo nao pode ser nulo!");
-            return;
+            throw new ServiceException("Subgrupo nao pode ser nulo!");
         }
         if (familia == null || familia.isEmpty()) {
-            showErroAlert( "Familia nao pode ser nula!");
-            return;
+            throw new ServiceException("Familia nao pode ser nula!");
         }
         if (descricao == null || descricao.isEmpty()) {
-            showErroAlert( "Descricao nao pode ser nula. Sere criada uma descricao padrao.");
             descricao = "Categoria sem padrao.";
         }
 
@@ -63,7 +57,6 @@ public class ServicoCategoria {
 
         if (categoriaDAO.addEntity(c)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Categoria registada com sucesso!");
         }
     }
 
@@ -73,19 +66,15 @@ public class ServicoCategoria {
 
         // Validações básicas antes de registrar a categoria
         if (grupo == null || grupo.isEmpty()) {
-            showErroAlert( "Grupo nao pode ser nulo!");
-            return;
+            throw new ServiceException("Grupo nao pode ser nulo!");
         }
         if (subgrupo == null || subgrupo.isEmpty()) {
-            showErroAlert( "Subgrupo nao pode ser nulo!");
-            return;
+            throw new ServiceException("Subgrupo nao pode ser nulo!");
         }
         if (familia == null || familia.isEmpty()) {
-            showErroAlert( "Familia nao pode ser nula!");
-            return;
+            throw new ServiceException("Familia nao pode ser nula!");
         }
         if (descricao == null || descricao.isEmpty()) {
-            showErroAlert( "Descricao nao pode ser nula. Sere criada uma descricao padrao.");
             descricao = "Categoria sem padrao.";
         }
         Categoria c = new Categoria();
@@ -96,7 +85,6 @@ public class ServicoCategoria {
         c.setDescricao(descricao);
 
         if (categoriaDAO.updateEntityByID(c)) {
-            showSuccessAlert( "Categoria actualizada com sucesso!");
             setOpsSuccess(true);
         }
     }
@@ -113,7 +101,6 @@ public class ServicoCategoria {
         
         if (categoriaDAO.deleteEntity(id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Registo excluido com sucesso!");
         }
     }
 }

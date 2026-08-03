@@ -13,8 +13,7 @@ import jminvsm.model.usuario.Permissao;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.util.Conexao;
 import jminvsm.util.LoadAndMoveUtilities;
-import static jminvsm.util.AlertUtilities.showDialog;
-
+import jminvsm.dao.DaoErrorHandler;
 /**
  *
  * @author JM-Tecnologias
@@ -58,12 +57,12 @@ import static jminvsm.util.AlertUtilities.showDialog;
 //                p.setTipo(result.getString("tipo"));
 //                user.setPermissao(p);
 //            } else {
-//                showDialog("Info", "Usuario nao existe!!");
+//                DaoErrorHandler.log("Info", "Usuario nao existe!!");
 //            }
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            showDialog( "Erro", "Detalhes: " + ex);
+//            DaoErrorHandler.log( "Erro", "Detalhes: " + ex);
 //        }
 //        return user;
 //    }
@@ -110,13 +109,13 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
                     user.setPermissao(p);
 
                 } else {
-                    showDialog("Info", "Usuario nao existe!!");
+                    DaoErrorHandler.log("Info", "Usuario nao existe!!");
                 }
             }
 
         } catch (SQLException ex) {
             System.out.println("Erro Detalhes: " + ex.getMessage());
-            showDialog("Erro", "Detalhes: " + ex.getMessage());
+            DaoErrorHandler.log("Erro", "Detalhes: " + ex.getMessage());
         }
 
         return user;
@@ -138,7 +137,7 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 //            ps.execute();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Falha ao adicionar Usuario: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("Informação", "Falha ao adicionar Usuario: " + ex);
 //        }
 //    }
 //
@@ -158,8 +157,8 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 //            ps.execute();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Falha ao actulizar Usuario: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("Informação", "Falha ao actulizar Usuario: "
+//                    + ex);
 //        }
 //    }
 //
@@ -184,7 +183,7 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 //            result.close();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Falha ao Buscar Usuarios: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("Informação", "Falha ao Buscar Usuarios: " + ex);
 //        }
 //        return lista;
 //    }
@@ -211,8 +210,7 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 ////            result.close();
 ////            ps.close();
 ////        } catch (SQLException ex) {
-////            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Usuario: " + ex,
-////                    "Informação", JOptionPane.ERROR_MESSAGE);
+////            DaoErrorHandler.log("Informação", "Erro ao pesquisar Usuario: " + ex,
 ////        }
 ////        return u;
 ////
@@ -241,8 +239,6 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 ////            result.close();
 ////            ps.close();
 ////        } catch (SQLException ex) {
-////            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Usuario: " + ex,
-////                    "Informação", JOptionPane.ERROR_MESSAGE);
 ////        }
 ////        return user;
 ////    }
@@ -256,8 +252,7 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 ////            ps.execute();
 ////            ps.close();
 ////        } catch (SQLException ex) {
-////            JOptionPane.showMessageDialog(null, "Erro ao deletar Usuario: "
-////                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+////                    + ex);
 ////        }
 ////    }
 //
@@ -271,8 +266,8 @@ public class UsuarioDAO implements UsuarioDAOImpl<Usuario> {
 //            ps.execute();
 //            ps.close();
 //        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Erro ao deletar Usuario: "
-//                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+//            DaoErrorHandler.log("Informação", "Erro ao deletar Usuario: "
+//                    + ex);
 //        }
 //    }
 //}

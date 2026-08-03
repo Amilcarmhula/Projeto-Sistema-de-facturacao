@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.model.empresa.endereco.EnderecoEmpresa;
 import jminvsm.util.Conexao;
 
@@ -43,7 +43,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
             }
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Endereco da Empresa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao adicionar Endereco da Empresa: " + ex);
         }
 
     }
@@ -71,8 +71,8 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
             ps.setInt(10, id);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Endereco da Empresa: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao actulizar Endereco da Empresa: "
+                    + ex);
         }
     }
 
@@ -101,7 +101,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Endereco da Empresa: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao Buscar Endereco da Empresa: " + ex);
         }
         return lista;
     }
@@ -131,8 +131,7 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Endereco da Empresa: " + ex,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao pesquisar Endereco da Empresa: " + ex);
         }
         return c;
 
@@ -143,8 +142,8 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
         try {
             jminvsm.util.SoftDeleteUtils.softDelete("endereco_empresa", id);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco da Empresa: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao deletar Endereco da Empresa: "
+                    + ex);
         }
     }
 
@@ -153,8 +152,8 @@ public class EnderecoEmpresaDAO implements EnderecoEmpresaDAOImpl<EnderecoEmpres
         try {
             jminvsm.util.SoftDeleteUtils.softDelete("endereco_empresa", id);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Endereco da Empresa: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao deletar Endereco da Empresa: "
+                    + ex);
         }
     }
 }

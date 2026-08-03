@@ -31,9 +31,9 @@ import jminvsm.model.cliente.contacto.ContactoCliente;
 import jminvsm.model.cliente.endereco.EnderecoCliente;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.ServiceException;
-import jminvsm.service.cliente.ServiceCliente;
-import jminvsm.service.cliente.contacto.ServiceContacto;
-import jminvsm.service.cliente.endereco.ServiceEndereco;
+import jminvsm.service.cliente.ServiceClienteCadastro;
+import jminvsm.service.cliente.ServiceContactoCliente;
+import jminvsm.service.cliente.ServiceEnderecoCliente;
 import jminvsm.util.LoadAndMoveUtilities;
 import static jminvsm.util.AlertUtilities.showErroAlert;
 import static jminvsm.util.AlertUtilities.showSuccessAlert;
@@ -47,9 +47,9 @@ public class AddClienteController implements Initializable {
     private static final Logger LOG = Logger.getLogger(AddClienteController.class.getName());
 
     private Usuario userData;
-    private ServiceCliente serviceCliente;
-    private ServiceContacto serviceContacto;
-    private ServiceEndereco serviceEndereco;
+    private ServiceClienteCadastro serviceCliente;
+    private ServiceContactoCliente serviceContacto;
+    private ServiceEnderecoCliente serviceEndereco;
     private Cliente cliente;
 
     private ObservableList<ContactoCliente> listaContactos = FXCollections.observableArrayList();
@@ -104,9 +104,9 @@ public class AddClienteController implements Initializable {
         userData = SessaoAplicacao.getUserData();
 
         try {
-            serviceCliente = new ServiceCliente();
-            serviceContacto = new ServiceContacto();
-            serviceEndereco = new ServiceEndereco();
+            serviceCliente = new ServiceClienteCadastro();
+            serviceContacto = new ServiceContactoCliente();
+            serviceEndereco = new ServiceEnderecoCliente();
 
             prepararCombos();
             prepararListas();
@@ -199,7 +199,7 @@ public class AddClienteController implements Initializable {
         }
 
         if (cliente == null && possuiIdCliente()) {
-            cliente = serviceCliente.consultaClienteByID(Integer.parseInt(txtIDCliente.getText().trim()));
+            cliente = serviceCliente.consultaPorId(valor(txtIDCliente));
         }
 
         if (cliente != null) {
@@ -235,14 +235,12 @@ public class AddClienteController implements Initializable {
     }
 
     public void addCliente(ActionEvent e) throws SQLException {
-        if (!validarCliente()) return;
-
         try {
-            serviceCliente.registar(
+            cliente = serviceCliente.registar(
                     txtNome.getText().trim(),
                     txtRazao.getText().trim(),
                     combTipoCliente.getValue(),
-                    inteiroOuZero(txtNuit.getText()),
+                    valor(txtNuit),
                     userData
             );
         } catch (ServiceException ex) {
@@ -252,21 +250,23 @@ public class AddClienteController implements Initializable {
 
         if (serviceCliente.isOpsSuccess()) {
             showSuccessAlert("Registo adicionado com sucesso.");
-            showCliente();
+            if (cliente != null) {
+                preencherCliente(cliente);
+                carregarContactos();
+                carregarEnderecos();
+            }
             actualizarTextosBotoes();
         }
     }
 
     public void updateCliente(ActionEvent e) throws SQLException {
-        if (!validarCliente() || !possuiIdCliente()) return;
-
         try {
-            serviceCliente.actualizar(
-                    Integer.parseInt(txtIDCliente.getText().trim()),
+            cliente = serviceCliente.actualizar(
+                    valor(txtIDCliente),
                     txtNome.getText().trim(),
                     txtRazao.getText().trim(),
                     combTipoCliente.getValue(),
-                    inteiroOuZero(txtNuit.getText()),
+                    valor(txtNuit),
                     userData
             );
         } catch (ServiceException ex) {
@@ -276,13 +276,12 @@ public class AddClienteController implements Initializable {
 
         if (serviceCliente.isOpsSuccess()) {
             showSuccessAlert("Registo actualizado com sucesso.");
-            showClienteByID();
+            preencherCliente(cliente);
             actualizarTextosBotoes();
         }
     }
 
     public void showCliente() throws SQLException {
-        cliente = serviceCliente.getUtimoCliente();
         preencherCliente(cliente);
         carregarContactos();
         carregarEnderecos();
@@ -290,7 +289,7 @@ public class AddClienteController implements Initializable {
 
     public void showClienteByID() throws SQLException {
         if (possuiIdCliente()) {
-            cliente = serviceCliente.consultaClienteByID(Integer.parseInt(txtIDCliente.getText().trim()));
+            cliente = serviceCliente.consultaPorId(valor(txtIDCliente));
             preencherCliente(cliente);
         }
     }
@@ -359,7 +358,7 @@ public class AddClienteController implements Initializable {
     }
 
     public void addContacto(ActionEvent e) throws SQLException {
-        if (!garantirClienteGuardado() || !validarContacto()) return;
+        if (!garantirClienteGuardado()) return;
 
         try {
             serviceContacto.registar(
@@ -380,11 +379,9 @@ public class AddClienteController implements Initializable {
     }
 
     public void updateContacto(ActionEvent e) throws SQLException {
-        if (txtIDContacto == null || vazio(txtIDContacto.getText()) || !validarContacto()) return;
-
         try {
             serviceContacto.actualizar(
-                    Integer.parseInt(txtIDContacto.getText().trim()),
+                    valor(txtIDContacto),
                     valor(txtEmail), valor(txtContacto), valor(txtSite),
                     valor(txtResponsavel), userData
             );
@@ -402,11 +399,10 @@ public class AddClienteController implements Initializable {
     }
 
     public void deleteContacto(ActionEvent event) throws SQLException {
-        if (txtIDContacto == null || vazio(txtIDContacto.getText())) return;
         if (!confirmarExclusao("contacto")) return;
 
         try {
-            serviceContacto.excluir(Integer.parseInt(txtIDContacto.getText().trim()));
+            serviceContacto.excluir(valor(txtIDContacto));
         } catch (ServiceException ex) {
             showErroAlert(ex.getMessage());
             return;
@@ -451,7 +447,7 @@ public class AddClienteController implements Initializable {
     private void carregarContactos() throws SQLException {
         listaContactos.clear();
         if (cliente != null) {
-            ObservableList<ContactoCliente> encontrados = serviceContacto.consultaContactoPorCLiente(cliente.getId());
+            ObservableList<ContactoCliente> encontrados = serviceContacto.consultaPorCliente(cliente);
             if (encontrados != null) listaContactos.addAll(encontrados);
         }
     }
@@ -469,13 +465,13 @@ public class AddClienteController implements Initializable {
     }
 
     public void addEndereco(ActionEvent e) throws SQLException {
-        if (!garantirClienteGuardado() || !validarEndereco()) return;
+        if (!garantirClienteGuardado()) return;
 
         try {
             serviceEndereco.registar(
                     tipoEnderecoSeleccionado(), valor(txtAvenida), valor(txtBairro),
-                    valor(txtCidade), inteiroOuZero(valor(txtCodigooPostal)),
-                    inteiroOuZero(valor(txtNumeroEndereco)), valor(combProvincia),
+                    valor(txtCidade), valor(txtCodigooPostal),
+                    valor(txtNumeroEndereco), valor(combProvincia),
                     valor(txtRua), cliente, userData
             );
         } catch (ServiceException ex) {
@@ -492,14 +488,12 @@ public class AddClienteController implements Initializable {
     }
 
     public void updateEndereco(ActionEvent e) throws SQLException {
-        if (txtIDEndereco == null || vazio(txtIDEndereco.getText()) || !validarEndereco()) return;
-
         try {
             serviceEndereco.actualizar(
-                    Integer.parseInt(txtIDEndereco.getText().trim()),
+                    valor(txtIDEndereco),
                     tipoEnderecoSeleccionado(), valor(txtAvenida), valor(txtBairro),
-                    valor(txtCidade), inteiroOuZero(valor(txtCodigooPostal)),
-                    inteiroOuZero(valor(txtNumeroEndereco)), valor(combProvincia),
+                    valor(txtCidade), valor(txtCodigooPostal),
+                    valor(txtNumeroEndereco), valor(combProvincia),
                     valor(txtRua), userData
             );
         } catch (ServiceException ex) {
@@ -520,7 +514,7 @@ public class AddClienteController implements Initializable {
         if (!confirmarExclusao("endereÃ§o")) return;
 
         try {
-            serviceEndereco.excluir(Integer.parseInt(txtIDEndereco.getText().trim()));
+            serviceEndereco.excluir(valor(txtIDEndereco));
         } catch (ServiceException ex) {
             showErroAlert(ex.getMessage());
             return;
@@ -574,68 +568,19 @@ public class AddClienteController implements Initializable {
     private void carregarEnderecos() throws SQLException {
         listaEndereco.clear();
         if (cliente != null) {
-            ObservableList<EnderecoCliente> encontrados = serviceEndereco.consultaEnderecosPorCLiente(cliente.getId());
+            ObservableList<EnderecoCliente> encontrados = serviceEndereco.consultaPorCliente(cliente);
             if (encontrados != null) listaEndereco.addAll(encontrados);
         }
     }
 
     // ---------------------------------------------------------------------
-    // ValidaÃ§Ã£o e utilitÃ¡rios
+    // UtilitÃ¡rios
     // ---------------------------------------------------------------------
-    private boolean validarCliente() {
-        if (txtNome == null || vazio(txtNome.getText())) {
-            mostrarAviso("Dados do cliente", "Informe o nome do cliente.");
-            return false;
-        }
-        if (combTipoCliente == null || combTipoCliente.getValue() == null) {
-            mostrarAviso("Dados do cliente", "Seleccione o tipo de cliente.");
-            return false;
-        }
-        if (txtNuit != null && !vazio(txtNuit.getText()) && !numeroValido(txtNuit.getText())) {
-            mostrarAviso("Dados do cliente", "O NUIT deve conter apenas nÃºmeros.");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validarContacto() {
-        if ((txtContacto == null || vazio(txtContacto.getText()))
-                && (txtEmail == null || vazio(txtEmail.getText()))) {
-            mostrarAviso("Contacto", "Informe pelo menos o telefone ou o e-mail.");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validarEndereco() {
-        if (tipoEnderecoSeleccionado() == null) {
-            mostrarAviso("EndereÃ§o", "Seleccione o tipo ou finalidade do endereÃ§o.");
-            return false;
-        }
-        if (combProvincia == null || combProvincia.getValue() == null) {
-            mostrarAviso("EndereÃ§o", "Seleccione a provÃ­ncia.");
-            return false;
-        }
-        if (txtCidade == null || vazio(txtCidade.getText())) {
-            mostrarAviso("EndereÃ§o", "Informe a cidade.");
-            return false;
-        }
-        if (txtCodigooPostal != null && !vazio(txtCodigooPostal.getText()) && !numeroValido(txtCodigooPostal.getText())) {
-            mostrarAviso("EndereÃ§o", "O cÃ³digo postal deve conter apenas nÃºmeros.");
-            return false;
-        }
-        if (txtNumeroEndereco != null && !vazio(txtNumeroEndereco.getText()) && !numeroValido(txtNumeroEndereco.getText())) {
-            mostrarAviso("EndereÃ§o", "O nÃºmero do endereÃ§o deve conter apenas nÃºmeros.");
-            return false;
-        }
-        return true;
-    }
-
     private boolean garantirClienteGuardado() {
         if (cliente != null) return true;
         if (possuiIdCliente()) {
             try {
-                cliente = serviceCliente.consultaClienteByID(Integer.parseInt(txtIDCliente.getText().trim()));
+                cliente = serviceCliente.consultaPorId(valor(txtIDCliente));
                 return cliente != null;
             } catch (NumberFormatException ex) {
                 LOG.log(Level.WARNING, "NÃ£o foi possÃ­vel recuperar o cliente.", ex);
@@ -701,19 +646,6 @@ public class AddClienteController implements Initializable {
 
     private static boolean vazio(String texto) {
         return texto == null || texto.trim().isEmpty();
-    }
-
-    private static boolean numeroValido(String texto) {
-        try {
-            Integer.parseInt(texto.trim());
-            return true;
-        } catch (NumberFormatException ex) {
-            return false;
-        }
-    }
-
-    private static int inteiroOuZero(String texto) {
-        return vazio(texto) ? 0 : Integer.parseInt(texto.trim());
     }
 
     private static String valor(TextField campo) {

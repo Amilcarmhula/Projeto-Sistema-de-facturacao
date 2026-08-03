@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.model.empresa.contacto.ContactoEmpresa;
 import jminvsm.util.Conexao;
 
@@ -38,7 +38,7 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
             ps.executeUpdate();
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao adicionar Contacto: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao adicionar Contacto: " + ex);
         }
 
     }
@@ -62,8 +62,8 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
             ps.executeUpdate();
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao actulizar Contacto: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Falha ao actulizar Contacto: "
+                    + ex);
         }
     }
 
@@ -87,7 +87,7 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao Buscar Fornecedor: " + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao Buscar Fornecedor: " + ex);
         }
         return lista;
     }
@@ -111,8 +111,7 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao pesquisar Contacto: " + ex,
-                    "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao pesquisar Contacto: " + ex);
         }
         return c;
 
@@ -123,8 +122,8 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
         try {
             jminvsm.util.SoftDeleteUtils.softDelete("contacto_empresa", id);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Contacto: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao deletar Contacto: "
+                    + ex);
         }
     }
 
@@ -133,8 +132,8 @@ public class ContactoEmpresaDAO implements ContactoEmpresaDAOImpl<ContactoEmpres
         try {
             jminvsm.util.SoftDeleteUtils.softDelete("contacto_empresa", id);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao deletar Contacto: "
-                    + ex, "Informação", JOptionPane.ERROR_MESSAGE);
+            DaoErrorHandler.log("Informação", "Erro ao deletar Contacto: "
+                    + ex);
         }
     }
 }

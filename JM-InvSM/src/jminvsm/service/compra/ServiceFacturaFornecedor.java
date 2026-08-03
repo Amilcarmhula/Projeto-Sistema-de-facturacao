@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import jminvsm.dao.compra.FacturaFornecedorDAO;
 import jminvsm.model.compra.FacturaFornecedor;
 import jminvsm.model.compra.ItemFacturaFornecedor;
+import jminvsm.model.compra.RecebimentoCompra;
 import jminvsm.service.ServiceException;
 
 public class ServiceFacturaFornecedor {
@@ -43,6 +44,14 @@ public class ServiceFacturaFornecedor {
             setOpsSuccess(true);
         }
         return isOpsSuccess();
+    }
+
+    public boolean criarDeRecebimento(RecebimentoCompra recebimento, String numeroFactura,
+            String dataEmissao, String dataVencimento, int idUsuario) {
+        if (recebimento == null || recebimento.getId() <= 0) {
+            throw new ServiceException("Recebimento nao selecionado!");
+        }
+        return criarDeRecebimento(numeroFactura, recebimento.getId(), dataEmissao, dataVencimento, idUsuario);
     }
 
     public boolean cancelarFactura(int id) {

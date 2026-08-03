@@ -12,8 +12,7 @@ import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.lote.Lote;
 import jminvsm.model.produto.Produto;
 import jminvsm.util.Conexao;
-import static jminvsm.util.AlertUtilities.showDialog;
-
+import jminvsm.dao.DaoErrorHandler;
 public class LoteDAO implements LoteDAOImpl {
 
     @Override
@@ -24,7 +23,7 @@ public class LoteDAO implements LoteDAOImpl {
             fillStatement(ps, entity);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Erro ao adicionar lote: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Erro ao adicionar lote: " + ex);
             return false;
         }
     }
@@ -38,7 +37,7 @@ public class LoteDAO implements LoteDAOImpl {
             ps.setInt(10, id);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Erro ao atualizar lote: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Erro ao atualizar lote: " + ex);
             return false;
         }
     }
@@ -53,7 +52,7 @@ public class LoteDAO implements LoteDAOImpl {
                 lista.add(mapLote(rs));
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao listar lotes: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao listar lotes: " + ex);
         }
         return lista;
     }
@@ -69,7 +68,7 @@ public class LoteDAO implements LoteDAOImpl {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao consultar lote: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao consultar lote: " + ex);
         }
         return null;
     }
@@ -79,7 +78,7 @@ public class LoteDAO implements LoteDAOImpl {
         try {
             return jminvsm.util.SoftDeleteUtils.softDelete("lote", id);
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Erro ao remover lote: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Erro ao remover lote: " + ex);
             return false;
         }
     }
@@ -93,7 +92,7 @@ public class LoteDAO implements LoteDAOImpl {
                 return mapLote(rs);
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao consultar ultimo lote: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao consultar ultimo lote: " + ex);
         }
         return null;
     }
@@ -115,7 +114,7 @@ public class LoteDAO implements LoteDAOImpl {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Erro ao listar lotes disponiveis: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Erro ao listar lotes disponiveis: " + ex);
         }
         return lista;
     }
@@ -129,7 +128,7 @@ public class LoteDAO implements LoteDAOImpl {
             ps.setInt(3, idLote);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Erro ao atualizar saldo do lote: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Erro ao atualizar saldo do lote: " + ex);
             return false;
         }
     }

@@ -10,9 +10,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,9 +30,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.categoria.Categoria;
+import jminvsm.service.ServiceException;
 import jminvsm.service.categoria.ServicoCategoria;
+import jminvsm.service.listagem.ServicePesquisaListagem;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
+import static jminvsm.util.AlertUtilities.showErroAlert;
+import static jminvsm.util.AlertUtilities.showSuccessAlert;
 
 /**
  * FXML Controller class
@@ -42,6 +44,8 @@ import jminvsm.util.LoadAndMoveUtilities;
  * @author JM-Tecnologias
  */
 public class CategoriaViewController implements Initializable {
+    private ServicoCategoria serviceCategoria;
+    private ServicePesquisaListagem servicePesquisa;
     
     @FXML
     private Button btnClose;
@@ -106,9 +110,9 @@ public class CategoriaViewController implements Initializable {
         // Configura o TextArea para quebra automÃ¡tica de linha
         ps_txtdescricaoCategoria.setWrapText(true);
 
-        // Opcional: configurar a largura mÃ¡xima do texto
-        //ps_txtdescricaoProduto.setPrefColumnCount(30); // Ajuste conforme necessÃ¡rio
         try {
+            serviceCategoria = new ServicoCategoria();
+            servicePesquisa = new ServicePesquisaListagem();
             showCategoria();
         } catch (SQLException ex) {
             Logger.getLogger(CategoriaViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -124,10 +128,10 @@ public class CategoriaViewController implements Initializable {
         Funcoes para fazer pesquisas no banco de dados buscando todos dados
      */
     private ObservableList<Categoria> listaCategorias;
+    private boolean pesquisaConfigurada;
     
     public void showCategoria() throws SQLException {
-        ServicoCategoria sc = new ServicoCategoria();
-        listaCategorias = sc.listaCategorias();
+        listaCategorias = serviceCategoria.listaCategorias();
         
         IDtabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("id"));
         tipotabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -136,29 +140,20 @@ public class CategoriaViewController implements Initializable {
         familiatabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("familia"));
         descricaotabelaCategoria.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         
-        FilteredList<Categoria> dadosFiltrados = new FilteredList<>(listaCategorias, b -> true);
-        ps_txtpesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
-                
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getGrupo().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (String.valueOf(x.getSubgrupo()).toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (String.valueOf(x.getFamilia()).toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (String.valueOf(x.getDescricao()).toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else {
-                    return false;
-                }
-                
-            });
-        });
-        SortedList<Categoria> sortedData = new SortedList<>(dadosFiltrados);
+        configurarPesquisa();
+        aplicarPesquisa();
+    }
+
+    private void configurarPesquisa() {
+        if (!pesquisaConfigurada) {
+            ps_txtpesquisar.textProperty().addListener((observable, oldValue, newValue) -> aplicarPesquisa());
+            pesquisaConfigurada = true;
+        }
+    }
+
+    private void aplicarPesquisa() {
+        SortedList<Categoria> sortedData = new SortedList<>(
+                servicePesquisa.filtrarCategorias(listaCategorias, ps_txtpesquisar.getText()));
         sortedData.comparatorProperty().bind(tabelaCategoria.comparatorProperty());
 
 //        tabelaCliente.setItems(listaAgentes);
@@ -198,10 +193,16 @@ public class CategoriaViewController implements Initializable {
             
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.get() == btnDelete) {
-                ServicoCategoria service = new ServicoCategoria();
-                service.excluir(x.getId());
-                showCategoria();
-                resetCategorias();
+                try {
+                    serviceCategoria.excluir(x.getId());
+                    if (serviceCategoria.isOpsSuccess()) {
+                        showSuccessAlert("Registo excluido com sucesso!");
+                        showCategoria();
+                        resetCategorias();
+                    }
+                } catch (ServiceException ex) {
+                    showErroAlert(ex.getMessage());
+                }
                 
             } else if (result.get() == btnCancel) {
                 resetCategorias();
@@ -213,11 +214,16 @@ public class CategoriaViewController implements Initializable {
         Funcoes para Adicionar informacoes ao banco de dados
      */
     public void addCategoria(ActionEvent e) throws SQLException {
-        ServicoCategoria sc = new ServicoCategoria();
-        sc.registar(ps_txtgrupoCategoria.getText(),
-                ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
-                ps_txtdescricaoCategoria.getText());
-        if (sc.isOpsSuccess()) {
+        try {
+            serviceCategoria.registar(ps_txtgrupoCategoria.getText(),
+                    ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
+                    ps_txtdescricaoCategoria.getText());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
+        if (serviceCategoria.isOpsSuccess()) {
+            showSuccessAlert("Categoria registada com sucesso!");
             resetCategorias();
             showCategoria();
         }
@@ -228,13 +234,20 @@ public class CategoriaViewController implements Initializable {
         Funcoes para Actualizar informacoes ao banco de dados
      */
     public void updateCategoria(ActionEvent e) throws SQLException {
-        ServicoCategoria sc = new ServicoCategoria();
-        sc.actualizar(Integer.parseInt(ps_txtIDCategoria.getText()), ps_txtgrupoCategoria.getText(),
-                ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
-                ps_txtdescricaoCategoria.getText());
+        try {
+            serviceCategoria.actualizar(Integer.parseInt(ps_txtIDCategoria.getText()), ps_txtgrupoCategoria.getText(),
+                    ps_txtsubgrupoCategoria.getText(), ps_txtfamiliaCategoria.getText(),
+                    ps_txtdescricaoCategoria.getText());
+        } catch (ServiceException ex) {
+            showErroAlert(ex.getMessage());
+            return;
+        }
         
-        resetCategorias();
-        showCategoria();
+        if (serviceCategoria.isOpsSuccess()) {
+            showSuccessAlert("Categoria actualizada com sucesso!");
+            resetCategorias();
+            showCategoria();
+        }
     }
 
     /*

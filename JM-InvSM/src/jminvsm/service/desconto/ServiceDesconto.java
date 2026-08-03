@@ -4,8 +4,7 @@ import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import jminvsm.dao.desconto.DescontoDAO;
 import jminvsm.model.desconto.Desconto;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -32,8 +31,7 @@ public class ServiceDesconto {
         setOpsSuccess(false);
         
         if (nomeDesconto == null || nomeDesconto.isEmpty()) {
-            showErroAlert( "Designacao do desconto nao pode ser nula!");
-            return;
+            throw new ServiceException("Designacao do desconto nao pode ser nula!");
         }
         
         if (descricao == null || descricao.isEmpty()) {
@@ -41,8 +39,7 @@ public class ServiceDesconto {
         }
         
         if (percentagem == null) {
-            showErroAlert("Taxa de Desconto nao informado!");
-            return;
+            throw new ServiceException("Taxa de Desconto nao informada!");
         }
         
         Desconto d = new Desconto();
@@ -51,7 +48,6 @@ public class ServiceDesconto {
         d.setDescricao(descricao);
         if (descontoDao.addEntity(d)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Desconto registado com sucesso!");
         }
     }
     
@@ -59,21 +55,18 @@ public class ServiceDesconto {
         setOpsSuccess(false);
         
         if (id == null) {
-            showErroAlert("Desconto nao selecionado!");
-            return;
+            throw new ServiceException("Desconto nao selecionado!");
         }
         
         if (nomeDesconto == null || nomeDesconto.isEmpty()) {
-            showErroAlert( "Designacao do desconto nao pode ser nula!");
-            return;
+            throw new ServiceException("Designacao do desconto nao pode ser nula!");
         }
         
         if (descricao == null || descricao.isEmpty()) {
             descricao = "Descricao padrao!";
         }
         if (percentagem == null) {
-            showErroAlert("Taxa de Desconto nao informado!");
-            return;
+            throw new ServiceException("Taxa de Desconto nao informada!");
         }
         
         
@@ -83,7 +76,6 @@ public class ServiceDesconto {
         d.setDescricao(descricao);
         if (descontoDao.updateEntity(d,id)) {
             setOpsSuccess(true);
-            showSuccessAlert( "Desconto actualizado com sucesso!");
         }
     }
     
@@ -91,8 +83,7 @@ public class ServiceDesconto {
         setOpsSuccess(false);
         
         if (id == null) {
-            showErroAlert("Desconto nao selecionado!");
-            return;
+            throw new ServiceException("Desconto nao selecionado!");
         }
           
         if (descontoDao.deleteEntity(id)) {

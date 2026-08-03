@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import jminvsm.model.caixa.Caixa;
 import jminvsm.model.transacao.Transacao;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -46,7 +46,7 @@ public class CaixaDAO implements CaixaDAOImpl<Caixa>{
             }
             }
         } catch (SQLException e) {
-            showDialog("Erro consulta", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro consulta", "Detalhes: " + e);
         }
         return c;
     }

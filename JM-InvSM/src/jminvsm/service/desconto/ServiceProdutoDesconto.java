@@ -32,8 +32,7 @@ import jminvsm.model.armazem.Armazem;
 import jminvsm.model.desconto.Desconto;
 import jminvsm.model.desconto.ProdutoDesconto;
 import jminvsm.model.produto.Produto;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -61,21 +60,17 @@ public class ServiceProdutoDesconto {
         setOpsSuccess(false);
 
         if (idProduto == null) {
-            showErroAlert("Produto nao definido.");
-            return;
+            throw new ServiceException("Produto nao definido.");
         }
 
         if (idDesconto == null) {
-            showErroAlert("Desconto nao definido.");
-            return;
+            throw new ServiceException("Desconto nao definido.");
         }
 
         if (dataInicio == null || dataInicio.isEmpty() || "null".equalsIgnoreCase(dataInicio)) {
-            showErroAlert("Data de descontos nao definidas!");
             dataInicio = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         }
         if (dataFim == null || dataFim.isEmpty() || "null".equalsIgnoreCase(dataFim)) {
-            showErroAlert("Data de descontos nao definidas!");
             dataFim = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         }
 
@@ -96,7 +91,6 @@ public class ServiceProdutoDesconto {
             dao.callAplicaDesconto(pd);
             dao.callDesativaDescontoProduto(pd);
             setOpsSuccess(true);
-            showSuccessAlert("Desconto registado com sucesso!");
         }
     }
     

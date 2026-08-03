@@ -1,10 +1,9 @@
 package jminvsm.service.auditoria;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.dao.auditoria.AuditoriaRegistoDAO;
 import jminvsm.model.auditoria.AuditoriaRegisto;
-import static jminvsm.util.AlertUtilities.showErroAlert;
+import jminvsm.service.ServiceException;
 
 public class ServiceAuditoriaRegisto {
 
@@ -19,8 +18,7 @@ public class ServiceAuditoriaRegisto {
         if (dataInicio != null && dataFim != null
                 && !dataInicio.trim().isEmpty() && !dataFim.trim().isEmpty()
                 && dataInicio.compareTo(dataFim) > 0) {
-            showErroAlert("A data inicial nao pode ser maior que a data final!");
-            return FXCollections.observableArrayList();
+            throw new ServiceException("A data inicial nao pode ser maior que a data final!");
         }
         return auditoriaDao.pesquisar(dataInicio, dataFim, tabela, operacao, idUsuario, idRegisto);
     }

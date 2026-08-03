@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,6 +30,7 @@ import jminvsm.model.fornecedor.Fornecedor;
 import jminvsm.model.usuario.Usuario;
 import jminvsm.service.ServiceException;
 import jminvsm.service.fornecedor.ServiceFornecedor;
+import jminvsm.service.listagem.ServicePesquisaListagem;
 import jminvsm.util.ButtonUtilities;
 import jminvsm.util.LoadAndMoveUtilities;
 import static jminvsm.util.AlertUtilities.showErroAlert;
@@ -43,6 +43,7 @@ import static jminvsm.util.AlertUtilities.showSuccessAlert;
  */
 public class FornecedorViewController implements Initializable {
     private ServiceFornecedor serFornecedor;
+    private ServicePesquisaListagem servicePesquisa;
 
     private Usuario userData;
 
@@ -98,6 +99,7 @@ public class FornecedorViewController implements Initializable {
         this.userData = SessaoAplicacao.getUserData();
         try {
             serFornecedor = new ServiceFornecedor();
+            servicePesquisa = new ServicePesquisaListagem();
             showClientes();
         } catch (SQLException ex) {
             Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,6 +115,7 @@ public class FornecedorViewController implements Initializable {
         Funcoes para fazer pesquisas no banco de dados buscando todos dados
      */
     private ObservableList<Fornecedor> listaClientes;
+    private boolean pesquisaConfigurada;
 
     public void showClientes() {
 
@@ -123,31 +126,24 @@ public class FornecedorViewController implements Initializable {
         razaotabelaCliente.setCellValueFactory(new PropertyValueFactory<>("razaosocial_forn"));
         nuittabelaCliente.setCellValueFactory(new PropertyValueFactory<>("nuit_forn"));
         contactotabelaCliente.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().printContatos())));
+                -> new SimpleStringProperty(servicePesquisa.contactosFornecedor(cellData.getValue())));
         enderecotabelaCliente.setCellValueFactory(cellData
-                -> new SimpleStringProperty(String.valueOf(cellData.getValue().printEnderecos())));
-        
-        
+                -> new SimpleStringProperty(servicePesquisa.enderecosFornecedor(cellData.getValue())));
 
-        FilteredList<Fornecedor> dadosFiltrados = new FilteredList<>(listaClientes, b -> true);
-        txtPesquisa.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
+        configurarPesquisa();
+        aplicarPesquisa();
+    }
 
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getRazaosocial_forn().toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else if (String.valueOf(x.getNuit_forn()).toLowerCase().indexOf(filtroCaixaBaixa) != -1) {
-                    return true;
-                } else {
-                    return false;
-                }
+    private void configurarPesquisa() {
+        if (!pesquisaConfigurada) {
+            txtPesquisa.textProperty().addListener((observable, oldValue, newValue) -> aplicarPesquisa());
+            pesquisaConfigurada = true;
+        }
+    }
 
-            });
-        });
-        SortedList<Fornecedor> sortedData = new SortedList<>(dadosFiltrados);
+    private void aplicarPesquisa() {
+        SortedList<Fornecedor> sortedData = new SortedList<>(
+                servicePesquisa.filtrarFornecedores(listaClientes, txtPesquisa.getText()));
         sortedData.comparatorProperty().bind(tabelaCliente.comparatorProperty());
 
         tabelaCliente.setItems(sortedData);

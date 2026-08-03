@@ -14,8 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.produto.fornecido.ProdutoFornecido;
-import jminvsm.util.AlertUtilities;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -46,7 +45,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -90,7 +89,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             }
         } catch (SQLException ex) {
             System.out.println("Erro Detalhes: " + ex);
-            AlertUtilities.showDialog("Erro de consulta", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Detalhes: " + ex);
 
         }
         return lista;
@@ -145,7 +144,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             }
         } catch (SQLException ex) {
             System.out.println("Erro:: " + ex);
-            showDialog("Erro Dados", "Erro ao carregar movimentos de produto: " + ex);
+            DaoErrorHandler.log("Erro Dados", "Erro ao carregar movimentos de produto: " + ex);
         }
         return mapa;
     }
@@ -168,7 +167,7 @@ public class ProdutoFornecidoDAO implements ProdutoFornecidoDAOImpl<ProdutoForne
             }
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
-            showDialog("Erro de consulta", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Detalhes: " + ex);
         }
         return pf;
     }

@@ -74,12 +74,24 @@ public class ServiceOrdemCompra {
         item.setQuantidadeSolicitada(quantidade);
         item.setCustoUnitario(custoUnitario);
         item.setEstado("Pendente");
+        actualizarTotaisItem(item);
         if (idItemRequisicao != null && idItemRequisicao > 0) {
             ItemRequisicao itemRequisicao = new ItemRequisicao();
             itemRequisicao.setId(idItemRequisicao);
             item.setItemRequisicao(itemRequisicao);
         }
         return item;
+    }
+
+    public void actualizarTotaisItem(ItemOrdemCompra item) {
+        if (item == null) {
+            return;
+        }
+        double desconto = item.getDesconto();
+        double imposto = item.getImposto();
+        double subtotal = item.getQuantidadeSolicitada() * item.getCustoUnitario();
+        item.setSubtotal(subtotal);
+        item.setTotalLinha(subtotal - desconto + imposto);
     }
 
     public boolean cancelarOrdemCompra(int id) {

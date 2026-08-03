@@ -10,8 +10,7 @@ import jminvsm.dao.precoProdutoArmazem.PrecoProdutoArmazemDAO;
 import jminvsm.model.armazem.Armazem;
 import jminvsm.model.preco.PrecoProdutoArmazem;
 import jminvsm.model.produto.Produto;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 /**
  *
@@ -38,7 +37,7 @@ public class ServicePrecoProdutoArmazem {
     public void registraPreco(Integer idProduto, Integer idArmazem, Double preco) {
         setOpsSuccess(false);
         if (preco == null || preco <= 0) {
-            showErroAlert("Preço nao pode ser nulo, Será definido um preço padrão.");
+            throw new ServiceException("Preco nao pode ser nulo!");
         }
         
         PrecoProdutoArmazem ppa = new PrecoProdutoArmazem();
@@ -50,46 +49,9 @@ public class ServicePrecoProdutoArmazem {
         p.setId(idProduto);
         ppa.setProduto(p);
         if (precoDao.addEntity(ppa)) {
-            showSuccessAlert("Preço registado com sucesso!");
             setOpsSuccess(true);
         }
     }
-
-//    public void actualizaPrecoVenda(int id, Double preco, Double precoComTaxa, Double precoSemTaxa, String data_inicio,
-//            String data_fim, Usuario user) {
-//        setOpsSuccess(false);
-//
-//        if (preco == null || preco <= 0) {
-//            showErroAlert("Preço nao pode ser nulo, Será definido um preço padrão.");
-//        }
-//        if (data_inicio == null || data_inicio.isEmpty()) {
-//            showErroAlert("Data inicial do preco não pode ser nula. Será usada a data atual!");
-//            data_inicio = LocalDate.now().toString();
-//        }
-//        if (data_fim == null || data_fim.isEmpty()) {
-//            showErroAlert("Data final do preco não pode ser nula. Será usada uma data padrão!");
-//            data_fim = "2099-12-31";
-//        }
-//
-//        if (user == null) {
-//            showErroAlert("Usuário não definido!");
-//            return;
-//        }
-//
-//        PrecoVenda pv = new PrecoVenda();
-//        pv.setPrecoNormal(preco);
-//        pv.setPrecoFinal(precoSemTaxa);
-//        pv.setPrecoVenda(precoComTaxa);
-//        pv.setData_inicio(data_inicio);
-//        pv.setDataValidade(data_fim);
-//        pv.setUsuario(user);
-//
-//        if (precoDao.updateEntityByID(pv, id)) {
-//            showSuccessAlert("Preço actualizado com sucesso!");
-//            setOpsSuccess(true);
-//        }
-//    }
-//
     public ObservableList<PrecoProdutoArmazem> listaTodosPrecos(int idProduto) {
         return precoDao.listAllPrecos(idProduto);
     }

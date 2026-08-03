@@ -11,8 +11,7 @@ import jminvsm.model.movimento.Movimento;
 import jminvsm.model.movimento.MovimentoLote;
 import jminvsm.model.produto.Produto;
 import jminvsm.model.requisicao.ItemRequisicao;
-import static jminvsm.util.AlertUtilities.showErroAlert;
-import static jminvsm.util.AlertUtilities.showSuccessAlert;
+import jminvsm.service.ServiceException;
 
 public class ServiceMovimento {
 
@@ -38,22 +37,19 @@ public class ServiceMovimento {
         setOpsSuccess(false);
         if (tipoOrigem == null || tipoMovimento == null || idProduto == null || idProduto <= 0
                 || idArmazem == null || idArmazem <= 0 || quantidade == null || quantidade <= 0) {
-            showErroAlert("Dados do movimento invalidos!");
-            return;
+            throw new ServiceException("Dados do movimento invalidos!");
         }
 
         Movimento movimento = montaMovimento(tipoOrigem, tipoMovimento, idProduto, idArmazem, quantidade, idLote, idItemRequisicao);
         if (movimentoDao.addEntity(movimento)) {
             setOpsSuccess(true);
-            showSuccessAlert("Movimento registado com sucesso!");
         }
     }
 
     public boolean registaMovimentoLote(int idMovimento, int idLote, int quantidadeRetirada) {
         setOpsSuccess(false);
         if (idMovimento <= 0 || idLote <= 0 || quantidadeRetirada <= 0) {
-            showErroAlert("Dados do movimento por lote invalidos!");
-            return false;
+            throw new ServiceException("Dados do movimento por lote invalidos!");
         }
 
         Movimento movimento = new Movimento();
@@ -69,7 +65,6 @@ public class ServiceMovimento {
 
         if (movimentoLoteDao.addEntity(movimentoLote)) {
             setOpsSuccess(true);
-            showSuccessAlert("Movimento por lote registado com sucesso!");
         }
         return isOpsSuccess();
     }

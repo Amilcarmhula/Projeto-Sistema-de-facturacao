@@ -13,7 +13,7 @@ import javafx.collections.ObservableList;
 import jminvsm.model.metodo_pagamento.MetodoPagamento;
 import jminvsm.model.parcelas.Parcela;
 import jminvsm.model.transacao.Transacao;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -54,7 +54,7 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
 
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex + " Data: " + t.getData_pagamento());
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -92,7 +92,7 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
 
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex + " Data: " + t.getData_pagamento());
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return isSuccess;
     }
@@ -127,7 +127,7 @@ public class TransacaoDAO implements TransacaoDAOImpl<Transacao> {
                 }
             }
         } catch (SQLException e) {
-            showDialog("Erro de consulta", "Detalhes: " + e);
+            DaoErrorHandler.log("Erro de consulta", "Detalhes: " + e);
         }
         return lista;
     }

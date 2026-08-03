@@ -6,14 +6,11 @@ package jminvsm.views.modulo_venda.vendaView.searchProduto;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +26,7 @@ import javafx.stage.Stage;
 import jminvsm.util.SessaoAplicacao;
 import jminvsm.model.stock.Stock;
 import jminvsm.model.usuario.Usuario;
+import jminvsm.service.listagem.ServicePesquisaListagem;
 import jminvsm.service.stock.ServiceStock;
 import jminvsm.util.LoadAndMoveUtilities;
 
@@ -43,6 +41,7 @@ public class SearchProdutoController implements Initializable {
 
     private Usuario userData;
     private ServiceStock serStock;
+    private ServicePesquisaListagem servicePesquisa;
     private int idArmazem;
     
 
@@ -98,6 +97,7 @@ public class SearchProdutoController implements Initializable {
         try {
 
             serStock = new ServiceStock();
+            servicePesquisa = new ServicePesquisaListagem();
             showInvenarioProdutos();
         } catch (SQLException ex) {
             Logger.getLogger(SearchProdutoController.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,51 +106,36 @@ public class SearchProdutoController implements Initializable {
     }
 
     private ObservableList<Stock> listaProduto;
-    private Map<String, Stock> mapaProdutos;
+    private boolean pesquisaConfigurada;
 
     public void showInvenarioProdutos() {
         listaProduto = serStock.listaProdutosParaVenda(1);
-        mapaProdutos = new HashMap<>();
-        for (Stock s : listaProduto) {
-            mapaProdutos.put(s.getProduto().getId() + "," + s.getArmazem().getId(), s);
-        }
 
-        ID.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getProduto().getId() + "," + cellData.getValue().getArmazem().getId())));
-        armazem.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getArmazem().getNome_arm() + ": " + cellData.getValue().getArmazem().getTipo())));
-        artigo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
-        descricao.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getDescricao()));
-        unidade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getUnidadeMedida().getSigla()));
-        categoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getCategoria().getFamilia()));
+        ID.setCellValueFactory(cellData -> new SimpleStringProperty(servicePesquisa.chaveStock(cellData.getValue())));
+        armazem.setCellValueFactory(cellData -> new SimpleStringProperty(servicePesquisa.armazemStock(cellData.getValue())));
+        artigo.setCellValueFactory(cellData -> new SimpleStringProperty(servicePesquisa.nomeProduto(cellData.getValue())));
+        descricao.setCellValueFactory(cellData -> new SimpleStringProperty(servicePesquisa.descricaoProduto(cellData.getValue())));
+        unidade.setCellValueFactory(cellData -> new SimpleStringProperty(servicePesquisa.unidadeProduto(cellData.getValue())));
+        categoria.setCellValueFactory(cellData -> new SimpleStringProperty(servicePesquisa.categoriaProduto(cellData.getValue())));
         quantidade.setCellValueFactory(new PropertyValueFactory<>("saldo"));
 
-        FilteredList<Stock> dadosFiltrados = new FilteredList<>(listaProduto, b -> true);
+        configurarPesquisa();
+        aplicarPesquisa();
+    }
 
-        txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> {
-            dadosFiltrados.setPredicate(x -> {
+    private void configurarPesquisa() {
+        if (!pesquisaConfigurada) {
+            txtPesquisar.textProperty().addListener((observable, oldValue, newValue) -> aplicarPesquisa());
+            pesquisaConfigurada = true;
+        }
+    }
 
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filtroCaixaBaixa = newValue.toLowerCase();
-                if (x.getProduto().getNome().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getArmazem().getNome_arm().concat(": "+x.getArmazem().getTipo()).toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else if (x.getProduto().getDescricao().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                }else if (x.getProduto().getCategoria().getFamilia().toLowerCase().contains(filtroCaixaBaixa)) {
-                    return true;
-                } else {
-                    return false;
-                }
-
-            });
-        });
-        SortedList<Stock> sortedData = new SortedList<>(dadosFiltrados);
+    private void aplicarPesquisa() {
+        SortedList<Stock> sortedData = new SortedList<>(
+                servicePesquisa.filtrarStock(listaProduto, txtPesquisar.getText()));
         sortedData.comparatorProperty().bind(tabelaProduto.comparatorProperty());
         tabelaProduto.setItems(sortedData);
     }
-
 
     public void selecionaProduto(MouseEvent event) {
 //        TablePosition pos = tabelaProduto.getSelectionModel().getSelectedCells().get(0);
@@ -161,9 +146,7 @@ public class SearchProdutoController implements Initializable {
 
         Stock x = tabelaProduto.getSelectionModel().getSelectedItem();
         if (x != null) {
-            Stock s = mapaProdutos.get(x.getProduto().getId() + "," + x.getArmazem().getId());
-            System.out.println("ID: "+s.getProduto().getId() + "," + s.getArmazem().getId()+" - PV: "+s.getPrecoProdutoArmazem().getPrecoVenda());
-            SessaoAplicacao.setData(s);
+            SessaoAplicacao.setData(x);
         }
     }
 }

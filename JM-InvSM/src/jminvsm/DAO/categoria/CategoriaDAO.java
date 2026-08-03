@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.categoria.Categoria;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -50,7 +50,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         } 
         return isSuccess;
     }
@@ -78,7 +78,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             }
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         } 
         
         return isSuccess;
@@ -103,7 +103,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
             }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -113,7 +113,7 @@ public class CategoriaDAO implements CategoriaDAOImpl<Categoria> {
         try {
             return jminvsm.util.SoftDeleteUtils.softDelete("categoria", x);
         } catch (SQLException ex) {
-            showDialog("Erro de exclusao", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de exclusao", "Detalhes: " + ex);
         } 
         return false;
     }

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jminvsm.model.metodo_pagamento.MetodoPagamento;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -38,7 +38,7 @@ public class MetodoPagamentoDAO implements MetodoImpl<MetodoPagamento>{
             }
             }
         } catch (SQLException ex) {
-            showDialog("Erro de consulta", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro de consulta", "Detalhes: " + ex);
         }
         return lista;
     }

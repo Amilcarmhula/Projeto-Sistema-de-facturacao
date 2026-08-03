@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import jminvsm.model.empresa.conta.ContaBancaria;
-import static jminvsm.util.AlertUtilities.showDialog;
+import jminvsm.dao.DaoErrorHandler;
 import jminvsm.util.Conexao;
 
 /**
@@ -39,7 +39,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
             ps.executeUpdate();
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
 
     }
@@ -64,7 +64,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
             ps.executeUpdate();
 
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
     }
 
@@ -90,7 +90,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return lista;
     }
@@ -118,7 +118,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
                 }
             }
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
         return c;
 
@@ -129,7 +129,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
         try {
             jminvsm.util.SoftDeleteUtils.softDelete("contabancaria", id);
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
     }
 
@@ -138,7 +138,7 @@ public class ContaBancariaDAO implements DaoImpl<ContaBancaria> {
         try {
             jminvsm.util.SoftDeleteUtils.softDelete("contabancaria", id);
         } catch (SQLException ex) {
-            showDialog("Erro persistencia", "Detalhes: " + ex);
+            DaoErrorHandler.log("Erro persistencia", "Detalhes: " + ex);
         }
     }
 
